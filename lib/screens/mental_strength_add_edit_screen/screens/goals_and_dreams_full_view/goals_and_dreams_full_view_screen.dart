@@ -727,8 +727,15 @@ class _GoalAndDreamFullViewBottomSheetState
               width: size.width * 0.6,
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                child: Text(
+                child: comments != null ?
+                Text(
                  comments,
+                  style: CustomTextStyles.bodyLargeGray700,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1, // Set the maximum number of lines to 3
+                ):
+                Text(
+                  "NA",
                   style: CustomTextStyles.bodyLargeGray700,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1, // Set the maximum number of lines to 3

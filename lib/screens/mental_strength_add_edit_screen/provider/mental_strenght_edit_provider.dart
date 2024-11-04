@@ -354,10 +354,19 @@ class MentalStrengthEditProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void pickedImagesRemove(index) {
-    pickedImages.removeAt(index);
-    notifyListeners();
+  void pickedImagesRemove(int index) {
+    if (index >= 0 && index < pickedImages.length) {
+      print('Removing image at index: $index');
+      print('Current images: $pickedImages');
+      pickedImages.removeAt(index);
+      print('Updated images: $pickedImages');
+      notifyListeners();
+    } else {
+      print('Index out of range: $index');
+    }
   }
+
+
 
   List<AllModel> alreadyTakedImages = [];
 

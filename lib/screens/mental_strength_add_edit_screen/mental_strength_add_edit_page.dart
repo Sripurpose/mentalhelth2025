@@ -113,6 +113,15 @@ class _MentalStrengthAddEditFullViewScreenState extends State<MentalStrengthAddE
     logger.w("mentalStrengthEditProvider.driveValueStar${mentalStrengthEditProvider.driveValueStar}");
     scheduleMicrotask(() {
       mentalStrengthEditProvider.mediaSelected = -1;
+      mentalStrengthEditProvider.descriptionEditTextController.text = "";
+      mentalStrengthEditProvider.emotionalValueStar = null;
+      mentalStrengthEditProvider.driveValueStar = null;
+      mentalStrengthEditProvider.alreadyRecordedFilePath.clear();
+      mentalStrengthEditProvider.recordedFilePath.clear();
+      mentalStrengthEditProvider.alreadyPickedImages.clear();
+      mentalStrengthEditProvider.pickedImages.clear();
+      mentalStrengthEditProvider.alreadyTakedImages.clear();
+      mentalStrengthEditProvider.takedImages.clear();
       _isTokenExpired();
     });
   }

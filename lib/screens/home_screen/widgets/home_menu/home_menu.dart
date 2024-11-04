@@ -26,7 +26,7 @@ import '../../../view_reminder_screen/screens/view_reminder_screen.dart';
 
 Widget buildPopupDialog(BuildContext context, Size size) {
   return AlertDialog(
-    backgroundColor: appTheme.blue300,
+    backgroundColor: appTheme.blue300.withOpacity(0.95), // Adjust the opacity as needed
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(
         20.0,
@@ -57,7 +57,7 @@ Widget buildPopupDialog(BuildContext context, Size size) {
                   onTap: (){
                     dashBoardProvider
                         .changeCommentPage(
-                      index: 9,
+                      index: 8,
                     );
                     Navigator.of(context).pop();
                   },

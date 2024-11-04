@@ -239,6 +239,8 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                                           // Check if interests or selected categories are not empty.
                                           final isProfileInterestsNotEmpty = editProfileProvider.profileInterests.isNotEmpty;
                                           final areSelectedCategoriesNotEmpty = selectedCategories.isNotEmpty;
+                                          logger.w("editProfileProvider.profileInterests-${editProfileProvider.profileInterests}");
+                                          logger.w("selectedCategories-$selectedCategories");
 
                                           return Container(
                                             height: size.height * 0.05, // Adjust this height as needed
