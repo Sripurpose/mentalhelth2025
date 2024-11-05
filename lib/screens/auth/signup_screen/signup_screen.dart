@@ -19,6 +19,15 @@ class SignupScreen extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back_ios,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop(); // Navigate back to the previous screen
+            },
+          ),),
         extendBody: true,
         extendBodyBehindAppBar: true,
         resizeToAvoidBottomInset: false,

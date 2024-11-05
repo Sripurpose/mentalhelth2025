@@ -65,7 +65,7 @@ class _HelpScreenState extends State<HelpScreen> {
                 buildAppBar(
                   context,
                   size,
-                  heading: "Help",
+                  heading: "Terms and services to help",
                 ),
                 // Use Expanded to allow WebView to take remaining space in the Column
                 Expanded(

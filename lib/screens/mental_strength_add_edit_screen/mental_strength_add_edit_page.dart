@@ -122,6 +122,9 @@ class _MentalStrengthAddEditFullViewScreenState extends State<MentalStrengthAddE
       mentalStrengthEditProvider.pickedImages.clear();
       mentalStrengthEditProvider.alreadyTakedImages.clear();
       mentalStrengthEditProvider.takedImages.clear();
+      mentalStrengthEditProvider.selectedLocationAddress = "";
+      mentalStrengthEditProvider.selectedLatitude = "";
+      mentalStrengthEditProvider.selectedLocationName = "";
       _isTokenExpired();
     });
   }
@@ -469,8 +472,8 @@ class _MentalStrengthAddEditFullViewScreenState extends State<MentalStrengthAddE
                                                 //  Navigator.of(context).pop();  // This will close the galleryBottomSheet as well
                                                 },
                                                 yes: "Yes",
-                                                title: 'Do you Need Delete',
-                                                content: 'Are you sure you want to delete',
+                                                title: 'Do you Need Delete ?',
+                                                content: 'Are you sure you want to delete ?',
                                               );
 
                                             },
@@ -623,8 +626,8 @@ class _MentalStrengthAddEditFullViewScreenState extends State<MentalStrengthAddE
                                                   //  Navigator.of(context).pop();  // This will close the galleryBottomSheet as well
                                                 },
                                                 yes: "Yes",
-                                                title: 'Do you Need Delete',
-                                                content: 'Are you sure you want to delete',
+                                                title: 'Do you Need Delete ?',
+                                                content: 'Are you sure you want to delete ?',
                                               );
 
                                             },

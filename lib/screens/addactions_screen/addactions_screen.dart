@@ -1084,6 +1084,7 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                   adDreamsGoalsProvider.getAddActionIdAndName(
                     value: addActionsProvider.goalModelIdName!,
                   );
+                  addActionsProvider.setRemainder = false;
                   // You can uncomment the line below if you want to close the screen after saving.
                   // Navigator.of(context).pop();
                 }
@@ -1104,6 +1105,8 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                 adDreamsGoalsProvider.getAddActionIdAndName(
                   value: addActionsProvider.goalModelIdName!,
                 );
+
+                addActionsProvider.setRemainder = false;
                 // You can uncomment the line below if you want to close the screen after saving.
                 // Navigator.of(context).pop();
               }

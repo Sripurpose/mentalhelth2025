@@ -743,30 +743,32 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                       onPressedDelete: () {
                         journalListProvider
                             .deleteJournalsFunction(
-                          journalId: homeProvider
-                              .journalDetails!.journals!.journalId
-                              .toString(),
+                          journalId: homeProvider.journalDetails!.journals!.journalId.toString(),
                         )
                             .then((value) {
                           homeProvider.fetchJournals(initial: true);
-                        });
-                        for (var journals in homeProvider.journalsModelList) {
-                          if (journals.journalId ==
-                              homeProvider.journalDetails!.journals!.journalId
-                                  .toString()) {
-                            homeProvider.journalsModelList
-                                .removeAt(widget.index);
+
+                          // Check if the journal exists in the list and remove it
+                          for (var journals in homeProvider.journalsModelList) {
+                            if (journals.journalId ==
+                                homeProvider.journalDetails!.journals!.journalId.toString()) {
+                              homeProvider.journalsModelList.removeAt(widget.index);
+                              break; // Stop the loop once item is removed
+                            }
                           }
-                          Navigator.of(context).pop();
 
-                          Navigator.of(context).pop();
-
-                        }
+                          // Close the dialog and then close the previous screen if needed
+                          Navigator.of(context).pop(); // Close the customPopup dialog
+                          Future.delayed(Duration(milliseconds: 200), () {
+                            Navigator.of(context).pop(); // Close the previous screen
+                          });
+                        });
                       },
                       title: 'Confirm Delete',
-                      content: 'Are you sure You want to Delete this Journal ?',
+                      content: 'Are you sure you want to delete this journal?',
                     );
                   },
+
                   value: 'Delete',
                   child: Text(
                     'Delete',

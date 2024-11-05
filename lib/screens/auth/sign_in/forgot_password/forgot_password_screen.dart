@@ -25,6 +25,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+        leading: IconButton(
+        icon: const Icon(
+          Icons.arrow_back_ios,
+        ),
+    onPressed: () {
+    Navigator.of(context).pop(); // Navigate back to the previous screen
+    },
+    ),),
         body: backGroundImager(
           size: size,
           padding: EdgeInsets.zero,

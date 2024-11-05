@@ -75,7 +75,7 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
     return tokenStatus == false ?
       Container(
       margin: EdgeInsets.only(
-        top: size.height * 0.15,
+        top: size.height * 0.12,
       ),
       decoration: BoxDecoration(
         color: appTheme.gray50,
