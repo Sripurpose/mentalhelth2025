@@ -128,11 +128,10 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
     return SafeArea(
       child: Consumer2<DashBoardProvider,HomeProvider>(builder: (context, dashBoardProvider,homeProvider, _) {
         return Scaffold(
-          appBar: buildAppBar(context, size, heading: "View your journal",
-            onTap:
-              () {
-                Navigator.of(context).pop();
-          },
+          appBar: buildAppBarJournalViewScreen(context, size, heading: "View your journal",
+            onTap: (){
+              Navigator.of(context).pop();
+            }
           ),
           body: backGroundImager(
             size: size,

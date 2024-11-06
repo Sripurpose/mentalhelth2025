@@ -287,17 +287,17 @@ Future cameraBottomSheet({
                                             customPopup(
                                               context: context,
                                               onPressedDelete: () async {
-                                                mentalStrengthEditProvider
-                                                    .removeMediaFunction(
-                                                  context: context,
-                                                  id: mentalStrengthEditProvider
-                                                      .takedImages[index],
-                                                  type: "journal",
-                                                );
-                                                mentalStrengthEditProvider
-                                                    .takedImagesRemove(index);
+                                                // mentalStrengthEditProvider
+                                                //     .removeMediaFunction(
+                                                //   context: context,
+                                                //   id: mentalStrengthEditProvider
+                                                //       .takedImages[index],
+                                                //   type: "journal",
+                                                // );
+                                                mentalStrengthEditProvider.takedImagesRemove(index);
 
-                                                Navigator.of(context).pop();
+                                                mentalStrengthEditProvider.removeMediaUploadResponseListFunction(index);
+                                             //  Navigator.of(context).pop();
 
                                                 // Close the bottom sheet after deleting
                                                 Navigator.of(context).pop();  // This will close the galleryBottomSheet as well

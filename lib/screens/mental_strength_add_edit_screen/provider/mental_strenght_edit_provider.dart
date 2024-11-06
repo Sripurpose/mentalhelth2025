@@ -159,6 +159,17 @@ class MentalStrengthEditProvider extends ChangeNotifier {
     addMediaUploadResponseList.addAll(value);
     notifyListeners();
   }
+  void removeMediaUploadResponseListFunction(int index) {
+    // Check if the index is valid before attempting to remove
+    if (index >= 0 && index < addMediaUploadResponseList.length) {
+      addMediaUploadResponseList.removeAt(index);  // Remove item at the given index
+      logger.w("Removed item at index $index: ${addMediaUploadResponseList[index]}");
+    } else {
+      logger.w("Invalid index: $index");
+    }
+    notifyListeners();  // Notify listeners after modifying the list
+  }
+
 
   TextEditingController descriptionEditTextController = TextEditingController();
   double? emotionalValueStar; // Use nullable type
@@ -197,11 +208,13 @@ class MentalStrengthEditProvider extends ChangeNotifier {
 
   void recorderValuesAddFunction(List<String> paths) {
     recordedFilePath.addAll(paths);
+    logger.w("AddrecordedFilePath$recordedFilePath");
     notifyListeners();
   }
 
   void recorderValuesRemove(index) {
     recordedFilePath.removeAt(index);
+    logger.w("RemoverecordedFilePath$recordedFilePath");
     notifyListeners();
   }
 

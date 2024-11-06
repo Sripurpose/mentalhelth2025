@@ -431,22 +431,11 @@ Future galleryBottomSheet({
                                             onTap: () {
                                               customPopup(
                                                 context: context,
-                                                onPressedDelete: ()  {
-                                                  mentalStrengthEditProvider
-                                                      .removeMediaFunction(
-                                                    context: context,
-                                                    id: mentalStrengthEditProvider
-                                                        .pickedImages[index],
-                                                    type: "journal",
-                                                  );
-                                                  mentalStrengthEditProvider
-                                                      .pickedImagesRemove(index);
-
-                                                  // Close the popup automatically after the action is confirmed
+                                                onPressedDelete: () async {
+                                                  mentalStrengthEditProvider.pickedImagesRemove(index);
                                                   Navigator.of(context).pop();
-
-                                                  // Close the bottom sheet after deleting
-                                                //  Navigator.of(context).pop();  // This will close the galleryBottomSheet as well
+                                                  mentalStrengthEditProvider.removeMediaUploadResponseListFunction(index);
+                                                  Navigator.of(context).pop();
 
                                                 },
                                                 yes: "Yes",

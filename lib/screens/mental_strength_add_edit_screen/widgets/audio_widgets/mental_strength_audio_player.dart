@@ -188,8 +188,9 @@ class _MentalStrengthAudioPlayerState extends State<MentalStrengthAudioPlayer> {
                                         customPopup(
                                           context: context,
                                           onPressedDelete: () async {
-                                             mentalStrengthEditProvider.removeMediaFunction(context: context, id: widget.id.toString(), type: widget.type.toString());
                                             mentalStrengthEditProvider.recorderValuesRemove(widget.index);
+                                            Navigator.of(context).pop();
+                                            mentalStrengthEditProvider.removeMediaUploadResponseListFunction(widget.index);
                                             Navigator.of(context).pop();
                                           },
                                           yes: "Yes",
@@ -216,6 +217,8 @@ class _MentalStrengthAudioPlayerState extends State<MentalStrengthAudioPlayer> {
                                           onPressedDelete: () async {
                                             adDreamsGoalsProvider.recorderValuesRemove(widget.index);
                                             Navigator.of(context).pop();
+                                            adDreamsGoalsProvider.removeMediaUploadResponseListFunction(widget.index);
+                                            Navigator.of(context).pop();
                                           },
                                           yes: "Yes",
                                           title: 'Do you Need Delete',
@@ -240,6 +243,8 @@ class _MentalStrengthAudioPlayerState extends State<MentalStrengthAudioPlayer> {
                                           context: context,
                                           onPressedDelete: () async {
                                             addActionsProvider.recorderValuesRemove(widget.index);
+                                            Navigator.of(context).pop();
+                                            addActionsProvider.removeMediaUploadResponseListFunction(widget.index);
                                             Navigator.of(context).pop();
                                           },
                                           yes: "Yes",

@@ -140,3 +140,39 @@ PreferredSizeWidget buildAppBar(BuildContext context, Size size,
     ],
   );
 }
+
+PreferredSizeWidget buildAppBarJournalViewScreen(BuildContext context, Size size,
+    {String? heading, Function? onTap, bool isSigned = true}) {
+  return CustomAppBar(
+    leadingWidth: 36,
+    leading:
+    Consumer<DashBoardProvider>(builder: (context, dashBoardProvider, _) {
+      return AppbarLeadingImage(
+        onTap: onTap ??
+                () {
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (context) => const DashBoardScreen(),
+                ),
+                    (route) => false,
+              );
+              dashBoardProvider.changeCommentPage(
+                index: 0,
+              );
+            },
+        imagePath: ImageConstant.imgTelevision,
+        margin: const EdgeInsets.only(
+          left: 20,
+          top: 19,
+          bottom: 23,
+        ),
+      );
+    }),
+    title: AppbarSubtitle(
+      text: heading ?? "My profile",
+      margin: const EdgeInsets.only(
+        left: 11,
+      ),
+    ),
+  );
+}

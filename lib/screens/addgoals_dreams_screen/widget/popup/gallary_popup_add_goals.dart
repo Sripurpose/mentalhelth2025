@@ -295,24 +295,21 @@ Future galleryBottomSheetAddGoals({
                                               customPopup(
                                                 context: context,
                                                 onPressedDelete: () async {
-                                                  mentalStrengthEditProvider
-                                                      .removeMediaFunction(
-                                                    context: context,
-                                                    id: adDreamsGoalsProvider
-                                                        .pickedImages[index],
-                                                    type: "goal",
-                                                  );
-                                                  adDreamsGoalsProvider
-                                                      .pickedImagesRemove(index);
-
+                                                  // mentalStrengthEditProvider
+                                                  //     .removeMediaFunction(
+                                                  //   context: context,
+                                                  //   id: adDreamsGoalsProvider
+                                                  //       .pickedImages[index],
+                                                  //   type: "goal",
+                                                  // );
+                                                  adDreamsGoalsProvider.pickedImagesRemove(index);
                                                   Navigator.of(context).pop();
-
-                                                  // Close the bottom sheet after deleting
-                                                  Navigator.of(context).pop();  // This will close the galleryBottomSheet as well
+                                                  adDreamsGoalsProvider.removeMediaUploadResponseListFunction(index);
+                                                  Navigator.of(context).pop();
                                                 },
                                                 yes: "Yes",
                                                 title: 'Do you Need Delete',
-                                                content: 'Are you sure do you need delete',
+                                                content: 'Are you sure do you need delete?',
                                               );
 
                                             },

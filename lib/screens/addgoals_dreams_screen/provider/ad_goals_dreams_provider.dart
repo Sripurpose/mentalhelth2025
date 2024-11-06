@@ -49,6 +49,17 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void removeMediaUploadResponseListFunction(int index) {
+    // Check if the index is valid before attempting to remove
+    if (index >= 0 && index < addMediaUploadResponseList.length) {
+      addMediaUploadResponseList.removeAt(index);  // Remove item at the given index
+
+    } else {
+
+    }
+    notifyListeners();  // Notify listeners after modifying the list
+  }
+
   TextEditingController descriptionEditTextController = TextEditingController();
   double emotionalValueStar = 0;
 
