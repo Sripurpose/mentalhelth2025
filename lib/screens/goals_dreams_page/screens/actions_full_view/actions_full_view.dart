@@ -381,7 +381,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                               ),
                             ),
                             const SizedBox(height: 6),
-                            mentalStrengthEditProvider.actionsDetailsModel!.actions!.location!.locationAddress!.isNotEmpty?
+                            mentalStrengthEditProvider.actionsDetailsModel!.actions!.location?.locationAddress != null?
                             SizedBox(
                               child: Center(
                                 child: Row(
@@ -392,7 +392,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                       width: 23,
                                     ),
                                     Text(
-                                      mentalStrengthEditProvider.actionsDetailsModel!.actions!.location!.locationAddress!.isEmpty
+                                      mentalStrengthEditProvider.actionsDetailsModel!.actions!.location?.locationAddress == null
                                           ? ""
                                           :mentalStrengthEditProvider.actionsDetailsModel!.actions!.location!.locationAddress.toString(),
                                       style: CustomTextStyles.bodyMediumGray700_1,

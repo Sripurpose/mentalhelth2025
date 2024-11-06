@@ -128,15 +128,6 @@ class _ViewReminderScreenState extends State<ViewReminderScreen> {
                     context,
                     size,
                     heading: "My Reminders",
-                    onTap: () {
-                      Navigator.pop(context);
-                      // Navigator.of(context).pushAndRemoveUntil(
-                      //   MaterialPageRoute(
-                      //     builder: (context) => const DashBoardScreen(),
-                      //   ),
-                      //       (route) => false,
-                      // );
-                    },
                   );
                 }),
             SizedBox(
@@ -170,34 +161,6 @@ class _ViewReminderScreenState extends State<ViewReminderScreen> {
                         //    controller: _scrollController,
                             itemCount: homeProvider.remindersDetails?.reminders?.length,
                             itemBuilder: (context, index) {
-                              // if (index <
-                              //     homeProvider.remindersDetails?.reminders?.length) {
-
-                              // if (goalsDreamsProvider.openBox == index) {
-                              //   return GestureDetector(
-                              //     onTap: () {
-                              //       goalsDreamsProvider.openBoxFunction(
-                              //         index: index,
-                              //       );
-                              //       Navigator.of(context).push(
-                              //         MaterialPageRoute(
-                              //           builder: (context) =>
-                              //               GoalAndDreamFullViewScreen(
-                              //             goalsanddream:
-                              //                 goalsDreamsProvider
-                              //                     .goalsanddreams[index],
-                              //             indexs: index,
-                              //           ),
-                              //         ),
-                              //       );
-                              //     },
-                              //     child: GoalsListWidget(
-                              //       goalsanddreams: goalsDreamsProvider
-                              //           .goalsanddreams,
-                              //       index: index,
-                              //     ),
-                              //   );
-                              // } else {
                               return GestureDetector(
                                 onTap: () {
                                   Navigator.of(context).push(
@@ -231,39 +194,6 @@ class _ViewReminderScreenState extends State<ViewReminderScreen> {
                             }
                           ),
                         ),
-                        // goalsDreamsProvider.isScrolling
-                        //     ? const SizedBox()
-                        //     : Align(
-                        //   alignment: Alignment.bottomCenter,
-                        //   child: Column(
-                        //     mainAxisSize: MainAxisSize.min,
-                        //     children: [
-                        //       ElevatedButton(
-                        //         style: ElevatedButton.styleFrom(
-                        //           backgroundColor: ColorsContent.primaryColor,
-                        //         ),
-                        //         onPressed: () {
-                        //           // Navigator.of(context).push(
-                        //           //   MaterialPageRoute(
-                        //           //     builder: (context) =>
-                        //           //     const AddNewReminderScreenScreen(),
-                        //           //   ),
-                        //           // );
-                        //         },
-                        //         child: const Text(
-                        //           "Create Reminder",
-                        //           style: TextStyle(
-                        //             fontWeight: FontWeight.bold,
-                        //             color: Colors.white,
-                        //           ),
-                        //         ),
-                        //       ),
-                        //       SizedBox(
-                        //         height: size.height * 0.01,
-                        //       )
-                        //     ],
-                        //   ),
-                        // ),
                       ],
                     );
                   }),

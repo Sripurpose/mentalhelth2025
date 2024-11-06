@@ -27,15 +27,15 @@ class OtpScreen extends StatelessWidget {
           backgroundColor: Colors.transparent,
           elevation: 0,
           actions: [
-            IconButton(
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: theme.colorScheme.primary, // You can set the color based on your theme
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
+            // IconButton(
+            //   icon: Icon(
+            //     Icons.arrow_back_ios,
+            //     color: theme.colorScheme.primary, // You can set the color based on your theme
+            //   ),
+            //   onPressed: () {
+            //     Navigator.pop(context);
+            //   },
+            // ),
           ],
         ),
         body: Container(

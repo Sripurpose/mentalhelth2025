@@ -630,9 +630,11 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
   DateTime? date;
 
   Future<void> selectDate(BuildContext context) async {
+    date = DateTime.now();
+    selectedDate = dateFormatter(date: date.toString());
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: date ?? DateTime.now(),
       firstDate: DateTime.now(),
       lastDate: DateTime(2100),
     );

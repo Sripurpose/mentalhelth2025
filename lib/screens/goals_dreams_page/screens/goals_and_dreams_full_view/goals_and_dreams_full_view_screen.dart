@@ -287,16 +287,18 @@ class _GoalAndDreamFullViewScreenState
                   ),
                 ),
                 const SizedBox(height: 6),
-                widget.goalsanddream.location!.locationAddress!.isNotEmpty ?
+                widget.goalsanddream.location?.locationAddress != null ?
                 Row(
                   children: [
+                    widget.goalsanddream.location?.locationAddress == null?
+                        const SizedBox():
                     CustomImageView(
                       imagePath: ImageConstant.imgLinkedin,
                       height: 23,
                       width: 23,
                     ),
                     Text(
-                      widget.goalsanddream.location!.locationAddress!.isEmpty
+                      widget.goalsanddream.location?.locationAddress == null
                           ? ""
                           : widget.goalsanddream.location!.locationAddress.toString(),
                       style: CustomTextStyles.bodyMediumGray700_1,

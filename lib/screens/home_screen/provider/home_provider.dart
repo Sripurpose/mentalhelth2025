@@ -420,7 +420,7 @@ class HomeProvider extends ChangeNotifier {
         'reminder_enddate': convertToUnixTimestamp(reminderEndDate).toString(),
         'from_time': convertTimeOfDayTo12Hour(reminderStartTime!).toString(),
         'to_time': convertTimeOfDayTo12Hour(reminderEndTime!).toString(),
-        'reminder_before': '${remindTime?.hour.toString().padLeft(2, '0')}:${remindTime?.minute.toString().padLeft(2, '0')}',
+        'reminder_before': '',
         'reminder_repeat':repeat,
         'reminder_id':reminderId,
       };

@@ -523,86 +523,86 @@ class _EditReminderScreenScreenScreenState
                             mainAxisAlignment:
                             MainAxisAlignment.spaceBetween,
                             children: [
-                              Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    "Remind before",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      homeProvider
-                                          .remindTimeFunction(
-                                        context,
-                                      );
-                                    },
-                                    child: Container(
-                                      margin: const EdgeInsets.only(
-                                        left: 2,
-                                      ),
-                                      padding: const EdgeInsets.only(
-                                        left: 11,
-                                        right: 8,
-                                        bottom: 6,
-                                        top: 6,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: theme.colorScheme
-                                            .onSecondaryContainer
-                                            .withOpacity(
-                                          1,
-                                        ),
-                                        border: Border.all(
-                                          color: appTheme.gray700,
-                                          width: 1,
-                                        ),
-                                        borderRadius:
-                                        BorderRadiusStyle
-                                            .roundedBorder4,
-                                      ),
-                                      child: SizedBox(
-                                        width: size.width * 0.32,
-                                        child: Row(
-                                          children: [
-                                            Padding(
-                                              padding:
-                                              const EdgeInsets
-                                                  .only(
-                                                left: 3,
-                                                top: 2,
-                                                bottom: 1,
-                                              ),
-                                              child: Text(
-                                                homeProvider.remindTime != null
-                                                    ? (homeProvider.remindTime!.hour == 0
-                                                    ? '${homeProvider.remindTime!.minute} Minute'
-                                                    : '${homeProvider.remindTime!.hour} Hour ${homeProvider.remindTime!.minute} Minute')
-                                                    : "Choose Time",
-                                                style: CustomTextStyles.bodySmallGray700,
-                                              ),
-
-                                            ),
-                                            const Spacer(),
-                                            const Icon(
-                                              Icons
-                                                  .keyboard_arrow_down_sharp,
-                                              color: Colors.blue,
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              // Column(
+                              //   crossAxisAlignment:
+                              //   CrossAxisAlignment.start,
+                              //   children: [
+                              //     const Text(
+                              //       "Remind before",
+                              //       style: TextStyle(
+                              //         fontWeight: FontWeight.bold,
+                              //         fontSize: 15,
+                              //       ),
+                              //     ),
+                              //     const SizedBox(
+                              //       height: 5,
+                              //     ),
+                              //     GestureDetector(
+                              //       onTap: () {
+                              //         homeProvider
+                              //             .remindTimeFunction(
+                              //           context,
+                              //         );
+                              //       },
+                              //       child: Container(
+                              //         margin: const EdgeInsets.only(
+                              //           left: 2,
+                              //         ),
+                              //         padding: const EdgeInsets.only(
+                              //           left: 11,
+                              //           right: 8,
+                              //           bottom: 6,
+                              //           top: 6,
+                              //         ),
+                              //         decoration: BoxDecoration(
+                              //           color: theme.colorScheme
+                              //               .onSecondaryContainer
+                              //               .withOpacity(
+                              //             1,
+                              //           ),
+                              //           border: Border.all(
+                              //             color: appTheme.gray700,
+                              //             width: 1,
+                              //           ),
+                              //           borderRadius:
+                              //           BorderRadiusStyle
+                              //               .roundedBorder4,
+                              //         ),
+                              //         child: SizedBox(
+                              //           width: size.width * 0.32,
+                              //           child: Row(
+                              //             children: [
+                              //               Padding(
+                              //                 padding:
+                              //                 const EdgeInsets
+                              //                     .only(
+                              //                   left: 3,
+                              //                   top: 2,
+                              //                   bottom: 1,
+                              //                 ),
+                              //                 child: Text(
+                              //                   homeProvider.remindTime != null
+                              //                       ? (homeProvider.remindTime!.hour == 0
+                              //                       ? '${homeProvider.remindTime!.minute} Minute'
+                              //                       : '${homeProvider.remindTime!.hour} Hour ${homeProvider.remindTime!.minute} Minute')
+                              //                       : "Choose Time",
+                              //                   style: CustomTextStyles.bodySmallGray700,
+                              //                 ),
+                              //
+                              //               ),
+                              //               const Spacer(),
+                              //               const Icon(
+                              //                 Icons
+                              //                     .keyboard_arrow_down_sharp,
+                              //                 color: Colors.blue,
+                              //               )
+                              //             ],
+                              //           ),
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
                               Column(
                                 crossAxisAlignment:
                                 CrossAxisAlignment.start,
@@ -805,6 +805,7 @@ class _EditReminderScreenScreenScreenState
             controller: homeProvider.titleEditTextController,
             hintText: "Title",
             hintStyle: CustomTextStyles.bodySmallGray700,
+            readOnly: homeProvider.titleEditTextController.text != null, // Makes the text field read-only
           );
         });
   }
@@ -819,6 +820,7 @@ class _EditReminderScreenScreenScreenState
             hintStyle: CustomTextStyles.bodySmallGray700,
             textInputAction: TextInputAction.done,
             maxLines: 4,
+            readOnly: homeProvider.titleEditTextController.text != null, // Makes the text field read-only
           );
         });
   }

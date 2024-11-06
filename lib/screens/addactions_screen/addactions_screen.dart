@@ -83,6 +83,11 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
     addActionsProvider.reminderStartDate = "";
     addActionsProvider.reminderEndDate = "";
     addActionsProvider.repeat = "";
+    addActionsProvider.recordedFilePath.clear();
+    addActionsProvider.pickedImages.clear();
+    addActionsProvider.takedImages.clear();
+    addActionsProvider.selectedLocationName = "";
+    addActionsProvider.mediaSelected = 0;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       editProfileProvider.fetchCategory();
       _isTokenExpired();

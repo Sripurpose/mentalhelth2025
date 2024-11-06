@@ -107,9 +107,23 @@ class _ChartWidgetState extends State<ChartWidget> {
   }
 
   double calculateBarWidth(int numberOfBars) {
-   // logger.w(numberOfBars);
-    return numberOfBars == 7 ? 0.4 : 0.1; // Adjusting bar width based on the number of bars
+    switch (numberOfBars) {
+      case 1:
+        return 0.1;
+      case 2:
+      case 3:
+        return 0.2;
+      case 4:
+      case 5:
+        return 0.3;
+      case 6:
+      case 7:
+        return 0.4;
+      default:
+        return 0.2; // Default width if `numberOfBars` is outside the specified range
+    }
   }
+
 }
 
 

@@ -64,10 +64,10 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
     adDreamsGoalsProvider.selectedDate = "";
     adDreamsGoalsProvider.commentEditTextController.text = "";
     adDreamsGoalsProvider.goalModelIdName.clear();
-    mentalStrengthEditProvider.recordedFilePath.clear();
-    mentalStrengthEditProvider.pickedImages.clear();
-    mentalStrengthEditProvider.takedImages.clear();
-    mentalStrengthEditProvider.selectedLocationName = "";
+    adDreamsGoalsProvider.recordedFilePath.clear();
+    adDreamsGoalsProvider.pickedImages.clear();
+    adDreamsGoalsProvider.takedImages.clear();
+    adDreamsGoalsProvider.selectedLocationName = "";
     adDreamsGoalsProvider.mediaSelected = 0;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -439,63 +439,43 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
   /// Section Widget
   Widget _buildAchievementDate(BuildContext context) {
     return Consumer<AdDreamsGoalsProvider>(
-        builder: (context, adDreamsGoalsProvider, _) {
-      return GestureDetector(
-        onTap: () {
-          adDreamsGoalsProvider.selectDate(
-            context,
-          );
-        },
-        child: Container(
-          margin: const EdgeInsets.only(
-            left: 2,
-          ),
-          padding: const EdgeInsets.symmetric(
-            horizontal: 11,
-            vertical: 8,
-          ),
-          decoration: const ShapeDecoration(
-            shape: RoundedRectangleBorder(
-              side: BorderSide(
-                width: 0.8,
-                style: BorderStyle.solid,
-                color: Colors.grey,
-              ),
-              borderRadius: BorderRadius.all(
-                Radius.circular(
-                  5.0,
-                ),
+      builder: (context, adDreamsGoalsProvider, _) {
+        return GestureDetector(
+          onTap: () {
+            adDreamsGoalsProvider.selectDate(context);
+          },
+          child: Container(
+            margin: const EdgeInsets.only(left: 2),
+            padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 8),
+            decoration: const ShapeDecoration(
+              shape: RoundedRectangleBorder(
+                side: BorderSide(width: 0.8, style: BorderStyle.solid, color: Colors.grey),
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
               ),
             ),
+            child: Row(
+              children: [
+                CustomImageView(
+                  imagePath: ImageConstant.imgThumbsUpGray700,
+                  height: 20,
+                  width: 20,
+                  margin: const EdgeInsets.only(bottom: 2),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 5, top: 2, bottom: 1),
+                  child: Text(
+                    adDreamsGoalsProvider.selectedDate.isNotEmpty
+                        ? adDreamsGoalsProvider.selectedDate
+                        : "Achievement Date",
+                    style: CustomTextStyles.bodySmallGray700,
+                  ),
+                ),
+              ],
+            ),
           ),
-          child: Row(
-            children: [
-              CustomImageView(
-                imagePath: ImageConstant.imgThumbsUpGray700,
-                height: 20,
-                width: 20,
-                margin: const EdgeInsets.only(
-                  bottom: 2,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 5,
-                  top: 2,
-                  bottom: 1,
-                ),
-                child: Text(
-                  adDreamsGoalsProvider.selectedDate.isNotEmpty &&  adDreamsGoalsProvider.selectedDate != null
-                      ? adDreamsGoalsProvider.selectedDate
-                      : "Achievement Date",
-                  style: CustomTextStyles.bodySmallGray700,
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 
   Widget _buildCommentEditText(BuildContext context) {

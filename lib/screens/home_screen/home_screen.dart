@@ -346,11 +346,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           const SizedBox(height: 6),
-                          homeProvider.journalsModel == null
+                          homeProvider.chartViewModel == null
                               ? const SizedBox()
                               : _buildUserProfileList(context, size, homeProvider),
                           const SizedBox(height: 4),
-                          homeProvider.journalsModel == null
+                          homeProvider.chartViewModel == null
                               ? const SizedBox()
                               : (homeProvider.journalsModel?.journals?.length ?? 0) < 0
                               ? const SizedBox()
@@ -523,8 +523,8 @@ class _HomeScreenState extends State<HomeScreen> {
         separatorBuilder: (context, index) {
           return const SizedBox(height: 3);
         },
-        itemCount: homeProvider.journalsModel!.journals!.length < 4
-            ? homeProvider.journalsModel!.journals!.length
+        itemCount: (homeProvider.journalsModel?.journals?.length ?? 0) < 4
+            ? (homeProvider.journalsModel?.journals?.length ?? 0)
             : 4,
         itemBuilder: (context, index) {
           return GestureDetector(

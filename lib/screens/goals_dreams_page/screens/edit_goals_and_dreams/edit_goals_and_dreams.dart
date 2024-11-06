@@ -247,6 +247,9 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
             context,
             size,
             heading: "Edit Goals & Dreams",
+            onTap: (){
+              Navigator.pop(context);
+            }
           ),
           // buildAppBarEditGoals(
           //   context,
