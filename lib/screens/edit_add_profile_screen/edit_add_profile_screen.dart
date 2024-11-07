@@ -66,6 +66,9 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
     dashBoardProvider = Provider.of<DashBoardProvider>(context, listen: false);
     editProfileProvider = Provider.of<EditProfileProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      editProfileProvider.initializeSelectedCategories(
+        editProfileProvider.getCategoryModel?.category ?? [],
+      );
       _isTokenExpired();
     });
     super.initState();
@@ -225,25 +228,8 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
 
                                       Consumer<EditProfileProvider>(
                                         builder: (context, editProfileProvider, _) {
-                                          // Ensure interests is a List<String>
-                                          final String? interestsString = editProfileProvider.getProfileModel?.interests;
-                                          editProfileProvider.profileInterests = interestsString != null
-                                              ? interestsString.split(',').map((e) => e.trim()).toList() // Split and trim whitespace
-                                              : [];
-                                          final String? intrestIdString = editProfileProvider.getProfileModel?.interest_ids;
-                                          editProfileProvider.profileInterestIds = intrestIdString != null
-                                              ? intrestIdString.split(',').map((e) => e.trim()).toList() // Split and trim whitespace
-                                              : [];
-                                          final selectedCategories = editProfileProvider.selectedCategories;
-
-                                          // Check if interests or selected categories are not empty.
-                                          final isProfileInterestsNotEmpty = editProfileProvider.profileInterests.isNotEmpty;
-                                          final areSelectedCategoriesNotEmpty = selectedCategories.isNotEmpty;
-                                          logger.w("editProfileProvider.profileInterests-${editProfileProvider.profileInterests}");
-                                          logger.w("selectedCategories-$selectedCategories");
-
                                           return Container(
-                                            height: size.height * 0.05, // Adjust this height as needed
+                                            height: size.height * 0.05, // Adjust height as needed
                                             margin: const EdgeInsets.only(left: 10),
                                             padding: const EdgeInsets.only(left: 2, right: 2),
                                             decoration: const ShapeDecoration(
@@ -255,78 +241,116 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                                                 Expanded(
                                                   child: InkWell(
                                                     onTap: () async {
-                                                      // Open modal to select items
-                                                      List<Category>? selectedCategories = await showModalBottomSheet(
+                                                      List<Category>? selectedCategories = await showDialog<List<Category>>(
                                                         context: context,
                                                         builder: (BuildContext context) {
-                                                          return MultiSelectCategoryWidget(
-                                                            categories: editProfileProvider.getCategoryModel?.category ?? [],
-                                                            selectedCategories: editProfileProvider.selectedCategories,
+                                                          return AlertDialog(
+                                                            backgroundColor: appTheme.blue300.withOpacity(0.95), // Adjust the opacity as needed
+                                                            title: const Text("Select Interests"),
+                                                            content: StatefulBuilder(
+                                                              builder: (context, setState) {
+                                                                final categories = editProfileProvider.getCategoryModel?.category ?? [];
+                                                                return SizedBox(
+                                                                  height: size.height * 0.2,
+                                                                  width: double.maxFinite,
+                                                                  child: ListView.builder(
+                                                                    itemCount: categories.length,
+                                                                    itemBuilder: (context, index) {
+                                                                      final category = categories[index];
+                                                                      final isSelected = editProfileProvider.selectedCategories.contains(category);
+
+                                                                      return ListTile(
+                                                                        title: Text(category.categoryName ?? ""),
+                                                                        tileColor: isSelected ? Colors.white.withOpacity(0.2) : Colors.transparent,
+                                                                        onTap: () {
+                                                                          setState(() {
+                                                                            if (isSelected) {
+                                                                              editProfileProvider.removeSelectedCategory(category);
+                                                                            } else {
+                                                                              editProfileProvider.addSelectedCategory(category);
+                                                                            }
+                                                                          });
+                                                                        },
+                                                                      );
+                                                                    },
+                                                                  ),
+                                                                );
+                                                              },
+                                                            ),
+                                                            actions: [
+                                                              TextButton(
+                                                                onPressed: () {
+                                                                  Navigator.pop(context, editProfileProvider.selectedCategories);
+                                                                },
+                                                                child: const Text("Done"),
+                                                              ),
+                                                            ],
                                                           );
                                                         },
                                                       );
-                                                      // If categories are selected, update provider
+
                                                       if (selectedCategories != null) {
                                                         editProfileProvider.setSelectedCategories(selectedCategories);
                                                       }
                                                     },
-                                                    child: Row(
-                                                      children: [
-                                                        Expanded(
-                                                          child: SingleChildScrollView(
-                                                            scrollDirection: Axis.horizontal,
-                                                            child: Row(
-                                                              children: areSelectedCategoriesNotEmpty
-                                                                  ? selectedCategories.map((category) {
-                                                                return Padding(
-                                                                  padding: const EdgeInsets.only(right: 8.0), // Space between items
-                                                                  child: Chip(
-                                                                    label: Text(category.categoryName ?? ""),
-                                                                    deleteIcon: const Icon(Icons.close),
-                                                                    onDeleted: () {
-                                                                      // Remove the item from the selected list
-                                                                      editProfileProvider.removeSelectedCategory(category);
-                                                                    },
-                                                                  ),
-                                                                );
-                                                              }).toList()
-                                                                  : isProfileInterestsNotEmpty
-                                                                  ? editProfileProvider.profileInterests.map((interest) {
-                                                                // Assuming you have a way to get the corresponding interest ID
-                                                                final interestId = editProfileProvider.profileInterestIds[editProfileProvider.profileInterests.indexOf(interest)];
-                                                                return Padding(
-                                                                  padding: const EdgeInsets.only(right: 8.0), // Space between items
-                                                                  child:
-                                                                  Chip(
-                                                                    label: Text(interest), // Use interest and its ID as the label
-                                                                    deleteIcon: const Icon(Icons.close), // Add delete icon
-                                                                    onDeleted: () {
-                                                                      // Remove the interest from the profile interests list
-                                                                      editProfileProvider.removeInterest(interest);
-                                                                      editProfileProvider.removeInterestId(interestId);
-                                                                      // No need to call removeInterestId() as it was removed
-                                                                    },
-                                                                  ),
-                                                                );
-                                                              }).toList()
-                                                                  : [
-                                                                Row(
-                                                                  children: [
-                                                                    Text(
-                                                                      'Select Interests',
-                                                                      style: CustomTextStyles.bodyMediumOnPrimary,
-                                                                    ),
-                                                                    const Gap(10),
-                                                                    const Icon(Icons.arrow_drop_down),
-                                                                  ],
+
+                                                    child: SingleChildScrollView(
+                                                      scrollDirection: Axis.horizontal,
+                                                      child: Row(
+                                                        children: [
+                                                          if (editProfileProvider.selectedCategories.isNotEmpty)
+                                                        ...editProfileProvider.selectedCategories
+                                                        .map((category) => category.categoryName) // Extract category names
+                                              .toSet() // Convert the list to a Set to remove duplicates
+                                              .map((categoryName) {
+                                            // Find the corresponding category object based on the categoryName
+                                            final category = editProfileProvider.selectedCategories.firstWhere(
+                                                    (c) => c.categoryName == categoryName,
+                                                orElse: () => Category(categoryName: "")); // Provide a fallback
+                                            return Padding(
+                                              padding: const EdgeInsets.only(right: 8.0),
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    category.categoryName ?? "",
+                                                    style: const TextStyle(
+                                                      color: Colors.blue,
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                  IconButton(
+                                                    icon: const Icon(Icons.close, size: 16, color: Colors.red),
+                                                    onPressed: () {
+                                                      editProfileProvider.removeSelectedCategory(category);
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          }).toList()
+                                          else
+                                                            Container(
+                                                              width:size.width * 0.65,
+                                                              decoration: BoxDecoration(
+                                                                color: Colors.transparent, // Keep the background color transparent
+                                                                border: Border.all(
+                                                                  color: Colors.black, // Set the border color
+                                                                  width: 0.5, // Set the border width
                                                                 ),
-                                                              ],
+                                                                borderRadius: BorderRadius.circular(5), // Add rounded corners if desired
+                                                              ),
+                                                              child: Padding(
+                                                                padding: const EdgeInsets.all(10.0),
+                                                                child: Text(
+                                                                  'Select Interests',
+                                                                  style: CustomTextStyles.bodyMediumOnPrimary,
+                                                                ),
+                                                              ),
                                                             ),
-                                                          ),
-                                                        ),
-
-
-                                                      ],
+                                                          const Gap(4),
+                                                          const Icon(Icons.arrow_drop_down,color: Colors.black,),
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
@@ -336,7 +360,8 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                                         },
                                       ),
 
-                                    const SizedBox(height: 8),
+
+                                      const SizedBox(height: 8),
                                       Align(
                                         alignment: Alignment.centerLeft,
                                         child: Padding(
@@ -595,6 +620,8 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
           onPressed: () async {
             // Get the email entered by the user
             String email = editProfileProvider.emailController.text;
+            logger.w("editProfileProvider.profileInterestIds${editProfileProvider.profileInterestIds}");
+            logger.w("editProfileProvider.selectedCategories${editProfileProvider.selectedCategories}");
 
             // Regular expression for standard email validation
             String emailPattern =
@@ -632,10 +659,11 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                 email: email,  // Pass the validated email
                 context: context,
                 interestIds: editProfileProvider.selectedCategories.isEmpty
-                    ? editProfileProvider.profileInterestIds  // Default if no categories are selected
+                    ? editProfileProvider.profileInterestIds
                     : editProfileProvider.selectedCategories
-                    .map((category) => category.id.toString())  // Convert categories to a list of IDs
+                    .map((category) => category.id.toString())
                     .toList(),
+
               );
               // Navigate to the comment page
               dashBoardProvider.changeCommentPage(
@@ -647,5 +675,6 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
       },
     );
   }
-
 }
+
+

@@ -41,6 +41,7 @@ class SettingRegister {
   String? message;
   String? link;
   String? linkUrl;
+  String? target;
   String? status;
 
   SettingRegister({
@@ -51,6 +52,7 @@ class SettingRegister {
     this.message,
     this.link,
     this.linkUrl,
+    this.target,
     this.status,
   });
 
@@ -62,6 +64,7 @@ class SettingRegister {
     message: json["message"],
     link: json["link"],
     linkUrl: json["link_url"],
+    target: json["target"],
     status: json["status"],
   );
 
@@ -73,6 +76,7 @@ class SettingRegister {
     "message": message,
     "link": link,
     "link_url": linkUrl,
+    "target":target,
     "status": status,
   };
 }

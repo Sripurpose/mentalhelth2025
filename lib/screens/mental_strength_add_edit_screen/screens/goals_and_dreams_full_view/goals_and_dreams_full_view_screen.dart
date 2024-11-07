@@ -355,7 +355,7 @@ class _GoalAndDreamFullViewBottomSheetState
                 ),
               ),
               const SizedBox(height: 6),
-              widget.goalDetailModel.goals!.location!.locationAddress!.isNotEmpty ?
+              widget.goalDetailModel.goals!.location?.locationAddress != null ?
               SizedBox(
                 child: Center(
                     child: Row(
@@ -422,7 +422,7 @@ class _GoalAndDreamFullViewBottomSheetState
                               },
                               child: Container(
                                 height: size.height * 0.04,
-                                width: size.width * 0.85,
+                                width: size.width * 0.78,
                                 padding: const EdgeInsets.only(
                                   bottom: 5,
                                   top: 5,
@@ -724,7 +724,7 @@ class _GoalAndDreamFullViewBottomSheetState
               style: CustomTextStyles.blackText16000000W600(),
             ),
             SizedBox(
-              width: size.width * 0.6,
+              width: size.width * 0.55,
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal, // Enable horizontal scrolling
                 child: comments != null ?

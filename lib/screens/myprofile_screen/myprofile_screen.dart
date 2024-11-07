@@ -365,11 +365,14 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                           .titleMediumff000000,
                                                     ),
                                                     TextSpan(
-                                                      text:
-                                                          "${editProfileProvider.getProfileModel!.interests}",
-                                                      style: CustomTextStyles
-                                                          .bodyLargeff000000,
-                                                    ),
+                                                      text: editProfileProvider.getProfileModel!.interests
+                                                          ?.split(',') // Split the interests string by commas into a list
+                                                          .map((e) => e.trim()) // Trim spaces around each interest
+                                                          .toSet() // Convert to a Set to remove duplicates
+                                                          .join(', '), // Join them back into a single string with commas
+                                                      style: CustomTextStyles.bodyLargeff000000,
+                                                    )
+
                                                   ],
                                                 ),
                                                 textAlign: TextAlign.center,

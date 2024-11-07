@@ -32,6 +32,7 @@ import 'package:html_unescape/html_unescape.dart';
 import '../../utils/logic/logic.dart';
 import '../../widgets/background_image/background_imager.dart';
 import '../journal_list_screen/journal_list_page.dart';
+import '../mental_strength_add_edit_screen/screens/goals_and_dreams_full_view/goals_and_dreams_full_view_screen.dart';
 
 class JournalViewScreen extends StatefulWidget {
   const JournalViewScreen(
@@ -48,10 +49,13 @@ class JournalViewScreen extends StatefulWidget {
 }
 
 class _JournalViewScreenState extends State<JournalViewScreen> {
+  late MentalStrengthEditProvider mentalStrengthEditProvider;
   late HomeProvider homeProvider;
   var logger = Logger();
   @override
   void initState() {
+    mentalStrengthEditProvider = Provider.of<MentalStrengthEditProvider>(context, listen: false,);
+    mentalStrengthEditProvider.openGoalViewSheet = false;
     init();
     super.initState();
   }
@@ -126,7 +130,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
-      child: Consumer2<DashBoardProvider,HomeProvider>(builder: (context, dashBoardProvider,homeProvider, _) {
+      child: Consumer3<MentalStrengthEditProvider,DashBoardProvider,HomeProvider>(builder: (context,mentalStrengthEditProvider,dashBoardProvider,homeProvider, _) {
         return Scaffold(
           appBar: buildAppBarJournalViewScreen(context, size, heading: "View your journal",
             onTap: (){
@@ -438,27 +442,85 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                 Padding(
                                   padding: const EdgeInsets.only(left: 5),
                                   child: Text(
-                                    "Goal  affected by your reaction",
+                                    "Goal affected by your reaction",
                                     style: theme.textTheme.bodyLarge,
                                   ),
                                 ),
                                 const SizedBox(height: 4),
                                 homeProvider.journalDetails?.journals?.goal == null
                                     ?   const SizedBox()
-                                    : Padding(
-                                        padding: const EdgeInsets.only(left: 5),
-                                        child: Text(
-                                          homeProvider.journalDetails!.journals!
-                                                      .goal ==
-                                                  null
-                                              ? ""
-                                              : homeProvider.journalDetails!
-                                                  .journals!.goal!.goalTitle
-                                                  .toString(),
-                                          style: CustomTextStyles
-                                              .bodyMediumGray700_1,
+                                    : Container(
+                                      height: size.height * 0.04,
+                                      width: size.width * 0.7,
+                                      padding:
+                                      const EdgeInsets.only(
+                                        bottom: 5,
+                                        top: 5,
+                                        left: 5,
+                                        right: 5,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius:
+                                        BorderRadius.circular(
+                                            100), // Makes it circular
+                                        border: Border.all(
+                                          color: Colors.grey,
+                                          width: 1,
                                         ),
                                       ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment
+                                            .spaceBetween,
+                                        children: [
+                                          SizedBox(
+                                            width: size.width * 0.45,
+                                            child: SingleChildScrollView(
+                                              scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+                                              child: Text(
+                                                homeProvider.journalDetails!.journals!
+                                                    .goal ==
+                                                    null
+                                                    ? ""
+                                                    : homeProvider.journalDetails!
+                                                    .journals!.goal!.goalTitle
+                                                    .toString(),
+                                                style: CustomTextStyles
+                                                    .bodyMediumGray700_1,
+                                              ),
+                                            ),
+                                          ),
+
+                                          GestureDetector(
+                                            onTap: () {
+                                              mentalStrengthEditProvider
+                                                  .openGoalViewSheetFunction();
+                                              mentalStrengthEditProvider
+                                                  .fetchGoalDetails(
+                                                goalId:
+                                                homeProvider.journalDetails!
+                                                    .journals!.goal!.goalId
+                                                    .toString(),
+                                              );
+                                            },
+                                            child: CircleAvatar(
+                                              radius:
+                                              size.width * 0.04,
+                                              backgroundColor:
+                                              Colors.blue,
+                                              child: Icon(
+                                                Icons
+                                                    .arrow_forward_ios_outlined,
+                                                color: Colors.white,
+                                                size: size.width *
+                                                    0.03,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                 homeProvider.journalDetails?.journals?.goal == null ?
                                     const SizedBox():
                                 const SizedBox(height: 33),
@@ -489,9 +551,39 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                         ),
 
                                 ),
-                                const SizedBox(height: 33),
+                               // const SizedBox(height: 33),
                               ],
                             ),
+
+                      mentalStrengthEditProvider.openGoalViewSheet
+                          ? mentalStrengthEditProvider.goalDetailModel ==
+                          null
+                          ? Container(
+                        decoration: BoxDecoration(
+                          color: appTheme.gray50,
+                          borderRadius: const BorderRadius.only(
+                            topRight: Radius.circular(
+                              25,
+                            ),
+                            topLeft: Radius.circular(
+                              25,
+                            ),
+                          ),
+                        ),
+                        margin: EdgeInsets.only(
+                          top: size.height * 0.0,
+                        ),
+                        child: shimmerList(
+                          height: size.height * 0.8,
+                          list: 10,
+                        ),
+                      )
+                          : GoalAndDreamFullViewBottomSheet(
+                        goalDetailModel:
+                        mentalStrengthEditProvider
+                            .goalDetailModel!,
+                      )
+                          : const SizedBox(),
                     ],
                   ),
                 );

@@ -60,7 +60,7 @@ class _AddActionAudioPlayerState extends State<AddActionAudioPlayer> {
 
   @override
   void dispose() {
-    audioPlayer.dispose();
+   // audioPlayer.dispose();
     super.dispose();
   }
 

@@ -256,7 +256,29 @@ class EditProfileProvider extends ChangeNotifier {
 
   void removeSelectedCategory(Category category) {
     selectedCategories.remove(category);
+    logger.w("RemoveselectedCategories$selectedCategories");
     notifyListeners();
+  }
+
+  void initializeSelectedCategories(List<Category> allCategories) {
+    final interests = getProfileModel?.interests?.split(',') ?? [];
+    final interestIds = getProfileModel?.interest_ids?.split(',') ?? [];
+
+    selectedCategories = allCategories.where((category) {
+      // Check if the category name or ID matches the interests or interest IDs
+      return interests.contains(category.categoryName) ||
+          interestIds.contains(category.id.toString());
+    }).toList();
+
+    notifyListeners();
+  }
+
+  void addSelectedCategory(Category category) {
+    if (!selectedCategories.contains(category)) {
+      selectedCategories.add(category);
+      logger.w("AddselectedCategories$selectedCategories");
+      notifyListeners();
+    }
   }
 
   Future<void> editProfileFunction(
@@ -287,6 +309,8 @@ class EditProfileProvider extends ChangeNotifier {
         'email':email
       };
 
+      logger.w("body$body");
+
       // Add profile image only if it's not an empty string or a URL
       if (!(profileimg.startsWith("https") || profileimg.startsWith("http") || profileimg == "")) {
         body['profileimg'] = profileimg;
@@ -296,7 +320,7 @@ class EditProfileProvider extends ChangeNotifier {
       for (int i = 0; i < interestIds.length; i++) {
         body['interest[$i]'] = interestIds[i];
       }
-
+      logger.w("body1$body");
       final http.Response response = await http.put(
         Uri.parse(
           UrlConstant.profileUrl(userId: userId!),

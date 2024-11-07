@@ -47,15 +47,65 @@ class _LandingRegisterScreenScreenState extends State<LandingRegisterScreenScree
     });
   }
 
-  // First, call fetchSettings
+
 
   Future<void> _launchInAppWithBrowserOptions(Uri url) async {
-    if (!await launchUrl(
-      url,
-      mode: LaunchMode.inAppBrowserView,
-      browserConfiguration: const BrowserConfiguration(showTitle: true),
-    )) {
-      throw Exception('Could not launch $url');
+    // Check if the URL is a deep link
+    if (url.scheme == "mental") {
+      // Handle the deep link (navigate to a specific screen in your app)
+      // For example, navigate to a MentalScreen page
+      Navigator.pushNamed(context, '/mentalScreen', arguments: url);
+    } else {
+      // If it's a regular URL, open it in an in-app browser
+      if (!await launchUrl(
+        url,
+        mode: LaunchMode.inAppBrowserView,
+        browserConfiguration: const BrowserConfiguration(showTitle: true),
+      )) {
+        throw Exception('Could not launch $url');
+      }
+    }
+  }
+
+  // First, call fetchSettings
+
+  // Future<void> _launchInAppWithBrowserOptions(Uri url) async {
+  //   if (!await launchUrl(
+  //     url,
+  //     mode: LaunchMode.inAppBrowserView,
+  //     browserConfiguration: const BrowserConfiguration(showTitle: true),
+  //   )) {
+  //     throw Exception('Could not launch $url');
+  //   }
+  // }
+
+
+  Future<void> _launchInAppWithWebView(Uri url, BuildContext context) async {
+    // Check if the URL is a deep link (custom scheme, e.g., mental://)
+    if (url.scheme == "mental") {
+      // Handle the deep link by navigating to a specific screen using MaterialPageRoute
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const LandingRegisterScreenScreen(), // Pass the URL as an argument
+        ),
+      );
+    } else {
+      // If it's a regular HTTP/HTTPS URL, open it in a WebView
+      try {
+        if (!await launchUrl(
+          url,
+          mode: LaunchMode.inAppWebView,
+          webViewConfiguration: const WebViewConfiguration(
+            enableJavaScript: true, // Enable JavaScript if needed
+            enableDomStorage: true, // Enable DOM storage if needed
+          ),
+        )) {
+          throw Exception('Could not launch $url');
+        }
+      } catch (e) {
+        // Handle errors like invalid URLs
+        print("Error launching URL: $e");
+      }
     }
   }
 
@@ -171,20 +221,13 @@ class _LandingRegisterScreenScreenState extends State<LandingRegisterScreenScree
                                 onTap: () {
                                   String chatURL = signInProvider.settingsRegisterModel?.settings?[0].linkUrl ?? "";
                                   var url = Uri.parse(chatURL);
-                                //  if (signInProvider.settingsList[0].target ==
-                                     // "external") {
+                                 if (signInProvider.settingsRegisterModel?.settings?[0].target ==
+                                     "external") {
                                    _launchInAppWithBrowserOptions(url);
-                                //  }
-                              //    else {
-                              //       Navigator.of(context).push(
-                              //         MaterialPageRoute(
-                              //           builder: (context) =>
-                              //               SubscriptionInAppScreen(
-                              //                 url: widget.linkUrl ?? "",
-                              //               ),
-                              //         ),
-                              //       );
-                                //  }
+                                 }
+                                 else {
+                                   _launchInAppWithWebView(url,context);
+                                 }
                                 },
                                 child: Container(
                                   padding: EdgeInsets.all(10.0),

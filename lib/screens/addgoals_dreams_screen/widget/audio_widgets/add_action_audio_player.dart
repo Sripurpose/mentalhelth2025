@@ -62,7 +62,7 @@ class _AddGoalsAndDreamsAudioPlayerState
 
   @override
   void dispose() {
-    audioPlayer.dispose();
+   // audioPlayer.dispose();
     super.dispose();
   }
 
