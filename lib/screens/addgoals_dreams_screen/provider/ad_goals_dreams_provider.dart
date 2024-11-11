@@ -24,7 +24,7 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
       required Placemark placemark,
       required LatLng location}) {
     selectedLocationName =
-        selectedLocationAddress = placemark.locality.toString();
+        selectedLocationAddress = "${placemark.locality.toString()},${placemark.administrativeArea.toString()}";
     selectedAddress.toString();
     selectedLatitude = location.latitude.toString();
     locationLongitude = location.longitude.toString();

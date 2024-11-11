@@ -192,12 +192,13 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                                                 const EdgeInsets.only(left: 10),
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 15, vertical: 10),
-                                            decoration: AppDecoration
-                                                .outlineGray700
-                                                .copyWith(
-                                              borderRadius: BorderRadiusStyle
-                                                  .roundedBorder4,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadiusStyle.roundedBorder4,
                                               color: Colors.transparent,
+                                              border: Border.all(
+                                                color: Colors.grey, // Set the color of the border
+                                                width: 1.0,         // Set the width of the border
+                                              ),
                                             ),
                                             child: Row(
                                               mainAxisSize: MainAxisSize.max,

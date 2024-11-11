@@ -17,6 +17,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'forgot_password/forgot_password_screen.dart';
+import 'coninue_with_google_class.dart';
 
 class ScreenSignIn extends StatefulWidget {
   const ScreenSignIn({Key? key}) : super(key: key);
@@ -30,6 +31,8 @@ class _ScreenSignInState extends State<ScreenSignIn> {
   var logger = Logger();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isLoading = true;
+  bool _isSignedIn = false;
+
 
   @override
   void initState() {
@@ -44,6 +47,75 @@ class _ScreenSignInState extends State<ScreenSignIn> {
       // First, call fetchSettings
       await signInProvider.fetchAppRegister(context);
     });
+  }
+
+  Future<void> handleGoogleSignInSignOut() async {
+    if (_isSignedIn) {
+      await googleSignOut();
+    } else {
+      await googleSignIn();
+    }
+    setState(() {
+      _isSignedIn = !_isSignedIn;
+    });
+  }
+
+  Future googleSignIn() async {
+    try {
+      final user = await GoogleSignInService.login();
+      await user?.authentication;
+      logger.w(user!.displayName.toString());
+      signInProvider.continueWithGoogleName = user.displayName;
+      logger.w(signInProvider.continueWithGoogleName);
+      signInProvider.continueWithGoogleMail = user.email;
+      logger.w(signInProvider.continueWithGoogleMail);
+      signInProvider.continueWithGoogleId = user.id;
+      logger.w(signInProvider.continueWithGoogleId);
+      if (context.mounted) {
+        // Social media function
+        await signInProvider.socialMediaFunction(
+          context,
+          googleid: signInProvider.continueWithGoogleId,
+        );
+
+        HomeProvider homeProvider =
+        Provider.of<HomeProvider>(context, listen: false);
+        EditProfileProvider editProfileProvider =
+        Provider.of<EditProfileProvider>(context,
+            listen: false);
+        homeProvider.fetchChartView(context);
+        //   homeProvider.fetchJournals(initial: true);
+        editProfileProvider.fetchUserProfile();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Column(
+            children: [
+              Text(
+                "Name: ${user.displayName}\nEmail: ${user.email}\nId: ${user.id}",
+              ),
+            ],
+          ),
+        ));
+      }
+    } catch (exception) {
+      logger.w(exception.toString());
+    }
+  }
+
+  Future googleSignOut() async {
+    try {
+      await GoogleSignInService.logout();
+      logger.w('Sign Out Success');
+      if (context.mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Sign Out Success')));
+      }
+    } catch (exception) {
+      logger.w(exception.toString());
+      if (context.mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Sign Out Failed')));
+      }
+    }
   }
 
   Future<void> _launchInAppWithBrowserOptions(Uri url) async {
@@ -295,10 +367,10 @@ class _ScreenSignInState extends State<ScreenSignIn> {
                     //   builder: (context, signInProvider, _) {
                     //     return buildContinueWithPhoneButton(
                     //       context,
-                    //       message: "Continue with Google",
+                    //       message: _isSignedIn ? "Sign Out from Google" : "Continue with Google",
                     //       imageMessage: ImageConstant.imgGoogle,
                     //       onPressed: () async {
-                    //         await signInProvider.loginWithGoogle();
+                    //         handleGoogleSignInSignOut();
                     //       },
                     //     );
                     //   },

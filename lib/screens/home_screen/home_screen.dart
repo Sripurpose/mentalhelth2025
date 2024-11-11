@@ -84,6 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
     dashBoardProvider = Provider.of<DashBoardProvider>(context, listen: false);
     goalsDreamsProvider = Provider.of<GoalsDreamsProvider>(context, listen: false);
     scheduleMicrotask(() async {
+      signInProvider.settingsList.clear();
       await editProfileProvider.fetchUserProfile();
       if(Platform.isIOS){
         final oneSignalId = await OneSignal.User.getOnesignalId();

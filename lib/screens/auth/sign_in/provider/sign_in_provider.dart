@@ -26,6 +26,9 @@ class SignInProvider extends ChangeNotifier {
   int forgotPasswordStatus = 0;
   String? forgotPasswordMessage = "";
   var logger = Logger();
+  String? continueWithGoogleId = "";
+  String? continueWithGoogleMail = "";
+  String? continueWithGoogleName = "";
   //stripe webview functions
 
   void clearTextEditingController() {
@@ -138,6 +141,9 @@ class SignInProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+
+
 
   bool logOutLoading = false;
   Future<void> logOutUser(BuildContext context) async {
@@ -346,7 +352,7 @@ class SignInProvider extends ChangeNotifier {
   bool socialMediaModelLoading = false;
 
   Future<void> socialMediaFunction(BuildContext context,
-      {String? fbid, String? googleid, String? appleid}) async {
+      {String? fbid, String? googleid, String? appleid,String? firstname, String? email}) async {
     try {
       // var body = {
       //   'fbid': email,
@@ -357,7 +363,7 @@ class SignInProvider extends ChangeNotifier {
       if (fbid != null) {
         body = {'fbid': fbid};
       } else if (googleid != null) {
-        body = {'googleid': googleid};
+        body = {'googleid': googleid,'firstname':firstname,'email':email};
       } else if (appleid != null) {
         body = {'appleid': appleid};
       }
@@ -388,10 +394,11 @@ class SignInProvider extends ChangeNotifier {
             subscribe: socialMediaModel!.isSubscribed.toString());
 
         if (socialMediaModel!.status!) {
-          Navigator.of(context).push(
+          Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
-              builder: (context) => SubscribePlanPage(),
+              builder: (context) => const DashBoardScreen(),
             ),
+                (route) => false,
           );
         }
       } else {

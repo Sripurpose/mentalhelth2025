@@ -163,7 +163,7 @@ class _LandingRegisterScreenScreenState extends State<LandingRegisterScreenScree
                                 borderRadius: BorderRadius.circular(5.0),
                                 // Optional: Add border radius
                                 border: Border.all(
-                                  color: Colors.blue,
+                                  color: Colors.black,
                                   // Change to your desired border color
                                   width: 0.5, // Optional: Adjust border width
                                 ),

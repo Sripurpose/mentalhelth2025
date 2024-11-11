@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../utils/core/image_constant.dart';
+import '../../utils/logic/shared_prefrence.dart';
 import '../../utils/theme/theme_helper.dart';
 import '../../widgets/app_bar/appbar_leading_image.dart';
 import '../auth/sign_in/provider/sign_in_provider.dart';
@@ -25,6 +26,7 @@ class _SubscriptionInAppScreenState extends State<SubscriptionInAppScreen> {
     signInProvider = Provider.of<SignInProvider>(context, listen: false);
     super.initState();
     _controller = WebViewController()
+      ..clearCache() // Clears the cache
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(
         NavigationDelegate(
@@ -42,11 +44,15 @@ class _SubscriptionInAppScreenState extends State<SubscriptionInAppScreen> {
       )
       ..loadRequest(
         Uri.parse(widget.url), // Loading the Terms of Service URL
+        headers: {
+          "Cache-Control": "no-cache, no-store, must-revalidate",
+          "Pragma": "no-cache",
+          "Expires": "0",
+        },
       );
   }
 
   Future<void> _performApiCallOnBackPress() async {
-
     await signInProvider.fetchSettings(context);
     // TODO: Implement your API call logic here
     // You can use http package or any other method to perform an API call
@@ -55,6 +61,7 @@ class _SubscriptionInAppScreenState extends State<SubscriptionInAppScreen> {
     // if (response.statusCode == 200) { ... }
     print("API call performed on back press");
   }
+
 
   @override
   Widget build(BuildContext context) {

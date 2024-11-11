@@ -224,6 +224,8 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                             // audioList.isEmpty
                             //     ? const SizedBox()
                             //     :
+                            audioList.isEmpty?
+                                SizedBox():
                             Padding(
                                     padding: const EdgeInsets.only(left: 2),
                                     child: Text(
@@ -233,14 +235,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                     ),
                                   ),
                             audioList.isEmpty
-                                ? const SizedBox()
-                                : const SizedBox(
-                                    height: 2,
-                                  ),
-                            audioList.isEmpty
-                                ?       Text("NA",
-                              style: CustomTextStyles
-                                  .bodyMediumGray700_1,)
+                                ?      SizedBox()
                                 :
                             SizedBox(
                                     height:size.height * 0.15,
@@ -253,9 +248,13 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                       },
                                     ),
                                   ),
+                            imageList.isEmpty?
+                                SizedBox():
                             const SizedBox(
                               height: 10,
                             ),
+                            imageList.isEmpty?
+                                SizedBox():
                             Padding(
                                     padding: const EdgeInsets.only(left: 2),
                                     child: Text(
@@ -265,12 +264,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                     ),
                                   ),
                             imageList.isEmpty
-                                ? const SizedBox()
-                                : const SizedBox(height: 4),
-                            imageList.isEmpty
-                                ?   Text("NA",
-                              style: CustomTextStyles
-                                  .bodyMediumGray700_1,)
+                                ?   SizedBox()
                                 : SizedBox(
                               height: imageList.isNotEmpty ? size.height * 0.3 : 0,
                                     child: Stack(
@@ -310,6 +304,8 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                       ],
                                     ),
                                   ),
+                            videoList.isEmpty?
+                                SizedBox():
                             const SizedBox(
                               height: 10,
                             ),
@@ -318,6 +314,8 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                 : const SizedBox(
                                     height: 10,
                                   ),
+                            videoList.isEmpty?
+                                SizedBox():
                             Padding(
                                     padding: const EdgeInsets.only(left: 2),
                                     child: Text(
@@ -327,9 +325,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                     ),
                                   ),
                             videoList.isEmpty
-                                ?   Text("NA",
-                              style: CustomTextStyles
-                                  .bodyMediumGray700_1,)
+                                ?   SizedBox()
                                 : const SizedBox(height: 4),
                             videoList.isEmpty
                                 ? const SizedBox()
@@ -372,14 +368,18 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                             //   context,
                             //   size,
                             // ),
-                            const SizedBox(height: 28),
+                            mentalStrengthEditProvider.actionsDetailsModel!.actions!.location?.locationAddress != null ?
+                            const SizedBox(height: 10):
+                                SizedBox(),
+                            mentalStrengthEditProvider.actionsDetailsModel!.actions!.location?.locationAddress != null ?
                             Padding(
                               padding: const EdgeInsets.only(left: 2),
                               child: Text(
                                 "Your Location",
                                 style: CustomTextStyles.blackText16000000W700(),
                               ),
-                            ),
+                            ):
+                                SizedBox(),
                             const SizedBox(height: 6),
                             mentalStrengthEditProvider.actionsDetailsModel!.actions!.location?.locationAddress != null?
                             SizedBox(
@@ -402,10 +402,11 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                               ),
                             )
                                 :
-                            Text("NA",
-                              style: CustomTextStyles
-                                  .bodyMediumGray700_1,),
-                            const SizedBox(height: 20),
+                           SizedBox(),
+                            mentalStrengthEditProvider.actionsDetailsModel!.actions!.actionStatus == "1" ||
+                                mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder == null ?
+                            const SizedBox(height: 10):
+                                const SizedBox(),
                             Consumer<AddActionsProvider>(
                                 builder: (context, addActionsProvider, _) {
                               return Column(

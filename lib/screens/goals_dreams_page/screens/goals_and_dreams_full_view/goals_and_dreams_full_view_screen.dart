@@ -136,10 +136,11 @@ class _GoalAndDreamFullViewScreenState
                   comments: widget.goalsanddream.goalDetails.toString(),
                 ),
 
-                const SizedBox(height: 15),
-                // audioList.isEmpty
-                //     ? const SizedBox()
-                //     :
+                audioList.isNotEmpty?
+                const SizedBox(height: 28):SizedBox(),
+                audioList.isEmpty
+                    ? const SizedBox()
+                    :
                 Padding(
                         padding: const EdgeInsets.only(left: 2),
                         child: Text(
@@ -149,9 +150,7 @@ class _GoalAndDreamFullViewScreenState
                       ),
                 const SizedBox(height: 4),
                 audioList.isEmpty?
-                Text("NA",
-                  style: CustomTextStyles
-                      .bodyMediumGray700_1,)
+             const SizedBox()
                     :
                 SizedBox(
                   height: size.height * 0.15,
@@ -165,18 +164,20 @@ class _GoalAndDreamFullViewScreenState
                     },
                   ),
                 ),
-                imageList.isNotEmpty
-                    ? const SizedBox(
-                        height: 23,
-                      )
-                    : const SizedBox(),
+                // imageList.isNotEmpty
+                //     ? const SizedBox(
+                //         height: 23,
+                //       )
+                //     : const SizedBox(),
+                imageList.isNotEmpty?
                 Padding(
                         padding: const EdgeInsets.only(left: 2),
                         child: Text(
                           "Photo",
                           style: CustomTextStyles.blackText16000000W700(),
                         ),
-                      ),
+                      ):
+                    SizedBox(),
                 const SizedBox(height: 4),
                 imageList.isNotEmpty?
                 SizedBox(
@@ -216,26 +217,20 @@ class _GoalAndDreamFullViewScreenState
                     ],
                   ),
                 ):
-                Text("NA",
-                  style: CustomTextStyles
-                      .bodyMediumGray700_1,),
-                videoList.isNotEmpty
-                    ? const SizedBox(
-                        height: 10,
-                      )
-                    : const SizedBox(),
+                const SizedBox(),
                 // videoList.isNotEmpty
                 //     ?
-                const SizedBox(
-                  height: 23,
-                ),
+                imageList.isNotEmpty?
+                const SizedBox(height: 28):SizedBox(),
+                videoList.isNotEmpty?
                 Padding(
                         padding: const EdgeInsets.only(left: 2),
                         child: Text(
                           "Video",
                           style: CustomTextStyles.blackText16000000W700(),
                         ),
-                      ),
+                      ):
+                    SizedBox(),
                 const SizedBox(height: 4),
                 videoList.isNotEmpty?
                 SizedBox(
@@ -271,21 +266,22 @@ class _GoalAndDreamFullViewScreenState
                     ],
                   ),
                 ):
-                Text("NA",
-                  style: CustomTextStyles
-                      .bodyMediumGray700_1,),
+        SizedBox(),
                 // _buildGrid(
                 //   context,
                 //   size,
                 // ),
-                const SizedBox(height: 28),
+                videoList.isNotEmpty?
+                const SizedBox(height: 28):SizedBox(),
+                widget.goalsanddream.location?.locationAddress != null ?
                 Padding(
                   padding: const EdgeInsets.only(left: 2),
                   child: Text(
                     "Your Location",
                     style: CustomTextStyles.blackText16000000W700(),
                   ),
-                ),
+                ):
+                    SizedBox(),
                 const SizedBox(height: 6),
                 widget.goalsanddream.location?.locationAddress != null ?
                 Row(
@@ -305,11 +301,13 @@ class _GoalAndDreamFullViewScreenState
                     ),
                   ],
                 ):
-                Text("NA",
-                  style: CustomTextStyles
-                      .bodyMediumGray700_1,),
-                const SizedBox(height: 10,),
+           SizedBox(),
+                widget.goalsanddream.location?.locationAddress != null ? SizedBox(height: 10,):
+                   SizedBox(),
 
+                widget
+                    .goalsanddream.action!.isEmpty ?
+                    SizedBox():
                 Padding(
                   padding: const EdgeInsets.only(left: 2),
                   child: Text(
@@ -321,9 +319,7 @@ class _GoalAndDreamFullViewScreenState
                 const SizedBox(height: 20),
                 widget
                     .goalsanddream.action!.isEmpty ?
-                    Text("NA",
-                      style: CustomTextStyles
-                          .bodyMediumGray700_1,):
+                    const SizedBox():
                 Consumer3<MentalStrengthEditProvider,AddActionsProvider,AdDreamsGoalsProvider>(
                   builder: (context,mentalStrengthEditProvider,addActionsProvider, adDreamsGoalsProvider, _) {
                     return SizedBox(

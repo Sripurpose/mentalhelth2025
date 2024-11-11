@@ -69,6 +69,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
         Provider.of<EditProfileProvider>(context, listen: false);
     addActionsProvider =
         Provider.of<AddActionsProvider>(context, listen: false);
+    addActionsProvider.setRemainder = true;
     logger.w(
         "addActionsProvider.reminderStartDate${addActionsProvider.reminderStartDate}");
     alarmDetails();

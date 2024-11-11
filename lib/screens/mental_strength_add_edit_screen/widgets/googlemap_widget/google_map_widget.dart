@@ -209,6 +209,10 @@ class _MentalGoogleMapState extends State<MentalGoogleMap> {
         setState(() {
           _selectedAddress =
               '${placemark.name}, ${placemark.locality}, ${placemark.administrativeArea}, ${placemark.country}';
+          logger.w("placemark.name${placemark.name}");
+          logger.w("placemark.locality${placemark.locality}");
+          logger.w("placemark.administrativeArea${placemark.administrativeArea}");
+          logger.w("placemark.country${placemark.country}");
           mentalStrengthEditProvider.addLocationSection(
               selectedAddress: _selectedAddress,
               placemark: placemark,

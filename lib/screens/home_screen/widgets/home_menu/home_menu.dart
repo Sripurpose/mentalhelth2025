@@ -21,6 +21,7 @@ import '../../../../utils/core/image_constant.dart';
 import '../../../../utils/theme/custom_text_style.dart';
 import '../../../../utils/theme/theme_helper.dart';
 import '../../../../widgets/custom_image_view.dart';
+import '../../../auth/sign_in/coninue_with_google_class.dart';
 import '../../../subscription_view/subscription_view_screen.dart';
 import '../../../view_reminder_screen/screens/view_reminder_screen.dart';
 
@@ -435,6 +436,7 @@ Widget buildPopupDialog(BuildContext context, Size size) {
                           OneSignal.User.removeTag("message");
                         }
                         addFCMTokenToSharePref(token: "");
+                       // GoogleSignInService.logout();
                         await signInProvider.logOutUser(context);
                         await removeUserDetailsSharePref(context: context);
                         removeAllValuesLogout(context: context);

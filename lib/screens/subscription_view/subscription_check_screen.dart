@@ -13,6 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../utils/theme/custom_text_style.dart';
 import '../../utils/theme/theme_helper.dart';
+import '../auth/sign_in/coninue_with_google_class.dart';
 import '../auth/sign_in/landing_register_screen.dart';
 
 class SubscriptionCheckScreen extends StatefulWidget {
@@ -39,10 +40,12 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
   var logger = Logger();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isLoading = true;
+  late String linkUrl;
 
   @override
   void initState() {
     super.initState();
+    linkUrl = widget.linkUrl;
     Future.delayed(Duration(seconds: 2), () {
       setState(() {
         _isLoading = false;
@@ -55,7 +58,22 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
       await signInProvider.fetchSettings(context);
     });
   }
-
+  Future googleSignOut() async {
+    try {
+      await GoogleSignInService.logout();
+      logger.w('Sign Out Success');
+      if (context.mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Sign Out Success')));
+      }
+    } catch (exception) {
+      logger.w(exception.toString());
+      if (context.mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Sign Out Failed')));
+      }
+    }
+  }
   Future<void> _launchInAppWithBrowserOptions(Uri url) async {
     if (!await launchUrl(
       url,
@@ -128,6 +146,7 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
                           GestureDetector(
                             onTap: () {
                               String chatURL = widget.linkUrl;
+                              logger.w("widget.linkUrl${ widget.linkUrl}");
                               var url = Uri.parse(chatURL);
                               if (signInProvider.settingsList[0].target ==
                                   "external") {
@@ -185,29 +204,27 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
                       ),
                       GestureDetector(
                         onTap: () async {
+                          setState(() {
+                            linkUrl = ""; // Clear linkUrl on cancel
+                          });
                           await signInProvider.logOutUser(context);
+                          //await googleSignOut();
                           Navigator.push(
                             context,
                             PageRouteBuilder(
-                              pageBuilder: (_, __, ___) =>
-                                  const LandingRegisterScreenScreen(),
-                              transitionDuration:
-                              const Duration(seconds: 0),
+                              pageBuilder: (_, __, ___) => const LandingRegisterScreenScreen(),
+                              transitionDuration: const Duration(seconds: 0),
                             ),
                           );
                         },
                         child: Container(
                           padding: EdgeInsets.all(10.0),
-                          // Add padding as needed
                           decoration: BoxDecoration(
                             color: Colors.transparent,
-                            // Change to your desired background color
                             borderRadius: BorderRadius.circular(5.0),
-                            // Optional: Add border radius
                             border: Border.all(
                               color: Colors.blue,
-                              // Change to your desired border color
-                              width: 0.5, // Optional: Adjust border width
+                              width: 0.5,
                             ),
                           ),
                           child: Text(
@@ -216,6 +233,7 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
                           ),
                         ),
                       ),
+
                     ],
                   ),
                 ),
