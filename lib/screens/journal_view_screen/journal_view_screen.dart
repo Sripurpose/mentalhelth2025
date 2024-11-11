@@ -450,76 +450,89 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                 const SizedBox(height: 4),
                                 homeProvider.journalDetails?.journals?.goal == null
                                     ?   const SizedBox()
-                                    : Container(
-                                      height: size.height * 0.04,
-                                      width: size.width * 0.7,
-                                      padding:
-                                      const EdgeInsets.only(
-                                        bottom: 5,
-                                        top: 5,
-                                        left: 5,
-                                        right: 5,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius:
-                                        BorderRadius.circular(
-                                            100), // Makes it circular
-                                        border: Border.all(
-                                          color: Colors.grey,
-                                          width: 1,
+                                    : GestureDetector(
+                                  onTap: (){
+                                    mentalStrengthEditProvider
+                                        .openGoalViewSheetFunction();
+                                    mentalStrengthEditProvider
+                                        .fetchGoalDetails(
+                                      goalId:
+                                      homeProvider.journalDetails!
+                                          .journals!.goal!.goalId
+                                          .toString(),
+                                    );
+                                  },
+                                      child: Container(
+                                        height: size.height * 0.04,
+                                        width: size.width * 0.7,
+                                        padding:
+                                        const EdgeInsets.only(
+                                          bottom: 5,
+                                          top: 5,
+                                          left: 5,
+                                          right: 5,
                                         ),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment
-                                            .spaceBetween,
-                                        children: [
-                                          SizedBox(
-                                            width: size.width * 0.45,
-                                            child: SingleChildScrollView(
-                                              scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                                              child: Text(
-                                                homeProvider.journalDetails!.journals!
-                                                    .goal ==
-                                                    null
-                                                    ? ""
-                                                    : homeProvider.journalDetails!
-                                                    .journals!.goal!.goalTitle
-                                                    .toString(),
-                                                style: CustomTextStyles
-                                                    .bodyMediumGray700_1,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                          BorderRadius.circular(
+                                              100), // Makes it circular
+                                          border: Border.all(
+                                            color: Colors.grey,
+                                            width: 1,
+                                          ),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment
+                                              .spaceBetween,
+                                          children: [
+                                            SizedBox(
+                                              width: size.width * 0.45,
+                                              child: SingleChildScrollView(
+                                                scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+                                                child: Text(
+                                                  homeProvider.journalDetails!.journals!
+                                                      .goal ==
+                                                      null
+                                                      ? ""
+                                                      : homeProvider.journalDetails!
+                                                      .journals!.goal!.goalTitle
+                                                      .toString(),
+                                                  style: CustomTextStyles
+                                                      .bodyMediumGray700_1,
+                                                ),
                                               ),
                                             ),
-                                          ),
 
-                                          GestureDetector(
-                                            onTap: () {
-                                              mentalStrengthEditProvider
-                                                  .openGoalViewSheetFunction();
-                                              mentalStrengthEditProvider
-                                                  .fetchGoalDetails(
-                                                goalId:
-                                                homeProvider.journalDetails!
-                                                    .journals!.goal!.goalId
-                                                    .toString(),
-                                              );
-                                            },
-                                            child: CircleAvatar(
-                                              radius:
-                                              size.width * 0.04,
-                                              backgroundColor:
-                                              Colors.blue,
-                                              child: Icon(
-                                                Icons
-                                                    .arrow_forward_ios_outlined,
-                                                color: Colors.white,
-                                                size: size.width *
-                                                    0.03,
+                                            GestureDetector(
+                                              onTap: () {
+                                                mentalStrengthEditProvider
+                                                    .openGoalViewSheetFunction();
+                                                mentalStrengthEditProvider
+                                                    .fetchGoalDetails(
+                                                  goalId:
+                                                  homeProvider.journalDetails!
+                                                      .journals!.goal!.goalId
+                                                      .toString(),
+                                                );
+                                              },
+                                              child: CircleAvatar(
+                                                radius:
+                                                size.width * 0.04,
+                                                backgroundColor:
+                                                Colors.blue,
+                                                child: Icon(
+                                                  Icons
+                                                      .arrow_forward_ios_outlined,
+                                                  color: Colors.white,
+                                                  size: size.width *
+                                                      0.03,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     ),
                                 homeProvider.journalDetails?.journals?.goal == null ?
