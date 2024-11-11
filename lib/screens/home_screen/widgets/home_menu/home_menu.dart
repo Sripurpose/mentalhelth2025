@@ -424,7 +424,7 @@ Widget buildPopupDialog(BuildContext context, Size size) {
               builder: (context, signInProvider, _) {
                 return GestureDetector(
                   onTap: () async {
-                    customPopup(
+                    customPopupNew(
                       context: context,
                       onPressedDelete: () async {
                         if(Platform.isAndroid){

@@ -72,7 +72,73 @@ void customPopup({
   //   },
   // );
 }
+void customPopupNew({
+  required BuildContext context,
+  required Future<void> Function()? onPressedDelete,
+  required String title,
+  required String content,
+  String? cancel,
+  String? yes,
+}) {
+  showCupertinoDialog(
+    context: context,
+    builder: (BuildContext context) {
+      bool isLoading = false; // State variable to track loading
 
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return CupertinoAlertDialog(
+            title: Text(title),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(content),
+                if (isLoading) // Show loading indicator if loading
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: Center(child: CupertinoActivityIndicator()),
+                  ),
+              ],
+            ),
+            actions: <Widget>[
+              CupertinoDialogAction(
+                onPressed: () {
+                  // Close the dialog without deleting anything
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  cancel ?? 'Cancel',
+                  style: const TextStyle(color: Colors.blue),
+                ),
+              ),
+              CupertinoDialogAction(
+                isDestructiveAction: true, // Indicates destructive action (delete)
+                onPressed: () async {
+                  setState(() {
+                    isLoading = true; // Set loading to true
+                  });
+                  try {
+                    await onPressedDelete?.call(); // Call the delete function
+                  } catch (e) {
+                    // Handle any errors that occur during the delete action
+                    print("Error during delete action: $e");
+                    // Optionally show an error message to the user here
+                  } finally {
+                  //  Navigator.of(context).pop(); // Close the dialog after action
+                  }
+                },
+                child: Text(
+                  yes ?? 'Delete',
+                  style: const TextStyle(color: Colors.blue),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    },
+  );
+}
 
 void customPopupLogout({
   required BuildContext context,
