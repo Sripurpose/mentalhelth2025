@@ -761,6 +761,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                         initial: true,
                       );
                       Navigator.of(context).pop();
+                      Navigator.of(context).pop();
                     },
                     value: 'Delete',
                     child: Text(
