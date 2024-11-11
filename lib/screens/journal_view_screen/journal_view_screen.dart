@@ -149,7 +149,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                   Consumer<HomeProvider>(builder: (context, homeProvider, _) {
                     logger.w("audioList.length ${audioList.length}");
                 return SingleChildScrollView(
-                  child: Column(
+                  child: Stack(
                     children: [
                       homeProvider.journalDetails == null
                           ? shimmerView(size: size)
@@ -569,35 +569,32 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                               ],
                             ),
 
-                      mentalStrengthEditProvider.openGoalViewSheet
-                          ? mentalStrengthEditProvider.goalDetailModel ==
-                          null
-                          ? Container(
-                        decoration: BoxDecoration(
-                          color: appTheme.gray50,
-                          borderRadius: const BorderRadius.only(
-                            topRight: Radius.circular(
-                              25,
+                      if (mentalStrengthEditProvider.openGoalViewSheet)
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: mentalStrengthEditProvider.goalDetailModel == null
+                              ? Container(
+                            decoration: BoxDecoration(
+                              color: appTheme.gray50,
+                              borderRadius: const BorderRadius.only(
+                                topRight: Radius.circular(25),
+                                topLeft: Radius.circular(25),
+                              ),
                             ),
-                            topLeft: Radius.circular(
-                              25,
+                            margin: EdgeInsets.only(
+                              top: size.height * 0.0,
                             ),
+                            child: shimmerList(
+                              height: size.height * 0.8,
+                              list: 10,
+                            ),
+                          )
+                              : GoalAndDreamFullViewBottomParellelSheet(
+                            goalDetailModel: mentalStrengthEditProvider.goalDetailModel!,
                           ),
                         ),
-                        margin: EdgeInsets.only(
-                          top: size.height * 0.0,
-                        ),
-                        child: shimmerList(
-                          height: size.height * 0.8,
-                          list: 10,
-                        ),
-                      )
-                          : GoalAndDreamFullViewBottomParellelSheet(
-                        goalDetailModel:
-                        mentalStrengthEditProvider
-                            .goalDetailModel!,
-                      )
-                          : const SizedBox(),
                     ],
                   ),
                 );

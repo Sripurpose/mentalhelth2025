@@ -105,6 +105,12 @@ class _GoalAndDreamFullViewBottomParellelSheetState
             topLeft: Radius.circular(
               25,
             ),
+            bottomLeft: Radius.circular(
+              25,
+            ),
+            bottomRight: Radius.circular(
+              25,
+            ),
           ),
           boxShadow: [
             BoxShadow(
