@@ -75,14 +75,32 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
       }
     }
   }
-  Future<void> _launchInAppWithBrowserOptions(Uri url) async {
-    if (!await launchUrl(
+  Future<void> _launchInAppWithBrowserOptions(BuildContext context, Uri url) async {
+    // Create a Completer to handle navigation after closing the browser
+    final Completer<void> completer = Completer<void>();
+
+    // Launch the URL
+    if (await launchUrl(
       url,
       mode: LaunchMode.inAppBrowserView,
       browserConfiguration: const BrowserConfiguration(showTitle: true),
     )) {
+      // Wait for the user to close the browser
+      completer.future.then((_) {
+        // Navigate to LandingRegisterScreenScreen after closing the browser
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const LandingRegisterScreenScreen(),
+          ),
+        );
+      });
+    } else {
       throw Exception('Could not launch $url');
     }
+
+    // Simulate waiting for the browser to close (you might need a better way to detect this)
+    await Future.delayed(Duration(seconds: 5)); // Adjust as necessary
+    completer.complete(); // Complete the completer when done
   }
 
   @override
@@ -157,15 +175,15 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
                               var url = Uri.parse(chatURL);
                               if (signInProvider.settingsList[0].target ==
                                   "external") {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        SubscriptionInAppScreen(
-                                          url: chatURL ?? "",
-                                        ),
-                                  ),
-                                );
-                               // _launchInAppWithBrowserOptions(url);
+                                // Navigator.of(context).push(
+                                //   MaterialPageRoute(
+                                //     builder: (context) =>
+                                //         SubscriptionInAppScreen(
+                                //           url: chatURL ?? "",
+                                //         ),
+                                //   ),
+                                // );
+                                _launchInAppWithBrowserOptions(context,url);
                               } else {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
