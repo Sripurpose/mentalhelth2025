@@ -6,6 +6,7 @@ import '../../utils/core/image_constant.dart';
 import '../../utils/logic/shared_prefrence.dart';
 import '../../utils/theme/theme_helper.dart';
 import '../../widgets/app_bar/appbar_leading_image.dart';
+import '../auth/sign_in/landing_register_screen.dart';
 import '../auth/sign_in/provider/sign_in_provider.dart';
 
 class SubscriptionInAppScreen extends StatefulWidget {
@@ -95,6 +96,14 @@ class _SubscriptionInAppScreenState extends State<SubscriptionInAppScreen> {
                     context,
                     size,
                     heading: "Subscription",
+                    onTap: () async {
+                      await signInProvider.logOutUser(context);
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const LandingRegisterScreenScreen(), // Pass the URL as an argument
+                        ),
+                      );
+                    }
                   ),
                   // Use Expanded to allow WebView to take remaining space in the Column
                   Expanded(

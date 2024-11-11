@@ -536,9 +536,10 @@ class SignInProvider extends ChangeNotifier {
   SettingsRegisterModel? settingsRegisterModel;
   List<SettingRegister> settingsRegisterList = [];
   bool registerSettingsLoading = false;
-
+  int? statusSub = 0;
   Future<void> fetchSettings(BuildContext context) async {
     try {
+      statusSub= 0;
       settingsModel = null;
       String? token = await getUserTokenSharePref();
       settingsLoading = true;
@@ -552,6 +553,7 @@ class SignInProvider extends ChangeNotifier {
       );
       final response = await http.get(url, headers: headers);
       if (response.statusCode == 200 || response.statusCode == 201) {
+        statusSub = response.statusCode;
         settingsModel = settingsModelFromJson(response.body);
         logger.w("settingsModel ${settingsModel?.settings}");
         if (settingsModel != null) {
@@ -564,17 +566,21 @@ class SignInProvider extends ChangeNotifier {
         notifyListeners();
       }
       else {
+        statusSub = response.statusCode;
         settingsLoading = false;
         notifyListeners();
       }
       if(response.statusCode == 401){
+        statusSub = response.statusCode;
         TokenManager.setTokenStatus(true);
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
       if(response.statusCode == 403){
+        statusSub = response.statusCode;
         TokenManager.setTokenStatus(true);
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
+      statusSub = response.statusCode;
       settingsLoading = false;
       notifyListeners();
     } catch (e) {

@@ -9,6 +9,7 @@ import 'package:mentalhelth/utils/core/image_constant.dart';
 import 'package:mentalhelth/widgets/background_image/background_imager.dart';
 import 'package:mentalhelth/widgets/custom_image_view.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../utils/theme/custom_text_style.dart';
@@ -143,14 +144,28 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
                             style: theme.textTheme.bodyMedium,
                           ),
                           SizedBox(height: size.height * 0.02),
+
                           GestureDetector(
                             onTap: () {
-                              String chatURL = widget.linkUrl;
-                              logger.w("widget.linkUrl${ widget.linkUrl}");
+                              Future.delayed(Duration(seconds: 2), () {
+                                setState(() {
+                                signInProvider.fetchSettings(context);
+                                });
+                              });
+                              String chatURL = signInProvider.settingsList[0].linkUrl ?? "";
+                              logger.w("widget.linkUrl${ signInProvider.settingsList[0].linkUrl}");
                               var url = Uri.parse(chatURL);
                               if (signInProvider.settingsList[0].target ==
                                   "external") {
-                                _launchInAppWithBrowserOptions(url);
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        SubscriptionInAppScreen(
+                                          url: chatURL ?? "",
+                                        ),
+                                  ),
+                                );
+                               // _launchInAppWithBrowserOptions(url);
                               } else {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(

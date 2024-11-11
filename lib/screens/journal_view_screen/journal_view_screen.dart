@@ -6,6 +6,7 @@ import 'package:mentalhelth/screens/home_screen/model/journal_details.dart';
 import 'package:mentalhelth/screens/home_screen/provider/home_provider.dart';
 import 'package:mentalhelth/screens/journal_list_screen/provider/journal_list_provider.dart';
 import 'package:mentalhelth/screens/journal_list_screen/screens/edit_journal/edit_journal.dart';
+import 'package:mentalhelth/screens/journal_view_screen/widgets/goal_view_in_parellel_screen.dart';
 import 'package:mentalhelth/screens/journal_view_screen/widgets/jouranl_view_google_map.dart';
 import 'package:mentalhelth/screens/journal_view_screen/widgets/journal_audio_player.dart';
 import 'package:mentalhelth/screens/mental_strength_add_edit_screen/model/all_model.dart';
@@ -578,7 +579,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                           list: 10,
                         ),
                       )
-                          : GoalAndDreamFullViewBottomSheet(
+                          : GoalAndDreamFullViewBottomParellelSheet(
                         goalDetailModel:
                         mentalStrengthEditProvider
                             .goalDetailModel!,
