@@ -493,7 +493,7 @@ Widget buildPopupDialog(BuildContext context, Size size) {
             Align(
               alignment: Alignment.center,
               child: Text(
-                "App Version 1.0.1",
+                "App Version 1.0.8",
                 maxLines: 13,
                 overflow: TextOverflow.ellipsis,
                 style: CustomTextStyles.titleMediumOnSecondaryContainerMedium
