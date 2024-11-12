@@ -15,6 +15,7 @@ import 'package:mentalhelth/widgets/functions/popup.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../utils/core/firebase_api.dart';
 import '../../../../utils/core/image_constant.dart';
@@ -435,6 +436,8 @@ Widget buildPopupDialog(BuildContext context, Size size) {
                           OneSignal.User.addTagWithKey("topic","live_doLogin");
                           OneSignal.User.removeTag("message");
                         }
+                        final prefs = await SharedPreferences.getInstance();
+                        await prefs.remove('lastSkippedTimestamp');
                         addFCMTokenToSharePref(token: "");
                        // GoogleSignInService.logout();
                         await signInProvider.logOutUser(context);
@@ -493,7 +496,7 @@ Widget buildPopupDialog(BuildContext context, Size size) {
             Align(
               alignment: Alignment.center,
               child: Text(
-                "App Version 1.0.9",
+                "App Version ${Constent.versionCode}",
                 maxLines: 13,
                 overflow: TextOverflow.ellipsis,
                 style: CustomTextStyles.titleMediumOnSecondaryContainerMedium

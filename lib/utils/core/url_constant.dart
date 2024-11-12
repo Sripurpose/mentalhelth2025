@@ -27,6 +27,7 @@ class UrlConstant {
   static const String chartviewUrl = "${baseUrl}chartview";
   static const String appSettingsUrl = "${baseUrl}appsettings";
   static const String appRegisterUrl= "${baseUrl}setup";
+  static const String version_update = "${baseUrl}version_update";
 
 
   static String journalsUrl({required String page}) {

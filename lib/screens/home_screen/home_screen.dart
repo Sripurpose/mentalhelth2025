@@ -18,7 +18,9 @@ import 'package:mentalhelth/widgets/background_image/background_imager.dart';
 import 'package:mentalhelth/widgets/custom_elevated_button.dart';
 import 'package:mentalhelth/widgets/widget/shimmer.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../utils/core/constants.dart';
@@ -38,6 +40,7 @@ import '../subscription_view/subscription_in_app_screen.dart';
 import '../subscription_view/subscription_view_screen.dart';
 import '../token_expiry/tocken_expiry_warning_screen.dart';
 import '../token_expiry/token_expiry.dart';
+import '../version_update_screen/version_update_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -56,9 +59,25 @@ class _HomeScreenState extends State<HomeScreen> {
   bool tokenStatus = false;
   var logger = Logger();
 
+
+  Future<void> getAppVersion() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String appName = packageInfo.appName;
+    String packageName = packageInfo.packageName;
+    String version = packageInfo.version;
+    String buildNumber = packageInfo.buildNumber;
+
+    print('App Name: $appName');
+    print('Package Name: $packageName');
+    print('Version: $version');
+    print('Build Number: $buildNumber');
+  }
+
   Future<void> _isTokenExpired() async {
+
     await homeProvider.fetchJournals(initial: true);
     await homeProvider.fetchChartView(context);
+  //  checkAndFetchVersionUpdate(context);
 
     // await homeProvider.fetchRemindersDetails();
     tokenStatus = TokenManager.checkTokenExpiry();
@@ -73,6 +92,11 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  void checkAndFetchVersionUpdate(BuildContext context,) {
+    String deviceType = Platform.isAndroid ? 'android' : 'ios';
+    signInProvider.fetchVersionUpdate(context, deviceType);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -84,6 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
     dashBoardProvider = Provider.of<DashBoardProvider>(context, listen: false);
     goalsDreamsProvider = Provider.of<GoalsDreamsProvider>(context, listen: false);
     scheduleMicrotask(() async {
+      getAppVersion();
       signInProvider.settingsList.clear();
       await editProfileProvider.fetchUserProfile();
       if(Platform.isIOS){
@@ -200,44 +225,54 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
           );
-          // settingsPopup(
-          //   context: context,
-          //   onPressedYes: () async {
-          //     String chatURL = signInProvider.settingsList[0].linkUrl ?? "";
-          //     var url = Uri.parse(chatURL);
-          //     if(signInProvider.settingsList[0].target == "external"){
-          //       _launchInAppWithBrowserOptions(url);
-          //     }else{
-          //       Navigator.of(context).push(
-          //         MaterialPageRoute(
-          //           builder: (context) => SubscriptionInAppScreen(
-          //             url: signInProvider
-          //                 .settingsList[0].linkUrl ??
-          //                 "",
-          //           ),
-          //         ),
-          //       );
-          //
-          //     }
-          //     // Attempt to launch the URL
-          //     // Delay and then close the app
-          //     // Future.delayed(const Duration(seconds: 2), () {
-          //     //   SystemNavigator.pop(); // Close the app
-          //     // });
-          //
-          //   },
-          //   onCancelYes: () async {
-          //     await signInProvider.logOutUser(context);
-          //     SystemNavigator.pop(); // Close the app immediately
-          //   },
-          //   yes: signInProvider.settingsList[0].link,
-          //   title: signInProvider.settingsList[0].title ?? "",
-          //   content: signInProvider.settingsList[0].message ?? "",
-          // );
         });
       } else {
       }
     }
+  }
+
+  void checkVersionUpdate() async {
+    final prefs = await SharedPreferences.getInstance();
+    final lastSkippedTimestamp = prefs.getInt('lastSkippedTimestamp');
+    final currentTime = DateTime.now().millisecondsSinceEpoch;
+
+    // 24 hours in milliseconds
+    const int oneDayInMillis = 24 * 60 * 60 * 1000;
+
+
+      if (signInProvider.versionUpdateModel != null) {
+        logger.w("signInProvider.versionUpdateModel${signInProvider.versionUpdateModel?.notifyType}");
+        if (lastSkippedTimestamp == null || (currentTime - lastSkippedTimestamp) > oneDayInMillis) {
+          if (signInProvider.versionUpdateModel?.notifyType == "0") {
+            Future.delayed(Duration.zero, () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => VersionUpdateCheckScreen(
+                    title: signInProvider.versionUpdateModel?.title ?? "",
+                    message: signInProvider.versionUpdateModel?.message ?? "",
+                    notifyMe: signInProvider.versionUpdateModel?.notifyType ?? "",
+                  ),
+                ),
+              );
+            });
+          }
+        }
+        if (signInProvider.versionUpdateModel?.notifyType == "1") {
+          Future.delayed(Duration.zero, () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => VersionUpdateCheckScreen(
+                  title: signInProvider.versionUpdateModel?.title ?? "",
+                  message: signInProvider.versionUpdateModel?.message ?? "",
+                  notifyMe: signInProvider.versionUpdateModel?.notifyType ?? "",
+                ),
+              ),
+            );
+          });
+        }
+        // Add any other handling logic as necessary
+      }
+    //}
   }
 
 // Call this method when you know data is loaded
@@ -266,7 +301,7 @@ class _HomeScreenState extends State<HomeScreen> {
         } else {
           // Now you can safely check your conditions and show the main content
           checkSubscriptionStatus();
-
+          checkVersionUpdate();
           // The main content if no token issues or settingsPopup
           return SafeArea(
             child: Consumer4<MentalStrengthEditProvider, HomeProvider, EditProfileProvider, DashBoardProvider>(

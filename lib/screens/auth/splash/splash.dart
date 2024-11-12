@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -86,9 +87,12 @@ class _SplashScreenState extends State<SplashScreen> {
     homeProvider.fetchChartView(context);
 
     //homeProvider.fetchJournals(initial: true);
-    editProfileProvider.fetchUserProfile();
+    checkAndFetchVersionUpdate(context,);
   }
-
+  void checkAndFetchVersionUpdate(BuildContext context) {
+    String deviceType = Platform.isAndroid ? 'android' : 'ios';
+    signInProvider.fetchVersionUpdate(context, deviceType);
+  }
   @override
   Widget build(BuildContext context) {
     return Container(

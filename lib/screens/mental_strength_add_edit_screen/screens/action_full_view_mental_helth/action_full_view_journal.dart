@@ -421,7 +421,7 @@ class _ActionFullViewJournalCreateBottomSheetState
                     mentalStrengthEditProvider
                         .actionsDetailsModel!
                         .actions!
-                        .location!.locationAddress!.isNotEmpty
+                        .location != null
                         ? SizedBox(
                       child: Center(
                           child: Row(

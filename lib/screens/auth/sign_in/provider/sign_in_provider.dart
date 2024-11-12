@@ -14,10 +14,12 @@ import 'package:mentalhelth/utils/core/url_constant.dart';
 import 'package:mentalhelth/utils/logic/shared_prefrence.dart';
 import 'package:mentalhelth/widgets/functions/snack_bar.dart';
 
+import '../../../../utils/core/constent.dart';
 import '../../../token_expiry/token_expiry.dart';
 import '../../subscribe_plan_page/subscribe_plan_page.dart';
 import '../model/app_settings_model.dart';
 import '../model/app_settings_register_model.dart';
+import '../model/version_update_model.dart';
 
 class SignInProvider extends ChangeNotifier {
   TextEditingController emailFieldController = TextEditingController();
@@ -84,6 +86,7 @@ class SignInProvider extends ChangeNotifier {
         );
         if (loginModel!.status!) {
           if (loginModel!.isSubscribed == "0") {
+            checkAndFetchVersionUpdate(context,);
         //    fetchSettings(context);
             // Navigator.of(context).pushAndRemoveUntil(
             //   MaterialPageRoute(
@@ -98,6 +101,7 @@ class SignInProvider extends ChangeNotifier {
                   (route) => false,
             );
           } else {
+            checkAndFetchVersionUpdate(context,);
           //  fetchSettings(context);
             Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
@@ -142,7 +146,10 @@ class SignInProvider extends ChangeNotifier {
     }
   }
 
-
+  void checkAndFetchVersionUpdate(BuildContext context,) {
+    String deviceType = Platform.isAndroid ? 'android' : 'ios';
+   fetchVersionUpdate(context, deviceType);
+  }
 
 
   bool logOutLoading = false;
@@ -537,6 +544,10 @@ class SignInProvider extends ChangeNotifier {
   List<SettingRegister> settingsRegisterList = [];
   bool registerSettingsLoading = false;
   int? statusSub = 0;
+
+  int? statusVersionUpdate= 0;
+  bool versionUpdateLoading = false;
+  VersionUpdateModel? versionUpdateModel;
   Future<void> fetchSettings(BuildContext context) async {
     try {
       statusSub= 0;
@@ -638,6 +649,63 @@ class SignInProvider extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       registerSettingsLoading = false;
+      notifyListeners();
+    }
+    notifyListeners();
+  }
+
+
+  Future<void> fetchVersionUpdate(BuildContext context,String deviceType) async {
+    try {
+      statusVersionUpdate= 0;
+      versionUpdateModel = null;
+      String? token = await getUserTokenSharePref();
+      versionUpdateLoading = true;
+      notifyListeners();
+
+      Map<String, String> headers = {
+        'authorization': token!, // Assuming token is not null
+        'device-type':deviceType,
+        'version':Constent.versionCode
+      };
+      Uri url = Uri.parse(
+        UrlConstant.version_update,
+      );
+      final response = await http.get(url, headers: headers);
+      logger.w("response100${response.headers}");
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        statusVersionUpdate = response.statusCode;
+        versionUpdateModel = versionUpdateModelFromJson(response.body);
+        logger.w("versionUpdateModel ${versionUpdateModel}");
+        // if (settingsModel != null) {
+        //   if (settingsModel!.settings != null) {
+        //     settingsList.addAll(settingsModel!.settings!);
+        //     logger.w("settingsList${jsonEncode(settingsModel)}");
+        //   }
+        // }
+        versionUpdateLoading = false;
+        notifyListeners();
+      }
+      else {
+        statusVersionUpdate = response.statusCode;
+        versionUpdateLoading = false;
+        notifyListeners();
+      }
+      if(response.statusCode == 401){
+        statusVersionUpdate = response.statusCode;
+        TokenManager.setTokenStatus(true);
+        //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
+      }
+      if(response.statusCode == 403){
+        statusVersionUpdate = response.statusCode;
+        TokenManager.setTokenStatus(true);
+        //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
+      }
+      statusVersionUpdate = response.statusCode;
+      versionUpdateLoading = false;
+      notifyListeners();
+    } catch (e) {
+      versionUpdateLoading = false;
       notifyListeners();
     }
     notifyListeners();
