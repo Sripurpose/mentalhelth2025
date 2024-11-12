@@ -804,8 +804,8 @@ class _GoalAndDreamFullViewScreenState
                     onTap: () {
                       customPopup(
                         context: context,
-                        onPressedDelete: () {
-                          goalsDreamsProvider.deleteGoalsFunction(
+                        onPressedDelete: () async {
+                          await goalsDreamsProvider.deleteGoalsFunction(
                             deleteId: id,
                           );
                           Navigator.of(context).pop();

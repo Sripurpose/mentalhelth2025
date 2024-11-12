@@ -855,7 +855,6 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                           journalId: homeProvider.journalDetails!.journals!.journalId.toString(),
                         )
                             .then((value) {
-                          homeProvider.fetchJournals(initial: true);
 
                           // Check if the journal exists in the list and remove it
                           for (var journals in homeProvider.journalsModelList) {
@@ -865,7 +864,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                               break; // Stop the loop once item is removed
                             }
                           }
-
+                          homeProvider.fetchJournals(initial: true);
                           // Close the dialog and then close the previous screen if needed
                           Navigator.of(context).pop(); // Close the customPopup dialog
                           Future.delayed(Duration(milliseconds: 200), () {

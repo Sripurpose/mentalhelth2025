@@ -84,7 +84,7 @@ class SignInProvider extends ChangeNotifier {
         );
         if (loginModel!.status!) {
           if (loginModel!.isSubscribed == "0") {
-            fetchSettings(context);
+        //    fetchSettings(context);
             // Navigator.of(context).pushAndRemoveUntil(
             //   MaterialPageRoute(
             //     builder: (context) => SubscribePlanPage(),
@@ -98,7 +98,7 @@ class SignInProvider extends ChangeNotifier {
                   (route) => false,
             );
           } else {
-            fetchSettings(context);
+          //  fetchSettings(context);
             Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
                 builder: (context) => const DashBoardScreen(),

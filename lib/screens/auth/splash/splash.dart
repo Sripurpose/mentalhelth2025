@@ -80,6 +80,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Provider.of<HomeProvider>(context, listen: false);
     EditProfileProvider editProfileProvider =
         Provider.of<EditProfileProvider>(context, listen: false);
+    signInProvider.fetchSettings(context);
     signInProvider.fetchAppRegister(context);
     //signInProvider.fetchSettings(context);
     homeProvider.fetchChartView(context);

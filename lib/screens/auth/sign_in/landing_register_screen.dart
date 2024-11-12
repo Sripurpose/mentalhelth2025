@@ -94,7 +94,7 @@ class _LandingRegisterScreenScreenState extends State<LandingRegisterScreenScree
       try {
         if (!await launchUrl(
           url,
-          mode: LaunchMode.inAppWebView,
+          mode: LaunchMode.inAppBrowserView,
           webViewConfiguration: const WebViewConfiguration(
             enableJavaScript: true, // Enable JavaScript if needed
             enableDomStorage: true, // Enable DOM storage if needed

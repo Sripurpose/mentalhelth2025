@@ -108,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
       }
 
       // First, call fetchSettings
-      await signInProvider.fetchSettings(context);
+     // await signInProvider.fetchSettings(context);
 
       print(" new fcm token    $fcmToken");
       updateFCMTokenIfNeeded(fcmToken);
@@ -130,8 +130,6 @@ class _HomeScreenState extends State<HomeScreen> {
       goalsDreamsProvider.goalsanddreams.clear();
       goalsDreamsProvider.goalsanddreams = [];
       mentalStrengthEditProvider.mediaSelected = -1;
-
-
     });
   }
 
@@ -517,8 +515,10 @@ class _HomeScreenState extends State<HomeScreen> {
         height: size.height * 0.5,
         list: 4,
         shimmerHeight: size.height * 0.07,
-      )
-          : ListView.separated(
+      ):
+      homeProvider.journalStatus == 404 ?
+          const SizedBox():
+           ListView.separated(
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         separatorBuilder: (context, index) {

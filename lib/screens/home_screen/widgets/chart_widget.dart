@@ -52,7 +52,7 @@ class _ChartWidgetState extends State<ChartWidget> {
               ),
             ),
           );
-        } else if (homeProvider.chartViewModel == null) {
+        } else if (homeProvider.chartViewModel == null || homeProvider.journalStatus == 404) {
           return SizedBox(
             height: size.height * 0.3,
             width: double.infinity,

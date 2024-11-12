@@ -16,6 +16,7 @@ import '../../utils/theme/custom_text_style.dart';
 import '../../utils/theme/theme_helper.dart';
 import '../auth/sign_in/coninue_with_google_class.dart';
 import '../auth/sign_in/landing_register_screen.dart';
+import '../auth/splash/splash.dart';
 
 class SubscriptionCheckScreen extends StatefulWidget {
   const SubscriptionCheckScreen(
@@ -56,7 +57,7 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
     scheduleMicrotask(() async {
       // First, call fetchSettings
       await signInProvider.fetchAppRegister(context);
-      await signInProvider.fetchSettings(context);
+     // await signInProvider.fetchSettings(context);
     });
   }
   Future googleSignOut() async {
@@ -76,31 +77,50 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
     }
   }
   Future<void> _launchInAppWithBrowserOptions(BuildContext context, Uri url) async {
+    // Check if the URL scheme is "mental"
+    if (url.scheme == "mental") {
+      // Handle the deep link by navigating to a specific screen
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const SplashScreen(), // Adjust as needed
+        ),
+      );
+      return; // Exit the function early to avoid launching the URL
+    }
+
     // Create a Completer to handle navigation after closing the browser
     final Completer<void> completer = Completer<void>();
 
-    // Launch the URL
-    if (await launchUrl(
-      url,
-      mode: LaunchMode.inAppBrowserView,
-      browserConfiguration: const BrowserConfiguration(showTitle: true),
-    )) {
-      // Wait for the user to close the browser
-      completer.future.then((_) {
-        // Navigate to LandingRegisterScreenScreen after closing the browser
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => const LandingRegisterScreenScreen(),
-          ),
-        );
-      });
-    } else {
-      throw Exception('Could not launch $url');
-    }
+    // Launch the URL in an in-app browser if it's not a "mental" URL
+    try {
+      if (await launchUrl(
+        url,
+        mode: LaunchMode.inAppBrowserView,
+        webViewConfiguration: const WebViewConfiguration(
+          enableJavaScript: true, // Enable JavaScript if needed
+          enableDomStorage: true, // Enable DOM storage if needed
+        ),
+      )) {
+        // Wait for the user to close the browser
+        completer.future.then((_) {
+          // Navigate to LandingRegisterScreenScreen after closing the browser
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const SplashScreen(),
+            ),
+          );
+        });
+      } else {
+        throw Exception('Could not launch $url');
+      }
 
-    // Simulate waiting for the browser to close (you might need a better way to detect this)
-    await Future.delayed(Duration(seconds: 5)); // Adjust as necessary
-    completer.complete(); // Complete the completer when done
+      // Simulate waiting for the browser to close (you might need a better way to detect this)
+      await Future.delayed(Duration(seconds: 5)); // Adjust as necessary
+      completer.complete(); // Complete the completer when done
+    } catch (e) {
+      // Handle errors like invalid URLs
+      print("Error launching URL: $e");
+    }
   }
 
   @override
@@ -167,7 +187,7 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
                             onTap: () {
                               Future.delayed(Duration(seconds: 2), () {
                                 setState(() {
-                                signInProvider.fetchSettings(context);
+                                //signInProvider.fetchSettings(context);
                                 });
                               });
                               String chatURL = signInProvider.settingsList[0].linkUrl ?? "";
