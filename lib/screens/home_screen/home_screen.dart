@@ -57,6 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late GoalsDreamsProvider goalsDreamsProvider;
   bool tokenStatus = false;
   var logger = Logger();
+  String versionName = "";
 
 
   Future<void> getAppVersion() async {
@@ -65,6 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
     String packageName = packageInfo.packageName;
     String version = packageInfo.version;
     String buildNumber = packageInfo.buildNumber;
+    versionName = packageInfo.version;
 
     print('App Name: $appName');
     print('Package Name: $packageName');
@@ -256,19 +258,22 @@ class _HomeScreenState extends State<HomeScreen> {
             });
           }
         }
-        if (signInProvider.versionUpdateModel?.notifyType == "1") {
-          Future.delayed(Duration.zero, () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => VersionUpdateCheckScreen(
-                  title: signInProvider.versionUpdateModel?.title ?? "",
-                  message: signInProvider.versionUpdateModel?.message ?? "",
-                  notifyMe: signInProvider.versionUpdateModel?.notifyType ?? "",
+        if(versionName != signInProvider.versionUpdateModel?.version){
+          if (signInProvider.versionUpdateModel?.notifyType == "1") {
+            Future.delayed(Duration.zero, () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => VersionUpdateCheckScreen(
+                    title: signInProvider.versionUpdateModel?.title ?? "",
+                    message: signInProvider.versionUpdateModel?.message ?? "",
+                    notifyMe: signInProvider.versionUpdateModel?.notifyType ?? "",
+                  ),
                 ),
-              ),
-            );
-          });
+              );
+            });
+          }
         }
+
         // Add any other handling logic as necessary
       }
     //}
