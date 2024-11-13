@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -138,6 +139,16 @@ class _ScreenSignInState extends State<ScreenSignIn> {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
+        appBar: Platform.isIOS
+            ? AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        )
+            : null, // No AppBar on Android
         body: backGroundImager(
           size: size,
           padding: EdgeInsets.zero,

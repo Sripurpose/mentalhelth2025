@@ -88,6 +88,7 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
     addActionsProvider.takedImages.clear();
     addActionsProvider.selectedLocationName = "";
     addActionsProvider.mediaSelected = 0;
+    addActionsProvider.setRemainder = false;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       editProfileProvider.fetchCategory();
       _isTokenExpired();

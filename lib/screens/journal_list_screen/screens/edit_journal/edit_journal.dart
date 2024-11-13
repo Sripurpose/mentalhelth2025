@@ -133,7 +133,7 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
                 },
                 child: Column(
                   children: [
-                    buildAppBar(
+                    buildAppBarJournalViewScreen(
                       context,
                       size,
                       heading: "Edit your mental strength",

@@ -494,50 +494,50 @@ class _GoalAndDreamFullViewBottomSheetState
                  SizedBox();
                 },
               ),
-              const SizedBox(height: 20),
-
-              widget.goalDetailModel.goals!.goalStatus == "1"
-                  ? const Padding(
-                      padding: EdgeInsets.only(
-                        left: 0,
-                        bottom: 10,
-                      ),
-                      child: Text(
-                        "Completed",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                        // style: theme.textTheme.titleSmall,
-                      ),
-                    )
-                  : Consumer<GoalsDreamsProvider>(
-                      builder: (context, goalsDreamsProvider, _) {
-                      return Padding(
-                        padding: const EdgeInsets.only(
-                          left: 13,
-                          bottom: 10,
-                        ),
-                        child: CustomCheckboxButton(
-                          text: "Mark this goal as Completed",
-                          value: isCompleted,
-                          onChange: (value) async {
-                            setState(() {
-                              isCompleted = true;
-                            });
-                            await goalsDreamsProvider.updateGoalsStatus(
-                              context,
-                              goalId: widget.goalDetailModel.goals!.goalId!
-                                  .toString(),
-                              status: "1",
-                            );
-                            goalsDreamsProvider.fetchGoalsAndDreams(
-                              initial: true,
-                            );
-                          },
-                        ),
-                      );
-                    }),
+              // const SizedBox(height: 20),
+              //
+              // widget.goalDetailModel.goals!.goalStatus == "1"
+              //     ? const Padding(
+              //         padding: EdgeInsets.only(
+              //           left: 0,
+              //           bottom: 10,
+              //         ),
+              //         child: Text(
+              //           "Completed",
+              //           textAlign: TextAlign.center,
+              //           style: TextStyle(
+              //             fontWeight: FontWeight.bold,
+              //           ),
+              //           // style: theme.textTheme.titleSmall,
+              //         ),
+              //       )
+              //     : Consumer<GoalsDreamsProvider>(
+              //         builder: (context, goalsDreamsProvider, _) {
+              //         return Padding(
+              //           padding: const EdgeInsets.only(
+              //             left: 13,
+              //             bottom: 10,
+              //           ),
+              //           child: CustomCheckboxButton(
+              //             text: "Mark this goal as Completed",
+              //             value: isCompleted,
+              //             onChange: (value) async {
+              //               setState(() {
+              //                 isCompleted = true;
+              //               });
+              //               await goalsDreamsProvider.updateGoalsStatus(
+              //                 context,
+              //                 goalId: widget.goalDetailModel.goals!.goalId!
+              //                     .toString(),
+              //                 status: "1",
+              //               );
+              //               goalsDreamsProvider.fetchGoalsAndDreams(
+              //                 initial: true,
+              //               );
+              //             },
+              //           ),
+              //         );
+              //       }),
               // _buildSaveButton(context),
               SizedBox(
                 height: size.height * 0.04,

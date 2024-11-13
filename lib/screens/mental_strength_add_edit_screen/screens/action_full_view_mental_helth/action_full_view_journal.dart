@@ -127,10 +127,10 @@ class _ActionFullViewJournalCreateBottomSheetState
           color: appTheme.gray50,
           borderRadius: const BorderRadius.only(
             topRight: Radius.circular(
-              25,
+              0,
             ),
             topLeft: Radius.circular(
-              25,
+              0,
             ),
           ),
           boxShadow: [
@@ -452,7 +452,7 @@ class _ActionFullViewJournalCreateBottomSheetState
                                     .actionsDetailsModel!
                                     .actions!
                                     .location!.locationAddress!.isEmpty
-                                    ? "NA"
+                                    ? ""
                                     :
                                 mentalStrengthEditProvider
                                     .actionsDetailsModel!
@@ -570,58 +570,58 @@ class _ActionFullViewJournalCreateBottomSheetState
                       );
                     }),
                     const SizedBox(height: 20),
-                    mentalStrengthEditProvider
-                                .actionsDetailsModel!.actions!.actionStatus ==
-                            "1"
-                        ? const Padding(
-                            padding: EdgeInsets.only(
-                              left: 0,
-                              bottom: 10,
-                            ),
-                            child: Text(
-                              "Completed",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                              // style: theme.textTheme.titleSmall,
-                            ),
-                          )
-                        : Consumer2<AddActionsProvider,
-                                MentalStrengthEditProvider>(
-                            builder: (context, addActionsProvider,
-                                mentalStrengthEditProvider, _) {
-                            return Padding(
-                              padding: const EdgeInsets.only(
-                                left: 13,
-                                bottom: 10,
-                              ),
-                              child: CustomCheckboxButton(
-                                text: "Mark this action is completed",
-                                value: isCompleted,
-                                onChange: (value) async {
-                                  setState(() {
-                                    isCompleted = true;
-                                  });
-                                  await addActionsProvider
-                                      .updateActionStatusFunction(
-                                    context,
-                                    goalId: mentalStrengthEditProvider
-                                        .actionsDetailsModel!.actions!.goalId
-                                        .toString(),
-                                    actionId: mentalStrengthEditProvider
-                                        .actionsDetailsModel!.actions!.actionId
-                                        .toString(),
-                                  );
-                                  mentalStrengthEditProvider.fetchGoalActions(
-                                    goalId: mentalStrengthEditProvider
-                                        .actionsDetailsModel!.actions!.goalId
-                                        .toString(),
-                                  );
-                                },
-                              ),
-                            );
-                          }),
+                    // mentalStrengthEditProvider
+                    //             .actionsDetailsModel!.actions!.actionStatus ==
+                    //         "1"
+                    //     ? const Padding(
+                    //         padding: EdgeInsets.only(
+                    //           left: 0,
+                    //           bottom: 10,
+                    //         ),
+                    //         child: Text(
+                    //           "Completed",
+                    //           textAlign: TextAlign.center,
+                    //           style: TextStyle(
+                    //             fontWeight: FontWeight.bold,
+                    //           ),
+                    //           // style: theme.textTheme.titleSmall,
+                    //         ),
+                    //       )
+                    //     : Consumer2<AddActionsProvider,
+                    //             MentalStrengthEditProvider>(
+                    //         builder: (context, addActionsProvider,
+                    //             mentalStrengthEditProvider, _) {
+                    //         return Padding(
+                    //           padding: const EdgeInsets.only(
+                    //             left: 13,
+                    //             bottom: 10,
+                    //           ),
+                    //           child: CustomCheckboxButton(
+                    //             text: "Mark this action is completed",
+                    //             value: isCompleted,
+                    //             onChange: (value) async {
+                    //               setState(() {
+                    //                 isCompleted = true;
+                    //               });
+                    //               await addActionsProvider
+                    //                   .updateActionStatusFunction(
+                    //                 context,
+                    //                 goalId: mentalStrengthEditProvider
+                    //                     .actionsDetailsModel!.actions!.goalId
+                    //                     .toString(),
+                    //                 actionId: mentalStrengthEditProvider
+                    //                     .actionsDetailsModel!.actions!.actionId
+                    //                     .toString(),
+                    //               );
+                    //               mentalStrengthEditProvider.fetchGoalActions(
+                    //                 goalId: mentalStrengthEditProvider
+                    //                     .actionsDetailsModel!.actions!.goalId
+                    //                     .toString(),
+                    //               );
+                    //             },
+                    //           ),
+                    //         );
+                    //       }),
                     const SizedBox(height: 30),
                   ],
                 ),

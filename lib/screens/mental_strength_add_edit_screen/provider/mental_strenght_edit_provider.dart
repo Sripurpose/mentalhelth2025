@@ -1144,15 +1144,17 @@ class MentalStrengthEditProvider extends ChangeNotifier {
   List<action.Action> actionList = [];
 
   void addActionFunction({required action.Action value}) {
-    // Add the action to the selection if it's not already selected
-    if (!actionList.contains(value)) {
+    // Check if an action with the same id already exists in the list
+    if (!actionList.any((action) => action.id == value.id)) {
+      // Add the action to the list if its id is not already in the list
       actionList.add(value);
     } else {
       // Optionally, if you want to allow deselection by clicking the checkbox again
-      actionList.remove(value);
+      actionList.removeWhere((action) => action.id == value.id);
     }
     notifyListeners(); // Notify listeners to update UI
   }
+
 
   void clearSelections() {
     actionList.clear();
