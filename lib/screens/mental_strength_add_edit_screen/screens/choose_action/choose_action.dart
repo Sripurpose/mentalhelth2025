@@ -358,22 +358,17 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
     const TokenExpireScreen();
   }
 
-  Widget listActionList(
-      {required Size size,
-      required List<action.Action> action,
-      required int index}) {
+  Widget listActionList({
+    required Size size,
+    required List<action.Action> action,
+    required int index,
+  }) {
     return Container(
-      padding: EdgeInsets.all(
-        size.width * 0.03,
-      ),
-      margin: const EdgeInsets.only(
-        bottom: 8,
-      ),
+      padding: EdgeInsets.all(size.width * 0.03),
+      margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
         color: Colors.blue[50],
-        borderRadius: const BorderRadius.all(
-          Radius.circular(10),
-        ),
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -381,21 +376,15 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
           SizedBox(
             width: size.width * 0.1,
             child: Consumer<MentalStrengthEditProvider>(
-                builder: (context, mentalStrengthEditProvider, _) {
-              return Checkbox(
-                value: mentalStrengthEditProvider.actionList.any(
-                  (element) => element.id == action[index].id.toString(),
-                ),
-                onChanged: (value) {
-                  mentalStrengthEditProvider.addActionFunction(
-                    value: action[index],
-                  );
-                  // mentalStrengthEditProvider.fetchGoalDetails(
-                  //   goalId: action[index].id.toString(),
-                  // );
-                },
-              );
-            }),
+              builder: (context, mentalStrengthEditProvider, _) {
+                return Checkbox(
+                  value: mentalStrengthEditProvider.actionList.contains(action[index]),
+                  onChanged: (value) {
+                    mentalStrengthEditProvider.addActionFunction(value: action[index]);
+                  },
+                );
+              },
+            ),
           ),
           SizedBox(
             width: size.width * 0.5,
@@ -404,62 +393,57 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  width:size.width * 0.55,
-                 // color: Colors.lightGreenAccent,
+                  width: size.width * 0.55,
                   child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+                    scrollDirection: Axis.horizontal,
                     child: Text(
                       action[index].title.toString(),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis, // Add this line if you want to truncate long text
-                      maxLines: 1, // Limit to 1 line for horizontal scrolling
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: size.height * 0.005,
-                ),
+                SizedBox(height: size.height * 0.005),
                 Text(
                   formatDate(int.parse(action[index].actionDate.toString())),
                   style: theme.textTheme.bodySmall,
                 ),
-                SizedBox(
-                  height: size.height * 0.01,
-                ),
+                SizedBox(height: size.height * 0.01),
               ],
             ),
           ),
           const Spacer(),
           Consumer<MentalStrengthEditProvider>(
-              builder: (context, mentalStrengthEditProvider, _) {
-            return GestureDetector(
-              onTap: () async {
-                await mentalStrengthEditProvider.fetchActionDetails(
-                  actionId: action[index].id.toString(),
-                );
-                mentalStrengthEditProvider.openActionFullViewFunction();
-              },
-              child: CircleAvatar(
-                radius: size.width * 0.03,
-                backgroundColor:
-                    mentalStrengthEditProvider.actionsDetailsModelLoading
-                        ? Colors.blue[50]
-                        : Colors.blue,
-                child: mentalStrengthEditProvider.actionsDetailsModelLoading
-                    ? const CircularProgressIndicator()
-                    : Icon(
-                        (Icons.arrow_forward_ios_outlined),
-                        color: Colors.white,
-                        size: size.width * 0.03,
-                      ),
-              ),
-            );
-          }),
+            builder: (context, mentalStrengthEditProvider, _) {
+              return GestureDetector(
+                onTap: () async {
+                  await mentalStrengthEditProvider.fetchActionDetails(
+                    actionId: action[index].id.toString(),
+                  );
+                  mentalStrengthEditProvider.openActionFullViewFunction();
+                },
+                child: CircleAvatar(
+                  radius: size.width * 0.03,
+                  backgroundColor:
+                  mentalStrengthEditProvider.actionsDetailsModelLoading
+                      ? Colors.blue[50]
+                      : Colors.blue,
+                  child: mentalStrengthEditProvider.actionsDetailsModelLoading
+                      ? const CircularProgressIndicator()
+                      : Icon(
+                    Icons.arrow_forward_ios_outlined,
+                    color: Colors.white,
+                    size: size.width * 0.03,
+                  ),
+                ),
+              );
+            },
+          ),
         ],
       ),
     );
   }
+
 }

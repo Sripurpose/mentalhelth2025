@@ -100,16 +100,16 @@ class _GoalAndDreamFullViewBottomParellelSheetState
           color: appTheme.gray50,
           borderRadius: const BorderRadius.only(
             topRight: Radius.circular(
-              25,
+              0,
             ),
             topLeft: Radius.circular(
-              25,
+              0,
             ),
             bottomLeft: Radius.circular(
-              25,
+              0,
             ),
             bottomRight: Radius.circular(
-              25,
+              0,
             ),
           ),
           boxShadow: [
