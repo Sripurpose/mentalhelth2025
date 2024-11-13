@@ -265,7 +265,11 @@ class _ActionFullViewJournalCreateBottomSheetState
                     //         overflow: TextOverflow.ellipsis,
                     //         style: CustomTextStyles.bodyMediumGray700_1,
                     //       ),
+                    audioList.isEmpty ?
+                        SizedBox():
                     const SizedBox(height: 15),
+                    audioList.isEmpty ?
+                        SizedBox():
                     Padding(
                             padding: const EdgeInsets.only(left: 2),
                             child: Text(
@@ -279,9 +283,7 @@ class _ActionFullViewJournalCreateBottomSheetState
                             height: 2,
                           ),
                     audioList.isEmpty
-                        ?Text("NA",
-                      style: CustomTextStyles
-                          .bodyMediumGray700_1,)
+                        ?SizedBox()
                         : SizedBox(
                             height: audioList.length * size.height * 0.1,
                             child: ListView.builder(
@@ -298,7 +300,11 @@ class _ActionFullViewJournalCreateBottomSheetState
                         : const SizedBox(
                             height: 23,
                           ),
+                    imageList.isEmpty ?
+                        SizedBox():
                     SizedBox(height: 10,),
+                    imageList.isEmpty?
+                        SizedBox():
                     Padding(
                             padding: const EdgeInsets.only(left: 2),
                             child: Text(
@@ -310,9 +316,7 @@ class _ActionFullViewJournalCreateBottomSheetState
                         ? const SizedBox()
                         : const SizedBox(height: 4),
                     imageList.isEmpty
-                        ? Text("NA",
-                      style: CustomTextStyles
-                          .bodyMediumGray700_1,)
+                        ? SizedBox()
                         : SizedBox(
                             height: size.height * 0.2,
                             child: Stack(
@@ -355,9 +359,13 @@ class _ActionFullViewJournalCreateBottomSheetState
                         : const SizedBox(
                             height: 10,
                           ),
+                    videoList.isEmpty?
+                        SizedBox():
                     const SizedBox(
                       height: 10,
                     ),
+                    videoList.isEmpty?
+                        SizedBox():
                     Padding(
                             padding: const EdgeInsets.only(left: 2),
                             child: Text(
@@ -369,9 +377,7 @@ class _ActionFullViewJournalCreateBottomSheetState
                         ? const SizedBox()
                         : const SizedBox(height: 4),
                     videoList.isEmpty
-                        ? Text("NA",
-                      style: CustomTextStyles
-                          .bodyMediumGray700_1,)
+                        ? SizedBox()
                         : SizedBox(
                             height: size.height * 0.3,
                             child: Stack(
@@ -409,14 +415,24 @@ class _ActionFullViewJournalCreateBottomSheetState
                     //   context,
                     //   size,
                     // ),
-                    const SizedBox(height: 10),
+                    mentalStrengthEditProvider
+                        .actionsDetailsModel!
+                        .actions!
+                        .location != null ?
+                    const SizedBox(height: 10):
+                        SizedBox(),
+                    mentalStrengthEditProvider
+                        .actionsDetailsModel!
+                        .actions!
+                        .location != null ?
                     Padding(
                       padding: const EdgeInsets.only(left: 2),
                       child: Text(
                         "Your Location",
                         style: CustomTextStyles.blackText16000000W600(),
                       ),
-                    ),
+                    ):
+                        SizedBox(),
                     const SizedBox(height: 6),
                     mentalStrengthEditProvider
                         .actionsDetailsModel!
@@ -448,9 +464,7 @@ class _ActionFullViewJournalCreateBottomSheetState
                           )
                       ),
                     ) :
-                    Text("NA",
-                      style: CustomTextStyles
-                          .bodyMediumGray700_1,),
+                SizedBox(),
                     const SizedBox(height: 20),
                     Consumer<AddActionsProvider>(
                         builder: (context, addActionsProvider, _) {

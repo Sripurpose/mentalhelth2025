@@ -205,7 +205,7 @@ class _GoalAndDreamFullViewBottomSheetState
                 comments: widget.goalDetailModel.goals!.goalDetails.toString(),
               ),
               audioList.isEmpty ? const SizedBox() : const SizedBox(height: 15),
-              SizedBox(height: 10),
+              //SizedBox(height: 10),
               audioList.isEmpty ?
                   SizedBox():
                   Padding(
@@ -293,10 +293,8 @@ class _GoalAndDreamFullViewBottomSheetState
                       height: 10,
                     )
                   : const SizedBox(),
-              const SizedBox(
-                height: 10,
-              ),
-              videoList.isNotEmpty ?
+
+              videoList.isEmpty ?
                   SizedBox():
              Padding(
                       padding: const EdgeInsets.only(left: 2),
@@ -346,7 +344,8 @@ class _GoalAndDreamFullViewBottomSheetState
               //   context,
               //   size,
               // ),
-              const SizedBox(height: 28),
+              widget.goalDetailModel.goals!.location?.locationAddress != null ?
+              const SizedBox(height: 28):SizedBox(),
               widget.goalDetailModel.goals!.location?.locationAddress != null ?
               Padding(
                 padding: const EdgeInsets.only(left: 2),
@@ -381,6 +380,8 @@ class _GoalAndDreamFullViewBottomSheetState
               )
                   :
             SizedBox(),
+              widget.goalDetailModel.goals!.location?.locationAddress == null ?
+                  SizedBox():
               const SizedBox(height: 20),
               widget.goalDetailModel.goals!.action!.isNotEmpty?
               Padding(

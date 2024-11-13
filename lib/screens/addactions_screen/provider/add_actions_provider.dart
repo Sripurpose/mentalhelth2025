@@ -1170,6 +1170,7 @@ var logger = Logger();
           id: responseData["id"].toString(),
           name: responseData["title"].toString(),
         );
+        Navigator.of(context).pop();
         // If a reminder is set, reschedule the updated alarm
         if (setRemainder) {
           scheduleAlarm(
