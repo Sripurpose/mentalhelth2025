@@ -496,7 +496,7 @@ Widget buildPopupDialog(BuildContext context, Size size) {
             Align(
               alignment: Alignment.center,
               child: Text(
-                "App Version ${Constent.versionCode}",
+                "App Version ${Platform.isAndroid ? Constent.versionCodeAndroid: Constent.versionCodeIOS} ",
                 maxLines: 13,
                 overflow: TextOverflow.ellipsis,
                 style: CustomTextStyles.titleMediumOnSecondaryContainerMedium

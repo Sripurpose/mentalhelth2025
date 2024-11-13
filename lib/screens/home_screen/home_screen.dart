@@ -23,6 +23,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../utils/core/constants.dart';
+import '../../utils/core/constent.dart';
 import '../../utils/core/firebase_api.dart';
 import '../../utils/logic/shared_prefrence.dart';
 import '../../utils/theme/custom_button_style.dart';
@@ -67,6 +68,11 @@ class _HomeScreenState extends State<HomeScreen> {
     String version = packageInfo.version;
     String buildNumber = packageInfo.buildNumber;
     versionName = packageInfo.version;
+    if(Platform.isAndroid){
+      Constent.versionCodeAndroid = packageInfo.version;
+    }else{
+      Constent.versionCodeIOS = packageInfo.version;
+    }
 
     print('App Name: $appName');
     print('Package Name: $packageName');

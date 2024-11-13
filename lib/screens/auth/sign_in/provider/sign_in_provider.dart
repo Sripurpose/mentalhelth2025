@@ -666,7 +666,7 @@ class SignInProvider extends ChangeNotifier {
       Map<String, String> headers = {
         'authorization': token!, // Assuming token is not null
         'device-type':deviceType,
-        'version':Constent.versionCode
+        'version': Platform.isAndroid ? Constent.versionCodeAndroid : Constent.versionCodeIOS
       };
       Uri url = Uri.parse(
         UrlConstant.version_update,
