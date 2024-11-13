@@ -367,23 +367,30 @@ class _GoalAndDreamFullViewBottomSheetState
                           height: 23,
                           width: 23,
                         ),
+                        Text(
+                          widget.goalDetailModel.goals!.location!.locationAddress!.isEmpty
+                              ? ""
+                              :
+                          widget.goalDetailModel.goals!.location!.locationAddress.toString(),
+                          style: CustomTextStyles.bodyMediumGray700_1,
+                        ),
              SizedBox(),
                       ],
                     )
                 ),
               )
                   :
-              Text("NA",
-                style: CustomTextStyles
-                    .bodyMediumGray700_1,),
+            SizedBox(),
               const SizedBox(height: 20),
+              widget.goalDetailModel.goals!.action!.isNotEmpty?
               Padding(
                 padding: const EdgeInsets.only(left: 2),
                 child: Text(
                   "Actions",
                   style: CustomTextStyles.blackText16000000W600(),
                 ),
-              ),
+              ):
+                  SizedBox(),
               const SizedBox(height: 5),
               Consumer<AdDreamsGoalsProvider>(
                 builder: (context, adDreamsGoalsProvider, _) {
@@ -483,10 +490,7 @@ class _GoalAndDreamFullViewBottomSheetState
                       },
                     ),
                   ):
-                    Text(
-                      "NA",
-                      style: CustomTextStyles.bodyMediumGray700_1,
-                    );
+                 SizedBox();
                 },
               ),
               const SizedBox(height: 20),
