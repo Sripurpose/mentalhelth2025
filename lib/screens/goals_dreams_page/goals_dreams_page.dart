@@ -229,7 +229,8 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
                                           });
                                           goalsDreamsProvider.fetchGoalsAndDreams(pageNo: currentPage.toString());
                                         },
-                                        child: Container(
+                                        child: goalsDreamsProvider.goalsanddreams.isNotEmpty ?
+                                        Container(
                                           margin: const EdgeInsets.all(4.0),
                                           padding: const EdgeInsets.all(8.0),
                                           decoration: BoxDecoration(
@@ -254,7 +255,7 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
                                               ),
                                             ),
                                           ),
-                                        ),
+                                        ):SizedBox(),
                                       );
                                     }),
                                   ),

@@ -117,6 +117,7 @@ class _JournalListViewWidgetState extends State<JournalListViewWidget> {
                   ),
                 ),
                 // Pagination Row
+                homeProvider.journalsModelList.isNotEmpty ?
                 Padding(
                   padding: const EdgeInsets.only(bottom: 0.0),
                   child: GestureDetector(
@@ -161,9 +162,8 @@ class _JournalListViewWidgetState extends State<JournalListViewWidget> {
                       }),
                     ),
                   ),
-                ),
-            
-            
+                ):
+                    const SizedBox(),
               ],
             ),
           ),
