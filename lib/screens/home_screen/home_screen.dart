@@ -32,8 +32,10 @@ import '../../utils/theme/theme_helper.dart';
 import '../../widgets/custom_image_view.dart';
 import '../../widgets/functions/popup.dart';
 import '../auth/sign_in/provider/sign_in_provider.dart';
+import '../auth/splash/splash.dart';
 import '../goals_dreams_page/provider/goals_dreams_provider.dart';
 import '../home_screen/widgets/userprofilelist_item_widget.dart';
+import '../maintenence_screen/maintenence_screen.dart';
 import '../mental_strength_add_edit_screen/provider/mental_strenght_edit_provider.dart';
 import '../subscription_view/subscription_check_screen.dart';
 import '../subscription_view/subscription_in_app_screen.dart';
@@ -70,8 +72,10 @@ class _HomeScreenState extends State<HomeScreen> {
     versionName = packageInfo.version;
     if(Platform.isAndroid){
       Constent.versionCodeAndroid = packageInfo.version;
+      addVersionSharePref(version: packageInfo.version);
     }else{
       Constent.versionCodeIOS = packageInfo.version;
+      addVersionSharePref(version: packageInfo.version);
     }
 
     print('App Name: $appName');
@@ -238,7 +242,52 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<void> _launchInAppWithBrowserOptionsVersionUpdate(BuildContext context, Uri url) async {
+    // Check if the URL scheme is "mental"
+
+    // Create a Completer to handle navigation after closing the browser
+    final Completer<void> completer = Completer<void>();
+
+    // Check the platform and set the update URL accordingly
+    Uri updateUrl = Platform.isAndroid
+        ? Uri.parse("https://play.google.com/store/apps/details?id=com.mentalhelth.mentalhelth")
+        : Uri.parse("https://apps.apple.com/app/id6736739491"); // Replace with your iOS App Store link
+
+    // Launch the update URL in an in-app browser if it's not a "mental" URL
+    try {
+      if (await launchUrl(
+        updateUrl,
+        mode: LaunchMode.inAppBrowserView,
+        webViewConfiguration: const WebViewConfiguration(
+          enableJavaScript: true,
+          enableDomStorage: true,
+        ),
+      )) {
+        // Wait for the user to close the browser
+        completer.future.then((_) {
+          // Navigate to SplashScreen after closing the browser
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const SplashScreen(),
+            ),
+          );
+        });
+      } else {
+        throw Exception('Could not launch $updateUrl');
+      }
+
+      // Simulate waiting for the browser to close (you might need a better way to detect this)
+      await Future.delayed(const Duration(seconds: 5));
+      completer.complete(); // Complete the completer when done
+    } catch (e) {
+      // Handle errors like invalid URLs
+      print("Error launching URL: $e");
+    }
+  }
+
   void checkVersionUpdate() async {
+    final String androidUpdateUrl = "https://play.google.com/store/apps/details?id=com.mentalhelth.mentalhelth";
+    final String iosUpdateUrl = "https://apps.apple.com/app/id6736739491"; // Replace with your iOS App Store link
     final prefs = await SharedPreferences.getInstance();
     final lastSkippedTimestamp = prefs.getInt('lastSkippedTimestamp');
     final currentTime = DateTime.now().millisecondsSinceEpoch;
@@ -279,9 +328,29 @@ class _HomeScreenState extends State<HomeScreen> {
             });
           }
         }
-
         // Add any other handling logic as necessary
       }
+
+    if(signInProvider.statusVersionUpdate == 503){
+      logger.w("signInProvider.statusVersionUpdate${signInProvider.statusVersionUpdate}");
+      Future.delayed(Duration.zero, () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => MaintenenceScreen(
+              title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+              message: signInProvider.versionUpdateModel?.message ?? "",
+            ),
+          ),
+        );
+      });
+    }else if(signInProvider.statusVersionUpdate == 505){
+      Uri updateUrl = Platform.isAndroid
+          ? Uri.parse(androidUpdateUrl)
+          : Uri.parse(iosUpdateUrl);
+
+      // Launch the in-app browser with the correct URL
+      await _launchInAppWithBrowserOptionsVersionUpdate(context, updateUrl);
+    }
     //}
   }
 

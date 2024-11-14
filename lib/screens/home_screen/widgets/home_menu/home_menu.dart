@@ -439,6 +439,7 @@ Widget buildPopupDialog(BuildContext context, Size size) {
                         final prefs = await SharedPreferences.getInstance();
                         await prefs.remove('lastSkippedTimestamp');
                         addFCMTokenToSharePref(token: "");
+                        addVersionSharePref(version:"");
                        // GoogleSignInService.logout();
                         await signInProvider.logOutUser(context);
                         await removeUserDetailsSharePref(context: context);

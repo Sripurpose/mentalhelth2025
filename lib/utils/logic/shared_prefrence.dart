@@ -31,6 +31,18 @@ Future<String?> getUserIdSharePref() async {
   return prefs.getString("userId");
 }
 
+
+void addVersionSharePref({required String version}) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString("version", version);
+}
+
+//get user id
+Future<String?> getVersionSharePref() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.getString("version");
+}
+
 //remove user id
 Future<void> removeUserDetailsSharePref({required BuildContext context}) async {
   DashBoardProvider dashBoardProvider = Provider.of(context, listen: false);

@@ -545,7 +545,7 @@ class SignInProvider extends ChangeNotifier {
   bool registerSettingsLoading = false;
   int? statusSub = 0;
 
-  int? statusVersionUpdate= 0;
+  int? statusVersionUpdate;
   bool versionUpdateLoading = false;
   VersionUpdateModel? versionUpdateModel;
   Future<void> fetchSettings(BuildContext context) async {
@@ -657,17 +657,30 @@ class SignInProvider extends ChangeNotifier {
 
   Future<void> fetchVersionUpdate(BuildContext context,String deviceType) async {
     try {
-      statusVersionUpdate= 0;
       versionUpdateModel = null;
       String? token = await getUserTokenSharePref();
       versionUpdateLoading = true;
       notifyListeners();
 
+
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
+
+
       Map<String, String> headers = {
         'authorization': token!, // Assuming token is not null
         'device-type':deviceType,
-        'version': Platform.isAndroid ? Constent.versionCodeAndroid : Constent.versionCodeIOS
+        'version': versionCode.toString()
       };
+      logger.w("headers${headers}");
       Uri url = Uri.parse(
         UrlConstant.version_update,
       );
@@ -675,6 +688,7 @@ class SignInProvider extends ChangeNotifier {
       logger.w("response100${response.headers}");
       if (response.statusCode == 200 || response.statusCode == 201) {
         statusVersionUpdate = response.statusCode;
+        logger.w("statusVersionUpdate${statusVersionUpdate}");
         versionUpdateModel = versionUpdateModelFromJson(response.body);
         logger.w("versionUpdateModel ${versionUpdateModel}");
         // if (settingsModel != null) {
@@ -688,16 +702,19 @@ class SignInProvider extends ChangeNotifier {
       }
       else {
         statusVersionUpdate = response.statusCode;
+        logger.w("statusVersionUpdate${statusVersionUpdate}");
         versionUpdateLoading = false;
         notifyListeners();
       }
       if(response.statusCode == 401){
         statusVersionUpdate = response.statusCode;
+        logger.w("statusVersionUpdate${statusVersionUpdate}");
         TokenManager.setTokenStatus(true);
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
       if(response.statusCode == 403){
         statusVersionUpdate = response.statusCode;
+        logger.w("statusVersionUpdate${statusVersionUpdate}");
         TokenManager.setTokenStatus(true);
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
