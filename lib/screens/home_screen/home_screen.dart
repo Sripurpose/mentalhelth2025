@@ -343,7 +343,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         );
       });
-    }else if(signInProvider.statusVersionUpdate == 505){
+    }
+    else if(signInProvider.statusVersionUpdate == 505){
       Uri updateUrl = Platform.isAndroid
           ? Uri.parse(androidUpdateUrl)
           : Uri.parse(iosUpdateUrl);
