@@ -63,6 +63,7 @@ void main() async {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
+
     }else if(Platform.isIOS){
       await Firebase.initializeApp(
         name: 'mentalhealth',
