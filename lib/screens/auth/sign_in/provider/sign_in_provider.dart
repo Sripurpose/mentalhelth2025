@@ -43,10 +43,12 @@ class SignInProvider extends ChangeNotifier {
   // bool isWebViewSuccessStarted = false;
   LoginModel? loginModel;
   bool loginLoading = false;
+  int? loginStatus;
 
   Future<void> loginUser(BuildContext context,
       {required String email, required String password}) async {
     try {
+      loginStatus = 0;
       loginLoading = true;
       notifyListeners();
       var body = {
@@ -63,6 +65,7 @@ class SignInProvider extends ChangeNotifier {
         body: body,
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
+        loginStatus = response.statusCode;
         TokenManager.setTokenStatus(false);
         loginModel = loginModelFromJson(
           response.body,
@@ -112,28 +115,34 @@ class SignInProvider extends ChangeNotifier {
           }
         }
       } else if(response.statusCode == 400){
+        loginStatus = response.statusCode;
         showCustomSnackBar(
           context: context,
           message: 'This account does not exists !',
         );
       }else{
+        loginStatus = response.statusCode;
         showCustomSnackBar(
           context: context,
           message: 'Incorrect Email or password !',
         );
       }
       if(response.statusCode == 401){
+        loginStatus = response.statusCode;
         TokenManager.setTokenStatus(true);
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
       if(response.statusCode == 403){
+        loginStatus = response.statusCode;
         TokenManager.setTokenStatus(true);
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
       if(response.statusCode == 400){
         TokenManager.setTokenStatus(true);
+        loginStatus = response.statusCode;
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
+      loginStatus = response.statusCode;
       loginLoading = false;
       notifyListeners();
       emailFieldController.clear();

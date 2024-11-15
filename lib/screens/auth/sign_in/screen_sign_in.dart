@@ -218,9 +218,11 @@ class _ScreenSignInState extends State<ScreenSignIn> {
                         onPressed: () async {
                           FocusScope.of(context).unfocus();
                           await signInProvider.callSignInButton(context);
-                          homeProvider.fetchChartView(context);
-                          //  homeProvider.fetchJournals(initial: true);
-                          editProfileProvider.fetchUserProfile();
+                          if(signInProvider.loginStatus == 200 || signInProvider.loginStatus == 201){
+                            homeProvider.fetchChartView(context);
+                            //  homeProvider.fetchJournals(initial: true);
+                            editProfileProvider.fetchUserProfile();
+                          }
                         },
                       );
                     }),
