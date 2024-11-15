@@ -224,6 +224,7 @@ class _ScreenSignInState extends State<ScreenSignIn> {
                             editProfileProvider.fetchUserProfile();
                           }
                         },
+
                       );
                     }),
                     const SizedBox(
