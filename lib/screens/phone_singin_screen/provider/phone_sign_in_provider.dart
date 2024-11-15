@@ -75,6 +75,7 @@ class PhoneSignInProvider extends ChangeNotifier {
     }
   }
 
+
   void addPhoneNumber(String value) {
     phoneNumberController.text = value;
     notifyListeners();
@@ -82,10 +83,12 @@ class PhoneSignInProvider extends ChangeNotifier {
 
   bool verifyLoading = false;
   VerifyOtpModel? verifyOtpModel;
+  int? statusOtpVerify;
 
   Future<void> verifyFunction(BuildContext context,
       {required String phone, required String otp}) async {
     try {
+      statusOtpVerify = 0;
       verifyLoading = true;
       notifyListeners();
 
@@ -104,6 +107,7 @@ class PhoneSignInProvider extends ChangeNotifier {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
+        statusOtpVerify = response.statusCode;
         verifyOtpModel = verifyOtpModelFromJson(
           response.body,
         );
@@ -145,16 +149,21 @@ class PhoneSignInProvider extends ChangeNotifier {
         }
         phoneNumberController.clear();
       } else {
+        statusOtpVerify = response.statusCode;
         showCustomSnackBar(context: context, message: 'otp failed.');
       }
+      statusOtpVerify = response.statusCode;
       if(response.statusCode == 401){
+        statusOtpVerify = response.statusCode;
         TokenManager.setTokenStatus(true);
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
       if(response.statusCode == 403){
         TokenManager.setTokenStatus(true);
+        statusOtpVerify = response.statusCode;
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
+      statusOtpVerify = response.statusCode;
       verifyLoading = false;
       notifyListeners();
     } catch (error) {

@@ -99,15 +99,19 @@ class OtpScreen extends StatelessWidget {
                         phone: phoneSignInProvider.phoneNumberController.text,
                         otp: phoneSignInProvider.otp.toString(),
                       );
+
+                      if(phoneSignInProvider.statusOtpVerify == 201 || phoneSignInProvider.statusOtpVerify == 200){
+                        HomeProvider homeProvider =
+                        Provider.of<HomeProvider>(context, listen: false);
+                        EditProfileProvider editProfileProvider =
+                        Provider.of<EditProfileProvider>(context,
+                            listen: false);
+                        homeProvider.fetchChartView(context);
+                        //   homeProvider.fetchJournals(initial: true);
+                        editProfileProvider.fetchUserProfile();
+                      }
                      // phoneSignInProvider.phoneNumberController.clear();
-                      HomeProvider homeProvider =
-                          Provider.of<HomeProvider>(context, listen: false);
-                      EditProfileProvider editProfileProvider =
-                          Provider.of<EditProfileProvider>(context,
-                              listen: false);
-                      homeProvider.fetchChartView(context);
-                   //   homeProvider.fetchJournals(initial: true);
-                      editProfileProvider.fetchUserProfile();
+
                     },
                   );
                 }),
