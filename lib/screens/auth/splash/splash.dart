@@ -84,7 +84,7 @@ class _SplashScreenState extends State<SplashScreen> {
     signInProvider.fetchSettings(context);
     signInProvider.fetchAppRegister(context);
     //signInProvider.fetchSettings(context);
-    homeProvider.fetchChartView(context);
+   // homeProvider.fetchChartView(context);
 
     //homeProvider.fetchJournals(initial: true);
     checkAndFetchVersionUpdate(context,);

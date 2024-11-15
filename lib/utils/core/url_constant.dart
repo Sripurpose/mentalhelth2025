@@ -1,33 +1,33 @@
 class UrlConstant {
-  static const String baseUrl = "https://mh.featureme.live/v1/";
+  static String baseUrl = "";
 
-  static const String loginUrl = "${baseUrl}login";
-  static const String logOutUrl = "${baseUrl}logout";
-  static const String forgotPassword = "${baseUrl}forgotpassword";
-  static const String signupUrl = "${baseUrl}signup";
-  static const String plansUrl = "${baseUrl}plans";
+  static String loginUrl = "${baseUrl}login";
+  static String logOutUrl = "${baseUrl}logout";
+  static String forgotPassword = "${baseUrl}forgotpassword";
+  static String signupUrl = "${baseUrl}signup";
+  static String plansUrl = "${baseUrl}plans";
   static String profileUrl({required String userId}) {
     return "${baseUrl}profile/$userId";
   }
 
-  static const String socialmedialoginUrl = "${baseUrl}socialmedialogin";
-  static const String savefirebasetokenUrl = "${baseUrl}token/";
-  static const String saveReminderUrl = "${baseUrl}reminder/";
+  static String socialmedialoginUrl = "${baseUrl}socialmedialogin";
+  static String savefirebasetokenUrl = "${baseUrl}token/";
+  static String saveReminderUrl = "${baseUrl}reminder/";
 
-  static const String otpPhoneLoginUrl = "${baseUrl}otplogin";
-  static const String verifyOtpUrl = "${baseUrl}verifyOtp";
-  static const String subscribePlanUrl = "${baseUrl}subscribe";
-  static const String accountUrl = "${baseUrl}account";
-  static const String categoryUrl = "${baseUrl}category";
+  static String otpPhoneLoginUrl = "${baseUrl}otplogin";
+  static String verifyOtpUrl = "${baseUrl}verifyOtp";
+  static String subscribePlanUrl = "${baseUrl}subscribe";
+  static String accountUrl = "${baseUrl}account";
+  static String categoryUrl = "${baseUrl}category";
 
-  static const String interestsUrl = "${baseUrl}interests";
-  static const String feedbackUrl = "${baseUrl}feedback";
-  static const String savegemUrl = "${baseUrl}savegem";
-  static const String mediauploadUrl = "${baseUrl}mediaupload";
-  static const String chartviewUrl = "${baseUrl}chartview";
-  static const String appSettingsUrl = "${baseUrl}appsettings";
-  static const String appRegisterUrl= "${baseUrl}setup";
-  static const String version_update = "${baseUrl}version_update";
+  static String interestsUrl = "${baseUrl}interests";
+  static String feedbackUrl = "${baseUrl}feedback";
+  static String savegemUrl = "${baseUrl}savegem";
+  static String mediauploadUrl = "${baseUrl}mediaupload";
+  static String chartviewUrl = "${baseUrl}chartview";
+  static String appSettingsUrl = "${baseUrl}appsettings";
+  static String appRegisterUrl= "${baseUrl}setup";
+  static String version_update = "${baseUrl}version_update";
 
 
   static String journalsUrl({required String page}) {
@@ -44,9 +44,9 @@ class UrlConstant {
   static String fetchRemindersDetails() {
     return "${baseUrl}reminder/";
   }
-  static const String journalChartViewUrl = "${baseUrl}journalchartview";
-  static const String emotionsUrl = "${baseUrl}emotions/";
-  static const String goalsUrl = "${baseUrl}goals/";
+  static String journalChartViewUrl = "${baseUrl}journalchartview";
+  static String emotionsUrl = "${baseUrl}emotions/";
+  static String goalsUrl = "${baseUrl}goals/";
 
   static String goalActionsUrl({required String goalId}) {
     return "${baseUrl}goalactions/$goalId";
@@ -60,14 +60,14 @@ class UrlConstant {
     return "${baseUrl}actions/$actionId";
   }
 
-  static const String journalUrl = "${baseUrl}journal/";
+  static String journalUrl = "${baseUrl}journal/";
 
   static String goalsanddreamsUrl({required String page}) {
     return "${baseUrl}goalsanddreams/$page";
   }
 
-  static const String updateGoalstatusUrl = "${baseUrl}update_goalstatus";
-  static const String updateActionStatusUrl = "${baseUrl}update_actionstatus";
+  static String updateGoalstatusUrl = "${baseUrl}update_goalstatus";
+  static String updateActionStatusUrl = "${baseUrl}update_actionstatus";
 
   static String deleteGoal({required String goal}) {
     return "${baseUrl}goal/$goal";
@@ -81,11 +81,11 @@ class UrlConstant {
     return "${baseUrl}reminder/$reminder_id";
   }
 
-  static const String removemediaUrl = "${baseUrl}removemedia";
+  static String removemediaUrl = "${baseUrl}removemedia";
 
-  static const String sendOtpEmailPhone = "${baseUrl}send_otp_email_phone";
+  static String sendOtpEmailPhone = "${baseUrl}send_otp_email_phone";
 
-  static const String verifyOtpEmailPhone = "${baseUrl}verify_otp_email_phone";
+  static String verifyOtpEmailPhone = "${baseUrl}verify_otp_email_phone";
 
   static String webContentPolicy({required String type}) {
     return "${baseUrl}content/$type";

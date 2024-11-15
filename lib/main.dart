@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart'; // Import for Crashlytics
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,7 @@ import 'package:mentalhelth/screens/mental_strength_add_edit_screen/provider/men
 import 'package:mentalhelth/utils/core/constants.dart';
 import 'package:mentalhelth/utils/core/firebase_api.dart';
 import 'package:mentalhelth/utils/core/local_notification.dart';
+import 'package:mentalhelth/utils/core/url_constant.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
@@ -218,14 +220,78 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   PermissionStatus permissionStatus = PermissionStatus.denied;
 
+  late DatabaseReference ref;
+  String? baseUrlLive;
+  String? baseUrlQA;
+  bool isBaseUrlReady = false;
+
   @override
   void initState() {
     super.initState();
     _checkPermissionStatus();
     _requestPermissions();
-    fetchAppRegister();
+    ref = FirebaseDatabase.instance.ref().child("mentalHealth");
+    observeDatabase();
+    // Delay the fetchAppRegister call by 2 seconds
+    Future.delayed(Duration(seconds: 5), () {
+      fetchAppRegister();
+    });
   }
 
+  void observeDatabase() {
+    ref.onValue.listen((event) {
+      final snapshot = event.snapshot;
+      if (snapshot.value is Map) {
+        final value = Map<String, dynamic>.from(snapshot.value as Map);
+
+        setState(() {
+          baseUrlLive = value["base_url_live"] as String?;
+          baseUrlQA = value["base_url_qa"] as String?;
+        });
+
+        setupRemoteConfig();
+      } else {
+        print("Error: Snapshot does not contain valid data");
+      }
+    }, onError: (error) {
+      hideLoader();
+      print("${error.toString()} ====> remote config feature me database observing error");
+    });
+  }
+
+
+  void setupRemoteConfig() {
+
+    if (kDebugMode) {
+      if(baseUrlQA!.isNotEmpty){
+        UrlConstant.baseUrl = baseUrlQA ?? "";
+        isBaseUrlReady = true;
+        print("QA Base URL set to1: $baseUrlQA");
+      }
+      print("App is running in Debug mode.");
+      // Debug-specific code here
+    } else if (kReleaseMode) {
+      if(baseUrlLive!.isNotEmpty){
+        UrlConstant.baseUrl = baseUrlLive ?? "";
+        isBaseUrlReady = true;
+        print("Live Base URL set to1: $baseUrlLive");
+      }
+
+      print("App is running in Release mode.");
+      // Production-specific code here
+    } else {
+      print("App is running in Profile mode.");
+      // Profile-specific code here
+    }
+    // Your remote config setup logic here
+    print("Live Base URL set to: $baseUrlLive");
+    print("QA Base URL set to: $baseUrlQA");
+  }
+
+  void hideLoader() {
+    // Logic to hide loader
+    print("Loader hidden");
+  }
   Future<void> _checkPermissionStatus() async {
     // Check location permission status
     final status = await Permission.locationWhenInUse.status;
@@ -263,9 +329,15 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return  MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SplashScreen(),
+      home: isBaseUrlReady
+          ? const SplashScreen() // Navigate to SplashScreen if baseUrl is ready
+          : const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(), // Show a loader while waiting
+        ),
+      ),
     );
   }
 }
