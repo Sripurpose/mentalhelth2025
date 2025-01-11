@@ -150,455 +150,470 @@ class _ActionsFullViewState extends State<ActionsFullView> {
           actionStatus:  mentalStrengthEditProvider
               .actionsDetailsModel!.actions!.actionStatus
               .toString(),),
-          body: Padding(
-            padding: const EdgeInsets.only(
-              left: 20,
-              right: 20,
-            ),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  mentalStrengthEditProvider.actionsDetailsModel == null
-                      ? shimmerView(size: size)
-                      : Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            mentalStrengthEditProvider.actionsDetailsModel ==
-                                    null
-                                ? const SizedBox()
-                                : _buildUntitledOne(
-                                    context,
-                                    size,
-                                    category: mentalStrengthEditProvider
-                                        .actionsDetailsModel!.actions!.goalTitle
-                                        .toString(),
-                                    createDate: mentalStrengthEditProvider
+          body: Stack(
+            children: [
+              Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(image: AssetImage(
+                        ImageConstant.imgGroup22,
+                      ),
+                          fit: BoxFit.cover)
+                  ),
+                ),
+              ),
+              Positioned.fill(
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    left: 20,
+                    right: 20,
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        mentalStrengthEditProvider.actionsDetailsModel == null
+                            ? shimmerView(size: size)
+                            : Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  mentalStrengthEditProvider.actionsDetailsModel ==
+                                          null
+                                      ? const SizedBox()
+                                      : _buildUntitledOne(
+                                          context,
+                                          size,
+                                          category: mentalStrengthEditProvider
+                                              .actionsDetailsModel!.actions!.goalTitle
+                                              .toString(),
+                                          createDate: mentalStrengthEditProvider
+                                              .actionsDetailsModel!
+                                              .actions!
+                                              .actionDatetime
+                                              .toString(),
+                                          achiveDate: mentalStrengthEditProvider
+                                              .actionsDetailsModel!
+                                              .actions!
+                                              .actionDatetime
+                                              .toString(),
+                                          status: mentalStrengthEditProvider
+                                              .actionsDetailsModel!
+                                              .actions!
+                                              .actionStatus
+                                              .toString(),
+                                    comments:  mentalStrengthEditProvider
                                         .actionsDetailsModel!
                                         .actions!
-                                        .actionDatetime
+                                        .actionDetails
                                         .toString(),
-                                    achiveDate: mentalStrengthEditProvider
-                                        .actionsDetailsModel!
-                                        .actions!
-                                        .actionDatetime
-                                        .toString(),
-                                    status: mentalStrengthEditProvider
-                                        .actionsDetailsModel!
-                                        .actions!
-                                        .actionStatus
-                                        .toString(),
-                              comments:  mentalStrengthEditProvider
-                                  .actionsDetailsModel!
-                                  .actions!
-                                  .actionDetails
-                                  .toString(),
-                                  ),
-                            // const SizedBox(height: 10),
-                            // mentalStrengthEditProvider.actionsDetailsModel ==
-                            //         null
-                            //     ? shimmerList(
-                            //         height: 50,
-                            //       )
-                            //     : Container(
-                            //   //color: Colors.amber,
-                            //       width: size.width * 0.75,
-                            //       child: Text(
-                            //           capitalText(mentalStrengthEditProvider
-                            //               .actionsDetailsModel!
-                            //               .actions!
-                            //               .actionDetails
-                            //               .toString()),
-                            //           maxLines: mentalStrengthEditProvider
-                            //               .actionsDetailsModel!
-                            //               .actions!
-                            //               .actionDetails?.length,
-                            //           overflow: TextOverflow.ellipsis,
-                            //           style: CustomTextStyles
-                            //               .blackText15GreyTextW400(),
-                            //         ),
-                            //     ),
-                            const SizedBox(height: 15),
-                            // audioList.isEmpty
-                            //     ? const SizedBox()
-                            //     :
-                            audioList.isEmpty?
-                                SizedBox():
-                            Padding(
-                                    padding: const EdgeInsets.only(left: 2),
-                                    child: Text(
-                                      "Audio",
-                                      style: CustomTextStyles
-                                          .blackText16000000W700(),
-                                    ),
-                                  ),
-                            audioList.isEmpty
-                                ?      SizedBox()
-                                :
-                            SizedBox(
-                                    height:size.height * 0.15,
-                                    child: ListView.builder(
-                                      itemCount: audioList.length,
-                                      itemBuilder: (context, index) {
-                                        return JournalAudioPlayer(
-                                          url: audioList[index],
-                                        );
-                                      },
-                                    ),
-                                  ),
-                            imageList.isEmpty?
-                                SizedBox():
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            imageList.isEmpty?
-                                SizedBox():
-                            Padding(
-                                    padding: const EdgeInsets.only(left: 2),
-                                    child: Text(
-                                      "Photo",
-                                      style: CustomTextStyles
-                                          .blackText16000000W700(),
-                                    ),
-                                  ),
-                            imageList.isEmpty
-                                ?   SizedBox()
-                                : SizedBox(
-                              height: imageList.isNotEmpty ? size.height * 0.3 : 0,
-                                    child: Stack(
-                                      children: [
-                                        PageView.builder(
-                                          controller: photoController,
-                                          itemCount: imageList.length,
-                                          itemBuilder: (context, index) {
-                                            return CustomImageView(
-                                              fit: BoxFit.cover,
-                                              imagePath: imageList[index],
-                                              height: size.height * 0.30,
-                                              width: size.width,
-                                              alignment: Alignment.center,
-                                            );
-                                          },
-                                          onPageChanged: (int pageIndex) {
-                                            setState(() {
-                                              photoCurrentIndex = pageIndex;
-                                            });
-                                          },
                                         ),
-                                        Positioned(
-                                          bottom: 10,
-                                          left: 0,
-                                          right: 0,
-                                          child: SizedBox(
-                                            width: imageList.length *
-                                                size.width *
-                                                0.1,
-                                            child: buildIndicators(
-                                              imageList.length,
-                                              photoCurrentIndex,
-                                            ),
+                                  // const SizedBox(height: 10),
+                                  // mentalStrengthEditProvider.actionsDetailsModel ==
+                                  //         null
+                                  //     ? shimmerList(
+                                  //         height: 50,
+                                  //       )
+                                  //     : Container(
+                                  //   //color: Colors.amber,
+                                  //       width: size.width * 0.75,
+                                  //       child: Text(
+                                  //           capitalText(mentalStrengthEditProvider
+                                  //               .actionsDetailsModel!
+                                  //               .actions!
+                                  //               .actionDetails
+                                  //               .toString()),
+                                  //           maxLines: mentalStrengthEditProvider
+                                  //               .actionsDetailsModel!
+                                  //               .actions!
+                                  //               .actionDetails?.length,
+                                  //           overflow: TextOverflow.ellipsis,
+                                  //           style: CustomTextStyles
+                                  //               .blackText15GreyTextW400(),
+                                  //         ),
+                                  //     ),
+                                  const SizedBox(height: 15),
+                                  // audioList.isEmpty
+                                  //     ? const SizedBox()
+                                  //     :
+                                  audioList.isEmpty?
+                                      SizedBox():
+                                  Padding(padding: const EdgeInsets.only(left: 2),
+                                          child: Text(
+                                            "Audio",
+                                            style: CustomTextStyles
+                                                .blackText16000000W700(),
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                            videoList.isEmpty?
-                                SizedBox():
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            videoList.isEmpty
-                                ? const SizedBox()
-                                : const SizedBox(
+                                  audioList.isEmpty
+                                      ?      SizedBox()
+                                      :
+                                  SizedBox(
+                                          height:size.height * 0.15,
+                                          child: ListView.builder(
+                                            itemCount: audioList.length,
+                                            itemBuilder: (context, index) {
+                                              return JournalAudioPlayer(
+                                                url: audioList[index],
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                  imageList.isEmpty?
+                                      SizedBox():
+                                  const SizedBox(
                                     height: 10,
                                   ),
-                            videoList.isEmpty?
-                                SizedBox():
-                            Padding(
-                                    padding: const EdgeInsets.only(left: 2),
-                                    child: Text(
-                                      "Video",
-                                      style: CustomTextStyles
-                                          .blackText16000000W700(),
-                                    ),
-                                  ),
-                            videoList.isEmpty
-                                ?   SizedBox()
-                                : const SizedBox(height: 4),
-                            videoList.isEmpty
-                                ? const SizedBox()
-                                : SizedBox(
-                                    height: size.height * 0.3,
-                                    child: Stack(
-                                      children: [
-                                        PageView.builder(
-                                          controller: videoController,
-                                          itemCount: videoList.length,
-                                          itemBuilder: (context, index) {
-                                            return VideoPlayerWidget(
-                                              videoUrl: videoList[index],
-                                            );
-                                          },
-                                          onPageChanged: (int pageIndex) {
-                                            setState(() {
-                                              videoCurrentIndex = pageIndex;
-                                            });
-                                          },
-                                        ),
-                                        Positioned(
-                                          bottom: 10,
-                                          left: 0,
-                                          right: 0,
-                                          child: SizedBox(
-                                            width: videoList.length *
-                                                size.width *
-                                                0.1,
-                                            child: buildIndicators(
-                                              videoList.length,
-                                              videoCurrentIndex,
-                                            ),
+                                  imageList.isEmpty?
+                                      SizedBox():
+                                  Padding(
+                                          padding: const EdgeInsets.only(left: 2),
+                                          child: Text(
+                                            "Photo",
+                                            style: CustomTextStyles
+                                                .blackText16000000W700(),
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                            // _buildGrid(
-                            //   context,
-                            //   size,
-                            // ),
-                            mentalStrengthEditProvider.actionsDetailsModel!.actions!.location?.locationAddress != null ?
-                            const SizedBox(height: 10):
-                                SizedBox(),
-                            mentalStrengthEditProvider.actionsDetailsModel!.actions!.location?.locationAddress != null ?
-                            Padding(
-                              padding: const EdgeInsets.only(left: 2),
-                              child: Text(
-                                "Your Location",
-                                style: CustomTextStyles.blackText16000000W700(),
-                              ),
-                            ):
-                                SizedBox(),
-                            const SizedBox(height: 6),
-                            mentalStrengthEditProvider.actionsDetailsModel!.actions!.location?.locationAddress != null?
-                            SizedBox(
-                              child: Center(
-                                child: Row(
-                                  children: [
-                                    CustomImageView(
-                                      imagePath: ImageConstant.imgLinkedin,
-                                      height: 23,
-                                      width: 23,
-                                    ),
-                                    Text(
-                                      mentalStrengthEditProvider.actionsDetailsModel!.actions!.location?.locationAddress == null
-                                          ? ""
-                                          :mentalStrengthEditProvider.actionsDetailsModel!.actions!.location!.locationAddress.toString(),
-                                      style: CustomTextStyles.bodyMediumGray700_1,
-                                    ),
-                                  ],
-                                )
-                              ),
-                            )
-                                :
-                           SizedBox(),
-                            mentalStrengthEditProvider.actionsDetailsModel!.actions!.actionStatus == "1" ||
-                                mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder == null ?
-                            const SizedBox(height: 10):
-                                const SizedBox(),
-                            Consumer<AddActionsProvider>(
-                                builder: (context, addActionsProvider, _) {
-                              return Column(
-                                children: [
-                                       mentalStrengthEditProvider.actionsDetailsModel!.actions!.actionStatus == "1" ||
-                                           mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder == null
-                                      ? const SizedBox()
-                                      : const Row(
-                                          children: [
-                                            // Checkbox(
-                                            //   value: addActionsProvider
-                                            //       .setRemainder,
-                                            //   onChanged: (value) {
-                                            //     addActionsProvider
-                                            //         .changeSetRemainder(value!);
-                                            //   },
-                                            // ),
-                                            // SizedBox(
-                                            //   width: size.width * 0.01,
-                                            // ),
-                                            Text(
-                                              "Reminder",
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
+                                  imageList.isEmpty
+                                      ?   SizedBox()
+                                      : SizedBox(
+                                    height: imageList.isNotEmpty ? size.height * 0.3 : 0,
+                                          child: Stack(
+                                            children: [
+                                              PageView.builder(
+                                                controller: photoController,
+                                                itemCount: imageList.length,
+                                                itemBuilder: (context, index) {
+                                                  return CustomImageView(
+                                                    fit: BoxFit.cover,
+                                                    imagePath: imageList[index],
+                                                    height: size.height * 0.30,
+                                                    width: size.width,
+                                                    alignment: Alignment.center,
+                                                  );
+                                                },
+                                                onPageChanged: (int pageIndex) {
+                                                  setState(() {
+                                                    photoCurrentIndex = pageIndex;
+                                                  });
+                                                },
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                  const SizedBox(height: 15),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                      left: size.width * 0.04,
-                                      bottom: 10,
-                                    ),
-                                    child:
-                                    mentalStrengthEditProvider.actionsDetailsModel!.actions!.actionStatus == "1" ||
-                                        mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder == null
-                                            ? const SizedBox()
-                                            : SizedBox(
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Row(
-                                                      children: [
-                                                        const Text(
-                                                          "Date",
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize: 15),
-                                                        ),
-                                                        const SizedBox(
-                                                          width: 5,
-                                                        ),
-                                                        Text(
-                                                            mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.reminder_startdate != null &&
-                                                                mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.reminder_enddate != null
-                                                                ? ": ${unixTimestampToDate(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.reminder_startdate!)} "
-                                                                "to ${unixTimestampToDate(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.reminder_enddate!)}"
-                                                                : ""
-                                                        ),
-
-                                                      ],
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 5,
-                                                    ),
-                                                    Row(
-                                                      children: [
-                                                        const Text(
-                                                          "Time",
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize: 15),
-                                                        ),
-                                                        const SizedBox(
-                                                          width: 5,
-                                                        ),
-                                                        Text(
-                                                            mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.from_time != null &&
-                                                                mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.to_time != null
-                                                                ? "${formatTimeOfDay(stringToTimeOfDay(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.from_time!)!)} "
-                                                                "to ${formatTimeOfDay(stringToTimeOfDay(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.to_time!)!)}"
-                                                                : ""
-                                                        ),
-
-                                                      ],
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 5,
-                                                    ),
-                                                    Row(
-                                                      children: [
-                                                        const Text(
-                                                          "Repeat",
-                                                          style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 15,
-                                                          ),
-                                                        ),
-                                                        const SizedBox(
-                                                          width: 5,
-                                                        ),
-                                                        Text(
-                                                            mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.reminder_repeat != null
-                                                                ? ": ${mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.reminder_repeat!}"
-                                                                : ""
-                                                        ),
-
-                                                      ],
-                                                    ),
-                                                  ],
+                                              Positioned(
+                                                bottom: 10,
+                                                left: 0,
+                                                right: 0,
+                                                child: SizedBox(
+                                                  width: imageList.length *
+                                                      size.width *
+                                                      0.1,
+                                                  child: buildIndicators(
+                                                    imageList.length,
+                                                    photoCurrentIndex,
+                                                  ),
                                                 ),
-                                              )
-                                  )
-                                ],
-                              );
-                            }),
-
-                            const SizedBox(height: 20),
-                            mentalStrengthEditProvider.actionsDetailsModel!.actions!.actionStatus! == "1"
-                                ? const Padding(
-                                    padding: EdgeInsets.only(
-                                      left: 0,
-                                      bottom: 10,
-                                    ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                  videoList.isEmpty?
+                                      SizedBox():
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  videoList.isEmpty
+                                      ? const SizedBox()
+                                      : const SizedBox(
+                                          height: 10,
+                                        ),
+                                  videoList.isEmpty?
+                                      SizedBox():
+                                  Padding(
+                                          padding: const EdgeInsets.only(left: 2),
+                                          child: Text(
+                                            "Video",
+                                            style: CustomTextStyles
+                                                .blackText16000000W700(),
+                                          ),
+                                        ),
+                                  videoList.isEmpty
+                                      ?   SizedBox()
+                                      : const SizedBox(height: 4),
+                                  videoList.isEmpty
+                                      ? const SizedBox()
+                                      : SizedBox(
+                                          height: size.height * 0.3,
+                                          child: Stack(
+                                            children: [
+                                              PageView.builder(
+                                                controller: videoController,
+                                                itemCount: videoList.length,
+                                                itemBuilder: (context, index) {
+                                                  return VideoPlayerWidget(
+                                                    videoUrl: videoList[index],
+                                                  );
+                                                },
+                                                onPageChanged: (int pageIndex) {
+                                                  setState(() {
+                                                    videoCurrentIndex = pageIndex;
+                                                  });
+                                                },
+                                              ),
+                                              Positioned(
+                                                bottom: 10,
+                                                left: 0,
+                                                right: 0,
+                                                child: SizedBox(
+                                                  width: videoList.length *
+                                                      size.width *
+                                                      0.1,
+                                                  child: buildIndicators(
+                                                    videoList.length,
+                                                    videoCurrentIndex,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                  // _buildGrid(
+                                  //   context,
+                                  //   size,
+                                  // ),
+                                  mentalStrengthEditProvider.actionsDetailsModel!.actions!.location?.locationAddress != null ?
+                                  const SizedBox(height: 10):
+                                      SizedBox(),
+                                  mentalStrengthEditProvider.actionsDetailsModel!.actions!.location?.locationAddress != null ?
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 2),
                                     child: Text(
-                                      "Completed",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      // style: theme.textTheme.titleSmall,
+                                      "Your Location",
+                                      style: CustomTextStyles.blackText16000000W700(),
+                                    ),
+                                  ):
+                                      SizedBox(),
+                                  const SizedBox(height: 6),
+                                  mentalStrengthEditProvider.actionsDetailsModel!.actions!.location?.locationAddress != null?
+                                  SizedBox(
+                                    child: Center(
+                                      child: Row(
+                                        children: [
+                                          CustomImageView(
+                                            imagePath: ImageConstant.imgLinkedin,
+                                            height: 23,
+                                            width: 23,
+                                          ),
+                                          Text(
+                                            mentalStrengthEditProvider.actionsDetailsModel!.actions!.location?.locationAddress == null
+                                                ? ""
+                                                :mentalStrengthEditProvider.actionsDetailsModel!.actions!.location!.locationAddress.toString(),
+                                            style: CustomTextStyles.bodyMediumGray700_1,
+                                          ),
+                                        ],
+                                      )
                                     ),
                                   )
-                                : Consumer2<AddActionsProvider,
-                                        MentalStrengthEditProvider>(
-                                    builder: (context, addActionsProvider,
-                                        mentalStrengthEditProvider, _) {
-                                    return Padding(
-                                      padding: EdgeInsets.only(
-                                        left: size.width * 0.04,
-                                        bottom: 10,
-                                      ),
-                                      child: CustomCheckboxButton(
-                                        text: "Mark this action is completed",
-                                        value: isCompleted,
-                                        onChange: (value) async {
-                                          customPopup(
-                                            context: context,
-                                            onPressedDelete: () async {
-                                              setState(() {
-                                                isCompleted = true;
-                                              });
-                                              await addActionsProvider
-                                                  .updateActionStatusFunction(
-                                                context,
-                                                goalId: widget.goalId.toString(),
-                                                actionId:
-                                                widget.action.id.toString(),
-                                              );
-                                              mentalStrengthEditProvider
-                                                  .fetchGoalActions(
-                                                goalId: widget.goalId.toString(),
-                                              );
-                                              Navigator.of(context).pop();
-                                              Navigator.of(context).pop();
-                                            },
-                                            yes: "Yes",
-                                            title: 'Action Completed',
-                                            content:
-                                            'Are you sure You want to mark this action as completed?',
-                                          );
+                                      :
+                                 SizedBox(),
+                                  mentalStrengthEditProvider.actionsDetailsModel!.actions!.actionStatus == "1" ||
+                                      mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder == null ?
+                                  const SizedBox(height: 10):
+                                      const SizedBox(),
+                                  Consumer<AddActionsProvider>(
+                                      builder: (context, addActionsProvider, _) {
+                                    return Column(
+                                      children: [
+                                             mentalStrengthEditProvider.actionsDetailsModel!.actions!.actionStatus == "1" ||
+                                                 mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder == null
+                                            ? const SizedBox()
+                                            : const Row(
+                                                children: [
+                                                  // Checkbox(
+                                                  //   value: addActionsProvider
+                                                  //       .setRemainder,
+                                                  //   onChanged: (value) {
+                                                  //     addActionsProvider
+                                                  //         .changeSetRemainder(value!);
+                                                  //   },
+                                                  // ),
+                                                  // SizedBox(
+                                                  //   width: size.width * 0.01,
+                                                  // ),
+                                                  Text(
+                                                    "Reminder",
+                                                    style: TextStyle(
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                        const SizedBox(height: 15),
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                            left: size.width * 0.04,
+                                            bottom: 10,
+                                          ),
+                                          child:
+                                          mentalStrengthEditProvider.actionsDetailsModel!.actions!.actionStatus == "1" ||
+                                              mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder == null
+                                                  ? const SizedBox()
+                                                  : SizedBox(
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment.start,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment.start,
+                                                        children: [
+                                                          Row(
+                                                            children: [
+                                                              const Text(
+                                                                "Date",
+                                                                style: TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize: 15),
+                                                              ),
+                                                              const SizedBox(
+                                                                width: 5,
+                                                              ),
+                                                              Text(
+                                                                  mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.reminder_startdate != null &&
+                                                                      mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.reminder_enddate != null
+                                                                      ? ": ${unixTimestampToDate(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.reminder_startdate!)} "
+                                                                      "to ${unixTimestampToDate(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.reminder_enddate!)}"
+                                                                      : ""
+                                                              ),
 
+                                                            ],
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 5,
+                                                          ),
+                                                          Row(
+                                                            children: [
+                                                              const Text(
+                                                                "Time",
+                                                                style: TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize: 15),
+                                                              ),
+                                                              const SizedBox(
+                                                                width: 5,
+                                                              ),
+                                                              Text(
+                                                                  mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.from_time != null &&
+                                                                      mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.to_time != null
+                                                                      ? "${formatTimeOfDay(stringToTimeOfDay(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.from_time!)!)} "
+                                                                      "to ${formatTimeOfDay(stringToTimeOfDay(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.to_time!)!)}"
+                                                                      : ""
+                                                              ),
 
-                                        },
-                                      ),
+                                                            ],
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 5,
+                                                          ),
+                                                          Row(
+                                                            children: [
+                                                              const Text(
+                                                                "Repeat",
+                                                                style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight.bold,
+                                                                  fontSize: 15,
+                                                                ),
+                                                              ),
+                                                              const SizedBox(
+                                                                width: 5,
+                                                              ),
+                                                              Text(
+                                                                  mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.reminder_repeat != null
+                                                                      ? ": ${mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.reminder_repeat!}"
+                                                                      : ""
+                                                              ),
+
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    )
+                                        )
+                                      ],
                                     );
                                   }),
-                            const SizedBox(height: 30),
-                          ],
-                        ),
-                ],
+
+                                  const SizedBox(height: 20),
+                                  mentalStrengthEditProvider.actionsDetailsModel!.actions!.actionStatus! == "1"
+                                      ? const Padding(
+                                          padding: EdgeInsets.only(
+                                            left: 0,
+                                            bottom: 10,
+                                          ),
+                                          child: Text(
+                                            "Completed",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            // style: theme.textTheme.titleSmall,
+                                          ),
+                                        )
+                                      : Consumer2<AddActionsProvider,
+                                              MentalStrengthEditProvider>(
+                                          builder: (context, addActionsProvider,
+                                              mentalStrengthEditProvider, _) {
+                                          return Padding(
+                                            padding: EdgeInsets.only(
+                                              left: size.width * 0.04,
+                                              bottom: 10,
+                                            ),
+                                            child: CustomCheckboxButton(
+                                              text: "Mark this action is completed",
+                                              value: isCompleted,
+                                              onChange: (value) async {
+                                                customPopup(
+                                                  context: context,
+                                                  onPressedDelete: () async {
+                                                    setState(() {
+                                                      isCompleted = true;
+                                                    });
+                                                    await addActionsProvider
+                                                        .updateActionStatusFunction(
+                                                      context,
+                                                      goalId: widget.goalId.toString(),
+                                                      actionId:
+                                                      widget.action.id.toString(),
+                                                    );
+                                                    mentalStrengthEditProvider
+                                                        .fetchGoalActions(
+                                                      goalId: widget.goalId.toString(),
+                                                    );
+                                                    Navigator.of(context).pop();
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  yes: "Yes",
+                                                  title: 'Action Completed',
+                                                  content:
+                                                  'Are you sure You want to mark this action as completed?',
+                                                );
+
+
+                                              },
+                                            ),
+                                          );
+                                        }),
+                                  const SizedBox(height: 30),
+                                ],
+                              ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
         );
       }),
@@ -754,14 +769,23 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                   ),
                   PopupMenuItem<String>(
                     onTap: () async {
-                      await addActionsProvider.deleteActionFunction(
-                        deleteId: id,
+
+                      customPopup(
+                        context: context,
+                        onPressedDelete: () async {
+                          await addActionsProvider.deleteActionFunction(
+                            deleteId: id,
+                          );
+                          goalsDreamsProvider.fetchGoalsAndDreams(
+                            initial: true,
+                          );
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                        },
+                        title: 'Confirm Delete',
+                        content: 'Are you sure You want to Delete this Goal?',
                       );
-                      goalsDreamsProvider.fetchGoalsAndDreams(
-                        initial: true,
-                      );
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pop();
+
                     },
                     value: 'Delete',
                     child: Text(

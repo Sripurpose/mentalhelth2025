@@ -154,7 +154,7 @@ class _MentalStrengthAddEditFullViewScreenState extends State<MentalStrengthAddE
                 buildAppBar(
                   context,
                   size,
-                  heading: "Build your mental strength",
+                  heading: "Mental Strength",
                   onTap: () {
                     homeProvider.fetchJournals(initial: true);
                     dashBoardProvider.changePage(index: 0);
@@ -293,9 +293,17 @@ class _MentalStrengthAddEditFullViewScreenState extends State<MentalStrengthAddE
                                 unselectedColor: Colors.grey,
                                 onRatingUpdate: (value) {
                                   logger.w("Updated emotional value star: $value");
+
+
+                                  // Map the value from 1-5 to -2 to 2 as an integer
+                                  int mappedValue = ((value - 1) * 4 / (5 - 1) - 2).round();
+
+
+                                  mentalStrengthEditProvider.fetchEmotions(emotion: "$mappedValue");
                                   mentalStrengthEditProvider.changeEmotionalValueStar(value);
                                   _isTokenExpired(); // Call your method after rating update.
                                 },
+
                               ),
 
                               SizedBox(height: size.height * 0.01),
@@ -310,8 +318,8 @@ class _MentalStrengthAddEditFullViewScreenState extends State<MentalStrengthAddE
                                 style: theme.textTheme.bodyLarge,
                               ),
                               SizedBox(height: size.height * 0.01),
-                              mentalStrengthEditProvider.getEmotionsModel ==
-                                      null
+                              (mentalStrengthEditProvider.getEmotionsModel ==
+                                      null)
                                   ? const SizedBox()
                                   :
                               Container(

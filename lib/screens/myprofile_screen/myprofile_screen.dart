@@ -12,6 +12,7 @@ import 'package:mentalhelth/screens/phone_singin_screen/provider/phone_sign_in_p
 import 'package:mentalhelth/utils/logic/date_format.dart';
 import 'package:mentalhelth/utils/logic/logic.dart';
 import 'package:mentalhelth/utils/theme/app_decoration.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/widgets/app_bar/appbar_leading_image.dart';
 import 'package:mentalhelth/widgets/background_image/background_imager.dart';
 import 'package:provider/provider.dart';
@@ -103,14 +104,17 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                             top: size.height * 0.055,
                           ),
                           child: Opacity(
-                            opacity: 0.11,
+                            opacity: 0.9,
                             child: Align(
                               alignment: Alignment.center,
                               child: Container(
                                 height: size.height * 0.64,
                                 decoration: BoxDecoration(
-                                  color: const Color(0xff666666),
-                                  // color: theme.colorScheme.primaryContainer,
+                                  color: Colors.white,
+                                  border: Border.all(
+                                    color: Colors.grey.shade300, // Set your desired border color here
+                                    width: 1.0, // Optional: set the width of the border
+                                  ),
                                   borderRadius: BorderRadius.circular(
                                     30,
                                   ),
@@ -404,9 +408,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                               ),
                                             ),
                                             SizedBox(
-                                              height: size.height * 0.02,
+                                              height: size.height * 0.065,
                                             ),
-                                            Consumer<DashBoardProvider>(builder:
+                                            Consumer<DashBoardProvider>(builder: //Edit profile button
                                                 (context, dashBoardProvider,
                                                     _) {
                                               return GestureDetector(
@@ -416,13 +420,28 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                     index: 9,
                                                   );
                                                 },
-                                                child: Text(
-                                                  "Edit Profile",
-                                                  style: CustomTextStyles
-                                                      .titleSmallBlue300
-                                                      .copyWith(
-                                                    decoration: TextDecoration
-                                                        .underline,
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    color: ColorsContent.primaryColor,
+                                                    borderRadius: const BorderRadius.only(
+                                                        topLeft: Radius.circular(12),
+                                                      topRight: Radius.circular(12)
+                                                    )
+                                                  ),
+                                                  child: const Padding(
+                                                    padding: EdgeInsets.only(
+                                                      left: 18,
+                                                      right: 18,
+                                                      top: 8,
+                                                      bottom: 8
+                                                    ),
+                                                    child: Text(
+                                                      "Edit Profile",
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight: FontWeight.bold
+                                                      ),
+                                                    ),
                                                   ),
                                                 ),
                                               );

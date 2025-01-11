@@ -194,7 +194,7 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                                                 horizontal: 15, vertical: 10),
                                             decoration: BoxDecoration(
                                               borderRadius: BorderRadiusStyle.roundedBorder4,
-                                              color: Colors.transparent,
+                                              color: Colors.white,
                                               border: Border.all(
                                                 color: Colors.grey, // Set the color of the border
                                                 width: 1.0,         // Set the width of the border
@@ -333,7 +333,7 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                                                             Container(
                                                               width:size.width * 0.65,
                                                               decoration: BoxDecoration(
-                                                                color: Colors.transparent, // Keep the background color transparent
+                                                                color: Colors.white, // Keep the background color transparent
                                                                 border: Border.all(
                                                                   color: Colors.black, // Set the border color
                                                                   width: 0.5, // Set the border width
@@ -483,6 +483,8 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
         return Padding(
           padding: const EdgeInsets.only(left: 10, right: 1),
           child: CustomTextFormField(
+            fillColor: Colors.white,
+            filled: true,
             controller: editProfileProvider.myProfileController,
             hintText: "",
             hintStyle: const TextStyle(
@@ -506,6 +508,8 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
         return Padding(
           padding: const EdgeInsets.only(left: 10, right: 1),
           child: CustomTextFormField(
+            fillColor: Colors.white,
+            filled: true,
             isValids: editProfileProvider.phoneIsValid,
             textInputType: TextInputType.phone,
             controller: editProfileProvider.phoneController,
@@ -542,6 +546,8 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
           padding: const EdgeInsets.only(left: 10, right: 1),
           child: Form(
             child: CustomTextFormField(
+              fillColor: Colors.white,
+              filled: true,
               hintStyle: const TextStyle(
                 color: Colors.black,
               ),
@@ -595,6 +601,8 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
       return Padding(
           padding: const EdgeInsets.only(left: 9, right: 1),
           child: CustomTextFormField(
+            fillColor: Colors.white,
+            filled: true,
               controller: editProfileProvider.aboutYouValueController,
               hintText:
                   "",

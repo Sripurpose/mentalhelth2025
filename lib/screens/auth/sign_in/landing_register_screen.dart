@@ -217,49 +217,52 @@ class _LandingRegisterScreenScreenState extends State<LandingRegisterScreenScree
                                 style: theme.textTheme.bodyMedium,
                               ),
                               SizedBox(height: size.height * 0.05),
-                              GestureDetector(
-                                onTap: () {
-                                  String chatURL = signInProvider.settingsRegisterModel?.settings?[0].linkUrl ?? "";
-                                  var url = Uri.parse(chatURL);
-                                 if (signInProvider.settingsRegisterModel?.settings?[0].target ==
-                                     "external") {
-                                   _launchInAppWithBrowserOptions(url);
-                                 }
-                                 else {
-                                   _launchInAppWithWebView(url,context);
-                                 }
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.all(10.0),
-                                  decoration: BoxDecoration(
-                                    color: Colors.transparent,
-                                    // Change to your desired background color
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    // Optional: Add border radius
-                                    border: Border.all(
-                                      color: Colors.black,
-                                      // Change to your desired border color
-                                      width: 0.5, // Optional: Adjust border width
-                                    ),
+                              Visibility(
+                                visible: signInProvider.settingsRegisterModel?.settings?[0].status == "1" ? true : false,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    String chatURL = signInProvider.settingsRegisterModel?.settings?[0].linkUrl ?? "";
+                                    var url = Uri.parse(chatURL);
+                                   if (signInProvider.settingsRegisterModel?.settings?[0].target ==
+                                       "external") {
+                                     _launchInAppWithBrowserOptions(url);
+                                   }
+                                   else {
+                                     _launchInAppWithWebView(url,context);
+                                   }
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.all(10.0),
+                                    decoration: BoxDecoration(
+                                      color: Colors.transparent,
+                                      // Change to your desired background color
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      // Optional: Add border radius
+                                      border: Border.all(
+                                        color: Colors.black,
+                                        // Change to your desired border color
+                                        width: 0.5, // Optional: Adjust border width
+                                      ),
 
-                                  ),
-                                  child: RichText(
-                                    text: TextSpan(
-                                      text: "Go to ",
-                                      // Regular text
-                                      style: theme.textTheme.bodyMedium,
-                                      // Regular style for "Go to"
-                                      children: [
-                                        TextSpan(
-                                          text: signInProvider.settingsRegisterModel?.settings?[0].link ?? "",
-                                          // The URL text
-                                          style: CustomTextStyles.labelLarge14
-                                              .copyWith(
-                                            decorationColor: Colors.blue,
-                                            // Optional: change the color of the underline
+                                    ),
+                                    child: RichText(
+                                      text: TextSpan(
+                                        text: "Go to ",
+                                        // Regular text
+                                        style: theme.textTheme.bodyMedium,
+                                        // Regular style for "Go to"
+                                        children: [
+                                          TextSpan(
+                                            text: signInProvider.settingsRegisterModel?.settings?[0].link ?? "",
+                                            // The URL text
+                                            style: CustomTextStyles.labelLarge14
+                                                .copyWith(
+                                              decorationColor: Colors.blue,
+                                              // Optional: change the color of the underline
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),

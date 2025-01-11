@@ -27,7 +27,6 @@ import 'package:mentalhelth/utils/core/local_notification.dart';
 import 'package:mentalhelth/utils/core/url_constant.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-
 import 'screens/actions_screen/provider/my_action_provider.dart';
 import 'screens/addactions_screen/provider/add_actions_provider.dart';
 import 'screens/addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
@@ -66,6 +65,10 @@ void main() async {
     }else if(Platform.isIOS){
       await Firebase.initializeApp(
         name: 'mentalhealth',
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+    } else if (kIsWeb) { // Check for web platform
+      await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
     }

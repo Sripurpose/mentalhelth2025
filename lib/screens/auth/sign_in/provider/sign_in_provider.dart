@@ -31,6 +31,7 @@ class SignInProvider extends ChangeNotifier {
   String? continueWithGoogleId = "";
   String? continueWithGoogleMail = "";
   String? continueWithGoogleName = "";
+  bool gotoVisibility = false;
   //stripe webview functions
 
   void clearTextEditingController() {
@@ -557,6 +558,7 @@ class SignInProvider extends ChangeNotifier {
   int? statusVersionUpdate;
   bool versionUpdateLoading = false;
   VersionUpdateModel? versionUpdateModel;
+
   Future<void> fetchSettings(BuildContext context) async {
     try {
       statusSub= 0;
@@ -626,6 +628,7 @@ class SignInProvider extends ChangeNotifier {
       logger.w("url ${url}");
       final response = await http.get(url,);
       if (response.statusCode == 200 || response.statusCode == 201) {
+
         settingsRegisterModel = settingsRegisterModelFromJson(response.body);
         registerSettingsLoading = false;
         notifyListeners();

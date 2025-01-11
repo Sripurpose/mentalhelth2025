@@ -137,6 +137,8 @@ class _HomeScreenState extends State<HomeScreen> {
           await PushNotifications.subscribeToTopic("message");
           await PushNotifications.unsubscribeFromTopic("live_doLogin");
         }else{
+          var userId = await OneSignal.User.getOnesignalId();
+          print("OneSignal User ID: ${userId}");
           OneSignal.User.addTagWithKey("topic","message");
           OneSignal.User.removeTag("live_doLogin");
         }
@@ -409,46 +411,70 @@ class _HomeScreenState extends State<HomeScreen> {
                               mentalStrengthEditProvider.fetchEmotions();
                             },
                             height: size.height * 0.06,
-                            width: size.width * 0.85,
+                            width: size.width * 1,
                             text: "Build your mental strength now",
                             buttonStyle: CustomButtonStyles.fillBlueBL10,
                             buttonTextStyle: CustomTextStyles.titleSmallOnSecondaryContainer15,
                           ),
                           const SizedBox(height: 31),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 1),
-                              child: Text(
-                                "Your recent mental strength scores",
-                                style: theme.textTheme.titleMedium,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 3),
-                          ChartWidget(chartData: homeProvider.chartViewModel?.chart),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 1),
-                              child: Text(
-                                "${DateTime.now().year}",
-                                style: CustomTextStyles.titleMediumBlue300,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 2),
                           Container(
-                            width: 324,
-                            margin: const EdgeInsets.only(left: 1, right: 10),
-                            child: Text(
-                              "You average mental strength according to the last 7 entries is 4 out of 5. Keep tracking...",
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: CustomTextStyles.bodyMediumOnPrimary14,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius:BorderRadius.all(Radius.circular(10)),
+                              border:  Border.all(
+                                color: Colors.grey.shade400, // Black border color
+                                width: 1.0,          // Border width
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Column(
+                                children: [
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 1),
+                                      child: Text(
+                                        "Recent  mental strength scores",
+                                        style: theme.textTheme.titleMedium,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 3),
+                                  ChartWidget(chartData: homeProvider.chartViewModel?.chart),
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 1),
+                                      child: Text.rich(
+                                        TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text: "${DateTime.now().year} ",
+                                              style: CustomTextStyles.titleMediumBlue300.copyWith(
+                                                color: Colors.blue,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: "You average mental strength according to the last 7 entries is 4 out of 5. Keep tracking...",
+                                              style: CustomTextStyles.bodyMediumOnPrimary14,
+                                            ),
+                                          ],
+                                        ),
+                                        maxLines: 3,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ),
+
+                                  const SizedBox(height: 25),
+                                ],
+                              ),
                             ),
                           ),
-                          const SizedBox(height: 25),
+
+
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Padding(
@@ -604,7 +630,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildMessageColumn(BuildContext context, Size size) {
     return Container(
       height: size.height * 0.06,
-      width: size.width * 0.85,
+      width: size.width * 1,
       // padding: EdgeInsets.symmetric(
       //     horizontal: size.width * 0.2, vertical: size.width * 0.027),
       decoration: AppDecoration.outlineBlue.copyWith(

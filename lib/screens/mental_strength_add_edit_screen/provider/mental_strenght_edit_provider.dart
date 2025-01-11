@@ -557,20 +557,29 @@ class MentalStrengthEditProvider extends ChangeNotifier {
   bool getEmotionsModelLoading = false;
   Emotion emotionValue = Emotion();
 
-  Future<void> fetchEmotions({bool editing = false, String? emotionId}) async {
+  Future<void> fetchEmotions({bool editing = false, String? emotionId, String? emotion}) async {
     try {
       String? token = await getUserTokenSharePref();
       getEmotionsModelLoading = true;
       notifyListeners();
+      // Conditionally construct the URL based on the presence of the emotion parameter
+      final uri = emotion != null
+          ? Uri.parse('${UrlConstant.emotionsUrl}$emotion')
+          : Uri.parse(UrlConstant.emotionsUrl);
+
+      print("URI is $uri");
+
       final response = await http.get(
-        Uri.parse(
-          UrlConstant.emotionsUrl,
-        ),
+        uri,
         headers: <String, String>{"authorization": "$token"},
       );
 
       if (response.statusCode == 200) {
         getEmotionsModel = getEmotionsModelFromJson(response.body);
+        getEmotionsModel?.emotions?.forEach((one) {
+          print("EMOTION ${one.title }");
+        });
+
         if (editing) {
           for (int i = 0; i < getEmotionsModel!.emotions!.length; i++) {
             if (getEmotionsModel!.emotions![i].id.toString() == emotionId) {
@@ -581,22 +590,22 @@ class MentalStrengthEditProvider extends ChangeNotifier {
           emotionValue = getEmotionsModel!.emotions![0];
         }
         notifyListeners();
-      } else {}
-      if(response.statusCode == 401){
+      } else if (response.statusCode == 401 || response.statusCode == 403) {
         TokenManager.setTokenStatus(true);
-        //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
+        // CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
-      if(response.statusCode == 403){
-        TokenManager.setTokenStatus(true);
-        //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
-      }
+
       getEmotionsModelLoading = false;
       notifyListeners();
     } catch (e) {
+      print("ERR is $e");
       getEmotionsModelLoading = false;
       notifyListeners();
     }
   }
+
+
+
 
   void addEmotionValue(Emotion emotion) {
     emotionValue = emotion;

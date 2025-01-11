@@ -116,422 +116,438 @@ class _GoalAndDreamFullViewScreenState
             heading: widget.goalsanddream.goalTitle.toString(),
             id: widget.goalsanddream.goalId.toString(),
         goalStatus: widget.goalStatus),
-        body: Padding(
-          padding: const EdgeInsets.only(
-            left: 20,
-            right: 20,
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildUntitledOne(
-                  context,
-                  size,
-                  category: widget.goalsanddream.goalTitle.toString(),
-                  createDate: widget.goalsanddream.createdAt.toString(),
-                  achiveDate: widget.goalsanddream.goalEnddate.toString(),
-                  status: widget.goalsanddream.goalStatus.toString(),
-                  comments: widget.goalsanddream.goalDetails.toString(),
-                ),
-
-                audioList.isNotEmpty?
-                const SizedBox(height: 28):SizedBox(),
-                audioList.isEmpty
-                    ? const SizedBox()
-                    :
-                Padding(
-                        padding: const EdgeInsets.only(left: 2),
-                        child: Text(
-                          "Audio",
-                          style: CustomTextStyles.blackText16000000W700(),
-                        ),
-                      ),
-                const SizedBox(height: 4),
-                audioList.isEmpty?
-             const SizedBox()
-                    :
-                SizedBox(
-                  height: size.height * 0.15,
-                  child: ListView.builder(
-                 //   physics: const NeverScrollableScrollPhysics(),
-                    itemCount: audioList.length,
-                    itemBuilder: (context, index) {
-                      return JournalAudioPlayer(
-                        url: audioList[index],
-                      );
-                    },
+        body: Stack(
+          children: [
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(image: AssetImage(
+                    ImageConstant.imgGroup22,
                   ),
+                  fit: BoxFit.cover)
                 ),
-                // imageList.isNotEmpty
-                //     ? const SizedBox(
-                //         height: 23,
-                //       )
-                //     : const SizedBox(),
-                imageList.isNotEmpty?
-                Padding(
-                        padding: const EdgeInsets.only(left: 2),
-                        child: Text(
-                          "Photo",
-                          style: CustomTextStyles.blackText16000000W700(),
-                        ),
-                      ):
-                    SizedBox(),
-                const SizedBox(height: 4),
-                imageList.isNotEmpty?
-                SizedBox(
-                  height: imageList.isNotEmpty ? size.height * 0.3 : 0,
-                  child: Stack(
+              ),
+            ),
+            Positioned.fill(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  left: 20,
+                  right: 20,
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      PageView.builder(
-                        controller: photoController,
-                        itemCount: imageList.length,
-                        itemBuilder: (context, index) {
-                          return CustomImageView(
-                            fit: BoxFit.cover,
-                            imagePath: imageList[index],
-                            height: size.height * 0.30,
-                            width: size.width,
-                            alignment: Alignment.center,
-                          );
-                        },
-                        onPageChanged: (int pageIndex) {
-                          setState(() {
-                            photoCurrentIndex = pageIndex;
-                          });
-                        },
+                      _buildUntitledOne(
+                        context,
+                        size,
+                        category: widget.goalsanddream.goalTitle.toString(),
+                        createDate: widget.goalsanddream.createdAt.toString(),
+                        achiveDate: widget.goalsanddream.goalEnddate.toString(),
+                        status: widget.goalsanddream.goalStatus.toString(),
+                        comments: widget.goalsanddream.goalDetails.toString(),
                       ),
-                      Positioned(
-                        bottom: 10,
-                        left: 0,
-                        right: 0,
-                        child: SizedBox(
-                          width: imageList.length * size.width * 0.1,
-                          child: buildIndicators(
-                            imageList.length,
-                            photoCurrentIndex,
-                          ),
+
+                      audioList.isNotEmpty?
+                      const SizedBox(height: 28):SizedBox(),
+                      audioList.isEmpty
+                          ? const SizedBox()
+                          :
+                      Padding(
+                              padding: const EdgeInsets.only(left: 2),
+                              child: Text(
+                                "Audio",
+                                style: CustomTextStyles.blackText16000000W700(),
+                              ),
+                            ),
+                      const SizedBox(height: 4),
+                      audioList.isEmpty?
+                   const SizedBox()
+                          :
+                      SizedBox(
+                        height: size.height * 0.15,
+                        child: ListView.builder(
+                       //   physics: const NeverScrollableScrollPhysics(),
+                          itemCount: audioList.length,
+                          itemBuilder: (context, index) {
+                            return JournalAudioPlayer(
+                              url: audioList[index],
+                            );
+                          },
                         ),
                       ),
-                    ],
-                  ),
-                ):
-                const SizedBox(),
-                // videoList.isNotEmpty
-                //     ?
-                imageList.isNotEmpty?
-                const SizedBox(height: 28):SizedBox(),
-                videoList.isNotEmpty?
-                Padding(
-                        padding: const EdgeInsets.only(left: 2),
-                        child: Text(
-                          "Video",
-                          style: CustomTextStyles.blackText16000000W700(),
-                        ),
-                      ):
-                    SizedBox(),
-                const SizedBox(height: 4),
-                videoList.isNotEmpty?
-                SizedBox(
-                  height: videoList.isNotEmpty ? size.height * 0.3 : 0,
-                  child: Stack(
-                    children: [
-                      PageView.builder(
-                        controller: videoController,
-                        itemCount: videoList.length,
-                        itemBuilder: (context, index) {
-                          return VideoPlayerWidget(
-                            videoUrl: videoList[index],
-                          );
-                        },
-                        onPageChanged: (int pageIndex) {
-                          setState(() {
-                            videoCurrentIndex = pageIndex;
-                          });
-                        },
-                      ),
-                      Positioned(
-                        bottom: 10,
-                        left: 0,
-                        right: 0,
-                        child: SizedBox(
-                          width: videoList.length * size.width * 0.1,
-                          child: buildIndicators(
-                            videoList.length,
-                            videoCurrentIndex,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ):
-        SizedBox(),
-                // _buildGrid(
-                //   context,
-                //   size,
-                // ),
-                videoList.isNotEmpty?
-                const SizedBox(height: 28):SizedBox(),
-                widget.goalsanddream.location?.locationAddress != null ?
-                Padding(
-                  padding: const EdgeInsets.only(left: 2),
-                  child: Text(
-                    "Your Location",
-                    style: CustomTextStyles.blackText16000000W700(),
-                  ),
-                ):
-                    SizedBox(),
-                const SizedBox(height: 6),
-                widget.goalsanddream.location?.locationAddress != null ?
-                Row(
-                  children: [
-                    widget.goalsanddream.location?.locationAddress == null?
-                        const SizedBox():
-                    CustomImageView(
-                      imagePath: ImageConstant.imgLinkedin,
-                      height: 23,
-                      width: 23,
-                    ),
-                    Text(
-                      widget.goalsanddream.location?.locationAddress == null
-                          ? ""
-                          : widget.goalsanddream.location!.locationAddress.toString(),
-                      style: CustomTextStyles.bodyMediumGray700_1,
-                    ),
-                  ],
-                ):
-           SizedBox(),
-                widget.goalsanddream.location?.locationAddress != null ? SizedBox(height: 10,):
-                   SizedBox(),
-
-                widget
-                    .goalsanddream.action!.isEmpty ?
-                    SizedBox():
-                Padding(
-                  padding: const EdgeInsets.only(left: 2),
-                  child: Text(
-                    "Actions",
-                    style: CustomTextStyles.blackText16000000W700(),
-                  ),
-                ),
-
-                const SizedBox(height: 20),
-                widget
-                    .goalsanddream.action!.isEmpty ?
-                    const SizedBox():
-                Consumer3<MentalStrengthEditProvider,AddActionsProvider,AdDreamsGoalsProvider>(
-                  builder: (context,mentalStrengthEditProvider,addActionsProvider, adDreamsGoalsProvider, _) {
-                    return SizedBox(
-                      height: widget.goalsanddream.action!.length *
-                          size.height *
-                          0.06,
-                      child: ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: widget.goalsanddream.action!.length,
-                        itemBuilder: (context, index) {
-                          logger.w("${widget.goalsanddream
-                              .action![index].actionTitle}--widget.goalsanddream");
-                          return Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => ActionsFullView(
-                                        id: widget.goalsanddream.action![index]
-                                            .actionId
-                                            .toString(),
-                                        indexs: index,
-                                        action: actionss.Action(
-                                          id: widget.goalsanddream
-                                              .action![index].actionId,
-                                          title: widget.goalsanddream
-                                              .action![index].actionTitle,
-                                          actionStatus: widget.goalsanddream
-                                              .action![index].actionStatus,
-                                          actionDate: widget.goalsanddream
-                                              .action![index].actionDatetime,
-                                        ),
-                                        goalId: widget.goalsanddream.goalId
-                                            .toString(),
-                                        actionStatus:  mentalStrengthEditProvider.getListGoalActionsModel?.actions?[index].actionStatus,
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: Center(
-                                  child: Container(
-                                    margin: const EdgeInsets.only(
-                                      bottom: 4,
-                                    ),
-                                    height: size.height * 0.04,
-                                    width: size.width * 0.87,
-                                    padding: const EdgeInsets.only(
-                                      bottom: 5,
-                                      top: 5,
-                                      left: 0,
-                                      right: 5,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(
-                                        100,
-                                      ),
-                                      border: Border.all(
-                                        color: Colors.grey,
-                                        width: 1,
-                                      ),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        mentalStrengthEditProvider.getListGoalActionsModel?.actions?[index].actionStatus != "1" ?
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                          child: CustomCheckboxButton(
-                                            text: "",
-                                            value: isActionCompletedList[index],
-                                            onChange: (value) async {
-                                              customPopup(
-                                                context: context,
-                                                onPressedDelete: () async {
-                                                  setState(() {
-                                                    isActionCompletedList[index] = value!;
-                                                  });
-                                                  await addActionsProvider.updateActionStatusFunction(
-                                                    context,
-                                                    goalId:widget.goalsanddream.goalId ?? "",
-                                                    actionId:
-                                                    widget.goalsanddream
-                                                        .action![index].actionId ?? "",
-                                                  );
-                                                  mentalStrengthEditProvider
-                                                      .fetchGoalActions(
-                                                    goalId: widget.goalsanddream.goalId ?? "",
-                                                  );
-                                                  Navigator.of(context).pop();
-                                                },
-                                                yes: "Yes",
-                                                title: 'Action Completed',
-                                                content:
-                                                'Are you sure You want to mark this action as completed?',
-                                              );
-
-
-                                            },
-                                          ),
-                                        ):
-                                            const SizedBox(),
-                                        SizedBox(
-                                          width: size.width * 0.45,
-                                          child: SingleChildScrollView(
-                                            scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                                            child: Text(
-                                              widget.goalsanddream.action![index]
-                                                  .actionTitle
-                                                  .toString(),
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 1, // Set the maximum number of lines to 3
-                                              textAlign: TextAlign.center,
-                                              style: const TextStyle(
-                                                color: Colors.grey,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        CircleAvatar(
-                                          radius: size.width * 0.04,
-                                          backgroundColor: Colors.blue,
-                                          child: Icon(
-                                            Icons.arrow_forward_ios_outlined,
-                                            color: Colors.white,
-                                            size: size.width * 0.03,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                      // imageList.isNotEmpty
+                      //     ? const SizedBox(
+                      //         height: 23,
+                      //       )
+                      //     : const SizedBox(),
+                      imageList.isNotEmpty?
+                      Padding(
+                              padding: const EdgeInsets.only(left: 2),
+                              child: Text(
+                                "Photo",
+                                style: CustomTextStyles.blackText16000000W700(),
+                              ),
+                            ):
+                          SizedBox(),
+                      const SizedBox(height: 4),
+                      imageList.isNotEmpty?
+                      SizedBox(
+                        height: imageList.isNotEmpty ? size.height * 0.3 : 0,
+                        child: Stack(
+                          children: [
+                            PageView.builder(
+                              controller: photoController,
+                              itemCount: imageList.length,
+                              itemBuilder: (context, index) {
+                                return CustomImageView(
+                                  fit: BoxFit.cover,
+                                  imagePath: imageList[index],
+                                  height: size.height * 0.30,
+                                  width: size.width,
+                                  alignment: Alignment.center,
+                                );
+                              },
+                              onPageChanged: (int pageIndex) {
+                                setState(() {
+                                  photoCurrentIndex = pageIndex;
+                                });
+                              },
+                            ),
+                            Positioned(
+                              bottom: 10,
+                              left: 0,
+                              right: 0,
+                              child: SizedBox(
+                                width: imageList.length * size.width * 0.1,
+                                child: buildIndicators(
+                                  imageList.length,
+                                  photoCurrentIndex,
                                 ),
                               ),
-                            ],
-                          );
+                            ),
+                          ],
+                        ),
+                      ):
+                      const SizedBox(),
+                      // videoList.isNotEmpty
+                      //     ?
+                      imageList.isNotEmpty?
+                      const SizedBox(height: 28):SizedBox(),
+                      videoList.isNotEmpty?
+                      Padding(
+                              padding: const EdgeInsets.only(left: 2),
+                              child: Text(
+                                "Video",
+                                style: CustomTextStyles.blackText16000000W700(),
+                              ),
+                            ):
+                          SizedBox(),
+                      const SizedBox(height: 4),
+                      videoList.isNotEmpty?
+                      SizedBox(
+                        height: videoList.isNotEmpty ? size.height * 0.3 : 0,
+                        child: Stack(
+                          children: [
+                            PageView.builder(
+                              controller: videoController,
+                              itemCount: videoList.length,
+                              itemBuilder: (context, index) {
+                                return VideoPlayerWidget(
+                                  videoUrl: videoList[index],
+                                );
+                              },
+                              onPageChanged: (int pageIndex) {
+                                setState(() {
+                                  videoCurrentIndex = pageIndex;
+                                });
+                              },
+                            ),
+                            Positioned(
+                              bottom: 10,
+                              left: 0,
+                              right: 0,
+                              child: SizedBox(
+                                width: videoList.length * size.width * 0.1,
+                                child: buildIndicators(
+                                  videoList.length,
+                                  videoCurrentIndex,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ):
+              SizedBox(),
+                      // _buildGrid(
+                      //   context,
+                      //   size,
+                      // ),
+                      videoList.isNotEmpty?
+                      const SizedBox(height: 28):SizedBox(),
+                      widget.goalsanddream.location?.locationAddress != null ?
+                      Padding(
+                        padding: const EdgeInsets.only(left: 2),
+                        child: Text(
+                          "Your Location",
+                          style: CustomTextStyles.blackText16000000W700(),
+                        ),
+                      ):
+                          SizedBox(),
+                      const SizedBox(height: 6),
+                      widget.goalsanddream.location?.locationAddress != null ?
+                      Row(
+                        children: [
+                          widget.goalsanddream.location?.locationAddress == null?
+                              const SizedBox():
+                          CustomImageView(
+                            imagePath: ImageConstant.imgLinkedin,
+                            height: 23,
+                            width: 23,
+                          ),
+                          Text(
+                            widget.goalsanddream.location?.locationAddress == null
+                                ? ""
+                                : widget.goalsanddream.location!.locationAddress.toString(),
+                            style: CustomTextStyles.bodyMediumGray700_1,
+                          ),
+                        ],
+                      ):
+                 SizedBox(),
+                      widget.goalsanddream.location?.locationAddress != null ? SizedBox(height: 10,):
+                         SizedBox(),
 
-                          // _buildCloseEditText(
-                          //   context,
-                          //   content:
-                          //       adDreamsGoalsProvider.goalModelIdName[index].name,
-                          //   onTap: () {
-                          //     adDreamsGoalsProvider
-                          //         .getAddActionIdAndNameClear(index);
-                          //   },
-                          // );
+                      widget
+                          .goalsanddream.action!.isEmpty ?
+                          SizedBox():
+                      Padding(
+                        padding: const EdgeInsets.only(left: 2),
+                        child: Text(
+                          "Actions",
+                          style: CustomTextStyles.blackText16000000W700(),
+                        ),
+                      ),
+
+                      const SizedBox(height: 20),
+                      widget
+                          .goalsanddream.action!.isEmpty ?
+                          const SizedBox():
+                      Consumer3<MentalStrengthEditProvider,AddActionsProvider,AdDreamsGoalsProvider>(
+                        builder: (context,mentalStrengthEditProvider,addActionsProvider, adDreamsGoalsProvider, _) {
+                          return SizedBox(
+                            height: widget.goalsanddream.action!.length *
+                                size.height *
+                                0.06,
+                            child: ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: widget.goalsanddream.action!.length,
+                              itemBuilder: (context, index) {
+                                logger.w("${widget.goalsanddream
+                                    .action![index].actionTitle}--widget.goalsanddream");
+                                return Row(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) => ActionsFullView(
+                                              id: widget.goalsanddream.action![index]
+                                                  .actionId
+                                                  .toString(),
+                                              indexs: index,
+                                              action: actionss.Action(
+                                                id: widget.goalsanddream
+                                                    .action![index].actionId,
+                                                title: widget.goalsanddream
+                                                    .action![index].actionTitle,
+                                                actionStatus: widget.goalsanddream
+                                                    .action![index].actionStatus,
+                                                actionDate: widget.goalsanddream
+                                                    .action![index].actionDatetime,
+                                              ),
+                                              goalId: widget.goalsanddream.goalId
+                                                  .toString(),
+                                              actionStatus:  mentalStrengthEditProvider.getListGoalActionsModel?.actions?[index].actionStatus,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Center(
+                                        child: Container(
+                                          margin: const EdgeInsets.only(
+                                            bottom: 4,
+                                          ),
+                                          height: size.height * 0.04,
+                                          width: size.width * 0.87,
+                                          padding: const EdgeInsets.only(
+                                            bottom: 5,
+                                            top: 5,
+                                            left: 0,
+                                            right: 5,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(
+                                              100,
+                                            ),
+                                            border: Border.all(
+                                              color: Colors.grey,
+                                              width: 1,
+                                            ),
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              mentalStrengthEditProvider.getListGoalActionsModel?.actions?[index].actionStatus != "1" ?
+                                              Padding(
+                                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                                child: CustomCheckboxButton(
+                                                  text: "",
+                                                  value: isActionCompletedList[index],
+                                                  onChange: (value) async {
+                                                    customPopup(
+                                                      context: context,
+                                                      onPressedDelete: () async {
+                                                        setState(() {
+                                                          isActionCompletedList[index] = value!;
+                                                        });
+                                                        await addActionsProvider.updateActionStatusFunction(
+                                                          context,
+                                                          goalId:widget.goalsanddream.goalId ?? "",
+                                                          actionId:
+                                                          widget.goalsanddream
+                                                              .action![index].actionId ?? "",
+                                                        );
+                                                        mentalStrengthEditProvider
+                                                            .fetchGoalActions(
+                                                          goalId: widget.goalsanddream.goalId ?? "",
+                                                        );
+                                                        Navigator.of(context).pop();
+                                                      },
+                                                      yes: "Yes",
+                                                      title: 'Action Completed',
+                                                      content:
+                                                      'Are you sure You want to mark this action as completed?',
+                                                    );
+
+
+                                                  },
+                                                ),
+                                              ):
+                                                  const SizedBox(),
+                                              SizedBox(
+                                                width: size.width * 0.45,
+                                                child: SingleChildScrollView(
+                                                  scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+                                                  child: Text(
+                                                    widget.goalsanddream.action![index]
+                                                        .actionTitle
+                                                        .toString(),
+                                                    overflow: TextOverflow.ellipsis,
+                                                    maxLines: 1, // Set the maximum number of lines to 3
+                                                    textAlign: TextAlign.center,
+                                                    style: const TextStyle(
+                                                      color: Colors.grey,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              CircleAvatar(
+                                                radius: size.width * 0.04,
+                                                backgroundColor: Colors.blue,
+                                                child: Icon(
+                                                  Icons.arrow_forward_ios_outlined,
+                                                  color: Colors.white,
+                                                  size: size.width * 0.03,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                );
+
+                                // _buildCloseEditText(
+                                //   context,
+                                //   content:
+                                //       adDreamsGoalsProvider.goalModelIdName[index].name,
+                                //   onTap: () {
+                                //     adDreamsGoalsProvider
+                                //         .getAddActionIdAndNameClear(index);
+                                //   },
+                                // );
+                              },
+                            ),
+                          );
                         },
                       ),
-                    );
-                  },
-                ),
-                const SizedBox(height: 20),
-                widget.goalsanddream.goalStatus == "1"
-                    ? const Padding(
-                        padding: EdgeInsets.only(
-                          left: 0,
-                          bottom: 10,
-                        ),
-                        child: Text(
-                          "Completed",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                          // style: theme.textTheme.titleSmall,
-                        ),
-                      )
-                    : Consumer<GoalsDreamsProvider>(
-                        builder: (context, goalsDreamsProvider, _) {
-                        return Padding(
-                          padding: const EdgeInsets.only(
-                            left: 13,
-                            bottom: 10,
-                          ),
-                          child: CustomCheckboxButton(
-                            text: "Mark this goal as Completed",
-                            value: isCompleted,
-                            onChange: (value) async {
-                              customPopup(
-                                context: context,
-                                onPressedDelete: () async {
-                                  await goalsDreamsProvider.updateGoalsStatus(
-                                    context,
-                                    goalId:
-                                        widget.goalsanddream.goalId.toString(),
-                                    status: "1",
-                                  );
-                                  await
-                                  goalsDreamsProvider.fetchGoalsAndDreams(initial: true,);
-                                  mentalStrengthEditProvider.fetchGoalActions(goalId: widget.goalsanddream.goalId.toString(),);
-                                  setState(() {
-                                    isCompleted = true;
-                                  });
-                                  Navigator.of(context).pop();
-                                },
-                                yes: "Yes",
-                                title: 'Goal Completed',
-                                content:
-                                    'Are you sure You want to mark this goal as completed?',
+                      const SizedBox(height: 20),
+                      widget.goalsanddream.goalStatus == "1"
+                          ? const Padding(
+                              padding: EdgeInsets.only(
+                                left: 0,
+                                bottom: 10,
+                              ),
+                              child: Text(
+                                "Completed",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                // style: theme.textTheme.titleSmall,
+                              ),
+                            )
+                          : Consumer<GoalsDreamsProvider>(
+                              builder: (context, goalsDreamsProvider, _) {
+                              return Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 13,
+                                  bottom: 10,
+                                ),
+                                child: CustomCheckboxButton(
+                                  text: "Mark this goal as Completed",
+                                  value: isCompleted,
+                                  onChange: (value) async {
+                                    customPopup(
+                                      context: context,
+                                      onPressedDelete: () async {
+                                        await goalsDreamsProvider.updateGoalsStatus(
+                                          context,
+                                          goalId:
+                                              widget.goalsanddream.goalId.toString(),
+                                          status: "1",
+                                        );
+                                        await
+                                        goalsDreamsProvider.fetchGoalsAndDreams(initial: true,);
+                                        mentalStrengthEditProvider.fetchGoalActions(goalId: widget.goalsanddream.goalId.toString(),);
+                                        setState(() {
+                                          isCompleted = true;
+                                        });
+                                        Navigator.of(context).pop();
+                                      },
+                                      yes: "Yes",
+                                      title: 'Goal Completed',
+                                      content:
+                                          'Are you sure You want to mark this goal as completed?',
+                                    );
+                                  },
+                                ),
                               );
-                            },
-                          ),
-                        );
-                      }),
-                // _buildSaveButton(context),
-                SizedBox(
-                  height: size.height * 0.04,
+                            }),
+                      // _buildSaveButton(context),
+                      SizedBox(
+                        height: size.height * 0.04,
+                      ),
+                    ],
+                  ),
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
