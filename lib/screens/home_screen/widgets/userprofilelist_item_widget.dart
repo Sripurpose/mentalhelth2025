@@ -27,7 +27,11 @@ class UserProfileListItemWidget extends StatelessWidget {
         vertical: 6,
       ),
       decoration: AppDecoration.outlineGray.copyWith(
-        borderRadius: BorderRadiusStyle.roundedBorder4,
+        borderRadius: BorderRadiusStyle.roundedBorder10,
+        border:  Border.all(
+          color: Colors.grey.shade400, // Black border color
+          width: 0.8,          // Border width
+        ),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -310,22 +310,34 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                                                 orElse: () => Category(categoryName: "")); // Provide a fallback
                                             return Padding(
                                               padding: const EdgeInsets.only(right: 8.0),
-                                              child: Row(
-                                                children: [
-                                                  Text(
-                                                    category.categoryName ?? "",
-                                                    style: const TextStyle(
-                                                      color: Colors.blue,
-                                                      fontWeight: FontWeight.bold,
-                                                    ),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius: const BorderRadius.all(Radius.circular(5)),
+                                                  border: Border.all(
+                                                    color: Colors.grey
+                                                  )
+                                                ),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Row(
+                                                    children: [
+                                                      Text(
+                                                        category.categoryName ?? "",
+                                                        style: const TextStyle(
+                                                          color: Colors.blue,
+                                                          fontWeight: FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                      IconButton(
+                                                        icon: const Icon(Icons.close, size: 16, color: Colors.red),
+                                                        onPressed: () {
+                                                          editProfileProvider.removeSelectedCategory(category);
+                                                        },
+                                                      ),
+                                                    ],
                                                   ),
-                                                  IconButton(
-                                                    icon: const Icon(Icons.close, size: 16, color: Colors.red),
-                                                    onPressed: () {
-                                                      editProfileProvider.removeSelectedCategory(category);
-                                                    },
-                                                  ),
-                                                ],
+                                                ),
                                               ),
                                             );
                                           }).toList()

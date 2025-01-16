@@ -475,7 +475,7 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
         padding: const EdgeInsets.only(left: 2),
         child: CustomTextFormField(
           controller: adDreamsGoalsProvider.commentEditTextController,
-          hintText: "Comments",
+          hintText: "Goal Description",
           hintStyle: CustomTextStyles.bodySmallGray700,
           maxLines: 4,
         ),

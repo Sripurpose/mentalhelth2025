@@ -182,6 +182,7 @@ class _GoalAndDreamFullViewScreenState
                       //         height: 23,
                       //       )
                       //     : const SizedBox(),
+                      const SizedBox(height: 4),
                       imageList.isNotEmpty?
                       Padding(
                               padding: const EdgeInsets.only(left: 2),
@@ -207,6 +208,7 @@ class _GoalAndDreamFullViewScreenState
                                   height: size.height * 0.30,
                                   width: size.width,
                                   alignment: Alignment.center,
+                                  radius: BorderRadius.circular(8),
                                 );
                               },
                               onPageChanged: (int pageIndex) {
@@ -294,7 +296,6 @@ class _GoalAndDreamFullViewScreenState
                           style: CustomTextStyles.blackText16000000W700(),
                         ),
                       ):
-                          SizedBox(),
                       const SizedBox(height: 6),
                       widget.goalsanddream.location?.locationAddress != null ?
                       Row(
@@ -439,18 +440,15 @@ class _GoalAndDreamFullViewScreenState
                                                   const SizedBox(),
                                               SizedBox(
                                                 width: size.width * 0.45,
-                                                child: SingleChildScrollView(
-                                                  scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                                                  child: Text(
-                                                    widget.goalsanddream.action![index]
-                                                        .actionTitle
-                                                        .toString(),
-                                                    overflow: TextOverflow.ellipsis,
-                                                    maxLines: 1, // Set the maximum number of lines to 3
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                      color: Colors.grey,
-                                                    ),
+                                                child: Text(
+                                                  widget.goalsanddream.action![index]
+                                                      .actionTitle
+                                                      .toString(),
+                                                  overflow: TextOverflow.ellipsis,
+                                                  maxLines: 1, // Set the maximum number of lines to 3
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                    color: Colors.grey,
                                                   ),
                                                 ),
                                               ),
@@ -724,7 +722,7 @@ class _GoalAndDreamFullViewScreenState
         Row(
           children: [
             Text(
-              "Comments : ",
+              "Goal Description : ",
               style: CustomTextStyles.blackText16000000W700(),
             ),
             SizedBox(

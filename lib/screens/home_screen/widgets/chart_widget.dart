@@ -75,7 +75,7 @@ class _ChartWidgetState extends State<ChartWidget> {
                 ),
               ),
               primaryYAxis: NumericAxis(),
-              legend: Legend(isVisible: true),
+              legend: Legend(isVisible: false),
               tooltipBehavior: tooltipBehavior,
               series: <CartesianSeries>[
                 ColumnSeries<Chart, String>(

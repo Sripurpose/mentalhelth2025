@@ -88,7 +88,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
               size,
             ),
             Container(
-              height: size.height * 0.75,
+              height: size.height * 0.74,
               padding: const EdgeInsets.symmetric(
                 horizontal: 28,
                 vertical: 21,
@@ -421,6 +421,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                   );
                                                 },
                                                 child: Container(
+                                                  width: 115,
+                                                  height: 34,
                                                   decoration: BoxDecoration(
                                                     color: ColorsContent.primaryColor,
                                                     borderRadius: const BorderRadius.only(
@@ -430,16 +432,19 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                   ),
                                                   child: const Padding(
                                                     padding: EdgeInsets.only(
-                                                      left: 18,
-                                                      right: 18,
+                                                      left: 8,
+                                                      right: 8,
                                                       top: 8,
                                                       bottom: 8
                                                     ),
-                                                    child: Text(
-                                                      "Edit Profile",
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontWeight: FontWeight.bold
+                                                    child: Center(
+                                                      child: Text(
+                                                        "Edit Profile",
+                                                        style: TextStyle(
+                                                          fontSize: 14,
+                                                          color: Colors.white,
+                                                          fontWeight: FontWeight.bold
+                                                        ),
                                                       ),
                                                     ),
                                                   ),

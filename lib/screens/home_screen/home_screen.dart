@@ -423,7 +423,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               borderRadius:BorderRadius.all(Radius.circular(10)),
                               border:  Border.all(
                                 color: Colors.grey.shade400, // Black border color
-                                width: 1.0,          // Border width
+                                width: 0.8,          // Border width
                               ),
                             ),
                             child: Padding(

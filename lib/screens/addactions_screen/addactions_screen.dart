@@ -1017,7 +1017,7 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
         builder: (context, addActionsProvider, _) {
       return CustomTextFormField(
         controller: addActionsProvider.descriptionEditTextController,
-        hintText: "Description",
+        hintText: "Action Description",
         hintStyle: CustomTextStyles.bodySmallGray700,
         textInputAction: TextInputAction.done,
         maxLines: 4,

@@ -45,7 +45,7 @@ class WeightLossComponentListItemWidget extends StatelessWidget {
               borderRadius: BorderRadiusStyle.roundedBorder10,
             ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           image == null
               ? const SizedBox()
@@ -57,22 +57,18 @@ class WeightLossComponentListItemWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(
               left: 15,
-              bottom: 13,
+              bottom: 12,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
-                  width: size.width * 0.5,
-                  child: Text(
-                    headding,
-                    style: CustomTextStyles.titleMedium16,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                Text(
+                  headding,
+                  style: CustomTextStyles.titleMedium16,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                SizedBox(
-                  height: size.height * 0.01,
-                ),
+
                 status
                     ? Text(
                         "Completed",

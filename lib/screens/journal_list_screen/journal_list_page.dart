@@ -339,6 +339,7 @@ class _JournalListPageState extends State<JournalListPage> {
                                     "List View",
                                     style: TextStyle(
                                       color: Colors.white,
+                                      fontWeight: FontWeight.bold
                                     ),
                                   ),
                                 ),
@@ -370,6 +371,7 @@ class _JournalListPageState extends State<JournalListPage> {
                                     "Chart View",
                                     style: TextStyle(
                                       color: Colors.white,
+                                        fontWeight: FontWeight.bold
                                     ),
                                   ),
                                 ),

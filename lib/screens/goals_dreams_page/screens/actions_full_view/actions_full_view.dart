@@ -678,7 +678,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
         Row(
           children: [
             Text(
-              "Comments : ",
+              "Action Description : ",
               style: CustomTextStyles.blackText16000000W700(),
             ),
             SizedBox(
@@ -783,7 +783,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                           Navigator.of(context).pop();
                         },
                         title: 'Confirm Delete',
-                        content: 'Are you sure You want to Delete this Goal?',
+                        content: 'Are you sure You want to Delete this Action?',
                       );
 
                     },

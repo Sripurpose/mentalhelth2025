@@ -721,7 +721,7 @@ class _GoalAndDreamFullViewBottomSheetState
         Row(
           children: [
             Text(
-              "Comments : ",
+              "Goal Description : ",
               style: CustomTextStyles.blackText16000000W600(),
             ),
             SizedBox(

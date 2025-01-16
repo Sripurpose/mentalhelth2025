@@ -499,18 +499,15 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                                                       ),
                                                     ),
                                                   ),
-                                                  SizedBox(
-                                                    width: size.width * 0.45,
-                                                    child: SingleChildScrollView(
-                                                      scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                                                      child: Text(
-                                                        data.name,
-                                                        overflow: TextOverflow.ellipsis,
-                                                        maxLines: 1, // Set the maximum number of lines to 3
-                                                        textAlign: TextAlign.center,
-                                                        style: const TextStyle(
-                                                          color: Colors.grey,
-                                                        ),
+                                                  SingleChildScrollView(
+                                                    scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+                                                    child: Text(
+                                                      data.name,
+                                                      overflow: TextOverflow.ellipsis,
+                                                      maxLines: 1, // Set the maximum number of lines to 3
+                                                      textAlign: TextAlign.center,
+                                                      style: const TextStyle(
+                                                        color: Colors.grey,
                                                       ),
                                                     ),
                                                   ),
@@ -661,8 +658,12 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
             horizontal: 11,
             vertical: 8,
           ),
-          decoration: AppDecoration.outlineGray700.copyWith(
-            borderRadius: BorderRadiusStyle.roundedBorder4,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.grey,
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(5),
           ),
           child: Row(
             children: [
@@ -699,7 +700,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
         padding: const EdgeInsets.only(left: 2),
         child: CustomTextFormField(
           controller: adDreamsGoalsProvider.commentEditTextController,
-          hintText: "Comments",
+          hintText: "Goal Description",
           hintStyle: CustomTextStyles.bodySmallGray700,
           maxLines: 4,
         ),
@@ -851,7 +852,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Add Media",
+              "Add Medssia",
               style: theme.textTheme.titleSmall,
             ),
             const SizedBox(

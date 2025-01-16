@@ -485,7 +485,7 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
         padding: const EdgeInsets.only(left: 2),
         child: CustomTextFormField(
           controller: adDreamsGoalsProvider.commentEditTextController,
-          hintText: "Comments",
+          hintText: "Goal Description",
           hintStyle: CustomTextStyles.bodySmallGray700,
           maxLines: 4,
         ),
@@ -570,7 +570,7 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
               } else if (adDreamsGoalsProvider.commentEditTextController.text.isEmpty) {
                 showCustomSnackBar(
                   context: context,
-                  message: "Please fill Comments",
+                  message: "Please fill Goal Description",
                 );
               } else if (adDreamsGoalsProvider.formattedDate == null) {
                 showCustomSnackBar(

@@ -678,7 +678,7 @@ class _ActionFullViewJournalCreateBottomSheetState
         Row(
           children: [
             Text(
-              "Comments : ",
+              "Action Description : ",
               style: CustomTextStyles.blackText16000000W600(),
             ),
             SizedBox(
