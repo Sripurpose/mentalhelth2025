@@ -32,6 +32,7 @@ import 'package:html_unescape/html_unescape.dart';
 
 import '../../utils/logic/logic.dart';
 import '../../widgets/background_image/background_imager.dart';
+import '../addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
 import '../journal_list_screen/journal_list_page.dart';
 import '../mental_strength_add_edit_screen/screens/goals_and_dreams_full_view/goals_and_dreams_full_view_screen.dart';
 
@@ -654,27 +655,37 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
               ),
               homeProvider.journalDetails!.journals!.location == null ?
                   const SizedBox():
-              Row(
-                children: [
-                  CustomImageView(
-                    imagePath: ImageConstant.imgLinkedin,
-                    height: 23,
-                    width: 23,
-                  ),
-                  Text(
-                    homeProvider.journalDetails == null
-                        ? ""
-                        : homeProvider.journalDetails!.journals == null
+              ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxWidth: 200,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomImageView(
+                      imagePath: ImageConstant.imgLinkedin,
+                      height: 23,
+                      width: 23,
+                    ),
+                    Flexible(
+                      child: Text(
+                        homeProvider.journalDetails == null
+                            ? ""
+                            : homeProvider.journalDetails!.journals == null
                             ? ""
                             : homeProvider.journalDetails!.journals!.location ==
-                                    null
-                                ? ""
-                                : homeProvider.journalDetails!.journals!
-                                    .location!.locationName
-                                    .toString(),
-                    style: CustomTextStyles.bodyMediumGray700_1,
-                  ),
-                ],
+                            null
+                            ? ""
+                            : homeProvider.journalDetails!.journals!
+                            .location!.locationName
+                            .toString(),
+                        style: CustomTextStyles.bodyMediumGray700_1,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           );

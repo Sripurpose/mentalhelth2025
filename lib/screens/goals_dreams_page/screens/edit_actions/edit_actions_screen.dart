@@ -1730,6 +1730,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
         onPressed: () async {
           if (!addActionsProvider.isVideoUploading) {
             if (addActionsProvider.titleEditTextController.text.isNotEmpty &&
+                addActionsProvider.descriptionEditTextController.text.isNotEmpty &&
                 (addActionsProvider.setRemainder
                     ? addActionsProvider.reminderStartDate.isNotEmpty &&
                     addActionsProvider.reminderEndDate.isNotEmpty &&

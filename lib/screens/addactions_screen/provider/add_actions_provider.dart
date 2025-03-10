@@ -349,7 +349,7 @@ var logger = Logger();
       required Placemark placemark,
       required LatLng location}) {
     selectedLocationName =
-        selectedLocationAddress = "${placemark.locality.toString()},${placemark.administrativeArea.toString()}";
+        selectedLocationAddress = "${placemark.name}, ${placemark.locality}, ${placemark.administrativeArea}, ${placemark.country}";
     selectedAddress.toString();
     selectedLatitude = location.latitude.toString();
     locationLongitude = location.longitude.toString();

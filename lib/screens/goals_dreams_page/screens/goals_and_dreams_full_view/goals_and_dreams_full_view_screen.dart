@@ -286,36 +286,37 @@ class _GoalAndDreamFullViewScreenState
                       //   context,
                       //   size,
                       // ),
-                      videoList.isNotEmpty?
-                      const SizedBox(height: 28):SizedBox(),
-                      widget.goalsanddream.location?.locationAddress != null ?
-                      Padding(
-                        padding: const EdgeInsets.only(left: 2),
-                        child: Text(
-                          "Your Location",
-                          style: CustomTextStyles.blackText16000000W700(),
-                        ),
-                      ):
-                      const SizedBox(height: 6),
-                      widget.goalsanddream.location?.locationAddress != null ?
-                      Row(
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          widget.goalsanddream.location?.locationAddress == null?
-                              const SizedBox():
-                          CustomImageView(
-                            imagePath: ImageConstant.imgLinkedin,
-                            height: 23,
-                            width: 23,
-                          ),
-                          Text(
-                            widget.goalsanddream.location?.locationAddress == null
-                                ? ""
-                                : widget.goalsanddream.location!.locationAddress.toString(),
-                            style: CustomTextStyles.bodyMediumGray700_1,
-                          ),
+                          if (videoList.isNotEmpty) const SizedBox(height: 28),
+                          if (widget.goalsanddream.location?.locationAddress != null) ...[
+                            Padding(
+                              padding: const EdgeInsets.only(left: 2),
+                              child: Text(
+                                "Your Location",
+                                style: CustomTextStyles.blackText16000000W700(),
+                                overflow: TextOverflow.fade,
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                CustomImageView(
+                                  imagePath: ImageConstant.imgLinkedin,
+                                  height: 23,
+                                  width: 23,
+                                ),
+                                Text(
+                                  widget.goalsanddream.location!.locationAddress!,
+                                  style: CustomTextStyles.bodyMediumGray700_1,
+                                ),
+                              ],
+                            ),
+                          ] else const SizedBox(height: 6),
                         ],
-                      ):
-                 SizedBox(),
+                      ),
+
+                      SizedBox(),
                       widget.goalsanddream.location?.locationAddress != null ? SizedBox(height: 10,):
                          SizedBox(),
 
@@ -725,20 +726,20 @@ class _GoalAndDreamFullViewScreenState
               "Goal Description : ",
               style: CustomTextStyles.blackText16000000W700(),
             ),
-            SizedBox(
-              width: size.width * 0.6,
+            Expanded(  // Using Expanded to prevent overflow
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal, // Enable horizontal scrolling
                 child: Text(
                   comments,
                   style: CustomTextStyles.bodyLargeGray700,
                   overflow: TextOverflow.ellipsis,
-                  maxLines: 1, // Set the maximum number of lines to 3
+                  maxLines: 1, // Set the maximum number of lines to 1
                 ),
               ),
             ),
           ],
-        ),
+        )
+
       ],
     );
   }

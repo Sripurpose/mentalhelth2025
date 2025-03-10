@@ -24,6 +24,7 @@ class HomeProvider extends ChangeNotifier {
   bool chartViewLoading = false;
   var logger = Logger();
 
+
   Future<void> fetchChartView(BuildContext context) async {
     try {
       chartViewModel = null;

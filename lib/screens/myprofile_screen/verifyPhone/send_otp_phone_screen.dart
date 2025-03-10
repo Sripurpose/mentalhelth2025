@@ -80,8 +80,10 @@ class _SendOtpPhoneScreenState extends State<SendOtpPhoneScreen> {
                                         showPhoneCode: true,
                                         onSelect: (Country country) {
                                           phoneSignInProvider.addCountryCode(
-                                            value: country.phoneCode.toString(),
+                                           value: country.phoneCode.toString(),
                                           );
+
+                                          print("Country code is ${phoneSignInProvider.countryCode}");
                                         },
                                         countryListTheme: CountryListThemeData(
                                           borderRadius: const BorderRadius.only(

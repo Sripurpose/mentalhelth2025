@@ -71,7 +71,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
       {required String selectedAddress,
       required Placemark placemark,
       required LatLng location}) {
-    selectedLocationName = selectedLocationAddress = "${placemark.locality.toString()},${placemark.administrativeArea.toString()}";
+    selectedLocationName = selectedLocationAddress = "${placemark.name}, ${placemark.locality}, ${placemark.administrativeArea}, ${placemark.country}";
     selectedAddress.toString();
     selectedLatitude = location.latitude.toString();
     locationLongitude = location.longitude.toString();

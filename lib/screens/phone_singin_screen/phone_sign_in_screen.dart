@@ -104,6 +104,7 @@ class PhoneSignInScreen extends StatelessWidget {
                                       phoneSignInProvider.addCountryCode(
                                         value: country.phoneCode.toString(),
                                       );
+                                      print("Country code is ${phoneSignInProvider.countryCode}");
                                     },
                                     countryListTheme: CountryListThemeData(
                                       borderRadius: const BorderRadius.only(

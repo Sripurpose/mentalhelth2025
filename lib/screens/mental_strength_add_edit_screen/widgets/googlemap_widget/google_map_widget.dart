@@ -152,6 +152,8 @@ class _MentalGoogleMapState extends State<MentalGoogleMap> {
           //     :
           Expanded(
                   child: GoogleMap(
+                    myLocationEnabled: true,
+                    myLocationButtonEnabled: true,
                     onMapCreated: (GoogleMapController controller) {
                       mapController = controller;
                     },

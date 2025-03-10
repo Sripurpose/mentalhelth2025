@@ -131,6 +131,8 @@ class _AddGoalsGoogleMapState extends State<AddGoalsGoogleMap> {
           const SizedBox(height: 10),
           Expanded(
             child: GoogleMap(
+              myLocationButtonEnabled: true,
+              myLocationEnabled: true,
               onMapCreated: (GoogleMapController controller) {
                 mapController = controller;
               },

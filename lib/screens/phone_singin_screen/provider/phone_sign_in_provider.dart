@@ -40,6 +40,7 @@ class PhoneSignInProvider extends ChangeNotifier {
       notifyListeners();
       var body = {
         'phone': phone,
+        'country_code':countryCode
       };
       final response = await http.post(
         Uri.parse(
