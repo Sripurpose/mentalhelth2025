@@ -1112,7 +1112,7 @@ class _MentalStrengthAddEditFullViewScreenState extends State<MentalStrengthAddE
                                 return Container(
                                   width: double.infinity,
                                   padding: const EdgeInsets.all(20),
-                                  child: const MentalGoogleMap(),
+                                  child: const MentalGoogleMap(edit: false,),
                                 );
                               },
                             );

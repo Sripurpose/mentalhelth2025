@@ -8,27 +8,26 @@ import 'package:logger/logger.dart';
 import 'package:mentalhelth/screens/addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
 import 'package:mentalhelth/utils/core/image_constant.dart';
 import 'package:mentalhelth/widgets/custom_image_view.dart';
-import 'package:mentalhelth/widgets/functions/snack_bar.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import '../../../goals_dreams_page/model/goals_and_dreams_model.dart';
 
 class AddGoalsGoogleMap extends StatefulWidget {
-  const AddGoalsGoogleMap({super.key,this.goalsanddream});
+  const AddGoalsGoogleMap({super.key, this.goalsanddream});
   final Goalsanddream? goalsanddream;
+
   @override
   _AddGoalsGoogleMapState createState() => _AddGoalsGoogleMapState();
 }
 
 class _AddGoalsGoogleMapState extends State<AddGoalsGoogleMap> {
   PermissionStatus permissionStatus = PermissionStatus.denied;
-  String currentTime = '';
   Position? _currentLocation;
   late AdDreamsGoalsProvider adDreamsGoalsProvider;
-  late double? savedLatitude = 0.0;
-  late double? savedLongitude = 0.0;
-  late  String? savedLocationAddress ='';
+  double? savedLatitude = 0.0;
+  double? savedLongitude = 0.0;
+  String? savedLocationAddress = '';
   var logger = Logger();
 
   @override
@@ -36,24 +35,26 @@ class _AddGoalsGoogleMapState extends State<AddGoalsGoogleMap> {
     super.initState();
     adDreamsGoalsProvider = Provider.of<AdDreamsGoalsProvider>(context, listen: false);
 
-    // Check if there are saved coordinates, otherwise get current location
+    // Retrieve saved location if available
     savedLatitude = double.parse(widget.goalsanddream?.location?.locationLatitude ?? "0.0");
     savedLongitude = double.parse(widget.goalsanddream?.location?.locationLongitude ?? "0.0");
     savedLocationAddress = widget.goalsanddream?.location?.locationAddress ?? "";
 
-    logger.w("savedLatitude $savedLatitude");
-    logger.w("savedLongitude $savedLongitude");
+    logger.w("Saved Latitude: $savedLatitude");
+    logger.w("Saved Longitude: $savedLongitude");
 
-    if (savedLatitude != null && savedLongitude != null) {
-      // If saved location exists, set the selected location and update the map
-      _selectedLocation = LatLng(savedLatitude ?? 0.0, savedLongitude ?? 0.0);
+    if (savedLatitude != 0.0 && savedLongitude != 0.0) {
+      _selectedLocation = LatLng(savedLatitude!, savedLongitude!);
       _updateMarkerPosition();
     } else {
-      // Request location permission and get the current location
-      _checkPermissionStatus();
-      _requestPermission();
-      _getCurrentLocation();
+      _fetchCurrentLocation();
     }
+  }
+
+  Future<void> _fetchCurrentLocation() async {
+    await _checkPermissionStatus();
+    await _requestPermission();
+    _getCurrentLocation();
   }
 
   Future<void> _checkPermissionStatus() async {
@@ -78,10 +79,18 @@ class _AddGoalsGoogleMapState extends State<AddGoalsGoogleMap> {
     if (mounted) {
       setState(() {
         _currentLocation = position;
-        _selectedLocation = LatLng(position.latitude, position.longitude);
+        if (savedLatitude == 0.0 && savedLongitude == 0.0) {
+          _selectedLocation = LatLng(position.latitude, position.longitude);
+          _updateMarkerPosition();
+        }
       });
-      _updateMarkerPosition();
-      _onMapTapped(LatLng(_currentLocation!.latitude, _currentLocation!.longitude));
+
+      // Move camera only if no saved location exists
+      if (savedLatitude == 0.0 && savedLongitude == 0.0) {
+        mapController.animateCamera(
+          CameraUpdate.newLatLngZoom(_selectedLocation, 15.0),
+        );
+      }
     }
   }
 
@@ -118,7 +127,7 @@ class _AddGoalsGoogleMapState extends State<AddGoalsGoogleMap> {
               const SizedBox(),
               GestureDetector(
                 onTap: () {
-                  Navigator.of(context).pop(); // Close the bottom sheet
+                  Navigator.of(context).pop();
                 },
                 child: CustomImageView(
                   imagePath: ImageConstant.imgClosePrimary,
@@ -138,10 +147,12 @@ class _AddGoalsGoogleMapState extends State<AddGoalsGoogleMap> {
               },
               onTap: _onMapTapped,
               initialCameraPosition: CameraPosition(
-                target: _selectedLocation.latitude != 0 && _selectedLocation.longitude != 0
-                    ? _selectedLocation
-                    : const LatLng(10.1632, 76.6413),
-                zoom: 10.0,  // Adjust zoom for better view
+                target: (savedLatitude != 0.0 && savedLongitude != 0.0)
+                    ? LatLng(savedLatitude!, savedLongitude!) // Use saved location
+                    : (_currentLocation != null
+                    ? LatLng(_currentLocation!.latitude, _currentLocation!.longitude) // Use current location
+                    : const LatLng(0.0, 0.0)), // Default fallback
+                zoom: 15.0,
               ),
               markers: markers,
               scrollGesturesEnabled: true,
@@ -155,17 +166,10 @@ class _AddGoalsGoogleMapState extends State<AddGoalsGoogleMap> {
               },
             ),
           ),
-          _selectedAddress.isNotEmpty ?
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              'Selected Address: $_selectedAddress',
-            ),
-          ):
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              'Selected Address: $savedLocationAddress,',
+              'Selected Address: ${_selectedAddress.isNotEmpty ? _selectedAddress : savedLocationAddress}',
             ),
           ),
         ],
@@ -180,7 +184,6 @@ class _AddGoalsGoogleMapState extends State<AddGoalsGoogleMap> {
       _selectedLocation = location;
     });
 
-    // Retrieve the address using geocoding
     try {
       List<Placemark> placemarks =
       await placemarkFromCoordinates(location.latitude, location.longitude);
@@ -190,9 +193,10 @@ class _AddGoalsGoogleMapState extends State<AddGoalsGoogleMap> {
           _selectedAddress =
           '${placemark.name}, ${placemark.locality}, ${placemark.administrativeArea}, ${placemark.country}';
           adDreamsGoalsProvider.addLocationSection(
-              selectedAddress: _selectedAddress,
-              placemark: placemark,
-              location: location);
+            selectedAddress: _selectedAddress,
+            placemark: placemark,
+            location: location,
+          );
         });
       }
       _updateMarkerPosition();

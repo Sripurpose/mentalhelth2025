@@ -1174,7 +1174,7 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
                               return Container(
                                   width: double.infinity,
                                   padding: const EdgeInsets.all(20),
-                                  child: const MentalGoogleMap());
+                                  child: const MentalGoogleMap(edit: true,));
                             },
                           );
                           // mentalStrengthEditProvider.mediaSelected == 3
