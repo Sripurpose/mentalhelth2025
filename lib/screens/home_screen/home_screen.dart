@@ -538,20 +538,46 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          GestureDetector(
-            onTap: () {
-              dashBoardProvider.changeCommentPage(index: 8);
-            },
-            child: CustomImageView(
-              imagePath: editProfileProvider.getProfileModel?.profileurl
-                  .toString() ?? "",
-              height: 58,
-              width: 58,
-              radius: BorderRadius.circular(
-                34,
+          Stack(
+            alignment: Alignment.bottomRight,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  dashBoardProvider.changeCommentPage(index: 8);
+                },
+                child: CustomImageView(
+                  imagePath: editProfileProvider.getProfileModel?.profileurl
+                      ?.toString() ??
+                      "",
+                  height: 58,
+                  width: 58,
+                  radius: BorderRadius.circular(34),
+                  fit: BoxFit.cover,
+                ),
               ),
-              fit: BoxFit.cover,
-            ),
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: GestureDetector(
+                  onTap: (){
+                    dashBoardProvider.changeCommentPage(index: 8);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.blue, // Adjust color as needed
+                      border: Border.all(color: Colors.white, width: 1),
+                    ),
+                    padding: const EdgeInsets.all(2),
+                    child: const Icon(
+                      Icons.add,
+                      color: Colors.white,
+                      size: 16,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
           Padding(
             padding: const EdgeInsets.only(
