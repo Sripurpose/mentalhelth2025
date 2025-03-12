@@ -359,21 +359,23 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                   height: 23,
                                   width: 23,
                                 ),
-                                Text(
-                                  homeProvider.journalDetails == null
-                                      ? ""
-                                      : homeProvider.journalDetails!.journals == null
-                                      ? ""
-                                      : homeProvider.journalDetails!.journals!.location ==
-                                      null
-                                      ? ""
-                                      : homeProvider.journalDetails!.journals!
-                                      .location!.locationName
-                                      .toString(),
-                                  style: CustomTextStyles.bodyMediumGray700_1,
+                                const SizedBox(width: 5), // Optional spacing
+                                Expanded(
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Text(
+                                      homeProvider.journalDetails?.journals?.location?.locationName
+                                          ?.toString()
+                                          .replaceAll('?', '') ?? "",
+                                      style: CustomTextStyles.bodyMediumGray700_1,
+                                      overflow: TextOverflow.visible, // Ensures scrolling works
+                                    ),
+                                  ),
                                 ),
+
                               ],
                             ),
+
                             homeProvider.journalDetails!.journals!.location == null ?
                             const SizedBox():
                             const SizedBox(height: 19),
@@ -678,7 +680,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                             ? ""
                             : homeProvider.journalDetails!.journals!
                             .location!.locationName
-                            .toString(),
+                            .toString().replaceAll('?', ''),
                         style: CustomTextStyles.bodyMediumGray700_1,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,

@@ -68,7 +68,7 @@ class _SplashScreenState extends State<SplashScreen> {
               return const DashBoardScreen();
             }
           } else {
-            return ScreenSignIn();
+            return const ScreenSignIn();
           }
         }));
       }

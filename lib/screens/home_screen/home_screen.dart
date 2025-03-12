@@ -474,7 +474,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
 
-
+                          if(homeProvider.journalsModel?.journals != null)
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Padding(

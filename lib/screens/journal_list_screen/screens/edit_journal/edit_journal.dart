@@ -26,6 +26,7 @@ import 'package:mentalhelth/widgets/functions/snack_bar.dart';
 import 'package:mentalhelth/widgets/widget/shimmer.dart';
 import 'package:provider/provider.dart';
 import 'package:html_unescape/html_unescape.dart';
+import '../../../../utils/logic/permissions.dart';
 import '../../../../utils/theme/custom_text_style.dart';
 import '../../../../utils/theme/theme_helper.dart';
 import '../../../../widgets/app_bar/appbar_leading_image.dart';
@@ -49,7 +50,6 @@ class EditJournalMentalStrength extends StatefulWidget {
 }
 
 class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
-
   late HomeProvider homeProvider;
   late MentalStrengthEditProvider mentalStrengthEditProvider;
   late EditProfileProvider editProfileProvider;
@@ -57,19 +57,24 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
   late AdDreamsGoalsProvider adDreamsGoalsProvider;
   bool tokenStatus = false;
   var logger = Logger();
+
   @override
   void initState() {
     homeProvider = Provider.of<HomeProvider>(context, listen: false);
-    mentalStrengthEditProvider = Provider.of<MentalStrengthEditProvider>(context, listen: false);
+    mentalStrengthEditProvider =
+        Provider.of<MentalStrengthEditProvider>(context, listen: false);
     dashBoardProvider = Provider.of<DashBoardProvider>(context, listen: false);
-    editProfileProvider = Provider.of<EditProfileProvider>(context, listen: false);
-    adDreamsGoalsProvider = Provider.of<AdDreamsGoalsProvider>(context, listen: false);
+    editProfileProvider =
+        Provider.of<EditProfileProvider>(context, listen: false);
+    adDreamsGoalsProvider =
+        Provider.of<AdDreamsGoalsProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       mentalStrengthEditProvider.mediaSelected = -1;
       _isTokenExpired();
     });
     super.initState();
   }
+
   Future<void> _isTokenExpired() async {
     await homeProvider.fetchChartView(context);
     await homeProvider.fetchJournals(initial: true);
@@ -80,11 +85,11 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
         logger.e("Token status changed: $tokenStatus");
       });
       logger.e("Token status changed: $tokenStatus");
-    }else{
+    } else {
       logger.e("Token status changedElse: $tokenStatus");
     }
-
   }
+
   // @override
   // void dispose() {
   //   MentalStrengthEditProvider mentalStrengthEditProvider =
@@ -97,352 +102,618 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return PopScope(
-      onPopInvoked: (value) async {
-        MentalStrengthEditProvider mentalStrengthEditProvider =
-            Provider.of<MentalStrengthEditProvider>(context, listen: false);
-        AdDreamsGoalsProvider adDreamsGoalsProvider =
-            Provider.of<AdDreamsGoalsProvider>(context, listen: false);
-        mentalStrengthEditProvider.clearAllValuesInSaveTime();
-        adDreamsGoalsProvider.clearAction();
-      },
-      child: tokenStatus == false ?
-      Scaffold(
-        body: SafeArea(
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(
-                  ImageConstant.imgGroup22,
-                ),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: Consumer4<EditProfileProvider, MentalStrengthEditProvider,
-                    DashBoardProvider, HomeProvider>(
-                builder: (context,
-                    editProfileProvider,
-                    mentalStrengthEditProvider,
-                    dashBoardProvider,
-                    homeProvider,
-                    _) {
-              return GestureDetector(
-                onTap: () {
-                  mentalStrengthEditProvider.openAllCloser();
-                },
-                child: Column(
-                  children: [
-                    buildAppBarJournalViewScreen(
-                      context,
-                      size,
-                      heading: "Edit your mental strength",
-                      onTap: () {
-                        MentalStrengthEditProvider mentalStrengthEditProvider =
-                            Provider.of<MentalStrengthEditProvider>(context,
-                                listen: false);
-                        AdDreamsGoalsProvider adDreamsGoalsProvider =
-                            Provider.of<AdDreamsGoalsProvider>(context,
-                                listen: false);
-                        mentalStrengthEditProvider.clearAllValuesInSaveTime();
-                        adDreamsGoalsProvider.clearAction();
-                        Navigator.of(context).pop();
-                      },
+        onPopInvoked: (value) async {
+          MentalStrengthEditProvider mentalStrengthEditProvider =
+              Provider.of<MentalStrengthEditProvider>(context, listen: false);
+          AdDreamsGoalsProvider adDreamsGoalsProvider =
+              Provider.of<AdDreamsGoalsProvider>(context, listen: false);
+          mentalStrengthEditProvider.clearAllValuesInSaveTime();
+          adDreamsGoalsProvider.clearAction();
+        },
+        child: tokenStatus == false
+            ? Scaffold(
+                body: SafeArea(
+                  child: Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(
+                          ImageConstant.imgGroup22,
+                        ),
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                    Expanded(
-                      child: Stack(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.only(
-                              left: size.width * 0.05,
-                              right: size.width * 0.05,
+                    child: Consumer4<
+                            EditProfileProvider,
+                            MentalStrengthEditProvider,
+                            DashBoardProvider,
+                            HomeProvider>(
+                        builder: (context,
+                            editProfileProvider,
+                            mentalStrengthEditProvider,
+                            dashBoardProvider,
+                            homeProvider,
+                            _) {
+                      return GestureDetector(
+                        onTap: () {
+                          mentalStrengthEditProvider.openAllCloser();
+                        },
+                        child: Column(
+                          children: [
+                            buildAppBarJournalViewScreen(
+                              context,
+                              size,
+                              heading: "Edit your mental strength",
+                              onTap: () {
+                                MentalStrengthEditProvider
+                                    mentalStrengthEditProvider =
+                                    Provider.of<MentalStrengthEditProvider>(
+                                        context,
+                                        listen: false);
+                                AdDreamsGoalsProvider adDreamsGoalsProvider =
+                                    Provider.of<AdDreamsGoalsProvider>(context,
+                                        listen: false);
+                                mentalStrengthEditProvider
+                                    .clearAllValuesInSaveTime();
+                                adDreamsGoalsProvider.clearAction();
+                                Navigator.of(context).pop();
+                              },
                             ),
-                            color: mentalStrengthEditProvider.openChooseGoal
-                                ? Colors.blue[50]
-                                : null,
-                            child: SingleChildScrollView(
-                              child: Column(
+                            Expanded(
+                              child: Stack(
                                 children: [
-                                  SizedBox(
-                                    // width: size.width * 0.1,
-                                    // height: size.height * 0.1,
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        // editProfileProvider.getImageFromGallery(
-                                        //   context: context,
-                                        // );
-                                      },
-                                      child: editProfileProvider.images != null
-                                          ? ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(60),
-                                              child: Image.file(
-                                                editProfileProvider.images!,
-                                                height: size.height * 0.1,
-                                                width: size.height * 0.1,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            )
-                                          : CustomImageView(
-                                              imagePath: editProfileProvider
-                                                  .profileUrl
-                                                  .toString(),
-                                              height: size.height * 0.1,
-                                              width: size.height * 0.1,
-                                              radius: BorderRadius.circular(54),
-                                              alignment: Alignment.center,
-                                              fit: BoxFit.cover,
-                                            ),
-                                    ),
-                                  ),
-                                  editProfileProvider.getProfileModel == null
-                                      ? const SizedBox()
-                                      : SizedBox(
-                                    width: size.width * 0.6,
-                                        child: SingleChildScrollView(
-                                          scrollDirection: Axis.vertical,
-                                          child: Center(
-                                            child: Text(
-                                                editProfileProvider
-                                                    .getProfileModel!.firstname
-                                                    .toString(),
-                                                style: CustomTextStyles.bodyLarge18,
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 10, // Set the maximum number of lines
-                                              ),
-                                          ),
-                                        ),
-                                      ),
-                                  editProfileProvider.getProfileModel == null
-                                      ? const SizedBox()
-                                      :       Text(
-                                    homeProvider.journalDetails == null
-                                        ? ""
-                                        : dateTimeFormatter(
-                                      date: homeProvider
-                                          .journalDetails!.journals!.journalDatetime
-                                          .toString(),
-                                    ),
-                                    style: CustomTextStyles.bodyMediumGray700,
-                                  ),
-                                  SizedBox(
-                                    height: size.height * 0.02,
-                                  ),
-                                  Text(
-                                    "Whats on your mind?",
-                                    style: theme.textTheme.bodyLarge,
-                                  ),
-                                  SizedBox(
-                                    height: size.height * 0.03,
-                                  ),
-                                  _buildDescriptionEditText(context),
-                                  // const Slider1ItemWidget(),
-                                  SizedBox(height: size.height * 0.03),
-                                  CustomImageView(
-                                    imagePath: ImageConstant.imgGroup27,
-                                    height: 33,
-                                    width: 5,
-                                  ),
-                                  _buildAddMediaColumn(
-                                    context,
-                                    size,
-                                  ),
-                                  SizedBox(height: size.height * 0.03),
-
-                                  // mentalStrengthEditProvider.mediaSelected == 3
-                                  //     ? const MentalGoogleMap()
-                                  //     : const SizedBox(),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  CustomIconButton(
-                                    height: size.height * 0.08,
-                                    width: size.height * 0.08,
-                                    padding: const EdgeInsets.all(
-                                      11,
-                                    ),
-                                    decoration: IconButtonStyleHelper.fillBlue,
-                                    child: CustomImageView(
-                                      imagePath: ImageConstant.imgLightBulb,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: size.height * 0.03,
-                                  ),
-                                  CustomImageView(
-                                    imagePath: ImageConstant.imgGroup28,
-                                    height: 19,
-                                    width: 5,
-                                  ),
-                                  SizedBox(height: size.height * 0.03),
-                                  Text(
-                                    "Rate how you are feeling now?",
-                                    style: theme.textTheme.bodyLarge,
-                                  ),
-                                  SizedBox(height: size.height * 0.01),
-                                  CustomRatingBar(
-                                    initialRating: mentalStrengthEditProvider
-                                        .emotionalValueStar,
-                                    itemSize: 34,
-                                    color: Colors.blue,
-                                    onRatingUpdate: (value) {
-                                      mentalStrengthEditProvider
-                                          .changeEmotionalValueStar(value);
-                                    },
-                                  ),
-                                  SizedBox(height: size.height * 0.01),
-                                  CustomImageView(
-                                    imagePath: ImageConstant.imgGroup29,
-                                    height: 33,
-                                    width: 5,
-                                  ),
-                                  SizedBox(
-                                    height: size.height * 0.03,
-                                  ),
-                                  Text(
-                                    "What is your emotional state?",
-                                    style: theme.textTheme.bodyLarge,
-                                  ),
-                                  SizedBox(height: size.height * 0.01),
-                                  mentalStrengthEditProvider.getEmotionsModel ==
-                                          null
-                                      ? const SizedBox()
-                                      :
                                   Container(
-                                    width: size.width * 0.60, // This controls the button width
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: Colors.grey, // Border color
-                                        width: 1.0,         // Border width
-                                      ),
-                                      borderRadius: BorderRadius.circular(15.0), // Border radius for rounded corners
-                                      color: Colors.white, // Background color (optional)
+                                    padding: EdgeInsets.only(
+                                      left: size.width * 0.05,
+                                      right: size.width * 0.05,
                                     ),
-                                    child: DropdownButtonHideUnderline(
-                                      child: DropdownButton2(
-                                        isExpanded: true,
-                                        // buttonWidth: size.width * 0.60, // Adjust the width of the button
-                                        // buttonDecoration: BoxDecoration(
-                                        //   borderRadius: BorderRadius.circular(15.0),
-                                        //   border: Border.all(color: Colors.grey, width: 1.0),
-                                        //   color: Colors.white,
-                                        // ),
-                                        // dropdownWidth: 190, // Set the desired width for the dropdown menu
-                                        // dropdownDecoration: BoxDecoration(
-                                        //   borderRadius: BorderRadius.circular(15.0),
-                                        //   color: Colors.white,
-                                        // ),
-                                        value: mentalStrengthEditProvider.emotionValue,
-                                        //icon: const Icon(Icons.keyboard_arrow_down),
-                                        dropdownStyleData: DropdownStyleData(
-                                          maxHeight: 300,
-                                          width: 250,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(14),
-                                            color: Colors.white,
-                                          ),
-                                          offset: const Offset(0, 0),
-                                          scrollbarTheme: ScrollbarThemeData(
-                                            radius: const Radius.circular(40),
-                                            thickness: MaterialStateProperty.all(6),
-                                            thumbVisibility:
-                                            MaterialStateProperty.all(true),
-                                          ),
-                                        ),
-                                        items: mentalStrengthEditProvider.getEmotionsModel!.emotions!.map((Emotion items) {
-                                          return DropdownMenuItem(
-                                            value: items,
-                                            child: Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                              child: Text(
-                                                items.title.toString(),
-                                                style: const TextStyle(
-                                                  color: Colors.black, // Change to your desired color
-                                                ),
-                                              ),
+                                    color: mentalStrengthEditProvider
+                                            .openChooseGoal
+                                        ? Colors.blue[50]
+                                        : null,
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        children: [
+                                          SizedBox(
+                                            // width: size.width * 0.1,
+                                            // height: size.height * 0.1,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                // editProfileProvider.getImageFromGallery(
+                                                //   context: context,
+                                                // );
+                                              },
+                                              child: editProfileProvider
+                                                          .images !=
+                                                      null
+                                                  ? ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              60),
+                                                      child: Image.file(
+                                                        editProfileProvider
+                                                            .images!,
+                                                        height:
+                                                            size.height * 0.1,
+                                                        width:
+                                                            size.height * 0.1,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    )
+                                                  : CustomImageView(
+                                                      imagePath:
+                                                          editProfileProvider
+                                                              .profileUrl
+                                                              .toString(),
+                                                      height: size.height * 0.1,
+                                                      width: size.height * 0.1,
+                                                      radius:
+                                                          BorderRadius.circular(
+                                                              54),
+                                                      alignment:
+                                                          Alignment.center,
+                                                      fit: BoxFit.cover,
+                                                    ),
                                             ),
-                                          );
-                                        }).toList(),
-                                        onChanged: (Emotion? newValue) {
-                                          setState(() {
-                                            mentalStrengthEditProvider.emotionValue = newValue!;
-                                          });
-                                          _isTokenExpired();
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(height: size.height * 0.03),
-                                  CustomImageView(
-                                    imagePath: ImageConstant.imgGroup29,
-                                    height: 33,
-                                    width: 5,
-                                  ),
-                                  SizedBox(height: size.height * 0.03),
-                                  Text(
-                                    "Do you like your reaction to the situation?",
-                                    style: theme.textTheme.bodyLarge,
-                                  ),
-                                  SizedBox(
-                                    height: size.height * 0.01,
-                                  ),
-                                  CustomRatingBar(
-                                    initialRating: mentalStrengthEditProvider
-                                        .driveValueStar,
-                                    itemSize: 34,
-                                    color: Colors.blue,
-                                    onRatingUpdate: (value) {
-                                      mentalStrengthEditProvider
-                                          .changeDriveValueStar(value);
-                                    },
-                                  ),
-                                  SizedBox(height: size.height * 0.03),
-                                  CustomImageView(
-                                    imagePath: ImageConstant.imgGroup29,
-                                    height: 33,
-                                    width: 5,
-                                  ),
-                                  SizedBox(height: size.height * 0.03),
-                                  Text(
-                                    "Which goal is affected by your reaction?",
-                                    style: theme.textTheme.bodyLarge,
-                                  ),
-                                  SizedBox(
-                                    height: size.height * 0.02,
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      mentalStrengthEditProvider
-                                          .openChooseGoalFunction();
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.blue,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                    ),
-                                    child: const Text(
-                                      "Choose Goal",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: size.height * 0.01,
-                                  ),
-                                  mentalStrengthEditProvider.goalsValue.id ==
-                                          null
-                                      ? const SizedBox()
-                                      : mentalStrengthEditProvider
-                                                  .goalsValue.id ==
-                                              ""
-                                          ? const SizedBox()
-                                          : mentalStrengthEditProvider
-                                                  .goalsValue.id!.isEmpty
+                                          ),
+                                          editProfileProvider.getProfileModel ==
+                                                  null
                                               ? const SizedBox()
-                                              :
-                                  Container(
+                                              : SizedBox(
+                                                  width: size.width * 0.6,
+                                                  child: SingleChildScrollView(
+                                                    scrollDirection:
+                                                        Axis.vertical,
+                                                    child: Center(
+                                                      child: Text(
+                                                        editProfileProvider
+                                                            .getProfileModel!
+                                                            .firstname
+                                                            .toString(),
+                                                        style: CustomTextStyles
+                                                            .bodyLarge18,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        maxLines:
+                                                            10, // Set the maximum number of lines
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                          editProfileProvider.getProfileModel ==
+                                                  null
+                                              ? const SizedBox()
+                                              : Text(
+                                                  homeProvider.journalDetails ==
+                                                          null
+                                                      ? ""
+                                                      : dateTimeFormatter(
+                                                          date: homeProvider
+                                                              .journalDetails!
+                                                              .journals!
+                                                              .journalDatetime
+                                                              .toString(),
+                                                        ),
+                                                  style: CustomTextStyles
+                                                      .bodyMediumGray700,
+                                                ),
+                                          SizedBox(
+                                            height: size.height * 0.02,
+                                          ),
+                                          Text(
+                                            "Whats on your mind?",
+                                            style: theme.textTheme.bodyLarge,
+                                          ),
+                                          SizedBox(
+                                            height: size.height * 0.03,
+                                          ),
+                                          _buildDescriptionEditText(context),
+                                          // const Slider1ItemWidget(),
+                                          SizedBox(height: size.height * 0.03),
+                                          CustomImageView(
+                                            imagePath: ImageConstant.imgGroup27,
+                                            height: 33,
+                                            width: 5,
+                                          ),
+                                          _buildAddMediaColumn(
+                                            context,
+                                            size,
+                                          ),
+                                          SizedBox(height: size.height * 0.03),
+
+                                          // mentalStrengthEditProvider.mediaSelected == 3
+                                          //     ? const MentalGoogleMap()
+                                          //     : const SizedBox(),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          CustomIconButton(
+                                            height: size.height * 0.08,
+                                            width: size.height * 0.08,
+                                            padding: const EdgeInsets.all(
+                                              11,
+                                            ),
+                                            decoration:
+                                                IconButtonStyleHelper.fillBlue,
+                                            child: CustomImageView(
+                                              imagePath:
+                                                  ImageConstant.imgLightBulb,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: size.height * 0.03,
+                                          ),
+                                          CustomImageView(
+                                            imagePath: ImageConstant.imgGroup28,
+                                            height: 19,
+                                            width: 5,
+                                          ),
+                                          SizedBox(height: size.height * 0.03),
+                                          Text(
+                                            "Rate how you are feeling now?",
+                                            style: theme.textTheme.bodyLarge,
+                                          ),
+                                          SizedBox(height: size.height * 0.01),
+                                          CustomRatingBar(
+                                            initialRating:
+                                                mentalStrengthEditProvider
+                                                    .emotionalValueStar,
+                                            itemSize: 34,
+                                            color: Colors.blue,
+                                            onRatingUpdate: (value) {
+                                              mentalStrengthEditProvider
+                                                  .changeEmotionalValueStar(
+                                                      value);
+                                            },
+                                          ),
+                                          SizedBox(height: size.height * 0.01),
+                                          CustomImageView(
+                                            imagePath: ImageConstant.imgGroup29,
+                                            height: 33,
+                                            width: 5,
+                                          ),
+                                          SizedBox(
+                                            height: size.height * 0.03,
+                                          ),
+                                          Text(
+                                            "What is your emotional state?",
+                                            style: theme.textTheme.bodyLarge,
+                                          ),
+                                          SizedBox(height: size.height * 0.01),
+                                          mentalStrengthEditProvider
+                                                      .getEmotionsModel ==
+                                                  null
+                                              ? const SizedBox()
+                                              : Container(
+                                                  width: size.width * 0.60,
+                                                  // This controls the button width
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                      color: Colors.grey,
+                                                      // Border color
+                                                      width:
+                                                          1.0, // Border width
+                                                    ),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15.0),
+                                                    // Border radius for rounded corners
+                                                    color: Colors
+                                                        .white, // Background color (optional)
+                                                  ),
+                                                  child:
+                                                      DropdownButtonHideUnderline(
+                                                    child: DropdownButton2(
+                                                      isExpanded: true,
+                                                      // buttonWidth: size.width * 0.60, // Adjust the width of the button
+                                                      // buttonDecoration: BoxDecoration(
+                                                      //   borderRadius: BorderRadius.circular(15.0),
+                                                      //   border: Border.all(color: Colors.grey, width: 1.0),
+                                                      //   color: Colors.white,
+                                                      // ),
+                                                      // dropdownWidth: 190, // Set the desired width for the dropdown menu
+                                                      // dropdownDecoration: BoxDecoration(
+                                                      //   borderRadius: BorderRadius.circular(15.0),
+                                                      //   color: Colors.white,
+                                                      // ),
+                                                      value:
+                                                          mentalStrengthEditProvider
+                                                              .emotionValue,
+                                                      //icon: const Icon(Icons.keyboard_arrow_down),
+                                                      dropdownStyleData:
+                                                          DropdownStyleData(
+                                                        maxHeight: 300,
+                                                        width: 250,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(14),
+                                                          color: Colors.white,
+                                                        ),
+                                                        offset:
+                                                            const Offset(0, 0),
+                                                        scrollbarTheme:
+                                                            ScrollbarThemeData(
+                                                          radius: const Radius
+                                                              .circular(40),
+                                                          thickness:
+                                                              MaterialStateProperty
+                                                                  .all(6),
+                                                          thumbVisibility:
+                                                              MaterialStateProperty
+                                                                  .all(true),
+                                                        ),
+                                                      ),
+                                                      items:
+                                                          mentalStrengthEditProvider
+                                                              .getEmotionsModel!
+                                                              .emotions!
+                                                              .map((Emotion
+                                                                  items) {
+                                                        return DropdownMenuItem(
+                                                          value: items,
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                                    horizontal:
+                                                                        8.0),
+                                                            child: Text(
+                                                              items.title
+                                                                  .toString(),
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: Colors
+                                                                    .black, // Change to your desired color
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        );
+                                                      }).toList(),
+                                                      onChanged:
+                                                          (Emotion? newValue) {
+                                                        setState(() {
+                                                          mentalStrengthEditProvider
+                                                                  .emotionValue =
+                                                              newValue!;
+                                                        });
+                                                        _isTokenExpired();
+                                                      },
+                                                    ),
+                                                  ),
+                                                ),
+                                          SizedBox(height: size.height * 0.03),
+                                          CustomImageView(
+                                            imagePath: ImageConstant.imgGroup29,
+                                            height: 33,
+                                            width: 5,
+                                          ),
+                                          SizedBox(height: size.height * 0.03),
+                                          Text(
+                                            "Do you like your reaction to the situation?",
+                                            style: theme.textTheme.bodyLarge,
+                                          ),
+                                          SizedBox(
+                                            height: size.height * 0.01,
+                                          ),
+                                          CustomRatingBar(
+                                            initialRating:
+                                                mentalStrengthEditProvider
+                                                    .driveValueStar,
+                                            itemSize: 34,
+                                            color: Colors.blue,
+                                            onRatingUpdate: (value) {
+                                              mentalStrengthEditProvider
+                                                  .changeDriveValueStar(value);
+                                            },
+                                          ),
+                                          SizedBox(height: size.height * 0.03),
+                                          CustomImageView(
+                                            imagePath: ImageConstant.imgGroup29,
+                                            height: 33,
+                                            width: 5,
+                                          ),
+                                          SizedBox(height: size.height * 0.03),
+                                          Text(
+                                            "Which goal is affected by your reaction?",
+                                            style: theme.textTheme.bodyLarge,
+                                          ),
+                                          SizedBox(
+                                            height: size.height * 0.02,
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              mentalStrengthEditProvider
+                                                  .openChooseGoalFunction();
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.blue,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                              ),
+                                            ),
+                                            child: const Text(
+                                              "Choose Goal",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: size.height * 0.01,
+                                          ),
+                                          mentalStrengthEditProvider
+                                                      .goalsValue.id ==
+                                                  null
+                                              ? const SizedBox()
+                                              : mentalStrengthEditProvider
+                                                          .goalsValue.id ==
+                                                      ""
+                                                  ? const SizedBox()
+                                                  : mentalStrengthEditProvider
+                                                          .goalsValue
+                                                          .id!
+                                                          .isEmpty
+                                                      ? const SizedBox()
+                                                      : Container(
+                                                          height: size.height *
+                                                              0.04,
+                                                          width:
+                                                              size.width * 0.7,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                            bottom: 5,
+                                                            top: 5,
+                                                            left: 5,
+                                                            right: 5,
+                                                          ),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: Colors.white,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        100), // Makes it circular
+                                                            border: Border.all(
+                                                              color:
+                                                                  Colors.grey,
+                                                              width: 1,
+                                                            ),
+                                                          ),
+                                                          child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              GestureDetector(
+                                                                onTap: () {
+                                                                  customPopup(
+                                                                    context:
+                                                                        context,
+                                                                    onPressedDelete:
+                                                                        () async {
+                                                                      mentalStrengthEditProvider
+                                                                          .cleaGoalValue();
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                      // Close the bottom sheet after deleting
+                                                                      //  Navigator.of(context).pop();  // This will close the galleryBottomSheet as well
+                                                                    },
+                                                                    yes: "Yes",
+                                                                    title:
+                                                                        'Do you Need Delete',
+                                                                    content:
+                                                                        'Are you sure do you need delete',
+                                                                  );
+                                                                },
+                                                                child:
+                                                                    CircleAvatar(
+                                                                  radius:
+                                                                      size.width *
+                                                                          0.04,
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .blue,
+                                                                  child: Icon(
+                                                                    Icons.close,
+                                                                    color: Colors
+                                                                        .white,
+                                                                    size: size
+                                                                            .width *
+                                                                        0.03,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              SizedBox(
+                                                                width:
+                                                                    size.width *
+                                                                        0.45,
+                                                                child:
+                                                                    SingleChildScrollView(
+                                                                  scrollDirection:
+                                                                      Axis.horizontal,
+                                                                  // Enable horizontal scrolling
+                                                                  child: Text(
+                                                                    mentalStrengthEditProvider
+                                                                        .goalsValue
+                                                                        .title
+                                                                        .toString(),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      color: Colors
+                                                                          .grey,
+                                                                    ),
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    // Add this line if you want to truncate long text
+                                                                    maxLines:
+                                                                        1, // Limit to 1 line for horizontal scrolling
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              GestureDetector(
+                                                                onTap: () {
+                                                                  mentalStrengthEditProvider
+                                                                      .openGoalViewSheetFunction();
+                                                                  mentalStrengthEditProvider
+                                                                      .fetchGoalDetails(
+                                                                    goalId: mentalStrengthEditProvider
+                                                                        .goalsValue
+                                                                        .id
+                                                                        .toString(),
+                                                                  );
+                                                                },
+                                                                child:
+                                                                    CircleAvatar(
+                                                                  radius:
+                                                                      size.width *
+                                                                          0.04,
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .blue,
+                                                                  child: Icon(
+                                                                    Icons
+                                                                        .arrow_forward_ios_outlined,
+                                                                    color: Colors
+                                                                        .white,
+                                                                    size: size
+                                                                            .width *
+                                                                        0.03,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                          SizedBox(
+                                            height: size.height * 0.03,
+                                          ),
+                                          CustomImageView(
+                                            imagePath: ImageConstant.imgGroup29,
+                                            height: 33,
+                                            width: 5,
+                                          ),
+                                          SizedBox(height: size.height * 0.03),
+                                          Text(
+                                            "Select an action?",
+                                            style: theme.textTheme.bodyLarge,
+                                          ),
+                                          SizedBox(height: size.height * 0.03),
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              if (mentalStrengthEditProvider
+                                                  .goalsValue.id ==
+                                                  null) {
+                                                showCustomSnackBar(
+                                                  context: context,
+                                                  message: "Please choose your goal",
+                                                );
+                                              }else{
+                                                mentalStrengthEditProvider
+                                                    .openChooseActionFunction();
+                                              }
+
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.blue,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                              ),
+                                            ),
+                                            child: const Text(
+                                              "Choose Action",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: size.height * 0.01,
+                                          ),
+                                          SizedBox(
+                                            height: mentalStrengthEditProvider
+                                                    .actionList.length *
+                                                size.height *
+                                                0.045,
+                                            width: size.width * 0.7,
+                                            child: ListView.builder(
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              itemCount:
+                                                  mentalStrengthEditProvider
+                                                      .actionList.length,
+                                              itemBuilder: (context, index) {
+                                                return Container(
                                                   height: size.height * 0.04,
                                                   width: size.width * 0.7,
                                                   padding:
@@ -451,6 +722,9 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
                                                     top: 5,
                                                     left: 5,
                                                     right: 5,
+                                                  ),
+                                                  margin: const EdgeInsets.only(
+                                                    bottom: 4,
                                                   ),
                                                   decoration: BoxDecoration(
                                                     color: Colors.white,
@@ -471,18 +745,25 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
                                                         onTap: () {
                                                           customPopup(
                                                             context: context,
-                                                            onPressedDelete: () async {
+                                                            onPressedDelete:
+                                                                () async {
                                                               mentalStrengthEditProvider
-                                                                  .cleaGoalValue();
-                                                              Navigator.of(context).pop();
+                                                                  .clearActionListSelected(
+                                                                index: index,
+                                                              );
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+
                                                               // Close the bottom sheet after deleting
                                                               //  Navigator.of(context).pop();  // This will close the galleryBottomSheet as well
                                                             },
                                                             yes: "Yes",
-                                                            title: 'Do you Need Delete',
-                                                            content: 'Are you sure do you need delete',
+                                                            title:
+                                                                'Do you Need Delete',
+                                                            content:
+                                                                'Are you sure do you need delete',
                                                           );
-
                                                         },
                                                         child: CircleAvatar(
                                                           radius:
@@ -498,30 +779,46 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
                                                         ),
                                                       ),
                                                       SizedBox(
-                                                        width: size.width * 0.45,
-                                                        child: SingleChildScrollView(
-                                                          scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+                                                        width:
+                                                            size.width * 0.45,
+                                                        // color:Colors.black,
+                                                        child:
+                                                            SingleChildScrollView(
+                                                          scrollDirection:
+                                                              Axis.horizontal,
+                                                          // Enable horizontal scrolling
                                                           child: Text(
-                                                            mentalStrengthEditProvider.goalsValue.title.toString(),
-                                                            textAlign: TextAlign.center,
-                                                            style: const TextStyle(
-                                                              color: Colors.grey,
+                                                            mentalStrengthEditProvider
+                                                                .actionList[
+                                                                    index]
+                                                                .title
+                                                                .toString(),
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style:
+                                                                const TextStyle(
+                                                              color:
+                                                                  Colors.grey,
                                                             ),
-                                                            overflow: TextOverflow.ellipsis, // Add this line if you want to truncate long text
-                                                            maxLines: 1, // Limit to 1 line for horizontal scrolling
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            // Add this line if you want to truncate long text
+                                                            maxLines:
+                                                                1, // Limit to 1 line for horizontal scrolling
                                                           ),
                                                         ),
                                                       ),
-
                                                       GestureDetector(
-                                                        onTap: () {
+                                                        onTap: () async {
                                                           mentalStrengthEditProvider
-                                                              .openGoalViewSheetFunction();
-                                                          mentalStrengthEditProvider
-                                                              .fetchGoalDetails(
-                                                            goalId:
+                                                              .openActionFullViewFunction();
+                                                          await mentalStrengthEditProvider
+                                                              .fetchActionDetails(
+                                                            actionId:
                                                                 mentalStrengthEditProvider
-                                                                    .goalsValue
+                                                                    .actionList[
+                                                                        index]
                                                                     .id
                                                                     .toString(),
                                                           );
@@ -542,367 +839,235 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
                                                       ),
                                                     ],
                                                   ),
-                                                ),
-                                  SizedBox(
-                                    height: size.height * 0.03,
-                                  ),
-                                  CustomImageView(
-                                    imagePath: ImageConstant.imgGroup29,
-                                    height: 33,
-                                    width: 5,
-                                  ),
-                                  SizedBox(height: size.height * 0.03),
-                                  Text(
-                                    "Select an action?",
-                                    style: theme.textTheme.bodyLarge,
-                                  ),
-                                  SizedBox(height: size.height * 0.03),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      mentalStrengthEditProvider
-                                          .openChooseActionFunction();
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.blue,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                    ),
-                                    child: const Text(
-                                      "Choose Action",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: size.height * 0.01,
-                                  ),
-                                  SizedBox(
-                                    height: mentalStrengthEditProvider
-                                            .actionList.length *
-                                        size.height *
-                                        0.045,
-                                    width: size.width * 0.7,
-                                    child: ListView.builder(
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      itemCount: mentalStrengthEditProvider
-                                          .actionList.length,
-                                      itemBuilder: (context, index) {
-                                        return Container(
-                                          height: size.height * 0.04,
-                                          width: size.width * 0.7,
-                                          padding: const EdgeInsets.only(
-                                            bottom: 5,
-                                            top: 5,
-                                            left: 5,
-                                            right: 5,
-                                          ),
-                                          margin: const EdgeInsets.only(
-                                            bottom: 4,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(
-                                                100), // Makes it circular
-                                            border: Border.all(
-                                              color: Colors.grey,
-                                              width: 1,
+                                                );
+                                              },
                                             ),
                                           ),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              GestureDetector(
-                                                onTap: () {
-                                                  customPopup(
-                                                    context: context,
-                                                    onPressedDelete: () async {
-                                                      mentalStrengthEditProvider
-                                                          .clearActionListSelected(
-                                                        index: index,
-                                                      );
-                                                      Navigator.of(context).pop();
 
-                                                      // Close the bottom sheet after deleting
-                                                      //  Navigator.of(context).pop();  // This will close the galleryBottomSheet as well
-                                                    },
-                                                    yes: "Yes",
-                                                    title: 'Do you Need Delete',
-                                                    content: 'Are you sure do you need delete',
-                                                  );
-                                                },
-                                                child: CircleAvatar(
-                                                  radius: size.width * 0.04,
-                                                  backgroundColor: Colors.blue,
-                                                  child: Icon(
-                                                    Icons.close,
-                                                    color: Colors.white,
-                                                    size: size.width * 0.03,
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width:size.width * 0.45,
-                                               // color:Colors.black,
-                                                child: SingleChildScrollView(
-                                                  scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                                                  child: Text(
-                                                    mentalStrengthEditProvider.actionList[index].title.toString(),
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                      color: Colors.grey,
-                                                    ),
-                                                    overflow: TextOverflow.ellipsis, // Add this line if you want to truncate long text
-                                                    maxLines: 1, // Limit to 1 line for horizontal scrolling
-                                                  ),
-                                                ),
-                                              ),
-                                              GestureDetector(
-                                                onTap: () async {
-                                                  mentalStrengthEditProvider
-                                                      .openActionFullViewFunction();
-                                                  await mentalStrengthEditProvider
-                                                      .fetchActionDetails(
-                                                    actionId:
-                                                        mentalStrengthEditProvider
-                                                            .actionList[index]
-                                                            .id
-                                                            .toString(),
-                                                  );
-                                                },
-                                                child: CircleAvatar(
-                                                  radius: size.width * 0.04,
-                                                  backgroundColor: Colors.blue,
-                                                  child: Icon(
-                                                    Icons
-                                                        .arrow_forward_ios_outlined,
-                                                    color: Colors.white,
-                                                    size: size.width * 0.03,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
+                                          SizedBox(
+                                            height: size.height * 0.03,
                                           ),
-                                        );
-                                      },
+                                          CustomElevatedButton(
+                                            loading: mentalStrengthEditProvider
+                                                .saveJournalLoading,
+                                            onPressed: () async {
+                                              _isTokenExpired();
+                                              if (!mentalStrengthEditProvider
+                                                  .isVideoUploading) {
+                                                if (mentalStrengthEditProvider
+                                                    .descriptionEditTextController
+                                                    .text
+                                                    .isNotEmpty) {
+                                                  bool isSuccess =
+                                                      await mentalStrengthEditProvider
+                                                          .updateJournalLoading(
+                                                    journalId: homeProvider
+                                                        .journalDetails!
+                                                        .journals!
+                                                        .journalId
+                                                        .toString(),
+                                                    context,
+                                                    journalTitle: mentalStrengthEditProvider
+                                                                .descriptionEditTextController
+                                                                .text
+                                                                .length <=
+                                                            6
+                                                        ? mentalStrengthEditProvider
+                                                            .descriptionEditTextController
+                                                            .text
+                                                        : mentalStrengthEditProvider
+                                                            .descriptionEditTextController
+                                                            .text
+                                                            .substring(0, 6),
+                                                    journalDesc:
+                                                        mentalStrengthEditProvider
+                                                            .descriptionEditTextController
+                                                            .text,
+                                                    emotionId:
+                                                        mentalStrengthEditProvider
+                                                            .emotionValue.id
+                                                            .toString(),
+                                                    emotionValue:
+                                                        mentalStrengthEditProvider
+                                                            .emotionalValueStar
+                                                            .toString(),
+                                                    driveValue:
+                                                        mentalStrengthEditProvider
+                                                            .driveValueStar
+                                                            .toString(),
+                                                    goalId:
+                                                        mentalStrengthEditProvider
+                                                            .goalsValue.id
+                                                            .toString(),
+                                                    locationName:
+                                                        mentalStrengthEditProvider
+                                                            .selectedLocationName,
+                                                    locationLatitude:
+                                                        mentalStrengthEditProvider
+                                                            .selectedLatitude,
+                                                    locationLongitude:
+                                                        mentalStrengthEditProvider
+                                                            .locationLongitude,
+                                                    mediaName:
+                                                        mentalStrengthEditProvider
+                                                            .addMediaUploadResponseList,
+                                                    locationAddress:
+                                                        mentalStrengthEditProvider
+                                                            .selectedLocationAddress,
+                                                    actionIdList:
+                                                        mentalStrengthEditProvider
+                                                            .actionList
+                                                            .map((e) =>
+                                                                e.id ?? "")
+                                                            .toList(),
+                                                  );
+                                                  if (isSuccess) {
+                                                    Future.delayed(
+                                                        const Duration(
+                                                            seconds: 3),
+                                                        () async {
+                                                      await homeProvider
+                                                          .fetchJournals(
+                                                              initial: true);
+                                                    });
+
+                                                    DashBoardProvider
+                                                        dashBoardProvider =
+                                                        Provider.of<
+                                                                DashBoardProvider>(
+                                                            context,
+                                                            listen: false);
+                                                    dashBoardProvider
+                                                        .changePage(index: 2);
+                                                  }
+                                                } else {
+                                                  showCustomSnackBar(
+                                                    context: context,
+                                                    message: "Enter Fields",
+                                                  );
+                                                }
+                                              } else {
+                                                showCustomSnackBar(
+                                                  context: context,
+                                                  message:
+                                                      "Please wait video upload",
+                                                );
+                                              }
+                                              Navigator.of(context).pop();
+                                              if (widget.valueBool) {
+                                                Navigator.of(context).pop();
+                                              }
+
+                                              dashBoardProvider.changePage(
+                                                index: 2,
+                                              );
+                                            },
+                                            height: 65,
+                                            text: "Update",
+                                            buttonStyle:
+                                                CustomButtonStyles.fillBlueTL13,
+                                            buttonTextStyle: CustomTextStyles
+                                                .titleLargeGray50,
+                                          ),
+                                          SizedBox(
+                                            height: size.height * 0.03,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-
-                                  SizedBox(
-                                    height: size.height * 0.03,
-                                  ),
-                                  CustomElevatedButton(
-                                    loading: mentalStrengthEditProvider
-                                        .saveJournalLoading,
-                                    onPressed: () async {
-                                      _isTokenExpired();
-                                      if (!mentalStrengthEditProvider
-                                          .isVideoUploading) {
-                                        if (mentalStrengthEditProvider
-                                            .descriptionEditTextController
-                                            .text
-                                            .isNotEmpty) {
-                                          bool isSuccess =
-                                              await mentalStrengthEditProvider
-                                                  .updateJournalLoading(
-                                            journalId: homeProvider
-                                                .journalDetails!
-                                                .journals!
-                                                .journalId
-                                                .toString(),
-                                            context,
-                                            journalTitle: mentalStrengthEditProvider
-                                                        .descriptionEditTextController
-                                                        .text
-                                                        .length <=
-                                                    6
-                                                ? mentalStrengthEditProvider
-                                                    .descriptionEditTextController
-                                                    .text
-                                                : mentalStrengthEditProvider
-                                                    .descriptionEditTextController
-                                                    .text
-                                                    .substring(0, 6),
-                                            journalDesc:
-                                                mentalStrengthEditProvider
-                                                    .descriptionEditTextController
-                                                    .text,
-                                            emotionId:
-                                                mentalStrengthEditProvider
-                                                    .emotionValue.id
-                                                    .toString(),
-                                            emotionValue:
-                                                mentalStrengthEditProvider
-                                                    .emotionalValueStar
-                                                    .toString(),
-                                            driveValue:
-                                                mentalStrengthEditProvider
-                                                    .driveValueStar
-                                                    .toString(),
-                                            goalId: mentalStrengthEditProvider
-                                                .goalsValue.id
-                                                .toString(),
-                                            locationName:
-                                                mentalStrengthEditProvider
-                                                    .selectedLocationName,
-                                            locationLatitude:
-                                                mentalStrengthEditProvider
-                                                    .selectedLatitude,
-                                            locationLongitude:
-                                                mentalStrengthEditProvider
-                                                    .locationLongitude,
-                                            mediaName:
-                                                mentalStrengthEditProvider
-                                                    .addMediaUploadResponseList,
-                                            locationAddress:
-                                                mentalStrengthEditProvider
-                                                    .selectedLocationAddress,
-                                            actionIdList:
-                                                mentalStrengthEditProvider
-                                                    .actionList
-                                                    .map((e) => e.id ?? "")
-                                                    .toList(),
-                                          );
-                                          if (isSuccess) {
-
-                                            Future.delayed(const Duration(seconds: 3), () async {
-                                              await homeProvider.fetchJournals(initial: true);
-                                            });
-
-                                            DashBoardProvider
-                                                dashBoardProvider =
-                                                Provider.of<DashBoardProvider>(
-                                                    context,
-                                                    listen: false);
-                                            dashBoardProvider.changePage(
-                                                index: 2);
-                                          }
-                                        } else {
-                                          showCustomSnackBar(
-                                            context: context,
-                                            message: "Enter Fields",
-                                          );
-                                        }
-                                      } else {
-                                        showCustomSnackBar(
-                                          context: context,
-                                          message: "Please wait video upload",
-                                        );
-                                      }
-                                      Navigator.of(context).pop();
-                                      if (widget.valueBool) {
-                                        Navigator.of(context).pop();
-                                      }
-
-                                      dashBoardProvider.changePage(
-                                        index: 2,
-                                      );
-                                    },
-                                    height: 65,
-                                    text: "Update",
-                                    buttonStyle:
-                                        CustomButtonStyles.fillBlueTL13,
-                                    buttonTextStyle:
-                                        CustomTextStyles.titleLargeGray50,
-                                  ),
-                                  SizedBox(
-                                    height: size.height * 0.03,
-                                  ),
+                                  mentalStrengthEditProvider.openChooseGoal
+                                      ? const ScreenChooseGoalMentalStrength()
+                                      : const SizedBox(),
+                                  mentalStrengthEditProvider.openAddGoal
+                                      ? const AddGoalsDreamsBottomSheet()
+                                      : const SizedBox(),
+                                  mentalStrengthEditProvider.openGoalViewSheet
+                                      ? mentalStrengthEditProvider
+                                                  .goalDetailModel ==
+                                              null
+                                          ? Container(
+                                              decoration: BoxDecoration(
+                                                color: appTheme.gray50,
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                  topRight: Radius.circular(
+                                                    25,
+                                                  ),
+                                                  topLeft: Radius.circular(
+                                                    25,
+                                                  ),
+                                                ),
+                                              ),
+                                              margin: EdgeInsets.only(
+                                                top: size.height * 0.15,
+                                              ),
+                                              child: shimmerList(
+                                                height: size.height * 0.8,
+                                                list: 10,
+                                              ),
+                                            )
+                                          : GoalAndDreamFullViewBottomSheet(
+                                              goalDetailModel:
+                                                  mentalStrengthEditProvider
+                                                      .goalDetailModel!,
+                                            )
+                                      : const SizedBox(),
+                                  mentalStrengthEditProvider.openChooseAction
+                                      ? ChooseActionMentalHelth(
+                                          goal: mentalStrengthEditProvider
+                                              .goalsValue,
+                                        )
+                                      : const SizedBox(),
+                                  mentalStrengthEditProvider.openAddAction
+                                      ? AddActionMentalStrengthBottomSheet(
+                                          goalId: mentalStrengthEditProvider
+                                              .goalsValue.id
+                                              .toString(),
+                                        )
+                                      : const SizedBox(),
+                                  mentalStrengthEditProvider.openActionFullView
+                                      ? const ActionFullViewJournalCreateBottomSheet()
+                                      : const SizedBox()
                                 ],
                               ),
                             ),
-                          ),
-                          mentalStrengthEditProvider.openChooseGoal
-                              ? const ScreenChooseGoalMentalStrength()
-                              : const SizedBox(),
-                          mentalStrengthEditProvider.openAddGoal
-                              ? const AddGoalsDreamsBottomSheet()
-                              : const SizedBox(),
-                          mentalStrengthEditProvider.openGoalViewSheet
-                              ? mentalStrengthEditProvider.goalDetailModel ==
-                                      null
-                                  ? Container(
-                                      decoration: BoxDecoration(
-                                        color: appTheme.gray50,
-                                        borderRadius: const BorderRadius.only(
-                                          topRight: Radius.circular(
-                                            25,
-                                          ),
-                                          topLeft: Radius.circular(
-                                            25,
-                                          ),
-                                        ),
-                                      ),
-                                      margin: EdgeInsets.only(
-                                        top: size.height * 0.15,
-                                      ),
-                                      child: shimmerList(
-                                        height: size.height * 0.8,
-                                        list: 10,
-                                      ),
-                                    )
-                                  : GoalAndDreamFullViewBottomSheet(
-                                      goalDetailModel:
-                                          mentalStrengthEditProvider
-                                              .goalDetailModel!,
-                                    )
-                              : const SizedBox(),
-                          mentalStrengthEditProvider.openChooseAction
-                              ? ChooseActionMentalHelth(
-                                  goal: mentalStrengthEditProvider.goalsValue,
-                                )
-                              : const SizedBox(),
-                          mentalStrengthEditProvider.openAddAction
-                              ? AddActionMentalStrengthBottomSheet(
-                                  goalId: mentalStrengthEditProvider
-                                      .goalsValue.id
-                                      .toString(),
-                                )
-                              : const SizedBox(),
-                          mentalStrengthEditProvider.openActionFullView
-                              ? const ActionFullViewJournalCreateBottomSheet()
-                              : const SizedBox()
-                        ],
-                      ),
-                    ),
-                  ],
+                          ],
+                        ),
+                      );
+                    }),
+                  ),
                 ),
-              );
-            }),
-          ),
-        ),
-      ):
-      const TokenExpireScreen()
-    );
+              )
+            : const TokenExpireScreen());
   }
 
   /// Section Widget
   Widget _buildDescriptionEditText(BuildContext context) {
     return Consumer<MentalStrengthEditProvider>(
         builder: (context, mentalStrengthEditProvider, _) {
-          // Decode the text before setting it to the controller
-          String decodedText = HtmlUnescape().convert(mentalStrengthEditProvider.descriptionEditTextController.text);
-          mentalStrengthEditProvider.descriptionEditTextController.text = decodedText;
+      // Decode the text before setting it to the controller
+      String decodedText = HtmlUnescape().convert(
+          mentalStrengthEditProvider.descriptionEditTextController.text);
+      mentalStrengthEditProvider.descriptionEditTextController.text =
+          decodedText;
 
-          return CustomTextFormField(
-            controller: mentalStrengthEditProvider.descriptionEditTextController,
-            hintText: "Description",
-            hintStyle: CustomTextStyles.bodySmallGray700,
-            textInputAction: TextInputAction.done,
-            maxLines: 4,
-          );
-        });
+      return CustomTextFormField(
+        controller: mentalStrengthEditProvider.descriptionEditTextController,
+        hintText: "Description",
+        hintStyle: CustomTextStyles.bodySmallGray700,
+        textInputAction: TextInputAction.done,
+        maxLines: 4,
+      );
+    });
   }
 
   Widget _buildAddMediaColumn(BuildContext context, Size size) {
-
     return Consumer<MentalStrengthEditProvider>(
         builder: (context, mentalStrengthEditProvider, _) {
-          var logger = Logger();
-          logger.w("pickedImages${mentalStrengthEditProvider.pickedImages.length + mentalStrengthEditProvider.alreadyPickedImages.length}");
+      var logger = Logger();
+      logger.w(
+          "pickedImages${mentalStrengthEditProvider.pickedImages.length + mentalStrengthEditProvider.alreadyPickedImages.length}");
       return Align(
         alignment: Alignment.topCenter,
         child: Column(
@@ -1018,11 +1183,19 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
                       GestureDetector(
                         onTap: () async {
                           _isTokenExpired();
-                          mentalStrengthEditProvider.selectedMedia(1);
-                          await galleryBottomSheet(
-                            context: context,
-                            title: 'Gallery',
-                          );
+                          if (await requestGalleryPermission()) {
+                            mentalStrengthEditProvider.selectedMedia(1);
+                            await galleryBottomSheet(
+                              context: context,
+                              title: 'Gallery',
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content:
+                                      Text("Gallery permission is required.")),
+                            );
+                          }
                         },
                         child: buildAvatarImage(
                           widget: Icon(
@@ -1047,12 +1220,10 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
                         child: Consumer<MentalStrengthEditProvider>(
                             builder: (context, mentalStrengthEditProvider, _) {
                           if (mentalStrengthEditProvider
-                              .alreadyPickedImages.isEmpty && mentalStrengthEditProvider
-                              .pickedImages.isEmpty) {
+                                  .alreadyPickedImages.isEmpty &&
+                              mentalStrengthEditProvider.pickedImages.isEmpty) {
                             return const SizedBox();
-                          }
-                          else {
-
+                          } else {
                             return Container(
                               width: size.height * 0.04,
                               decoration: BoxDecoration(
@@ -1092,13 +1263,21 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
                   child: Stack(
                     children: [
                       GestureDetector(
-                        onTap: () {
+                        onTap: () async {
                           _isTokenExpired();
-                          mentalStrengthEditProvider.selectedMedia(2);
-                          cameraBottomSheet(
-                            context: context,
-                            title: "Camera",
-                          );
+                          if (await requestCameraPermission()) {
+                            mentalStrengthEditProvider.selectedMedia(2);
+                            cameraBottomSheet(
+                              context: context,
+                              title: "Camera",
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content:
+                                      Text("Camera permission is required.")),
+                            );
+                          }
                         },
                         child: buildAvatarImage(
                           widget: Icon(
@@ -1174,7 +1353,9 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
                               return Container(
                                   width: double.infinity,
                                   padding: const EdgeInsets.all(20),
-                                  child: const MentalGoogleMap(edit: true,));
+                                  child: const MentalGoogleMap(
+                                    edit: true,
+                                  ));
                             },
                           );
                           // mentalStrengthEditProvider.mediaSelected == 3

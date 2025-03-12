@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
 import 'package:mentalhelth/utils/core/url_constant.dart';
 import 'package:mentalhelth/utils/logic/shared_prefrence.dart';
 import 'package:mentalhelth/widgets/functions/snack_bar.dart';
@@ -16,6 +17,7 @@ class FeedBackProvider extends ChangeNotifier {
   TextEditingController messageEditTextController = TextEditingController();
 
   bool saveFeedBackLoading = false;
+  var logger = Logger();
 
   Future<void> saveFeedBack(BuildContext context,
       {required String name,
@@ -30,6 +32,7 @@ class FeedBackProvider extends ChangeNotifier {
         'email': email,
         'msg': message,
       };
+      logger.w("body${body}");
       final response = await http.post(
         Uri.parse(
           UrlConstant.feedbackUrl,
@@ -61,8 +64,11 @@ class FeedBackProvider extends ChangeNotifier {
       saveFeedBackLoading = false;
       notifyListeners();
     } catch (error) {
+      logger.w("error${error}");
       saveFeedBackLoading = false;
       notifyListeners();
     }
   }
 }
+
+

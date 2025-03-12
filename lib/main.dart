@@ -319,8 +319,8 @@ class _MyAppState extends State<MyApp> {
     } else if (Platform.isAndroid) {
       //await Permission.locationWhenInUse.request();
       await Permission.notification.request();
-      await Permission.storage.request(); // For storage permissions
-      await Permission.manageExternalStorage.request(); // For Android 11 and above
+      // await Permission.storage.request(); // For storage permissions
+      // await Permission.manageExternalStorage.request(); // For Android 11 and above
     }
 
     // Check updated location permission status

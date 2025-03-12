@@ -29,6 +29,7 @@ import 'package:mentalhelth/widgets/functions/snack_bar.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../utils/logic/permissions.dart';
 import '../../../addactions_screen/model/alaram_info.dart';
 import '../../../dash_borad_screen/provider/dash_board_provider.dart';
 import '../../../edit_add_profile_screen/provider/edit_provider.dart';
@@ -101,7 +102,6 @@ class _EditActionScreenState extends State<EditActionScreen> {
     logger.w("alarmInfo $alarmInfo");
   }
 
-
   Future<void> _checkPermissionStatus() async {
     // Check location permission status
     final status = await Permission.locationWhenInUse.status;
@@ -120,7 +120,8 @@ class _EditActionScreenState extends State<EditActionScreen> {
       await Permission.locationWhenInUse.request();
       await Permission.notification.request();
       await Permission.storage.request(); // For storage permissions
-      await Permission.manageExternalStorage.request(); // For Android 11 and above
+      await Permission.manageExternalStorage
+          .request(); // For Android 11 and above
     }
 
     // Check updated location permission status
@@ -1730,57 +1731,63 @@ class _EditActionScreenState extends State<EditActionScreen> {
         onPressed: () async {
           if (!addActionsProvider.isVideoUploading) {
             if (addActionsProvider.titleEditTextController.text.isNotEmpty &&
-                addActionsProvider.descriptionEditTextController.text.isNotEmpty &&
+                addActionsProvider
+                    .descriptionEditTextController.text.isNotEmpty &&
                 (addActionsProvider.setRemainder
                     ? addActionsProvider.reminderStartDate.isNotEmpty &&
-                    addActionsProvider.reminderEndDate.isNotEmpty &&
-                    addActionsProvider.reminderStartTime != null &&
-                    addActionsProvider.reminderEndTime != null &&
-                    addActionsProvider.repeat.isNotEmpty
+                        addActionsProvider.reminderEndDate.isNotEmpty &&
+                        addActionsProvider.reminderStartTime != null &&
+                        addActionsProvider.reminderEndTime != null &&
+                        addActionsProvider.repeat.isNotEmpty
                     : true)) {
               if (addActionsProvider.setRemainder) {
                 await addActionsProvider.editActionFunction(context,
                     title: addActionsProvider.titleEditTextController.text,
-                    details: addActionsProvider.descriptionEditTextController.text,
+                    details:
+                        addActionsProvider.descriptionEditTextController.text,
                     mediaName: addActionsProvider.addMediaUploadResponseList,
                     locationName: addActionsProvider.selectedLocationName,
                     locationLatitude: addActionsProvider.selectedLatitude,
                     locationLongitude: addActionsProvider.locationLongitude,
                     locationAddress: addActionsProvider.selectedLocationAddress,
-                    actionId: widget.actionsDetailsModel!.actions!.actionId.toString(),
+                    actionId: widget.actionsDetailsModel!.actions!.actionId
+                        .toString(),
                     goalId: widget.actionsDetailsModel!.actions?.goalId ?? "",
                     isReminder: "1");
               } else {
                 await addActionsProvider.editActionFunction(context,
                     title: addActionsProvider.titleEditTextController.text,
-                    details: addActionsProvider.descriptionEditTextController.text,
+                    details:
+                        addActionsProvider.descriptionEditTextController.text,
                     mediaName: addActionsProvider.addMediaUploadResponseList,
                     locationName: addActionsProvider.selectedLocationName,
                     locationLatitude: addActionsProvider.selectedLatitude,
                     locationLongitude: addActionsProvider.locationLongitude,
                     locationAddress: addActionsProvider.selectedLocationAddress,
-                    actionId: widget.actionsDetailsModel!.actions!.actionId.toString(),
+                    actionId: widget.actionsDetailsModel!.actions!.actionId
+                        .toString(),
                     goalId: widget.actionsDetailsModel!.actions?.goalId ?? "",
                     isReminder: "0");
               }
 
-              mentalStrengthEditProvider.fetchGoalActions(goalId: widget.actionsDetailsModel!.actions!.goalId ?? "",);
+              mentalStrengthEditProvider.fetchGoalActions(
+                goalId: widget.actionsDetailsModel!.actions!.goalId ?? "",
+              );
 
               // adDreamsGoalsProvider.getAddActionIdAndName(
               //   value: addActionsProvider.goalModelIdName!,
               // );
-           //  Navigator.of(context).pop();
-             // Navigator.of(context).pop();
+              //  Navigator.of(context).pop();
+              // Navigator.of(context).pop();
               addActionsProvider.clearFunction();
 
-             // Navigator.of(context).pop();
+              // Navigator.of(context).pop();
             } else {
               showCustomSnackBar(
                 context: context,
                 message: "Please fill in all the fields",
               );
             }
-
           } else {
             showCustomSnackBar(
               context: context,
@@ -1915,11 +1922,19 @@ class _EditActionScreenState extends State<EditActionScreen> {
                     children: [
                       GestureDetector(
                         onTap: () async {
-                          addActionsProvider.selectedMedia(1);
-                          await galleryBottomSheetAction(
-                            context: context,
-                            title: 'Gallery',
-                          );
+                          if (await requestGalleryPermission()) {
+                            addActionsProvider.selectedMedia(1);
+                            await galleryBottomSheetAction(
+                              context: context,
+                              title: 'Gallery',
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content:
+                                      Text("Gallery permission is required.")),
+                            );
+                          }
                         },
                         child: buildAvatarImage(
                           widget: Icon(
@@ -1986,12 +2001,20 @@ class _EditActionScreenState extends State<EditActionScreen> {
                   child: Stack(
                     children: [
                       GestureDetector(
-                        onTap: () {
-                          addActionsProvider.selectedMedia(2);
-                          cameraBottomSheetAction(
-                            context: context,
-                            title: "Camera",
-                          );
+                        onTap: () async {
+                          if (await requestCameraPermission()) {
+                            addActionsProvider.selectedMedia(2);
+                            cameraBottomSheetAction(
+                              context: context,
+                              title: "Camera",
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content:
+                                      Text("Camera permission is required.")),
+                            );
+                          }
                         },
                         child: buildAvatarImage(
                           widget: Icon(

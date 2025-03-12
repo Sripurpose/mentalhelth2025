@@ -21,6 +21,7 @@ import 'package:mentalhelth/widgets/functions/snack_bar.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
+import '../../utils/logic/permissions.dart';
 import '../../utils/theme/custom_button_style.dart';
 import '../addactions_screen/addactions_screen.dart';
 import '../dash_borad_screen/provider/dash_board_provider.dart';
@@ -55,10 +56,13 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
   @override
   void initState() {
     homeProvider = Provider.of<HomeProvider>(context, listen: false);
-    mentalStrengthEditProvider = Provider.of<MentalStrengthEditProvider>(context, listen: false);
+    mentalStrengthEditProvider =
+        Provider.of<MentalStrengthEditProvider>(context, listen: false);
     dashBoardProvider = Provider.of<DashBoardProvider>(context, listen: false);
-    editProfileProvider = Provider.of<EditProfileProvider>(context, listen: false);
-    adDreamsGoalsProvider = Provider.of<AdDreamsGoalsProvider>(context, listen: false);
+    editProfileProvider =
+        Provider.of<EditProfileProvider>(context, listen: false);
+    adDreamsGoalsProvider =
+        Provider.of<AdDreamsGoalsProvider>(context, listen: false);
     adDreamsGoalsProvider.nameEditTextController.text = "";
     editProfileProvider.interestsValueController.text = "";
     adDreamsGoalsProvider.selectedDate = "";
@@ -81,19 +85,17 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
   Future<void> _isTokenExpired() async {
     await homeProvider.fetchChartView(context);
     await homeProvider.fetchJournals(initial: true);
-   // await editProfileProvider.fetchUserProfile();
+    // await editProfileProvider.fetchUserProfile();
     tokenStatus = TokenManager.checkTokenExpiry();
     if (tokenStatus) {
       setState(() {
         logger.e("Token status changed: $tokenStatus");
       });
       logger.e("Token status changed: $tokenStatus");
-    }else{
+    } else {
       logger.e("Token status changedElse: $tokenStatus");
     }
-
   }
-
 
   Future<void> _checkPermissionStatus() async {
     // Check location permission status
@@ -113,7 +115,8 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
       await Permission.locationWhenInUse.request();
       await Permission.notification.request();
       await Permission.storage.request(); // For storage permissions
-      await Permission.manageExternalStorage.request(); // For Android 11 and above
+      await Permission.manageExternalStorage
+          .request(); // For Android 11 and above
     }
 
     // Check updated location permission status
@@ -126,299 +129,314 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return  tokenStatus == false ?
-      SafeArea(
-      child: Scaffold(
-        appBar: buildAppBar(
-          context,
-          size,
-          heading: "Add Goals & Dreams",
-        ),
-        body: Stack(
-          children: [
-            Container(
-              width: size.width,
-              height: size.height,
-              decoration: BoxDecoration(
-                color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
-                image: DecorationImage(
-                  image: AssetImage(
-                    ImageConstant.imgGroup22,
-                  ),
-                  fit: BoxFit.cover,
-                ),
+    return tokenStatus == false
+        ? SafeArea(
+            child: Scaffold(
+              appBar: buildAppBar(
+                context,
+                size,
+                heading: "Add Goals & Dreams",
               ),
-              child: Form(
-                key: _formKey,
-                child: Container(
-                  width: double.maxFinite,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 27,
-                    vertical: 6,
-                  ),
-                  child: Consumer<AdDreamsGoalsProvider>(
-                      builder: (context, adDreamsGoalsProvider, _) {
-                    return SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: size.height * 0.02,
-                          ),
-                          _buildNameEditText(context),
-                          const SizedBox(height: 11),
-                          Consumer<EditProfileProvider>(
-                              builder: (context, editProfileProvider, _) {
-                            return Container(
-                              height: size.height * 0.045,
-                              padding: const EdgeInsets.only(
-                                left: 10,
-                                right: 10,
-                              ),
-                              decoration: const ShapeDecoration(
-                                shape: RoundedRectangleBorder(
-                                  side: BorderSide(
-                                    width: 0.8,
-                                    style: BorderStyle.solid,
-                                    color: Colors.grey,
-                                  ),
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(
-                                      5.0,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              child: editProfileProvider.getCategoryModel ==
-                                      null
-                                  ? const SizedBox()
-                                  : DropdownButton<Category>(
-                                      items: editProfileProvider
-                                          .getCategoryModel!.category!
-                                          .map((Category value) {
-                                        return DropdownMenuItem<Category>(
-                                          value: value,
-                                          child: Text(
-                                              value.categoryName.toString()),
-                                        );
-                                      }).toList(),
-                                      hint: Text(
-                                        editProfileProvider
-                                                .interestsValueController
-                                                .text
-                                                .isEmpty
-                                            ? 'Music, Badminton'
-                                            : editProfileProvider
-                                                .interestsValueController.text,
-                                        style: CustomTextStyles.bodySmallGray700,
-                                      ),
-                                      borderRadius: BorderRadius.circular(10),
-                                      underline: const SizedBox(),
-                                      isExpanded: true,
-                                      onChanged: (value) {
-                                        if (value != null) {
-                                          editProfileProvider.selectCategory(
-                                            value:
-                                                value.categoryName.toString(),
-                                            mainCategory: value,
-                                          );
-                                          _isTokenExpired();
-                                        }
-                                      },
-                                    ),
-                            );
-                          }),
-                          const SizedBox(height: 11),
-                          _buildAchievementDate(context),
-                          const SizedBox(height: 25),
-                          _buildAddMediaColumn(
-                            context,
-                            size,
-                          ),
-                          const SizedBox(height: 11),
-                          // adDreamsGoalsProvider.mediaSelected == 3
-                          //     ? const Center(child: AddGoalsGoogleMap())
-                          //     : const SizedBox(),
-                          const SizedBox(height: 24),
-                          _buildCommentEditText(context),
-                          const SizedBox(height: 20),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: 2,
-                            ),
-                            child: Text(
-                              "Actions to achieve the goal",
-                              style: theme.textTheme.titleSmall,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 3,
-                          ),
-                          _buildAddActionsButton(
-                            context,
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          // SizedBox(
-                          //   height: size.height * 0.1,
-                          //   child: Consumer<AdDreamsGoalsProvider>(
-                          //       builder: (context, adDreamsGoalsProvider, _) {
-                          //     return ListView.builder(
-                          //       itemCount: adDreamsGoalsProvider
-                          //           .goalModelIdName.length,
-                          //       itemBuilder: (context, index) {
-                          //         return _buildCloseEditText(
-                          //           context,
-                          //           content: adDreamsGoalsProvider
-                          //               .goalModelIdName[index].name,
-                          //           onTap: () {
-                          //             adDreamsGoalsProvider
-                          //                 .getAddActionIdAndNameClear(index);
-                          //           },
-                          //         );
-                          //       },
-                          //     );
-                          //   }),
-                          // ),
-                          Consumer<AdDreamsGoalsProvider>(
+              body: Stack(
+                children: [
+                  Container(
+                    width: size.width,
+                    height: size.height,
+                    decoration: BoxDecoration(
+                      color:
+                          theme.colorScheme.onSecondaryContainer.withOpacity(1),
+                      image: DecorationImage(
+                        image: AssetImage(
+                          ImageConstant.imgGroup22,
+                        ),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    child: Form(
+                      key: _formKey,
+                      child: Container(
+                        width: double.maxFinite,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 27,
+                          vertical: 6,
+                        ),
+                        child: Consumer<AdDreamsGoalsProvider>(
                             builder: (context, adDreamsGoalsProvider, _) {
-                              return SizedBox(
-                                height: adDreamsGoalsProvider
-                                        .goalModelIdName.length *
-                                    size.height *
-                                    0.06,
-                                child: ListView.builder(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: adDreamsGoalsProvider
-                                      .goalModelIdName.length,
-                                  itemBuilder: (context, index) {
-                                    return Row(
-                                      children: [
-                                        // Checkbox(
-                                        //     value: false,
-                                        //     onChanged: (value) {}),
-                                        GestureDetector(
-                                          onTap: () {
-                                            // Navigator.of(context).push(
-                                            //   MaterialPageRoute(
-                                            //     builder: (context) =>
-                                            //         ActionsFullView(
-                                            //       id: mentalStrengthEditProvider
-                                            //           .getListGoalActionsModel!
-                                            //           .actions![index]
-                                            //           .id
-                                            //           .toString(),
-                                            //       indexs: index,
-                                            //     ),
-                                            //   ),
-                                            // );
-                                          },
-                                          child: Container(
-                                            height: size.height * 0.04,
-                                            width: size.width * 0.85,
-                                            margin: const EdgeInsets.only(
-                                              bottom: 4,
-                                            ),
-                                            padding: const EdgeInsets.only(
-                                              bottom: 5,
-                                              top: 5,
-                                              left: 0,
-                                              right: 5,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                100,
-                                              ),
-                                              border: Border.all(
-                                                color: Colors.grey,
-                                                width: 1,
-                                              ),
-                                            ),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    adDreamsGoalsProvider
-                                                        .getAddActionIdAndNameClear(
-                                                      index,
-                                                    );
-                                                  },
-                                                  child: CircleAvatar(
-                                                    radius: size.width * 0.04,
-                                                    backgroundColor:
-                                                        Colors.blue,
-                                                    child: Icon(
-                                                      Icons.close,
-                                                      color: Colors.white,
-                                                      size: size.width * 0.03,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Text(
-                                                  adDreamsGoalsProvider
-                                                      .goalModelIdName[index]
-                                                      .name,
-                                                  textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                    color: Colors.grey,
-                                                  ),
-                                                ),
-                                                CircleAvatar(
-                                                  radius: size.width * 0.04,
-                                                  backgroundColor: Colors.blue,
-                                                  child: Icon(
-                                                    Icons
-                                                        .arrow_forward_ios_outlined,
-                                                    color: Colors.white,
-                                                    size: size.width * 0.03,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
+                          return SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: size.height * 0.02,
+                                ),
+                                _buildNameEditText(context),
+                                const SizedBox(height: 11),
+                                Consumer<EditProfileProvider>(
+                                    builder: (context, editProfileProvider, _) {
+                                  return Container(
+                                    height: size.height * 0.045,
+                                    padding: const EdgeInsets.only(
+                                      left: 10,
+                                      right: 10,
+                                    ),
+                                    decoration: const ShapeDecoration(
+                                      shape: RoundedRectangleBorder(
+                                        side: BorderSide(
+                                          width: 0.8,
+                                          style: BorderStyle.solid,
+                                          color: Colors.grey,
+                                        ),
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(
+                                            5.0,
                                           ),
                                         ),
-                                      ],
-                                    );
+                                      ),
+                                    ),
+                                    child: editProfileProvider
+                                                .getCategoryModel ==
+                                            null
+                                        ? const SizedBox()
+                                        : DropdownButton<Category>(
+                                            items: editProfileProvider
+                                                .getCategoryModel!.category!
+                                                .map((Category value) {
+                                              return DropdownMenuItem<Category>(
+                                                value: value,
+                                                child: Text(value.categoryName
+                                                    .toString()),
+                                              );
+                                            }).toList(),
+                                            hint: Text(
+                                              editProfileProvider
+                                                      .interestsValueController
+                                                      .text
+                                                      .isEmpty
+                                                  ? 'Music, Badminton'
+                                                  : editProfileProvider
+                                                      .interestsValueController
+                                                      .text,
+                                              style: CustomTextStyles
+                                                  .bodySmallGray700,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            underline: const SizedBox(),
+                                            isExpanded: true,
+                                            onChanged: (value) {
+                                              if (value != null) {
+                                                editProfileProvider
+                                                    .selectCategory(
+                                                  value: value.categoryName
+                                                      .toString(),
+                                                  mainCategory: value,
+                                                );
+                                                _isTokenExpired();
+                                              }
+                                            },
+                                          ),
+                                  );
+                                }),
+                                const SizedBox(height: 11),
+                                _buildAchievementDate(context),
+                                const SizedBox(height: 25),
+                                _buildAddMediaColumn(
+                                  context,
+                                  size,
+                                ),
+                                const SizedBox(height: 11),
+                                // adDreamsGoalsProvider.mediaSelected == 3
+                                //     ? const Center(child: AddGoalsGoogleMap())
+                                //     : const SizedBox(),
+                                const SizedBox(height: 24),
+                                _buildCommentEditText(context),
+                                const SizedBox(height: 20),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: 2,
+                                  ),
+                                  child: Text(
+                                    "Actions to achieve the goal",
+                                    style: theme.textTheme.titleSmall,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 3,
+                                ),
+                                _buildAddActionsButton(
+                                  context,
+                                ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                // SizedBox(
+                                //   height: size.height * 0.1,
+                                //   child: Consumer<AdDreamsGoalsProvider>(
+                                //       builder: (context, adDreamsGoalsProvider, _) {
+                                //     return ListView.builder(
+                                //       itemCount: adDreamsGoalsProvider
+                                //           .goalModelIdName.length,
+                                //       itemBuilder: (context, index) {
+                                //         return _buildCloseEditText(
+                                //           context,
+                                //           content: adDreamsGoalsProvider
+                                //               .goalModelIdName[index].name,
+                                //           onTap: () {
+                                //             adDreamsGoalsProvider
+                                //                 .getAddActionIdAndNameClear(index);
+                                //           },
+                                //         );
+                                //       },
+                                //     );
+                                //   }),
+                                // ),
+                                Consumer<AdDreamsGoalsProvider>(
+                                  builder: (context, adDreamsGoalsProvider, _) {
+                                    return SizedBox(
+                                      height: adDreamsGoalsProvider
+                                              .goalModelIdName.length *
+                                          size.height *
+                                          0.06,
+                                      child: ListView.builder(
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        itemCount: adDreamsGoalsProvider
+                                            .goalModelIdName.length,
+                                        itemBuilder: (context, index) {
+                                          return Row(
+                                            children: [
+                                              // Checkbox(
+                                              //     value: false,
+                                              //     onChanged: (value) {}),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  // Navigator.of(context).push(
+                                                  //   MaterialPageRoute(
+                                                  //     builder: (context) =>
+                                                  //         ActionsFullView(
+                                                  //       id: mentalStrengthEditProvider
+                                                  //           .getListGoalActionsModel!
+                                                  //           .actions![index]
+                                                  //           .id
+                                                  //           .toString(),
+                                                  //       indexs: index,
+                                                  //     ),
+                                                  //   ),
+                                                  // );
+                                                },
+                                                child: Container(
+                                                  height: size.height * 0.04,
+                                                  width: size.width * 0.85,
+                                                  margin: const EdgeInsets.only(
+                                                    bottom: 4,
+                                                  ),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                    bottom: 5,
+                                                    top: 5,
+                                                    left: 0,
+                                                    right: 5,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                      100,
+                                                    ),
+                                                    border: Border.all(
+                                                      color: Colors.grey,
+                                                      width: 1,
+                                                    ),
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          adDreamsGoalsProvider
+                                                              .getAddActionIdAndNameClear(
+                                                            index,
+                                                          );
+                                                        },
+                                                        child: CircleAvatar(
+                                                          radius:
+                                                              size.width * 0.04,
+                                                          backgroundColor:
+                                                              Colors.blue,
+                                                          child: Icon(
+                                                            Icons.close,
+                                                            color: Colors.white,
+                                                            size: size.width *
+                                                                0.03,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        adDreamsGoalsProvider
+                                                            .goalModelIdName[
+                                                                index]
+                                                            .name,
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: const TextStyle(
+                                                          color: Colors.grey,
+                                                        ),
+                                                      ),
+                                                      CircleAvatar(
+                                                        radius:
+                                                            size.width * 0.04,
+                                                        backgroundColor:
+                                                            Colors.blue,
+                                                        child: Icon(
+                                                          Icons
+                                                              .arrow_forward_ios_outlined,
+                                                          color: Colors.white,
+                                                          size:
+                                                              size.width * 0.03,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          );
 
-                                    // _buildCloseEditText(
-                                    //   context,
-                                    //   content:
-                                    //       adDreamsGoalsProvider.goalModelIdName[index].name,
-                                    //   onTap: () {
-                                    //     adDreamsGoalsProvider
-                                    //         .getAddActionIdAndNameClear(index);
-                                    //   },
-                                    // );
+                                          // _buildCloseEditText(
+                                          //   context,
+                                          //   content:
+                                          //       adDreamsGoalsProvider.goalModelIdName[index].name,
+                                          //   onTap: () {
+                                          //     adDreamsGoalsProvider
+                                          //         .getAddActionIdAndNameClear(index);
+                                          //   },
+                                          // );
+                                        },
+                                      ),
+                                    );
                                   },
                                 ),
-                              );
-                            },
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          _buildSaveButton(context),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                        ],
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                _buildSaveButton(context),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                              ],
+                            ),
+                          );
+                        }),
                       ),
-                    );
-                  }),
-                ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
-    ):
-    const TokenExpireScreen();
+          )
+        : const TokenExpireScreen();
   }
 
   /// Section Widget
@@ -449,7 +467,8 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 8),
             decoration: const ShapeDecoration(
               shape: RoundedRectangleBorder(
-                side: BorderSide(width: 0.8, style: BorderStyle.solid, color: Colors.grey),
+                side: BorderSide(
+                    width: 0.8, style: BorderStyle.solid, color: Colors.grey),
                 borderRadius: BorderRadius.all(Radius.circular(5.0)),
               ),
             ),
@@ -499,7 +518,9 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
       onPressed: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => const AddactionsScreen(goalId: '',),
+            builder: (context) => const AddactionsScreen(
+              goalId: '',
+            ),
           ),
         );
       },
@@ -567,7 +588,8 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
                   context: context,
                   message: "Please fill Achievement date",
                 );
-              } else if (adDreamsGoalsProvider.commentEditTextController.text.isEmpty) {
+              } else if (adDreamsGoalsProvider
+                  .commentEditTextController.text.isEmpty) {
                 showCustomSnackBar(
                   context: context,
                   message: "Please fill Goal Description",
@@ -587,13 +609,14 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
                   locationName: adDreamsGoalsProvider.selectedLocationName,
                   locationLatitude: adDreamsGoalsProvider.selectedLatitude,
                   locationLongitude: adDreamsGoalsProvider.locationLongitude,
-                  locationAddress: adDreamsGoalsProvider.selectedLocationAddress,
+                  locationAddress:
+                      adDreamsGoalsProvider.selectedLocationAddress,
                   categoryId: editProfileProvider.categorys!.id.toString(),
                   gemEndDate: adDreamsGoalsProvider.formattedDate,
                   actionId: adDreamsGoalsProvider.goalModelIdName,
                 );
                 GoalsDreamsProvider goalsDreamsProvider =
-                Provider.of<GoalsDreamsProvider>(
+                    Provider.of<GoalsDreamsProvider>(
                   context,
                   listen: false,
                 );
@@ -610,12 +633,12 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
           text: "Save",
           margin: const EdgeInsets.only(left: 2),
           buttonStyle: CustomButtonStyles.outlinePrimaryTL5,
-          buttonTextStyle: CustomTextStyles.titleSmallHelveticaOnSecondaryContainer,
+          buttonTextStyle:
+              CustomTextStyles.titleSmallHelveticaOnSecondaryContainer,
         );
       },
     );
   }
-
 
   Widget _buildAddMediaColumn(BuildContext context, Size size) {
     return Consumer<AdDreamsGoalsProvider>(
@@ -733,11 +756,19 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
                       GestureDetector(
                         onTap: () async {
                           _isTokenExpired();
-                          mentalStrengthEditProvider.selectedMedia(1);
-                          await galleryBottomSheetAddGoals(
-                            context: context,
-                            title: 'Gallery',
-                          );
+                          if (await requestGalleryPermission()) {
+                            mentalStrengthEditProvider.selectedMedia(1);
+                            await galleryBottomSheetAddGoals(
+                              context: context,
+                              title: 'Gallery',
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content:
+                                      Text("Gallery permission is required.")),
+                            );
+                          }
                         },
                         child: buildAvatarImage(
                           widget: Icon(
@@ -804,13 +835,21 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
                   child: Stack(
                     children: [
                       GestureDetector(
-                        onTap: () {
+                        onTap: () async {
                           _isTokenExpired();
-                          mentalStrengthEditProvider.selectedMedia(2);
-                          cameraBottomSheetAdGoals(
-                            context: context,
-                            title: "Camera",
-                          );
+                          if (await requestCameraPermission()) {
+                            mentalStrengthEditProvider.selectedMedia(2);
+                            cameraBottomSheetAdGoals(
+                              context: context,
+                              title: "Camera",
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content:
+                                      Text("Camera permission is required.")),
+                            );
+                          }
                         },
                         child: buildAvatarImage(
                           widget: Icon(

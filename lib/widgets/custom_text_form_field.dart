@@ -23,21 +23,21 @@ class CustomTextFormField extends StatelessWidget {
     this.prefixConstraints,
     this.suffix,
     this.suffixConstraints,
-    this.prefixText, // Add prefixText parameter
-    this.prefixStyle, // Add prefixStyle parameter
+    this.prefixText,
+    this.prefixStyle,
     this.contentPadding,
     this.borderDecoration,
     this.fillColor,
     this.filled = false,
     this.validator,
     this.onChanged,
+    this.onTap, // Added onTap parameter
+    this.onEditingComplete, // Added onEditingComplete parameter
     this.textAlign,
     this.isValids,
-    this.inputFormatters, // Added inputFormatters here
-    this.readOnly = false, // Add readOnly parameter with a default value
-  }) : super(
-    key: key,
-  );
+    this.inputFormatters,
+    this.readOnly = false,
+  }) : super(key: key);
 
   final Alignment? alignment;
   final double? width;
@@ -56,18 +56,20 @@ class CustomTextFormField extends StatelessWidget {
   final BoxConstraints? prefixConstraints;
   final Widget? suffix;
   final BoxConstraints? suffixConstraints;
-  final String? prefixText; // Declare prefixText
-  final TextStyle? prefixStyle; // Declare prefixStyle
+  final String? prefixText;
+  final TextStyle? prefixStyle;
   final EdgeInsets? contentPadding;
   final InputBorder? borderDecoration;
   final Color? fillColor;
   final bool? filled;
   final FormFieldValidator<String>? validator;
   final void Function(String)? onChanged;
+  final VoidCallback? onTap; // Declare onTap
+  final VoidCallback? onEditingComplete; // Declare onEditingComplete
   final TextAlign? textAlign;
   final bool? isValids;
-  final List<TextInputFormatter>? inputFormatters; // Make inputFormatters nullable
-  final bool readOnly; // Declare readOnly as a parameter
+  final List<TextInputFormatter>? inputFormatters;
+  final bool readOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -84,8 +86,14 @@ class CustomTextFormField extends StatelessWidget {
     child: TextFormField(
       textAlign: textAlign ?? TextAlign.start,
       onChanged: onChanged,
-      scrollPadding:
-      EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      onTap: onTap,
+      onEditingComplete: () {
+        FocusScope.of(context).unfocus(); // Ensures keyboard is closed
+        if (onEditingComplete != null) {
+          onEditingComplete!(); // Calls the provided callback
+        }
+      },
+      scrollPadding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       controller: controller,
       focusNode: focusNode,
       autofocus: autofocus ?? false,
@@ -94,22 +102,18 @@ class CustomTextFormField extends StatelessWidget {
       textInputAction: textInputAction,
       keyboardType: textInputType,
       maxLines: maxLines ?? 1,
-      decoration: decoration, // Use the updated InputDecoration getter
+      decoration: decoration,
       validator: validator,
-      inputFormatters: inputFormatters, // Apply inputFormatters here
-      readOnly: readOnly, // Pass readOnly to the TextFormField
+      inputFormatters: inputFormatters,
+      readOnly: readOnly,
     ),
   );
 
+
   InputDecoration get decoration => InputDecoration(
     hintText: hintText ?? "",
-    errorText: isValids == null
-        ? null
-        : isValids!
-        ? null
-        : 'Invalid phone number',
-    hintStyle:
-    hintStyle ?? CustomTextStyles.bodyLargeRobotoOnSecondaryContainer,
+    errorText: isValids == null ? null : isValids! ? null : 'Invalid phone number',
+    hintStyle: hintStyle ?? CustomTextStyles.bodyLargeRobotoOnSecondaryContainer,
     prefixIcon: prefix,
     prefixIconConstraints: prefixConstraints,
     suffixIcon: suffix,
@@ -118,8 +122,8 @@ class CustomTextFormField extends StatelessWidget {
     contentPadding: contentPadding ?? const EdgeInsets.all(11),
     fillColor: fillColor,
     filled: filled,
-    prefixText: prefixText, // Include prefixText in the decoration
-    prefixStyle: prefixStyle ?? CustomTextStyles.bodyLargeRobotoOnSecondaryContainer, // Style for prefixText
+    prefixText: prefixText,
+    prefixStyle: prefixStyle ?? CustomTextStyles.bodyLargeRobotoOnSecondaryContainer,
     border: borderDecoration ??
         OutlineInputBorder(
           borderRadius: BorderRadius.circular(5),
@@ -146,6 +150,7 @@ class CustomTextFormField extends StatelessWidget {
         ),
   );
 }
+
 
 
 /// Extension on [CustomTextFormField] to facilitate inclusion of all types of border style etc

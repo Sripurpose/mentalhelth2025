@@ -427,7 +427,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                     color: ColorsContent.primaryColor,
                                                     borderRadius: const BorderRadius.only(
                                                         topLeft: Radius.circular(12),
-                                                      topRight: Radius.circular(12)
+                                                      topRight: Radius.circular(12),
+                                                      bottomRight: Radius.circular(12),
+                                                      bottomLeft: Radius.circular(12)
                                                     )
                                                   ),
                                                   child: const Padding(

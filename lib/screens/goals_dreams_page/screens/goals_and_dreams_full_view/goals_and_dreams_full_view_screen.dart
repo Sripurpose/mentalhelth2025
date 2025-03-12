@@ -142,7 +142,7 @@ class _GoalAndDreamFullViewScreenState
                       _buildUntitledOne(
                         context,
                         size,
-                        category: widget.goalsanddream.goalTitle.toString(),
+                        category: widget.goalsanddream.categoryName.toString(),
                         createDate: widget.goalsanddream.createdAt.toString(),
                         achiveDate: widget.goalsanddream.goalEnddate.toString(),
                         status: widget.goalsanddream.goalStatus.toString(),
