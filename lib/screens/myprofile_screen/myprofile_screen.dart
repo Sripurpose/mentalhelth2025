@@ -412,7 +412,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                             ),
                                             Platform.isAndroid?
                                             SizedBox(
-                                              height: size.height * 0.065,
+                                              height: size.height * 0.015,
                                             ):
                                             SizedBox(
                                               height: size.height * 0.025,
