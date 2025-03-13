@@ -413,68 +413,71 @@ class _GoalAndDreamFullViewBottomParellelSheetState
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: widget.goalDetailModel.goals!.action!.length,
                         itemBuilder: (context, index) {
-                          return Row(
-                            children: [
-                              //  Checkbox(value: false, onChanged: (value) {}),
-                              GestureDetector(
-                                onTap: () {
-                                  // Navigator.of(context).push(
-                                  //   MaterialPageRoute(
-                                  //     builder: (context) => ActionsFullView(
-                                  //       id: mentalStrengthEditProvider
-                                  //           .getListGoalActionsModel!
-                                  //           .actions![index]
-                                  //           .id
-                                  //           .toString(),
-                                  //       indexs: index,
-                                  //     ),
-                                  //   ),
-                                  // );
-                                },
-                                child: Container(
-                                  height: size.height * 0.04,
-                                  width: size.width * 0.78,
-                                  padding: const EdgeInsets.only(
-                                    bottom: 5,
-                                    top: 5,
-                                    left: 0,
-                                    right: 5,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(
-                                      100,
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Row(
+                              children: [
+                                //  Checkbox(value: false, onChanged: (value) {}),
+                                GestureDetector(
+                                  onTap: () {
+                                    // Navigator.of(context).push(
+                                    //   MaterialPageRoute(
+                                    //     builder: (context) => ActionsFullView(
+                                    //       id: mentalStrengthEditProvider
+                                    //           .getListGoalActionsModel!
+                                    //           .actions![index]
+                                    //           .id
+                                    //           .toString(),
+                                    //       indexs: index,
+                                    //     ),
+                                    //   ),
+                                    // );
+                                  },
+                                  child: Container(
+                                    height: size.height * 0.04,
+                                    width: size.width * 0.78,
+                                    padding: const EdgeInsets.only(
+                                      bottom: 5,
+                                      top: 5,
+                                      left: 0,
+                                      right: 5,
                                     ),
-                                    border: Border.all(
-                                      color: Colors.grey,
-                                      width: 1,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(
+                                        100,
+                                      ),
+                                      border: Border.all(
+                                        color: Colors.grey,
+                                        width: 1,
+                                      ),
                                     ),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.center,
-                                    children: [
+                                    child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.center,
+                                      children: [
 
-                                      SizedBox(
-                                        width: size.width * 0.6,
-                                        child: SingleChildScrollView(
-                                          scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                                          child: Text(
-                                            widget.goalDetailModel.goals!.action![index].actionTitle ?? "",
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                              color: Colors.grey,
+                                        SizedBox(
+                                          width: size.width * 0.6,
+                                          child: SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+                                            child: Text(
+                                              widget.goalDetailModel.goals!.action![index].actionTitle ?? "",
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                color: Colors.grey,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1, // Set the maximum number of lines to 3
                                             ),
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1, // Set the maximum number of lines to 3
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           );
 
                           // _buildCloseEditText(

@@ -306,10 +306,22 @@ class _GoalAndDreamFullViewScreenState
                                   height: 23,
                                   width: 23,
                                 ),
-                                Text(
-                                  widget.goalsanddream.location!.locationAddress!,
-                                  style: CustomTextStyles.bodyMediumGray700_1,
+
+                                Expanded(
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.vertical,
+                                    child: Text(
+                                      widget.goalsanddream.location!.locationAddress
+                                          ?.toString()
+                                          .replaceAll('?', '') ?? "",
+                                      style: CustomTextStyles.bodyMediumGray700_1,
+                                      overflow: TextOverflow.visible,
+                                      maxLines: 4,// Ensures scrolling works
+                                    ),
+                                  ),
                                 ),
+
+
                               ],
                             ),
                           ] else const SizedBox(height: 6),

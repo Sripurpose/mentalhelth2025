@@ -403,18 +403,27 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                             height: 23,
                                             width: 23,
                                           ),
-                                          Text(
-                                            mentalStrengthEditProvider.actionsDetailsModel!.actions!.location?.locationAddress == null
-                                                ? ""
-                                                :mentalStrengthEditProvider.actionsDetailsModel!.actions!.location!.locationAddress.toString(),
-                                            style: CustomTextStyles.bodyMediumGray700_1,
+                                          Expanded(
+                                            child: SingleChildScrollView(
+                                              scrollDirection: Axis.vertical,
+                                              child: Text(
+                                                mentalStrengthEditProvider.actionsDetailsModel!.actions!.location?.locationAddress
+                                                    ?.toString()
+                                                    .replaceAll('?', '') ?? "",
+                                                style: CustomTextStyles.bodyMediumGray700_1,
+                                                overflow: TextOverflow.visible,
+                                                maxLines: 4,// Ensures scrolling works
+                                              ),
+                                            ),
                                           ),
+
                                         ],
                                       )
                                     ),
                                   )
                                       :
                                  SizedBox(),
+                                  const SizedBox(height: 10),
                                   mentalStrengthEditProvider.actionsDetailsModel!.actions!.actionStatus == "1" ||
                                       mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder == null ?
                                   const SizedBox(height: 10):
@@ -426,27 +435,28 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                              mentalStrengthEditProvider.actionsDetailsModel!.actions!.actionStatus == "1" ||
                                                  mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder == null
                                             ? const SizedBox()
-                                            : const Row(
-                                                children: [
-                                                  // Checkbox(
-                                                  //   value: addActionsProvider
-                                                  //       .setRemainder,
-                                                  //   onChanged: (value) {
-                                                  //     addActionsProvider
-                                                  //         .changeSetRemainder(value!);
-                                                  //   },
-                                                  // ),
-                                                  // SizedBox(
-                                                  //   width: size.width * 0.01,
-                                                  // ),
-                                                  Text(
-                                                    "Reminder",
-                                                    style: TextStyle(
-                                                      fontWeight: FontWeight.bold,
+                                            :  Padding(
+                                              padding: EdgeInsets.symmetric(horizontal: 5.0),
+                                              child: Row(
+                                                  children: [
+                                                    // Checkbox(
+                                                    //   value: addActionsProvider
+                                                    //       .setRemainder,
+                                                    //   onChanged: (value) {
+                                                    //     addActionsProvider
+                                                    //         .changeSetRemainder(value!);
+                                                    //   },
+                                                    // ),
+                                                    // SizedBox(
+                                                    //   width: size.width * 0.01,
+                                                    // ),
+                                                    Text(
+                                                      "Reminder",
+                                                      style: CustomTextStyles.blackText16000000W700(),
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
+                                                  ],
+                                                ),
+                                            ),
                                         const SizedBox(height: 15),
                                         Padding(
                                           padding: EdgeInsets.only(

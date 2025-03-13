@@ -33,7 +33,7 @@ class _PhoneSignInScreenState extends State<PhoneSignInScreen> {
 
     scheduleMicrotask(() {
       phoneSignInProvider.phoneNumberController.text = "";
-      phoneSignInProvider.countryCode = "";
+      phoneSignInProvider.resetCountryCode(); // Reset country code when screen is reopened
     });
   }
 
@@ -153,10 +153,10 @@ class _PhoneSignInScreenState extends State<PhoneSignInScreen> {
                               text: "\r\n",
                               style: CustomTextStyles.bodySmallNunitoff59a9f2,
                             ),
-                            TextSpan(
-                              text: "Learn more",
-                              style: CustomTextStyles.labelLargeNunitoff59a9f2,
-                            ),
+                            // TextSpan(
+                            //   text: "Learn more",
+                            //   style: CustomTextStyles.labelLargeNunitoff59a9f2,
+                            // ),
                           ],
                         ),
                         textAlign: TextAlign.justify,

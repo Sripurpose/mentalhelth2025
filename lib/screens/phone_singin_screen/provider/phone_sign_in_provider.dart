@@ -27,6 +27,12 @@ class PhoneSignInProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // **New Method to Reset Country Code**
+  void resetCountryCode() {
+    countryCode = '91'; // Reset to default country code
+    notifyListeners();
+  }
+
   //phone login
 
   bool loginLoading = false;
