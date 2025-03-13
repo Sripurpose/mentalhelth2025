@@ -1241,8 +1241,7 @@ class _MentalStrengthAddEditFullViewScreenState
                           mentalStrengthEditProvider.selectedMedia(
                             3,
                           );
-                          final status =
-                              await Permission.locationWhenInUse.status;
+                          final status = await Permission.locationWhenInUse.status;
 
                           print("Permission status is ${status}");
                           if (status.isDenied || status.isPermanentlyDenied) {
@@ -1278,21 +1277,23 @@ class _MentalStrengthAddEditFullViewScreenState
                               return;
                             }
                           }
-
-                          if (mounted) {
-                            showModalBottomSheet(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return Container(
-                                  width: double.infinity,
-                                  padding: const EdgeInsets.all(20),
-                                  child: const MentalGoogleMap(
-                                    edit: false,
-                                  ),
-                                );
-                              },
-                            );
+                          if (await Permission.locationWhenInUse.isGranted){
+                            if (mounted) {
+                              showModalBottomSheet(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Container(
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.all(20),
+                                    child: const MentalGoogleMap(
+                                      edit: false,
+                                    ),
+                                  );
+                                },
+                              );
+                            }
                           }
+
                         },
                         child: buildAvatarImage(
                           widget: Icon(

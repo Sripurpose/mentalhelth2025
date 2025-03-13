@@ -929,22 +929,61 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
                   child: Stack(
                     children: [
                       GestureDetector(
-                        onTap: () {
-                          _checkPermissionStatus();
-                          _requestPermissions();
+                        onTap: () async {
+                          // _checkPermissionStatus();
+                          // _requestPermissions();
                           mentalStrengthEditProvider.selectedMedia(
                             3,
                           );
-                          showModalBottomSheet(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return Container(
-                                width: double.infinity,
-                                padding: const EdgeInsets.all(20),
-                                child: const AddGoalsGoogleMap(),
+                          final status = await Permission.locationWhenInUse.status;
+                          print("Permission status is ${status}");
+                          if (status.isDenied || status.isPermanentlyDenied) {
+                            final result =
+                                await Permission.locationWhenInUse.request();
+
+                            if (result.isDenied || result.isPermanentlyDenied) {
+                              if (mounted) {
+                                showDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (context) => AlertDialog(
+                                    title: const Text(
+                                        'Location Permission Required'),
+                                    content: const Text(
+                                        'Location permission is needed to add your current location to the mental strength entry. Please enable it in settings.'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child: const Text('Cancel'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () async {
+                                          Navigator.pop(context);
+                                          await openAppSettings();
+                                        },
+                                        child: const Text('Open Settings'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
+                              return;
+                            }
+                          }
+                          if (await Permission.locationWhenInUse.isGranted){
+                            if (mounted) {
+                              showModalBottomSheet(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Container(
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.all(20),
+                                    child: const AddGoalsGoogleMap(),
+                                  );
+                                },
                               );
-                            },
-                          );
+                            }
+                          }
                         },
                         child: buildAvatarImage(
                           widget: Icon(
