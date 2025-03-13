@@ -683,7 +683,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                             .toString().replaceAll('?', ''),
                         style: CustomTextStyles.bodyMediumGray700_1,
                         overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
+                        maxLines: 4,
                       ),
                     ),
                   ],

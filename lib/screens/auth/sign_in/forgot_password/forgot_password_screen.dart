@@ -98,10 +98,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                   Navigator.of(context).pop();
 
                                 }else{
-                                  showToast(
-                                    context: context,
-                                    message: signInProvider.forgotPasswordMessage ?? "",
-                                  );
+                                  // showToast(
+                                  //   context: context,
+                                  //   message: signInProvider.forgotPasswordMessage ?? "",
+                                  // );
                                 }
                               }else{
                                   showToast(

@@ -467,11 +467,11 @@ class SignInProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
       } else {}
       if(response.statusCode == 401){
-        TokenManager.setTokenStatus(true);
+       // TokenManager.setTokenStatus(true);
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
       if(response.statusCode == 403){
-        TokenManager.setTokenStatus(true);
+        //TokenManager.setTokenStatus(true);
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
       saveFirebaseLoading = false;

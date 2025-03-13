@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
@@ -1183,17 +1185,23 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
                       GestureDetector(
                         onTap: () async {
                           _isTokenExpired();
-                          if (await requestGalleryPermission()) {
+                          if (await requestGalleryPermission() && Platform.isAndroid) {
                             mentalStrengthEditProvider.selectedMedia(1);
                             await galleryBottomSheet(
                               context: context,
                               title: 'Gallery',
                             );
-                          } else {
+                          } else if(Platform.isIOS){
+                            mentalStrengthEditProvider.selectedMedia(1);
+                            await galleryBottomSheet(
+                              context: context,
+                              title: 'Gallery',
+                            );
+                          }else{
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                   content:
-                                      Text("Gallery permission is required.")),
+                                  Text("Gallery permission is required.")),
                             );
                           }
                         },
@@ -1265,17 +1273,24 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
                       GestureDetector(
                         onTap: () async {
                           _isTokenExpired();
-                          if (await requestCameraPermission()) {
+                          if (await requestCameraPermission() && Platform.isAndroid) {
                             mentalStrengthEditProvider.selectedMedia(2);
                             cameraBottomSheet(
                               context: context,
                               title: "Camera",
                             );
-                          } else {
+                          } else if(Platform.isIOS){
+                            mentalStrengthEditProvider.selectedMedia(2);
+                            cameraBottomSheet(
+                              context: context,
+                              title: "Camera",
+                            );
+
+                          }else{
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                   content:
-                                      Text("Camera permission is required.")),
+                                  Text("Camera permission is required.")),
                             );
                           }
                         },

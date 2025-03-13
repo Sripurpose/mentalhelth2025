@@ -200,7 +200,7 @@ class _GoalAndDreamFullViewBottomParellelSheetState
               _buildUntitledOne(
                 context,
                 size,
-                category: widget.goalDetailModel.goals!.goalTitle.toString(),
+                category: widget.goalDetailModel.goals!.categoryName.toString(),
                 createDate: widget.goalDetailModel.goals!.createdAt.toString(),
                 achiveDate:
                 widget.goalDetailModel.goals!.goalEnddate.toString(),
@@ -470,15 +470,6 @@ class _GoalAndDreamFullViewBottomParellelSheetState
                                           ),
                                         ),
                                       ),
-                                      // CircleAvatar(
-                                      //   radius: size.width * 0.04,
-                                      //   backgroundColor: Colors.blue,
-                                      //   child: Icon(
-                                      //     Icons.arrow_forward_ios_outlined,
-                                      //     color: Colors.white,
-                                      //     size: size.width * 0.03,
-                                      //   ),
-                                      // ),
                                     ],
                                   ),
                                 ),

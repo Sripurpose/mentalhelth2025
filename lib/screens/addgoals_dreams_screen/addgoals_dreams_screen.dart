@@ -756,17 +756,24 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
                       GestureDetector(
                         onTap: () async {
                           _isTokenExpired();
-                          if (await requestGalleryPermission()) {
+                          if (await requestGalleryPermission() && Platform.isAndroid) {
                             mentalStrengthEditProvider.selectedMedia(1);
                             await galleryBottomSheetAddGoals(
                               context: context,
                               title: 'Gallery',
                             );
-                          } else {
+                          } else if(Platform.isIOS){
+                            mentalStrengthEditProvider.selectedMedia(1);
+                            await galleryBottomSheetAddGoals(
+                              context: context,
+                              title: 'Gallery',
+                            );
+
+                          }else{
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                   content:
-                                      Text("Gallery permission is required.")),
+                                  Text("Gallery permission is required.")),
                             );
                           }
                         },
@@ -837,17 +844,23 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
                       GestureDetector(
                         onTap: () async {
                           _isTokenExpired();
-                          if (await requestCameraPermission()) {
+                          if (await requestCameraPermission() && Platform.isAndroid) {
                             mentalStrengthEditProvider.selectedMedia(2);
                             cameraBottomSheetAdGoals(
                               context: context,
                               title: "Camera",
                             );
-                          } else {
+                          } else if(Platform.isIOS){
+                            mentalStrengthEditProvider.selectedMedia(2);
+                            cameraBottomSheetAdGoals(
+                              context: context,
+                              title: "Camera",
+                            );
+                          }else{
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                   content:
-                                      Text("Camera permission is required.")),
+                                  Text("Camera permission is required.")),
                             );
                           }
                         },

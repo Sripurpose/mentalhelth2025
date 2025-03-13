@@ -651,21 +651,21 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
 
             // Check if required fields are filled and if the email is valid
             if (editProfileProvider.myProfileController.text.isEmpty) {
-              showToast(context: context, message: 'Please enter your name');
+              showToastProfile(context: context, message: 'Please enter your name');
             } else if (!editProfileProvider.phoneIsValid) {
-              showToast(context: context, message: 'Invalid phone number');
+              showToastProfile(context: context, message: 'Invalid phone number');
             } else if (editProfileProvider.selectedDate.isEmpty) {
-              showToast(context: context, message: 'Select your date of birth');
+              showToastProfile(context: context, message: 'Select your date of birth');
             } else if (editProfileProvider.phoneController.text.isEmpty) {
-              showToast(context: context, message: 'Enter your phone number');
+              showToastProfile(context: context, message: 'Enter your phone number');
             } else if (editProfileProvider.emailController.text.isEmpty) {
-              showToast(context: context, message: 'Enter your email');
+              showToastProfile(context: context, message: 'Enter your email');
             } else if (editProfileProvider.aboutYouValueController.text.isEmpty) {
-              showToast(context: context, message: 'Enter information about yourself');
+              showToastProfile(context: context, message: 'Enter information about yourself');
             }
             // Custom email format validation using regex
             else if (!regex.hasMatch(email)) {
-              showToast(
+              showToastProfile(
                   context: context,
                   message: 'Please enter a valid email address (e.g.,user@example.com)');
             }

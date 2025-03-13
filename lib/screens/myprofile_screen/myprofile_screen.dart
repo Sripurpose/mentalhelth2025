@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
@@ -68,6 +70,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     editProfileProvider = Provider.of<EditProfileProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       editProfileProvider.getProfileModel?.profileurl = "";
+      logger.i("editProfileProvider.getProfileModel?.profileurl.toString()${editProfileProvider.getProfileModel?.profileurl.toString()}");
       _isTokenExpired();
     });
     super.initState();
@@ -407,8 +410,12 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                 ),
                                               ),
                                             ),
+                                            Platform.isAndroid?
                                             SizedBox(
                                               height: size.height * 0.065,
+                                            ):
+                                            SizedBox(
+                                              height: size.height * 0.025,
                                             ),
                                             Consumer<DashBoardProvider>(builder: //Edit profile button
                                                 (context, dashBoardProvider,
