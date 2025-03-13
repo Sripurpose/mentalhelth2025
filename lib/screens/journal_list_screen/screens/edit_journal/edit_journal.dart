@@ -26,6 +26,7 @@ import 'package:mentalhelth/widgets/custom_icon_button.dart';
 import 'package:mentalhelth/widgets/custom_text_form_field.dart';
 import 'package:mentalhelth/widgets/functions/snack_bar.dart';
 import 'package:mentalhelth/widgets/widget/shimmer.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:html_unescape/html_unescape.dart';
 import '../../../../utils/logic/permissions.dart';
@@ -1358,21 +1359,63 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
                   child: Stack(
                     children: [
                       GestureDetector(
-                        onTap: () {
+                        onTap: () async {
                           mentalStrengthEditProvider.selectedMedia(
                             3,
                           );
-                          showModalBottomSheet(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return Container(
-                                  width: double.infinity,
-                                  padding: const EdgeInsets.all(20),
-                                  child: const MentalGoogleMap(
-                                    edit: true,
-                                  ));
-                            },
-                          );
+
+                          final status = await Permission.locationWhenInUse.status;
+
+                          print("Permission status is ${status}");
+                          if (status.isDenied || status.isPermanentlyDenied) {
+                            final result =
+                                await Permission.locationWhenInUse.request();
+
+                            if (result.isDenied || result.isPermanentlyDenied) {
+                              if (mounted) {
+                                showDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (context) => AlertDialog(
+                                    title: const Text(
+                                        'Location Permission Required'),
+                                    content: const Text(
+                                        'Location permission is needed to add your current location to the mental strength entry. Please enable it in settings.'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child: const Text('Cancel'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () async {
+                                          Navigator.pop(context);
+                                          await openAppSettings();
+                                        },
+                                        child: const Text('Open Settings'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
+                              return;
+                            }
+                          }
+                          if (await Permission.locationWhenInUse.isGranted){
+                            if (mounted) {
+                              showModalBottomSheet(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Container(
+                                      width: double.infinity,
+                                      padding: const EdgeInsets.all(20),
+                                      child: const MentalGoogleMap(
+                                        edit: true,
+                                      ));
+                                },
+                              );
+                            }
+                          }
+
                           // mentalStrengthEditProvider.mediaSelected == 3
                           //     ? const MentalGoogleMap()
                           //     : const SizedBox(),
