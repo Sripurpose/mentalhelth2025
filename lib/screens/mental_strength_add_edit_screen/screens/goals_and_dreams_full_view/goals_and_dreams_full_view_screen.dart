@@ -197,7 +197,7 @@ class _GoalAndDreamFullViewBottomSheetState
               _buildUntitledOne(
                 context,
                 size,
-                category: widget.goalDetailModel.goals!.goalTitle.toString(),
+                category: widget.goalDetailModel.goals!.categoryName.toString(),
                 createDate: widget.goalDetailModel.goals!.createdAt.toString(),
                 achiveDate:
                     widget.goalDetailModel.goals!.goalEnddate.toString(),

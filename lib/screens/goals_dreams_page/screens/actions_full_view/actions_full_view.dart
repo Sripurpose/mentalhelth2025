@@ -407,16 +407,17 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                             child: SingleChildScrollView(
                                               scrollDirection: Axis.vertical,
                                               child: Text(
-                                                mentalStrengthEditProvider.actionsDetailsModel!.actions!.location?.locationAddress
-                                                    ?.toString()
-                                                    .replaceAll('?', '') ?? "",
+                                                mentalStrengthEditProvider.actionsDetailsModel?.actions?.location?.locationAddress
+                                                    ?.replaceAll(RegExp(r'[^a-zA-Z0-9, ]'), '') // Remove unwanted characters
+                                                    .replaceAll(RegExp(r',\s*,+'), ',') // Replace multiple consecutive commas with a single comma
+                                                    .replaceAll(RegExp(r'^,|,$'), '') // Remove leading and trailing commas
+                                                    .trim() ?? "",
                                                 style: CustomTextStyles.bodyMediumGray700_1,
                                                 overflow: TextOverflow.visible,
-                                                maxLines: 4,// Ensures scrolling works
+                                                maxLines: 4, // Ensures scrolling works
                                               ),
                                             ),
                                           ),
-
                                         ],
                                       )
                                     ),

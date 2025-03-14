@@ -139,7 +139,7 @@ class SignInProvider extends ChangeNotifier {
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
       if(response.statusCode == 400){
-        TokenManager.setTokenStatus(true);
+        //TokenManager.setTokenStatus(true);
         loginStatus = response.statusCode;
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
@@ -193,7 +193,7 @@ class SignInProvider extends ChangeNotifier {
       print('Response body: ${response.body}');
 
       if (response.statusCode == 401 || response.statusCode == 403 || response.statusCode == 400) {
-        //TokenManager.setTokenStatus(true);
+
         print('Authorization error: Token may be invalid or expired');
         // Optionally, handle the token refresh or invalidation
       }

@@ -91,10 +91,10 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
               size,
             ),
             Container(
-              height: size.height * 0.74,
+              height: size.height * 0.80,
               padding: const EdgeInsets.symmetric(
                 horizontal: 28,
-                vertical: 21,
+                vertical: 10,
               ),
               child: SingleChildScrollView(
                 child: Column(
@@ -104,14 +104,14 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                       children: [
                         Container(
                           padding: EdgeInsets.only(
-                            top: size.height * 0.055,
+                            top: size.height * 0.035,
                           ),
                           child: Opacity(
                             opacity: 0.9,
                             child: Align(
                               alignment: Alignment.center,
                               child: Container(
-                                height: size.height * 0.64,
+                                height: size.height * 0.74,
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   border: Border.all(
@@ -412,7 +412,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                             ),
                                             Platform.isAndroid?
                                             SizedBox(
-                                              height: size.height * 0.015,
+                                              height: size.height * 0.055,
                                             ):
                                             SizedBox(
                                               height: size.height * 0.025,

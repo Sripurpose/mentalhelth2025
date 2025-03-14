@@ -374,13 +374,24 @@ class _GoalAndDreamFullViewBottomParellelSheetState
                           height: 23,
                           width: 23,
                         ),
-                        Text(
-                          widget.goalDetailModel.goals!.location!.locationAddress!.isEmpty
-                              ? "NA"
-                              :
-                          widget.goalDetailModel.goals!.location!.locationAddress.toString(),
-                          style: CustomTextStyles.bodyMediumGray700_1,
+                        Expanded(
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Text(
+                              (widget.goalDetailModel.goals?.location?.locationAddress?.isEmpty ?? true)
+                                  ? "NA"
+                                  : widget.goalDetailModel.goals!.location!.locationAddress!
+                                  .replaceAll(RegExp(r'[^a-zA-Z0-9, ]'), '') // Remove unwanted characters
+                                  .replaceAll(RegExp(r',\s*,+'), ',') // Replace multiple consecutive commas with a single comma
+                                  .replaceAll(RegExp(r'^,|,$'), '') // Remove leading and trailing commas
+                                  .trim(),
+                              style: CustomTextStyles.bodyMediumGray700_1,
+                              overflow: TextOverflow.visible,
+                              maxLines: 4, // Ensures scrolling works
+                            ),
+                          ),
                         ),
+
                       ],
                     )
                 ),

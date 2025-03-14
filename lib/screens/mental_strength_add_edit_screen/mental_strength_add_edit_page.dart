@@ -135,6 +135,7 @@ class _MentalStrengthAddEditFullViewScreenState
       mentalStrengthEditProvider.selectedLocationAddress = "";
       mentalStrengthEditProvider.selectedLatitude = "";
       mentalStrengthEditProvider.selectedLocationName = "";
+
       _isTokenExpired();
     });
   }

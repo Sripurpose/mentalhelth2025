@@ -40,7 +40,7 @@ void showErrorPopupDialog(BuildContext context, String message, Function() onSuc
                   ),
                   child: Text(
                     message,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Color(0xFF694C00),
                       fontSize: 14,
                       fontFamily: 'Roboto',
@@ -48,7 +48,7 @@ void showErrorPopupDialog(BuildContext context, String message, Function() onSuc
                     ),
                   ),
                 ),
-                SizedBox(height: 0),
+                const SizedBox(height: 0),
                 Lottie.asset(
                   'assets/lottie/alert.json',
                   width: screenWidth * 0.22,

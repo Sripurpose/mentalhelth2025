@@ -112,6 +112,10 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
               Provider.of<AdDreamsGoalsProvider>(context, listen: false);
           mentalStrengthEditProvider.clearAllValuesInSaveTime();
           adDreamsGoalsProvider.clearAction();
+          mentalStrengthEditProvider.openGoalViewSheet = false;
+          mentalStrengthEditProvider.goalDetailModel = null;
+          mentalStrengthEditProvider.openActionFullView =false;
+          mentalStrengthEditProvider.openAddAction = false;
         },
         child: tokenStatus == false
             ? Scaffold(
@@ -160,6 +164,18 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
                                 mentalStrengthEditProvider
                                     .clearAllValuesInSaveTime();
                                 adDreamsGoalsProvider.clearAction();
+                                mentalStrengthEditProvider.openGoalViewSheet = false;
+                                mentalStrengthEditProvider.goalDetailModel = null;
+                                mentalStrengthEditProvider.openActionFullView =false;
+                                mentalStrengthEditProvider.openAddAction = false;
+                                // Proper condition check before popping the screen
+                                // if (mentalStrengthEditProvider.openGoalViewSheet) {
+                                //   if (mentalStrengthEditProvider.goalDetailModel != null) {
+                                //     Navigator.of(context).pop();
+                                //   }
+                                // } else {
+                                //   Navigator.of(context).pop();
+                                // }
                                 Navigator.of(context).pop();
                               },
                             ),
