@@ -18,12 +18,14 @@ class FeedBackProvider extends ChangeNotifier {
 
   bool saveFeedBackLoading = false;
   var logger = Logger();
+  int? feedbackStatusCode;
 
   Future<void> saveFeedBack(BuildContext context,
       {required String name,
       required String email,
       required String message}) async {
     try {
+      feedbackStatusCode = 0;
       saveFeedBackLoading = true;
       notifyListeners();
       String? token = await getUserTokenSharePref();
@@ -44,15 +46,19 @@ class FeedBackProvider extends ChangeNotifier {
         showToastTop(context: context, message:  json.decode(response.body)["text"]);
         // showCustomSnackBar(
         //     context: context, message: json.decode(response.body)["text"]);
-        Navigator.of(context).pop();
+        feedbackStatusCode = response.statusCode;
+        logger.i("feedbackStatusCode${feedbackStatusCode}");
         nameEditTextController.clear();
         emailEditTextController.clear();
         messageEditTextController.clear();
       } else {
+        feedbackStatusCode = response.statusCode;
+        logger.i("feedbackStatusCodeelse${feedbackStatusCode}");
         showToastTop(context: context, message:  json.decode(response.body)["text"]);
         // showCustomSnackBar(
         //     context: context, message: json.decode(response.body)["text"]);
       }
+      feedbackStatusCode = response.statusCode;
       if(response.statusCode == 401){
         TokenManager.setTokenStatus(true);
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);

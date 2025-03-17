@@ -8,6 +8,7 @@ import 'package:mentalhelth/widgets/functions/snack_bar.dart';
 import 'package:provider/provider.dart';
 
 import '../../utils/theme/custom_text_style.dart';
+import '../dash_borad_screen/dash_board_screen.dart';
 import 'provider/feed_back_provider.dart';
 
 // ignore: must_be_immutable
@@ -151,14 +152,8 @@ class FeedbackScreen extends StatelessWidget {
             } else if (!isEmailValid(
                 feedBackProvider.emailEditTextController.text)) {
               showToastTop(context: context, message: 'Enter a valid email address');
-              // showCustomSnackBar(
-              //     context: context, message: 'Enter a valid email address');
             } else {
               showToastTop(context: context, message: 'Enter your name and email');
-              // showCustomSnackBar(
-              //   context: context,
-              //   message: 'Enter your name and email',
-              // );
             }
           },
           width: 104,
