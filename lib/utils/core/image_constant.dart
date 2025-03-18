@@ -3,6 +3,7 @@ class ImageConstant {
 
   static String imagePath = 'assets/images';
   static String logo = 'assets/images/logo.svg';
+  static String splashNextIcon = 'assets/images/splash-next-icon.png';
   static String noData = '$imagePath/home/noData.gif';
   static String imgMenu = '$imagePath/img_menu.svg';
 

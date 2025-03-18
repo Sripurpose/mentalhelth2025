@@ -168,12 +168,20 @@ class _MentalGoogleMapState extends State<MentalGoogleMap> {
               },
             ),
           ),
+          // Padding(
+          //   padding: const EdgeInsets.all(8.0),
+          //   child: Text(
+          //     'Selected Address: ${_selectedAddress.isNotEmpty ? _selectedAddress : (widget.edit ? savedLocationAddress : "Location not available")}',
+          //   ),
+          // ),
+
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              'Selected Address: ${_selectedAddress.isNotEmpty ? _selectedAddress : (widget.edit ? savedLocationAddress : "Location not available")}',
+              'Selected Address: ${_selectedAddress.isNotEmpty ? _selectedAddress.replaceAll(RegExp(r'[^a-zA-Z0-9\s,]'), '').trim() : (widget.edit ? savedLocationAddress?.replaceAll(RegExp(r'[^a-zA-Z0-9\s,]'), '').trim() : "")}',
             ),
           ),
+
         ],
       ),
     );

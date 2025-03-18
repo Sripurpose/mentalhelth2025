@@ -217,6 +217,7 @@ class _LandingRegisterScreenScreenState extends State<LandingRegisterScreenScree
                                 style: theme.textTheme.bodyMedium,
                               ),
                               SizedBox(height: size.height * 0.05),
+                              signInProvider.settingsRegisterModel?.settings?[0].link != null ?
                               Visibility(
                                 visible: signInProvider.settingsRegisterModel?.settings?[0].status == "1" ? true : false,
                                 child: GestureDetector(
@@ -266,7 +267,8 @@ class _LandingRegisterScreenScreenState extends State<LandingRegisterScreenScree
                                     ),
                                   ),
                                 ),
-                              ),
+                              ):
+                                  const SizedBox(),
                             ],
                           ),
                           SizedBox(

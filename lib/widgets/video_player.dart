@@ -1,56 +1,57 @@
-import 'package:chewie/chewie.dart';
+// import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:io';
 
-class VideoScreen extends StatefulWidget {
-  const VideoScreen({super.key, required this.videoUrl});
-
-  final String videoUrl;
-  @override
-  VideoScreenState createState() => VideoScreenState();
-}
-
-class VideoScreenState extends State<VideoScreen> {
-  late VideoPlayerController _videoPlayerController;
-  late ChewieController _chewieController;
-
-  @override
-  void initState() {
-    super.initState();
-    // ignore: deprecated_member_use
-    _videoPlayerController = VideoPlayerController.network(
-      widget.videoUrl,
-    );
-    _chewieController = ChewieController(
-      videoPlayerController: _videoPlayerController,
-      autoPlay: false,
-      looping: false,
-      // Other customization options...
-    );
-  }
-
-  @override
-  void dispose() {
-    _videoPlayerController.dispose();
-    _chewieController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
-    return SizedBox(
-      width: size.width * 0.3,
-      child: Center(
-        child: Chewie(
-          controller: _chewieController,
-        ),
-      ),
-    );
-  }
-}
+// class VideoScreen extends StatefulWidget {
+//   const VideoScreen({super.key, required this.videoUrl});
+//
+//   final String videoUrl;
+//   @override
+//   VideoScreenState createState() => VideoScreenState();
+// }
+//
+// class VideoScreenState extends State<VideoScreen> {
+//   late VideoPlayerController _videoPlayerController;
+//  // late ChewieController _chewieController;
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     // ignore: deprecated_member_use
+//     _videoPlayerController = VideoPlayerController.network(
+//       widget.videoUrl,
+//     );
+//     // _chewieController = ChewieController(
+//     //   videoPlayerController: _videoPlayerController,
+//     //   autoPlay: false,
+//     //   looping: false,
+//     //   // Other customization options...
+//     // );
+//   }
+//
+//   @override
+//   void dispose() {
+//     _videoPlayerController.dispose();
+//     //_chewieController.dispose();
+//     super.dispose();
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     Size size = MediaQuery.of(context).size;
+//
+//     return SizedBox(
+//       width: size.width * 0.3,
+//       child: const Center(
+//         child:SizedBox() ,
+//         // Chewie(
+//         //   controller: _chewieController,
+//         // ),
+//       ),
+//     );
+//   }
+// }
 
 class VideoPlayerWidget extends StatefulWidget {
   const VideoPlayerWidget({super.key, required this.videoUrl});

@@ -12,7 +12,7 @@ pluginManagement {
 
     plugins {
         id 'com.android.application'
-        id 'org.jetbrains.kotlin.android' version '1.8.0'  // Ensure this is the latest version
+        id 'org.jetbrains.kotlin.android' version '2.1.0'  // Ensure this is the latest version
         id 'io.flutter.flutter'
         id "dev.flutter.flutter-gradle-plugin" version "1.0.0" apply false
     }
