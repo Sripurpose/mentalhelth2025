@@ -33,10 +33,12 @@ import '../token_expiry/token_expiry.dart';
 import 'provider/ad_goals_dreams_provider.dart';
 
 class AddGoalsDreamsScreen extends StatefulWidget {
-  const AddGoalsDreamsScreen({Key? key})
+  const AddGoalsDreamsScreen({Key? key,required this.pageNo})
       : super(
           key: key,
         );
+
+  final String pageNo;
 
   @override
   State<AddGoalsDreamsScreen> createState() => _AddGoalsDreamsScreenState();

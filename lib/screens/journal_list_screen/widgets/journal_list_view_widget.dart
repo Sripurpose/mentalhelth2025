@@ -32,6 +32,7 @@ class _JournalListViewWidgetState extends State<JournalListViewWidget> {
     super.initState();
     homeProvider = Provider.of<HomeProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      print("currentPagnewse$currentPage");
       _scrollController.addListener(_loadMoreData);
       homeProvider.fetchJournals(initial: true); // Fetch initial journals
       Future.delayed(const Duration(seconds: 1), () {
@@ -128,35 +129,24 @@ class _JournalListViewWidgetState extends State<JournalListViewWidget> {
                         children: List.generate(homeProvider.journalsModel?.pageCount ?? 0, (index) {
                           return GestureDetector(
                             onTap: () {
-                              // Update the current page and fetch new data
-                              setState(() {
-                                homeProvider.journalsModelList.clear();
-                                currentPage = index + 1;
-                              });
-                              homeProvider.fetchJournals(pageNo: currentPage.toString());
+                              homeProvider.setCurrentPage(index + 1); // Update current page
+                              homeProvider.journalsModelList.clear();
+                              print("currentPagenews ${homeProvider.currentPage}");
+
+                              homeProvider.fetchJournals(pageNo: homeProvider.currentPage.toString());
                             },
                             child: Container(
                               margin: const EdgeInsets.all(4.0),
                               padding: const EdgeInsets.all(8.0),
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: currentPage == index + 1 ? Colors.blue : Colors.grey, // Change color based on current page
+                                color: homeProvider.currentPage == index + 1 ? Colors.blue : Colors.grey, // Change color based on current page
                               ),
-                              child: GestureDetector(
-                                onTap: () {
-                                  // Update the current page and fetch new data
-                                  setState(() {
-                                    homeProvider.journalsModelList.clear();
-                                    currentPage = index + 1;
-                                  });
-                                  homeProvider.fetchJournals(pageNo: currentPage.toString());
-                                },
-                                child: Text(
-                                  '${index + 1}',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                              child: Text(
+                                '${index + 1}',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
@@ -165,7 +155,9 @@ class _JournalListViewWidgetState extends State<JournalListViewWidget> {
                       ),
                     ),
                   ),
-                ):
+                )
+
+              :
                     const SizedBox(),
               ],
             ),

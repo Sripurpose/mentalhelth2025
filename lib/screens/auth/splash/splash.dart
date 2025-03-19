@@ -14,6 +14,7 @@ import 'package:mentalhelth/utils/logic/shared_prefrence.dart';
 import 'package:provider/provider.dart';
 
 import '../sign_in/landing_register_screen.dart';
+import 'new_splash_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -46,11 +47,11 @@ class _SplashScreenState extends State<SplashScreen> {
               } else if (getSubScribed.toString() == "1") {
                 return const DashBoardScreen();
               } else {
-                return const LandingRegisterScreenScreen(
+                return const NewSplashScreen(
                 );
               }
             } else {
-              return const LandingRegisterScreenScreen(
+              return const NewSplashScreen(
               );
             }
           }));

@@ -88,6 +88,15 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  int _currentPage = 1; // Store the current page number
+
+  int get currentPage => _currentPage;
+
+  void setCurrentPage(int page) {
+    _currentPage = page;
+    notifyListeners(); // Notify UI to update
+  }
+
   //get the journels
   JournalsModel? journalsModel;
   List<Journal> journalsModelList = [];

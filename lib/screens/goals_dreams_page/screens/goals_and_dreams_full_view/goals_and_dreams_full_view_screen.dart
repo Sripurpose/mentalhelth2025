@@ -838,6 +838,7 @@ class _GoalAndDreamFullViewScreenState
                           await goalsDreamsProvider.deleteGoalsFunction(
                             deleteId: id,
                           );
+                          await Future.delayed(const Duration(seconds: 1));
                           Navigator.of(context).pop();
                           Navigator.of(context).pop();
                         },

@@ -37,7 +37,6 @@ import 'screens/feedback_screen/provider/feed_back_provider.dart';
 import 'screens/home_screen/provider/home_provider.dart';
 import 'screens/phone_singin_screen/provider/phone_sign_in_provider.dart';
 import 'screens/privacy_screen/provider/privacy_policy_provider.dart';
-import 'utils/theme/theme_helper.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =

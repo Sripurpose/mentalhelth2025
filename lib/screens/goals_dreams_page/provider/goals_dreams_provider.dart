@@ -33,13 +33,24 @@ class GoalsDreamsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+
+  int _currentPage = 1; // Store the current page number
+
+  int get currentPage => _currentPage;
+
+  void setCurrentPage(int page) {
+    _currentPage = page;
+    notifyListeners(); // Notify UI to update
+  }
+
   GoalsAndDreamsModel? goalsAndDreamsModel;
   bool goalsAndDreamsModelLoading = false;
   List<Goalsanddream> goalsanddreams = [];
 
   int pageLoad = 1;
-
+  int fetchGoalsAndDreamsStatus = 0;
   Future fetchGoalsAndDreams({bool initial = false,String? pageNo}) async {
+    fetchGoalsAndDreamsStatus = 0;
     // try {
     // goalsAndDreamsModel = null;
     String? token = await getUserTokenSharePref();
@@ -68,8 +79,11 @@ class GoalsDreamsProvider extends ChangeNotifier {
       headers: headers,
     );
 
+    logger.i("fetchGoalsAndDreamsurl$url");
+
     log(response.body.toString(), name: " fetchGoalsAndDreams");
     if (response.statusCode == 200) {
+      fetchGoalsAndDreamsStatus = response.statusCode;
       goalsAndDreamsModel = goalsAndDreamsModelFromJson(response.body);
       logger.w("goalsAndDreamsModel ${goalsAndDreamsModel}");
      // if (initial) {
@@ -91,10 +105,12 @@ class GoalsDreamsProvider extends ChangeNotifier {
 
       notifyListeners();
     } else {
+      fetchGoalsAndDreamsStatus = response.statusCode;
       goalsAndDreamsModelLoading = false;
       logger.w("goalsAndDreamsModelelse ${goalsAndDreamsModel}");
       notifyListeners();
     }
+    fetchGoalsAndDreamsStatus = response.statusCode;
     if(response.statusCode == 401){
       TokenManager.setTokenStatus(true);
       //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);

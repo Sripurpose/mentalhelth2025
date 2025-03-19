@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/screens/dash_borad_screen/provider/dash_board_provider.dart';
 import 'package:mentalhelth/screens/edit_add_profile_screen/provider/edit_provider.dart';
@@ -25,6 +26,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../utils/core/constants.dart';
 import '../../utils/core/constent.dart';
 import '../../utils/core/firebase_api.dart';
+import '../../utils/core/image_constant.dart';
 import '../../utils/logic/shared_prefrence.dart';
 import '../../utils/theme/custom_button_style.dart';
 import '../../utils/theme/custom_text_style.dart';
@@ -473,6 +475,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ),
+
+
+                          // Image.asset(
+                          // ImageConstant.dashboardNewBannerPng,
+                          // ),
 
                           if(homeProvider.journalsModel?.journals != null)
                           Align(

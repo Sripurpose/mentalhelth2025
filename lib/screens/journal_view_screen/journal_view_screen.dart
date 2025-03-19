@@ -868,7 +868,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                             .deleteJournalsFunction(
                           journalId: homeProvider.journalDetails!.journals!.journalId.toString(),
                         )
-                            .then((value) {
+                            .then((value) async {
 
                           // Check if the journal exists in the list and remove it
                           for (var journals in homeProvider.journalsModelList) {
@@ -878,16 +878,19 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                               break; // Stop the loop once item is removed
                             }
                           }
-                          homeProvider.fetchJournals(initial: true);
+                          await homeProvider.fetchJournals(pageNo:homeProvider.currentPage.toString());
+                          if(homeProvider.journalStatus == 404){
+                            await homeProvider.fetchJournals(pageNo:1.toString());
+                          }
+
                           // Close the dialog and then close the previous screen if needed
-                          Navigator.of(context).pop(); // Close the customPopup dialog
-                          Future.delayed(Duration(milliseconds: 200), () {
-                            Navigator.of(context).pop(); // Close the previous screen
-                          });
+                          await Future.delayed(const Duration(seconds: 1));
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
                         });
                       },
                       title: 'Confirm Delete',
-                      content: 'Are you sure you want to delete this journal?',
+                      content: 'Are you sure you want to delete this journaldf?',
                     );
                   },
 

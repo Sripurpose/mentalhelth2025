@@ -54,7 +54,7 @@ class VerifyOtpScreen extends StatelessWidget {
                     height: 50,
                   ),
                   Text(
-                    "Enter the code sent to your phone (email)",
+                    "Enter the code sent to your email",
                       style: CustomTextStyles.bodyMedium14
                   ),
                   const SizedBox(

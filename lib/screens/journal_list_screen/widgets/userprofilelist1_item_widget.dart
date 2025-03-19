@@ -263,7 +263,10 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                               )
                                   .then((value) async {
                                 Navigator.of(context).pop();
-                                await homeProvider.fetchJournals(initial: true);
+                                await homeProvider.fetchJournals(pageNo:homeProvider.currentPage.toString());
+                                if(homeProvider.journalStatus == 404){
+                                  await homeProvider.fetchJournals(pageNo:1.toString());
+                                }
 
                                 List<int> indicesToRemove = [];
                                 for (int i = 0;

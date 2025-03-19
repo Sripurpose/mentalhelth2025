@@ -167,13 +167,15 @@ class _ScreenChooseGoalMentalStrengthState
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
+                        mentalStrengthEditProvider.goalsValue.id != null ?
                         const Text(
                           "Choose Goal",
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
-                        ),
+                        ):
+                            SizedBox(),
                         mentalStrengthEditProvider.goalsValue.id == null
                             ? const SizedBox()
                             : ElevatedButton(

@@ -7,4 +7,5 @@ class ColorsContent {
 
   static Color greyText = const Color(0xFF666666);
   static Color whiteText = const Color(0xFFFFFFFF);
+  static Color newThemeColor = const Color(0xFF7E69F8);
 }

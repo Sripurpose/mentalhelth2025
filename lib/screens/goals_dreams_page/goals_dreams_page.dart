@@ -84,6 +84,7 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
      goalsDreamsProvider.goalsanddreams = [];
 
      WidgetsBinding.instance.addPostFrameCallback((_) {
+       currentPage = 1;
        goalsDreamsProvider.goalsanddreams = [];
        goalsDreamsProvider.goalsanddreams.clear();
        goalsDreamsProvider.fetchGoalsAndDreams(pageNo: currentPage.toString());
@@ -270,7 +271,7 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
                                 onPressed: () {
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
-                                      builder: (context) => const AddGoalsDreamsScreen(),
+                                      builder: (context) =>  AddGoalsDreamsScreen(pageNo: currentPage.toString(),),
                                     ),
                                   );
                                 },

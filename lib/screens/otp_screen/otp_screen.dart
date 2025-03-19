@@ -65,7 +65,7 @@ class OtpScreen extends StatelessWidget {
                   height: 90,
                 ),
                 Text(
-                  "Enter the code sent to your email ",
+                  "Enter the code sent to your phone ",
                   style: theme.textTheme.bodyLarge,
                 ),
                 const SizedBox(

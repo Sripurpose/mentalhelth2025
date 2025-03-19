@@ -44,6 +44,7 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
   late MentalStrengthEditProvider mentalStrengthEditProvider;
   late EditProfileProvider editProfileProvider;
   late DashBoardProvider dashBoardProvider;
+  late AdDreamsGoalsProvider adDreamsGoalsProvider;
   bool tokenStatus = false;
   var logger = Logger();
 
@@ -70,7 +71,20 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
     mentalStrengthEditProvider = Provider.of<MentalStrengthEditProvider>(context, listen: false);
     dashBoardProvider = Provider.of<DashBoardProvider>(context, listen: false);
     editProfileProvider = Provider.of<EditProfileProvider>(context, listen: false);
+    adDreamsGoalsProvider = Provider.of<AdDreamsGoalsProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      ///added for clearing///19-03-2025
+      adDreamsGoalsProvider.nameEditTextController.text = "";
+      editProfileProvider.interestsValueController.text = "";
+      adDreamsGoalsProvider.selectedDate = "";
+      adDreamsGoalsProvider.commentEditTextController.text = "";
+      adDreamsGoalsProvider.goalModelIdName.clear();
+      adDreamsGoalsProvider.recordedFilePath.clear();
+      adDreamsGoalsProvider.pickedImages.clear();
+      adDreamsGoalsProvider.takedImages.clear();
+      adDreamsGoalsProvider.selectedLocationName = "";
+      adDreamsGoalsProvider.mediaSelected = 0;
+      ///added for clearing///19-03-2025
       editProfileProvider.fetchCategory();
       _isTokenExpired();
     });

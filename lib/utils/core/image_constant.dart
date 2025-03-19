@@ -3,6 +3,10 @@ class ImageConstant {
 
   static String imagePath = 'assets/images';
   static String logo = 'assets/images/logo.svg';
+  static String dummyImageSplash1 = 'assets/images/dummy_image_splash1.png';
+  static String dummyImageSplash2 = 'assets/images/dummy_image_splash2.png';
+  static String dashboardNewBannerPng = 'assets/images/dashboard_new_banner.png';
+  static String dashboardNewBannerShadowPng = 'assets/images/dashboard_shadow.png';
   static String splashNextIcon = 'assets/images/splash-next-icon.png';
   static String noData = '$imagePath/home/noData.gif';
   static String imgMenu = '$imagePath/img_menu.svg';
