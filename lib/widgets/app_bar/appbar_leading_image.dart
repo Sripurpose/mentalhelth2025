@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:mentalhelth/screens/dash_borad_screen/dash_board_screen.dart';
 import 'package:mentalhelth/screens/dash_borad_screen/provider/dash_board_provider.dart';
 import 'package:mentalhelth/screens/home_screen/widgets/home_menu/home_menu.dart';
@@ -99,42 +100,46 @@ PreferredSizeWidget buildAppBar(BuildContext context, Size size,
                 padding: EdgeInsets.only(
                   right: size.width * 0.07,
                 ),
-                child: CircleAvatar(
-                  radius: size.width * 0.04,
-                  backgroundColor: PrimaryColors().blue300,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: size.height * 0.003,
-                        width: size.width * 0.03,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(
-                              10,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: size.height * 0.005,
-                      ),
-                      Container(
-                        height: size.height * 0.003,
-                        width: size.width * 0.03,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(
-                              10,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                child:
+                SvgPicture.asset(
+                  ImageConstant.menuBarSvg,
                 ),
+                // CircleAvatar(
+                //   radius: size.width * 0.04,
+                //   backgroundColor: PrimaryColors().blue300,
+                //   child: Column(
+                //     mainAxisAlignment: MainAxisAlignment.center,
+                //     children: [
+                //       Container(
+                //         height: size.height * 0.003,
+                //         width: size.width * 0.03,
+                //         decoration: const BoxDecoration(
+                //           color: Colors.white,
+                //           borderRadius: BorderRadius.all(
+                //             Radius.circular(
+                //               10,
+                //             ),
+                //           ),
+                //         ),
+                //       ),
+                //       SizedBox(
+                //         height: size.height * 0.005,
+                //       ),
+                //       Container(
+                //         height: size.height * 0.003,
+                //         width: size.width * 0.03,
+                //         decoration: const BoxDecoration(
+                //           color: Colors.white,
+                //           borderRadius: BorderRadius.all(
+                //             Radius.circular(
+                //               10,
+                //             ),
+                //           ),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
               ),
             ),
     ],

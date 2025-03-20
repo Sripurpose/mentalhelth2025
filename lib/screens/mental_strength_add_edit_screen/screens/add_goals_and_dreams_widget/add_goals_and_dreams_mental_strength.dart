@@ -73,6 +73,7 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
     editProfileProvider = Provider.of<EditProfileProvider>(context, listen: false);
     adDreamsGoalsProvider = Provider.of<AdDreamsGoalsProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      logger.t("adDreamsGoalsProvider.selectedDate${adDreamsGoalsProvider.selectedDate}");
       ///added for clearing///19-03-2025
       adDreamsGoalsProvider.nameEditTextController.text = "";
       editProfileProvider.interestsValueController.text = "";

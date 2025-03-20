@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mentalhelth/utils/core/image_constant.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/utils/theme/theme_helper.dart';
 
 Widget backGroundImager({
@@ -11,15 +12,13 @@ Widget backGroundImager({
     width: size.width,
     height: size.height,
     decoration: BoxDecoration(
-      color: theme.colorScheme.onSecondaryContainer.withOpacity(
-        1,
-      ),
-      image: DecorationImage(
-        image: AssetImage(
-          ImageConstant.imgGroup22,
-        ),
-        fit: BoxFit.cover,
-      ),
+      color: ColorsContent.homeBackGroundColor, // Replace image with a solid color
+      // image: DecorationImage(
+      //   image: AssetImage(
+      //     ImageConstant.imgGroup22,
+      //   ),
+      //   fit: BoxFit.cover,
+      // ),
     ),
     child: Container(
       width: double.maxFinite,

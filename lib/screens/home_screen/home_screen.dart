@@ -28,6 +28,7 @@ import '../../utils/core/constent.dart';
 import '../../utils/core/firebase_api.dart';
 import '../../utils/core/image_constant.dart';
 import '../../utils/logic/shared_prefrence.dart';
+import '../../utils/theme/colors.dart';
 import '../../utils/theme/custom_button_style.dart';
 import '../../utils/theme/custom_text_style.dart';
 import '../../utils/theme/theme_helper.dart';
@@ -406,100 +407,108 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(height: size.height * 0.01),
                           _buildHeaderRow(context, size, editProfileProvider, dashBoardProvider),
                           const SizedBox(height: 12),
-                          _buildMessageColumn(context, size),
-                          CustomElevatedButton(
-                            onPressed: () {
+                          ///commented in new screen///
+                          // _buildMessageColumn(context, size),
+                          // CustomElevatedButton(
+                          //   onPressed: () {
+                          //     dashBoardProvider.changePage(index: 1);
+                          //     mentalStrengthEditProvider.fetchEmotions();
+                          //   },
+                          //   height: size.height * 0.06,
+                          //   width: size.width * 1,
+                          //   text: "Build your mental strength now",
+                          //   buttonStyle: CustomButtonStyles.fillBlueBL10,
+                          //   buttonTextStyle: CustomTextStyles.titleSmallOnSecondaryContainer15,
+                          // ),
+                          // const SizedBox(height: 31),
+                          // Container(
+                          //   decoration: BoxDecoration(
+                          //     color: Colors.white,
+                          //     borderRadius:BorderRadius.all(Radius.circular(10)),
+                          //     border:  Border.all(
+                          //       color: Colors.grey.shade400, // Black border color
+                          //       width: 0.8,          // Border width
+                          //     ),
+                          //   ),
+                          //   child: Padding(
+                          //     padding: const EdgeInsets.all(12.0),
+                          //     child: Column(
+                          //       children: [
+                          //         Align(
+                          //           alignment: Alignment.centerLeft,
+                          //           child: Padding(
+                          //             padding: const EdgeInsets.only(left: 1),
+                          //             child: Text(
+                          //               "Recent  mental strength scores",
+                          //               style: theme.textTheme.titleMedium,
+                          //             ),
+                          //           ),
+                          //         ),
+                          //         const SizedBox(height: 3),
+                          //         ChartWidget(chartData: homeProvider.chartViewModel?.chart),
+                          //         Align(
+                          //           alignment: Alignment.centerLeft,
+                          //           child: Padding(
+                          //             padding: const EdgeInsets.only(left: 1),
+                          //             child: Text.rich(
+                          //               TextSpan(
+                          //                 children: [
+                          //                   TextSpan(
+                          //                     text: "${DateTime.now().year} ",
+                          //                     style: CustomTextStyles.titleMediumBlue300.copyWith(
+                          //                       color: Colors.blue,
+                          //                       fontWeight: FontWeight.bold,
+                          //                     ),
+                          //                   ),
+                          //                   TextSpan(
+                          //                     text: "You average mental strength according to the last 7 entries is 4 out of 5. Keep tracking...",
+                          //                     style: CustomTextStyles.bodyMediumOnPrimary14,
+                          //                   ),
+                          //                 ],
+                          //               ),
+                          //               maxLines: 3,
+                          //               overflow: TextOverflow.ellipsis,
+                          //             ),
+                          //           ),
+                          //         ),
+                          //
+                          //         const SizedBox(height: 25),
+                          //       ],
+                          //     ),
+                          //   ),
+                          // ),
+                          ///commented in new screen///
+                          GestureDetector(
+                            onTap: (){
                               dashBoardProvider.changePage(index: 1);
                               mentalStrengthEditProvider.fetchEmotions();
                             },
-                            height: size.height * 0.06,
-                            width: size.width * 1,
-                            text: "Build your mental strength now",
-                            buttonStyle: CustomButtonStyles.fillBlueBL10,
-                            buttonTextStyle: CustomTextStyles.titleSmallOnSecondaryContainer15,
-                          ),
-                          const SizedBox(height: 31),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius:BorderRadius.all(Radius.circular(10)),
-                              border:  Border.all(
-                                color: Colors.grey.shade400, // Black border color
-                                width: 0.8,          // Border width
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Column(
-                                children: [
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 1),
-                                      child: Text(
-                                        "Recent  mental strength scores",
-                                        style: theme.textTheme.titleMedium,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 3),
-                                  ChartWidget(chartData: homeProvider.chartViewModel?.chart),
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 1),
-                                      child: Text.rich(
-                                        TextSpan(
-                                          children: [
-                                            TextSpan(
-                                              text: "${DateTime.now().year} ",
-                                              style: CustomTextStyles.titleMediumBlue300.copyWith(
-                                                color: Colors.blue,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            TextSpan(
-                                              text: "You average mental strength according to the last 7 entries is 4 out of 5. Keep tracking...",
-                                              style: CustomTextStyles.bodyMediumOnPrimary14,
-                                            ),
-                                          ],
-                                        ),
-                                        maxLines: 3,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  ),
-
-                                  const SizedBox(height: 25),
-                                ],
-                              ),
+                            child: Image.asset(
+                            ImageConstant.homeBannerNumu,
+                              width: 400,
+                              height: 200,
                             ),
                           ),
-
-
-                          // Image.asset(
-                          // ImageConstant.dashboardNewBannerPng,
-                          // ),
 
                           if(homeProvider.journalsModel?.journals != null)
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Padding(
-                              padding: const EdgeInsets.only(left: 1),
+                              padding: const EdgeInsets.symmetric(horizontal: 20),
                               child: Text(
-                                "Your recent Journals",
-                                style: theme.textTheme.titleMedium,
+                                "Your Recent Journals",
+                               style:  TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700,
+                                  color:  ColorsContent.blackThemeColor,
+                                ),
                               ),
                             ),
                           ),
-                          const SizedBox(height: 6),
-                          homeProvider.chartViewModel == null
-                              ? const SizedBox()
-                              : _buildUserProfileList(context, size, homeProvider),
-                          const SizedBox(height: 4),
-                          homeProvider.chartViewModel == null
-                              ? const SizedBox()
-                              : (homeProvider.journalsModel?.journals?.length ?? 0) < 0
+                          const SizedBox(height: 20),
+                          _buildUserProfileList(context, size, homeProvider),
+                          const SizedBox(height: 10),
+                          (homeProvider.journalsModel?.journals?.length ?? 0) < 0
                               ? const SizedBox()
                               : GestureDetector(
                             onTap: () {
@@ -508,10 +517,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: Padding(
-                                padding: const EdgeInsets.only(left: 1),
+                                padding: const EdgeInsets.symmetric(horizontal: 15),
                                 child: Text(
                                   "View more ...",
-                                  style: CustomTextStyles.bodySmallPrimary,
+                                  style: CustomTextStyles.bodyLargeRoboto,
                                 ),
                               ),
                             ),
@@ -617,42 +626,47 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
             },
-            child: CircleAvatar(
-              backgroundColor: PrimaryColors().blue300,
-              radius: size.width * 0.04,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    height: size.height * 0.003,
-                    width: size.width * 0.03,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(
-                          10,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: size.height * 0.005,
-                  ),
-                  Container(
-                    height: size.height * 0.003,
-                    width: size.width * 0.03,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(
-                          10,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+            child:
+            SvgPicture.asset(
+            ImageConstant.menuBarSvg,
             ),
+
+            // CircleAvatar(
+            //   backgroundColor: PrimaryColors().blue300,
+            //   radius: size.width * 0.04,
+            //   child: Column(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     children: [
+            //       Container(
+            //         height: size.height * 0.003,
+            //         width: size.width * 0.03,
+            //         decoration: const BoxDecoration(
+            //           color: Colors.white,
+            //           borderRadius: BorderRadius.all(
+            //             Radius.circular(
+            //               10,
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //       SizedBox(
+            //         height: size.height * 0.005,
+            //       ),
+            //       Container(
+            //         height: size.height * 0.003,
+            //         width: size.width * 0.03,
+            //         decoration: const BoxDecoration(
+            //           color: Colors.white,
+            //           borderRadius: BorderRadius.all(
+            //             Radius.circular(
+            //               10,
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
           ),
         ],
       ),
@@ -683,7 +697,7 @@ class _HomeScreenState extends State<HomeScreen> {
       BuildContext context, Size size, HomeProvider homeProvider) {
     var logger = Logger();
     return Padding(
-      padding: const EdgeInsets.only(left: 1),
+      padding: const EdgeInsets.symmetric(horizontal: 15,),
       child: homeProvider.journalsModelLoading
           ? shimmerList(
         height: size.height * 0.5,
@@ -698,9 +712,9 @@ class _HomeScreenState extends State<HomeScreen> {
         separatorBuilder: (context, index) {
           return const SizedBox(height: 3);
         },
-        itemCount: (homeProvider.journalsModel?.journals?.length ?? 0) < 4
+        itemCount: (homeProvider.journalsModel?.journals?.length ?? 0) < 5
             ? (homeProvider.journalsModel?.journals?.length ?? 0)
-            : 4,
+            : 5,
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {

@@ -5,8 +5,8 @@ class ImageConstant {
   static String logo = 'assets/images/logo.svg';
   static String dummyImageSplash1 = 'assets/images/dummy_image_splash1.png';
   static String dummyImageSplash2 = 'assets/images/dummy_image_splash2.png';
-  static String dashboardNewBannerPng = 'assets/images/dashboard_new_banner.png';
-  static String dashboardNewBannerShadowPng = 'assets/images/dashboard_shadow.png';
+  static String homeBannerNumu = 'assets/images/home_banner_numu.png';
+  static String menuBarSvg = 'assets/images/menu_bar.svg';
   static String splashNextIcon = 'assets/images/splash-next-icon.png';
   static String noData = '$imagePath/home/noData.gif';
   static String imgMenu = '$imagePath/img_menu.svg';
@@ -36,13 +36,18 @@ class ImageConstant {
 
   static String imgTelevision = '$imagePath/img_television.svg';
 
-  static String imgHome = '$imagePath/img_home.svg';
+  static String imgHome = '$imagePath/home_in_active_icon_numu.svg';
+  static String imgHomeActive = '$imagePath/home_active_icon_numu.svg';
 
-  static String imgSettings = '$imagePath/img_settings.svg';
+  static String imgSettings = '$imagePath/mental_in_active_icon_numu.svg';
+  static String imgSettingsActive = '$imagePath/mental_active_icon_numu.svg';
 
-  static String imgMegaphone = '$imagePath/img_megaphone.svg';
+  static String imgMegaphone = '$imagePath/chart_view_in_active_icon_numu.svg';
+  static String imgMegaphoneActive = '$imagePath/chartview_active_icon_numu.svg';
 
-  static String imgArrowDown = '$imagePath/img_arrow_down.svg';
+  static String imgArrowDown = '$imagePath/goal_in_active_icon_numu.svg';
+  static String imgArrowDownActive = '$imagePath/goals_active_icon_numu.svg';
+
   static String imgImage5 = '$imagePath/img_image_5.png';
   static String imgThumbsUpGray700 = '$imagePath/img_thumbs_up_gray_700.svg';
   static String imgClose = '$imagePath/img_close.svg';

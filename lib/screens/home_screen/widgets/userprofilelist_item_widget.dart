@@ -62,8 +62,8 @@ class UserProfileListItemWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  width: 270,
-                  // color: Colors.red,
+                  width: 230,
+                  //color: Colors.red,
                   child: Text(
                     HtmlUnescape().convert(title.toString()), // Decoding HTML entities
                     style: theme.textTheme.bodyMedium,

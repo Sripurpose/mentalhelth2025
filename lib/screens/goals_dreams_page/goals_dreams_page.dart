@@ -104,7 +104,7 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
 
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
-      goalsDreamsProvider.fetchGoalsAndDreams();
+     // goalsDreamsProvider.fetchGoalsAndDreams();
     }
 
     if (_scrollController.position.pixels !=

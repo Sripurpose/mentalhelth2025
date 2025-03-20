@@ -185,13 +185,18 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            mentalStrengthEditProvider
+                                .getListGoalActionsModel!
+                                .actions!
+                                .isNotEmpty ?
                             const Text(
                               "Choose Actions",
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
-                            ),
+                            ):
+                                SizedBox(),
                             SizedBox(
                               height: size.height * 0.003,
                             ),
@@ -427,12 +432,17 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
                 child: CircleAvatar(
                   radius: size.width * 0.03,
                   backgroundColor:
-                  mentalStrengthEditProvider.actionsDetailsModelLoading
-                      ? Colors.blue[50]
-                      : Colors.blue,
-                  child: mentalStrengthEditProvider.actionsDetailsModelLoading
-                      ? const CircularProgressIndicator()
-                      : Icon(
+                  // mentalStrengthEditProvider.actionsDetailsModelLoading
+                  //     ?
+                  // Colors.blue[50]
+                  //     :
+                  Colors.blue,
+                  child:
+                  // mentalStrengthEditProvider.actionsDetailsModelLoading
+                  //     ?
+                  // const CircularProgressIndicator()
+                  //     :
+                  Icon(
                     Icons.arrow_forward_ios_outlined,
                     color: Colors.white,
                     size: size.width * 0.03,

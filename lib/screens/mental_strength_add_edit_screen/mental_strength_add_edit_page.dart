@@ -34,6 +34,7 @@ import '../../widgets/app_bar/appbar_leading_image.dart';
 import '../../widgets/custom_image_view.dart';
 import '../../widgets/custom_rating_bar.dart';
 import '../../widgets/functions/popup.dart';
+import '../addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
 import '../auth/sign_in/provider/sign_in_provider.dart';
 import '../home_screen/provider/home_provider.dart';
 import '../token_expiry/tocken_expiry_warning_screen.dart';
@@ -61,6 +62,7 @@ class _MentalStrengthAddEditFullViewScreenState
   late MentalStrengthEditProvider mentalStrengthEditProvider;
   late EditProfileProvider editProfileProvider;
   late DashBoardProvider dashBoardProvider;
+  late AdDreamsGoalsProvider adDreamsGoalsProvider;
   bool tokenStatus = false;
   var logger = Logger();
   PermissionStatus permissionStatus = PermissionStatus.denied;
@@ -117,6 +119,7 @@ class _MentalStrengthAddEditFullViewScreenState
     editProfileProvider =
         Provider.of<EditProfileProvider>(context, listen: false);
     dashBoardProvider = Provider.of<DashBoardProvider>(context, listen: false);
+    adDreamsGoalsProvider = Provider.of<AdDreamsGoalsProvider>(context, listen: false);
     logger.w(
         "mentalStrengthEditProvider.emotionalValueStar${mentalStrengthEditProvider.emotionalValueStar}");
     logger.w(
@@ -126,6 +129,7 @@ class _MentalStrengthAddEditFullViewScreenState
       mentalStrengthEditProvider.descriptionEditTextController.text = "";
       mentalStrengthEditProvider.emotionalValueStar = null;
       mentalStrengthEditProvider.driveValueStar = null;
+      adDreamsGoalsProvider.selectedDate = "";
       mentalStrengthEditProvider.alreadyRecordedFilePath.clear();
       mentalStrengthEditProvider.recordedFilePath.clear();
       mentalStrengthEditProvider.alreadyPickedImages.clear();

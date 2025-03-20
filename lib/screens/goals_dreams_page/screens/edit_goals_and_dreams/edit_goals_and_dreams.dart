@@ -871,7 +871,8 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                   context,
                   listen: false,
                 );
-                goalsDreamsProvider.fetchGoalsAndDreams(initial: true);
+
+                //goalsDreamsProvider.fetchGoalsAndDreams(initial: true);
               }
             } else {
               showCustomSnackBar(

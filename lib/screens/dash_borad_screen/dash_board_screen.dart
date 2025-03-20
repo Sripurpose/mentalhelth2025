@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mentalhelth/screens/addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
 import 'package:mentalhelth/screens/dash_borad_screen/provider/dash_board_provider.dart';
 import 'package:mentalhelth/screens/edit_add_profile_screen/provider/edit_provider.dart';
@@ -53,100 +52,110 @@ class DashBoardScreen extends StatelessWidget {
         },
         child: Scaffold(
           body: dashBoardProvider.getPage(),
-          bottomNavigationBar: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            selectedItemColor: ColorsContent.primaryColor,
-            selectedFontSize: 0,
-            elevation: 0,
-            currentIndex: dashBoardProvider.currentIndex,
-            onTap: (index) async {
-              dashBoardProvider.changePage(index: index);
-              if (index == 0) {
-                if (homeProvider.chartViewModel == null) {
-                  homeProvider.fetchChartView(context);
-                }
-              } else if (index == 1) {
-                mentalStrengthEditProvider.clearAllValuesInSaveTime();
-                adDreamsGoalsProvider.clearAction();
-                mentalStrengthEditProvider.openAllCloser();
-                await mentalStrengthEditProvider.fetchEmotions();
-                await editProfileProvider.fetchUserProfile();
-              } else if (index == 2) {
-                await journalListProvider.fetchJournalChartView();
-                await homeProvider.fetchJournals(initial: true);
-              }
-            },
-            items: [
-              BottomNavigationBarItem(
-                icon: CustomImageView(
-                  imagePath: ImageConstant.imgHome,
-                  height: 24,
-                  width: 24,
-                  color: theme.colorScheme.primary.withOpacity(1),
-                ),
-                activeIcon: SvgPicture.asset(
-                  ImageConstant.imgHome,
-                  // ignore: deprecated_member_use
-                  color: ColorsContent.primaryColor,
-                  height: 24,
-                  width: 24,
-                  fit: BoxFit.contain,
-                ),
-                label: '',
+          backgroundColor: ColorsContent.homeBackGroundColor,
+          bottomNavigationBar: Container(
+            decoration: const BoxDecoration(
+              color: Colors.transparent, // Set your background color
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30), // Adjust as needed
+                topRight: Radius.circular(30),
               ),
-              BottomNavigationBarItem(
-                icon: CustomImageView(
-                  imagePath: ImageConstant.imgSettings,
-                  height: 24,
-                  width: 24,
-                  color: theme.colorScheme.primary.withOpacity(1),
-                ),
-                activeIcon: SvgPicture.asset(
-                  ImageConstant.imgSettings,
-                  // ignore: deprecated_member_use
-                  color: ColorsContent.primaryColor,
-                  height: 24,
-                  width: 24,
-                  fit: BoxFit.contain,
-                ),
-                label: '',
+            ),
+            child: ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(30), // Match the radius of the container
+                topRight: Radius.circular(30),
               ),
-              BottomNavigationBarItem(
-                icon: CustomImageView(
-                  imagePath: ImageConstant.imgMegaphone,
-                  height: 24,
-                  width: 24,
-                  color: theme.colorScheme.primary.withOpacity(1),
-                ),
-                activeIcon: SvgPicture.asset(
-                  ImageConstant.imgMegaphone,
-                  // ignore: deprecated_member_use
-                  color: ColorsContent.primaryColor,
-                  height: 24,
-                  width: 24,
-                  fit: BoxFit.contain,
-                ),
-                label: '',
+              child: BottomNavigationBar(
+                type: BottomNavigationBarType.fixed,
+                selectedItemColor: ColorsContent.primaryColor,
+                selectedFontSize: 0,
+                elevation: 0,
+                backgroundColor: Colors.white, // Ensure the background matches
+                currentIndex: dashBoardProvider.currentIndex,
+                onTap: (index) async {
+                  dashBoardProvider.changePage(index: index);
+                  if (index == 0) {
+                    if (homeProvider.chartViewModel == null) {
+                      homeProvider.fetchChartView(context);
+                    }
+                  } else if (index == 1) {
+                    mentalStrengthEditProvider.clearAllValuesInSaveTime();
+                    adDreamsGoalsProvider.clearAction();
+                    mentalStrengthEditProvider.openAllCloser();
+                    await mentalStrengthEditProvider.fetchEmotions();
+                    await editProfileProvider.fetchUserProfile();
+                  } else if (index == 2) {
+                    await journalListProvider.fetchJournalChartView();
+                    await homeProvider.fetchJournals(initial: true);
+                  }
+                },
+                items: [
+                  BottomNavigationBarItem(
+                    icon: CustomImageView(
+                      imagePath: ImageConstant.imgHome,
+                      height: 20,
+                      width: 20,
+                      color: theme.colorScheme.primary.withOpacity(1),
+                    ),
+                    activeIcon: CustomImageView(
+                      imagePath: ImageConstant.imgHomeActive,
+                      height: 80,
+                      width: 80,
+                      color: theme.colorScheme.primary.withOpacity(1),
+                    ),
+                    label: '',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: CustomImageView(
+                      imagePath: ImageConstant.imgSettings,
+                      height: 24,
+                      width: 24,
+                      color: theme.colorScheme.primary.withOpacity(1),
+                    ),
+                    activeIcon: CustomImageView(
+                      imagePath: ImageConstant.imgSettingsActive,
+                      height: 80,
+                      width: 80,
+                      color: theme.colorScheme.primary.withOpacity(1),
+                    ),
+                    label: '',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: CustomImageView(
+                      imagePath: ImageConstant.imgMegaphone,
+                      height: 24,
+                      width: 24,
+                      color: theme.colorScheme.primary.withOpacity(1),
+                    ),
+                    activeIcon: CustomImageView(
+                      imagePath: ImageConstant.imgMegaphoneActive,
+                      height: 80,
+                      width: 80,
+                      color: theme.colorScheme.primary.withOpacity(1),
+                    ),
+                    label: '',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: CustomImageView(
+                      imagePath: ImageConstant.imgArrowDown,
+                      height: 24,
+                      width: 24,
+                      color: theme.colorScheme.primary.withOpacity(1),
+                    ),
+                    activeIcon: CustomImageView(
+                      imagePath: ImageConstant.imgArrowDownActive,
+                      height: 80,
+                      width: 80,
+                      color: theme.colorScheme.primary.withOpacity(1),
+                    ),
+                    label: '',
+                  ),
+                ],
               ),
-              BottomNavigationBarItem(
-                icon: CustomImageView(
-                  imagePath: ImageConstant.imgArrowDown,
-                  height: 24,
-                  width: 24,
-                  color: theme.colorScheme.primary.withOpacity(1),
-                ),
-                activeIcon: SvgPicture.asset(
-                  ImageConstant.imgArrowDown,
-                  // ignore: deprecated_member_use
-                  color: ColorsContent.primaryColor,
-                  height: 24,
-                  width: 24,
-                  fit: BoxFit.contain,
-                ),
-                label: '',
-              ),
-            ],
+            ),
           ),
+
         ),
       );
     });

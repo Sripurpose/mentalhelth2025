@@ -80,7 +80,10 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
 
   Future<void> _isTokenExpired() async {
     await homeProvider.fetchChartView(context);
-    await homeProvider.fetchJournals(initial: true);
+    await homeProvider.fetchJournals(pageNo:homeProvider.currentPage.toString());
+    if(homeProvider.journalStatus == 404){
+      await homeProvider.fetchJournals(pageNo:1.toString());
+    }
     //await editProfileProvider.fetchUserProfile();
     tokenStatus = TokenManager.checkTokenExpiry();
     if (tokenStatus) {
@@ -870,6 +873,8 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
                                             loading: mentalStrengthEditProvider
                                                 .saveJournalLoading,
                                             onPressed: () async {
+                                              logger.i("homeProvider.currentPage${homeProvider.currentPage}");
+
                                               _isTokenExpired();
                                               if (!mentalStrengthEditProvider
                                                   .isVideoUploading) {
@@ -945,9 +950,12 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
                                                         const Duration(
                                                             seconds: 3),
                                                         () async {
-                                                      await homeProvider
-                                                          .fetchJournals(
-                                                              initial: true);
+                                                       //   homeProvider.currentPage == 1;
+                                                          await homeProvider.fetchJournals(pageNo:homeProvider.currentPage.toString());
+                                                          if(homeProvider.journalStatus == 404){
+                                                            await homeProvider.fetchJournals(pageNo:1.toString());
+                                                          }
+                                                      logger.i("homeProvider.currentPage${homeProvider.currentPage}");
                                                     });
 
                                                     DashBoardProvider
