@@ -519,7 +519,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 15),
                                 child: Text(
-                                  "View more ...",
+                                  homeProvider.journalStatus == 200 ?
+                                  "View more ..." : "",
                                   style: CustomTextStyles.bodyLargeRoboto,
                                 ),
                               ),

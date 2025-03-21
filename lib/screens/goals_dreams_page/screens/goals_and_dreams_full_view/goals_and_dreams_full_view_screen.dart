@@ -836,6 +836,7 @@ class _GoalAndDreamFullViewScreenState
                         context: context,
                         onPressedDelete: () async {
                           await goalsDreamsProvider.deleteGoalsFunction(
+                            context,
                             deleteId: id,
                           );
                           await Future.delayed(const Duration(seconds: 1));

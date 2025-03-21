@@ -813,6 +813,7 @@ class _GoalAndDreamFullViewBottomSheetState
                   PopupMenuItem<String>(
                     onTap: () {
                       goalsDreamsProvider.deleteGoalsFunction(
+                        context,
                         deleteId: id,
                       );
                       Navigator.of(context).pop();

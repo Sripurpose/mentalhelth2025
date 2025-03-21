@@ -75,7 +75,7 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
     return tokenStatus == false ?
       Container(
       margin: EdgeInsets.only(
-        top: size.height * 0.12,
+        top: size.height * 0.04,
       ),
       decoration: BoxDecoration(
         color: appTheme.gray50,
@@ -108,24 +108,7 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
                 Consumer<MentalStrengthEditProvider>(
                     builder: (context, mentalStrengthEditProvider, _) {
                   return
-                  //   Row(
-                  //   mainAxisAlignment: MainAxisAlignment.end,
-                  //   children: [
-                  //     GestureDetector(
-                  //       onTap: () {
-                  //         mentalStrengthEditProvider.openChooseActionFunction();
-                  //       },
-                  //       child: CustomImageView(
-                  //         imagePath: ImageConstant.imgClosePrimaryNew,
-                  //         height: 40,
-                  //         width: 40,
-                  //       ),
-                  //     ),
-                  //     SizedBox(
-                  //       width: size.width * 0.03,
-                  //     )
-                  //   ],
-                  // );
+
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -289,17 +272,6 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
                                             .length) {
                                       return GestureDetector(
                                         onTap: () {
-                                          // log("${homeProvider.journalsModelList![index].journalId}",
-                                          //     name: "journals List");
-                                          // Navigator.of(context).push(
-                                          //   MaterialPageRoute(
-                                          //     builder: (context) => JournalViewScreen(
-                                          //       journalsModelList: homeProvider
-                                          //           .journalsModelList![index],
-                                          //       indexs: index,
-                                          //     ),
-                                          //   ),
-                                          // );
                                         },
                                         child: listActionList(
                                           size: size,
@@ -341,7 +313,7 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
                       mentalStrengthEditProvider.openAddActionFunction();
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
+                      backgroundColor: ColorsContent.newThemeColor,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
@@ -436,7 +408,7 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
                   //     ?
                   // Colors.blue[50]
                   //     :
-                  Colors.blue,
+                  ColorsContent.newThemeColor,
                   child:
                   // mentalStrengthEditProvider.actionsDetailsModelLoading
                   //     ?
@@ -445,7 +417,7 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
                   Icon(
                     Icons.arrow_forward_ios_outlined,
                     color: Colors.white,
-                    size: size.width * 0.03,
+                    size: size.width * 0.04,
                   ),
                 ),
               );

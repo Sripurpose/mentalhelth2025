@@ -13,6 +13,7 @@ class CustomRatingBar extends StatelessWidget {
     this.color,
     this.unselectedColor,
     this.onRatingUpdate,
+    this.isRatingStatic = false, // New bool variable
   }) : super(key: key);
 
   final Alignment? alignment;
@@ -22,6 +23,7 @@ class CustomRatingBar extends StatelessWidget {
   final int? itemCount;
   final Color? color;
   final Color? unselectedColor;
+  final bool isRatingStatic; // Controls if rating should be static
   Function(double)? onRatingUpdate;
 
   @override
@@ -35,9 +37,9 @@ class CustomRatingBar extends StatelessWidget {
   }
 
   Widget get ratingBarWidget => RatingBar.builder(
-    ignoreGestures: ignoreGestures ?? false,
-    initialRating: initialRating ?? 0.0, // Show 0 stars if initialRating is null.
-    minRating: 0.1, // Minimum rating to prevent zero-rating.
+    ignoreGestures: ignoreGestures ?? isRatingStatic, // Make unclickable if isRatingStatic is true
+    initialRating: initialRating ?? 0.0,
+    minRating: 0.1,
     direction: Axis.horizontal,
     allowHalfRating: false,
     itemSize: itemSize ?? 26,
@@ -45,15 +47,19 @@ class CustomRatingBar extends StatelessWidget {
     itemCount: itemCount ?? 5,
     updateOnDrag: true,
     itemBuilder: (context, _) {
-      return Icon(
-        Icons.star,
-        color: color ?? Colors.yellow,
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+        child: Icon(
+          Icons.star,
+          color: color ?? Colors.yellow,
+        ),
       );
     },
     onRatingUpdate: (rating) {
-      if (rating >= 0.1) {
+      if (!isRatingStatic && rating >= 0.1) {
         onRatingUpdate?.call(rating);
       }
     },
   );
 }
+

@@ -214,6 +214,7 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               // Pagination Row
+                              if ((goalsDreamsProvider.goalsAndDreamsModel?.pageCount ?? 0) > 1)
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 0.0),
                                 child: GestureDetector(
@@ -224,11 +225,12 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
                                         onTap: () {
                                           // Update the current page and fetch new data
                                           setState(() {
+                                            goalsDreamsProvider.setCurrentPage(index + 1); // Update current page
                                           goalsDreamsProvider.goalsanddreams.clear();
                                           _onPageChanged(index + 1);
                                           //  currentPage = index + 1;
                                           });
-                                          goalsDreamsProvider.fetchGoalsAndDreams(pageNo: currentPage.toString());
+                                          goalsDreamsProvider.fetchGoalsAndDreams(pageNo: goalsDreamsProvider.currentPage.toString());
                                         },
                                         child: goalsDreamsProvider.goalsanddreams.isNotEmpty ?
                                         Container(
@@ -236,17 +238,18 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
                                           padding: const EdgeInsets.all(8.0),
                                           decoration: BoxDecoration(
                                             shape: BoxShape.circle,
-                                            color: currentPage == index + 1 ? Colors.blue : Colors.grey, // Change color based on current page
+                                            color: goalsDreamsProvider.currentPage == index + 1 ? Colors.blue : Colors.grey, // Change color based on current page
                                           ),
                                           child: GestureDetector(
                                             onTap: () {
                                               // Update the current page and fetch new data
                                               setState(() {
+                                                goalsDreamsProvider.setCurrentPage(index + 1); // Update current page
                                                 goalsDreamsProvider.goalsanddreams.clear();
                                                 _onPageChanged(index + 1);
                                               // currentPage = index + 1;
                                               });
-                                              goalsDreamsProvider.fetchGoalsAndDreams(pageNo: currentPage.toString());
+                                              goalsDreamsProvider.fetchGoalsAndDreams(pageNo: goalsDreamsProvider.currentPage.toString());
                                             },
                                             child: Text(
                                               '${index + 1}',

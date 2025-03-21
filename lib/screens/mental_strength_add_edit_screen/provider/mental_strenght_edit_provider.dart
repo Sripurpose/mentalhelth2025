@@ -1018,8 +1018,12 @@ class MentalStrengthEditProvider extends ChangeNotifier {
         clearAllValuesInSaveTime();
         showCustomSnackBar(
           context: context,
-          message: json.decode(response.body)["text"],
+          message: "Journal updated Successfully",
         );
+        // showCustomSnackBar(
+        //   context: context,
+        //   message: json.decode(response.body)["text"],
+        // );
         saveJournalLoading = false;
         notifyListeners();
         return true;

@@ -10,8 +10,15 @@ class ImageConstant {
   static String splashNextIcon = 'assets/images/splash-next-icon.png';
   static String noData = '$imagePath/home/noData.gif';
   static String imgMenu = '$imagePath/img_menu.svg';
+  static String feelingDummyNumu = '$imagePath/feeling_dummy_numu.svg';
+  static String submitButtonNumu = 'assets/images/submit_button_numu.svg';
+  static String tabBackButton = 'assets/images/tab_back_button.svg';
 
   static String imgThumbsUp = '$imagePath/img_thumbs_up.svg';
+  static String galleryAddMediaNumu = '$imagePath/gallery_add_media_numu.svg';
+  static String cameraAddMediaNumu = '$imagePath/camera_add_media_numu.svg';
+  static String recordAddMediaNumu = '$imagePath/record_add_media_numu.svg';
+  static String locationAddMediaNumu = '$imagePath/location_add_media_numu.svg';
 
   static String imgCamera = '$imagePath/img_camera.svg';
 

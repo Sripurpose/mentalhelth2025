@@ -66,7 +66,7 @@ class _MentalStrengthAddEditFullViewScreenState
   bool tokenStatus = false;
   var logger = Logger();
   PermissionStatus permissionStatus = PermissionStatus.denied;
-
+  late FocusNode _descriptionFocusNode;
   Future<void> _isTokenExpired() async {
     await homeProvider.fetchJournals(initial: true);
     //  await editProfileProvider.fetchUserProfile();
@@ -113,6 +113,7 @@ class _MentalStrengthAddEditFullViewScreenState
   @override
   void initState() {
     super.initState();
+    _descriptionFocusNode = FocusNode();
     homeProvider = Provider.of<HomeProvider>(context, listen: false);
     mentalStrengthEditProvider =
         Provider.of<MentalStrengthEditProvider>(context, listen: false);
@@ -143,7 +144,11 @@ class _MentalStrengthAddEditFullViewScreenState
       _isTokenExpired();
     });
   }
-
+  @override
+  void dispose() {
+    _descriptionFocusNode.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
@@ -328,9 +333,9 @@ class _MentalStrengthAddEditFullViewScreenState
                                             ((value - 1) * 4 / (5 - 1) - 2)
                                                 .round();
 
-                                        mentalStrengthEditProvider
-                                            .fetchEmotions(
-                                                emotion: "$mappedValue");
+                                        // mentalStrengthEditProvider
+                                        //     .fetchEmotions(
+                                        //         emotion: "$mappedValue");
                                         mentalStrengthEditProvider
                                             .changeEmotionalValueStar(value);
                                         _isTokenExpired(); // Call your method after rating update.
@@ -433,10 +438,7 @@ class _MentalStrengthAddEditFullViewScreenState
                                                   }).toList(),
                                                   onChanged:
                                                       (Emotion? newValue) {
-                                                    mentalStrengthEditProvider
-                                                        .addEmotionValue(
-                                                            newValue ??
-                                                                Emotion());
+                                                    mentalStrengthEditProvider.addEmotionValue(newValue ?? Emotion());
 
                                                     _isTokenExpired();
                                                   },
@@ -937,11 +939,11 @@ class _MentalStrengthAddEditFullViewScreenState
         return CustomTextFormField(
           textAlign: TextAlign.center,
           controller: mentalStrengthEditProvider.descriptionEditTextController,
-          hintText: focusNode.hasFocus ? '' : "I just feel excited now, hope it will be an amazing day.",
+          hintText: _descriptionFocusNode.hasFocus ? '' : "Start writing...",
           hintStyle: CustomTextStyles.bodySmallGray700,
           textInputAction: TextInputAction.done,
           maxLines: 4,
-          focusNode: focusNode,
+          focusNode: _descriptionFocusNode,
           onTap: () => setState(() {}), // Rebuild when tapped
           onEditingComplete: () => setState(() {}), // Rebuild when focus is lost
         );

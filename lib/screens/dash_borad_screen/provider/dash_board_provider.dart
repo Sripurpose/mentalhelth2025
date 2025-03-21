@@ -11,6 +11,7 @@ import '../../goals_dreams_page/goals_dreams_page.dart';
 import '../../help_screen/help_screen.dart';
 import '../../home_screen/home_screen.dart';
 import '../../journal_list_screen/journal_list_page.dart';
+import '../../mental_strength_add_edit_screen/numu_mental_strength_add_edit_page.dart';
 import '../../terms_of_services/terms_of_services_screen.dart';
 import '../../view_reminder_screen/screens/view_reminder_screen.dart';
 
@@ -97,7 +98,8 @@ class DashBoardProvider extends ChangeNotifier {
           return const HomeScreen();
       }
     } else if (currentIndex == 1) {
-      return const MentalStrengthAddEditFullViewScreen();
+      //return const MentalStrengthAddEditFullViewScreen();
+      return const NumuMentalStrengthAddEditPage();
     } else if (currentIndex == 2) {
       return const JournalListPage();
     } else if (currentIndex == 3) {

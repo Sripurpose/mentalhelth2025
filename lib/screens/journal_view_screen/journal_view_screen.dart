@@ -405,6 +405,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                   homeProvider.journalDetails!.journals!.emotionValue?.toString() ?? '0',
                                 ),
                                       itemSize: 30,
+                                isRatingStatic: true, // Set to true to make rating unchangeable
                                     ),
                               const SizedBox(height: 22),
                               Padding(
@@ -448,6 +449,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                         (homeProvider.journalDetails!.journals!.driveValue ?? 0).toString(),
                                       ),
                                       itemSize: 30,
+                                isRatingStatic: true, // Set to true to make rating unchangeable
                                     ),
                               const SizedBox(height: 29),
                               homeProvider.journalDetails?.journals?.goal == null?
@@ -890,7 +892,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                         });
                       },
                       title: 'Confirm Delete',
-                      content: 'Are you sure you want to delete this journaldf?',
+                      content: 'Are you sure you want to delete this journals?',
                     );
                   },
 

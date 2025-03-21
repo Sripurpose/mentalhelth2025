@@ -178,7 +178,7 @@ class GoalsDreamsProvider extends ChangeNotifier {
   //delete goal
   bool deleteGoalsLoading = false;
 
-  Future<bool> deleteGoalsFunction({required String deleteId}) async {
+  Future<bool> deleteGoalsFunction(BuildContext context,{required String deleteId}) async {
     try {
       deleteGoalsLoading = true;
       notifyListeners();
@@ -208,6 +208,10 @@ class GoalsDreamsProvider extends ChangeNotifier {
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
       if (response.statusCode == 200) {
+        showCustomSnackBar(
+          context: context,
+          message: "Goal Deleted Successfully",
+        );
         // notifyListeners();
         fetchGoalsAndDreams(
           initial: true,

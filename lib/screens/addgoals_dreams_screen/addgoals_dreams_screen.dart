@@ -622,7 +622,11 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
                   context,
                   listen: false,
                 );
-                goalsDreamsProvider.fetchGoalsAndDreams(initial: true);
+                goalsDreamsProvider.fetchGoalsAndDreams(pageNo: goalsDreamsProvider.currentPage.toString());
+                if(goalsDreamsProvider.fetchGoalsAndDreamsStatus == 404){
+                  goalsDreamsProvider.fetchGoalsAndDreams(pageNo: 1.toString());
+                }
+
               }
             } else {
               showCustomSnackBar(

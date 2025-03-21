@@ -58,7 +58,7 @@ class _ScreenChooseGoalMentalStrengthState
     Size size = MediaQuery.of(context).size;
     return Container(
       margin: EdgeInsets.only(
-        top: size.height * 0.15,
+        top: size.height * 0.07,
       ),
       decoration: BoxDecoration(
         color: appTheme.gray50,
@@ -85,32 +85,10 @@ class _ScreenChooseGoalMentalStrengthState
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
-                // SizedBox(
-                //   height: size.height * 0.015,
-                // ),
                 Consumer2<MentalStrengthEditProvider, AdDreamsGoalsProvider>(
                     builder: (context, mentalStrengthEditProvider,
                         adDreamsGoalsProvider, _) {
                   return
-                  //   Row(
-                  //   mainAxisAlignment: MainAxisAlignment.end,
-                  //   children: [
-                  //     GestureDetector(
-                  //       onTap: () {
-                  //         mentalStrengthEditProvider.openChooseGoalFunction();
-                  //         adDreamsGoalsProvider.clearAction();
-                  //       },
-                  //       child: CustomImageView(
-                  //         imagePath: ImageConstant.imgClosePrimaryNew,
-                  //         height: 40,
-                  //         width: 40,
-                  //       ),
-                  //     ),
-                  //     SizedBox(
-                  //       width: size.width * 0.03,
-                  //     )
-                  //   ],
-                  // );
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -228,17 +206,6 @@ class _ScreenChooseGoalMentalStrengthState
                               mentalStrengthEditProvider.goalsList.length) {
                             return GestureDetector(
                               onTap: () {
-                                // log("${homeProvider.journalsModelList![index].journalId}",
-                                //     name: "journals List");
-                                // Navigator.of(context).push(
-                                //   MaterialPageRoute(
-                                //     builder: (context) => JournalViewScreen(
-                                //       journalsModelList: homeProvider
-                                //           .journalsModelList![index],
-                                //       indexs: index,
-                                //     ),
-                                //   ),
-                                // );
                               },
                               child: listGoalWidget(
                                 size: size,
@@ -272,9 +239,7 @@ class _ScreenChooseGoalMentalStrengthState
                     );
                   },
                 ),
-                // SizedBox(
-                //   height: size.height * 0.01,
-                // ),
+
                 Consumer<MentalStrengthEditProvider>(
                     builder: (context, mentalStrengthEditProvider, _) {
                   return ElevatedButton(
@@ -282,7 +247,7 @@ class _ScreenChooseGoalMentalStrengthState
                       mentalStrengthEditProvider.openAddGoalFunction();
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
+                      backgroundColor:ColorsContent.newThemeColor,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
@@ -400,11 +365,11 @@ class _ScreenChooseGoalMentalStrengthState
               },
               child: CircleAvatar(
                 radius: size.width * 0.03,
-                backgroundColor: Colors.blue,
+                backgroundColor: Colors.deepPurple,
                 child: Icon(
                   Icons.arrow_forward_ios_outlined,
                   color: Colors.white,
-                  size: size.width * 0.03,
+                  size: size.width * 0.04,
                 ),
               ),
             );

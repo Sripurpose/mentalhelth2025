@@ -1,0 +1,1431 @@
+import 'dart:async';
+import 'dart:io';
+import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:logger/logger.dart';
+import 'package:mentalhelth/screens/dash_borad_screen/provider/dash_board_provider.dart';
+import 'package:mentalhelth/screens/edit_add_profile_screen/provider/edit_provider.dart';
+import 'package:mentalhelth/screens/mental_strength_add_edit_screen/screens/add_action/add_action_mental_strength.dart';
+import 'package:mentalhelth/screens/mental_strength_add_edit_screen/screens/choose_action/choose_action.dart';
+import 'package:mentalhelth/screens/mental_strength_add_edit_screen/screens/choose_goal/choose_goal.dart';
+import 'package:mentalhelth/screens/mental_strength_add_edit_screen/widgets/googlemap_widget/google_map_widget.dart';
+import 'package:mentalhelth/screens/mental_strength_add_edit_screen/widgets/popup/audio_popup.dart';
+import 'package:mentalhelth/screens/mental_strength_add_edit_screen/widgets/popup/camera_popup.dart';
+import 'package:mentalhelth/screens/mental_strength_add_edit_screen/widgets/popup/gallary_popup.dart';
+import 'package:mentalhelth/utils/logic/logic.dart';
+import 'package:mentalhelth/utils/theme/custom_button_style.dart';
+import 'package:mentalhelth/widgets/background_image/background_imager.dart';
+import 'package:mentalhelth/widgets/custom_elevated_button.dart';
+import 'package:mentalhelth/widgets/custom_icon_button.dart';
+import 'package:mentalhelth/widgets/custom_text_form_field.dart';
+import 'package:mentalhelth/widgets/functions/snack_bar.dart';
+import 'package:mentalhelth/widgets/widget/shimmer.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
+
+import '../../utils/core/image_constant.dart';
+import '../../utils/logic/date_format.dart';
+import '../../utils/logic/permissions.dart';
+import '../../utils/theme/colors.dart';
+import '../../utils/theme/custom_text_style.dart';
+import '../../utils/theme/theme_helper.dart';
+import '../../widgets/app_bar/appbar_leading_image.dart';
+import '../../widgets/custom_image_view.dart';
+import '../../widgets/custom_rating_bar.dart';
+import '../../widgets/functions/popup.dart';
+import '../addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
+import '../auth/sign_in/provider/sign_in_provider.dart';
+import '../home_screen/provider/home_provider.dart';
+import '../token_expiry/tocken_expiry_warning_screen.dart';
+import '../token_expiry/token_expiry.dart';
+import 'model/emotions_model.dart';
+import 'provider/mental_strenght_edit_provider.dart';
+import 'screens/action_full_view_mental_helth/action_full_view_journal.dart';
+import 'screens/add_goals_and_dreams_widget/add_goals_and_dreams_mental_strength.dart';
+import 'screens/goals_and_dreams_full_view/goals_and_dreams_full_view_screen.dart';
+
+class NumuMentalStrengthAddEditPage extends StatefulWidget {
+  const NumuMentalStrengthAddEditPage({Key? key})
+      : super(
+          key: key,
+        );
+
+  @override
+  _NumuMentalStrengthAddEditPageState createState() =>
+      _NumuMentalStrengthAddEditPageState();
+}
+
+class _NumuMentalStrengthAddEditPageState
+    extends State<NumuMentalStrengthAddEditPage>
+    with SingleTickerProviderStateMixin {
+  late HomeProvider homeProvider;
+  late MentalStrengthEditProvider mentalStrengthEditProvider;
+  late EditProfileProvider editProfileProvider;
+  late DashBoardProvider dashBoardProvider;
+  late AdDreamsGoalsProvider adDreamsGoalsProvider;
+  bool tokenStatus = false;
+  var logger = Logger();
+  PermissionStatus permissionStatus = PermissionStatus.denied;
+  late TabController _tabController;
+  int currentTabIndex = 0;
+  late FocusNode _descriptionFocusNode;
+
+  Future<void> _isTokenExpired() async {
+    await homeProvider.fetchJournals(initial: true);
+    //  await editProfileProvider.fetchUserProfile();
+    tokenStatus = TokenManager.checkTokenExpiry();
+    if (tokenStatus) {
+      setState(() {
+        logger.e("Token status changed: $tokenStatus");
+      });
+      logger.e("Token status changed: $tokenStatus");
+    } else {
+      logger.e("Token status changedElse: $tokenStatus");
+    }
+  }
+
+  Future<void> _checkPermissionStatus() async {
+    // Check location permission status
+    final status = await Permission.locationWhenInUse.status;
+    setState(() {
+      permissionStatus = status;
+    });
+  }
+
+  Future<void> _requestPermissions() async {
+    // Request location permission (Platform specific)
+    if (Platform.isIOS) {
+      await Permission.locationWhenInUse.request();
+      await Permission.notification.request();
+      await Permission.photos.request();
+    } else if (Platform.isAndroid) {
+      await Permission.locationWhenInUse.request();
+      await Permission.notification.request();
+      await Permission.storage.request(); // For storage permissions
+      await Permission.manageExternalStorage
+          .request(); // For Android 11 and above
+    }
+
+    // Check updated location permission status
+    final locationStatus = await Permission.locationWhenInUse.status;
+    setState(() {
+      permissionStatus = locationStatus;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _descriptionFocusNode = FocusNode();
+    _tabController = TabController(length: 6, vsync: this);
+    _tabController.addListener(() {
+      setState(() {
+        currentTabIndex = _tabController.index;
+      });
+    });
+    homeProvider = Provider.of<HomeProvider>(context, listen: false);
+    mentalStrengthEditProvider =
+        Provider.of<MentalStrengthEditProvider>(context, listen: false);
+    editProfileProvider =
+        Provider.of<EditProfileProvider>(context, listen: false);
+    dashBoardProvider = Provider.of<DashBoardProvider>(context, listen: false);
+    adDreamsGoalsProvider =
+        Provider.of<AdDreamsGoalsProvider>(context, listen: false);
+    logger.w(
+        "mentalStrengthEditProvider.emotionalValueStar${mentalStrengthEditProvider.emotionalValueStar}");
+    logger.w(
+        "mentalStrengthEditProvider.driveValueStar${mentalStrengthEditProvider.driveValueStar}");
+    scheduleMicrotask(() {
+      mentalStrengthEditProvider.mediaSelected = -1;
+      mentalStrengthEditProvider.descriptionEditTextController.text = "";
+      mentalStrengthEditProvider.emotionalValueStar = null;
+      mentalStrengthEditProvider.driveValueStar = null;
+      adDreamsGoalsProvider.selectedDate = "";
+      mentalStrengthEditProvider.alreadyRecordedFilePath.clear();
+      mentalStrengthEditProvider.recordedFilePath.clear();
+      mentalStrengthEditProvider.alreadyPickedImages.clear();
+      mentalStrengthEditProvider.pickedImages.clear();
+      mentalStrengthEditProvider.alreadyTakedImages.clear();
+      mentalStrengthEditProvider.takedImages.clear();
+      mentalStrengthEditProvider.selectedLocationAddress = "";
+      mentalStrengthEditProvider.selectedLatitude = "";
+      mentalStrengthEditProvider.selectedLocationName = "";
+
+      _isTokenExpired();
+    });
+  }
+
+  @override
+  void dispose() {
+    _descriptionFocusNode.dispose();
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+    Size size = MediaQuery.of(context).size;
+
+    return tokenStatus == false
+          ? WillPopScope(
+        onWillPop: (){
+          return Future.value(false); // Prevents back navigation
+        },
+          child: SafeArea(
+              child: backGroundImagerOtherScreens(
+                size: size,
+                padding: EdgeInsets.zero,
+                child: Consumer3<EditProfileProvider, MentalStrengthEditProvider,
+                    DashBoardProvider>(
+                  builder: (contexts, editProfileProvider,
+                      mentalStrengthEditProvider, dashBoardProvider, _) {
+                    return GestureDetector(
+                      onTap: () {
+                        mentalStrengthEditProvider.openAllCloser();
+                        FocusScope.of(context).unfocus();
+                      },
+                      child: Column(
+                        children: [
+                          const SizedBox(
+                            height: 40,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: size.width * 0.05, vertical: 8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Row with Back Button (Only shown if not on the first tab) and Progress Text
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    // Show Back Button only when on the 2nd tab or beyond
+                                    if (currentTabIndex > 0)
+                                      GestureDetector(
+                                        onTap: () {
+                                          _tabController.animateTo(
+                                              currentTabIndex -
+                                                  1); // Go to previous tab
+                                        },
+                                        child: Row(
+                                          children: [
+                                            SvgPicture.asset(
+                                              ImageConstant.tabBackButton,
+                                              // Replace with your SVG file path
+                                              width: 30, // Adjust size if needed
+                                              height: 30,
+                                            ),
+                                            const SizedBox(width: 20),
+                                            // Spacing between icon and text
+                                            Text(
+                                              "Back",
+                                              style: TextStyle(
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.w500,
+                                                color: ColorsContent
+                                                    .newThemeColor, // Adjust color as needed
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    else
+                                      const SizedBox(width: 48),
+                                    // Placeholder to keep alignment when back button is hidden
+
+                                    // Progress Text (e.g., "1/6", "2/6")
+                                    Text(
+                                      "${currentTabIndex + 1}/6",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w600,
+                                        color: ColorsContent
+                                            .newThemeColor, // Adjust color as needed
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
+                                const SizedBox(height: 30),
+                                // Spacing between rows
+
+                                // Progress Bar (on a separate line)
+                                LinearProgressIndicator(
+                                  value: (currentTabIndex + 1) / 6,
+                                  // Dynamic progress
+                                  backgroundColor: Colors.grey,
+                                  valueColor:  AlwaysStoppedAnimation<Color>(
+                                      ColorsContent.newThemeColor ),
+                                  minHeight: 4,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Stack(
+                              children: [
+                                TabBarView(
+                                  controller: _tabController,
+                                  children: [
+                                    _buildFirstTab(context,
+                                        mentalStrengthEditProvider, size),
+                                    _buildSecondTab(context, size),
+                                    _buildThirdTab(context, size),
+                                    _buildFourthTab(context, size),
+                                    _buildFifthTab(context, size),
+                                    _buildSixthTab(context, size),
+                                  ],
+                                ),
+
+                                // Floating Button for navigation and submission
+                                currentTabIndex < 5
+                                    ? Positioned(
+                                        bottom: size.height * 0.025,
+                                        left: 0,
+                                        right: 0,
+                                        child: Center(
+                                          child: Positioned(
+                                            bottom: size.height * 0.02,
+                                            left: 0,
+                                            right: 0,
+                                            child: Center(
+                                              child: SizedBox(
+                                                width:
+                                                    70, // Adjust the width as needed
+                                                height:
+                                                    70, // Adjust the height as needed
+                                                child: FloatingActionButton(
+                                                  onPressed: () {
+                                                    if (currentTabIndex < 5) {
+                                                      _tabController.animateTo(
+                                                          currentTabIndex + 1);
+                                                    } else {
+                                                      print("End of progress");
+                                                    }
+                                                  },
+                                                  child: Image.asset(
+                                                    ImageConstant.splashNextIcon,
+                                                    width:
+                                                        90, // Increase image width
+                                                    height:
+                                                        90, // Increase image height
+                                                  ),
+                                                  shape: const CircleBorder(),
+                                                  elevation: 5,
+                                                  heroTag: "next_button",
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : Positioned(
+                                        bottom: size.height * 0.02,
+                                        left: 0,
+                                        right: 0,
+                                        child: Center(
+                                          child: GestureDetector(
+                                            onTap:
+                                                (!mentalStrengthEditProvider
+                                                            .saveJournalLoading &&
+                                                        mentalStrengthEditProvider
+                                                            .descriptionEditTextController
+                                                            .text
+                                                            .isNotEmpty &&
+                                                        mentalStrengthEditProvider
+                                                            .emotionValue.id
+                                                            .toString()
+                                                            .isNotEmpty &&
+                                                        mentalStrengthEditProvider
+                                                                .emotionalValueStar !=
+                                                            null &&
+                                                        mentalStrengthEditProvider
+                                                                .driveValueStar !=
+                                                            null)
+                                                    ? () async {
+                                                        await mentalStrengthEditProvider
+                                                            .saveButtonFunction(
+                                                                context);
+                                                        _isTokenExpired();
+                                                      }
+                                                    : null,
+                                            child: Opacity(
+                                              opacity:
+                                                  (!mentalStrengthEditProvider
+                                                              .saveJournalLoading &&
+                                                          mentalStrengthEditProvider
+                                                              .descriptionEditTextController
+                                                              .text
+                                                              .isNotEmpty &&
+                                                          mentalStrengthEditProvider
+                                                              .emotionValue.id
+                                                              .toString()
+                                                              .isNotEmpty &&
+                                                          mentalStrengthEditProvider
+                                                                  .emotionalValueStar !=
+                                                              null &&
+                                                          mentalStrengthEditProvider
+                                                                  .driveValueStar !=
+                                                              null)
+                                                      ? 1.0
+                                                      : 0.5,
+                                              child: Stack(
+                                                alignment: Alignment.center,
+                                                children: [
+                                                  SvgPicture.asset(
+                                                    ImageConstant
+                                                        .submitButtonNumu,
+                                                  ),
+                                                  if (mentalStrengthEditProvider
+                                                      .saveJournalLoading)
+                                                    const Padding(
+                                                      padding: EdgeInsets.only(
+                                                          top: 5, bottom: 5),
+                                                      child: SpinKitWave(
+                                                        color: Colors.white,
+                                                        size: 25,
+                                                      ),
+                                                    ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+
+                                // Newly Added Widgets
+                                mentalStrengthEditProvider.openChooseGoal
+                                    ? const ScreenChooseGoalMentalStrength()
+                                    : const SizedBox(),
+                                mentalStrengthEditProvider.openAddGoal
+                                    ? const AddGoalsDreamsBottomSheet()
+                                    : const SizedBox(),
+                                mentalStrengthEditProvider.openGoalViewSheet
+                                    ? (mentalStrengthEditProvider
+                                                .goalDetailModel ==
+                                            null
+                                        ? Container(
+                                            decoration: BoxDecoration(
+                                              color: appTheme.gray50,
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                topRight: Radius.circular(25),
+                                                topLeft: Radius.circular(25),
+                                              ),
+                                            ),
+                                            margin: EdgeInsets.only(
+                                                top: size.height * 0.15),
+                                            child: shimmerList(
+                                                height: size.height * 0.8,
+                                                list: 10),
+                                          )
+                                        : GoalAndDreamFullViewBottomSheet(
+                                            goalDetailModel:
+                                                mentalStrengthEditProvider
+                                                    .goalDetailModel!,
+                                          ))
+                                    : const SizedBox(),
+                                mentalStrengthEditProvider.openChooseAction
+                                    ? ChooseActionMentalHelth(
+                                        goal:
+                                            mentalStrengthEditProvider.goalsValue,
+                                      )
+                                    : const SizedBox(),
+                                mentalStrengthEditProvider.openAddAction
+                                    ? AddActionMentalStrengthBottomSheet(
+                                        goalId: mentalStrengthEditProvider
+                                            .goalsValue.id
+                                            .toString(),
+                                      )
+                                    : const SizedBox(),
+                                mentalStrengthEditProvider.openActionFullView
+                                    ? const ActionFullViewJournalCreateBottomSheet()
+                                    : const SizedBox(),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+        )
+        : const TokenExpireScreen();
+  }
+
+  /// ✅ First Tab - Kept as per your design
+  Widget _buildFirstTab(BuildContext context,
+      MentalStrengthEditProvider mentalStrengthEditProvider, Size size) {
+    return Expanded(
+      child: Stack(
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+            color: mentalStrengthEditProvider.openChooseGoal
+                ? Colors.blue[50]
+                : null,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(height: size.height * 0.03),
+                  Container(
+                    width: 350,
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: ColorsContent.whatsOnYourMindBoxColor,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      "What's on your mind?",
+                      style: TextStyle(
+                        color: ColorsContent.newThemeColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'OpenSans',
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: size.height * 0.03),
+                  _buildDescriptionEditText(
+                      context, mentalStrengthEditProvider),
+                  SizedBox(height: size.height * 0.03),
+                  _buildAddMediaColumn(context, size),
+                  SizedBox(height: size.height * 0.03),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSecondTab(BuildContext context, Size size) {
+    Size size = MediaQuery.of(context).size;
+    return Center(
+      child: Column(
+        children: [
+          const SizedBox(
+            height: 20,
+          ),
+          const Text(
+            "Rate How You Are Feeling Now ?",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              fontFamily: 'OpenSans',
+            ),
+          ),
+          SizedBox(height: size.height * 0.05),
+          SvgPicture.asset(
+            ImageConstant.feelingDummyNumu, // Button icon
+          ),
+          SizedBox(height: size.height * 0.05),
+          CustomRatingBar(
+            initialRating: mentalStrengthEditProvider.emotionalValueStar,
+            itemSize: 60,
+            color: ColorsContent.newThemeColor,
+            unselectedColor: Colors.grey,
+            onRatingUpdate: (value) {
+              logger.w("Updated emotional value star: $value");
+
+              // Map the value from 1-5 to -2 to 2 as an integer
+              int mappedValue = ((value - 1) * 4 / (5 - 1) - 2).round();
+
+              // mentalStrengthEditProvider
+              //     .fetchEmotions(
+              //     emotion: "$mappedValue");
+
+              mentalStrengthEditProvider.changeEmotionalValueStar(value);
+              _isTokenExpired(); // Call your method after rating update.
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildThirdTab(BuildContext context, Size size) {
+    Size size = MediaQuery.of(context).size;
+    return Center(
+      child: Column(
+        children: [
+          const SizedBox(
+            height: 20,
+          ),
+          const Text(
+            "What Is Your Emotional State?",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              fontFamily: 'OpenSans',
+            ),
+          ),
+          SizedBox(height: size.height * 0.08),
+          (mentalStrengthEditProvider.getEmotionsModel == null)
+              ? const SizedBox()
+              : Container(
+                  width: size.width * 0.70,
+                  // This controls the button width
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    // Border radius for rounded corners
+                    color: ColorsContent
+                        .whatsOnYourMindBoxColor, // Background color (optional)
+                  ),
+                  child: Center(
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton2(
+                        isExpanded: true,
+                        dropdownStyleData: DropdownStyleData(
+                          maxHeight: 300,
+                          width: 250,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                            color: Colors.white,
+                          ),
+                          offset: const Offset(0, 0),
+                          scrollbarTheme: ScrollbarThemeData(
+                            radius: const Radius.circular(40),
+                            thickness: MaterialStateProperty.all(6),
+                            thumbVisibility: MaterialStateProperty.all(true),
+                          ),
+                        ),
+                        menuItemStyleData: const MenuItemStyleData(
+                          height: 40,
+                          padding: EdgeInsets.only(left: 14, right: 14),
+                        ),
+                        value: mentalStrengthEditProvider.emotionValue,
+                        //  icon: const Icon(Icons.keyboard_arrow_down),
+                        items: mentalStrengthEditProvider
+                            .getEmotionsModel!.emotions!
+                            .map((Emotion items) {
+                          return DropdownMenuItem(
+                            value: items,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Text(
+                                items.title.toString(),
+                                style: TextStyle(
+                                  color: ColorsContent
+                                      .newThemeColor, // Change to your desired color
+                                ),
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (Emotion? newValue) {
+                          mentalStrengthEditProvider
+                              .addEmotionValue(newValue ?? Emotion());
+
+                          _isTokenExpired();
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFourthTab(BuildContext context, Size size) {
+    Size size = MediaQuery.of(context).size;
+    return Center(
+      child: Column(
+        children: [
+          const SizedBox(
+            height: 20,
+          ),
+          const Text(
+            "Do You Like Your Reaction To",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              fontFamily: 'OpenSans',
+            ),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          const Text(
+            "The situation?",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              fontFamily: 'OpenSans',
+            ),
+          ),
+          SizedBox(height: size.height * 0.03),
+          SizedBox(height: size.height * 0.01),
+          CustomRatingBar(
+            initialRating: mentalStrengthEditProvider.driveValueStar,
+            itemSize: 60,
+            color: ColorsContent.newThemeColor,
+            onRatingUpdate: (value) {
+              mentalStrengthEditProvider.changeDriveValueStar(value);
+
+              _isTokenExpired();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFifthTab(BuildContext context, Size size) {
+    Size size = MediaQuery.of(context).size;
+    return Center(
+      child: Column(
+        children: [
+          const SizedBox(
+            height: 20,
+          ),
+          const Text(
+            "Which Goal Is Affected By ",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              fontFamily: 'OpenSans',
+            ),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          const Text(
+            " Your Reaction ?",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              fontFamily: 'OpenSans',
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          ElevatedButton(
+            onPressed: () {
+              _isTokenExpired();
+              mentalStrengthEditProvider.openChooseGoalFunction();
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: ColorsContent.newThemeColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+            child: const Text(
+              "Select Goal",
+              style: TextStyle(
+                color: Color(0xffFFFFFF),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: size.height * 0.04,
+          ),
+          mentalStrengthEditProvider.goalsValue.id == null
+              ? const SizedBox()
+              : Container(
+                  height: size.height * 0.06,
+                  width: size.width * 0.80,
+                  padding: const EdgeInsets.only(
+                    bottom: 5,
+                    top: 5,
+                    left: 5,
+                    right: 5,
+                  ),
+                  decoration: BoxDecoration(
+                    color: ColorsContent.newThemeColor,
+                    borderRadius: BorderRadius.circular(8), // Makes it circular
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            customPopup(
+                              context: context,
+                              onPressedDelete: () async {
+                                mentalStrengthEditProvider.cleaGoalValue();
+                                Navigator.of(context).pop();
+                              },
+                              yes: "Yes",
+                              title: 'Do you Need Delete ?',
+                              content: 'Are you sure you want to delete ?',
+                            );
+                          },
+                          child: CircleAvatar(
+                            radius: size.width * 0.04,
+                            backgroundColor: Colors.deepPurple,
+                            child: Icon(
+                              Icons.close,
+                              color: Colors.white,
+                              size: size.width * 0.05,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          // color: Colors.red,
+                          width: size.width * 0.45,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            // Enable horizontal scrolling
+                            child: Text(
+                              mentalStrengthEditProvider.goalsValue.title
+                                  .toString(),
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'OpenSans',
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines:
+                                  1, // Set the maximum number of lines to 3
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            mentalStrengthEditProvider
+                                .openGoalViewSheetFunction();
+                            mentalStrengthEditProvider.fetchGoalDetails(
+                              goalId: mentalStrengthEditProvider.goalsValue.id
+                                  .toString(),
+                            );
+                          },
+                          child: CircleAvatar(
+                            radius: size.width * 0.04,
+                            backgroundColor: Colors.deepPurple,
+                            child: Icon(
+                              Icons.play_arrow,
+                              color: Colors.white,
+                              size: size.width * 0.05,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSixthTab(BuildContext context, Size size) {
+    return Center(
+      child: Column(
+        children: [
+          const SizedBox(
+            height: 20,
+          ),
+          const Text(
+            "Select an action",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              fontFamily: 'OpenSans',
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (mentalStrengthEditProvider.goalsValue.id == null) {
+                showCustomSnackBar(
+                  context: context,
+                  message: "Please choose your goal",
+                );
+              } else {
+                _isTokenExpired();
+                mentalStrengthEditProvider.openChooseActionFunction();
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: ColorsContent.newThemeColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+            child: const Text(
+              "Select An Action",
+              style: TextStyle(
+                color: Color(0xffFFFFFF),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: size.height * 0.04,
+          ),
+          SizedBox(
+            height: mentalStrengthEditProvider.actionList.length *
+                size.height *
+                0.060,
+            width: size.width * 0.80,
+            child: ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: mentalStrengthEditProvider.actionList.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  height: size.height * 0.06,
+                  width: size.width * 0.80,
+                  padding: const EdgeInsets.only(
+                    bottom: 5,
+                    top: 5,
+                    left: 5,
+                    right: 5,
+                  ),
+                  margin: const EdgeInsets.only(
+                    bottom: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: ColorsContent.newThemeColor,
+                    borderRadius: BorderRadius.circular(8), // Makes it circular
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            customPopup(
+                              context: context,
+                              onPressedDelete: () async {
+                                mentalStrengthEditProvider
+                                    .clearActionListSelected(
+                                  index: index,
+                                );
+                                Navigator.of(context).pop();
+
+                                // Close the bottom sheet after deleting
+                                //  Navigator.of(context).pop();  // This will close the galleryBottomSheet as well
+                              },
+                              yes: "Yes",
+                              title: 'Do you Need Delete ?',
+                              content: 'Are you sure you want to delete ?',
+                            );
+                          },
+                          child: CircleAvatar(
+                            radius: size.width * 0.04,
+                            backgroundColor: Colors.deepPurple,
+                            child: Icon(
+                              Icons.close,
+                              color: Colors.white,
+                              size: size.width * 0.04,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: size.width * 0.45,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            // Enable horizontal scrolling
+                            child: Text(
+                              mentalStrengthEditProvider.actionList[index].title
+                                  .toString(),
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'OpenSans',
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              // Add this line if you want to truncate long text
+                              maxLines:
+                                  1, // Limit to 1 line for horizontal scrolling
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () async {
+                            mentalStrengthEditProvider
+                                .openActionFullViewFunction();
+                            await mentalStrengthEditProvider.fetchActionDetails(
+                              actionId: mentalStrengthEditProvider
+                                  .actionList[index].id
+                                  .toString(),
+                            );
+                          },
+                          child: CircleAvatar(
+                            radius: size.width * 0.04,
+                            backgroundColor: Colors.deepPurple,
+                            child: Icon(
+                              Icons.play_arrow,
+                              color: Colors.white,
+                              size: size.width * 0.04,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDescriptionEditText(BuildContext context,
+      MentalStrengthEditProvider mentalStrengthEditProvider) {
+    //FocusNode focusNode = FocusNode();
+
+    return StatefulBuilder(
+      builder: (context, setState) {
+        return CustomTextFormFieldNumu(
+          textAlign: TextAlign.start,
+          controller: mentalStrengthEditProvider.descriptionEditTextController,
+          hintText: _descriptionFocusNode.hasFocus ? '' : "Start writing...",
+          hintStyle: TextStyle(
+            color: ColorsContent.newThemeColor,
+            fontSize: 16,
+            fontWeight: FontWeight.w400, // Font weight 600
+            fontFamily: 'OpenSans', // Font family Open Sans
+          ),
+          textInputAction: TextInputAction.done,
+          maxLines: 4,
+          focusNode: _descriptionFocusNode,
+          onTap: () => setState(() {}),
+          // Rebuild when tapped
+          onEditingComplete: () =>
+              setState(() {}), // Rebuild when focus is lost
+        );
+      },
+    );
+  }
+
+  Widget _buildAddMediaColumn(BuildContext context, Size size) {
+    return Consumer<MentalStrengthEditProvider>(
+        builder: (context, mentalStrengthEditProvider, _) {
+      return Align(
+        alignment: Alignment.topCenter,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Add Media",
+              style: theme.textTheme.titleSmall,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // const AudioRecorderMentalStrengthBuild(),
+                Container(
+                  height: size.height * 0.10,
+                  child: Stack(
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          _isTokenExpired();
+                          if (await requestGalleryPermission() &&
+                              Platform.isAndroid) {
+                            mentalStrengthEditProvider.selectedMedia(1);
+                            await galleryBottomSheet(
+                              context: context,
+                              title: 'Gallery',
+                            );
+                          } else if (Platform.isIOS) {
+                            mentalStrengthEditProvider.selectedMedia(1);
+                            await galleryBottomSheet(
+                              context: context,
+                              title: 'Gallery',
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content:
+                                      Text("Gallery permission is required.")),
+                            );
+                          }
+                        },
+                        child: SvgPicture.asset(
+                          ImageConstant
+                              .galleryAddMediaNumu, // Replace with your SVG asset path
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 50, // Adjust this value as needed
+                        right: 0, // Move to the right
+                        left: 40,
+                        child: Consumer<MentalStrengthEditProvider>(
+                          builder: (context, mentalStrengthEditProvider, _) {
+                            if (mentalStrengthEditProvider
+                                .pickedImages.isEmpty) {
+                              return const SizedBox();
+                            } else {
+                              return Container(
+                                width: size.height * 0.04,
+                                // Set width
+                                height: size.height * 0.04,
+                                // Set height same as width to make it a circle
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                  // Ensures the container is circular
+                                  image: DecorationImage(
+                                    image: AssetImage(ImageConstant.imgMenu),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  border: Border.all(
+                                    color: appTheme.blue300,
+                                    width: 2.0,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    mentalStrengthEditProvider
+                                        .pickedImages.length
+                                        .toString(),
+                                    style: const TextStyle(
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+
+                SizedBox(
+                  height: size.height * 0.09,
+                  child: Stack(
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          _isTokenExpired();
+                          if (await requestCameraPermission() &&
+                              Platform.isAndroid) {
+                            mentalStrengthEditProvider.selectedMedia(2);
+                            cameraBottomSheet(
+                              context: context,
+                              title: "Camera",
+                            );
+                          } else if (Platform.isIOS) {
+                            mentalStrengthEditProvider.selectedMedia(2);
+                            cameraBottomSheet(
+                              context: context,
+                              title: "Camera",
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content:
+                                      Text("Camera permission is required.")),
+                            );
+                          }
+                        },
+                        child: SvgPicture.asset(
+                          ImageConstant
+                              .cameraAddMediaNumu, // Replace with your SVG asset path
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 40, // Adjust this value as needed
+                        right: 0, // Move to the right
+                        left: 40,
+                        child: Consumer<MentalStrengthEditProvider>(
+                          builder: (context, mentalStrengthEditProvider, _) {
+                            if (mentalStrengthEditProvider
+                                .takedImages.isEmpty) {
+                              return const SizedBox();
+                            } else {
+                              return Container(
+                                width: size.height * 0.04,
+                                // Ensure width
+                                height: size.height * 0.04,
+                                // Ensure height matches width for a circle
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                  // This makes it perfectly round
+                                  image: DecorationImage(
+                                    image: AssetImage(ImageConstant.imgMenu),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  border: Border.all(
+                                    color: appTheme.blue300,
+                                    width: 2.0,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    mentalStrengthEditProvider
+                                        .takedImages.length
+                                        .toString(),
+                                    style: const TextStyle(
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+
+                SizedBox(
+                  height: size.height * 0.09,
+                  child: Stack(
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          _isTokenExpired();
+                          mentalStrengthEditProvider.selectedMedia(0);
+                          await audioBottomSheet(
+                            context: context,
+                            title: 'Record Audio',
+                          );
+                        },
+                        child: SvgPicture.asset(
+                          ImageConstant
+                              .recordAddMediaNumu, // Replace with your SVG asset path
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 40, // Adjust this value as needed
+                        right: 0, // Move to the right
+                        left: 40,
+                        child: Consumer<MentalStrengthEditProvider>(
+                          builder: (context, mentalStrengthEditProvider, _) {
+                            if (mentalStrengthEditProvider
+                                .recordedFilePath.isEmpty) {
+                              return const SizedBox();
+                            } else {
+                              return Container(
+                                width: size.height * 0.04,
+                                // Ensuring width
+                                height: size.height * 0.04,
+                                // Ensuring height for a circle
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                  // Ensuring a perfect circle
+                                  image: DecorationImage(
+                                    image: AssetImage(ImageConstant.imgMenu),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  border: Border.all(
+                                    color: appTheme.blue300,
+                                    width: 2.0,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    mentalStrengthEditProvider
+                                        .recordedFilePath.length
+                                        .toString(),
+                                    style: const TextStyle(
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+
+                SizedBox(
+                  height: size.height * 0.09,
+                  child: Stack(
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          _isTokenExpired();
+                          mentalStrengthEditProvider.selectedMedia(
+                            3,
+                          );
+                          final status =
+                              await Permission.locationWhenInUse.status;
+
+                          print("Permission status is ${status}");
+                          if (status.isDenied || status.isPermanentlyDenied) {
+                            final result =
+                                await Permission.locationWhenInUse.request();
+
+                            if (result.isDenied || result.isPermanentlyDenied) {
+                              if (mounted) {
+                                showDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (context) => AlertDialog(
+                                    title: const Text(
+                                        'Location Permission Required'),
+                                    content: const Text(
+                                        'Location permission is needed to add your current location to the mental strength entry. Please enable it in settings.'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child: const Text('Cancel'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () async {
+                                          Navigator.pop(context);
+                                          await openAppSettings();
+                                        },
+                                        child: const Text('Open Settings'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
+                              return;
+                            }
+                          }
+                          if (await Permission.locationWhenInUse.isGranted) {
+                            if (mounted) {
+                              showModalBottomSheet(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Container(
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.all(20),
+                                    child: const MentalGoogleMap(
+                                      edit: false,
+                                    ),
+                                  );
+                                },
+                              );
+                            }
+                          }
+                        },
+                        child: SvgPicture.asset(
+                          ImageConstant
+                              .locationAddMediaNumu, // Replace with your SVG asset path
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 40, // Adjust this value as needed
+                        right: 0, // Move to the right
+                        left: 40,
+                        child: Consumer<MentalStrengthEditProvider>(
+                          builder: (context, mentalStrengthEditProvider, _) {
+                            if (mentalStrengthEditProvider
+                                .selectedLocationName.isEmpty) {
+                              return const SizedBox();
+                            } else {
+                              return Container(
+                                width: size.height * 0.04,
+                                height: size.height * 0.04,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                  // Ensuring a perfect circle
+                                  image: DecorationImage(
+                                    image: AssetImage(ImageConstant.imgMenu),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  border: Border.all(
+                                    color: appTheme.blue300,
+                                    width: 2.0,
+                                  ),
+                                ),
+                                child: const Center(
+                                  child: Text(
+                                    "1",
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    });
+  }
+}
+
+Widget buildAvatarImage(
+    {required String imagePath,
+    required Size size,
+    Widget? widget,
+    bool isSelected = false}) {
+  return Container(
+    height: size.height * 0.08,
+    width: size.height * 0.08,
+    decoration: BoxDecoration(
+      color: isSelected ? Colors.blue : Colors.transparent,
+      image: DecorationImage(
+        image: AssetImage(
+          imagePath,
+        ),
+        fit: BoxFit.cover,
+      ),
+      borderRadius: const BorderRadius.all(
+        Radius.circular(
+          50.0,
+        ),
+      ),
+      border: Border.all(
+        color: appTheme.blue300,
+        width: 1.0,
+      ),
+    ),
+    child: widget ??
+        CustomIconButton(
+          height: size.height * 0.08,
+          width: size.height * 0.08,
+          padding: const EdgeInsets.all(18),
+          child: CustomImageView(
+            imagePath: imagePath,
+            color: isSelected ? Colors.white : Colors.blue,
+          ),
+        ),
+  );
+}
