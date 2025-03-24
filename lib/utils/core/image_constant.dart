@@ -57,6 +57,8 @@ class ImageConstant {
 
   static String imgImage5 = '$imagePath/img_image_5.png';
   static String imgThumbsUpGray700 = '$imagePath/img_thumbs_up_gray_700.svg';
+  static String actionDatePickerNumu = '$imagePath/action_date_picker_numu.svg';
+
   static String imgClose = '$imagePath/img_close.svg';
   static String imgFloatingIconBlue300 =
       '$imagePath/img_floating_icon_blue_300.svg';

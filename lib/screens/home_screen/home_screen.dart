@@ -507,25 +507,25 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           const SizedBox(height: 20),
                           _buildUserProfileList(context, size, homeProvider),
-                          const SizedBox(height: 10),
-                          (homeProvider.journalsModel?.journals?.length ?? 0) < 0
-                              ? const SizedBox()
-                              : GestureDetector(
-                            onTap: () {
-                              dashBoardProvider.changePage(index: 2);
-                            },
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 15),
-                                child: Text(
-                                  homeProvider.journalStatus == 200 ?
-                                  "View more ..." : "",
-                                  style: CustomTextStyles.bodyLargeRoboto,
-                                ),
-                              ),
-                            ),
-                          ),
+                          // const SizedBox(height: 10),
+                          // (homeProvider.journalsModel?.journals?.length ?? 0) < 0
+                          //     ? const SizedBox()
+                          //     : GestureDetector(
+                          //   onTap: () {
+                          //     dashBoardProvider.changePage(index: 2);
+                          //   },
+                          //   child: Align(
+                          //     alignment: Alignment.centerLeft,
+                          //     child: Padding(
+                          //       padding: const EdgeInsets.symmetric(horizontal: 15),
+                          //       child: Text(
+                          //         homeProvider.journalStatus == 200 ?
+                          //         "View more ..." : "",
+                          //         style: CustomTextStyles.bodyLargeRoboto,
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                           const SizedBox(height: 50),
                         ],
                       ),
@@ -582,7 +582,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.blue, // Adjust color as needed
+                      color: ColorsContent.newThemeColor, // Adjust color as needed
                       border: Border.all(color: Colors.white, width: 1),
                     ),
                     padding: const EdgeInsets.all(2),
@@ -702,7 +702,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: homeProvider.journalsModelLoading
           ? shimmerList(
         height: size.height * 0.5,
-        list: 4,
+        list: 5,
         shimmerHeight: size.height * 0.07,
       ):
       homeProvider.journalStatus == 404 ?
@@ -713,9 +713,9 @@ class _HomeScreenState extends State<HomeScreen> {
         separatorBuilder: (context, index) {
           return const SizedBox(height: 3);
         },
-        itemCount: (homeProvider.journalsModel?.journals?.length ?? 0) < 5
+        itemCount: (homeProvider.journalsModel?.journals?.length ?? 0) < 6
             ? (homeProvider.journalsModel?.journals?.length ?? 0)
-            : 5,
+            : 6,
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {

@@ -273,8 +273,7 @@ class _NumuMentalStrengthAddEditPageState
                                 TabBarView(
                                   controller: _tabController,
                                   children: [
-                                    _buildFirstTab(context,
-                                        mentalStrengthEditProvider, size),
+                                    _buildFirstTab(context, mentalStrengthEditProvider, size),
                                     _buildSecondTab(context, size),
                                     _buildThirdTab(context, size),
                                     _buildFourthTab(context, size),
@@ -284,172 +283,123 @@ class _NumuMentalStrengthAddEditPageState
                                 ),
 
                                 // Floating Button for navigation and submission
-                                currentTabIndex < 5
-                                    ? Positioned(
-                                        bottom: size.height * 0.025,
-                                        left: 0,
-                                        right: 0,
-                                        child: Center(
-                                          child: Positioned(
-                                            bottom: size.height * 0.02,
-                                            left: 0,
-                                            right: 0,
-                                            child: Center(
-                                              child: SizedBox(
-                                                width:
-                                                    70, // Adjust the width as needed
-                                                height:
-                                                    70, // Adjust the height as needed
-                                                child: FloatingActionButton(
-                                                  onPressed: () {
-                                                    if (currentTabIndex < 5) {
-                                                      _tabController.animateTo(
-                                                          currentTabIndex + 1);
-                                                    } else {
-                                                      print("End of progress");
-                                                    }
-                                                  },
-                                                  child: Image.asset(
-                                                    ImageConstant.splashNextIcon,
-                                                    width:
-                                                        90, // Increase image width
-                                                    height:
-                                                        90, // Increase image height
-                                                  ),
-                                                  shape: const CircleBorder(),
-                                                  elevation: 5,
-                                                  heroTag: "next_button",
-                                                ),
-                                              ),
-                                            ),
+                                if (currentTabIndex < 5)
+                                  Positioned(
+                                    bottom: size.height * 0.025,
+                                    left: 0,
+                                    right: 0,
+                                    child: Center(
+                                      child: SizedBox(
+                                        width: 70,
+                                        height: 70,
+                                        child: FloatingActionButton(
+                                          onPressed: () {
+                                            if (currentTabIndex < 5) {
+                                              _tabController.animateTo(currentTabIndex + 1);
+                                            } else {
+                                              print("End of progress");
+                                            }
+                                          },
+                                          child: Image.asset(
+                                            ImageConstant.splashNextIcon,
+                                            width: 90,
+                                            height: 90,
                                           ),
+                                          shape: const CircleBorder(),
+                                          elevation: 5,
+                                          heroTag: "next_button",
                                         ),
-                                      )
-                                    : Positioned(
-                                        bottom: size.height * 0.02,
-                                        left: 0,
-                                        right: 0,
-                                        child: Center(
-                                          child: GestureDetector(
-                                            onTap:
-                                                (!mentalStrengthEditProvider
-                                                            .saveJournalLoading &&
-                                                        mentalStrengthEditProvider
-                                                            .descriptionEditTextController
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        mentalStrengthEditProvider
-                                                            .emotionValue.id
-                                                            .toString()
-                                                            .isNotEmpty &&
-                                                        mentalStrengthEditProvider
-                                                                .emotionalValueStar !=
-                                                            null &&
-                                                        mentalStrengthEditProvider
-                                                                .driveValueStar !=
-                                                            null)
-                                                    ? () async {
-                                                        await mentalStrengthEditProvider
-                                                            .saveButtonFunction(
-                                                                context);
-                                                        _isTokenExpired();
-                                                      }
-                                                    : null,
-                                            child: Opacity(
-                                              opacity:
-                                                  (!mentalStrengthEditProvider
-                                                              .saveJournalLoading &&
-                                                          mentalStrengthEditProvider
-                                                              .descriptionEditTextController
-                                                              .text
-                                                              .isNotEmpty &&
-                                                          mentalStrengthEditProvider
-                                                              .emotionValue.id
-                                                              .toString()
-                                                              .isNotEmpty &&
-                                                          mentalStrengthEditProvider
-                                                                  .emotionalValueStar !=
-                                                              null &&
-                                                          mentalStrengthEditProvider
-                                                                  .driveValueStar !=
-                                                              null)
-                                                      ? 1.0
-                                                      : 0.5,
-                                              child: Stack(
-                                                alignment: Alignment.center,
-                                                children: [
-                                                  SvgPicture.asset(
-                                                    ImageConstant
-                                                        .submitButtonNumu,
+                                      ),
+                                    ),
+                                  )
+                                else
+                                  Positioned(
+                                    bottom: size.height * 0.02,
+                                    left: 0,
+                                    right: 0,
+                                    child: Center(
+                                      child: GestureDetector(
+                                        onTap: (!mentalStrengthEditProvider.saveJournalLoading &&
+                                            mentalStrengthEditProvider
+                                                .descriptionEditTextController.text.isNotEmpty &&
+                                            mentalStrengthEditProvider.emotionValue.id
+                                                .toString()
+                                                .isNotEmpty &&
+                                            mentalStrengthEditProvider.emotionalValueStar != null &&
+                                            mentalStrengthEditProvider.driveValueStar != null)
+                                            ? () async {
+                                          await mentalStrengthEditProvider.saveButtonFunction(
+                                              context);
+                                          _isTokenExpired();
+                                        }
+                                            : null,
+                                        child: Opacity(
+                                          opacity: (!mentalStrengthEditProvider.saveJournalLoading &&
+                                              mentalStrengthEditProvider
+                                                  .descriptionEditTextController.text.isNotEmpty &&
+                                              mentalStrengthEditProvider.emotionValue.id
+                                                  .toString()
+                                                  .isNotEmpty &&
+                                              mentalStrengthEditProvider.emotionalValueStar != null &&
+                                              mentalStrengthEditProvider.driveValueStar != null)
+                                              ? 1.0
+                                              : 0.5,
+                                          child: Stack(
+                                            alignment: Alignment.center,
+                                            children: [
+                                              SvgPicture.asset(ImageConstant.submitButtonNumu),
+                                              if (mentalStrengthEditProvider.saveJournalLoading)
+                                                const Padding(
+                                                  padding: EdgeInsets.only(top: 5, bottom: 5),
+                                                  child: SpinKitWave(
+                                                    color: Colors.white,
+                                                    size: 25,
                                                   ),
-                                                  if (mentalStrengthEditProvider
-                                                      .saveJournalLoading)
-                                                    const Padding(
-                                                      padding: EdgeInsets.only(
-                                                          top: 5, bottom: 5),
-                                                      child: SpinKitWave(
-                                                        color: Colors.white,
-                                                        size: 25,
-                                                      ),
-                                                    ),
-                                                ],
-                                              ),
-                                            ),
+                                                ),
+                                            ],
                                           ),
                                         ),
                                       ),
+                                    ),
+                                  ),
 
                                 // Newly Added Widgets
-                                mentalStrengthEditProvider.openChooseGoal
-                                    ? const ScreenChooseGoalMentalStrength()
-                                    : const SizedBox(),
-                                mentalStrengthEditProvider.openAddGoal
-                                    ? const AddGoalsDreamsBottomSheet()
-                                    : const SizedBox(),
-                                mentalStrengthEditProvider.openGoalViewSheet
-                                    ? (mentalStrengthEditProvider
-                                                .goalDetailModel ==
-                                            null
-                                        ? Container(
-                                            decoration: BoxDecoration(
-                                              color: appTheme.gray50,
-                                              borderRadius:
-                                                  const BorderRadius.only(
-                                                topRight: Radius.circular(25),
-                                                topLeft: Radius.circular(25),
-                                              ),
-                                            ),
-                                            margin: EdgeInsets.only(
-                                                top: size.height * 0.15),
-                                            child: shimmerList(
-                                                height: size.height * 0.8,
-                                                list: 10),
-                                          )
-                                        : GoalAndDreamFullViewBottomSheet(
-                                            goalDetailModel:
-                                                mentalStrengthEditProvider
-                                                    .goalDetailModel!,
-                                          ))
-                                    : const SizedBox(),
-                                mentalStrengthEditProvider.openChooseAction
-                                    ? ChooseActionMentalHelth(
-                                        goal:
-                                            mentalStrengthEditProvider.goalsValue,
-                                      )
-                                    : const SizedBox(),
-                                mentalStrengthEditProvider.openAddAction
-                                    ? AddActionMentalStrengthBottomSheet(
-                                        goalId: mentalStrengthEditProvider
-                                            .goalsValue.id
-                                            .toString(),
-                                      )
-                                    : const SizedBox(),
-                                mentalStrengthEditProvider.openActionFullView
-                                    ? const ActionFullViewJournalCreateBottomSheet()
-                                    : const SizedBox(),
+                                if (mentalStrengthEditProvider.openChooseGoal)
+                                  const ScreenChooseGoalMentalStrength(),
+
+                                if (mentalStrengthEditProvider.openAddGoal)
+                                  const AddGoalsDreamsBottomSheet(),
+
+                                if (mentalStrengthEditProvider.openGoalViewSheet)
+                                  mentalStrengthEditProvider.goalDetailModel == null
+                                      ? Container(
+                                    decoration: BoxDecoration(
+                                      color: appTheme.gray50,
+                                      borderRadius: const BorderRadius.only(
+                                        topRight: Radius.circular(25),
+                                        topLeft: Radius.circular(25),
+                                      ),
+                                    ),
+                                    margin: EdgeInsets.only(top: size.height * 0.15),
+                                    child: shimmerList(height: size.height * 0.8, list: 10),
+                                  )
+                                      : GoalAndDreamFullViewBottomSheet(
+                                    goalDetailModel: mentalStrengthEditProvider.goalDetailModel!,
+                                  ),
+
+                                if (mentalStrengthEditProvider.openChooseAction)
+                                  ChooseActionMentalHelth(goal: mentalStrengthEditProvider.goalsValue),
+
+                                if (mentalStrengthEditProvider.openAddAction)
+                                  AddActionMentalStrengthBottomSheet(
+                                    goalId: mentalStrengthEditProvider.goalsValue.id.toString(),
+                                  ),
+
+                                if (mentalStrengthEditProvider.openActionFullView)
+                                  const ActionFullViewJournalCreateBottomSheet(),
                               ],
                             ),
-                          ),
+                          )
                         ],
                       ),
                     );
@@ -464,49 +414,47 @@ class _NumuMentalStrengthAddEditPageState
   /// ✅ First Tab - Kept as per your design
   Widget _buildFirstTab(BuildContext context,
       MentalStrengthEditProvider mentalStrengthEditProvider, Size size) {
-    return Expanded(
-      child: Stack(
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
-            color: mentalStrengthEditProvider.openChooseGoal
-                ? Colors.blue[50]
-                : null,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  SizedBox(height: size.height * 0.03),
-                  Container(
-                    width: 350,
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: ColorsContent.whatsOnYourMindBoxColor,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      "What's on your mind?",
-                      style: TextStyle(
-                        color: ColorsContent.newThemeColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'OpenSans',
-                      ),
+    return Stack(
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+          color: mentalStrengthEditProvider.openChooseGoal
+              ? Colors.blue[50]
+              : null,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(height: size.height * 0.03),
+                Container(
+                  width: 350,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: ColorsContent.whatsOnYourMindBoxColor,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    "What's on your mind?",
+                    style: TextStyle(
+                      color: ColorsContent.newThemeColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'OpenSans',
                     ),
                   ),
-                  SizedBox(height: size.height * 0.03),
-                  _buildDescriptionEditText(
-                      context, mentalStrengthEditProvider),
-                  SizedBox(height: size.height * 0.03),
-                  _buildAddMediaColumn(context, size),
-                  SizedBox(height: size.height * 0.03),
-                ],
-              ),
+                ),
+                SizedBox(height: size.height * 0.03),
+                _buildDescriptionEditText(context, mentalStrengthEditProvider),
+                SizedBox(height: size.height * 0.03),
+                _buildAddMediaColumn(context, size),
+                SizedBox(height: size.height * 0.03),
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
+
 
   Widget _buildSecondTab(BuildContext context, Size size) {
     Size size = MediaQuery.of(context).size;
@@ -541,9 +489,9 @@ class _NumuMentalStrengthAddEditPageState
               // Map the value from 1-5 to -2 to 2 as an integer
               int mappedValue = ((value - 1) * 4 / (5 - 1) - 2).round();
 
-              // mentalStrengthEditProvider
-              //     .fetchEmotions(
-              //     emotion: "$mappedValue");
+              mentalStrengthEditProvider
+                  .fetchEmotions(
+                  emotion: "$mappedValue");
 
               mentalStrengthEditProvider.changeEmotionalValueStar(value);
               _isTokenExpired(); // Call your method after rating update.
@@ -718,22 +666,25 @@ class _NumuMentalStrengthAddEditPageState
           const SizedBox(
             height: 20,
           ),
-          ElevatedButton(
-            onPressed: () {
-              _isTokenExpired();
-              mentalStrengthEditProvider.openChooseGoalFunction();
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: ColorsContent.newThemeColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
+          SizedBox(
+            width: 250, // Set your desired width
+            child: ElevatedButton(
+              onPressed: () {
+                _isTokenExpired();
+                mentalStrengthEditProvider.openChooseGoalFunction();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: ColorsContent.newThemeColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
               ),
-            ),
-            child: const Text(
-              "Select Goal",
-              style: TextStyle(
-                color: Color(0xffFFFFFF),
-                fontWeight: FontWeight.bold,
+              child: const Text(
+                "Select Goal",
+                style: TextStyle(
+                  color: Color(0xffFFFFFF),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
@@ -852,29 +803,32 @@ class _NumuMentalStrengthAddEditPageState
           const SizedBox(
             height: 20,
           ),
-          ElevatedButton(
-            onPressed: () {
-              if (mentalStrengthEditProvider.goalsValue.id == null) {
-                showCustomSnackBar(
-                  context: context,
-                  message: "Please choose your goal",
-                );
-              } else {
-                _isTokenExpired();
-                mentalStrengthEditProvider.openChooseActionFunction();
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: ColorsContent.newThemeColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
+          SizedBox(
+            width: 250,
+            child: ElevatedButton(
+              onPressed: () {
+                if (mentalStrengthEditProvider.goalsValue.id == null) {
+                  showCustomSnackBar(
+                    context: context,
+                    message: "Please choose your goal",
+                  );
+                } else {
+                  _isTokenExpired();
+                  mentalStrengthEditProvider.openChooseActionFunction();
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: ColorsContent.newThemeColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
               ),
-            ),
-            child: const Text(
-              "Select An Action",
-              style: TextStyle(
-                color: Color(0xffFFFFFF),
-                fontWeight: FontWeight.bold,
+              child: const Text(
+                "Select An Action",
+                style: TextStyle(
+                  color: Color(0xffFFFFFF),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
@@ -1042,7 +996,7 @@ class _NumuMentalStrengthAddEditPageState
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // const AudioRecorderMentalStrengthBuild(),
-                Container(
+                SizedBox(
                   height: size.height * 0.10,
                   child: Stack(
                     children: [
@@ -1091,7 +1045,7 @@ class _NumuMentalStrengthAddEditPageState
                                 height: size.height * 0.04,
                                 // Set height same as width to make it a circle
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: ColorsContent.galleryCountColor,
                                   shape: BoxShape.circle,
                                   // Ensures the container is circular
                                   image: DecorationImage(
@@ -1099,8 +1053,8 @@ class _NumuMentalStrengthAddEditPageState
                                     fit: BoxFit.cover,
                                   ),
                                   border: Border.all(
-                                    color: appTheme.blue300,
-                                    width: 2.0,
+                                    color: Colors.white,
+                                    width: 1.0,
                                   ),
                                 ),
                                 child: Center(
@@ -1109,7 +1063,7 @@ class _NumuMentalStrengthAddEditPageState
                                         .pickedImages.length
                                         .toString(),
                                     style: const TextStyle(
-                                      color: Colors.blue,
+                                      color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -1172,7 +1126,7 @@ class _NumuMentalStrengthAddEditPageState
                                 height: size.height * 0.04,
                                 // Ensure height matches width for a circle
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: ColorsContent.cameraCountColor,
                                   shape: BoxShape.circle,
                                   // This makes it perfectly round
                                   image: DecorationImage(
@@ -1180,8 +1134,8 @@ class _NumuMentalStrengthAddEditPageState
                                     fit: BoxFit.cover,
                                   ),
                                   border: Border.all(
-                                    color: appTheme.blue300,
-                                    width: 2.0,
+                                    color: Colors.white,
+                                    width: 1.0,
                                   ),
                                 ),
                                 child: Center(
@@ -1190,7 +1144,7 @@ class _NumuMentalStrengthAddEditPageState
                                         .takedImages.length
                                         .toString(),
                                     style: const TextStyle(
-                                      color: Colors.blue,
+                                      color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -1238,7 +1192,7 @@ class _NumuMentalStrengthAddEditPageState
                                 height: size.height * 0.04,
                                 // Ensuring height for a circle
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: ColorsContent.recordCountColor,
                                   shape: BoxShape.circle,
                                   // Ensuring a perfect circle
                                   image: DecorationImage(
@@ -1246,8 +1200,8 @@ class _NumuMentalStrengthAddEditPageState
                                     fit: BoxFit.cover,
                                   ),
                                   border: Border.all(
-                                    color: appTheme.blue300,
-                                    width: 2.0,
+                                    color: Colors.white,
+                                    width: 1.0,
                                   ),
                                 ),
                                 child: Center(
@@ -1256,7 +1210,7 @@ class _NumuMentalStrengthAddEditPageState
                                         .recordedFilePath.length
                                         .toString(),
                                     style: const TextStyle(
-                                      color: Colors.blue,
+                                      color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -1353,7 +1307,7 @@ class _NumuMentalStrengthAddEditPageState
                                 width: size.height * 0.04,
                                 height: size.height * 0.04,
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: ColorsContent.locationCountColor,
                                   shape: BoxShape.circle,
                                   // Ensuring a perfect circle
                                   image: DecorationImage(
@@ -1361,15 +1315,15 @@ class _NumuMentalStrengthAddEditPageState
                                     fit: BoxFit.cover,
                                   ),
                                   border: Border.all(
-                                    color: appTheme.blue300,
-                                    width: 2.0,
+                                    color: Colors.white,
+                                    width: 1.0,
                                   ),
                                 ),
                                 child: const Center(
                                   child: Text(
                                     "1",
                                     style: TextStyle(
-                                      color: Colors.blue,
+                                      color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),

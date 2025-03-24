@@ -2,15 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:mentalhelth/screens/auth/sign_in/provider/sign_in_provider.dart';
-import 'package:mentalhelth/screens/auth/subscribe_plan_page/subscribe_plan_page.dart';
 import 'package:mentalhelth/screens/dash_borad_screen/provider/dash_board_provider.dart';
 import 'package:mentalhelth/screens/edit_add_profile_screen/provider/edit_provider.dart';
-import 'package:mentalhelth/screens/feedback_screen/feedback_screen.dart';
-import 'package:mentalhelth/screens/help_screen/help_screen.dart';
 import 'package:mentalhelth/screens/home_screen/provider/home_provider.dart';
 import 'package:mentalhelth/utils/core/constent.dart';
 import 'package:mentalhelth/utils/logic/logic.dart';
 import 'package:mentalhelth/utils/logic/shared_prefrence.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/widgets/functions/popup.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
@@ -20,15 +18,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../utils/core/firebase_api.dart';
 import '../../../../utils/core/image_constant.dart';
 import '../../../../utils/theme/custom_text_style.dart';
-import '../../../../utils/theme/theme_helper.dart';
 import '../../../../widgets/custom_image_view.dart';
-import '../../../auth/sign_in/coninue_with_google_class.dart';
-import '../../../subscription_view/subscription_view_screen.dart';
-import '../../../view_reminder_screen/screens/view_reminder_screen.dart';
 
 Widget buildPopupDialog(BuildContext context, Size size) {
   return AlertDialog(
-    backgroundColor: appTheme.blue300.withOpacity(0.95), // Adjust the opacity as needed
+    backgroundColor: ColorsContent.newThemeColor.withOpacity(0.95), // Adjust the opacity as needed
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(
         20.0,

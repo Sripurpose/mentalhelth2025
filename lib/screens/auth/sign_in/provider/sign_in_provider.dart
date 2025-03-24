@@ -56,6 +56,7 @@ class SignInProvider extends ChangeNotifier {
         'email': email,
         'password': password,
       };
+      logger.i("body${body}");
       final response = await http.post(
         Uri.parse(
           UrlConstant.loginUrl,

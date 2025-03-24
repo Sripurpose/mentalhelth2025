@@ -144,7 +144,7 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
                       children: [
                         Container(
                           color: goalsDreamsProvider.goalsanddreams.isEmpty
-                              ? Colors.white
+                              ? ColorsContent.homeBackGroundColor
                               : null,
                           padding: const EdgeInsets.symmetric(horizontal: 28),
                           child: goalsDreamsProvider.goalsAndDreamsModelLoading

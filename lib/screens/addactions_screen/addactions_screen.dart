@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/screens/addactions_screen/widget/popup/audio_popup.dart';
 import 'package:mentalhelth/screens/addactions_screen/widget/popup/camera_popup.dart';
@@ -22,6 +23,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import '../../utils/logic/permissions.dart';
+import '../../utils/theme/colors.dart';
 import '../addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
 import '../dash_borad_screen/provider/dash_board_provider.dart';
 import '../edit_add_profile_screen/provider/edit_provider.dart';
@@ -144,13 +146,9 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                 width: double.infinity,
                 height: double.infinity,
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
-                  image: DecorationImage(
-                    image: AssetImage(
-                      ImageConstant.imgGroup22,
-                    ),
-                    fit: BoxFit.cover,
-                  ),
+                  color: ColorsContent.homeBackGroundColor,
+                  //   fit: BoxFit.cover,
+                  // ),
                 ),
                 child: Container(
                   width: double.maxFinite,
@@ -166,9 +164,9 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                           return Column(
                             children: [
                               _buildTitleEditText(context),
-                              const SizedBox(height: 19),
+                              const SizedBox(height: 20),
                               _buildDescriptionEditText(context),
-                              const SizedBox(height: 35),
+                              const SizedBox(height: 25),
                               _buildAddMediaColumn(
                                 context,
                                 size,
@@ -179,6 +177,7 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                               Row(
                                 children: [
                                   Checkbox(
+                                    side:  BorderSide(color: ColorsContent.locationCountColor, width: 2), // Change border color
                                     value: addActionsProvider.setRemainder,
                                     onChanged: (value) async {
                                       _isTokenExpired();
@@ -200,7 +199,7 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                                 ],
                               ),
                               SizedBox(
-                                height: size.height * 0.02,
+                                height: size.height * 0.01,
                               ),
                               addActionsProvider.setRemainder
                                   ? SizedBox(
@@ -243,10 +242,6 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                                                     color: theme.colorScheme
                                                         .onSecondaryContainer
                                                         .withOpacity(1),
-                                                    border: Border.all(
-                                                      color: appTheme.gray700,
-                                                      width: 1,
-                                                    ),
                                                     borderRadius:
                                                         BorderRadiusStyle
                                                             .roundedBorder4,
@@ -257,9 +252,10 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                                                       children: [
                                                         CustomImageView(
                                                           imagePath: ImageConstant
-                                                              .imgThumbsUpGray700,
+                                                              .actionDatePickerNumu,
                                                           height: 20,
                                                           width: 20,
+
                                                           margin:
                                                               const EdgeInsets
                                                                   .only(
@@ -317,10 +313,6 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                                                     color: theme.colorScheme
                                                         .onSecondaryContainer
                                                         .withOpacity(1),
-                                                    border: Border.all(
-                                                      color: appTheme.gray700,
-                                                      width: 1,
-                                                    ),
                                                     borderRadius:
                                                         BorderRadiusStyle
                                                             .roundedBorder4,
@@ -331,7 +323,7 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                                                       children: [
                                                         CustomImageView(
                                                           imagePath: ImageConstant
-                                                              .imgThumbsUpGray700,
+                                                              .actionDatePickerNumu,
                                                           height: 20,
                                                           width: 20,
                                                           margin:
@@ -402,10 +394,6 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                                                     color: theme.colorScheme
                                                         .onSecondaryContainer
                                                         .withOpacity(1),
-                                                    border: Border.all(
-                                                      color: appTheme.gray700,
-                                                      width: 1,
-                                                    ),
                                                     borderRadius:
                                                         BorderRadiusStyle
                                                             .roundedBorder4,
@@ -416,7 +404,7 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                                                       children: [
                                                         CustomImageView(
                                                           imagePath: ImageConstant
-                                                              .imgThumbsUpGray700,
+                                                              .actionDatePickerNumu,
                                                           height: 20,
                                                           width: 20,
                                                           margin:
@@ -476,10 +464,6 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                                                     color: theme.colorScheme
                                                         .onSecondaryContainer
                                                         .withOpacity(1),
-                                                    border: Border.all(
-                                                      color: appTheme.gray700,
-                                                      width: 1,
-                                                    ),
                                                     borderRadius:
                                                         BorderRadiusStyle
                                                             .roundedBorder4,
@@ -490,7 +474,7 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                                                       children: [
                                                         CustomImageView(
                                                           imagePath: ImageConstant
-                                                              .imgThumbsUpGray700,
+                                                              .actionDatePickerNumu,
                                                           height: 20,
                                                           width: 20,
                                                           margin:
@@ -773,11 +757,6 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                                                         color: theme.colorScheme
                                                             .onSecondaryContainer
                                                             .withOpacity(1),
-                                                        border: Border.all(
-                                                          color:
-                                                              appTheme.gray700,
-                                                          width: 1,
-                                                        ),
                                                         borderRadius:
                                                             BorderRadiusStyle
                                                                 .roundedBorder4,
@@ -1051,7 +1030,7 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
   Widget _buildTitleEditText(BuildContext context) {
     return Consumer<AddActionsProvider>(
         builder: (context, addActionsProvider, _) {
-      return CustomTextFormField(
+      return CustomTextFormFieldGoalOrActionName(
         controller: addActionsProvider.titleEditTextController,
         hintText: "Title",
         hintStyle: CustomTextStyles.bodySmallGray700,
@@ -1063,7 +1042,7 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
   Widget _buildDescriptionEditText(BuildContext context) {
     return Consumer<AddActionsProvider>(
         builder: (context, addActionsProvider, _) {
-      return CustomTextFormField(
+      return CustomTextFormFieldGoalOrActionDesc(
         controller: addActionsProvider.descriptionEditTextController,
         hintText: "Action Description",
         hintStyle: CustomTextStyles.bodySmallGray700,
@@ -1171,9 +1150,13 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
           },
           height: 40,
           text: "Save",
-          buttonStyle: CustomButtonStyles.outlinePrimaryTL5,
-          buttonTextStyle:
-              CustomTextStyles.titleSmallHelveticaOnSecondaryContainer,
+          buttonStyle:  CustomButtonStyles.addActionButtonStyle,
+          buttonTextStyle:const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w700,
+          fontFamily: 'Open Sans',
+          color:  Colors.white,
+        ),
         );
       },
     );
@@ -1188,105 +1171,20 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Add Media",
-              style: theme.textTheme.titleSmall,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5.0),
+              child: Text(
+                "Add Media",
+                style: theme.textTheme.titleSmall,
+              ),
             ),
             const SizedBox(
-              height: 11,
+              height: 15,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SizedBox(
-                  height: size.height * 0.09,
-                  child: Stack(
-                    children: [
-                      GestureDetector(
-                        onTap: () async {
-                          _isTokenExpired();
-                          addActionsProvider.selectedMedia(0);
-                          await audioBottomSheetAction(
-                            context: context,
-                            title: 'Record Audio',
-                          );
-                          // }
-                        },
-                        child: Container(
-                          height: size.height * 0.08,
-                          width: size.height * 0.08,
-                          decoration: BoxDecoration(
-                            color: addActionsProvider.mediaSelected == 0
-                                ? Colors.blue
-                                : Colors.transparent,
-                            image: DecorationImage(
-                              image: AssetImage(ImageConstant.imgMenu),
-                              fit: BoxFit.cover,
-                            ),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(
-                                50.0,
-                              ),
-                            ),
-                            border: Border.all(
-                              color: appTheme.blue300,
-                              width: 1.0,
-                            ),
-                          ),
-                          child: Icon(
-                            Icons.mic,
-                            size: 30,
-                            color: addActionsProvider.mediaSelected == 0
-                                ? Colors.white
-                                : Colors.blue,
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        left: 10,
-                        right: 10,
-                        child: Consumer<AddActionsProvider>(
-                            builder: (context, addActionsProvider, _) {
-                          if (addActionsProvider.recordedFilePath.isEmpty) {
-                            return const SizedBox();
-                          } else {
-                            return Container(
-                              width: size.height * 0.04,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                image: DecorationImage(
-                                  image: AssetImage(ImageConstant.imgMenu),
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(
-                                    50.0,
-                                  ),
-                                ),
-                                border: Border.all(
-                                  color: appTheme.blue300,
-                                  width: 2.0,
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  addActionsProvider.recordedFilePath.length
-                                      .toString(),
-                                  style: const TextStyle(
-                                    color: Colors.blue,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            );
-                          }
-                        }),
-                      )
-                    ],
-                  ),
-                ),
-                // const AudioRecorderMentalStrengthBuild(),
+
                 SizedBox(
                   height: size.height * 0.09,
                   child: Stack(
@@ -1315,46 +1213,66 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                             );
                           }
                         },
-                        child: buildAvatarImage(
-                          widget: Icon(
-                            Icons.image,
-                            size: 30,
-                            color: addActionsProvider.mediaSelected == 1
-                                ? Colors.white
-                                : Colors.blue,
-                          ),
-                          imagePath: ImageConstant.imgThumbsUp,
-                          size: size,
-                          isSelected: addActionsProvider.mediaSelected == 1
-                              ? true
-                              : false,
+                        child: SvgPicture.asset(
+                          ImageConstant
+                              .galleryAddMediaNumu, // Replace with your SVG asset path
                         ),
                       ),
                       Positioned(
-                        bottom: 0,
-                        left: 10,
-                        right: 10,
+                        bottom: 40, // Adjust this value as needed
+                        right: 0, // Move to the right
+                        left: 40,
                         child: Consumer<AddActionsProvider>(
                             builder: (context, addActionsProvider, _) {
                           if (addActionsProvider.pickedImages.isEmpty) {
                             return const SizedBox();
                           } else {
+                            // return Container(
+                            //   width: size.height * 0.04,
+                            //   decoration: BoxDecoration(
+                            //     color: Colors.white,
+                            //     image: DecorationImage(
+                            //       image: AssetImage(ImageConstant.imgMenu),
+                            //       fit: BoxFit.cover,
+                            //     ),
+                            //     borderRadius: const BorderRadius.all(
+                            //       Radius.circular(
+                            //         50.0,
+                            //       ),
+                            //     ),
+                            //     border: Border.all(
+                            //       color: appTheme.blue300,
+                            //       width: 2.0,
+                            //     ),
+                            //   ),
+                            //   child: Center(
+                            //     child: Text(
+                            //       addActionsProvider.pickedImages.length
+                            //           .toString(),
+                            //       style: const TextStyle(
+                            //         color: Colors.blue,
+                            //         fontWeight: FontWeight.bold,
+                            //       ),
+                            //     ),
+                            //   ),
+                            // );
+
                             return Container(
                               width: size.height * 0.04,
+                              // Set width
+                              height: size.height * 0.04,
+                              // Set height same as width to make it a circle
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: ColorsContent.galleryCountColor,
+                                shape: BoxShape.circle,
+                                // Ensures the container is circular
                                 image: DecorationImage(
                                   image: AssetImage(ImageConstant.imgMenu),
                                   fit: BoxFit.cover,
                                 ),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(
-                                    50.0,
-                                  ),
-                                ),
                                 border: Border.all(
-                                  color: appTheme.blue300,
-                                  width: 2.0,
+                                  color: Colors.white,
+                                  width: 1.0,
                                 ),
                               ),
                               child: Center(
@@ -1362,7 +1280,7 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                                   addActionsProvider.pickedImages.length
                                       .toString(),
                                   style: const TextStyle(
-                                    color: Colors.blue,
+                                    color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -1374,6 +1292,8 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                     ],
                   ),
                 ),
+
+
                 SizedBox(
                   height: size.height * 0.09,
                   child: Stack(
@@ -1403,46 +1323,65 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                           }
 
                         },
-                        child: buildAvatarImage(
-                          widget: Icon(
-                            Icons.camera_alt_outlined,
-                            size: 30,
-                            color: addActionsProvider.mediaSelected == 2
-                                ? Colors.white
-                                : Colors.blue,
-                          ),
-                          imagePath: ImageConstant.imgCamera,
-                          size: size,
-                          isSelected: addActionsProvider.mediaSelected == 2
-                              ? true
-                              : false,
+                        child: SvgPicture.asset(
+                          ImageConstant
+                              .cameraAddMediaNumu, // Replace with your SVG asset path
                         ),
                       ),
                       Positioned(
-                        bottom: 0,
-                        left: 10,
-                        right: 10,
+                        bottom: 40, // Adjust this value as needed
+                        right: 0, // Move to the right
+                        left: 40,
                         child: Consumer<AddActionsProvider>(
                             builder: (context, addActionsProvider, _) {
                           if (addActionsProvider.takedImages.isEmpty) {
                             return const SizedBox();
                           } else {
+                            // return Container(
+                            //   width: size.height * 0.04,
+                            //   decoration: BoxDecoration(
+                            //     color: Colors.white,
+                            //     image: DecorationImage(
+                            //       image: AssetImage(ImageConstant.imgMenu),
+                            //       fit: BoxFit.cover,
+                            //     ),
+                            //     borderRadius: const BorderRadius.all(
+                            //       Radius.circular(
+                            //         50.0,
+                            //       ),
+                            //     ),
+                            //     border: Border.all(
+                            //       color: appTheme.blue300,
+                            //       width: 2.0,
+                            //     ),
+                            //   ),
+                            //   child: Center(
+                            //     child: Text(
+                            //       addActionsProvider.takedImages.length
+                            //           .toString(),
+                            //       style: const TextStyle(
+                            //         color: Colors.blue,
+                            //         fontWeight: FontWeight.bold,
+                            //       ),
+                            //     ),
+                            //   ),
+                            // );
                             return Container(
                               width: size.height * 0.04,
+                              // Ensure width
+                              height: size.height * 0.04,
+                              // Ensure height matches width for a circle
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: ColorsContent.cameraCountColor,
+                                shape: BoxShape.circle,
+                                // This makes it perfectly round
                                 image: DecorationImage(
                                   image: AssetImage(ImageConstant.imgMenu),
                                   fit: BoxFit.cover,
                                 ),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(
-                                    50.0,
-                                  ),
-                                ),
                                 border: Border.all(
-                                  color: appTheme.blue300,
-                                  width: 2.0,
+                                  color: Colors.white,
+                                  width: 1.0,
                                 ),
                               ),
                               child: Center(
@@ -1450,7 +1389,7 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                                   addActionsProvider.takedImages.length
                                       .toString(),
                                   style: const TextStyle(
-                                    color: Colors.blue,
+                                    color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -1462,6 +1401,103 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                     ],
                   ),
                 ),
+
+
+                SizedBox(
+                  height: size.height * 0.09,
+                  child: Stack(
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          _isTokenExpired();
+                          addActionsProvider.selectedMedia(0);
+                          await audioBottomSheetAction(
+                            context: context,
+                            title: 'Record Audio',
+                          );
+                          // }
+                        },
+                        child: SvgPicture.asset(
+                          ImageConstant
+                              .recordAddMediaNumu, // Replace with your SVG asset path
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 40, // Adjust this value as needed
+                        right: 0, // Move to the right
+                        left: 40,
+                        child: Consumer<AddActionsProvider>(
+                            builder: (context, addActionsProvider, _) {
+                              if (addActionsProvider.recordedFilePath.isEmpty) {
+                                return const SizedBox();
+                              } else {
+                                // return Container(
+                                //   width: size.height * 0.04,
+                                //   decoration: BoxDecoration(
+                                //     color: Colors.white,
+                                //     image: DecorationImage(
+                                //       image: AssetImage(ImageConstant.imgMenu),
+                                //       fit: BoxFit.cover,
+                                //     ),
+                                //     borderRadius: const BorderRadius.all(
+                                //       Radius.circular(
+                                //         50.0,
+                                //       ),
+                                //     ),
+                                //     border: Border.all(
+                                //       color: appTheme.blue300,
+                                //       width: 2.0,
+                                //     ),
+                                //   ),
+                                //   child: Center(
+                                //     child: Text(
+                                //       addActionsProvider.recordedFilePath.length
+                                //           .toString(),
+                                //       style: const TextStyle(
+                                //         color: Colors.blue,
+                                //         fontWeight: FontWeight.bold,
+                                //       ),
+                                //     ),
+                                //   ),
+                                // );
+
+                                return Container(
+                                  width: size.height * 0.04,
+                                  // Ensuring width
+                                  height: size.height * 0.04,
+                                  // Ensuring height for a circle
+                                  decoration: BoxDecoration(
+                                    color: ColorsContent.recordCountColor,
+                                    shape: BoxShape.circle,
+                                    // Ensuring a perfect circle
+                                    image: DecorationImage(
+                                      image: AssetImage(ImageConstant.imgMenu),
+                                      fit: BoxFit.cover,
+                                    ),
+                                    border: Border.all(
+                                      color: Colors.white,
+                                      width: 1.0,
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      addActionsProvider.recordedFilePath.length
+                                          .toString(),
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }
+                            }),
+                      )
+                    ],
+                  ),
+                ),
+
+
                 SizedBox(
                   height: size.height * 0.09,
                   child: Stack(
@@ -1525,26 +1561,15 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
 
 
                         },
-                        child: buildAvatarImage(
-                          widget: Icon(
-                            Icons.location_on,
-                            size: 30,
-                            color: addActionsProvider.mediaSelected == 3
-                                ? Colors.white
-                                : Colors.blue,
-                          ),
-                          imagePath: ImageConstant.imgLinkedin,
-                          size: size,
-                          // wi
-                          isSelected: addActionsProvider.mediaSelected == 3
-                              ? true
-                              : false,
+                        child: SvgPicture.asset(
+                          ImageConstant
+                              .locationAddMediaNumu, // Replace with your SVG asset path
                         ),
                       ),
                       Positioned(
-                        bottom: 0,
-                        left: 10,
-                        right: 10,
+                        bottom: 40, // Adjust this value as needed
+                        right: 0, // Move to the right
+                        left: 40,
                         child: Consumer<AddActionsProvider>(
                             builder: (context, addActionsProvider, _) {
                           if (addActionsProvider.selectedLocationName.isEmpty) {
@@ -1552,27 +1577,25 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                           } else {
                             return Container(
                               width: size.height * 0.04,
+                              height: size.height * 0.04,
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: ColorsContent.locationCountColor,
+                                shape: BoxShape.circle,
+                                // Ensuring a perfect circle
                                 image: DecorationImage(
                                   image: AssetImage(ImageConstant.imgMenu),
                                   fit: BoxFit.cover,
                                 ),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(
-                                    50.0,
-                                  ),
-                                ),
                                 border: Border.all(
-                                  color: appTheme.blue300,
-                                  width: 2.0,
+                                  color: Colors.white,
+                                  width: 1.0,
                                 ),
                               ),
                               child: const Center(
                                 child: Text(
                                   "1",
                                   style: TextStyle(
-                                    color: Colors.blue,
+                                    color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -1595,7 +1618,8 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
 
 PreferredSizeWidget buildAppBarAction(BuildContext context, Size size,
     {String? heading, Function? onTap}) {
-  return CustomAppBar(
+  return CustomAppBarNumu(
+    backgroundColor:ColorsContent.homeBackGroundColor, // Set your desired background color here,
     leadingWidth: 36,
     leading: AppbarLeadingImage(
       onTap: onTap ??
@@ -1630,41 +1654,8 @@ PreferredSizeWidget buildAppBarAction(BuildContext context, Size size,
           padding: EdgeInsets.only(
             right: size.width * 0.07,
           ),
-          child: CircleAvatar(
-            radius: size.width * 0.04,
-            backgroundColor: PrimaryColors().blue300,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  height: size.height * 0.003,
-                  width: size.width * 0.03,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(
-                        10,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: size.height * 0.005,
-                ),
-                Container(
-                  height: size.height * 0.003,
-                  width: size.width * 0.03,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(
-                        10,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+          child: SvgPicture.asset(
+            ImageConstant.menuBarSvg,
           ),
         ),
       ),

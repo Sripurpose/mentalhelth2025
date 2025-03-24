@@ -12,5 +12,10 @@ class ColorsContent {
   static Color blackThemeColor = const Color(0xFF16161B);
   static Color whatsOnYourMindBoxColor = const Color(0xFFE6EBFF);
 
+  static Color galleryCountColor = const Color(0xFF6551DC);
+  static Color cameraCountColor = const Color(0xFF4B73EF);
+  static Color recordCountColor = const Color(0xFFA153E1);
+  static Color locationCountColor = const Color(0xFF755EF9);
+
 
 }

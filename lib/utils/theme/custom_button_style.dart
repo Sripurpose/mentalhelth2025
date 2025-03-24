@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/utils/theme/theme_helper.dart';
 
 class CustomButtonStyles {
@@ -66,6 +67,15 @@ class CustomButtonStyles {
         shadowColor: theme.colorScheme.primary,
         elevation: 38,
       );
+
+  static ButtonStyle get addActionButtonStyle => ElevatedButton.styleFrom(
+    backgroundColor:ColorsContent.newThemeColor,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(5),
+    ),
+    shadowColor: theme.colorScheme.primary,
+    elevation: 38,
+  );
 
   static ButtonStyle get outlinePrimaryTL5 => ElevatedButton.styleFrom(
         backgroundColor: theme.colorScheme.primary.withOpacity(1),
