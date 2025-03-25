@@ -152,6 +152,7 @@ import 'package:mentalhelth/widgets/custom_image_view.dart';
 import 'package:mentalhelth/widgets/video_player.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../utils/theme/colors.dart';
 import '../../../../widgets/functions/popup.dart';
 
 Future cameraBottomSheet({
@@ -207,6 +208,10 @@ Future cameraBottomSheet({
                         }
                       },
                       child: buildAvatarImage(
+                        widget:  Icon(
+                          Icons.camera_alt,
+                          color: ColorsContent.newThemeColor,
+                        ),
                         imagePath: ImageConstant.imgCamera,
                         size: size,
                       ),
@@ -218,9 +223,9 @@ Future cameraBottomSheet({
                         }
                       },
                       child: buildAvatarImage(
-                        widget: const Icon(
+                        widget:  Icon(
                           Icons.video_collection_rounded,
-                          color: Colors.blue,
+                          color: ColorsContent.newThemeColor,
                         ),
                         imagePath: ImageConstant.imgCamera,
                         size: size,

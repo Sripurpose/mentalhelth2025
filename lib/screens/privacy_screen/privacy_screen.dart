@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mentalhelth/screens/privacy_screen/provider/privacy_policy_provider.dart';
 import 'package:mentalhelth/utils/core/image_constant.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/utils/theme/theme_helper.dart';
 import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -35,7 +36,7 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
         width: size.width,
         height: size.height,
         decoration: BoxDecoration(
-          color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
+          color:ColorsContent.homeBackGroundColor,
           image: DecorationImage(
             image: AssetImage(
               ImageConstant.imgGroup193,

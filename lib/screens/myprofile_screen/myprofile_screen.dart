@@ -94,7 +94,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
               height: size.height * 0.80,
               padding: const EdgeInsets.symmetric(
                 horizontal: 28,
-                vertical: 10,
+              //  vertical: 10,
               ),
               child: SingleChildScrollView(
                 child: Column(
@@ -280,23 +280,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                                               message: editProfileProvider.sendOtpPhoneMessage ?? "",
                                                                             );
                                                                           }
-                                                                          // Navigator.of(context)
-                                                                          //     .push(
-                                                                          //   MaterialPageRoute(
-                                                                          //     builder: (context) =>  SendOtpPhoneScreen(),
-                                                                          //   ),
-                                                                          // );
                                                                         } else {
-                                                                          // phoneSignInProvider.addPhoneNumber(editProfileProvider
-                                                                          //     .getProfileModel!
-                                                                          //     .phone
-                                                                          //     .toString());
-                                                                          // await phoneSignInProvider
-                                                                          //     .phoneLoginUser(
-                                                                          //   context,
-                                                                          //   phone:
-                                                                          //       editProfileProvider.getProfileModel!.phone ?? '',
-                                                                          // );
                                                                         }
                                                                       },
                                                               ),
@@ -339,19 +323,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                                   message: editProfileProvider.sendOtpMailMessage ?? "",
                                                                 );
                                                               }
-
-                                                              // Navigator.of(context).push(
-                                                              //   MaterialPageRoute(
-                                                              //     builder: (context) => const SendOtpMailScreen(),
-                                                              //   ),
-                                                              // );
                                                             } else {
-                                                              // Navigator.of(context)
-                                                              //     .push(
-                                                              //   MaterialPageRoute(
-                                                              //     builder: (context) => const SendOtpMailScreen(),
-                                                              //   ),
-                                                              // );
                                                             }
                                                           },
                                                     ),
@@ -388,10 +360,10 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                             const SizedBox(
                                               height: 10,
                                             ),
-                                            Text("About You",
-                                              style: CustomTextStyles
-                                                  .titleMediumff000000,
-                                            ),
+                                            // Text("About You",
+                                            //   style: CustomTextStyles
+                                            //       .titleMediumff000000,
+                                            // ),
                                             const SizedBox(
                                               height: 0,
                                             ),
@@ -417,49 +389,40 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                             SizedBox(
                                               height: size.height * 0.025,
                                             ),
-                                            Consumer<DashBoardProvider>(builder: //Edit profile button
-                                                (context, dashBoardProvider,
-                                                    _) {
-                                              return GestureDetector(
-                                                onTap: () {
-                                                  dashBoardProvider
-                                                      .changeCommentPage(
-                                                    index: 9,
-                                                  );
-                                                },
-                                                child: Container(
-                                                  width: 115,
-                                                  height: 34,
-                                                  decoration: BoxDecoration(
-                                                    color: ColorsContent.primaryColor,
-                                                    borderRadius: const BorderRadius.only(
-                                                        topLeft: Radius.circular(12),
-                                                      topRight: Radius.circular(12),
-                                                      bottomRight: Radius.circular(12),
-                                                      bottomLeft: Radius.circular(12)
-                                                    )
-                                                  ),
-                                                  child: const Padding(
-                                                    padding: EdgeInsets.only(
-                                                      left: 8,
-                                                      right: 8,
-                                                      top: 8,
-                                                      bottom: 8
-                                                    ),
-                                                    child: Center(
-                                                      child: Text(
-                                                        "Edit Profile",
-                                                        style: TextStyle(
-                                                          fontSize: 14,
-                                                          color: Colors.white,
-                                                          fontWeight: FontWeight.bold
+                                            Align(
+                                              alignment: Alignment.bottomCenter, // Move the button to the bottom center
+                                              child: Consumer<DashBoardProvider>(
+                                                builder: (context, dashBoardProvider, _) {
+                                                  return GestureDetector(
+                                                    onTap: () {
+                                                      dashBoardProvider.changeCommentPage(index: 9);
+                                                    },
+                                                    child: Container(
+                                                      width: 115,
+                                                      height: 34,
+                                                      decoration: BoxDecoration(
+                                                        color: ColorsContent.newThemeColor,
+                                                        borderRadius: const BorderRadius.only(
+                                                          topLeft: Radius.circular(12),
+                                                          topRight: Radius.circular(12),
+                                                        ), // Removed bottomLeft and bottomRight corners
+                                                      ),
+                                                      child: const Center(
+                                                        child: Text(
+                                                          "Edit Profile",
+                                                          style: TextStyle(
+                                                            fontSize: 14,
+                                                            color: Colors.white,
+                                                            fontWeight: FontWeight.bold,
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
-                                                  ),
-                                                ),
-                                              );
-                                            }),
+                                                  );
+                                                },
+                                              ),
+                                            ),
+
                                           ],
                                         );
                             }),

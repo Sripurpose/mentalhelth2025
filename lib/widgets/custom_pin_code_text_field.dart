@@ -43,30 +43,33 @@ class CustomPinCodeTextField extends StatelessWidget {
   }
 
   Widget get pinCodeTextFieldWidget => PinCodeTextField(
-        appContext: context,
-        controller: controller,
-        length: 6,
-        keyboardType: TextInputType.number,
-        textStyle: textStyle,
-        hintStyle: hintStyle,
-        inputFormatters: [
-          FilteringTextInputFormatter.digitsOnly,
-        ],
-        enableActiveFill: true,
-        pinTheme: PinTheme(
-          fieldHeight: 40,
-          fieldWidth: 43,
-          shape: PinCodeFieldShape.box,
-          borderRadius: BorderRadius.circular(5),
-          inactiveColor: appTheme.gray500,
-          activeColor: appTheme.gray500,
-          inactiveFillColor:
-              theme.colorScheme.onSecondaryContainer.withOpacity(1),
-          activeFillColor:
-              theme.colorScheme.onSecondaryContainer.withOpacity(1),
-          selectedColor: Colors.transparent,
-        ),
-        onChanged: (value) => onChanged(value),
-        validator: validator,
-      );
+    appContext: context,
+    controller: controller,
+    length: 6,
+    keyboardType: TextInputType.number,
+    textStyle: textStyle,
+    hintStyle: hintStyle,
+    inputFormatters: [
+      FilteringTextInputFormatter.digitsOnly,
+    ],
+    enableActiveFill: true,
+    pinTheme: PinTheme(
+      fieldHeight: 40,
+      fieldWidth: 43,
+      shape: PinCodeFieldShape.box,
+      borderRadius: BorderRadius.circular(5),
+      inactiveColor: Colors.transparent, // Removes inactive border
+      activeColor: Colors.transparent, // Removes active border
+      selectedColor: Colors.transparent, // Removes selected border
+      inactiveFillColor:
+      theme.colorScheme.onSecondaryContainer.withOpacity(1),
+      activeFillColor:
+      theme.colorScheme.onSecondaryContainer.withOpacity(1),
+      selectedFillColor:
+      theme.colorScheme.onSecondaryContainer.withOpacity(1),
+    ),
+    onChanged: (value) => onChanged(value),
+    validator: validator,
+  );
+
 }

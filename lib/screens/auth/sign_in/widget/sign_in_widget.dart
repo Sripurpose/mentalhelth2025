@@ -16,7 +16,7 @@ Widget buildEmailField(BuildContext context,
     padding: const EdgeInsets.symmetric(
       horizontal: 4,
     ),
-    child: CustomTextFormField(
+    child: CustomTextFormFieldEmailAndPasswordNumu(
       controller: emailFieldController,
       hintText: "Your Email ID",
       hintStyle: theme.textTheme.bodySmall,
@@ -30,7 +30,7 @@ Widget buildPasswordField(BuildContext context,
     {required TextEditingController passwordFieldController}) {
   return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: CustomTextFormField(
+      child: CustomTextFormFieldEmailAndPasswordNumu(
         controller: passwordFieldController,
         hintText: "Password",
         hintStyle: theme.textTheme.bodySmall,
@@ -52,7 +52,7 @@ Widget buildSignInButton(BuildContext context,
     margin: const EdgeInsets.symmetric(
       horizontal: 4,
     ),
-    buttonStyle: CustomButtonStyles.outlinePrimary,
+    buttonStyle: CustomButtonStyles.signInButton,
     buttonTextStyle: CustomTextStyles.titleSmallHelveticaOnSecondaryContainer,
     onPressed: onPressed,
   );
@@ -65,7 +65,7 @@ Widget buildContinueWithPhoneButton(
   required String imageMessage,
   required VoidCallback? onPressed,
 }) {
-  return CustomOutlinedButton(
+  return CustomOutlinedButtonContinueWithPhoneNumu(
     text: message,
     margin: const EdgeInsets.only(
       right: 8,
@@ -77,7 +77,7 @@ Widget buildContinueWithPhoneButton(
         width: 24,
       ),
     ),
-    buttonStyle: CustomButtonStyles.outlineGray,
+    buttonStyle: CustomButtonStyles.continueWithPhone,
     onPressed: onPressed
   );
 }
@@ -94,7 +94,7 @@ onTapSignUpButton(BuildContext context) {
 onTapContinueWithPhoneButton(BuildContext context) {
   Navigator.of(context).push(
     MaterialPageRoute(
-      builder: (context) => PhoneSignInScreen(),
+      builder: (context) => const PhoneSignInScreen(),
     ),
   );
 }

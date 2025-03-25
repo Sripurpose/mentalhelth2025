@@ -281,15 +281,16 @@ class EditProfileProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> editProfileFunction(
-      {required String firstName,
-        required String note,
-        required String profileimg,
-        required String dob,
-        required String phone,
-        required String email,
-        required BuildContext context,
-        required List<String> interestIds}) async {  // Modified to accept a list of interest IDs
+  Future<void> editProfileFunction({
+    required String firstName,
+    required String note,
+    required String profileimg,
+    required String dob,
+    required String phone,
+    required String email,
+    required BuildContext context,
+    required List<String> interestIds,
+  }) async {
     try {
       editLoading = true;
       notifyListeners();
@@ -306,7 +307,7 @@ class EditProfileProvider extends ChangeNotifier {
         'note': note,
         'dob': dob,
         'phone': phone,
-        'email':email
+        'email': email,
       };
 
       logger.w("body$body");
@@ -321,30 +322,37 @@ class EditProfileProvider extends ChangeNotifier {
         body['interest[$i]'] = interestIds[i];
       }
       logger.w("body1$body");
+
       final http.Response response = await http.put(
-        Uri.parse(
-          UrlConstant.profileUrl(userId: userId!),
-        ),
+        Uri.parse(UrlConstant.profileUrl(userId: userId!)),
         headers: headers,
         body: body,
       );
-
+      Map<String, dynamic> responseData = jsonDecode(response.body);
       if (response.statusCode == 200) {
+        Map<String, dynamic> responseData = jsonDecode(response.body);
+
+        String message = responseData['text'] ?? 'Profile Updated Successfully.';
+
         showCustomSnackBar(
           context: context,
-          message: 'Profile Updated Successfully.',
+          message: message,
         );
-        fetchUserProfile();
+
+        if (responseData['status'] == true) {
+          fetchUserProfile();
+        }
       } else if (response.statusCode == 401 || response.statusCode == 403) {
         TokenManager.setTokenStatus(true);
-        // Handle token refresh or re-authentication logic
       } else {
+        Map<String, dynamic> responseData = jsonDecode(response.body);
+        String errorMessage = responseData['text'] ?? 'Something went wrong!';
+
         showCustomSnackBar(
           context: context,
-          message: 'Edit request failed.',
+          message: "Edit Failed - $errorMessage",
         );
       }
-
       editLoading = false;
       notifyListeners();
     } catch (error) {
@@ -352,6 +360,7 @@ class EditProfileProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
 
 
   bool saveIntrestsLoading = false;

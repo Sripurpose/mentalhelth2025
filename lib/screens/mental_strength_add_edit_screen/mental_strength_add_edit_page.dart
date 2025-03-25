@@ -1394,7 +1394,7 @@ Widget buildAvatarImage(
         ),
       ),
       border: Border.all(
-        color: appTheme.blue300,
+        color: ColorsContent.newThemeColor,
         width: 1.0,
       ),
     ),

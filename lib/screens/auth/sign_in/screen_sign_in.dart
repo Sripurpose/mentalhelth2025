@@ -9,6 +9,7 @@ import 'package:mentalhelth/screens/auth/sign_in/widget/sign_in_widget.dart';
 import 'package:mentalhelth/screens/edit_add_profile_screen/provider/edit_provider.dart';
 import 'package:mentalhelth/screens/home_screen/provider/home_provider.dart';
 import 'package:mentalhelth/utils/core/image_constant.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/utils/theme/custom_text_style.dart';
 import 'package:mentalhelth/widgets/background_image/background_imager.dart';
 import 'package:mentalhelth/widgets/custom_image_view.dart';
@@ -38,7 +39,7 @@ class _ScreenSignInState extends State<ScreenSignIn> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 2), () {
       setState(() {
         _isLoading = false;
       });
@@ -149,7 +150,7 @@ class _ScreenSignInState extends State<ScreenSignIn> {
           ),
         )
             : null, // No AppBar on Android
-        body: backGroundImager(
+        body: backGroundImagerGradient(
           size: size,
           padding: EdgeInsets.zero,
           child: Center(
@@ -167,17 +168,14 @@ class _ScreenSignInState extends State<ScreenSignIn> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(
-                      height: size.height * 0.05,
-                    ),
                     CustomImageView(
-                      imagePath: ImageConstant.imgLogo,
-                      height: 68,
+                      imagePath: ImageConstant.imgNumuLogo,
+                      height: 80,
                       width: 280,
                       color: Colors.white,
                     ),
                     const SizedBox(
-                      height: 40,
+                      height: 50,
                     ),
                     Consumer<SignInProvider>(
                         builder: (context, signInProvider, _) {
@@ -230,59 +228,67 @@ class _ScreenSignInState extends State<ScreenSignIn> {
                     const SizedBox(
                       height: 11,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Consumer<SignInProvider>(
-                            builder: (context, signInProvider, _) {
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ForgotPasswordScreen(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Consumer<SignInProvider>(
+                              builder: (context, signInProvider, _) {
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ForgotPasswordScreen(),
+                                  ),
+                                );
+                              },
+                              child:  Text(
+                                "Forgot your password ?",
+                                style: TextStyle(
+                                  fontSize: 12.50,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Open Sans',
+                                  color: ColorsContent.forgotPasswordColor,
                                 ),
-                              );
-                            },
-                            child: Text(
-                              "Forgot your password ?",
-                              style: CustomTextStyles.bodySmallOnPrimary,
-                            ),
-                          );
-                        }),
-                        isRequiredValue == "1"
-                            ? Text(
-                                "",
-                                style: CustomTextStyles.bodySmallOnPrimary,
-                              )
-                            : Text(
-                                "|",
-                                style: CustomTextStyles.bodySmallOnPrimary,
                               ),
-                        _isLoading
-                            ? const Column(
-                                children: [
-                                  Center(
-                                    child: SpinKitFadingCircle(
-                                      color: Colors.transparent,
-                                      size: 20.0,
+                            );
+                          }),
+                          isRequiredValue == "1"
+                              ? Text(
+                                  "",
+                                  style: CustomTextStyles.bodySmallOnPrimary,
+                                )
+                              : Text(
+                                  "|",
+                                  style: CustomTextStyles.bodySmallOnPrimary,
+                                ),
+                          _isLoading
+                              ? const Column(
+                                  children: [
+                                    Center(
+                                      child: SpinKitFadingCircle(
+                                        color: Colors.transparent,
+                                        size: 20.0,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              )
-                            : isRequiredValue == "1"
-                                ? const SizedBox()
-                                : GestureDetector(
-                                    onTap: () {
-                                      onTapSignUpButton(context);
-                                    },
-                                    child: Text(
-                                      "Sign up",
-                                      style:
-                                          CustomTextStyles.bodySmallOnPrimary,
+                                  ],
+                                )
+                              : isRequiredValue == "1"
+                                  ? const SizedBox()
+                                  : GestureDetector(
+                                      onTap: () {
+                                        onTapSignUpButton(context);
+                                      },
+                                      child: Text(
+                                        "Sign up",
+                                        style:
+                                            CustomTextStyles.bodySmallOnPrimary,
+                                      ),
                                     ),
-                                  ),
-                      ],
+                        ],
+                      ),
                     ),
                     const SizedBox(
                       height: 44,
@@ -291,8 +297,8 @@ class _ScreenSignInState extends State<ScreenSignIn> {
                         builder: (context, signInProvider, _) {
                       return buildContinueWithPhoneButton(
                         context,
-                        message: "Continue with Phone ",
-                        imageMessage: ImageConstant.imgMobilelight,
+                        message: "Continue with Phone",
+                        imageMessage: ImageConstant.mobileLight,
                         onPressed: () {
                           FocusScope.of(context).unfocus();
                           signInProvider.clearTextEditingController();

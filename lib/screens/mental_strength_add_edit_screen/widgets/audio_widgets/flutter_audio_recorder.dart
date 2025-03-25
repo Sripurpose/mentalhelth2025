@@ -8,6 +8,7 @@ import 'package:flutter_sound_platform_interface/flutter_sound_recorder_platform
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/utils/core/image_constant.dart';
 import 'package:mentalhelth/utils/logic/logic.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/utils/theme/theme_helper.dart';
 import 'package:mentalhelth/widgets/custom_icon_button.dart';
 import 'package:mentalhelth/widgets/custom_image_view.dart';
@@ -16,6 +17,7 @@ import 'package:provider/provider.dart';
 import 'package:audio_session/audio_session.dart' as audioSession;
 import 'package:audioplayers/audioplayers.dart' as audioplayers;
 
+import '../../../journal_list_screen/screens/edit_journal/edit_journal.dart';
 import '../../provider/mental_strenght_edit_provider.dart';
 
 const theSource = AudioSource.microphone;
@@ -307,7 +309,7 @@ var logger = Logger();
               ),
             ),
             border: Border.all(
-              color: appTheme.blue300,
+              color: ColorsContent.newThemeColor,
               width: 1.0,
             ),
           ),
@@ -316,9 +318,9 @@ var logger = Logger();
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Icon(
+                     Icon(
                       Icons.stop,
-                      color: Colors.blue,
+                      color: ColorsContent.newThemeColor,
                     ),
                     StreamBuilder<RecordingDisposition>(
                       stream: recorder.onProgress,
@@ -336,14 +338,14 @@ var logger = Logger();
                     )
                   ],
                 )
-              : CustomIconButton(
-                  height: size.height * 0.08,
-                  width: size.height * 0.08,
-                  padding: const EdgeInsets.all(18),
-                  child: CustomImageView(
-                    imagePath: ImageConstant.imgMenu,
-                  ),
-                ),
+              : buildAvatarImage(
+            widget:  Icon(
+              Icons.mic,
+              color: ColorsContent.newThemeColor,
+            ),
+            imagePath: ImageConstant.imgMenu,
+            size: size,
+          ),
         ),
       );
     });

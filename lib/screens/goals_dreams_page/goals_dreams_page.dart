@@ -269,7 +269,7 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
                               // Create New Goals Button
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: ColorsContent.primaryColor,
+                                  backgroundColor: ColorsContent.newThemeColor,
                                 ),
                                 onPressed: () {
                                   Navigator.of(context).push(

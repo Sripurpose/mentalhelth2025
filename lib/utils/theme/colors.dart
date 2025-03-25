@@ -16,6 +16,9 @@ class ColorsContent {
   static Color cameraCountColor = const Color(0xFF4B73EF);
   static Color recordCountColor = const Color(0xFFA153E1);
   static Color locationCountColor = const Color(0xFF755EF9);
+  static Color signInGradientColorViolet = const Color(0xFF7F6AFD);
+  static Color signInGradientColorBlue = const Color(0xFF583DF5);
+  static Color forgotPasswordColor = const Color(0xFFC4C4C4);
 
 
 }

@@ -8,6 +8,7 @@ import 'package:flutter_sound_platform_interface/flutter_sound_recorder_platform
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/utils/core/image_constant.dart';
 import 'package:mentalhelth/utils/logic/logic.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/utils/theme/theme_helper.dart';
 import 'package:mentalhelth/widgets/custom_icon_button.dart';
 import 'package:mentalhelth/widgets/custom_image_view.dart';
@@ -15,6 +16,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:audio_session/audio_session.dart' as audioSession;
 import 'package:audioplayers/audioplayers.dart' as audioplayers;
+import '../../../journal_list_screen/screens/edit_journal/edit_journal.dart';
 import '../../provider/add_actions_provider.dart';
 
 const theSource = AudioSource.microphone;
@@ -297,7 +299,7 @@ class _AudioRecorderAddActionState extends State<AudioRecorderAddAction> {
               ),
             ),
             border: Border.all(
-              color: appTheme.blue300,
+              color: ColorsContent.newThemeColor,
               width: 1.0,
             ),
           ),
@@ -306,9 +308,9 @@ class _AudioRecorderAddActionState extends State<AudioRecorderAddAction> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Icon(
+                     Icon(
                       Icons.stop,
-                      color: Colors.blue,
+                      color: ColorsContent.newThemeColor,
                     ),
                     StreamBuilder<RecordingDisposition>(
                       stream: recorder.onProgress,
@@ -326,14 +328,14 @@ class _AudioRecorderAddActionState extends State<AudioRecorderAddAction> {
                     )
                   ],
                 )
-              : CustomIconButton(
-                  height: size.height * 0.08,
-                  width: size.height * 0.08,
-                  padding: const EdgeInsets.all(18),
-                  child: CustomImageView(
-                    imagePath: ImageConstant.imgMenu,
-                  ),
-                ),
+              : buildAvatarImage(
+            widget:  Icon(
+              Icons.mic,
+              color: ColorsContent.newThemeColor,
+            ),
+            imagePath: ImageConstant.imgMenu,
+            size: size,
+          ),
         ),
       );
     });

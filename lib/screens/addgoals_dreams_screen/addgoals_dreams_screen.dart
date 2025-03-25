@@ -56,9 +56,18 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
   bool tokenStatus = false;
   var logger = Logger();
   PermissionStatus permissionStatus = PermissionStatus.denied;
+  late FocusNode _goalNameFocusNode;
+  late FocusNode _goalDescFocusNode;
 
   @override
   void initState() {
+    _goalNameFocusNode = FocusNode();
+    _goalDescFocusNode = FocusNode();
+    // Ensure the focus is not automatically set when returning
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _goalNameFocusNode.unfocus(); // Ensure it does not get focus automatically
+      _goalDescFocusNode.unfocus(); // Ensure it does not get focus automatically
+    });
     homeProvider = Provider.of<HomeProvider>(context, listen: false);
     mentalStrengthEditProvider =
         Provider.of<MentalStrengthEditProvider>(context, listen: false);
@@ -128,6 +137,13 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
     setState(() {
       permissionStatus = locationStatus;
     });
+  }
+
+  @override
+  void dispose() {
+    _goalNameFocusNode.dispose();
+    _goalDescFocusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -431,8 +447,15 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
         padding: const EdgeInsets.only(left: 2),
         child: CustomTextFormFieldGoalOrActionName(
           controller: adDreamsGoalsProvider.nameEditTextController,
-          hintText: "Goal Name",
+          hintText: _goalNameFocusNode.hasFocus ? '' : "Goal Name",
           hintStyle: CustomTextStyles.bodySmallGray700,
+          focusNode: _goalNameFocusNode,
+          onTap: () => setState(() {}),
+          // Rebuild when tapped
+          onEditingComplete: () {
+            _goalNameFocusNode.unfocus(); // Ensure focus is removed when done
+            setState(() {});
+          }, // Rebuild when focus is lost
         ),
       );
     });
@@ -493,9 +516,16 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
         padding: const EdgeInsets.only(left: 2),
         child: CustomTextFormFieldGoalOrActionDesc(
           controller: adDreamsGoalsProvider.commentEditTextController,
-          hintText: "Goal Description",
+          hintText: _goalDescFocusNode.hasFocus ? '' : "Goal Description",
           hintStyle: CustomTextStyles.bodySmallGray700,
           maxLines: 4,
+          focusNode: _goalDescFocusNode,
+          onTap: () => setState(() {}),
+          // Rebuild when tapped
+          onEditingComplete: () {
+            _goalDescFocusNode.unfocus(); // Ensure focus is removed when done
+            setState(() {});
+          },
         ),
       );
     });

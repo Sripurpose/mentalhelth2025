@@ -61,3 +61,30 @@ Widget backGroundImagerOtherScreens({
     ),
   );
 }
+Widget backGroundImagerGradient({
+  required Size size,
+  EdgeInsets? padding,
+  Widget? child,
+}) {
+  return Container(
+    width: size.width,
+    height: size.height,
+    decoration: BoxDecoration(
+      image: DecorationImage(
+        image: AssetImage(
+          ImageConstant.gradientBackground,
+        ),
+        fit: BoxFit.cover,
+      ),
+    ),
+    child: Container(
+      width: double.maxFinite,
+      padding: padding ??
+          EdgeInsets.only(
+            left: size.width * 0.05,
+            right: size.width * 0.05,
+          ),
+      child: child,
+    ),
+  );
+}

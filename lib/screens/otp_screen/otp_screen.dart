@@ -26,7 +26,7 @@ class OtpScreen extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          actions: [
+          actions: const [
             // IconButton(
             //   icon: Icon(
             //     Icons.arrow_back_ios,
@@ -44,7 +44,7 @@ class OtpScreen extends StatelessWidget {
           decoration: BoxDecoration(
               color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
               image: DecorationImage(
-                  image: AssetImage(ImageConstant.imgGroup22),
+                  image: AssetImage(ImageConstant.gradientBackground),
                   fit: BoxFit.cover)),
           child: Container(
             width: double.maxFinite,
@@ -56,17 +56,24 @@ class OtpScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(
-                  height: 34,
-                ),
+                //const SizedBox(height: 34,),
                 CustomImageView(
-                    imagePath: ImageConstant.imgLogo, height: 68, width: 280),
-                const SizedBox(
-                  height: 90,
+                  imagePath: ImageConstant.imgNumuLogo,
+                  height: 80,
+                  width: 280,
+                  color: Colors.white,
                 ),
-                Text(
+                const SizedBox(
+                  height: 100,
+                ),
+                const Text(
                   "Enter the code sent to your phone ",
-                  style: theme.textTheme.bodyLarge,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Open Sans',
+                    color: Colors.white,
+                  ),
                 ),
                 const SizedBox(
                   height: 6,
@@ -81,7 +88,7 @@ class OtpScreen extends StatelessWidget {
                   );
                 }),
                 const SizedBox(
-                  height: 29,
+                  height: 20,
                 ),
                 Consumer<PhoneSignInProvider>(
                     builder: (context, phoneSignInProvider, _) {
@@ -90,7 +97,7 @@ class OtpScreen extends StatelessWidget {
                     height: 40,
                     text: "Sign in",
                     margin: const EdgeInsets.symmetric(horizontal: 3),
-                    buttonStyle: CustomButtonStyles.outlinePrimary,
+                    buttonStyle: CustomButtonStyles.signInButton,
                     buttonTextStyle: CustomTextStyles
                         .titleSmallHelveticaOnSecondaryContainer,
                     onPressed: () async {

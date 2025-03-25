@@ -114,7 +114,7 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                                     18,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: appTheme.gray200,
+                                    color: Colors.white,
                                     borderRadius: BorderRadius.circular(
                                       30,
                                     ),
@@ -635,7 +635,7 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
       builder: (contexts, editProfileProvider, dashBoardProvider, _) {
         return CustomElevatedButton(
           loading: editProfileProvider.editLoading,
-          buttonStyle: CustomButtonStyles.outlinePrimary,
+          buttonStyle: CustomButtonStyles.outlineNewTheme,
           width: 104,
           text: "Save",
           onPressed: () async {

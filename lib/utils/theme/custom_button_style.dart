@@ -48,8 +48,19 @@ class CustomButtonStyles {
         ),
       );
 
+  static ButtonStyle get continueWithPhone => OutlinedButton.styleFrom(
+    backgroundColor: ColorsContent.signInGradientColorBlue,
+    side: BorderSide(
+      color: appTheme.gray50001,
+      width: 0.4,
+    ),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(5),
+    ),
+  );
+
   static ButtonStyle get outlineGrayTL5 => OutlinedButton.styleFrom(
-        backgroundColor: theme.colorScheme.onSecondaryContainer.withOpacity(1),
+        backgroundColor: ColorsContent.whatsOnYourMindBoxColor,
         side: BorderSide(
           color: appTheme.gray700,
           width: 1,
@@ -67,6 +78,24 @@ class CustomButtonStyles {
         shadowColor: theme.colorScheme.primary,
         elevation: 38,
       );
+
+  static ButtonStyle get outlineNewTheme => ElevatedButton.styleFrom(
+    backgroundColor: ColorsContent.newThemeColor,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(5),
+    ),
+    shadowColor: theme.colorScheme.primary,
+    elevation: 38,
+  );
+
+  static ButtonStyle get signInButton => ElevatedButton.styleFrom(
+    backgroundColor: ColorsContent.blackThemeColor,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(5),
+    ),
+    shadowColor: theme.colorScheme.primary,
+    elevation: 38,
+  );
 
   static ButtonStyle get addActionButtonStyle => ElevatedButton.styleFrom(
     backgroundColor:ColorsContent.newThemeColor,

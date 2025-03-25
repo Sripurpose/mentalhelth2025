@@ -52,7 +52,7 @@ class _PhoneSignInScreenState extends State<PhoneSignInScreen> {
           decoration: BoxDecoration(
             color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
             image: DecorationImage(
-              image: AssetImage(ImageConstant.imgGroup22),
+              image: AssetImage(ImageConstant.gradientBackground),
               fit: BoxFit.cover,
             ),
           ),
@@ -66,13 +66,14 @@ class _PhoneSignInScreenState extends State<PhoneSignInScreen> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const SizedBox(height: 33),
+                    //const SizedBox(height: 33),
                     CustomImageView(
-                      imagePath: ImageConstant.imgLogo,
-                      height: 68,
+                      imagePath: ImageConstant.imgNumuLogo,
+                      height: 80,
                       width: 280,
+                      color: Colors.white,
                     ),
-                    const SizedBox(height: 39),
+                    const SizedBox(height: 50),
                     Padding(
                       padding: const EdgeInsets.only(left: 3, right: 5),
                       child: Row(
@@ -81,7 +82,7 @@ class _PhoneSignInScreenState extends State<PhoneSignInScreen> {
                           Consumer<PhoneSignInProvider>(
                             builder: (context, phoneSignInProvider, _) {
                               return SizedBox(
-                                height: 40,
+                                height: 42,
                                 child: OutlinedButton(
                                   style: CustomButtonStyles.outlineGrayTL5,
                                   onPressed: () {
@@ -112,7 +113,7 @@ class _PhoneSignInScreenState extends State<PhoneSignInScreen> {
                               return Expanded(
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 4),
-                                  child: CustomTextFormField(
+                                  child: CustomTextFormFieldPhoneNumberNumu(
                                     controller: phoneSignInProvider.phoneNumberController,
                                     hintText: "Phone number",
                                     hintStyle: theme.textTheme.bodySmall,
@@ -145,9 +146,14 @@ class _PhoneSignInScreenState extends State<PhoneSignInScreen> {
                       child: RichText(
                         text: TextSpan(
                           children: [
-                            TextSpan(
+                            const TextSpan(
                               text: "Your phone number will be used to improve your experience within Mental health app, as well as validate your account. If you sign up with SMS, SMS fees may apply",
-                              style: CustomTextStyles.bodySmallNunitoff333333,
+                              style:  TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Nunito',
+                                color: Colors.white,
+                              ),
                             ),
                             TextSpan(
                               text: "\r\n",
@@ -170,7 +176,7 @@ class _PhoneSignInScreenState extends State<PhoneSignInScreen> {
                           height: 40,
                           text: "Send Code",
                           margin: const EdgeInsets.only(right: 10),
-                          buttonStyle: CustomButtonStyles.outlinePrimary,
+                          buttonStyle: CustomButtonStyles.signInButton,
                           buttonTextStyle: CustomTextStyles.titleSmallHelveticaOnSecondaryContainer,
                           onPressed: () async {
                             FocusScope.of(context).unfocus();

@@ -52,30 +52,41 @@ class FeedbackScreen extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    Align(
+                    const SizedBox(height: 80),
+                    const Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 2),
+                        padding: EdgeInsets.only(left: 2),
                         child: Text(
                           "Name *",
-                          style: CustomTextStyles.bodyMedium14,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Open Sans',
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 5),
                     _buildNameEditText(context),
                     const SizedBox(height: 16),
-                    Align(
+                    const Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 2),
+                        padding: EdgeInsets.only(left: 2),
                         child: Text(
                           "Email *",
-                          style: CustomTextStyles.bodyMedium14,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Open Sans',
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 5),
                     _buildEmailEditText(context),
                     const SizedBox(height: 24),
                     Align(
@@ -105,7 +116,7 @@ class FeedbackScreen extends StatelessWidget {
   /// Section Widget
   Widget _buildNameEditText(BuildContext context) {
     return Consumer<FeedBackProvider>(builder: (context, feedBackProvider, _) {
-      return CustomTextFormField(
+      return CustomTextFormFieldPhoneNumberFeedbackNumu(
         controller: feedBackProvider.nameEditTextController,
         hintText: "Josh_Peter",
       );
@@ -115,7 +126,7 @@ class FeedbackScreen extends StatelessWidget {
   /// Section Widget
   Widget _buildEmailEditText(BuildContext context) {
     return Consumer<FeedBackProvider>(builder: (context, feedBackProvider, _) {
-      return CustomTextFormField(
+      return CustomTextFormFieldPhoneNumberFeedbackNumu(
         controller: feedBackProvider.emailEditTextController,
         hintText: "Josh_Peter@gmail.com",
         textInputType: TextInputType.emailAddress,
@@ -126,7 +137,7 @@ class FeedbackScreen extends StatelessWidget {
   /// Section Widget
   Widget _buildMessageEditText(BuildContext context) {
     return Consumer<FeedBackProvider>(builder: (context, feedBackProvider, _) {
-      return CustomTextFormField(
+      return CustomTextFormFieldPhoneNumberFeedbackNumu(
         maxLines: 8,
         controller: feedBackProvider.messageEditTextController,
         textInputAction: TextInputAction.done,
@@ -158,7 +169,7 @@ class FeedbackScreen extends StatelessWidget {
           },
           width: 104,
           text: "Submit",
-          buttonStyle: CustomButtonStyles.outlinePrimary,
+          buttonStyle: CustomButtonStyles.outlineNewTheme,
         );
       },
     );

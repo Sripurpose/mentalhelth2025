@@ -36,8 +36,9 @@ class ImageConstant {
 
   static String imgGroup29 = '$imagePath/img_group_29.svg';
   static String imgGroup22 = '$imagePath/img_group_22.png';
-
+  static String gradientBackground = '$imagePath/gradient_background.png';
   static String imgLogo = '$imagePath/img_logo.svg';
+  static String imgNumuLogo = '$imagePath/numu_new_logo.svg';
 
   static String imgGroup193 = '$imagePath/img_group_193.png';
 
@@ -67,6 +68,7 @@ class ImageConstant {
 
   //solved
   static String imgMobilelight = '$imagePath/img_mobilelight.svg';
+  static String mobileLight = '$imagePath/mobile_light.svg';
 
   static String imgFacebook = '$imagePath/img_facebook.svg';
 

@@ -57,6 +57,9 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
   var logger = Logger();
   PermissionStatus permissionStatus = PermissionStatus.denied;
 
+  late FocusNode _actionNameFocusNode;
+  late FocusNode _actionDescFocusNode;
+
   Future<void> _isTokenExpired() async {
     await homeProvider.fetchChartView(context);
     await homeProvider.fetchJournals(initial: true);
@@ -74,6 +77,13 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
 
   @override
   void initState() {
+    _actionNameFocusNode = FocusNode();
+    _actionDescFocusNode = FocusNode();
+    // Ensure the focus is not automatically set when returning
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _actionNameFocusNode.unfocus(); // Ensure it does not get focus automatically
+      _actionDescFocusNode.unfocus(); // Ensure it does not get focus automatically
+    });
     homeProvider = Provider.of<HomeProvider>(context, listen: false);
     mentalStrengthEditProvider =
         Provider.of<MentalStrengthEditProvider>(context, listen: false);
@@ -100,6 +110,13 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
       _isTokenExpired();
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _actionNameFocusNode.dispose();
+    _actionDescFocusNode.dispose();
+    super.dispose();
   }
 
   Future<void> _checkPermissionStatus() async {
@@ -1032,8 +1049,15 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
         builder: (context, addActionsProvider, _) {
       return CustomTextFormFieldGoalOrActionName(
         controller: addActionsProvider.titleEditTextController,
-        hintText: "Title",
+        hintText: _actionNameFocusNode.hasFocus ? '' : "Title",
         hintStyle: CustomTextStyles.bodySmallGray700,
+        focusNode: _actionNameFocusNode,
+        onTap: () => setState(() {}),
+        // Rebuild when tapped
+        onEditingComplete: () {
+          _actionNameFocusNode.unfocus(); // Ensure focus is removed when done
+          setState(() {});
+        },
       );
     });
   }
@@ -1044,10 +1068,17 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
         builder: (context, addActionsProvider, _) {
       return CustomTextFormFieldGoalOrActionDesc(
         controller: addActionsProvider.descriptionEditTextController,
-        hintText: "Action Description",
+        hintText: _actionDescFocusNode.hasFocus ? '' : "Action Description",
         hintStyle: CustomTextStyles.bodySmallGray700,
         textInputAction: TextInputAction.done,
         maxLines: 4,
+        focusNode: _actionDescFocusNode,
+        onTap: () => setState(() {}),
+        // Rebuild when tapped
+        onEditingComplete: () {
+          _actionDescFocusNode.unfocus(); // Ensure focus is removed when done
+          setState(() {});
+        },
       );
     });
   }
@@ -1121,7 +1152,7 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                   );
                   addActionsProvider.setRemainder = false;
                   // You can uncomment the line below if you want to close the screen after saving.
-                  // Navigator.of(context).pop();
+                   Navigator.of(context).pop();
                 }
               } else {
                 // Reminder is not set, proceed with save without reminder-related fields

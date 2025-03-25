@@ -144,6 +144,7 @@ import 'package:mentalhelth/screens/mental_strength_add_edit_screen/mental_stren
 import 'package:mentalhelth/screens/mental_strength_add_edit_screen/provider/mental_strenght_edit_provider.dart';
 import 'package:mentalhelth/utils/core/image_constant.dart';
 import 'package:mentalhelth/utils/logic/logic.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/widgets/custom_image_view.dart';
 import 'package:mentalhelth/widgets/video_player.dart';
 import 'package:provider/provider.dart';
@@ -203,9 +204,9 @@ Future galleryBottomSheet({
                         }
                       },
                       child: buildAvatarImage(
-                        widget: const Icon(
+                        widget:  Icon(
                           Icons.image,
-                          color: Colors.blue,
+                          color: ColorsContent.newThemeColor,
                         ),
                         imagePath: ImageConstant.imgThumbsUp,
                         size: size,
@@ -218,9 +219,9 @@ Future galleryBottomSheet({
                         }
                       },
                       child: buildAvatarImage(
-                        widget: const Icon(
+                        widget:  Icon(
                           Icons.video_collection_rounded,
-                          color: Colors.blue,
+                          color: ColorsContent.newThemeColor,
                         ),
                         imagePath: ImageConstant.imgThumbsUp,
                         size: size,

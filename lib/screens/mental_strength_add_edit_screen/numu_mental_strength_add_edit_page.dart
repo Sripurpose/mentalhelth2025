@@ -120,6 +120,10 @@ class _NumuMentalStrengthAddEditPageState
   void initState() {
     super.initState();
     _descriptionFocusNode = FocusNode();
+    // Ensure the focus is not automatically set when returning
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _descriptionFocusNode.unfocus(); // Ensure it does not get focus automatically
+    });
     _tabController = TabController(length: 6, vsync: this);
     _tabController.addListener(() {
       setState(() {
@@ -319,49 +323,49 @@ class _NumuMentalStrengthAddEditPageState
                                     right: 0,
                                     child: Center(
                                       child: GestureDetector(
-                                        onTap: (!mentalStrengthEditProvider.saveJournalLoading &&
-                                            mentalStrengthEditProvider
-                                                .descriptionEditTextController.text.isNotEmpty &&
-                                            mentalStrengthEditProvider.emotionValue.id
-                                                .toString()
-                                                .isNotEmpty &&
-                                            mentalStrengthEditProvider.emotionalValueStar != null &&
-                                            mentalStrengthEditProvider.driveValueStar != null)
-                                            ? () async {
-                                          await mentalStrengthEditProvider.saveButtonFunction(
-                                              context);
-                                          _isTokenExpired();
-                                        }
-                                            : null,
-                                        child: Opacity(
-                                          opacity: (!mentalStrengthEditProvider.saveJournalLoading &&
-                                              mentalStrengthEditProvider
-                                                  .descriptionEditTextController.text.isNotEmpty &&
-                                              mentalStrengthEditProvider.emotionValue.id
-                                                  .toString()
-                                                  .isNotEmpty &&
-                                              mentalStrengthEditProvider.emotionalValueStar != null &&
-                                              mentalStrengthEditProvider.driveValueStar != null)
-                                              ? 1.0
-                                              : 0.5,
-                                          child: Stack(
-                                            alignment: Alignment.center,
-                                            children: [
-                                              SvgPicture.asset(ImageConstant.submitButtonNumu),
-                                              if (mentalStrengthEditProvider.saveJournalLoading)
-                                                const Padding(
-                                                  padding: EdgeInsets.only(top: 5, bottom: 5),
-                                                  child: SpinKitWave(
-                                                    color: Colors.white,
-                                                    size: 25,
-                                                  ),
+                                        onTap: () async {
+                                          String? validationMessage;
+
+                                          if (mentalStrengthEditProvider.descriptionEditTextController.text.isEmpty) {
+                                            validationMessage = "Description missing";
+                                          } else if (mentalStrengthEditProvider.emotionValue.id.toString().isEmpty) {
+                                            validationMessage = "Please select an emotion";
+                                          } else if (mentalStrengthEditProvider.emotionalValueStar == null) {
+                                            validationMessage = "Please select Feeling Now emotional Rate";
+                                          } else if (mentalStrengthEditProvider.driveValueStar == null) {
+                                            validationMessage = "Please select Situation Rate";
+                                          }
+
+                                          if (validationMessage != null) {
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              SnackBar(
+                                                content: Text(validationMessage),
+                                                backgroundColor: Colors.red,
+                                              ),
+                                            );
+                                          } else {
+                                            await mentalStrengthEditProvider.saveButtonFunction(context);
+                                            _isTokenExpired();
+                                          }
+                                        },
+                                        child: Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            SvgPicture.asset(ImageConstant.submitButtonNumu),
+                                            if (mentalStrengthEditProvider.saveJournalLoading)
+                                              const Padding(
+                                                padding: EdgeInsets.only(top: 5, bottom: 5),
+                                                child: SpinKitWave(
+                                                  color: Colors.white,
+                                                  size: 25,
                                                 ),
-                                            ],
-                                          ),
+                                              ),
+                                          ],
                                         ),
                                       ),
                                     ),
                                   ),
+
 
                                 // Newly Added Widgets
                                 if (mentalStrengthEditProvider.openChooseGoal)
@@ -969,8 +973,10 @@ class _NumuMentalStrengthAddEditPageState
           focusNode: _descriptionFocusNode,
           onTap: () => setState(() {}),
           // Rebuild when tapped
-          onEditingComplete: () =>
-              setState(() {}), // Rebuild when focus is lost
+          onEditingComplete: () {
+            _descriptionFocusNode.unfocus(); // Ensure focus is removed when done
+            setState(() {});
+          }, // Rebuild when focus is lost
         );
       },
     );
