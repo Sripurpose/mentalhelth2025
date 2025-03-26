@@ -128,6 +128,7 @@ class _MentalStrengthAddEditFullViewScreenState
     scheduleMicrotask(() {
       mentalStrengthEditProvider.mediaSelected = -1;
       mentalStrengthEditProvider.descriptionEditTextController.text = "";
+      mentalStrengthEditProvider.titleEditTextController.text = "";
       mentalStrengthEditProvider.emotionalValueStar = null;
       mentalStrengthEditProvider.driveValueStar = null;
       adDreamsGoalsProvider.selectedDate = "";

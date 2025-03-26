@@ -270,7 +270,7 @@ class CustomTextFormFieldNumu extends StatelessWidget {
     suffixIconConstraints: suffixConstraints,
     isDense: true,
     contentPadding: contentPadding ?? const EdgeInsets.all(11),
-    fillColor: ColorsContent.whatsOnYourMindBoxColor, // Background color
+    fillColor: Colors.white, // Background color
     filled: true, // Ensures background color is applied
     prefixText: prefixText,
     prefixStyle: prefixStyle ?? CustomTextStyles.bodyLargeRobotoOnSecondaryContainer,

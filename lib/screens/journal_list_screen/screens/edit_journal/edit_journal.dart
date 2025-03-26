@@ -288,11 +288,17 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
                                             style: theme.textTheme.bodyLarge,
                                           ),
                                           SizedBox(
-                                            height: size.height * 0.03,
+                                            height: size.height * 0.01,
                                           ),
-                                          _buildDescriptionEditText(context),
+                                          _buildTitleEditText(context),
                                           // const Slider1ItemWidget(),
-                                          SizedBox(height: size.height * 0.03),
+                                          SizedBox(height: size.height * 0.01),
+                                          Text(
+                                            "Description",
+                                            style: theme.textTheme.bodyLarge,
+                                          ),
+                                          SizedBox(height: size.height * 0.01),
+                                          _buildDescriptionEditText(context),
                                           CustomImageView(
                                             imagePath: ImageConstant.imgGroup27,
                                             height: 33,
@@ -881,6 +887,9 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
                                                 if (mentalStrengthEditProvider
                                                     .descriptionEditTextController
                                                     .text
+                                                    .isNotEmpty && mentalStrengthEditProvider
+                                                    .titleEditTextController
+                                                    .text
                                                     .isNotEmpty) {
                                                   bool isSuccess =
                                                       await mentalStrengthEditProvider
@@ -891,18 +900,9 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
                                                         .journalId
                                                         .toString(),
                                                     context,
-                                                    journalTitle: mentalStrengthEditProvider
-                                                                .descriptionEditTextController
-                                                                .text
-                                                                .length <=
-                                                            6
-                                                        ? mentalStrengthEditProvider
-                                                            .descriptionEditTextController
-                                                            .text
-                                                        : mentalStrengthEditProvider
-                                                            .descriptionEditTextController
-                                                            .text
-                                                            .substring(0, 6),
+                                                    journalTitle:mentalStrengthEditProvider
+                                                        .titleEditTextController
+                                                        .text,
                                                     journalDesc:
                                                         mentalStrengthEditProvider
                                                             .descriptionEditTextController
@@ -1070,23 +1070,42 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
   }
 
   /// Section Widget
-  Widget _buildDescriptionEditText(BuildContext context) {
+  Widget _buildTitleEditText(BuildContext context) {
     return Consumer<MentalStrengthEditProvider>(
         builder: (context, mentalStrengthEditProvider, _) {
       // Decode the text before setting it to the controller
       String decodedText = HtmlUnescape().convert(
-          mentalStrengthEditProvider.descriptionEditTextController.text);
-      mentalStrengthEditProvider.descriptionEditTextController.text =
+          mentalStrengthEditProvider.titleEditTextController.text);
+      mentalStrengthEditProvider.titleEditTextController.text =
           decodedText;
 
       return CustomTextFormField(
-        controller: mentalStrengthEditProvider.descriptionEditTextController,
-        hintText: "Description",
+        controller: mentalStrengthEditProvider.titleEditTextController,
+        hintText: "Title",
         hintStyle: CustomTextStyles.bodySmallGray700,
         textInputAction: TextInputAction.done,
-        maxLines: 4,
+        maxLines: 1,
       );
     });
+  }
+
+  Widget _buildDescriptionEditText(BuildContext context) {
+    return Consumer<MentalStrengthEditProvider>(
+        builder: (context, mentalStrengthEditProvider, _) {
+          // Decode the text before setting it to the controller
+          String decodedText = HtmlUnescape().convert(
+              mentalStrengthEditProvider.descriptionEditTextController.text);
+          mentalStrengthEditProvider.descriptionEditTextController.text =
+              decodedText;
+
+          return CustomTextFormField(
+            controller: mentalStrengthEditProvider.descriptionEditTextController,
+            hintText: "Description",
+            hintStyle: CustomTextStyles.bodySmallGray700,
+            textInputAction: TextInputAction.done,
+            maxLines: 4,
+          );
+        });
   }
 
   Widget _buildAddMediaColumn(BuildContext context, Size size) {

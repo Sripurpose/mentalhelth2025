@@ -178,6 +178,28 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                   homeProvider.journalDetails == null
                                       ? ""
                                       : HtmlUnescape().convert(homeProvider
+                                      .journalDetails!.journals!.journalTitle
+                                      .toString(),),
+                                  maxLines:HtmlUnescape().convert(homeProvider
+                                      .journalDetails!.journals!.journalTitle
+                                      .toString(),).length,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: CustomTextStyles.bodyMediumGray700_1,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                "Description",
+                                style: theme.textTheme.bodyLarge,
+                              ),
+                              const SizedBox(height: 2),
+                              SizedBox(
+                                width: size.width * 0.70,
+                                // color: Colors.amber,
+                                child: Text(
+                                  homeProvider.journalDetails == null
+                                      ? ""
+                                      : HtmlUnescape().convert(homeProvider
                                       .journalDetails!.journals!.journalDesc
                                       .toString(),),
                                   maxLines:HtmlUnescape().convert(homeProvider
@@ -720,6 +742,10 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                       mentalStrengthEditProvider
                               .descriptionEditTextController.text =
                           homeProvider.journalDetails!.journals!.journalDesc
+                              .toString();
+                      mentalStrengthEditProvider
+                          .titleEditTextController.text =
+                          homeProvider.journalDetails!.journals!.journalTitle
                               .toString();
                       for (int i = 0;
                           i <

@@ -262,7 +262,12 @@ class _ScreenSignInState extends State<ScreenSignIn> {
                                 )
                               : Text(
                                   "|",
-                                  style: CustomTextStyles.bodySmallOnPrimary,
+                            style: TextStyle(
+                              fontSize: 12.50,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Open Sans',
+                              color: ColorsContent.forgotPasswordColor,
+                            ),
                                 ),
                           _isLoading
                               ? const Column(
@@ -283,8 +288,12 @@ class _ScreenSignInState extends State<ScreenSignIn> {
                                       },
                                       child: Text(
                                         "Sign up",
-                                        style:
-                                            CustomTextStyles.bodySmallOnPrimary,
+                                        style: TextStyle(
+                                          fontSize: 12.50,
+                                          fontWeight: FontWeight.w400,
+                                          fontFamily: 'Open Sans',
+                                          color: ColorsContent.forgotPasswordColor,
+                                        ),
                                       ),
                                     ),
                         ],

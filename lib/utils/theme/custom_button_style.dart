@@ -70,6 +70,17 @@ class CustomButtonStyles {
         ),
       );
 
+  static ButtonStyle get editProfileCountryCode => OutlinedButton.styleFrom(
+    backgroundColor: Colors.transparent,
+    side: BorderSide(
+      color: appTheme.gray700,
+      width: 0.8,
+    ),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(5),
+    ),
+  );
+
   static ButtonStyle get outlinePrimary => ElevatedButton.styleFrom(
         backgroundColor: appTheme.blue300,
         shape: RoundedRectangleBorder(

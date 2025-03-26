@@ -699,12 +699,14 @@ class _HomeScreenState extends State<HomeScreen> {
     var logger = Logger();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15,),
-      child: homeProvider.journalsModelLoading
-          ? shimmerList(
-        height: size.height * 0.5,
-        list: 5,
-        shimmerHeight: size.height * 0.07,
-      ):
+      child:
+      // homeProvider.journalsModelLoading
+      //     ? shimmerList(
+      //   height: size.height * 0.5,
+      //   list: 5,
+      //   shimmerHeight: size.height * 0.07,
+      // ) :
+
       homeProvider.journalStatus == 404 ?
           const SizedBox():
            ListView.separated(
@@ -731,7 +733,7 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             },
             child: UserProfileListItemWidget(
-              title: homeProvider.journalsModel!.journals![index].journalDesc!,
+              title: homeProvider.journalsModel!.journals![index].journalTitle!,
               date: homeProvider.journalsModel!.journals![index].journalDatetime!,
               image: homeProvider.journalsModel!.journals![index].displayImage!,
             ),

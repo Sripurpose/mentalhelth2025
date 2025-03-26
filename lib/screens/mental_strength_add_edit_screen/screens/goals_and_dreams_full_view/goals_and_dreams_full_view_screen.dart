@@ -406,88 +406,67 @@ class _GoalAndDreamFullViewBottomSheetState
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: widget.goalDetailModel.goals!.action!.length,
                       itemBuilder: (context, index) {
-                        return Row(
-                          children: [
-                          //  Checkbox(value: false, onChanged: (value) {}),
-                            GestureDetector(
-                              onTap: () {
-                                // Navigator.of(context).push(
-                                //   MaterialPageRoute(
-                                //     builder: (context) => ActionsFullView(
-                                //       id: mentalStrengthEditProvider
-                                //           .getListGoalActionsModel!
-                                //           .actions![index]
-                                //           .id
-                                //           .toString(),
-                                //       indexs: index,
-                                //     ),
-                                //   ),
-                                // );
-                              },
-                              child: Container(
-                                height: size.height * 0.04,
-                                width: size.width * 0.78,
-                                padding: const EdgeInsets.only(
-                                  bottom: 5,
-                                  top: 5,
-                                  left: 0,
-                                  right: 5,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(
-                                    100,
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 15.0), // Adds space between items
+                          child: Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  // Navigator.of(context).push(
+                                  //   MaterialPageRoute(
+                                  //     builder: (context) => ActionsFullView(
+                                  //       id: mentalStrengthEditProvider
+                                  //           .getListGoalActionsModel!
+                                  //           .actions![index]
+                                  //           .id
+                                  //           .toString(),
+                                  //       indexs: index,
+                                  //     ),
+                                  //   ),
+                                  // );
+                                },
+                                child: Container(
+                                  height: size.height * 0.04,
+                                  width: size.width * 0.78,
+                                  padding: const EdgeInsets.only(
+                                    bottom: 5,
+                                    top: 5,
+                                    left: 0,
+                                    right: 5,
                                   ),
-                                  border: Border.all(
-                                    color: Colors.grey,
-                                    width: 1,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(100),
+                                    border: Border.all(
+                                      color: Colors.grey,
+                                      width: 1,
+                                    ),
                                   ),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.center,
-                                  children: [
-
-                                    SizedBox(
-                                      width: size.width * 0.6,
-                                      child: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                                        child: Text(
-                                          widget.goalDetailModel.goals!.action![index].actionTitle ?? "",
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(
-                                            color: Colors.grey,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                        width: size.width * 0.6,
+                                        child: SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+                                          child: Text(
+                                            widget.goalDetailModel.goals!.action![index].actionTitle ?? "",
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                              color: Colors.grey,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
                                           ),
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1, // Set the maximum number of lines to 3
                                         ),
                                       ),
-                                    ),
-                                    // CircleAvatar(
-                                    //   radius: size.width * 0.04,
-                                    //   backgroundColor: Colors.blue,
-                                    //   child: Icon(
-                                    //     Icons.arrow_forward_ios_outlined,
-                                    //     color: Colors.white,
-                                    //     size: size.width * 0.03,
-                                    //   ),
-                                    // ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         );
-
-                        // _buildCloseEditText(
-                        //   context,
-                        //   content:
-                        //       adDreamsGoalsProvider.goalModelIdName[index].name,
-                        //   onTap: () {
-                        //     adDreamsGoalsProvider
-                        //         .getAddActionIdAndNameClear(index);
-                        //   },
-                        // );
                       },
                     ),
                   ):

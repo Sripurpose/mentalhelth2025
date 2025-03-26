@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mentalhelth/screens/edit_add_profile_screen/provider/edit_provider.dart';
 import 'package:mentalhelth/screens/home_screen/provider/home_provider.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/widgets/custom_elevated_button.dart';
 import 'package:mentalhelth/widgets/custom_pin_code_text_field.dart';
 import 'package:provider/provider.dart';
@@ -30,10 +31,11 @@ class VerifyOtpPhoneScreen extends StatelessWidget {
           width: size.width,
           height: size.height,
           decoration: BoxDecoration(
-              color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
+              color: ColorsContent.homeBackGroundColor,
               image: DecorationImage(
-                  image: AssetImage(ImageConstant.imgGroup22),
-                  fit: BoxFit.cover)),
+                  image: AssetImage(ImageConstant.gradientBackground),
+                  fit: BoxFit.cover)
+          ),
           child: Container(
             width: double.maxFinite,
             padding: const EdgeInsets.symmetric(
@@ -49,13 +51,18 @@ class VerifyOtpPhoneScreen extends StatelessWidget {
                     height: 34,
                   ),
                   CustomImageView(
-                      imagePath: ImageConstant.imgLogo, height: 68, width: 280),
+                      imagePath: ImageConstant.imgNumuLogo, height: 68, width: 280),
                   const SizedBox(
                     height: 50,
                   ),
                   Text(
-                      "Enter the code sent to your phone (phone)",
-                      style: CustomTextStyles.bodyMedium14
+                      "Enter the code sent to your phone",
+                    style:  TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Open Sans',
+                      color: Colors.white,
+                    ),
                   ),
                   const SizedBox(
                     height: 20,
@@ -79,7 +86,7 @@ class VerifyOtpPhoneScreen extends StatelessWidget {
                         height: 40,
                         text: "Submit",
                         margin: const EdgeInsets.symmetric(horizontal: 3),
-                        buttonStyle: CustomButtonStyles.outlinePrimary,
+                        buttonStyle: CustomButtonStyles.signInButton,
                         buttonTextStyle: CustomTextStyles.titleSmallHelveticaOnSecondaryContainer,
                         onPressed: () async {
                           if(editProfileProvider.phoneOtp.isNotEmpty){

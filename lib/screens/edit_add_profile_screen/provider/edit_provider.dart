@@ -281,6 +281,19 @@ class EditProfileProvider extends ChangeNotifier {
     }
   }
 
+  String countryCode = '91';
+  void addCountryCode({required String value}) {
+    countryCode = value;
+    notifyListeners();
+  }
+
+  // **New Method to Reset Country Code**
+  void resetCountryCode() {
+    countryCode = '91'; // Reset to default country code
+    notifyListeners();
+  }
+
+
   Future<void> editProfileFunction({
     required String firstName,
     required String note,
@@ -288,6 +301,7 @@ class EditProfileProvider extends ChangeNotifier {
     required String dob,
     required String phone,
     required String email,
+    required String countryCode,
     required BuildContext context,
     required List<String> interestIds,
   }) async {
@@ -308,6 +322,7 @@ class EditProfileProvider extends ChangeNotifier {
         'dob': dob,
         'phone': phone,
         'email': email,
+        'country_code':countryCode
       };
 
       logger.w("body$body");

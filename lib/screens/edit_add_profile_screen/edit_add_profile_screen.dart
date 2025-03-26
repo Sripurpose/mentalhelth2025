@@ -1,3 +1,4 @@
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
@@ -154,6 +155,35 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                                         ),
                                       ),
                                       const SizedBox(height: 2),
+                                      // Consumer<EditProfileProvider>(
+                                      //   builder: (context, editProfileProvider, _) {
+                                      //     return SizedBox(
+                                      //       height: 42,
+                                      //       child: OutlinedButton(
+                                      //         style: CustomButtonStyles.outlineGrayTL5,
+                                      //         onPressed: () {
+                                      //           showCountryPicker(
+                                      //             context: context,
+                                      //             exclude: <String>['KN', 'MF'],
+                                      //             favorite: <String>['SE'],
+                                      //             showPhoneCode: true,
+                                      //             onSelect: (Country country) {
+                                      //               editProfileProvider.addCountryCode(
+                                      //                 value: country.phoneCode.toString(),
+                                      //               );
+                                      //             },
+                                      //           );
+                                      //         },
+                                      //         child: Center(
+                                      //           child: Text(
+                                      //             "+${editProfileProvider.countryCode.toString()}",
+                                      //             style: CustomTextStyles.titleSmallHelveticaOnPrimary,
+                                      //           ),
+                                      //         ),
+                                      //       ),
+                                      //     );
+                                      //   },
+                                      // ),
                                       _buildPhone(context),
                                       const SizedBox(height: 9),
                                       Align(
@@ -517,34 +547,74 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
   Widget _buildPhone(BuildContext context) {
     return Consumer<EditProfileProvider>(
       builder: (context, editProfileProvider, _) {
-        return Padding(
-          padding: const EdgeInsets.only(left: 10, right: 1),
-          child: CustomTextFormField(
-            fillColor: Colors.white,
-            filled: true,
-            isValids: editProfileProvider.phoneIsValid,
-            textInputType: TextInputType.phone,
-            controller: editProfileProvider.phoneController,
-            hintText: "0000000000", // Phone number hint
-            hintStyle: const TextStyle(
-              color: Colors.black,
+        bool isPhoneVerified = editProfileProvider.getProfileModel?.phoneVerify == "1";
+
+        return Row(
+          children: [
+            if (!isPhoneVerified) // Show country picker button only if phone is not verified
+              Consumer<EditProfileProvider>(
+                builder: (context, editProfileProvider, _) {
+                  return SizedBox(
+                    height: 40,
+                    child: OutlinedButton(
+                      style: CustomButtonStyles.editProfileCountryCode,
+                      onPressed: () {
+                        showCountryPicker(
+                          context: context,
+                          exclude: <String>['KN', 'MF'],
+                          favorite: <String>['SE'],
+                          showPhoneCode: true,
+                          onSelect: (Country country) {
+                            editProfileProvider.addCountryCode(
+                              value: country.phoneCode.toString(),
+                            );
+                          },
+                        );
+                      },
+                      child: Center(
+                        child: Text(
+                          "+${editProfileProvider.countryCode.toString()}",
+                          style: CustomTextStyles.titleSmallHelveticaOnPrimary,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            Expanded( // Ensure proper layout within the row
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10, right: 1),
+                child: CustomTextFormField(
+                  fillColor: Colors.white,
+                  filled: true,
+                  isValids: editProfileProvider.phoneIsValid,
+                  textInputType: TextInputType.phone,
+                  controller: editProfileProvider.phoneController,
+                  hintText: "0000000000", // Phone number hint
+                  hintStyle: const TextStyle(
+                    color: Colors.black,
+                  ),
+                  readOnly: isPhoneVerified, // Make field read-only if phone is verified
+                  prefixText: editProfileProvider.getProfileModel?.countryCode?.isNotEmpty == true
+                      ? "+${editProfileProvider.getProfileModel!.countryCode} "
+                      : "",
+                  prefixStyle: const TextStyle(
+                    color: Colors.black,
+                  ),
+                  onChanged: (value) {
+                    editProfileProvider.phoneValidate(
+                      editProfileProvider.validatePhoneNumber(value),
+                    );
+                  },
+                ),
+              ),
             ),
-            readOnly: editProfileProvider.getProfileModel?.phoneVerify == "1", // Make field read-only if phone is verified
-            prefixText: "+${editProfileProvider.getProfileModel?.countryCode ?? "+00"} ", // Add country code as prefix text
-            prefixStyle: const TextStyle(
-             // fontSize: 10,
-              color: Colors.black,
-            ),
-            onChanged: (value) {
-              editProfileProvider.phoneValidate(
-                editProfileProvider.validatePhoneNumber(value),
-              );
-            },
-          ),
+          ],
         );
       },
     );
   }
+
 
 
 
@@ -678,6 +748,9 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                 dob: editProfileProvider.date.toString(),
                 phone: editProfileProvider.phoneController.text,
                 email: email,  // Pass the validated email
+                countryCode: editProfileProvider.countryCode.isNotEmpty
+                    ? editProfileProvider.countryCode
+                    : (editProfileProvider.getProfileModel?.countryCode ?? ""), // Fallback to profileModel countryCode if countryCode is empty
                 context: context,
                 interestIds: editProfileProvider.selectedCategories.isEmpty
                     ? editProfileProvider.profileInterestIds

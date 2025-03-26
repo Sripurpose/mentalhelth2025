@@ -172,6 +172,49 @@ PreferredSizeWidget buildAppBarNumu(BuildContext context, Size size,
 }
 
 
+PreferredSizeWidget buildAppBarBuildMental(BuildContext context, Size size,
+    {String? heading, bool isSigned = true}) {
+  return CustomAppBarBuild(
+    automaticallyImplyLeading: false, // Removes the back button
+    leadingWidth: 36,
+    leading: Consumer<DashBoardProvider>(builder: (context, dashBoardProvider, _) {
+      return AppbarLeadingImage(
+        imagePath: ImageConstant.imgTelevision,
+        margin: const EdgeInsets.only(
+          left: 20,
+          top: 19,
+          bottom: 23,
+        ),
+      );
+    }),
+    actions: [
+      !isSigned
+          ? const SizedBox()
+          : GestureDetector(
+        onTap: () {
+          if (isSigned) {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) =>
+                  buildPopupDialog(context, size),
+            );
+          }
+        },
+        child: Padding(
+          padding: EdgeInsets.only(
+            right: size.width * 0.07,
+          ),
+          child: SvgPicture.asset(
+            ImageConstant.menuBarSvg,
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
+
+
 PreferredSizeWidget buildAppBarJournalViewScreen(BuildContext context, Size size,
     {String? heading, Function? onTap, bool isSigned = true}) {
   return CustomAppBar(

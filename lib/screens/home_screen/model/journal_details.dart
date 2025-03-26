@@ -42,6 +42,7 @@ class JournalDetails {
 class Journals {
   String? userId;
   String? journalId;
+  String? journalTitle;
   String? journalDesc;
   String? emotionId;
   String? emotionTitle;
@@ -58,6 +59,7 @@ class Journals {
   Journals({
     this.userId,
     this.journalId,
+    this.journalTitle,
     this.journalDesc,
     this.emotionId,
     this.emotionTitle,
@@ -75,6 +77,7 @@ class Journals {
   factory Journals.fromJson(Map<String, dynamic> json) => Journals(
         userId: json["user_id"],
         journalId: json["journal_id"],
+        journalTitle: json["journal_title"],
         journalDesc: json["journal_desc"],
         emotionId: json["emotion_id"],
         emotionTitle: json["emotion_title"],
@@ -99,6 +102,7 @@ class Journals {
   Map<String, dynamic> toJson() => {
         "user_id": userId,
         "journal_id": journalId,
+        "journal_title":journalTitle,
         "journal_desc": journalDesc,
         "emotion_id": emotionId,
         "emotion_title": emotionTitle,

@@ -42,7 +42,7 @@ Widget backGroundImagerOtherScreens({
     width: size.width,
     height: size.height,
     decoration: BoxDecoration(
-      color: ColorsContent.whiteText, // Replace image with a solid color
+      color: ColorsContent.homeBackGroundColor, // Replace image with a solid color
       // image: DecorationImage(
       //   image: AssetImage(
       //     ImageConstant.imgGroup22,

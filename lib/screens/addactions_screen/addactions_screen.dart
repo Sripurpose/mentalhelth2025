@@ -1152,7 +1152,11 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                   );
                   addActionsProvider.setRemainder = false;
                   // You can uncomment the line below if you want to close the screen after saving.
-                   Navigator.of(context).pop();
+                  Future.microtask(() {
+                    if (context.mounted) {
+                      Navigator.of(context).pop();
+                    }
+                  });
                 }
               } else {
                 // Reminder is not set, proceed with save without reminder-related fields
@@ -1174,8 +1178,13 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                 );
 
                 addActionsProvider.setRemainder = false;
-                // You can uncomment the line below if you want to close the screen after saving.
-                // Navigator.of(context).pop();
+
+                Future.microtask(() {
+                  if (context.mounted) {
+                    Navigator.of(context).pop();
+                  }
+                });
+
               }
             }
           },

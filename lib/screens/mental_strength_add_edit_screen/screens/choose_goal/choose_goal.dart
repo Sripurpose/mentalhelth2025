@@ -187,7 +187,7 @@ class _ScreenChooseGoalMentalStrengthState
                     return SizedBox(
                       height: size.height * 0.45,
                       width: size.width * 0.8,
-                      child: ListView.separated(
+                      child: mentalStrengthEditProvider.goalsValue.id != null ? ListView.separated(
                         controller: _scrollController,
                         separatorBuilder: (
                           context,
@@ -220,22 +220,36 @@ class _ScreenChooseGoalMentalStrengthState
                               list: 10,
                               shimmerHeight: size.height * 0.07,
                             );
-                          } else if (mentalStrengthEditProvider
-                              .goalsList.isEmpty) {
-                            return const SizedBox(
-                              child: Center(
-                                child: Text("No Data"),
-                              ),
-                            );
-                          } else {
-                            return const SizedBox(
-                              child: Center(
-                                child: Text("No Data"),
-                              ),
-                            );
                           }
+                          // else if (mentalStrengthEditProvider.goalsValue.id == null) {
+                          //   return const SizedBox(
+                          //     child: Center(
+                          //       child: Text("No Data",    style: TextStyle(
+                          //         color: Colors.red,
+                          //         fontWeight: FontWeight.bold,
+                          //       ),),
+                          //     ),
+                          //   );
+                          // } else {
+                          //   return const SizedBox(
+                          //     child: Center(
+                          //       child: Text("No Data",    style: TextStyle(
+                          //         color: Colors.red,
+                          //         fontWeight: FontWeight.bold,
+                          //       ),),
+                          //     ),
+                          //   );
+                          // }
                         },
-                      ),
+                      ):
+                      const SizedBox(
+                      child: Center(
+                      child: Text("No goals were found",    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),),
+                    ),
+                    ),
                     );
                   },
                 ),

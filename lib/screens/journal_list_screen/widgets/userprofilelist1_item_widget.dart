@@ -110,6 +110,10 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                                     .descriptionEditTextController.text =
                                 homeProvider.journalDetails!.journals!.journalDesc
                                     .toString();
+                            mentalStrengthEditProvider
+                                .titleEditTextController.text =
+                                homeProvider.journalDetails!.journals!.journalTitle
+                                    .toString();
                             for (int i = 0;
                                 i <
                                     homeProvider.journalDetails!.journals!

@@ -6,6 +6,7 @@ import 'package:mentalhelth/widgets/custom_pin_code_text_field.dart';
 import 'package:provider/provider.dart';
 
 import '../../../utils/core/image_constant.dart';
+import '../../../utils/theme/colors.dart';
 import '../../../utils/theme/custom_button_style.dart';
 import '../../../utils/theme/custom_text_style.dart';
 import '../../../utils/theme/theme_helper.dart';
@@ -30,9 +31,9 @@ class VerifyOtpScreen extends StatelessWidget {
           width: size.width,
           height: size.height,
           decoration: BoxDecoration(
-              color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
+              color: ColorsContent.homeBackGroundColor,
               image: DecorationImage(
-                  image: AssetImage(ImageConstant.imgGroup22),
+                  image: AssetImage(ImageConstant.gradientBackground),
                   fit: BoxFit.cover)),
           child: Container(
             width: double.maxFinite,
@@ -49,13 +50,18 @@ class VerifyOtpScreen extends StatelessWidget {
                     height: 34,
                   ),
                   CustomImageView(
-                      imagePath: ImageConstant.imgLogo, height: 68, width: 280),
+                      imagePath: ImageConstant.imgNumuLogo, height: 68, width: 280),
                   const SizedBox(
                     height: 50,
                   ),
-                  Text(
+                  const Text(
                     "Enter the code sent to your email",
-                      style: CustomTextStyles.bodyMedium14
+                    style:  TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Open Sans',
+                      color: Colors.white,
+                    ),
                   ),
                   const SizedBox(
                     height: 20,
@@ -79,7 +85,7 @@ class VerifyOtpScreen extends StatelessWidget {
                     height: 40,
                     text: "Submit",
                     margin: const EdgeInsets.symmetric(horizontal: 3),
-                    buttonStyle: CustomButtonStyles.outlinePrimary,
+                    buttonStyle: CustomButtonStyles.signInButton,
                     buttonTextStyle: CustomTextStyles.titleSmallHelveticaOnSecondaryContainer,
                     onPressed: () async {
                       if(editProfileProvider.otp.isNotEmpty){

@@ -39,6 +39,7 @@ import '../../widgets/functions/popup.dart';
 import '../addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
 import '../auth/sign_in/provider/sign_in_provider.dart';
 import '../home_screen/provider/home_provider.dart';
+import '../home_screen/widgets/home_menu/home_menu.dart';
 import '../token_expiry/tocken_expiry_warning_screen.dart';
 import '../token_expiry/token_expiry.dart';
 import 'model/emotions_model.dart';
@@ -72,6 +73,7 @@ class _NumuMentalStrengthAddEditPageState
   late TabController _tabController;
   int currentTabIndex = 0;
   late FocusNode _descriptionFocusNode;
+  late FocusNode _titleFocusNode;
 
   Future<void> _isTokenExpired() async {
     await homeProvider.fetchJournals(initial: true);
@@ -120,9 +122,11 @@ class _NumuMentalStrengthAddEditPageState
   void initState() {
     super.initState();
     _descriptionFocusNode = FocusNode();
+    _titleFocusNode = FocusNode();
     // Ensure the focus is not automatically set when returning
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _descriptionFocusNode.unfocus(); // Ensure it does not get focus automatically
+      _descriptionFocusNode.unfocus();
+      _titleFocusNode.unfocus();// Ensure it does not get focus automatically
     });
     _tabController = TabController(length: 6, vsync: this);
     _tabController.addListener(() {
@@ -145,6 +149,7 @@ class _NumuMentalStrengthAddEditPageState
     scheduleMicrotask(() {
       mentalStrengthEditProvider.mediaSelected = -1;
       mentalStrengthEditProvider.descriptionEditTextController.text = "";
+      mentalStrengthEditProvider.titleEditTextController.text = "";
       mentalStrengthEditProvider.emotionalValueStar = null;
       mentalStrengthEditProvider.driveValueStar = null;
       adDreamsGoalsProvider.selectedDate = "";
@@ -165,6 +170,7 @@ class _NumuMentalStrengthAddEditPageState
   @override
   void dispose() {
     _descriptionFocusNode.dispose();
+    _titleFocusNode.dispose();
     _tabController.dispose();
     super.dispose();
   }
@@ -194,9 +200,36 @@ class _NumuMentalStrengthAddEditPageState
                       },
                       child: Column(
                         children: [
-                          const SizedBox(
-                            height: 40,
+                          const SizedBox(height: 5,),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                //  if (isSigned) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          buildPopupDialog(context, size),
+                                    );
+                                 // }
+                                  //else {
+
+                                 // }
+                                },
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                    right: size.width * 0.07,
+                                  ),
+                                  child:
+                                  SvgPicture.asset(
+                                    ImageConstant.menuBarSvg,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
+                          const SizedBox(height: 10,),
                           Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: size.width * 0.05, vertical: 8),
@@ -429,23 +462,24 @@ class _NumuMentalStrengthAddEditPageState
             child: Column(
               children: [
                 SizedBox(height: size.height * 0.03),
-                Container(
-                  width: 350,
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: ColorsContent.whatsOnYourMindBoxColor,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    "What's on your mind?",
-                    style: TextStyle(
-                      color: ColorsContent.newThemeColor,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'OpenSans',
-                    ),
-                  ),
-                ),
+                _buildTitleEditText(context, mentalStrengthEditProvider),
+                // Container(
+                //   width: 350,
+                //   padding: const EdgeInsets.all(10),
+                //   decoration: BoxDecoration(
+                //     color: Colors.white,
+                //     borderRadius: BorderRadius.circular(8),
+                //   ),
+                //   child: Text(
+                //     "What's on your mind?",
+                //     style: TextStyle(
+                //       color: ColorsContent.newThemeColor,
+                //       fontSize: 16,
+                //       fontWeight: FontWeight.w600,
+                //       fontFamily: 'OpenSans',
+                //     ),
+                //   ),
+                // ),
                 SizedBox(height: size.height * 0.03),
                 _buildDescriptionEditText(context, mentalStrengthEditProvider),
                 SizedBox(height: size.height * 0.03),
@@ -532,8 +566,7 @@ class _NumuMentalStrengthAddEditPageState
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
                     // Border radius for rounded corners
-                    color: ColorsContent
-                        .whatsOnYourMindBoxColor, // Background color (optional)
+                    color:Colors.white, // Background color (optional)
                   ),
                   child: Center(
                     child: DropdownButtonHideUnderline(
@@ -963,7 +996,7 @@ class _NumuMentalStrengthAddEditPageState
           controller: mentalStrengthEditProvider.descriptionEditTextController,
           hintText: _descriptionFocusNode.hasFocus ? '' : "Start writing...",
           hintStyle: TextStyle(
-            color: ColorsContent.newThemeColor,
+            color: ColorsContent.hintColor,
             fontSize: 16,
             fontWeight: FontWeight.w400, // Font weight 600
             fontFamily: 'OpenSans', // Font family Open Sans
@@ -975,6 +1008,36 @@ class _NumuMentalStrengthAddEditPageState
           // Rebuild when tapped
           onEditingComplete: () {
             _descriptionFocusNode.unfocus(); // Ensure focus is removed when done
+            setState(() {});
+          }, // Rebuild when focus is lost
+        );
+      },
+    );
+  }
+
+  Widget _buildTitleEditText(BuildContext context,
+      MentalStrengthEditProvider mentalStrengthEditProvider) {
+    //FocusNode focusNode = FocusNode();
+
+    return StatefulBuilder(
+      builder: (context, setState) {
+        return CustomTextFormFieldNumu(
+          textAlign: TextAlign.start,
+          controller: mentalStrengthEditProvider.titleEditTextController,
+          hintText: _titleFocusNode.hasFocus ? '' : "Whats on your mind ?",
+          hintStyle: TextStyle(
+            color: ColorsContent.hintColor,
+            fontSize: 16,
+            fontWeight: FontWeight.w400, // Font weight 600
+            fontFamily: 'OpenSans', // Font family Open Sans
+          ),
+          textInputAction: TextInputAction.done,
+          maxLines: 1,
+          focusNode: _titleFocusNode,
+          onTap: () => setState(() {}),
+          // Rebuild when tapped
+          onEditingComplete: () {
+            _titleFocusNode.unfocus(); // Ensure focus is removed when done
             setState(() {});
           }, // Rebuild when focus is lost
         );

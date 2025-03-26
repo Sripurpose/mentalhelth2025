@@ -32,6 +32,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
 
   void editJournalAddValues({
     required String descriptionText,
+    required String titleText,
     required List<String> recordedFile,
     required List<String> pickedImagesList,
     required String selectedLocationNames,
@@ -45,6 +46,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
     required List<action.Action> actionLists,
   }) {
     descriptionEditTextController.text = descriptionText;
+    titleEditTextController.text = titleText;
     recordedFilePath.addAll(recordedFile);
     pickedImages.addAll(pickedImagesList);
     selectedLocationName = selectedLocationNames;
@@ -171,6 +173,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
 
 
   TextEditingController descriptionEditTextController = TextEditingController();
+  TextEditingController titleEditTextController = TextEditingController();
   double? emotionalValueStar; // Use nullable type
 
 
@@ -632,6 +635,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
 
   GetGoalsModel? getGoalsModel;
   bool getGoalsModelLoading = false;
+  int? fetchGoalsStatusCode;
   Goal goalsValue = Goal();
   List<Goal> goalsList = [];
   int pageLoad = 1;
@@ -639,6 +643,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
   Future<void> fetchGoals({bool initial = false}) async {
     try {
       String? token = await getUserTokenSharePref();
+      fetchGoalsStatusCode = 0;
       getGoalsModelLoading = true;
       notifyListeners();
       if (initial) {
@@ -656,12 +661,16 @@ class MentalStrengthEditProvider extends ChangeNotifier {
         headers: <String, String>{"authorization": "$token"},
       );
       if (response.statusCode == 200) {
+        fetchGoalsStatusCode = response.statusCode;
         getGoalsModel = getGoalsModelFromJson(response.body);
         goalsList.addAll(
           getGoalsModel!.goals!,
         );
         notifyListeners();
-      } else {}
+      } else {
+        fetchGoalsStatusCode = response.statusCode;
+      }
+      fetchGoalsStatusCode = response.statusCode;
       if(response.statusCode == 401){
         TokenManager.setTokenStatus(true);
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
@@ -1131,6 +1140,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
 
   void clearAllValuesInSaveTime() {
     descriptionEditTextController.clear();
+    titleEditTextController.clear();
     // emotionValue = Emotion();
     emotionalValueStar = 0;
     driveValueStar = 0;
@@ -1239,10 +1249,10 @@ class MentalStrengthEditProvider extends ChangeNotifier {
 
   Future<void> saveButtonFunction(BuildContext context) async {
     if (!isVideoUploading) {
-      if (descriptionEditTextController.text.isNotEmpty) {
+      if (descriptionEditTextController.text.isNotEmpty && titleEditTextController.text.isNotEmpty) {
         bool isSuccess = await saveJournalsFunction(
           context,
-          journalTitle: descriptionEditTextController.text,
+          journalTitle: titleEditTextController.text,
           journalDesc: descriptionEditTextController.text,
           emotionId: emotionValue.id.toString(),
           emotionValue: emotionalValueStar.toString(),

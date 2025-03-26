@@ -219,10 +219,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                     editProfileProvider.getProfileModel!.phone!.isNotEmpty ?
                                                     TextSpan(
                                                       text:
-                                                          "+${editProfileProvider.getProfileModel!.countryCode} ${editProfileProvider.getProfileModel!.phone}\n",
-                                                      style: CustomTextStyles
-                                                          .bodyLargeff000000,
-                                                    ):
+                                                      "${(editProfileProvider.getProfileModel?.countryCode?.isNotEmpty ?? false) ? "+${editProfileProvider.getProfileModel!.countryCode} " : ""}${editProfileProvider.getProfileModel!.phone}\n",
+                                                      style: CustomTextStyles.bodyLargeff000000,
+                                                    ) :
                                                     TextSpan(
                                                       text:
                                                       "",
