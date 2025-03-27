@@ -187,7 +187,7 @@ class _ScreenChooseGoalMentalStrengthState
                     return SizedBox(
                       height: size.height * 0.45,
                       width: size.width * 0.8,
-                      child: mentalStrengthEditProvider.goalsValue.id != null ? ListView.separated(
+                      child: mentalStrengthEditProvider.goalsList != null ? ListView.separated(
                         controller: _scrollController,
                         separatorBuilder: (
                           context,

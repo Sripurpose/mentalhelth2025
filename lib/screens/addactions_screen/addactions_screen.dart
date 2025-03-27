@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:logger/logger.dart';
@@ -1153,8 +1154,10 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                   addActionsProvider.setRemainder = false;
                   // You can uncomment the line below if you want to close the screen after saving.
                   Future.microtask(() {
-                    if (context.mounted) {
-                      Navigator.of(context).pop();
+                    if (!kReleaseMode) { // ✅ Only execute in debug mode
+                      if (context.mounted) {
+                        Navigator.of(context).pop();
+                      }
                     }
                   });
                 }
@@ -1180,8 +1183,10 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                 addActionsProvider.setRemainder = false;
 
                 Future.microtask(() {
-                  if (context.mounted) {
-                    Navigator.of(context).pop();
+                  if (!kReleaseMode) { // ✅ Only execute in debug mode
+                    if (context.mounted) {
+                      Navigator.of(context).pop();
+                    }
                   }
                 });
 

@@ -78,9 +78,12 @@ class ReminderListItemWidget extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      formatDate(int.parse(startDate),),
+                      startDate.isNotEmpty && int.tryParse(startDate) != null
+                          ? formatDate(int.parse(startDate))
+                          : "Invalid Date", // Show default text if parsing fails
                       style: theme.textTheme.bodySmall,
                     ),
+
                     Text(
                       "  to  ",
                       style: theme.textTheme.bodySmall,

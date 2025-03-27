@@ -309,6 +309,7 @@ class _NumuMentalStrengthAddEditPageState
                               children: [
                                 TabBarView(
                                   controller: _tabController,
+                                  physics: const NeverScrollableScrollPhysics(), // Prevents swipe gestures
                                   children: [
                                     _buildFirstTab(context, mentalStrengthEditProvider, size),
                                     _buildSecondTab(context, size),
@@ -320,36 +321,93 @@ class _NumuMentalStrengthAddEditPageState
                                 ),
 
                                 // Floating Button for navigation and submission
-                                if (currentTabIndex < 5)
-                                  Positioned(
-                                    bottom: size.height * 0.025,
-                                    left: 0,
-                                    right: 0,
-                                    child: Center(
-                                      child: SizedBox(
-                                        width: 70,
-                                        height: 70,
-                                        child: FloatingActionButton(
-                                          onPressed: () {
-                                            if (currentTabIndex < 5) {
-                                              _tabController.animateTo(currentTabIndex + 1);
-                                            } else {
-                                              print("End of progress");
-                                            }
-                                          },
-                                          child: Image.asset(
-                                            ImageConstant.splashNextIcon,
-                                            width: 90,
-                                            height: 90,
-                                          ),
-                                          shape: const CircleBorder(),
-                                          elevation: 5,
-                                          heroTag: "next_button",
-                                        ),
-                                      ),
+                              if (currentTabIndex < 5)
+                      Positioned(
+                      bottom: size.height * 0.025,
+                      left: 0,
+                      right: 0,
+                      child: Center(
+                        child: SizedBox(
+                          width: 70,
+                          height: 70,
+                          child: FloatingActionButton(
+                            onPressed: () {
+                              // Check for required conditions before moving to the next tab
+                              if (currentTabIndex == 0) {
+                                if (mentalStrengthEditProvider.titleEditTextController.text.isNotEmpty &&
+                                    mentalStrengthEditProvider.descriptionEditTextController.text.isNotEmpty) {
+                                  _tabController.animateTo(currentTabIndex + 1);
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text("Title or Description are required."),
+                                      backgroundColor: Colors.red,
                                     ),
-                                  )
-                                else
+                                  );
+                                  print("Title and Description are required.");
+                                }
+                              } else if (currentTabIndex == 1) {
+                                if (mentalStrengthEditProvider.emotionalValueStar != null) {
+                                  _tabController.animateTo(currentTabIndex + 1);
+                                }
+                                else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text("Emotional star rating is required."),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                  print("Emotional star rating,");
+                                }
+                              }
+                              else if (currentTabIndex == 2) {
+                                if ( mentalStrengthEditProvider.emotionValue != null) {
+                                  _tabController.animateTo(currentTabIndex + 1);
+                                }
+
+                                else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text("Emotion selection is required."),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                  print("Emotion selection, is required.");
+                                }
+                              }
+                              else if (currentTabIndex == 3) {
+                                if ( mentalStrengthEditProvider.driveValueStar != null) {
+                                  _tabController.animateTo(currentTabIndex + 1);
+                                }
+
+                                else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text("Drive star rating is required."),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                  print("Drive star rating is required.");
+                                }
+                              }
+                              else {
+                                _tabController.animateTo(currentTabIndex + 1);
+                              }
+                            },
+                            child: Image.asset(
+                              ImageConstant.splashNextIcon,
+                              width: 90,
+                              height: 90,
+                            ),
+                            shape: const CircleBorder(),
+                            elevation: 5,
+                            heroTag: "next_button",
+                          ),
+                        ),
+                      ),
+                    )
+
+                    else
                                   Positioned(
                                     bottom: size.height * 0.02,
                                     left: 0,
@@ -361,7 +419,7 @@ class _NumuMentalStrengthAddEditPageState
 
                                           if (mentalStrengthEditProvider.descriptionEditTextController.text.isEmpty) {
                                             validationMessage = "Description missing";
-                                          } else if (mentalStrengthEditProvider.emotionValue.id.toString().isEmpty) {
+                                          } else if (mentalStrengthEditProvider.emotionValue!.id.toString().isEmpty) {
                                             validationMessage = "Please select an emotion";
                                           } else if (mentalStrengthEditProvider.emotionalValueStar == null) {
                                             validationMessage = "Please select Feeling Now emotional Rate";
@@ -572,51 +630,28 @@ class _NumuMentalStrengthAddEditPageState
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton2(
                         isExpanded: true,
-                        dropdownStyleData: DropdownStyleData(
-                          maxHeight: 300,
-                          width: 250,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(14),
-                            color: Colors.white,
-                          ),
-                          offset: const Offset(0, 0),
-                          scrollbarTheme: ScrollbarThemeData(
-                            radius: const Radius.circular(40),
-                            thickness: MaterialStateProperty.all(6),
-                            thumbVisibility: MaterialStateProperty.all(true),
-                          ),
-                        ),
-                        menuItemStyleData: const MenuItemStyleData(
-                          height: 40,
-                          padding: EdgeInsets.only(left: 14, right: 14),
-                        ),
-                        value: mentalStrengthEditProvider.emotionValue,
-                        //  icon: const Icon(Icons.keyboard_arrow_down),
-                        items: mentalStrengthEditProvider
-                            .getEmotionsModel!.emotions!
-                            .map((Emotion items) {
+                        value: mentalStrengthEditProvider.emotionValue, // Allow null value
+                        hint: Text("Select Emotion"), // Add a hint when no value is selected
+                        items: mentalStrengthEditProvider.getEmotionsModel?.emotions?.map((Emotion items) {
                           return DropdownMenuItem(
                             value: items,
                             child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
                               child: Text(
                                 items.title.toString(),
                                 style: TextStyle(
-                                  color: ColorsContent
-                                      .newThemeColor, // Change to your desired color
+                                  color: ColorsContent.newThemeColor, // Change to your desired color
                                 ),
                               ),
                             ),
                           );
                         }).toList(),
                         onChanged: (Emotion? newValue) {
-                          mentalStrengthEditProvider
-                              .addEmotionValue(newValue ?? Emotion());
-
+                          mentalStrengthEditProvider.addEmotionValue(newValue!);
                           _isTokenExpired();
                         },
                       ),
+
                     ),
                   ),
                 ),

@@ -909,7 +909,7 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
                                                             .text,
                                                     emotionId:
                                                         mentalStrengthEditProvider
-                                                            .emotionValue.id
+                                                            .emotionValue!.id
                                                             .toString(),
                                                     emotionValue:
                                                         mentalStrengthEditProvider

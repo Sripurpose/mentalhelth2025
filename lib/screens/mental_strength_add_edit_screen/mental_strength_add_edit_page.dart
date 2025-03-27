@@ -808,7 +808,7 @@ class _MentalStrengthAddEditFullViewScreenState
                                                 .text
                                                 .isNotEmpty &&
                                             mentalStrengthEditProvider
-                                                .emotionValue.id
+                                                .emotionValue!.id
                                                 .toString()
                                                 .isNotEmpty &&
                                             mentalStrengthEditProvider
@@ -828,7 +828,7 @@ class _MentalStrengthAddEditFullViewScreenState
                                               .text
                                               .isNotEmpty &&
                                           mentalStrengthEditProvider
-                                              .emotionValue.id
+                                              .emotionValue!.id
                                               .toString()
                                               .isNotEmpty &&
                                           mentalStrengthEditProvider

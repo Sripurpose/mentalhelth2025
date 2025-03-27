@@ -558,14 +558,14 @@ class MentalStrengthEditProvider extends ChangeNotifier {
 
   GetEmotionsModel? getEmotionsModel;
   bool getEmotionsModelLoading = false;
-  Emotion emotionValue = Emotion();
+  Emotion? emotionValue;
 
   Future<void> fetchEmotions({bool editing = false, String? emotionId, String? emotion}) async {
     try {
       String? token = await getUserTokenSharePref();
       getEmotionsModelLoading = true;
       notifyListeners();
-      // Conditionally construct the URL based on the presence of the emotion parameter
+
       final uri = emotion != null
           ? Uri.parse('${UrlConstant.emotionsUrl}$emotion')
           : Uri.parse(UrlConstant.emotionsUrl);
@@ -590,12 +590,11 @@ class MentalStrengthEditProvider extends ChangeNotifier {
             }
           }
         } else {
-          emotionValue = getEmotionsModel!.emotions![0];
+          emotionValue = null; // Avoid selecting the first value
         }
         notifyListeners();
       } else if (response.statusCode == 401 || response.statusCode == 403) {
         TokenManager.setTokenStatus(true);
-        // CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
 
       getEmotionsModelLoading = false;
@@ -1254,7 +1253,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
           context,
           journalTitle: titleEditTextController.text,
           journalDesc: descriptionEditTextController.text,
-          emotionId: emotionValue.id.toString(),
+          emotionId: emotionValue!.id.toString(),
           emotionValue: emotionalValueStar.toString(),
           driveValue: driveValueStar.toString(),
           goalId: goalsValue.id.toString(),
