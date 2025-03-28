@@ -34,6 +34,7 @@ import '../../utils/logic/logic.dart';
 import '../../widgets/background_image/background_imager.dart';
 import '../addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
 import '../journal_list_screen/journal_list_page.dart';
+import '../journal_list_screen/screens/edit_journal/numu_edit_journal_screen.dart';
 import '../mental_strength_add_edit_screen/screens/goals_and_dreams_full_view/goals_and_dreams_full_view_screen.dart';
 
 class JournalViewScreen extends StatefulWidget {
@@ -866,13 +867,22 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                         ));
                       }
                     }
+                    // Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //     builder: (context) => const EditJournalMentalStrength(
+                    //       valueBool: true,
+                    //     ),
+                    //   ),
+                    // );
+
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => const EditJournalMentalStrength(
+                        builder: (context) => const NumuEditJournalScreen(
                           valueBool: true,
                         ),
                       ),
                     );
+
                   },
                   value: 'Edit',
                   child: Text(

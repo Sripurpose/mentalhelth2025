@@ -1,12 +1,15 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/screens/auth/sign_in/provider/sign_in_provider.dart';
 import 'package:mentalhelth/screens/auth/sign_in/screen_sign_in.dart';
+import 'package:mentalhelth/screens/auth/sign_in/widget/sign_in_widget.dart';
 import 'package:mentalhelth/screens/subscription_view/subscription_in_app_screen.dart';
 import 'package:mentalhelth/utils/core/image_constant.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/widgets/background_image/background_imager.dart';
 import 'package:mentalhelth/widgets/custom_image_view.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +18,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../utils/theme/custom_text_style.dart';
 import '../../../utils/theme/theme_helper.dart';
+import '../../edit_add_profile_screen/provider/edit_provider.dart';
+import '../../home_screen/provider/home_provider.dart';
 
 class LandingRegisterScreenScreen extends StatefulWidget {
   const LandingRegisterScreenScreen(
@@ -123,7 +128,7 @@ class _LandingRegisterScreenScreenState extends State<LandingRegisterScreenScree
           return false;
         },
         child: Scaffold(
-          body: backGroundImager(
+          body: landingScreenImager(
             size: size,
             padding: EdgeInsets.zero,
             child: Center(
@@ -142,44 +147,9 @@ class _LandingRegisterScreenScreenState extends State<LandingRegisterScreenScree
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          GestureDetector(
-                            onTap: () async {
-                              Navigator.push(
-                                context,
-                                PageRouteBuilder(
-                                  pageBuilder: (_, __, ___) =>
-                                      const ScreenSignIn(),
-                                  transitionDuration:
-                                  const Duration(seconds: 0),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(10.0),
-                              // Add padding as needed
-                              decoration: BoxDecoration(
-                                color: Colors.transparent,
-                                // Change to your desired background color
-                                borderRadius: BorderRadius.circular(5.0),
-                                // Optional: Add border radius
-                                border: Border.all(
-                                  color: Colors.black,
-                                  // Change to your desired border color
-                                  width: 0.5, // Optional: Adjust border width
-                                ),
-                              ),
-                              child: Text(
-                                "Sign in",
-                                style: theme.textTheme.titleMedium,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: size.height * 0.30,
-                          ),
                           CustomImageView(
-                            imagePath: ImageConstant.imgLogo,
-                            height: 70,
+                            imagePath: ImageConstant.imgNumuLogo,
+                            height: 100,
                             width: 280,
                             color: Colors.white,
                           ),
@@ -187,21 +157,10 @@ class _LandingRegisterScreenScreenState extends State<LandingRegisterScreenScree
                             height: size.height * 0.05,
                           ),
                           _isLoading
-                              ? Shimmer.fromColors(
-                            baseColor: Colors.grey[300]!,
-                            highlightColor: Colors.grey[100]!,
-                            child: Column(
-                              children: [
-                                Center(
-                                  child: Container(
-                                    color: Colors.grey[100],
-                                    height: 200.0,
-                                    width: size.width * 0.75,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
+                              ?    const Center(child: CupertinoActivityIndicator(
+                            color: Colors.white,
+                            radius: 15,
+                          ))
                               :
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -209,12 +168,23 @@ class _LandingRegisterScreenScreenState extends State<LandingRegisterScreenScree
                             children: [
                               Text(
                                 signInProvider.settingsRegisterModel?.settings?[0].title ?? "",
-                                style: theme.textTheme.titleMedium,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'Open Sans',
+                                  color: Colors.white,
+                                ),
                               ),
                               SizedBox(height: size.height * 0.02),
                               Text(
-                                signInProvider.settingsRegisterModel?.settings?[0].message ?? "",
-                                style: theme.textTheme.bodyMedium,
+                                signInProvider.settingsRegisterModel?.settings?[0].message
+                                    ?.replaceAll("with ", "with\n              ") ?? "",
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Open Sans',
+                                  color: Colors.white,
+                                ),
                               ),
                               SizedBox(height: size.height * 0.05),
                               signInProvider.settingsRegisterModel?.settings?[0].link != null ?
@@ -232,43 +202,99 @@ class _LandingRegisterScreenScreenState extends State<LandingRegisterScreenScree
                                      _launchInAppWithWebView(url,context);
                                    }
                                   },
-                                  child: Container(
-                                    padding: EdgeInsets.all(10.0),
+                                  child:Container(
+                                    width: size.width * 0.75,
+                                    padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0), // Adjust padding for better spacing
                                     decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      // Change to your desired background color
-                                      borderRadius: BorderRadius.circular(5.0),
-                                      // Optional: Add border radius
-                                      border: Border.all(
-                                        color: Colors.black,
-                                        // Change to your desired border color
-                                        width: 0.5, // Optional: Adjust border width
-                                      ),
-
+                                      color: Colors.white, // Background color
+                                      borderRadius: BorderRadius.circular(5.0), // Optional: Add border radius
                                     ),
-                                    child: RichText(
-                                      text: TextSpan(
-                                        text: "Go to ",
-                                        // Regular text
-                                        style: theme.textTheme.bodyMedium,
-                                        // Regular style for "Go to"
-                                        children: [
-                                          TextSpan(
-                                            text: signInProvider.settingsRegisterModel?.settings?[0].link ?? "",
-                                            // The URL text
-                                            style: CustomTextStyles.labelLarge14
-                                                .copyWith(
-                                              decorationColor: Colors.blue,
-                                              // Optional: change the color of the underline
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.start, // Aligns items to the start
+                                      crossAxisAlignment: CrossAxisAlignment.center, // Keeps items vertically aligned
+                                      children: [
+                                        Icon(
+                                          Icons.language,
+                                          color: ColorsContent.newThemeColor,
+                                          size: 24, // Reduced icon size
+                                        ),
+
+                                        const SizedBox(width: 8), // Add small spacing between icon and text
+
+                                        Expanded(
+                                          child: Text(
+                                            signInProvider.settingsRegisterModel?.settings?[0].link ?? "",
+                                            style:  TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold, // Set font weight to bold
+                                              color:ColorsContent.newThemeColor,
+                                            ),
+                                            overflow: TextOverflow.ellipsis, // Avoid text overflow
+                                          ),
+                                        ),
+
+                                        const SizedBox(width: 10), // Adjust spacing before the forward icon
+
+                                        Container(
+                                          width: 28, // Adjust size as needed
+                                          height: 28,
+                                          decoration: BoxDecoration(
+                                            color: ColorsContent.newThemeColor, // Background color
+                                            shape: BoxShape.circle, // Circular shape
+                                          ),
+                                          child: const Center(
+                                            child: Icon(
+                                              Icons.arrow_forward,
+                                              color: Colors.white, // Icon color
+                                              size: 18, // Slightly reduced icon size
                                             ),
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   ),
+
+
                                 ),
                               ):
                                   const SizedBox(),
+                              SizedBox(height: size.height * 0.03),
+                              GestureDetector(
+                                onTap: (){
+                                  Navigator.push(
+                                                  context,
+                                                  PageRouteBuilder(
+                                                    pageBuilder: (_, __, ___) =>
+                                                    const ScreenSignIn(),
+                                                    transitionDuration:
+                                                    const Duration(seconds: 0),
+                                                  ),
+                                                );
+                                },
+                                child: Container(
+                                  width: size.width * 0.75,
+                                  padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 13.0), // Adjust padding for better spacing
+                                  decoration: BoxDecoration(
+                                    color: Colors.black, // Background color
+                                    borderRadius: BorderRadius.circular(5.0), // Optional: Add border radius
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center, // Aligns items to the start
+                                    crossAxisAlignment: CrossAxisAlignment.center, // Keeps items vertically aligned
+                                    children: [
+                                      Text(
+                                        "Sign in",
+                                        style:  TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold, // Set font weight to bold
+                                          color:ColorsContent.whiteText,
+                                        ),
+                                        overflow: TextOverflow.ellipsis, // Avoid text overflow
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                           SizedBox(

@@ -13,6 +13,7 @@ class ImageConstant {
   static String feelingDummyNumu = '$imagePath/feeling_dummy_numu.svg';
   static String submitButtonNumu = 'assets/images/submit_button_numu.svg';
   static String tabBackButton = 'assets/images/tab_back_button.svg';
+  static String goToIcon = 'assets/images/go_to_icon.png';
 
   static String imgThumbsUp = '$imagePath/img_thumbs_up.svg';
   static String galleryAddMediaNumu = '$imagePath/gallery_add_media_numu.svg';

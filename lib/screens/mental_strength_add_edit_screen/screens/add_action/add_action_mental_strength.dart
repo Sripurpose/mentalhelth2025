@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:mentalhelth/screens/addactions_screen/provider/add_actions_provider.dart';
 import 'package:mentalhelth/screens/addactions_screen/widget/googlemap_widget/google_map_widget.dart';
 import 'package:mentalhelth/screens/addactions_screen/widget/popup/audio_popup.dart';
@@ -9,6 +10,7 @@ import 'package:mentalhelth/screens/mental_strength_add_edit_screen/provider/men
 import 'package:mentalhelth/utils/core/image_constant.dart';
 import 'package:mentalhelth/utils/logic/date_format.dart';
 import 'package:mentalhelth/utils/theme/app_decoration.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/utils/theme/custom_button_style.dart';
 import 'package:mentalhelth/utils/theme/custom_text_style.dart';
 import 'package:mentalhelth/utils/theme/theme_helper.dart';
@@ -38,7 +40,7 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
       width: double.infinity,
       height: double.infinity,
       decoration: BoxDecoration(
-        color: appTheme.gray50,
+        color:ColorsContent.homeBackGroundColor,
         borderRadius: const BorderRadius.only(
           topRight: Radius.circular(
             25,
@@ -55,13 +57,6 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
             offset: const Offset(0, 3), // Offset
           ),
         ],
-        // color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
-        image: DecorationImage(
-          image: AssetImage(
-            ImageConstant.imgGroup193,
-          ),
-          fit: BoxFit.cover,
-        ),
       ),
       child: Container(
         width: double.maxFinite,
@@ -116,6 +111,7 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                     Row(
                       children: [
                         Checkbox(
+                          side:  BorderSide(color: ColorsContent.locationCountColor, width: 2), // Change border color
                           value: addActionsProvider.setRemainder,
                           onChanged: (value) {
                             addActionsProvider.changeSetRemainder(value!);
@@ -173,10 +169,10 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                                           color: theme
                                               .colorScheme.onSecondaryContainer
                                               .withOpacity(1),
-                                          border: Border.all(
-                                            color: appTheme.gray700,
-                                            width: 1,
-                                          ),
+                                          // border: Border.all(
+                                          //   color: appTheme.gray700,
+                                          //   width: 1,
+                                          // ),
                                           borderRadius:
                                               BorderRadiusStyle.roundedBorder4,
                                         ),
@@ -186,7 +182,7 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                                             children: [
                                               CustomImageView(
                                                 imagePath: ImageConstant
-                                                    .imgThumbsUpGray700,
+                                                    .actionDatePickerNumu,
                                                 height: 20,
                                                 width: 20,
                                                 margin: const EdgeInsets.only(
@@ -240,10 +236,10 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                                           color: theme
                                               .colorScheme.onSecondaryContainer
                                               .withOpacity(1),
-                                          border: Border.all(
-                                            color: appTheme.gray700,
-                                            width: 1,
-                                          ),
+                                          // border: Border.all(
+                                          //   color: appTheme.gray700,
+                                          //   width: 1,
+                                          // ),
                                           borderRadius:
                                               BorderRadiusStyle.roundedBorder4,
                                         ),
@@ -253,7 +249,7 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                                             children: [
                                               CustomImageView(
                                                 imagePath: ImageConstant
-                                                    .imgThumbsUpGray700,
+                                                    .actionDatePickerNumu,
                                                 height: 20,
                                                 width: 20,
                                                 margin: const EdgeInsets.only(
@@ -319,10 +315,10 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                                           color: theme
                                               .colorScheme.onSecondaryContainer
                                               .withOpacity(1),
-                                          border: Border.all(
-                                            color: appTheme.gray700,
-                                            width: 1,
-                                          ),
+                                          // border: Border.all(
+                                          //   color: appTheme.gray700,
+                                          //   width: 1,
+                                          // ),
                                           borderRadius:
                                               BorderRadiusStyle.roundedBorder4,
                                         ),
@@ -332,7 +328,7 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                                             children: [
                                               CustomImageView(
                                                 imagePath: ImageConstant
-                                                    .imgThumbsUpGray700,
+                                                    .actionDatePickerNumu,
                                                 height: 20,
                                                 width: 20,
                                                 margin: const EdgeInsets.only(
@@ -386,10 +382,10 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                                           color: theme
                                               .colorScheme.onSecondaryContainer
                                               .withOpacity(1),
-                                          border: Border.all(
-                                            color: appTheme.gray700,
-                                            width: 1,
-                                          ),
+                                          // border: Border.all(
+                                          //   color: appTheme.gray700,
+                                          //   width: 0,
+                                          // ),
                                           borderRadius:
                                               BorderRadiusStyle.roundedBorder4,
                                         ),
@@ -399,7 +395,7 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                                             children: [
                                               CustomImageView(
                                                 imagePath: ImageConstant
-                                                    .imgThumbsUpGray700,
+                                                    .actionDatePickerNumu,
                                                 height: 20,
                                                 width: 20,
                                                 margin: const EdgeInsets.only(
@@ -655,10 +651,10 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                                               color: theme.colorScheme
                                                   .onSecondaryContainer
                                                   .withOpacity(1),
-                                              border: Border.all(
-                                                color: appTheme.gray700,
-                                                width: 1,
-                                              ),
+                                              // border: Border.all(
+                                              //   color: appTheme.gray700,
+                                              //   width: 1,
+                                              // ),
                                               borderRadius: BorderRadiusStyle
                                                   .roundedBorder4,
                                             ),
@@ -721,7 +717,7 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
   Widget _buildTitleEditText(BuildContext context) {
     return Consumer<AddActionsProvider>(
         builder: (context, addActionsProvider, _) {
-      return CustomTextFormField(
+      return CustomTextFormFieldNumu(
         controller: addActionsProvider.titleEditTextController,
         hintText: "Title",
         hintStyle: CustomTextStyles.bodySmallGray700,
@@ -733,7 +729,7 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
   Widget _buildDescriptionEditText(BuildContext context) {
     return Consumer<AddActionsProvider>(
         builder: (context, addActionsProvider, _) {
-      return CustomTextFormField(
+      return CustomTextFormFieldNumu(
         controller: addActionsProvider.descriptionEditTextController,
         hintText: "Action Description",
         hintStyle: CustomTextStyles.bodySmallGray700,
@@ -874,6 +870,217 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+
+                SizedBox(
+                  height: size.height * 0.09,
+                  child: Stack(
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          addActionsProvider.selectedMedia(1);
+                          await galleryBottomSheetAction(
+                            context: context,
+                            title: 'Gallery',
+                          );
+                        },
+                        child: SvgPicture.asset(
+                          ImageConstant
+                              .galleryAddMediaNumu, // Replace with your SVG asset path
+                        ),
+                      ),
+
+                      Positioned(
+                        bottom: 40, // Adjust this value as needed
+                        right: 0, // Move to the right
+                        left: 40,
+                        child: Consumer<AddActionsProvider>(
+                          builder: (context, addActionsProvider, _) {
+                            if (addActionsProvider.pickedImages.isEmpty) {
+                              return const SizedBox();
+                            } else {
+                              return Container(
+                                width: size.height * 0.04,
+                                // Set width
+                                height: size.height * 0.04,
+                                // Set height same as width to make it a circle
+                                decoration: BoxDecoration(
+                                  color: ColorsContent.galleryCountColor,
+                                  shape: BoxShape.circle,
+                                  // Ensures the container is circular
+                                  image: DecorationImage(
+                                    image: AssetImage(ImageConstant.imgMenu),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 1.0,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    addActionsProvider.pickedImages.length
+                                        .toString(),
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                      )
+                      // Positioned(
+                      //   bottom: 0,
+                      //   left: 10,
+                      //   right: 10,
+                      //   child: Consumer<AddActionsProvider>(
+                      //       builder: (context, addActionsProvider, _) {
+                      //     if (addActionsProvider.pickedImages.isEmpty) {
+                      //       return const SizedBox();
+                      //     } else {
+                      //       return Container(
+                      //         width: size.height * 0.04,
+                      //         decoration: BoxDecoration(
+                      //           color: Colors.white,
+                      //           image: DecorationImage(
+                      //             image: AssetImage(ImageConstant.imgMenu),
+                      //             fit: BoxFit.cover,
+                      //           ),
+                      //           borderRadius: const BorderRadius.all(
+                      //             Radius.circular(
+                      //               50.0,
+                      //             ),
+                      //           ),
+                      //           border: Border.all(
+                      //             color: appTheme.blue300,
+                      //             width: 2.0,
+                      //           ),
+                      //         ),
+                      //         child: Center(
+                      //           child: Text(
+                      //             addActionsProvider.pickedImages.length
+                      //                 .toString(),
+                      //             style: const TextStyle(
+                      //               color: Colors.blue,
+                      //               fontWeight: FontWeight.bold,
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       );
+                      //     }
+                      //   }),
+                      // )
+                    ],
+                  ),
+                ),
+
+                SizedBox(
+                  height: size.height * 0.09,
+                  child: Stack(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          addActionsProvider.selectedMedia(2);
+                          cameraBottomSheetAction(
+                            context: context,
+                            title: "Camera",
+                          );
+                        },
+                        child: SvgPicture.asset(
+                          ImageConstant
+                              .cameraAddMediaNumu, // Replace with your SVG asset path
+                        ),
+                      ),
+
+                      Positioned(
+                        bottom: 40, // Adjust this value as needed
+                        right: 0, // Move to the right
+                        left: 40,
+                        child: Consumer<AddActionsProvider>(
+                          builder: (context, addActionsProvider, _) {
+                            if (addActionsProvider.takedImages.isEmpty) {
+                              return const SizedBox();
+                            } else {
+                              return Container(
+                                width: size.height * 0.04,
+                                // Ensure width
+                                height: size.height * 0.04,
+                                // Ensure height matches width for a circle
+                                decoration: BoxDecoration(
+                                  color: ColorsContent.cameraCountColor,
+                                  shape: BoxShape.circle,
+                                  // This makes it perfectly round
+                                  image: DecorationImage(
+                                    image: AssetImage(ImageConstant.imgMenu),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 1.0,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    addActionsProvider.takedImages.length
+                                        .toString(),
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                      )
+                      // Positioned(
+                      //   bottom: 0,
+                      //   left: 10,
+                      //   right: 10,
+                      //   child: Consumer<AddActionsProvider>(
+                      //       builder: (context, addActionsProvider, _) {
+                      //     if (addActionsProvider.takedImages.isEmpty) {
+                      //       return const SizedBox();
+                      //     } else {
+                      //       return Container(
+                      //         width: size.height * 0.04,
+                      //         decoration: BoxDecoration(
+                      //           color: Colors.white,
+                      //           image: DecorationImage(
+                      //             image: AssetImage(ImageConstant.imgMenu),
+                      //             fit: BoxFit.cover,
+                      //           ),
+                      //           borderRadius: const BorderRadius.all(
+                      //             Radius.circular(
+                      //               50.0,
+                      //             ),
+                      //           ),
+                      //           border: Border.all(
+                      //             color: appTheme.blue300,
+                      //             width: 2.0,
+                      //           ),
+                      //         ),
+                      //         child: Center(
+                      //           child: Text(
+                      //             addActionsProvider.takedImages.length
+                      //                 .toString(),
+                      //             style: const TextStyle(
+                      //               color: Colors.blue,
+                      //               fontWeight: FontWeight.bold,
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       );
+                      //     }
+                      //   }),
+                      // )
+                    ],
+                  ),
+                ),
+
                 SizedBox(
                   height: size.height * 0.09,
                   child: Stack(
@@ -887,223 +1094,100 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                           );
                           // }
                         },
-                        child: Container(
-                          height: size.height * 0.08,
-                          width: size.height * 0.08,
-                          decoration: BoxDecoration(
-                            color: addActionsProvider.mediaSelected == 0
-                                ? Colors.blue
-                                : Colors.transparent,
-                            image: DecorationImage(
-                              image: AssetImage(ImageConstant.imgMenu),
-                              fit: BoxFit.cover,
-                            ),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(
-                                50.0,
-                              ),
-                            ),
-                            border: Border.all(
-                              color: appTheme.blue300,
-                              width: 1.0,
-                            ),
-                          ),
-                          child: Icon(
-                            Icons.mic,
-                            size: 30,
-                            color: addActionsProvider.mediaSelected == 0
-                                ? Colors.white
-                                : Colors.blue,
-                          ),
+                        child: SvgPicture.asset(
+                          ImageConstant
+                              .recordAddMediaNumu, // Replace with your SVG asset path
                         ),
                       ),
+
                       Positioned(
-                        bottom: 0,
-                        left: 10,
-                        right: 10,
+                        bottom: 40, // Adjust this value as needed
+                        right: 0, // Move to the right
+                        left: 40,
                         child: Consumer<AddActionsProvider>(
-                            builder: (context, addActionsProvider, _) {
-                          if (addActionsProvider.recordedFilePath.isEmpty) {
-                            return const SizedBox();
-                          } else {
-                            return Container(
-                              width: size.height * 0.04,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                image: DecorationImage(
-                                  image: AssetImage(ImageConstant.imgMenu),
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(
-                                    50.0,
+                          builder: (context, addActionsProvider, _) {
+                            if (addActionsProvider.recordedFilePath.isEmpty) {
+                              return const SizedBox();
+                            } else {
+                              return Container(
+                                width: size.height * 0.04,
+                                // Ensuring width
+                                height: size.height * 0.04,
+                                // Ensuring height for a circle
+                                decoration: BoxDecoration(
+                                  color: ColorsContent.recordCountColor,
+                                  shape: BoxShape.circle,
+                                  // Ensuring a perfect circle
+                                  image: DecorationImage(
+                                    image: AssetImage(ImageConstant.imgMenu),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 1.0,
                                   ),
                                 ),
-                                border: Border.all(
-                                  color: appTheme.blue300,
-                                  width: 2.0,
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  addActionsProvider.recordedFilePath.length
-                                      .toString(),
-                                  style: const TextStyle(
-                                    color: Colors.blue,
-                                    fontWeight: FontWeight.bold,
+                                child: Center(
+                                  child: Text(
+                                    addActionsProvider.recordedFilePath.length
+                                        .toString(),
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          }
-                        }),
+                              );
+                            }
+                          },
+                        ),
                       )
+                      // Positioned(
+                      //   bottom: 0,
+                      //   left: 10,
+                      //   right: 10,
+                      //   child: Consumer<AddActionsProvider>(
+                      //       builder: (context, addActionsProvider, _) {
+                      //         if (addActionsProvider.recordedFilePath.isEmpty) {
+                      //           return const SizedBox();
+                      //         } else {
+                      //           return Container(
+                      //             width: size.height * 0.04,
+                      //             decoration: BoxDecoration(
+                      //               color: Colors.white,
+                      //               image: DecorationImage(
+                      //                 image: AssetImage(ImageConstant.imgMenu),
+                      //                 fit: BoxFit.cover,
+                      //               ),
+                      //               borderRadius: const BorderRadius.all(
+                      //                 Radius.circular(
+                      //                   50.0,
+                      //                 ),
+                      //               ),
+                      //               border: Border.all(
+                      //                 color: appTheme.blue300,
+                      //                 width: 2.0,
+                      //               ),
+                      //             ),
+                      //             child: Center(
+                      //               child: Text(
+                      //                 addActionsProvider.recordedFilePath.length
+                      //                     .toString(),
+                      //                 style: const TextStyle(
+                      //                   color: Colors.blue,
+                      //                   fontWeight: FontWeight.bold,
+                      //                 ),
+                      //               ),
+                      //             ),
+                      //           );
+                      //         }
+                      //       }),
+                      // )
                     ],
                   ),
                 ),
-                // const AudioRecorderMentalStrengthBuild(),
-                SizedBox(
-                  height: size.height * 0.09,
-                  child: Stack(
-                    children: [
-                      GestureDetector(
-                        onTap: () async {
-                          addActionsProvider.selectedMedia(1);
-                          await galleryBottomSheetAction(
-                            context: context,
-                            title: 'Gallery',
-                          );
-                        },
-                        child: buildAvatarImage(
-                          widget: Icon(
-                            Icons.image,
-                            size: 30,
-                            color: addActionsProvider.mediaSelected == 1
-                                ? Colors.white
-                                : Colors.blue,
-                          ),
-                          imagePath: ImageConstant.imgThumbsUp,
-                          size: size,
-                          isSelected: addActionsProvider.mediaSelected == 1
-                              ? true
-                              : false,
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        left: 10,
-                        right: 10,
-                        child: Consumer<AddActionsProvider>(
-                            builder: (context, addActionsProvider, _) {
-                          if (addActionsProvider.pickedImages.isEmpty) {
-                            return const SizedBox();
-                          } else {
-                            return Container(
-                              width: size.height * 0.04,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                image: DecorationImage(
-                                  image: AssetImage(ImageConstant.imgMenu),
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(
-                                    50.0,
-                                  ),
-                                ),
-                                border: Border.all(
-                                  color: appTheme.blue300,
-                                  width: 2.0,
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  addActionsProvider.pickedImages.length
-                                      .toString(),
-                                  style: const TextStyle(
-                                    color: Colors.blue,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            );
-                          }
-                        }),
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: size.height * 0.09,
-                  child: Stack(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          addActionsProvider.selectedMedia(2);
-                          cameraBottomSheetAction(
-                            context: context,
-                            title: "Camera",
-                          );
-                        },
-                        child: buildAvatarImage(
-                          widget: Icon(
-                            Icons.camera_alt_outlined,
-                            size: 30,
-                            color: addActionsProvider.mediaSelected == 2
-                                ? Colors.white
-                                : Colors.blue,
-                          ),
-                          imagePath: ImageConstant.imgCamera,
-                          size: size,
-                          isSelected: addActionsProvider.mediaSelected == 2
-                              ? true
-                              : false,
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        left: 10,
-                        right: 10,
-                        child: Consumer<AddActionsProvider>(
-                            builder: (context, addActionsProvider, _) {
-                          if (addActionsProvider.takedImages.isEmpty) {
-                            return const SizedBox();
-                          } else {
-                            return Container(
-                              width: size.height * 0.04,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                image: DecorationImage(
-                                  image: AssetImage(ImageConstant.imgMenu),
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(
-                                    50.0,
-                                  ),
-                                ),
-                                border: Border.all(
-                                  color: appTheme.blue300,
-                                  width: 2.0,
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  addActionsProvider.takedImages.length
-                                      .toString(),
-                                  style: const TextStyle(
-                                    color: Colors.blue,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            );
-                          }
-                        }),
-                      )
-                    ],
-                  ),
-                ),
+
+
                 SizedBox(
                   height: size.height * 0.09,
                   child: Stack(
@@ -1124,62 +1208,91 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                             },
                           );
                         },
-                        child: buildAvatarImage(
-                          widget: Icon(
-                            Icons.location_on,
-                            size: 30,
-                            color: addActionsProvider.mediaSelected == 3
-                                ? Colors.white
-                                : Colors.blue,
-                          ),
-                          imagePath: ImageConstant.imgLinkedin,
-                          size: size,
-                          // wi
-                          isSelected: addActionsProvider.mediaSelected == 3
-                              ? true
-                              : false,
+                        child: SvgPicture.asset(
+                          ImageConstant
+                              .locationAddMediaNumu, // Replace with your SVG asset path
                         ),
                       ),
+
                       Positioned(
-                        bottom: 0,
-                        left: 10,
-                        right: 10,
+                        bottom: 40, // Adjust this value as needed
+                        right: 0, // Move to the right
+                        left: 40,
                         child: Consumer<AddActionsProvider>(
-                            builder: (context, addActionsProvider, _) {
-                          if (addActionsProvider.selectedLocationName.isEmpty) {
-                            return const SizedBox();
-                          } else {
-                            return Container(
-                              width: size.height * 0.04,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                image: DecorationImage(
-                                  image: AssetImage(ImageConstant.imgMenu),
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(
-                                    50.0,
+                          builder: (context, addActionsProvider, _) {
+                            if (addActionsProvider.selectedLocationName.isEmpty) {
+                              return const SizedBox();
+                            } else {
+                              return Container(
+                                width: size.height * 0.04,
+                                height: size.height * 0.04,
+                                decoration: BoxDecoration(
+                                  color: ColorsContent.locationCountColor,
+                                  shape: BoxShape.circle,
+                                  // Ensuring a perfect circle
+                                  image: DecorationImage(
+                                    image: AssetImage(ImageConstant.imgMenu),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 1.0,
                                   ),
                                 ),
-                                border: Border.all(
-                                  color: appTheme.blue300,
-                                  width: 2.0,
-                                ),
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  "1",
-                                  style: TextStyle(
-                                    color: Colors.blue,
-                                    fontWeight: FontWeight.bold,
+                                child: const Center(
+                                  child: Text(
+                                    "1",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          }
-                        }),
-                      )
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                      // Positioned(
+                      //   bottom: 0,
+                      //   left: 10,
+                      //   right: 10,
+                      //   child: Consumer<AddActionsProvider>(
+                      //       builder: (context, addActionsProvider, _) {
+                      //     if (addActionsProvider.selectedLocationName.isEmpty) {
+                      //       return const SizedBox();
+                      //     } else {
+                      //       return Container(
+                      //         width: size.height * 0.04,
+                      //         decoration: BoxDecoration(
+                      //           color: Colors.white,
+                      //           image: DecorationImage(
+                      //             image: AssetImage(ImageConstant.imgMenu),
+                      //             fit: BoxFit.cover,
+                      //           ),
+                      //           borderRadius: const BorderRadius.all(
+                      //             Radius.circular(
+                      //               50.0,
+                      //             ),
+                      //           ),
+                      //           border: Border.all(
+                      //             color: appTheme.blue300,
+                      //             width: 2.0,
+                      //           ),
+                      //         ),
+                      //         child: const Center(
+                      //           child: Text(
+                      //             "1",
+                      //             style: TextStyle(
+                      //               color: Colors.blue,
+                      //               fontWeight: FontWeight.bold,
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       );
+                      //     }
+                      //   }),
+                      // )
                     ],
                   ),
                 ),

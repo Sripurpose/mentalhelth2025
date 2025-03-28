@@ -61,7 +61,7 @@ class _ScreenChooseGoalMentalStrengthState
         top: size.height * 0.07,
       ),
       decoration: BoxDecoration(
-        color: appTheme.gray50,
+        color: ColorsContent.homeBackGroundColor,
         borderRadius: const BorderRadius.only(
           topRight: Radius.circular(
             25,

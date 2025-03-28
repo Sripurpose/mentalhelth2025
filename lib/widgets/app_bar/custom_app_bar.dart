@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 
 // ignore: must_be_immutable
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -94,6 +95,52 @@ class CustomAppBarBuild extends StatelessWidget implements PreferredSizeWidget {
     height ?? 56,
   );
 }
+
+
+class CustomAppBarAction extends StatelessWidget implements PreferredSizeWidget {
+  const CustomAppBarAction({
+    Key? key,
+    this.height,
+    this.leadingWidth,
+    this.leading,
+    this.title,
+    this.centerTitle,
+    this.actions,
+    this.backgroundColor, // New parameter
+  }) : super(key: key);
+
+  final double? height;
+  final double? leadingWidth;
+  final Widget? leading;
+  final Widget? title;
+  final bool? centerTitle;
+  final List<Widget>? actions;
+  final Color? backgroundColor; // New property
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      elevation: 0,
+      toolbarHeight: height ?? 56,
+      automaticallyImplyLeading: false,
+      backgroundColor: backgroundColor ?? ColorsContent.homeBackGroundColor, // Default color set
+      leadingWidth: leadingWidth ?? 0,
+      leading: leading,
+      title: title,
+      titleSpacing: 0,
+      centerTitle: centerTitle ?? false,
+      actions: actions,
+      scrolledUnderElevation: 0,
+    );
+  }
+
+  @override
+  Size get preferredSize => Size(
+    double.infinity,
+    height ?? 56,
+  );
+}
+
 
 
 

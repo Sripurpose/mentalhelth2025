@@ -800,11 +800,10 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                                                               ),
                                                             ),
                                                             const Spacer(),
-                                                            const Icon(
+                                                             Icon(
                                                               Icons
                                                                   .keyboard_arrow_down_sharp,
-                                                              color:
-                                                                  Colors.blue,
+                                                              color: ColorsContent.newThemeColor,
                                                             )
                                                           ],
                                                         ),

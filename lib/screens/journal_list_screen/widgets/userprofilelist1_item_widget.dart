@@ -16,6 +16,7 @@ import 'package:html_unescape/html_unescape.dart';
 import '../../../utils/theme/app_decoration.dart';
 import '../../../utils/theme/theme_helper.dart';
 import '../../mental_strength_add_edit_screen/model/get_goals_model.dart';
+import '../screens/edit_journal/numu_edit_journal_screen.dart';
 
 class UserProfileList1ItemWidget extends StatelessWidget {
   const UserProfileList1ItemWidget({
@@ -236,10 +237,17 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                               ));
                             }
                           }
+                          // Navigator.of(context).push(
+                          //   MaterialPageRoute(
+                          //     builder: (context) =>
+                          //         const EditJournalMentalStrength(),
+                          //   ),
+                          // );
+
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) =>
-                                  const EditJournalMentalStrength(),
+                              const NumuEditJournalScreen(),
                             ),
                           );
                         },

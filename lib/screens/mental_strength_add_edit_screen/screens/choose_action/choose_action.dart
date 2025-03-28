@@ -78,7 +78,7 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
         top: size.height * 0.04,
       ),
       decoration: BoxDecoration(
-        color: appTheme.gray50,
+        color: ColorsContent.homeBackGroundColor,
         borderRadius: const BorderRadius.only(
           topRight: Radius.circular(
             25,
@@ -168,11 +168,10 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            mentalStrengthEditProvider
-                                .getListGoalActionsModel!
-                                .actions!
-                                .isNotEmpty ?
-                            const Text(
+                            mentalStrengthEditProvider.getListGoalActionsModel != null &&
+                                mentalStrengthEditProvider.getListGoalActionsModel!.actions != null &&
+                                mentalStrengthEditProvider.getListGoalActionsModel!.actions!.isNotEmpty
+                                ? const Text(
                               "Choose Actions",
                               style: TextStyle(
                                 fontSize: 18,

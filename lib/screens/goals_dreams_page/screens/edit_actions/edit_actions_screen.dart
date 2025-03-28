@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/screens/addactions_screen/provider/add_actions_provider.dart';
@@ -15,6 +16,7 @@ import 'package:mentalhelth/screens/mental_strength_add_edit_screen/model/all_mo
 import 'package:mentalhelth/utils/core/image_constant.dart';
 import 'package:mentalhelth/utils/logic/date_format.dart';
 import 'package:mentalhelth/utils/theme/app_decoration.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/utils/theme/custom_button_style.dart';
 import 'package:mentalhelth/utils/theme/custom_text_style.dart';
 import 'package:mentalhelth/utils/theme/theme_helper.dart';
@@ -59,9 +61,17 @@ class _EditActionScreenState extends State<EditActionScreen> {
   var logger = Logger();
   AlarmInfo? alarmInfo;
   PermissionStatus permissionStatus = PermissionStatus.denied;
+  late FocusNode _descriptionFocusNode;
+  late FocusNode _titleFocusNode;
 
   @override
   void initState() {
+    _descriptionFocusNode = FocusNode();
+    _titleFocusNode = FocusNode();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _descriptionFocusNode.unfocus();
+      _titleFocusNode.unfocus();// Ensure it does not get focus automatically
+    });
     homeProvider = Provider.of<HomeProvider>(context, listen: false);
     mentalStrengthEditProvider =
         Provider.of<MentalStrengthEditProvider>(context, listen: false);
@@ -319,6 +329,14 @@ class _EditActionScreenState extends State<EditActionScreen> {
     }
   }
 
+
+  @override
+  void dispose() {
+    _descriptionFocusNode.dispose();
+    _titleFocusNode.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -342,14 +360,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
                     width: double.infinity,
                     height: double.infinity,
                     decoration: BoxDecoration(
-                      color:
-                          theme.colorScheme.onSecondaryContainer.withOpacity(1),
-                      image: DecorationImage(
-                        image: AssetImage(
-                          ImageConstant.imgGroup193,
-                        ),
-                        fit: BoxFit.cover,
-                      ),
+                      color: ColorsContent.homeBackGroundColor
                     ),
                     child: Container(
                       width: double.maxFinite,
@@ -380,6 +391,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
                                   Row(
                                     children: [
                                       Checkbox(
+                                        side:  BorderSide(color: ColorsContent.locationCountColor, width: 2), // Change border color
                                         value: addActionsProvider.setRemainder,
                                         onChanged: (value) async {
                                           addActionsProvider
@@ -442,11 +454,6 @@ class _EditActionScreenState extends State<EditActionScreen> {
                                                         color: theme.colorScheme
                                                             .onSecondaryContainer
                                                             .withOpacity(1),
-                                                        border: Border.all(
-                                                          color:
-                                                              appTheme.gray700,
-                                                          width: 1,
-                                                        ),
                                                         borderRadius:
                                                             BorderRadiusStyle
                                                                 .roundedBorder4,
@@ -457,9 +464,8 @@ class _EditActionScreenState extends State<EditActionScreen> {
                                                         child: Row(
                                                           children: [
                                                             CustomImageView(
-                                                              imagePath:
-                                                                  ImageConstant
-                                                                      .imgThumbsUpGray700,
+                                                              imagePath: ImageConstant
+                                                                  .actionDatePickerNumu,
                                                               height: 20,
                                                               width: 20,
                                                               margin:
@@ -520,11 +526,6 @@ class _EditActionScreenState extends State<EditActionScreen> {
                                                         color: theme.colorScheme
                                                             .onSecondaryContainer
                                                             .withOpacity(1),
-                                                        border: Border.all(
-                                                          color:
-                                                              appTheme.gray700,
-                                                          width: 1,
-                                                        ),
                                                         borderRadius:
                                                             BorderRadiusStyle
                                                                 .roundedBorder4,
@@ -535,9 +536,8 @@ class _EditActionScreenState extends State<EditActionScreen> {
                                                         child: Row(
                                                           children: [
                                                             CustomImageView(
-                                                              imagePath:
-                                                                  ImageConstant
-                                                                      .imgThumbsUpGray700,
+                                                              imagePath: ImageConstant
+                                                                  .actionDatePickerNumu,
                                                               height: 20,
                                                               width: 20,
                                                               margin:
@@ -610,11 +610,6 @@ class _EditActionScreenState extends State<EditActionScreen> {
                                                         color: theme.colorScheme
                                                             .onSecondaryContainer
                                                             .withOpacity(1),
-                                                        border: Border.all(
-                                                          color:
-                                                              appTheme.gray700,
-                                                          width: 1,
-                                                        ),
                                                         borderRadius:
                                                             BorderRadiusStyle
                                                                 .roundedBorder4,
@@ -625,9 +620,8 @@ class _EditActionScreenState extends State<EditActionScreen> {
                                                         child: Row(
                                                           children: [
                                                             CustomImageView(
-                                                              imagePath:
-                                                                  ImageConstant
-                                                                      .imgThumbsUpGray700,
+                                                              imagePath: ImageConstant
+                                                                  .actionDatePickerNumu,
                                                               height: 20,
                                                               width: 20,
                                                               margin:
@@ -688,11 +682,6 @@ class _EditActionScreenState extends State<EditActionScreen> {
                                                         color: theme.colorScheme
                                                             .onSecondaryContainer
                                                             .withOpacity(1),
-                                                        border: Border.all(
-                                                          color:
-                                                              appTheme.gray700,
-                                                          width: 1,
-                                                        ),
                                                         borderRadius:
                                                             BorderRadiusStyle
                                                                 .roundedBorder4,
@@ -703,9 +692,8 @@ class _EditActionScreenState extends State<EditActionScreen> {
                                                         child: Row(
                                                           children: [
                                                             CustomImageView(
-                                                              imagePath:
-                                                                  ImageConstant
-                                                                      .imgThumbsUpGray700,
+                                                              imagePath: ImageConstant
+                                                                  .actionDatePickerNumu,
                                                               height: 20,
                                                               width: 20,
                                                               margin:
@@ -1010,11 +998,6 @@ class _EditActionScreenState extends State<EditActionScreen> {
                                                                 .colorScheme
                                                                 .onSecondaryContainer
                                                                 .withOpacity(1),
-                                                            border: Border.all(
-                                                              color: appTheme
-                                                                  .gray700,
-                                                              width: 1,
-                                                            ),
                                                             borderRadius:
                                                                 BorderRadiusStyle
                                                                     .roundedBorder4,
@@ -1040,11 +1023,10 @@ class _EditActionScreenState extends State<EditActionScreen> {
                                                                   ),
                                                                 ),
                                                                 const Spacer(),
-                                                                const Icon(
+                                                                 Icon(
                                                                   Icons
                                                                       .keyboard_arrow_down_sharp,
-                                                                  color: Colors
-                                                                      .blue,
+                                                                  color: ColorsContent.newThemeColor,
                                                                 )
                                                               ],
                                                             ),
@@ -1700,10 +1682,19 @@ class _EditActionScreenState extends State<EditActionScreen> {
   Widget _buildTitleEditText(BuildContext context) {
     return Consumer<AddActionsProvider>(
         builder: (context, addActionsProvider, _) {
-      return CustomTextFormField(
+      return CustomTextFormFieldNumu(
         controller: addActionsProvider.titleEditTextController,
-        hintText: "Title",
+        hintText: _titleFocusNode.hasFocus ? '' : "Title",
         hintStyle: CustomTextStyles.bodySmallGray700,
+        textInputAction: TextInputAction.done,
+        maxLines: 1,
+        focusNode: _titleFocusNode,
+        onTap: () => setState(() {}),
+        // Rebuild when tapped
+        onEditingComplete: () {
+          _titleFocusNode.unfocus(); // Ensure focus is removed when done
+          setState(() {});
+        }, // Rebuild when focus is lost
       );
     });
   }
@@ -1712,12 +1703,19 @@ class _EditActionScreenState extends State<EditActionScreen> {
   Widget _buildDescriptionEditText(BuildContext context) {
     return Consumer<AddActionsProvider>(
         builder: (context, addActionsProvider, _) {
-      return CustomTextFormField(
+      return CustomTextFormFieldNumu(
         controller: addActionsProvider.descriptionEditTextController,
-        hintText: "Description",
+        hintText: _descriptionFocusNode.hasFocus ? '' : "Description",
         hintStyle: CustomTextStyles.bodySmallGray700,
         textInputAction: TextInputAction.done,
         maxLines: 4,
+        focusNode: _descriptionFocusNode,
+        onTap: () => setState(() {}),
+        // Rebuild when tapped
+        onEditingComplete: () {
+          _descriptionFocusNode.unfocus(); // Ensure focus is removed when done
+          setState(() {});
+        }, // Rebuild when focus is lost
       );
     });
   }
@@ -1823,99 +1821,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SizedBox(
-                  height: size.height * 0.09,
-                  child: Stack(
-                    children: [
-                      GestureDetector(
-                        onTap: () async {
-                          addActionsProvider.selectedMedia(0);
-                          await audioBottomSheetAction(
-                            context: context,
-                            title: 'Record Audio',
-                          );
-                          // }
-                        },
-                        child: Container(
-                          height: size.height * 0.08,
-                          width: size.height * 0.08,
-                          decoration: BoxDecoration(
-                            color: addActionsProvider.mediaSelected == 0
-                                ? Colors.blue
-                                : Colors.transparent,
-                            image: DecorationImage(
-                              image: AssetImage(ImageConstant.imgMenu),
-                              fit: BoxFit.cover,
-                            ),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(
-                                50.0,
-                              ),
-                            ),
-                            border: Border.all(
-                              color: appTheme.blue300,
-                              width: 1.0,
-                            ),
-                          ),
-                          child: CustomIconButton(
-                              height: size.height * 0.08,
-                              width: size.height * 0.08,
-                              padding: const EdgeInsets.all(18),
-                              child: Icon(
-                                Icons.mic,
-                                size: 30,
-                                color: addActionsProvider.mediaSelected == 0
-                                    ? Colors.white
-                                    : Colors.blue,
-                              )),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        left: 10,
-                        right: 10,
-                        child: Consumer<AddActionsProvider>(
-                            builder: (context, addActionsProvider, _) {
-                          if (addActionsProvider.recordedFilePath.isEmpty &&
-                              addActionsProvider
-                                  .alreadyRecordedFilePath.isEmpty) {
-                            return const SizedBox();
-                          } else {
-                            return Container(
-                              width: size.height * 0.04,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                image: DecorationImage(
-                                  image: AssetImage(ImageConstant.imgMenu),
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(
-                                    50.0,
-                                  ),
-                                ),
-                                border: Border.all(
-                                  color: appTheme.blue300,
-                                  width: 2.0,
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "${addActionsProvider.recordedFilePath.length + addActionsProvider.alreadyRecordedFilePath.length}",
-                                  style: const TextStyle(
-                                    color: Colors.blue,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            );
-                          }
-                        }),
-                      )
-                    ],
-                  ),
-                ),
-                // const AudioRecorderMentalStrengthBuild(),
+
                 SizedBox(
                   height: size.height * 0.09,
                   child: Stack(
@@ -1936,66 +1842,102 @@ class _EditActionScreenState extends State<EditActionScreen> {
                             );
                           }
                         },
-                        child: buildAvatarImage(
-                          widget: Icon(
-                            Icons.image,
-                            size: 30,
-                            color: addActionsProvider.mediaSelected == 1
-                                ? Colors.white
-                                : Colors.blue,
-                          ),
-                          imagePath: ImageConstant.imgThumbsUp,
-                          size: size,
-                          isSelected: addActionsProvider.mediaSelected == 1
-                              ? true
-                              : false,
+                        child: SvgPicture.asset(
+                          ImageConstant
+                              .galleryAddMediaNumu, // Replace with your SVG asset path
                         ),
                       ),
+
                       Positioned(
-                        bottom: 0,
-                        left: 10,
-                        right: 10,
+                        bottom: 40, // Adjust this value as needed
+                        right: 0, // Move to the right
+                        left: 40,
                         child: Consumer<AddActionsProvider>(
-                            builder: (context, addActionsProvider, _) {
-                          if (addActionsProvider.alreadyPickedImages.isEmpty &&
-                              addActionsProvider.pickedImages.isEmpty) {
-                            return const SizedBox();
-                          } else {
-                            return Container(
-                              width: size.height * 0.04,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                image: DecorationImage(
-                                  image: AssetImage(ImageConstant.imgMenu),
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(
-                                    50.0,
+                          builder: (context, addActionsProvider, _) {
+                            if (addActionsProvider.alreadyPickedImages.isEmpty &&
+                                addActionsProvider.pickedImages.isEmpty) {
+                              return const SizedBox();
+                            } else {
+                              return Container(
+                                width: size.height * 0.04,
+                                // Set width
+                                height: size.height * 0.04,
+                                // Set height same as width to make it a circle
+                                decoration: BoxDecoration(
+                                  color: ColorsContent.galleryCountColor,
+                                  shape: BoxShape.circle,
+                                  // Ensures the container is circular
+                                  image: DecorationImage(
+                                    image: AssetImage(ImageConstant.imgMenu),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 1.0,
                                   ),
                                 ),
-                                border: Border.all(
-                                  color: appTheme.blue300,
-                                  width: 2.0,
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "${addActionsProvider.pickedImages.length + addActionsProvider.alreadyPickedImages.length}"
-                                      .toString(),
-                                  style: const TextStyle(
-                                    color: Colors.blue,
-                                    fontWeight: FontWeight.bold,
+                                child: Center(
+                                  child: Text(
+                                    "${addActionsProvider.pickedImages.length + addActionsProvider.alreadyPickedImages.length}"
+                                        .toString(),
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          }
-                        }),
+                              );
+                            }
+                          },
+                        ),
                       )
+
+                      // Positioned(
+                      //   bottom: 0,
+                      //   left: 10,
+                      //   right: 10,
+                      //   child: Consumer<AddActionsProvider>(
+                      //       builder: (context, addActionsProvider, _) {
+                      //     if (addActionsProvider.alreadyPickedImages.isEmpty &&
+                      //         addActionsProvider.pickedImages.isEmpty) {
+                      //       return const SizedBox();
+                      //     } else {
+                      //       return Container(
+                      //         width: size.height * 0.04,
+                      //         decoration: BoxDecoration(
+                      //           color: Colors.white,
+                      //           image: DecorationImage(
+                      //             image: AssetImage(ImageConstant.imgMenu),
+                      //             fit: BoxFit.cover,
+                      //           ),
+                      //           borderRadius: const BorderRadius.all(
+                      //             Radius.circular(
+                      //               50.0,
+                      //             ),
+                      //           ),
+                      //           border: Border.all(
+                      //             color: appTheme.blue300,
+                      //             width: 2.0,
+                      //           ),
+                      //         ),
+                      //         child: Center(
+                      //           child: Text(
+                      //             "${addActionsProvider.pickedImages.length + addActionsProvider.alreadyPickedImages.length}"
+                      //                 .toString(),
+                      //             style: const TextStyle(
+                      //               color: Colors.blue,
+                      //               fontWeight: FontWeight.bold,
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       );
+                      //     }
+                      //   }),
+                      // )
                     ],
                   ),
                 ),
+
                 SizedBox(
                   height: size.height * 0.09,
                   child: Stack(
@@ -2016,65 +1958,207 @@ class _EditActionScreenState extends State<EditActionScreen> {
                             );
                           }
                         },
-                        child: buildAvatarImage(
-                          widget: Icon(
-                            Icons.camera_alt_outlined,
-                            size: 30,
-                            color: addActionsProvider.mediaSelected == 2
-                                ? Colors.white
-                                : Colors.blue,
-                          ),
-                          imagePath: ImageConstant.imgCamera,
-                          size: size,
-                          isSelected: addActionsProvider.mediaSelected == 2
-                              ? true
-                              : false,
+                        child: SvgPicture.asset(
+                          ImageConstant
+                              .cameraAddMediaNumu, // Replace with your SVG asset path
                         ),
                       ),
+
                       Positioned(
-                        bottom: 0,
-                        left: 10,
-                        right: 10,
+                        bottom: 40, // Adjust this value as needed
+                        right: 0, // Move to the right
+                        left: 40,
                         child: Consumer<AddActionsProvider>(
-                            builder: (context, addActionsProvider, _) {
-                          if (addActionsProvider.takedImages.isEmpty) {
-                            return const SizedBox();
-                          } else {
-                            return Container(
-                              width: size.height * 0.04,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                image: DecorationImage(
-                                  image: AssetImage(ImageConstant.imgMenu),
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(
-                                    50.0,
+                          builder: (context, addActionsProvider, _) {
+                            if (addActionsProvider.takedImages.isEmpty) {
+                              return const SizedBox();
+                            } else {
+                              return Container(
+                                width: size.height * 0.04,
+                                // Ensure width
+                                height: size.height * 0.04,
+                                // Ensure height matches width for a circle
+                                decoration: BoxDecoration(
+                                  color: ColorsContent.cameraCountColor,
+                                  shape: BoxShape.circle,
+                                  // This makes it perfectly round
+                                  image: DecorationImage(
+                                    image: AssetImage(ImageConstant.imgMenu),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 1.0,
                                   ),
                                 ),
-                                border: Border.all(
-                                  color: appTheme.blue300,
-                                  width: 2.0,
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  addActionsProvider.takedImages.length
-                                      .toString(),
-                                  style: const TextStyle(
-                                    color: Colors.blue,
-                                    fontWeight: FontWeight.bold,
+                                child: Center(
+                                  child: Text(
+                                    addActionsProvider.takedImages.length
+                                        .toString(),
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          }
-                        }),
+                              );
+                            }
+                          },
+                        ),
                       )
+
+                      // Positioned(
+                      //   bottom: 0,
+                      //   left: 10,
+                      //   right: 10,
+                      //   child: Consumer<AddActionsProvider>(
+                      //       builder: (context, addActionsProvider, _) {
+                      //     if (addActionsProvider.takedImages.isEmpty) {
+                      //       return const SizedBox();
+                      //     } else {
+                      //       return Container(
+                      //         width: size.height * 0.04,
+                      //         decoration: BoxDecoration(
+                      //           color: Colors.white,
+                      //           image: DecorationImage(
+                      //             image: AssetImage(ImageConstant.imgMenu),
+                      //             fit: BoxFit.cover,
+                      //           ),
+                      //           borderRadius: const BorderRadius.all(
+                      //             Radius.circular(
+                      //               50.0,
+                      //             ),
+                      //           ),
+                      //           border: Border.all(
+                      //             color: appTheme.blue300,
+                      //             width: 2.0,
+                      //           ),
+                      //         ),
+                      //         child: Center(
+                      //           child: Text(
+                      //             addActionsProvider.takedImages.length
+                      //                 .toString(),
+                      //             style: const TextStyle(
+                      //               color: Colors.blue,
+                      //               fontWeight: FontWeight.bold,
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       );
+                      //     }
+                      //   }),
+                      // )
                     ],
                   ),
                 ),
+
+                SizedBox(
+                  height: size.height * 0.09,
+                  child: Stack(
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          addActionsProvider.selectedMedia(0);
+                          await audioBottomSheetAction(
+                            context: context,
+                            title: 'Record Audio',
+                          );
+                          // }
+                        },
+                        child: SvgPicture.asset(
+                          ImageConstant
+                              .recordAddMediaNumu, // Replace with your SVG asset path
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 40, // Adjust this value as needed
+                        right: 0, // Move to the right
+                        left: 40,
+                        child: Consumer<AddActionsProvider>(
+                          builder: (context, addActionsProvider, _) {
+                            if (addActionsProvider.recordedFilePath.isEmpty &&
+                                addActionsProvider
+                                    .alreadyRecordedFilePath.isEmpty) {
+                              return const SizedBox();
+                            } else {
+                              return Container(
+                                width: size.height * 0.04,
+                                // Ensuring width
+                                height: size.height * 0.04,
+                                // Ensuring height for a circle
+                                decoration: BoxDecoration(
+                                  color: ColorsContent.recordCountColor,
+                                  shape: BoxShape.circle,
+                                  // Ensuring a perfect circle
+                                  image: DecorationImage(
+                                    image: AssetImage(ImageConstant.imgMenu),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 1.0,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "${addActionsProvider.recordedFilePath.length + addActionsProvider.alreadyRecordedFilePath.length}",
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                      )
+                      // Positioned(
+                      //   bottom: 0,
+                      //   left: 10,
+                      //   right: 10,
+                      //   child: Consumer<AddActionsProvider>(
+                      //       builder: (context, addActionsProvider, _) {
+                      //         if (addActionsProvider.recordedFilePath.isEmpty &&
+                      //             addActionsProvider
+                      //                 .alreadyRecordedFilePath.isEmpty) {
+                      //           return const SizedBox();
+                      //         } else {
+                      //           return Container(
+                      //             width: size.height * 0.04,
+                      //             decoration: BoxDecoration(
+                      //               color: Colors.white,
+                      //               image: DecorationImage(
+                      //                 image: AssetImage(ImageConstant.imgMenu),
+                      //                 fit: BoxFit.cover,
+                      //               ),
+                      //               borderRadius: const BorderRadius.all(
+                      //                 Radius.circular(
+                      //                   50.0,
+                      //                 ),
+                      //               ),
+                      //               border: Border.all(
+                      //                 color: appTheme.blue300,
+                      //                 width: 2.0,
+                      //               ),
+                      //             ),
+                      //             child: Center(
+                      //               child: Text(
+                      //                 "${addActionsProvider.recordedFilePath.length + addActionsProvider.alreadyRecordedFilePath.length}",
+                      //                 style: const TextStyle(
+                      //                   color: Colors.blue,
+                      //                   fontWeight: FontWeight.bold,
+                      //                 ),
+                      //               ),
+                      //             ),
+                      //           );
+                      //         }
+                      //       }),
+                      // )
+                    ],
+                  ),
+                ),
+
                 SizedBox(
                   height: size.height * 0.09,
                   child: Stack(
@@ -2139,62 +2223,91 @@ class _EditActionScreenState extends State<EditActionScreen> {
                           }
 
                         },
-                        child: buildAvatarImage(
-                          widget: Icon(
-                            Icons.location_on,
-                            size: 30,
-                            color: addActionsProvider.mediaSelected == 3
-                                ? Colors.white
-                                : Colors.blue,
-                          ),
-                          imagePath: ImageConstant.imgLinkedin,
-                          size: size,
-                          // wi
-                          isSelected: addActionsProvider.mediaSelected == 3
-                              ? true
-                              : false,
+                        child: SvgPicture.asset(
+                          ImageConstant
+                              .locationAddMediaNumu, // Replace with your SVG asset path
                         ),
                       ),
+
                       Positioned(
-                        bottom: 0,
-                        left: 10,
-                        right: 10,
+                        bottom: 40, // Adjust this value as needed
+                        right: 0, // Move to the right
+                        left: 40,
                         child: Consumer<AddActionsProvider>(
-                            builder: (context, addActionsProvider, _) {
-                          if (addActionsProvider.selectedLocationName.isEmpty) {
-                            return const SizedBox();
-                          } else {
-                            return Container(
-                              width: size.height * 0.04,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                image: DecorationImage(
-                                  image: AssetImage(ImageConstant.imgMenu),
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(
-                                    50.0,
+                          builder: (context, addActionsProvider, _) {
+                            if (addActionsProvider.selectedLocationName.isEmpty) {
+                              return const SizedBox();
+                            } else {
+                              return Container(
+                                width: size.height * 0.04,
+                                height: size.height * 0.04,
+                                decoration: BoxDecoration(
+                                  color: ColorsContent.locationCountColor,
+                                  shape: BoxShape.circle,
+                                  // Ensuring a perfect circle
+                                  image: DecorationImage(
+                                    image: AssetImage(ImageConstant.imgMenu),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 1.0,
                                   ),
                                 ),
-                                border: Border.all(
-                                  color: appTheme.blue300,
-                                  width: 2.0,
-                                ),
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  "1",
-                                  style: TextStyle(
-                                    color: Colors.blue,
-                                    fontWeight: FontWeight.bold,
+                                child: const Center(
+                                  child: Text(
+                                    "1",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          }
-                        }),
-                      )
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                      // Positioned(
+                      //   bottom: 0,
+                      //   left: 10,
+                      //   right: 10,
+                      //   child: Consumer<AddActionsProvider>(
+                      //       builder: (context, addActionsProvider, _) {
+                      //     if (addActionsProvider.selectedLocationName.isEmpty) {
+                      //       return const SizedBox();
+                      //     } else {
+                      //       return Container(
+                      //         width: size.height * 0.04,
+                      //         decoration: BoxDecoration(
+                      //           color: Colors.white,
+                      //           image: DecorationImage(
+                      //             image: AssetImage(ImageConstant.imgMenu),
+                      //             fit: BoxFit.cover,
+                      //           ),
+                      //           borderRadius: const BorderRadius.all(
+                      //             Radius.circular(
+                      //               50.0,
+                      //             ),
+                      //           ),
+                      //           border: Border.all(
+                      //             color: appTheme.blue300,
+                      //             width: 2.0,
+                      //           ),
+                      //         ),
+                      //         child: const Center(
+                      //           child: Text(
+                      //             "1",
+                      //             style: TextStyle(
+                      //               color: Colors.blue,
+                      //               fontWeight: FontWeight.bold,
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       );
+                      //     }
+                      //   }),
+                      // )
                     ],
                   ),
                 ),
@@ -2208,7 +2321,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
 
   PreferredSizeWidget buildAppBarActions(BuildContext context, Size size,
       {String? heading}) {
-    return CustomAppBar(
+    return CustomAppBarAction(
       leadingWidth: 36,
       leading: AppbarLeadingImage(
         onTap: () {
@@ -2237,7 +2350,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
           ),
           child: CircleAvatar(
             radius: size.width * 0.04,
-            backgroundColor: PrimaryColors().blue300,
+            backgroundColor: ColorsContent.newThemeColor,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

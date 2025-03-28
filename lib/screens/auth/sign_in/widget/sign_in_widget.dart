@@ -58,6 +58,25 @@ Widget buildSignInButton(BuildContext context,
   );
 }
 
+
+Widget buildLandingSignInButton(BuildContext context,
+    {required bool isLoading,
+      required String buttonText,
+      required void Function()? onPressed}) {
+  return CustomElevatedButton(
+    loading: isLoading,
+    height: 45,
+    width:  300,
+    text: buttonText,
+    margin: const EdgeInsets.symmetric(
+      horizontal: 4,
+    ),
+    buttonStyle: CustomButtonStyles.signInButton,
+    buttonTextStyle: CustomTextStyles.titleSmallHelveticaOnSecondaryContainer,
+    onPressed: onPressed,
+  );
+}
+
 /// Section Widget
 Widget buildContinueWithPhoneButton(
   BuildContext context, {

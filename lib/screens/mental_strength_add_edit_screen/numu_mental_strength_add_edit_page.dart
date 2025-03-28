@@ -339,9 +339,9 @@ class _NumuMentalStrengthAddEditPageState
                                   _tabController.animateTo(currentTabIndex + 1);
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text("Title or Description are required."),
-                                      backgroundColor: Colors.red,
+                                     SnackBar(
+                                      content: const Text("Title or Description are required."),
+                                      backgroundColor: ColorsContent.newThemeColor,
                                     ),
                                   );
                                   print("Title and Description are required.");
@@ -352,9 +352,9 @@ class _NumuMentalStrengthAddEditPageState
                                 }
                                 else {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text("Emotional star rating is required."),
-                                      backgroundColor: Colors.red,
+                                     SnackBar(
+                                      content: const Text("Emotional star rating is required."),
+                                      backgroundColor: ColorsContent.newThemeColor,
                                     ),
                                   );
                                   print("Emotional star rating,");
@@ -367,9 +367,9 @@ class _NumuMentalStrengthAddEditPageState
 
                                 else {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text("Emotion selection is required."),
-                                      backgroundColor: Colors.red,
+                                     SnackBar(
+                                      content: const Text("Emotion selection is required."),
+                                      backgroundColor: ColorsContent.newThemeColor,
                                     ),
                                   );
                                   print("Emotion selection, is required.");
@@ -382,9 +382,9 @@ class _NumuMentalStrengthAddEditPageState
 
                                 else {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text("Drive star rating is required."),
-                                      backgroundColor: Colors.red,
+                                     SnackBar(
+                                      content: const Text("Drive star rating is required."),
+                                      backgroundColor: ColorsContent.newThemeColor,
                                     ),
                                   );
                                   print("Drive star rating is required.");
@@ -431,7 +431,7 @@ class _NumuMentalStrengthAddEditPageState
                                             ScaffoldMessenger.of(context).showSnackBar(
                                               SnackBar(
                                                 content: Text(validationMessage),
-                                                backgroundColor: Colors.red,
+                                                backgroundColor: ColorsContent.newThemeColor,
                                               ),
                                             );
                                           } else {
@@ -521,23 +521,6 @@ class _NumuMentalStrengthAddEditPageState
               children: [
                 SizedBox(height: size.height * 0.03),
                 _buildTitleEditText(context, mentalStrengthEditProvider),
-                // Container(
-                //   width: 350,
-                //   padding: const EdgeInsets.all(10),
-                //   decoration: BoxDecoration(
-                //     color: Colors.white,
-                //     borderRadius: BorderRadius.circular(8),
-                //   ),
-                //   child: Text(
-                //     "What's on your mind?",
-                //     style: TextStyle(
-                //       color: ColorsContent.newThemeColor,
-                //       fontSize: 16,
-                //       fontWeight: FontWeight.w600,
-                //       fontFamily: 'OpenSans',
-                //     ),
-                //   ),
-                // ),
                 SizedBox(height: size.height * 0.03),
                 _buildDescriptionEditText(context, mentalStrengthEditProvider),
                 SizedBox(height: size.height * 0.03),
@@ -619,42 +602,50 @@ class _NumuMentalStrengthAddEditPageState
           (mentalStrengthEditProvider.getEmotionsModel == null)
               ? const SizedBox()
               : Container(
-                  width: size.width * 0.70,
-                  // This controls the button width
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    // Border radius for rounded corners
-                    color:Colors.white, // Background color (optional)
-                  ),
-                  child: Center(
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton2(
-                        isExpanded: true,
-                        value: mentalStrengthEditProvider.emotionValue, // Allow null value
-                        hint: Text("Select Emotion"), // Add a hint when no value is selected
-                        items: mentalStrengthEditProvider.getEmotionsModel?.emotions?.map((Emotion items) {
-                          return DropdownMenuItem(
-                            value: items,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Text(
-                                items.title.toString(),
-                                style: TextStyle(
-                                  color: ColorsContent.newThemeColor, // Change to your desired color
-                                ),
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (Emotion? newValue) {
-                          mentalStrengthEditProvider.addEmotionValue(newValue!);
-                          _isTokenExpired();
-                        },
+            width: size.width * 0.70, // Controls the button width
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.0), // Border radius for rounded corners
+              color: Colors.white, // Background color (optional)
+            ),
+            child: Center(
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton2(
+                  isExpanded: true,
+                  value: mentalStrengthEditProvider.emotionValue, // Allow null value
+                  hint: const Text("Select Emotion"), // Hint when no value is selected
+                  items: mentalStrengthEditProvider.getEmotionsModel?.emotions?.map((Emotion items) {
+                    return DropdownMenuItem(
+                      value: items,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(
+                          items.title.toString(),
+                          style: TextStyle(
+                            color: ColorsContent.newThemeColor, // Change to your desired color
+                          ),
+                        ),
                       ),
-
+                    );
+                  }).toList(),
+                  onChanged: (Emotion? newValue) {
+                    mentalStrengthEditProvider.addEmotionValue(newValue!);
+                    _isTokenExpired();
+                  },
+                  dropdownStyleData: DropdownStyleData(
+                    maxHeight: 350, // Set max height for dropdown list
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10), // Optional: rounded corners
+                      color: Colors.white, // Optional: background color
                     ),
                   ),
+                  menuItemStyleData: const MenuItemStyleData(
+                    padding: EdgeInsets.all(8), // Adjust padding inside dropdown items
+                  ),
                 ),
+              ),
+            ),
+          ),
+
         ],
       ),
     );
@@ -1099,7 +1090,7 @@ class _NumuMentalStrengthAddEditPageState
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // const AudioRecorderMentalStrengthBuild(),
+
                 SizedBox(
                   height: size.height * 0.10,
                   child: Stack(

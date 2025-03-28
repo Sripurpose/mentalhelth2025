@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/screens/addactions_screen/provider/add_actions_provider.dart';
@@ -20,6 +21,7 @@ import "package:mentalhelth/screens/mental_strength_add_edit_screen/model/list_g
     as actionss;
 import 'package:mentalhelth/utils/core/image_constant.dart';
 import 'package:mentalhelth/utils/theme/app_decoration.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/utils/theme/custom_button_style.dart';
 import 'package:mentalhelth/utils/theme/custom_text_style.dart';
 import 'package:mentalhelth/utils/theme/theme_helper.dart';
@@ -66,9 +68,13 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
   var logger = Logger();
   int? unixTimestamp;
   PermissionStatus permissionStatus = PermissionStatus.denied;
+  late FocusNode _titleFocusNode;
+  late FocusNode _descriptionFocusNode;
 
   @override
   void initState() {
+    _descriptionFocusNode = FocusNode();
+    _titleFocusNode = FocusNode();
     homeProvider = Provider.of<HomeProvider>(context, listen: false);
     mentalStrengthEditProvider =
         Provider.of<MentalStrengthEditProvider>(context, listen: false);
@@ -79,6 +85,8 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
         Provider.of<AdDreamsGoalsProvider>(context, listen: false);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      _descriptionFocusNode.unfocus();
+      _titleFocusNode.unfocus();// Ensure it does not get focus automatically
       logger.w(
           " adDreamsGoalsProvider.formattedDate${adDreamsGoalsProvider.formattedDate}");
       logger.w(
@@ -236,6 +244,14 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
     }
   }
 
+
+  @override
+  void dispose() {
+    _descriptionFocusNode.dispose();
+    _titleFocusNode.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -248,7 +264,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
         child: tokenStatus == false
             ? SafeArea(
                 child: Scaffold(
-                  appBar: buildAppBar(context, size,
+                  appBar: buildAppBarNumu(context, size,
                       heading: "Edit Goals & Dreams", onTap: () {
                     Navigator.pop(context);
                   }),
@@ -263,14 +279,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                         width: size.width,
                         height: size.height,
                         decoration: BoxDecoration(
-                          color: theme.colorScheme.onSecondaryContainer
-                              .withOpacity(1),
-                          image: DecorationImage(
-                            image: AssetImage(
-                              ImageConstant.imgGroup22,
-                            ),
-                            fit: BoxFit.cover,
-                          ),
+                          color: ColorsContent.homeBackGroundColor,
                         ),
                         child: Form(
                           key: _formKey,
@@ -294,21 +303,17 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                                     Consumer<EditProfileProvider>(builder:
                                         (context, editProfileProvider, _) {
                                       return Container(
-                                        height: size.height * 0.045,
+                                        height: size.height * 0.050,
                                         padding: const EdgeInsets.only(
                                           left: 10,
                                           right: 10,
                                         ),
                                         decoration: const ShapeDecoration(
+                                          color: Colors.white,
                                           shape: RoundedRectangleBorder(
-                                            side: BorderSide(
-                                              width: 0.8,
-                                              style: BorderStyle.solid,
-                                              color: Colors.grey,
-                                            ),
                                             borderRadius: BorderRadius.all(
                                               Radius.circular(
-                                                5.0,
+                                                8.0,
                                               ),
                                             ),
                                           ),
@@ -522,14 +527,14 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                                                                   size.width *
                                                                       0.04,
                                                               backgroundColor:
-                                                                  Colors.blue,
+                                                                  ColorsContent.newThemeColor,
                                                               child: Icon(
                                                                 Icons.close,
                                                                 color: Colors
                                                                     .white,
                                                                 size:
                                                                     size.width *
-                                                                        0.03,
+                                                                        0.04,
                                                               ),
                                                             ),
                                                           ),
@@ -607,7 +612,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                                                                   size.width *
                                                                       0.04,
                                                               backgroundColor:
-                                                                  Colors.blue,
+                                                              ColorsContent.newThemeColor,
                                                               child: Icon(
                                                                 Icons
                                                                     .arrow_forward_ios_outlined,
@@ -615,7 +620,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                                                                     .white,
                                                                 size:
                                                                     size.width *
-                                                                        0.03,
+                                                                        0.04,
                                                               ),
                                                             ),
                                                           ),
@@ -682,10 +687,19 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
         builder: (context, adDreamsGoalsProvider, _) {
       return Padding(
         padding: const EdgeInsets.only(left: 2),
-        child: CustomTextFormField(
+        child: CustomTextFormFieldNumu(
           controller: adDreamsGoalsProvider.nameEditTextController,
-          hintText: "Goal Name",
+          hintText: _titleFocusNode.hasFocus ? '' : "Goal Name",
           hintStyle: CustomTextStyles.bodySmallGray700,
+          focusNode: _titleFocusNode,
+          textInputAction: TextInputAction.done,
+          maxLines: 1,
+          onTap: () => setState(() {}),
+          // Rebuild when tapped
+          onEditingComplete: () {
+            _titleFocusNode.unfocus(); // Ensure focus is removed when done
+            setState(() {});
+          },
         ),
       );
     });
@@ -707,14 +721,11 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
           ),
           padding: const EdgeInsets.symmetric(
             horizontal: 11,
-            vertical: 8,
+            vertical: 10,
           ),
           decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.grey,
-              width: 1,
-            ),
-            borderRadius: BorderRadius.circular(5),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
           ),
           child: Row(
             children: [
@@ -749,11 +760,19 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
         builder: (context, adDreamsGoalsProvider, _) {
       return Padding(
         padding: const EdgeInsets.only(left: 2),
-        child: CustomTextFormField(
+        child: CustomTextFormFieldNumu(
           controller: adDreamsGoalsProvider.commentEditTextController,
-          hintText: "Goal Description",
+          hintText: _descriptionFocusNode.hasFocus ? '' : "Goal Description",
           hintStyle: CustomTextStyles.bodySmallGray700,
           maxLines: 4,
+          textInputAction: TextInputAction.done,
+          focusNode: _descriptionFocusNode,
+          onTap: () => setState(() {}),
+          // Rebuild when tapped
+          onEditingComplete: () {
+            _descriptionFocusNode.unfocus(); // Ensure focus is removed when done
+            setState(() {});
+          }, // Rebuild when focus is lost
         ),
       );
     });
@@ -774,7 +793,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
       height: 40,
       text: "Add Action",
       margin: const EdgeInsets.only(left: 2),
-      buttonStyle: CustomButtonStyles.outlinePrimary,
+      buttonStyle: CustomButtonStyles.addActionButtonStyle,
       buttonTextStyle: CustomTextStyles.titleSmallOnSecondaryContainer_1,
     );
   }
@@ -916,95 +935,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SizedBox(
-                  height: size.height * 0.09,
-                  child: Stack(
-                    children: [
-                      GestureDetector(
-                        onTap: () async {
-                          _isTokenExpired();
-                          adDreamsGoalsProvider.selectedMedia(0);
-                          await audioBottomSheetAddGoals(
-                            context: context,
-                            title: 'Record Audio',
-                          );
-                        },
-                        child: Container(
-                          height: size.height * 0.08,
-                          width: size.height * 0.08,
-                          decoration: BoxDecoration(
-                            color: adDreamsGoalsProvider.mediaSelected == 0
-                                ? Colors.blue
-                                : Colors.transparent,
-                            image: DecorationImage(
-                              image: AssetImage(ImageConstant.imgMenu),
-                              fit: BoxFit.cover,
-                            ),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(
-                                50.0,
-                              ),
-                            ),
-                            border: Border.all(
-                              color: appTheme.blue300,
-                              width: 1.0,
-                            ),
-                          ),
-                          child: Icon(
-                            Icons.mic,
-                            size: 30,
-                            color: adDreamsGoalsProvider.mediaSelected == 0
-                                ? Colors.white
-                                : Colors.blue,
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        left: 10,
-                        right: 10,
-                        child: Consumer<AdDreamsGoalsProvider>(
-                            builder: (context, adDreamsGoalsProvider, _) {
-                          if (adDreamsGoalsProvider
-                                  .alreadyRecordedFilePath.isEmpty &&
-                              adDreamsGoalsProvider.recordedFilePath.isEmpty) {
-                            return const SizedBox();
-                          } else {
-                            return Container(
-                              width: size.height * 0.04,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                image: DecorationImage(
-                                  image: AssetImage(ImageConstant.imgMenu),
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(
-                                    50.0,
-                                  ),
-                                ),
-                                border: Border.all(
-                                  color: appTheme.blue300,
-                                  width: 2.0,
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "${adDreamsGoalsProvider.recordedFilePath.length + adDreamsGoalsProvider.alreadyRecordedFilePath.length}",
-                                  style: const TextStyle(
-                                    color: Colors.blue,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            );
-                          }
-                        }),
-                      )
-                    ],
-                  ),
-                ),
-                // const AudioRecorderMentalStrengthBuild(),
+
                 SizedBox(
                   height: size.height * 0.09,
                   child: Stack(
@@ -1026,66 +957,100 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                             );
                           }
                         },
-                        child: buildAvatarImage(
-                          widget: Icon(
-                            Icons.image,
-                            size: 30,
-                            color: adDreamsGoalsProvider.mediaSelected == 1
-                                ? Colors.white
-                                : Colors.blue,
-                          ),
-                          imagePath: ImageConstant.imgThumbsUp,
-                          size: size,
-                          isSelected: adDreamsGoalsProvider.mediaSelected == 1
-                              ? true
-                              : false,
+                        child: SvgPicture.asset(
+                          ImageConstant
+                              .galleryAddMediaNumu, // Replace with your SVG asset path
                         ),
                       ),
                       Positioned(
-                        bottom: 0,
-                        left: 10,
-                        right: 10,
+                        bottom: 40, // Adjust this value as needed
+                        right: 0, // Move to the right
+                        left: 40,
                         child: Consumer<AdDreamsGoalsProvider>(
-                            builder: (context, adDreamsGoalsProvider, _) {
-                          if (adDreamsGoalsProvider
-                                  .alreadyPickedImages.isEmpty &&
-                              adDreamsGoalsProvider.pickedImages.isEmpty) {
-                            return const SizedBox();
-                          } else {
-                            return Container(
-                              width: size.height * 0.04,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                image: DecorationImage(
-                                  image: AssetImage(ImageConstant.imgMenu),
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(
-                                    50.0,
+                          builder: (context, adDreamsGoalsProvider, _) {
+                            if (adDreamsGoalsProvider
+                                .alreadyPickedImages.isEmpty &&
+                                adDreamsGoalsProvider.pickedImages.isEmpty) {
+                              return const SizedBox();
+                            } else {
+                              return Container(
+                                width: size.height * 0.04,
+                                // Set width
+                                height: size.height * 0.04,
+                                // Set height same as width to make it a circle
+                                decoration: BoxDecoration(
+                                  color: ColorsContent.galleryCountColor,
+                                  shape: BoxShape.circle,
+                                  // Ensures the container is circular
+                                  image: DecorationImage(
+                                    image: AssetImage(ImageConstant.imgMenu),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 1.0,
                                   ),
                                 ),
-                                border: Border.all(
-                                  color: appTheme.blue300,
-                                  width: 2.0,
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "${adDreamsGoalsProvider.pickedImages.length + adDreamsGoalsProvider.alreadyPickedImages.length}",
-                                  style: const TextStyle(
-                                    color: Colors.blue,
-                                    fontWeight: FontWeight.bold,
+                                child: Center(
+                                  child: Text(
+                                    "${adDreamsGoalsProvider.pickedImages.length + adDreamsGoalsProvider.alreadyPickedImages.length}",
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          }
-                        }),
-                      )
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                      // Positioned(
+                      //   bottom: 0,
+                      //   left: 10,
+                      //   right: 10,
+                      //   child: Consumer<AdDreamsGoalsProvider>(
+                      //       builder: (context, adDreamsGoalsProvider, _) {
+                      //     if (adDreamsGoalsProvider
+                      //             .alreadyPickedImages.isEmpty &&
+                      //         adDreamsGoalsProvider.pickedImages.isEmpty) {
+                      //       return const SizedBox();
+                      //     } else {
+                      //       return Container(
+                      //         width: size.height * 0.04,
+                      //         decoration: BoxDecoration(
+                      //           color: Colors.white,
+                      //           image: DecorationImage(
+                      //             image: AssetImage(ImageConstant.imgMenu),
+                      //             fit: BoxFit.cover,
+                      //           ),
+                      //           borderRadius: const BorderRadius.all(
+                      //             Radius.circular(
+                      //               50.0,
+                      //             ),
+                      //           ),
+                      //           border: Border.all(
+                      //             color: appTheme.blue300,
+                      //             width: 2.0,
+                      //           ),
+                      //         ),
+                      //         child: Center(
+                      //           child: Text(
+                      //             "${adDreamsGoalsProvider.pickedImages.length + adDreamsGoalsProvider.alreadyPickedImages.length}",
+                      //             style: const TextStyle(
+                      //               color: Colors.blue,
+                      //               fontWeight: FontWeight.bold,
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       );
+                      //     }
+                      //   }),
+                      // )
                     ],
                   ),
                 ),
+
                 SizedBox(
                   height: size.height * 0.09,
                   child: Stack(
@@ -1107,65 +1072,206 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                             );
                           }
                         },
-                        child: buildAvatarImage(
-                          widget: Icon(
-                            Icons.camera_alt_outlined,
-                            size: 30,
-                            color: adDreamsGoalsProvider.mediaSelected == 2
-                                ? Colors.white
-                                : Colors.blue,
-                          ),
-                          imagePath: ImageConstant.imgCamera,
-                          size: size,
-                          isSelected: adDreamsGoalsProvider.mediaSelected == 2
-                              ? true
-                              : false,
+                        child: SvgPicture.asset(
+                          ImageConstant
+                              .cameraAddMediaNumu, // Replace with your SVG asset path
                         ),
                       ),
+
                       Positioned(
-                        bottom: 0,
-                        left: 10,
-                        right: 10,
+                        bottom: 40, // Adjust this value as needed
+                        right: 0, // Move to the right
+                        left: 40,
                         child: Consumer<AdDreamsGoalsProvider>(
-                            builder: (context, adDreamsGoalsProvider, _) {
-                          if (adDreamsGoalsProvider.takedImages.isEmpty) {
-                            return const SizedBox();
-                          } else {
-                            return Container(
-                              width: size.height * 0.04,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                image: DecorationImage(
-                                  image: AssetImage(ImageConstant.imgMenu),
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(
-                                    50.0,
+                          builder: (context, adDreamsGoalsProvider, _) {
+                            if (adDreamsGoalsProvider.takedImages.isEmpty) {
+                              return const SizedBox();
+                            } else {
+                              return Container(
+                                width: size.height * 0.04,
+                                // Ensure width
+                                height: size.height * 0.04,
+                                // Ensure height matches width for a circle
+                                decoration: BoxDecoration(
+                                  color: ColorsContent.cameraCountColor,
+                                  shape: BoxShape.circle,
+                                  // This makes it perfectly round
+                                  image: DecorationImage(
+                                    image: AssetImage(ImageConstant.imgMenu),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 1.0,
                                   ),
                                 ),
-                                border: Border.all(
-                                  color: appTheme.blue300,
-                                  width: 2.0,
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  adDreamsGoalsProvider.takedImages.length
-                                      .toString(),
-                                  style: const TextStyle(
-                                    color: Colors.blue,
-                                    fontWeight: FontWeight.bold,
+                                child: Center(
+                                  child: Text(
+                                    adDreamsGoalsProvider.takedImages.length
+                                        .toString(),
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          }
-                        }),
+                              );
+                            }
+                          },
+                        ),
                       )
+                      // Positioned(
+                      //   bottom: 0,
+                      //   left: 10,
+                      //   right: 10,
+                      //   child: Consumer<AdDreamsGoalsProvider>(
+                      //       builder: (context, adDreamsGoalsProvider, _) {
+                      //     if (adDreamsGoalsProvider.takedImages.isEmpty) {
+                      //       return const SizedBox();
+                      //     } else {
+                      //       return Container(
+                      //         width: size.height * 0.04,
+                      //         decoration: BoxDecoration(
+                      //           color: Colors.white,
+                      //           image: DecorationImage(
+                      //             image: AssetImage(ImageConstant.imgMenu),
+                      //             fit: BoxFit.cover,
+                      //           ),
+                      //           borderRadius: const BorderRadius.all(
+                      //             Radius.circular(
+                      //               50.0,
+                      //             ),
+                      //           ),
+                      //           border: Border.all(
+                      //             color: appTheme.blue300,
+                      //             width: 2.0,
+                      //           ),
+                      //         ),
+                      //         child: Center(
+                      //           child: Text(
+                      //             adDreamsGoalsProvider.takedImages.length
+                      //                 .toString(),
+                      //             style: const TextStyle(
+                      //               color: Colors.blue,
+                      //               fontWeight: FontWeight.bold,
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       );
+                      //     }
+                      //   }),
+                      // )
                     ],
                   ),
                 ),
+
+                SizedBox(
+                  height: size.height * 0.09,
+                  child: Stack(
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          _isTokenExpired();
+                          adDreamsGoalsProvider.selectedMedia(0);
+                          await audioBottomSheetAddGoals(
+                            context: context,
+                            title: 'Record Audio',
+                          );
+                        },
+                        child: SvgPicture.asset(
+                          ImageConstant
+                              .recordAddMediaNumu, // Replace with your SVG asset path
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 40, // Adjust this value as needed
+                        right: 0, // Move to the right
+                        left: 40,
+                        child: Consumer<AdDreamsGoalsProvider>(
+                          builder: (context, adDreamsGoalsProvider, _) {
+                            if (adDreamsGoalsProvider
+                                .alreadyRecordedFilePath.isEmpty &&
+                                adDreamsGoalsProvider.recordedFilePath.isEmpty) {
+                              return const SizedBox();
+                            } else {
+                              return Container(
+                                width: size.height * 0.04,
+                                // Ensuring width
+                                height: size.height * 0.04,
+                                // Ensuring height for a circle
+                                decoration: BoxDecoration(
+                                  color: ColorsContent.recordCountColor,
+                                  shape: BoxShape.circle,
+                                  // Ensuring a perfect circle
+                                  image: DecorationImage(
+                                    image: AssetImage(ImageConstant.imgMenu),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 1.0,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "${adDreamsGoalsProvider.recordedFilePath.length + adDreamsGoalsProvider.alreadyRecordedFilePath.length}",
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                      )
+                      // Positioned(
+                      //   bottom: 0,
+                      //   left: 10,
+                      //   right: 10,
+                      //   child: Consumer<AdDreamsGoalsProvider>(
+                      //       builder: (context, adDreamsGoalsProvider, _) {
+                      //         if (adDreamsGoalsProvider
+                      //             .alreadyRecordedFilePath.isEmpty &&
+                      //             adDreamsGoalsProvider.recordedFilePath.isEmpty) {
+                      //           return const SizedBox();
+                      //         } else {
+                      //           return Container(
+                      //             width: size.height * 0.04,
+                      //             decoration: BoxDecoration(
+                      //               color: Colors.white,
+                      //               image: DecorationImage(
+                      //                 image: AssetImage(ImageConstant.imgMenu),
+                      //                 fit: BoxFit.cover,
+                      //               ),
+                      //               borderRadius: const BorderRadius.all(
+                      //                 Radius.circular(
+                      //                   50.0,
+                      //                 ),
+                      //               ),
+                      //               border: Border.all(
+                      //                 color: appTheme.blue300,
+                      //                 width: 2.0,
+                      //               ),
+                      //             ),
+                      //             child: Center(
+                      //               child: Text(
+                      //                 "${adDreamsGoalsProvider.recordedFilePath.length + adDreamsGoalsProvider.alreadyRecordedFilePath.length}",
+                      //                 style: const TextStyle(
+                      //                   color: Colors.blue,
+                      //                   fontWeight: FontWeight.bold,
+                      //                 ),
+                      //               ),
+                      //             ),
+                      //           );
+                      //         }
+                      //       }),
+                      // )
+                    ],
+                  ),
+                ),
+
                 SizedBox(
                   height: size.height * 0.09,
                   child: Stack(
@@ -1231,63 +1337,93 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                           }
 
                         },
-                        child: buildAvatarImage(
-                          widget: Icon(
-                            Icons.location_on,
-                            size: 30,
-                            color: adDreamsGoalsProvider.mediaSelected == 3
-                                ? Colors.white
-                                : Colors.blue,
-                          ),
-                          imagePath: ImageConstant.imgLinkedin,
-                          size: size,
-                          // wi
-                          isSelected: adDreamsGoalsProvider.mediaSelected == 3
-                              ? true
-                              : false,
+                        child: SvgPicture.asset(
+                          ImageConstant
+                              .locationAddMediaNumu, // Replace with your SVG asset path
                         ),
                       ),
+
                       Positioned(
-                        bottom: 0,
-                        left: 10,
-                        right: 10,
+                        bottom: 40, // Adjust this value as needed
+                        right: 0, // Move to the right
+                        left: 40,
                         child: Consumer<AdDreamsGoalsProvider>(
-                            builder: (context, adDreamsGoalsProvider, _) {
-                          if (adDreamsGoalsProvider
-                              .selectedLocationName.isEmpty) {
-                            return const SizedBox();
-                          } else {
-                            return Container(
-                              width: size.height * 0.04,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                image: DecorationImage(
-                                  image: AssetImage(ImageConstant.imgMenu),
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(
-                                    50.0,
+                          builder: (context, adDreamsGoalsProvider, _) {
+                            if (adDreamsGoalsProvider
+                                .selectedLocationName.isEmpty) {
+                              return const SizedBox();
+                            } else {
+                              return Container(
+                                width: size.height * 0.04,
+                                height: size.height * 0.04,
+                                decoration: BoxDecoration(
+                                  color: ColorsContent.locationCountColor,
+                                  shape: BoxShape.circle,
+                                  // Ensuring a perfect circle
+                                  image: DecorationImage(
+                                    image: AssetImage(ImageConstant.imgMenu),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 1.0,
                                   ),
                                 ),
-                                border: Border.all(
-                                  color: appTheme.blue300,
-                                  width: 2.0,
-                                ),
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  "1",
-                                  style: TextStyle(
-                                    color: Colors.blue,
-                                    fontWeight: FontWeight.bold,
+                                child: const Center(
+                                  child: Text(
+                                    "1",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          }
-                        }),
-                      )
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                      // Positioned(
+                      //   bottom: 0,
+                      //   left: 10,
+                      //   right: 10,
+                      //   child: Consumer<AdDreamsGoalsProvider>(
+                      //       builder: (context, adDreamsGoalsProvider, _) {
+                      //     if (adDreamsGoalsProvider
+                      //         .selectedLocationName.isEmpty) {
+                      //       return const SizedBox();
+                      //     } else {
+                      //       return Container(
+                      //         width: size.height * 0.04,
+                      //         decoration: BoxDecoration(
+                      //           color: Colors.white,
+                      //           image: DecorationImage(
+                      //             image: AssetImage(ImageConstant.imgMenu),
+                      //             fit: BoxFit.cover,
+                      //           ),
+                      //           borderRadius: const BorderRadius.all(
+                      //             Radius.circular(
+                      //               50.0,
+                      //             ),
+                      //           ),
+                      //           border: Border.all(
+                      //             color: appTheme.blue300,
+                      //             width: 2.0,
+                      //           ),
+                      //         ),
+                      //         child: const Center(
+                      //           child: Text(
+                      //             "1",
+                      //             style: TextStyle(
+                      //               color: Colors.blue,
+                      //               fontWeight: FontWeight.bold,
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       );
+                      //     }
+                      //   }),
+                      // )
                     ],
                   ),
                 ),
