@@ -217,7 +217,8 @@ PreferredSizeWidget buildAppBarBuildMental(BuildContext context, Size size,
 
 PreferredSizeWidget buildAppBarJournalViewScreen(BuildContext context, Size size,
     {String? heading, Function? onTap, bool isSigned = true}) {
-  return CustomAppBar(
+  return CustomAppBarNumu(
+    backgroundColor: ColorsContent.homeBackGroundColor,
     leadingWidth: 36,
     leading:
     Consumer<DashBoardProvider>(builder: (context, dashBoardProvider, _) {

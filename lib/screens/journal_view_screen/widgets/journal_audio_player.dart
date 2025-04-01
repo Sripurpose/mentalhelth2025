@@ -4,6 +4,8 @@ import 'package:mentalhelth/screens/journal_list_screen/provider/journal_list_pr
 import 'package:mentalhelth/utils/theme/app_decoration.dart';
 import 'package:provider/provider.dart';
 
+import '../../../utils/theme/colors.dart';
+
 // Define a global AudioPlayer instance
 final AudioPlayer globalAudioPlayer = AudioPlayer();
 String? currentPlayingUrl;
@@ -64,8 +66,11 @@ class _JournalAudioPlayerState extends State<JournalAudioPlayer> {
         horizontal: 19,
         vertical: 12,
       ),
-      decoration: AppDecoration.fillBlue300.copyWith(
-        borderRadius: BorderRadiusStyle.roundedBorder10,
+      decoration: BoxDecoration(
+        color: ColorsContent.newThemeColor,
+        borderRadius:
+        BorderRadius.circular(
+            8), // Makes it circular
       ),
       child: Consumer<JournalListProvider>(
           builder: (context, journalListProvider, _) {

@@ -142,8 +142,9 @@ class _ScreenSignInState extends State<ScreenSignIn> {
       child: Scaffold(
         appBar: Platform.isIOS
             ? AppBar(
+          backgroundColor: ColorsContent.newThemeColor,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios),
+            icon: const Icon(Icons.arrow_back_ios,color: Colors.white,),
             onPressed: () {
               Navigator.of(context).pop();
             },

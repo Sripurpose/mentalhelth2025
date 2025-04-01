@@ -4,6 +4,7 @@ import 'package:mentalhelth/screens/auth/sign_in/widget/sign_in_widget.dart';
 import 'package:mentalhelth/screens/edit_add_profile_screen/provider/edit_provider.dart';
 import 'package:mentalhelth/screens/home_screen/provider/home_provider.dart';
 import 'package:mentalhelth/utils/core/image_constant.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/utils/theme/custom_text_style.dart';
 import 'package:mentalhelth/widgets/background_image/background_imager.dart';
 import 'package:mentalhelth/widgets/custom_image_view.dart';
@@ -26,15 +27,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: ColorsContent.newThemeColor,
         leading: IconButton(
         icon: const Icon(
+          color: Colors.white,
           Icons.arrow_back_ios,
         ),
     onPressed: () {
     Navigator.of(context).pop(); // Navigate back to the previous screen
     },
     ),),
-        body: backGroundImager(
+        body: backGroundImagerGradient(
           size: size,
           padding: EdgeInsets.zero,
           child: Center(
@@ -52,19 +55,24 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(
-                        height: size.height * 0.05,
-                      ),
+
                       CustomImageView(
-                        imagePath: ImageConstant.imgLogo,
-                        height: 68,
+                        imagePath: ImageConstant.imgNumuLogo,
+                        height: 100,
                         width: 280,
                         color: Colors.white,
                       ),
                       const SizedBox(
-                        height: 20,
+                        height: 50,
                       ),
-                      Center(child: Text("Forgot Password",  style: CustomTextStyles.bodyMedium18)),
+                      const Center(child: Text("Forgot Password",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Urbanist',
+                          color: Colors.white,
+                        ),)
+                      ),
                       const SizedBox(
                         height: 20,
                       ),

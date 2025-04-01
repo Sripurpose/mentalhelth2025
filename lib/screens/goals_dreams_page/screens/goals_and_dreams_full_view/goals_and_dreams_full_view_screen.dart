@@ -11,6 +11,7 @@ import "package:mentalhelth/screens/mental_strength_add_edit_screen/model/list_g
     as actionss;
 import 'package:mentalhelth/utils/core/date_time_utils.dart';
 import 'package:mentalhelth/utils/core/image_constant.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/utils/theme/custom_text_style.dart';
 import 'package:mentalhelth/widgets/app_bar/appbar_leading_image.dart';
 import 'package:mentalhelth/widgets/custom_checkbox_button.dart';
@@ -121,10 +122,7 @@ class _GoalAndDreamFullViewScreenState
             Positioned.fill(
               child: Container(
                 decoration: BoxDecoration(
-                  image: DecorationImage(image: AssetImage(
-                    ImageConstant.imgGroup22,
-                  ),
-                  fit: BoxFit.cover)
+                  color: ColorsContent.homeBackGroundColor,
                 ),
               ),
             ),
@@ -301,10 +299,12 @@ class _GoalAndDreamFullViewScreenState
                             ),
                             Row(
                               children: [
-                                CustomImageView(
-                                  imagePath: ImageConstant.imgLinkedin,
-                                  height: 23,
-                                  width: 23,
+                                Icon(
+                                  Icons
+                                      .location_on,
+                                  color: ColorsContent.newThemeColor,
+                                  size: size.width *
+                                      0.06,
                                 ),
 
                                 Expanded(
@@ -404,14 +404,10 @@ class _GoalAndDreamFullViewScreenState
                                             right: 5,
                                           ),
                                           decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(
-                                              100,
-                                            ),
-                                            border: Border.all(
-                                              color: Colors.grey,
-                                              width: 1,
-                                            ),
+                                            color: ColorsContent.newThemeColor,
+                                            borderRadius:
+                                            BorderRadius.circular(
+                                                8), // Makes it circular
                                           ),
                                           child: Row(
                                             mainAxisAlignment:
@@ -464,17 +460,23 @@ class _GoalAndDreamFullViewScreenState
                                                   maxLines: 1, // Set the maximum number of lines to 3
                                                   textAlign: TextAlign.center,
                                                   style: const TextStyle(
-                                                    color: Colors.grey,
+                                                    fontSize: 17,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontFamily: 'Open Sans',
+                                                    color: Colors.white,
                                                   ),
                                                 ),
                                               ),
-                                              CircleAvatar(
-                                                radius: size.width * 0.04,
-                                                backgroundColor: Colors.blue,
+                                               CircleAvatar(
+                                                radius:
+                                                size.width * 0.04,
+                                                backgroundColor:Colors.deepPurple,
                                                 child: Icon(
-                                                  Icons.arrow_forward_ios_outlined,
+                                                  Icons
+                                                      .arrow_forward_ios,
                                                   color: Colors.white,
-                                                  size: size.width * 0.03,
+                                                  size: size.width *
+                                                      0.03,
                                                 ),
                                               ),
                                             ],
@@ -679,7 +681,12 @@ class _GoalAndDreamFullViewScreenState
                 scrollDirection: Axis.horizontal, // Enable horizontal scrolling
                 child: Text(
                   category,
-                  style: CustomTextStyles.bodyLargeGray700,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Open Sans',
+                    color: Colors.black,
+                  ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1, // Set the maximum number of lines to 3
                 ),
@@ -698,7 +705,12 @@ class _GoalAndDreamFullViewScreenState
             ),
             Text(
               formatDate(int.parse(createDate)),
-              style: CustomTextStyles.bodyLargeGray700,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w400,
+                fontFamily: 'Open Sans',
+                color: Colors.black,
+              ),
             ),
           ],
         ),
@@ -713,7 +725,12 @@ class _GoalAndDreamFullViewScreenState
             ),
             Text(
               achiveDate == "" ? "" : formatDate2(int.parse(achiveDate)),
-              style: CustomTextStyles.bodyLargeGray700,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w400,
+                fontFamily: 'Open Sans',
+                color: Colors.black,
+              ),
             ),
           ],
         ),
@@ -728,7 +745,12 @@ class _GoalAndDreamFullViewScreenState
             ),
             Text(
               status == "0" ? "Active" : "DeActive",
-              style: CustomTextStyles.bodyLargeGray700,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w400,
+                fontFamily: 'Open Sans',
+                color: Colors.black,
+              ),
             ),
           ],
         ),
@@ -746,7 +768,12 @@ class _GoalAndDreamFullViewScreenState
                 scrollDirection: Axis.horizontal, // Enable horizontal scrolling
                 child: Text(
                   comments,
-                  style: CustomTextStyles.bodyLargeGray700,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Open Sans',
+                    color: Colors.black,
+                  ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1, // Set the maximum number of lines to 1
                 ),
@@ -787,7 +814,8 @@ class _GoalAndDreamFullViewScreenState
     required String id,
         required String goalStatus,
   }) {
-    return CustomAppBar(
+    return CustomAppBarNumu(
+      backgroundColor: ColorsContent.homeBackGroundColor,
       leadingWidth: 36,
       leading: AppbarLeadingImage(
         onTap: () {
@@ -813,23 +841,26 @@ class _GoalAndDreamFullViewScreenState
               onSelected: (value) {},
               itemBuilder: (BuildContext context) {
                 return [
-                  if(goalStatus == "0")
-                  PopupMenuItem<String>(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => EditGoalsScreen(
-                            goalsanddream: widget.goalsanddream,
+                  if (goalStatus == "0")
+                    PopupMenuItem<String>(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => EditGoalsScreen(
+                              goalsanddream: widget.goalsanddream,
+                            ),
                           ),
+                        );
+                      },
+                      value: 'Edit',
+                      child: ListTile(
+                        leading: Icon(Icons.edit, color: ColorsContent.newThemeColor), // Edit Icon
+                        title: Text(
+                          'Edit',
+                          style: CustomTextStyles.bodyMedium14,
                         ),
-                      );
-                    },
-                    value: 'Edit',
-                    child: Text(
-                      'Edit',
-                      style: CustomTextStyles.bodyMedium14,
+                      ),
                     ),
-                  ),
                   PopupMenuItem<String>(
                     onTap: () {
                       customPopup(
@@ -848,9 +879,12 @@ class _GoalAndDreamFullViewScreenState
                       );
                     },
                     value: 'Delete',
-                    child: Text(
-                      'Delete',
-                      style: CustomTextStyles.bodyMedium14,
+                    child: ListTile(
+                      leading: Icon(Icons.delete, color: ColorsContent.newThemeColor), // Delete Icon
+                      title: Text(
+                        'Delete',
+                        style: CustomTextStyles.bodyMedium14,
+                      ),
                     ),
                   ),
                 ];
@@ -859,6 +893,7 @@ class _GoalAndDreamFullViewScreenState
           },
         ),
       ],
+
     );
   }
 }

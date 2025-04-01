@@ -14,6 +14,7 @@ import 'package:mentalhelth/widgets/functions/popup.dart';
 import 'package:provider/provider.dart';
 import 'package:html_unescape/html_unescape.dart';
 import '../../../utils/theme/app_decoration.dart';
+import '../../../utils/theme/colors.dart';
 import '../../../utils/theme/theme_helper.dart';
 import '../../mental_strength_add_edit_screen/model/get_goals_model.dart';
 import '../screens/edit_journal/numu_edit_journal_screen.dart';
@@ -252,9 +253,12 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                           );
                         },
                         value: 'Edit',
-                        child: Text(
-                          'Edit',
-                          style: CustomTextStyles.bodyMedium14,
+                        child: ListTile(
+                          leading: Icon(Icons.edit, color: ColorsContent.newThemeColor), // Edit Icon
+                          title: Text(
+                            'Edit',
+                            style: CustomTextStyles.bodyMedium14,
+                          ),
                         ),
                       ),
                       // PopupMenuItem<String>(
@@ -303,9 +307,12 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                           );
                         },
                         value: 'Delete',
-                        child: Text(
-                          'Delete',
-                          style: CustomTextStyles.bodyMedium14,
+                        child: ListTile(
+                          leading: Icon(Icons.delete, color: ColorsContent.newThemeColor), // Delete Icon
+                          title: Text(
+                            'Delete',
+                            style: CustomTextStyles.bodyMedium14,
+                          ),
                         ),
                       ),
                     ];

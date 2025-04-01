@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:mentalhelth/utils/core/image_constant.dart';
@@ -41,7 +43,8 @@ class _SplashScreenState extends State<NewSplashScreen> {
       backgroundColor: Colors.white,
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 23.0,horizontal: 10),
+          padding: Platform.isAndroid ?
+          const EdgeInsets.symmetric(vertical: 23.0,horizontal: 10):const EdgeInsets.symmetric(vertical: 0.0,horizontal: 10),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [

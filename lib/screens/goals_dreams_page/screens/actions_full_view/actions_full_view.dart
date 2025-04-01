@@ -21,6 +21,7 @@ import 'package:mentalhelth/widgets/video_player.dart';
 import 'package:mentalhelth/widgets/widget/shimmer.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../utils/theme/colors.dart';
 import '../../../../widgets/app_bar/appbar_subtitle.dart';
 import '../../../../widgets/app_bar/custom_app_bar.dart';
 import '../../../../widgets/functions/popup.dart';
@@ -155,10 +156,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
               Positioned.fill(
                 child: Container(
                   decoration: BoxDecoration(
-                      image: DecorationImage(image: AssetImage(
-                        ImageConstant.imgGroup22,
-                      ),
-                          fit: BoxFit.cover)
+                    color: ColorsContent.homeBackGroundColor,
                   ),
                 ),
               ),
@@ -398,10 +396,12 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                     child: Center(
                                       child: Row(
                                         children: [
-                                          CustomImageView(
-                                            imagePath: ImageConstant.imgLinkedin,
-                                            height: 23,
-                                            width: 23,
+                                          Icon(
+                                            Icons
+                                                .location_on,
+                                            color: ColorsContent.newThemeColor,
+                                            size: size.width *
+                                                0.06,
                                           ),
                                           Expanded(
                                             child: SingleChildScrollView(
@@ -424,7 +424,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                   )
                                       :
                                  SizedBox(),
-                                  const SizedBox(height: 10),
+                                  const SizedBox(height: 15),
                                   mentalStrengthEditProvider.actionsDetailsModel!.actions!.actionStatus == "1" ||
                                       mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder == null ?
                                   const SizedBox(height: 10):
@@ -479,16 +479,23 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                                             children: [
                                                               const Text(
                                                                 "Date",
-                                                                style: TextStyle(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontSize: 15),
+                                                                style: const TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight: FontWeight.w600,
+                                                                  fontFamily: 'Open Sans',
+                                                                  color: Colors.black,
+                                                                ),
                                                               ),
                                                               const SizedBox(
                                                                 width: 5,
                                                               ),
                                                               Text(
+                                                                  style: const TextStyle(
+                                                                    fontSize: 16,
+                                                                    fontWeight: FontWeight.w400,
+                                                                    fontFamily: 'Open Sans',
+                                                                    color: Colors.black,
+                                                                  ),
                                                                   mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.reminder_startdate != null &&
                                                                       mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.reminder_enddate != null
                                                                       ? ": ${unixTimestampToDate(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.reminder_startdate!)} "
@@ -506,15 +513,22 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                                               const Text(
                                                                 "Time",
                                                                 style: TextStyle(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontSize: 15),
+                                                                  fontSize: 16,
+                                                                  fontWeight: FontWeight.w600,
+                                                                  fontFamily: 'Open Sans',
+                                                                  color: Colors.black,
+                                                                ),
                                                               ),
                                                               const SizedBox(
                                                                 width: 5,
                                                               ),
                                                               Text(
+                                                                  style: const TextStyle(
+                                                                    fontSize: 16,
+                                                                    fontWeight: FontWeight.w400,
+                                                                    fontFamily: 'Open Sans',
+                                                                    color: Colors.black,
+                                                                  ),
                                                                   mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.from_time != null &&
                                                                       mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.to_time != null
                                                                       ? "${formatTimeOfDay(stringToTimeOfDay(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.from_time!)!)} "
@@ -532,15 +546,22 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                                               const Text(
                                                                 "Repeat",
                                                                 style: TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight.bold,
-                                                                  fontSize: 15,
+                                                                  fontSize: 16,
+                                                                  fontWeight: FontWeight.w600,
+                                                                  fontFamily: 'Open Sans',
+                                                                  color: Colors.black,
                                                                 ),
                                                               ),
                                                               const SizedBox(
                                                                 width: 5,
                                                               ),
                                                               Text(
+                                                                  style: const TextStyle(
+                                                                    fontSize: 16,
+                                                                    fontWeight: FontWeight.w400,
+                                                                    fontFamily: 'Open Sans',
+                                                                    color: Colors.black,
+                                                                  ),
                                                                   mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.reminder_repeat != null
                                                                       ? ": ${mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.reminder_repeat!}"
                                                                       : ""
@@ -654,7 +675,12 @@ class _ActionsFullViewState extends State<ActionsFullView> {
               width: size.width * 0.60,
               child: Text(
                 status == "0" ? "Active" : "DeActive",
-                style: CustomTextStyles.bodyLargeGray700,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'Open Sans',
+                  color: Colors.black,
+                ),
               ),
             ),
           ],
@@ -675,7 +701,12 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                 scrollDirection: Axis.horizontal, // Enable horizontal scrolling
                 child: Text(
                   category,
-                  style: CustomTextStyles.bodyLargeGray700,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Open Sans',
+                    color: Colors.black,
+                  ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1, // Set the maximum number of lines to 3
                 ),
@@ -698,7 +729,12 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                 scrollDirection: Axis.horizontal, // Enable horizontal scrolling
                 child: Text(
                   comments,
-                  style: CustomTextStyles.bodyLargeGray700,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Open Sans',
+                    color: Colors.black,
+                  ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1, // Set the maximum number of lines to 3
                 ),
@@ -733,7 +769,8 @@ class _ActionsFullViewState extends State<ActionsFullView> {
 
   PreferredSizeWidget buildAppBarActionView(BuildContext context, Size size,
       {String? heading, required String id,required actionStatus}) {
-    return CustomAppBar(
+    return CustomAppBarNumu(
+      backgroundColor: ColorsContent.homeBackGroundColor,
       leadingWidth: 36,
       leading: AppbarLeadingImage(
         onTap: () {
@@ -773,9 +810,12 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                       );
                     },
                     value: 'Edit',
-                    child: Text(
-                      'Edit',
-                      style: CustomTextStyles.bodyMedium14,
+                    child: ListTile(
+                      leading: Icon(Icons.edit, color: ColorsContent.newThemeColor), // Edit Icon
+                      title: Text(
+                        'Edit',
+                        style: CustomTextStyles.bodyMedium14,
+                      ),
                     ),
                   ),
                   PopupMenuItem<String>(
@@ -799,9 +839,12 @@ class _ActionsFullViewState extends State<ActionsFullView> {
 
                     },
                     value: 'Delete',
-                    child: Text(
-                      'Delete',
-                      style: CustomTextStyles.bodyMedium14,
+                    child: ListTile(
+                      leading: Icon(Icons.delete, color: ColorsContent.newThemeColor), // Delete Icon
+                      title: Text(
+                        'Delete',
+                        style: CustomTextStyles.bodyMedium14,
+                      ),
                     ),
                   ),
                 ];

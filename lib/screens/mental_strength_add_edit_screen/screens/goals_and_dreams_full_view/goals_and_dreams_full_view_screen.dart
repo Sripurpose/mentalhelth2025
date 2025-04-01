@@ -97,7 +97,7 @@ class _GoalAndDreamFullViewBottomSheetState
     return SafeArea(
       child: Container(
         decoration: BoxDecoration(
-          color: appTheme.gray50,
+          color:ColorsContent.homeBackGroundColor,
           borderRadius: const BorderRadius.only(
             topRight: Radius.circular(
               25,
@@ -361,10 +361,12 @@ class _GoalAndDreamFullViewBottomSheetState
                 child: Center(
                     child: Row(
                       children: [
-                        CustomImageView(
-                          imagePath: ImageConstant.imgLinkedin,
-                          height: 23,
-                          width: 23,
+                        Icon(
+                          Icons
+                              .location_on,
+                          color: ColorsContent.newThemeColor,
+                          size: size.width *
+                              0.06,
                         ),
                         Text(
                           widget.goalDetailModel.goals!.location!.locationAddress!.isEmpty
@@ -435,12 +437,10 @@ class _GoalAndDreamFullViewBottomSheetState
                                     right: 5,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(100),
-                                    border: Border.all(
-                                      color: Colors.grey,
-                                      width: 1,
-                                    ),
+                                    color: ColorsContent.newThemeColor,
+                                    borderRadius:
+                                    BorderRadius.circular(
+                                        8), // Makes it circular
                                   ),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -453,7 +453,10 @@ class _GoalAndDreamFullViewBottomSheetState
                                             widget.goalDetailModel.goals!.action![index].actionTitle ?? "",
                                             textAlign: TextAlign.center,
                                             style: const TextStyle(
-                                              color: Colors.grey,
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: 'Open Sans',
+                                              color: Colors.white,
                                             ),
                                             overflow: TextOverflow.ellipsis,
                                             maxLines: 1,
@@ -640,7 +643,12 @@ class _GoalAndDreamFullViewBottomSheetState
                 scrollDirection: Axis.horizontal, // Enable horizontal scrolling
                 child: Text(
                   category,
-                  style: CustomTextStyles.bodyLargeGray700,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Open Sans',
+                    color: Colors.black,
+                  ),
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1, // Set the maximum number of lines to 3
@@ -660,7 +668,12 @@ class _GoalAndDreamFullViewBottomSheetState
             ),
             Text(
               formatDate(int.parse(createDate)),
-              style: CustomTextStyles.bodyLargeGray700,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w400,
+                fontFamily: 'Open Sans',
+                color: Colors.black,
+              ),
             ),
           ],
         ),
@@ -675,7 +688,12 @@ class _GoalAndDreamFullViewBottomSheetState
             ),
             Text(
               achiveDate == "" ? "" : formatDate2(int.parse(achiveDate)),
-              style: CustomTextStyles.bodyLargeGray700,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w400,
+                fontFamily: 'Open Sans',
+                color: Colors.black,
+              ),
             ),
           ],
         ),
@@ -690,7 +708,12 @@ class _GoalAndDreamFullViewBottomSheetState
             ),
             Text(
               status == "0" ? "Active" : "DeActive",
-              style: CustomTextStyles.bodyLargeGray700,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w400,
+                fontFamily: 'Open Sans',
+                color: Colors.black,
+              ),
             ),
           ],
         ),
@@ -710,13 +733,23 @@ class _GoalAndDreamFullViewBottomSheetState
                 child: comments != null ?
                 Text(
                  comments,
-                  style: CustomTextStyles.bodyLargeGray700,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Open Sans',
+                    color: Colors.black,
+                  ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1, // Set the maximum number of lines to 3
                 ):
-                Text(
+                const Text(
                   "NA",
-                  style: CustomTextStyles.bodyLargeGray700,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Open Sans',
+                    color: Colors.black,
+                  ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1, // Set the maximum number of lines to 3
                 ),

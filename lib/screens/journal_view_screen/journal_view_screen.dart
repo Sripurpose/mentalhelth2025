@@ -18,6 +18,7 @@ import 'package:mentalhelth/screens/mental_strength_add_edit_screen/model/list_g
 import 'package:mentalhelth/screens/mental_strength_add_edit_screen/provider/mental_strenght_edit_provider.dart';
 import 'package:mentalhelth/utils/core/image_constant.dart';
 import 'package:mentalhelth/utils/logic/date_format.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/utils/theme/custom_text_style.dart';
 import 'package:mentalhelth/utils/theme/theme_helper.dart';
 import 'package:mentalhelth/widgets/app_bar/appbar_leading_image.dart';
@@ -167,9 +168,14 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                             children: [
                               _buildUntitledOne(context, size),
                               const SizedBox(height: 20),
-                              Text(
+                              const Text(
                                 "In your mind",
-                                style: theme.textTheme.bodyLarge,
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: 'Open Sans',
+                                  color: Colors.black,
+                                ),
                               ),
                               const SizedBox(height: 2),
                               SizedBox(
@@ -189,9 +195,14 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                 ),
                               ),
                               const SizedBox(height: 10),
-                              Text(
+                              const Text(
                                 "Description",
-                                style: theme.textTheme.bodyLarge,
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: 'Open Sans',
+                                  color: Colors.black,
+                                ),
                               ),
                               const SizedBox(height: 2),
                               SizedBox(
@@ -214,11 +225,16 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                               audioList.isEmpty
                                   ? const SizedBox()
                                   :
-                              Padding(
-                                      padding: const EdgeInsets.only(left: 2),
+                              const Padding(
+                                      padding: EdgeInsets.only(left: 2),
                                       child: Text(
                                         "Audio",
-                                        style: theme.textTheme.bodyLarge,
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: 'Open Sans',
+                                          color: Colors.black,
+                                        ),
                                       ),
                                     ),
                               audioList.isEmpty
@@ -255,11 +271,16 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                               const SizedBox(height: 5),
                               imageList.isEmpty?
                                            const SizedBox():
-                              Padding(
-                                      padding: const EdgeInsets.only(left: 2),
+                              const Padding(
+                                      padding: EdgeInsets.only(left: 2),
                                       child: Text(
                                         "Photo",
-                                        style: theme.textTheme.bodyLarge,
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: 'Open Sans',
+                                          color: Colors.black,
+                                        ),
                                       ),
                                     ),
                               imageList.isEmpty
@@ -317,11 +338,16 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                               videoList.isEmpty
                                   ? const SizedBox()
                                   :
-                              Padding(
-                                      padding: const EdgeInsets.only(left: 2),
+                              const Padding(
+                                      padding: EdgeInsets.only(left: 2),
                                       child: Text(
                                         "Video",
-                                        style: theme.textTheme.bodyLarge,
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: 'Open Sans',
+                                          color: Colors.black,
+                                        ),
                                       ),
                                     ),
                               videoList.isEmpty
@@ -370,11 +396,16 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                               const SizedBox(height: 28),
                               homeProvider.journalDetails!.journals!.location == null ?
                                   const SizedBox():
-                              Padding(
-                                padding: const EdgeInsets.only(left: 2),
+                              const Padding(
+                                padding: EdgeInsets.only(left: 2),
                                 child: Text(
                                   "Your Location",
-                                  style: theme.textTheme.bodyLarge,
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'Open Sans',
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
                               const SizedBox(height: 6),
@@ -384,10 +415,12 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                   :
                               Row(
                                 children: [
-                                  CustomImageView(
-                                    imagePath: ImageConstant.imgLinkedin,
-                                    height: 23,
-                                    width: 23,
+                                  Icon(
+                                    Icons
+                                        .location_on,
+                                    color: ColorsContent.newThemeColor,
+                                    size: size.width *
+                                        0.06,
                                   ),
                                   const SizedBox(width: 5), // Optional spacing
                                   Expanded(
@@ -412,32 +445,42 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                               homeProvider.journalDetails!.journals!.location == null ?
                               const SizedBox():
                               const SizedBox(height: 19),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 5),
+                              const Padding(
+                                padding: EdgeInsets.only(left: 5),
                                 child: Text(
                                   "Rating as how you felt",
-                                  style: theme.textTheme.bodyLarge,
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'Open Sans',
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
                               const SizedBox(height: 3),
                               homeProvider.journalDetails == null
                                   ? const SizedBox()
                                   : CustomRatingBar(
-                                      color: Colors.blue,
+                                color: ColorsContent.newThemeColor,
                                 initialRating: double.parse(
                                   homeProvider.journalDetails!.journals!.emotionValue?.toString() ?? '0',
                                 ),
-                                      itemSize: 30,
+                                      itemSize: 35,
                                 isRatingStatic: true, // Set to true to make rating unchangeable
                                     ),
                               const SizedBox(height: 22),
-                              Padding(
-                                padding: const EdgeInsets.only(
+                              const Padding(
+                                padding: EdgeInsets.only(
                                   left: 6,
                                 ),
                                 child: Text(
                                   "Your emotional state ",
-                                  style: theme.textTheme.bodyLarge,
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'Open Sans',
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
                               const SizedBox(
@@ -456,32 +499,42 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                       ),
                                     ),
                               const SizedBox(height: 22),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 2),
+                              const Padding(
+                                padding: EdgeInsets.only(left: 2),
                                 child: Text(
                                   "Like towards the reaction to the situation?",
-                                  style: theme.textTheme.bodyLarge,
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'Open Sans',
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
                               const SizedBox(height: 6),
                               homeProvider.journalDetails == null
                                   ? const SizedBox()
                                   : CustomRatingBar(
-                                      color: Colors.blue,
+                                      color: ColorsContent.newThemeColor,
                                       initialRating: double.parse(
                                         (homeProvider.journalDetails!.journals!.driveValue ?? 0).toString(),
                                       ),
-                                      itemSize: 30,
+                                      itemSize: 35,
                                 isRatingStatic: true, // Set to true to make rating unchangeable
                                     ),
                               const SizedBox(height: 29),
                               homeProvider.journalDetails?.journals?.goal == null?
                               const SizedBox():
-                              Padding(
-                                padding: const EdgeInsets.only(left: 5),
+                              const Padding(
+                                padding: EdgeInsets.only(left: 5),
                                 child: Text(
                                   "Goal affected by your reaction",
-                                  style: theme.textTheme.bodyLarge,
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'Open Sans',
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
                               const SizedBox(height: 4),
@@ -510,14 +563,10 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                         right: 5,
                                       ),
                                       decoration: BoxDecoration(
-                                        color: Colors.white,
+                                        color: ColorsContent.newThemeColor,
                                         borderRadius:
                                         BorderRadius.circular(
-                                            100), // Makes it circular
-                                        border: Border.all(
-                                          color: Colors.grey,
-                                          width: 1,
-                                        ),
+                                            8), // Makes it circular
                                       ),
                                       child: Row(
                                         mainAxisAlignment:
@@ -536,8 +585,12 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                                     : homeProvider.journalDetails!
                                                     .journals!.goal!.goalTitle
                                                     .toString(),
-                                                style: CustomTextStyles
-                                                    .bodyMediumGray700_1,
+                                                style: const TextStyle(
+                                                  fontSize: 17,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: 'Open Sans',
+                                                  color: Colors.white,
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -557,14 +610,13 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                             child: CircleAvatar(
                                               radius:
                                               size.width * 0.04,
-                                              backgroundColor:
-                                              Colors.blue,
+                                              backgroundColor:Colors.deepPurple,
                                               child: Icon(
                                                 Icons
-                                                    .arrow_forward_ios_outlined,
+                                                    .play_arrow,
                                                 color: Colors.white,
                                                 size: size.width *
-                                                    0.03,
+                                                    0.04,
                                               ),
                                             ),
                                           ),
@@ -577,11 +629,16 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                               const SizedBox(height: 33),
                               homeProvider.journalDetails!.journals!.action!.isEmpty?
                                   const SizedBox():
-                              Padding(
-                                padding: const EdgeInsets.only(left: 7),
+                              const Padding(
+                                padding: EdgeInsets.only(left: 7),
                                 child: Text(
                                   "Your action",
-                                  style: theme.textTheme.bodyLarge,
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'Open Sans',
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
                               const SizedBox(height: 4),
@@ -602,7 +659,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                       ),
 
                               ),
-                             // const SizedBox(height: 33),
+                              const SizedBox(height: 10),
                             ],
                           ):
                     mentalStrengthEditProvider.goalDetailModel == null
@@ -678,7 +735,12 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                   capitalText(editProfileProvider.getProfileModel == null
                       ? ""
                       : editProfileProvider.getProfileModel!.firstname.toString()),
-                  style: CustomTextStyles.bodyLarge18,
+                  style: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Open Sans',
+                    color: Colors.black,
+                  ),
                 ),
               ),
               Text(
@@ -700,10 +762,12 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CustomImageView(
-                      imagePath: ImageConstant.imgLinkedin,
-                      height: 23,
-                      width: 23,
+                    Icon(
+                      Icons
+                          .location_on,
+                      color: ColorsContent.newThemeColor,
+                      size: size.width *
+                          0.06,
                     ),
                     Flexible(
                       child: Text(
@@ -885,9 +949,12 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
 
                   },
                   value: 'Edit',
-                  child: Text(
-                    'Edit',
-                    style: CustomTextStyles.bodyMedium14,
+                  child: ListTile(
+                    leading: Icon(Icons.edit, color: ColorsContent.newThemeColor), // Edit Icon
+                    title: Text(
+                      'Edit',
+                      style: CustomTextStyles.bodyMedium14,
+                    ),
                   ),
                 ),
                 // PopupMenuItem<String>(
@@ -933,9 +1000,12 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                   },
 
                   value: 'Delete',
-                  child: Text(
-                    'Delete',
-                    style: CustomTextStyles.bodyMedium14,
+                  child: ListTile(
+                    leading: Icon(Icons.delete, color: ColorsContent.newThemeColor), // Delete Icon
+                    title: Text(
+                      'Delete',
+                      style: CustomTextStyles.bodyMedium14,
+                    ),
                   ),
                 ),
               ];
