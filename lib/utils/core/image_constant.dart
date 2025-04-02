@@ -5,6 +5,8 @@ class ImageConstant {
   static String logo = 'assets/images/logo.svg';
   static String dummyImageSplash1 = 'assets/images/dummy_image_splash1.png';
   static String dummyImageSplash2 = 'assets/images/dummy_image_splash2.png';
+  static String splashScreen1 = 'assets/images/splash_screen1.png';
+  static String splashScreen2 = 'assets/images/splash_screen2.png';
   static String homeBannerNumu = 'assets/images/home_banner_numu.png';
   static String menuBarSvg = 'assets/images/menu_bar.svg';
   static String splashNextIcon = 'assets/images/splash-next-icon.png';
@@ -34,7 +36,7 @@ class ImageConstant {
 
   static String imgGroup28 = '$imagePath/img_group_28.svg';
   static String imgDots = '$imagePath/img_dots.svg';
-
+  static String createGoals = '$imagePath/create_goals.svg';
   static String imgGroup29 = '$imagePath/img_group_29.svg';
   static String imgGroup22 = '$imagePath/img_group_22.png';
   static String gradientBackground = '$imagePath/gradient_background.png';

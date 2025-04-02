@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mentalhelth/utils/core/date_time_utils.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/utils/theme/theme_helper.dart';
 
 import '../../../utils/theme/app_decoration.dart';
@@ -37,15 +38,12 @@ class ReminderListItemWidget extends StatelessWidget {
         bottom: 10,
       ),
       decoration: BoxDecoration(
-        color: Colors.blue[100],
+        color: ColorsContent.goalNotCompletedColor,
         borderRadius: BorderRadiusStyle.roundedBorder10,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // image == null
-          //     ? const SizedBox()
-          //     :
           imagePath != null && imagePath.isNotEmpty ?
            CircleAvatar(
              backgroundColor: appTheme.gray50,
@@ -81,18 +79,33 @@ class ReminderListItemWidget extends StatelessWidget {
                       startDate.isNotEmpty && int.tryParse(startDate) != null
                           ? formatDate(int.parse(startDate))
                           : "Invalid Date", // Show default text if parsing fails
-                      style: theme.textTheme.bodySmall,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Open Sans',
+                        color:  ColorsContent.goalCompletedTextColor,
+                      ),
                     ),
 
                     Text(
                       "  to  ",
-                      style: theme.textTheme.bodySmall,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Open Sans',
+                        color:  ColorsContent.goalCompletedTextColor,
+                      ),
                     ),
                     Text(
                       endDate == ""
                           ? ""
                           : formatDate(int.parse(endDate)),
-                      style: theme.textTheme.bodySmall,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Open Sans',
+                        color:  ColorsContent.goalCompletedTextColor,
+                      ),
                     ),
                   ],
                 ),

@@ -14,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../utils/theme/colors.dart';
 import '../../utils/theme/custom_text_style.dart';
 import '../../utils/theme/theme_helper.dart';
 import '../auth/sign_in/coninue_with_google_class.dart';
@@ -135,7 +136,7 @@ class _VersionUpdateCheckScreenState extends State<VersionUpdateCheckScreen> {
           return false;
         },
         child: Scaffold(
-          body: backGroundImager(
+          body: landingScreenImager(
             size: size,
             padding: EdgeInsets.zero,
             child: Center(
@@ -154,17 +155,14 @@ class _VersionUpdateCheckScreenState extends State<VersionUpdateCheckScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          SizedBox(
-                            height: size.height * 0.30,
-                          ),
                           CustomImageView(
-                            imagePath: ImageConstant.imgLogo,
-                            height: 70,
+                            imagePath: ImageConstant.imgNumuLogo,
+                            height: 100,
                             width: 280,
                             color: Colors.white,
                           ),
                           SizedBox(
-                            height: size.height * 0.10,
+                            height: size.height * 0.05,
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -172,12 +170,22 @@ class _VersionUpdateCheckScreenState extends State<VersionUpdateCheckScreen> {
                             children: [
                               Text(
                                 widget.title ?? '',
-                                style: theme.textTheme.titleMedium,
+                                style: const TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: 'Open Sans',
+                                  color: Colors.white,
+                                ),
                               ),
                               SizedBox(height: size.height * 0.02),
                               Text(
                                 widget.message ?? '',
-                                style: theme.textTheme.bodyMedium,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Open Sans',
+                                  color: Colors.white,
+                                ),
                               ),
                               SizedBox(height: size.height * 0.02),
 
@@ -254,86 +262,145 @@ class _VersionUpdateCheckScreenState extends State<VersionUpdateCheckScreen> {
                           //   height: size.height * 0.04,
                           // ),
                           widget.notifyMe == "1" ?
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              GestureDetector(
-                                onTap: () async {
 
-                                  Uri updateUrl = Platform.isAndroid
-                                      ? Uri.parse(androidUpdateUrl)
-                                      : Uri.parse(iosUpdateUrl);
+                          GestureDetector(
+                            onTap: () async {
+                              Uri updateUrl = Platform.isAndroid
+                                  ? Uri.parse(androidUpdateUrl)
+                                  : Uri.parse(iosUpdateUrl);
 
-                                  // Launch the in-app browser with the correct URL
-                                  await _launchInAppWithBrowserOptions(context, updateUrl);
-
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.all(10.0),
-                                  decoration: BoxDecoration(
-                                    color: Colors.transparent,
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    border: Border.all(
-                                      color: Colors.black,
-                                      width: 0.5,
+                              // Launch the in-app browser with the correct URL
+                              await _launchInAppWithBrowserOptions(context, updateUrl);
+                            },
+                            child: Container(
+                              width: size.width * 0.75,
+                              padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0), // Adjust padding for better spacing
+                              decoration: BoxDecoration(
+                                color: Colors.white, // Background color
+                                borderRadius: BorderRadius.circular(5.0), // Optional: Add border radius
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Aligns items to the start
+                                crossAxisAlignment: CrossAxisAlignment.center, // Keeps items vertically aligned
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      "Update Now",
+                                      style:  TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold, // Set font weight to bold
+                                        color:ColorsContent.newThemeColor,
+                                      ),
+                                      overflow: TextOverflow.ellipsis, // Avoid text overflow
                                     ),
                                   ),
-                                  child: Text(
-                                    "Update",
-                                    style: theme.textTheme.titleMedium,
-                                  ),
-                                ),
-                              ),
 
-                            ],
-                          ):
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              GestureDetector(
-                                onTap: () async {
+                                  const SizedBox(width: 10), // Adjust spacing before the forward icon
 
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.all(10.0),
-                                  decoration: BoxDecoration(
-                                    color: Colors.transparent,
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    border: Border.all(
-                                      color: Colors.black,
-                                      width: 0.5,
+                                  Container(
+                                    width: 28, // Adjust size as needed
+                                    height: 28,
+                                    decoration: BoxDecoration(
+                                      color: ColorsContent.newThemeColor, // Background color
+                                      shape: BoxShape.circle, // Circular shape
+                                    ),
+                                    child: const Center(
+                                      child: Icon(
+                                        Icons.arrow_forward,
+                                        color: Colors.white, // Icon color
+                                        size: 18, // Slightly reduced icon size
+                                      ),
                                     ),
                                   ),
-                                  child: Text(
-                                    "Update",
-                                    style: theme.textTheme.titleMedium,
-                                  ),
-                                ),
+                                ],
                               ),
-                              GestureDetector(
-                                onTap: () async {
-                                  Navigator.pop(context);
-                                  final prefs = await SharedPreferences.getInstance();
-                                  prefs.setInt('lastSkippedTimestamp', DateTime.now().millisecondsSinceEpoch);
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.all(10.0),
-                                  decoration: BoxDecoration(
-                                    color: Colors.transparent,
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    border: Border.all(
-                                      color: Colors.black,
-                                      width: 0.5,
-                                    ),
-                                  ),
-                                  child: Text(
-                                    "Skip",
-                                    style: theme.textTheme.titleMedium,
-                                  ),
-                                ),
-                              ),
-                            ],
+                            ),
                           )
+                              :
+                          GestureDetector(
+                            onTap: () async {
+                              Uri updateUrl = Platform.isAndroid
+                                  ? Uri.parse(androidUpdateUrl)
+                                  : Uri.parse(iosUpdateUrl);
+
+                              // Launch the in-app browser with the correct URL
+                              await _launchInAppWithBrowserOptions(context, updateUrl);
+                            },
+                            child: Container(
+                              width: size.width * 0.75,
+                              padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0), // Adjust padding for better spacing
+                              decoration: BoxDecoration(
+                                color: Colors.white, // Background color
+                                borderRadius: BorderRadius.circular(5.0), // Optional: Add border radius
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Aligns items to the start
+                                crossAxisAlignment: CrossAxisAlignment.center, // Keeps items vertically aligned
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      "Update Now",
+                                      style:  TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold, // Set font weight to bold
+                                        color:ColorsContent.newThemeColor,
+                                      ),
+                                      overflow: TextOverflow.ellipsis, // Avoid text overflow
+                                    ),
+                                  ),
+
+                                  const SizedBox(width: 10), // Adjust spacing before the forward icon
+
+                                  Container(
+                                    width: 28, // Adjust size as needed
+                                    height: 28,
+                                    decoration: BoxDecoration(
+                                      color: ColorsContent.newThemeColor, // Background color
+                                      shape: BoxShape.circle, // Circular shape
+                                    ),
+                                    child: const Center(
+                                      child: Icon(
+                                        Icons.arrow_forward,
+                                        color: Colors.white, // Icon color
+                                        size: 18, // Slightly reduced icon size
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: size.height * 0.03),
+                          GestureDetector(
+                            onTap: () async {
+                                      Navigator.pop(context);
+                                      final prefs = await SharedPreferences.getInstance();
+                                      prefs.setInt('lastSkippedTimestamp', DateTime.now().millisecondsSinceEpoch);
+                            },
+                            child: Container(
+                              width: size.width * 0.75,
+                              padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 13.0), // Adjust padding for better spacing
+                              decoration: BoxDecoration(
+                                color: Colors.black, // Background color
+                                borderRadius: BorderRadius.circular(5.0), // Optional: Add border radius
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center, // Aligns items to the start
+                                crossAxisAlignment: CrossAxisAlignment.center, // Keeps items vertically aligned
+                                children: [
+                                  Text(
+                                    "Skip",
+                                    style:  TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold, // Set font weight to bold
+                                      color:ColorsContent.whiteText,
+                                    ),
+                                    overflow: TextOverflow.ellipsis, // Avoid text overflow
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
 
                         ],
                       ),

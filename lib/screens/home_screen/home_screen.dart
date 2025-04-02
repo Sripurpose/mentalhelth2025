@@ -377,8 +377,8 @@ class _HomeScreenState extends State<HomeScreen> {
       future: signInProvider.fetchSettings(context), // Your method to fetch settings
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child:  SpinKitWave(
-            color: Colors.blue,
+          return  Center(child:  SpinKitWave(
+            color: ColorsContent.newThemeColor,
             size: 25,
           ),); // Show loading indicator
         } else if (snapshot.hasError) {
@@ -713,7 +713,7 @@ class _HomeScreenState extends State<HomeScreen> {
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         separatorBuilder: (context, index) {
-          return const SizedBox(height: 3);
+          return const SizedBox(height: 10);
         },
         itemCount: (homeProvider.journalsModel?.journals?.length ?? 0) < 6
             ? (homeProvider.journalsModel?.journals?.length ?? 0)

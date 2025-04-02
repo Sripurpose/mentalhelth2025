@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/screens/addgoals_dreams_screen/addgoals_dreams_screen.dart';
@@ -139,11 +140,10 @@ class _ViewReminderScreenState extends State<ViewReminderScreen> {
                     return Stack(
                       children: [
                         homeProvider.remindersDetailsLoading ?
-                        shimmerList(
-                              height: size.height,
-                              list: 10,
-                              shimmerHeight: size.height * 0.1,
-                            ):
+                         Center(child: CupertinoActivityIndicator(
+                          color: ColorsContent.newThemeColor,
+                          radius: 15,
+                        )):
                             homeProvider.reminderStatusCode == 404?
                             Center(
                                   child: Image.asset(
@@ -151,9 +151,8 @@ class _ViewReminderScreenState extends State<ViewReminderScreen> {
                                   ),
                                 ):
                         Container(
-                          color: homeProvider.remindersDetails?.reminders == null
-                              ? Colors.white
-                              : null,
+                          color
+                              : ColorsContent.homeBackGroundColor,
                           padding: const EdgeInsets.symmetric(
                             horizontal: 28,
                           ),

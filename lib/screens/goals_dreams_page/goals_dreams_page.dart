@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/screens/addgoals_dreams_screen/addgoals_dreams_screen.dart';
 import 'package:mentalhelth/screens/dash_borad_screen/provider/dash_board_provider.dart';
@@ -127,174 +129,272 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
         child: Column(
           children: [
             Consumer<DashBoardProvider>(
-                builder: (context, dashBoardProvider, _) {
-                  return buildAppBar(
-                    context,
-                    size,
-                    heading: "My Goals & Dreams",
-                    onTap: () {
-                      dashBoardProvider.changePage(index: 0);
-                    },
-                  );
-                }),
+              builder: (context, dashBoardProvider, _) {
+                return buildAppBar(
+                  context,
+                  size,
+                  heading: "My Goals & Dreams",
+                  onTap: () {
+                    dashBoardProvider.changePage(index: 0);
+                  },
+                );
+              },
+            ),
+            SizedBox(height: 20,),
             Expanded(
               child: Consumer<GoalsDreamsProvider>(
-                  builder: (context, goalsDreamsProvider, _) {
-                    return Stack(
-                      children: [
-                        Container(
-                          color: goalsDreamsProvider.goalsanddreams.isEmpty
-                              ? ColorsContent.homeBackGroundColor
-                              : null,
-                          padding: const EdgeInsets.symmetric(horizontal: 28),
-                          child: goalsDreamsProvider.goalsAndDreamsModelLoading
-                              ? const Center(
-                            child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                  Colors.blue),
-                            ),
-                          )
-                              : goalsDreamsProvider.goalsanddreams.isEmpty
-                              ? Center(
-                            child: Image.asset(
-                              ImageConstant.noData,
-                            ),
-                          )
-                              : ListView.builder(
-                            itemCount: goalsDreamsProvider.goalsanddreams.length +
-                                (goalsDreamsProvider.goalsAndDreamsModelLoading ? 1 : 0),
-                            itemBuilder: (context, index) {
-                              if (index < goalsDreamsProvider.goalsanddreams.length) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    goalsDreamsProvider.openBoxFunction(index: index);
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) => GoalAndDreamFullViewScreen(
-                                          goalsanddream: goalsDreamsProvider.goalsanddreams[index],
-                                          indexs: index,
-                                          goalStatus: goalsDreamsProvider.goalsanddreams[index].goalStatus ?? "",
-                                        )
-                                      ),
-                                    ).then((_) {
-                                      // Fetch the correct page's data when coming back
-                                      goalsDreamsProvider.fetchGoalsAndDreams(pageNo: currentPage.toString());
-                                    });
-                                   // currentPage = 1;
-                                  },
-                                  child: WeightLossComponentListItemWidget(
-                                    image: goalsDreamsProvider.goalsanddreams[index].goalMedia.toString(),
-                                    headding: goalsDreamsProvider.goalsanddreams[index].goalTitle.toString(),
-                                    status: goalsDreamsProvider.goalsanddreams[index].goalStatus == "1" ? true : false,
-                                    startDate: goalsDreamsProvider.goalsanddreams[index].goalStartdate.toString(),
-                                    endDate: goalsDreamsProvider.goalsanddreams[index].goalEnddate.toString(),
-                                  ),
-                                );
-                              } else if (goalsDreamsProvider.goalsAndDreamsModelLoading) {
-                                return shimmerList(
-                                  height: size.height,
-                                  list: 10,
-                                  shimmerHeight: size.height * 0.1,
-                                );
-                              } else {
-                                return Center(
-                                  child: Image.asset(
-                                    ImageConstant.noData,
-                                  ),
-                                );
-                              }
-                            },
+                builder: (context, goalsDreamsProvider, _) {
+                  return Stack(
+                    children: [
+                      Container(
+                        color: goalsDreamsProvider.goalsanddreams.isEmpty
+                            ? ColorsContent.homeBackGroundColor
+                            : null,
+                        padding: const EdgeInsets.symmetric(horizontal: 28),
+                        child: goalsDreamsProvider.goalsAndDreamsModelLoading
+                            ?    Center(child: CupertinoActivityIndicator(
+                          color: ColorsContent.newThemeColor,
+                          radius: 15,
+                        ))
+                            : goalsDreamsProvider.goalsanddreams.isEmpty
+                            ? Center(
+                          child: Image.asset(
+                            ImageConstant.noData,
                           ),
+                        )
+                            : ListView.builder(
+                          itemCount: goalsDreamsProvider
+                              .goalsanddreams.length +
+                              (goalsDreamsProvider
+                                  .goalsAndDreamsModelLoading
+                                  ? 1
+                                  : 0),
+                          itemBuilder: (context, index) {
+                            if (index <
+                                goalsDreamsProvider
+                                    .goalsanddreams.length) {
+                              return GestureDetector(
+                                onTap: () {
+                                  goalsDreamsProvider
+                                      .openBoxFunction(
+                                      index: index);
+                                  Navigator.of(context)
+                                      .push(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          GoalAndDreamFullViewScreen(
+                                            goalsanddream:
+                                            goalsDreamsProvider
+                                                .goalsanddreams[
+                                            index],
+                                            indexs: index,
+                                            goalStatus: goalsDreamsProvider
+                                                .goalsanddreams[
+                                            index]
+                                                .goalStatus ??
+                                                "",
+                                          ),
+                                    ),
+                                  )
+                                      .then((_) {
+                                    goalsDreamsProvider
+                                        .fetchGoalsAndDreams(
+                                        pageNo: currentPage
+                                            .toString());
+                                  });
+                                },
+                                child:
+                                WeightLossComponentListItemWidget(
+                                  image: goalsDreamsProvider
+                                      .goalsanddreams[index]
+                                      .goalMedia
+                                      .toString(),
+                                  headding: goalsDreamsProvider
+                                      .goalsanddreams[index]
+                                      .goalTitle
+                                      .toString(),
+                                  status: goalsDreamsProvider
+                                      .goalsanddreams[
+                                  index]
+                                      .goalStatus ==
+                                      "1"
+                                      ? true
+                                      : false,
+                                  startDate: goalsDreamsProvider
+                                      .goalsanddreams[index]
+                                      .goalStartdate
+                                      .toString(),
+                                  endDate: goalsDreamsProvider
+                                      .goalsanddreams[index]
+                                      .goalEnddate
+                                      .toString(),
+                                ),
+                              );
+                            } else if (goalsDreamsProvider
+                                .goalsAndDreamsModelLoading) {
+                              return shimmerList(
+                                height: size.height,
+                                list: 10,
+                                shimmerHeight: size.height * 0.1,
+                              );
+                            } else {
+                              return Center(
+                                child: Image.asset(
+                                  ImageConstant.noData,
+                                ),
+                              );
+                            }
+                          },
                         ),
-                        goalsDreamsProvider.isScrolling
-                            ? const SizedBox()
-                            : Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              // Pagination Row
-                              if ((goalsDreamsProvider.goalsAndDreamsModel?.pageCount ?? 0) > 1)
+                      ),
+                      goalsDreamsProvider.isScrolling
+                          ? const SizedBox()
+                          : Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // Pagination Row
+                            if ((goalsDreamsProvider
+                                .goalsAndDreamsModel
+                                ?.pageCount ??
+                                0) >
+                                1)
                               Padding(
-                                padding: const EdgeInsets.only(bottom: 0.0),
+                                padding:
+                                const EdgeInsets.only(bottom: 0),
                                 child: GestureDetector(
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: List.generate(goalsDreamsProvider.goalsAndDreamsModel?.pageCount ?? 0, (index) {
-                                      return GestureDetector(
-                                        onTap: () {
-                                          // Update the current page and fetch new data
-                                          setState(() {
-                                            goalsDreamsProvider.setCurrentPage(index + 1); // Update current page
-                                          goalsDreamsProvider.goalsanddreams.clear();
-                                          _onPageChanged(index + 1);
-                                          //  currentPage = index + 1;
-                                          });
-                                          goalsDreamsProvider.fetchGoalsAndDreams(pageNo: goalsDreamsProvider.currentPage.toString());
-                                        },
-                                        child: goalsDreamsProvider.goalsanddreams.isNotEmpty ?
-                                        Container(
-                                          margin: const EdgeInsets.all(4.0),
-                                          padding: const EdgeInsets.all(8.0),
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: goalsDreamsProvider.currentPage == index + 1 ? Colors.blue : Colors.grey, // Change color based on current page
-                                          ),
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              // Update the current page and fetch new data
-                                              setState(() {
-                                                goalsDreamsProvider.setCurrentPage(index + 1); // Update current page
-                                                goalsDreamsProvider.goalsanddreams.clear();
-                                                _onPageChanged(index + 1);
-                                              // currentPage = index + 1;
-                                              });
-                                              goalsDreamsProvider.fetchGoalsAndDreams(pageNo: goalsDreamsProvider.currentPage.toString());
-                                            },
-                                            child: Text(
-                                              '${index + 1}',
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
+                                    children: List.generate(
+                                      goalsDreamsProvider
+                                          .goalsAndDreamsModel
+                                          ?.pageCount ??
+                                          0,
+                                          (index) {
+                                        return GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              goalsDreamsProvider
+                                                  .setCurrentPage(
+                                                  index + 1);
+                                              goalsDreamsProvider
+                                                  .goalsanddreams
+                                                  .clear();
+                                              _onPageChanged(
+                                                  index + 1);
+                                            });
+                                            goalsDreamsProvider
+                                                .fetchGoalsAndDreams(
+                                                pageNo:
+                                                goalsDreamsProvider
+                                                    .currentPage
+                                                    .toString());
+                                          },
+                                          child: goalsDreamsProvider
+                                              .goalsanddreams
+                                              .isNotEmpty
+                                              ? Container(
+                                            margin:
+                                            const EdgeInsets
+                                                .all(4.0),
+                                            padding:
+                                            const EdgeInsets
+                                                .all(8.0),
+                                            decoration:
+                                            BoxDecoration(
+                                              shape: BoxShape
+                                                  .circle,
+                                              color: goalsDreamsProvider
+                                                  .currentPage ==
+                                                  index + 1
+                                                  ? ColorsContent.newThemeColor
+                                                  : Colors.grey,
+                                            ),
+                                            child:
+                                            GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  goalsDreamsProvider
+                                                      .setCurrentPage(
+                                                      index +
+                                                          1);
+                                                  goalsDreamsProvider
+                                                      .goalsanddreams
+                                                      .clear();
+                                                  _onPageChanged(
+                                                      index +
+                                                          1);
+                                                });
+                                                goalsDreamsProvider
+                                                    .fetchGoalsAndDreams(
+                                                    pageNo: goalsDreamsProvider
+                                                        .currentPage
+                                                        .toString());
+                                              },
+                                              child: Text(
+                                                '${index + 1}',
+                                                style:
+                                                const TextStyle(
+                                                  color: Colors
+                                                      .white,
+                                                  fontWeight:
+                                                  FontWeight
+                                                      .bold,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ):SizedBox(),
-                                      );
-                                    }),
+                                          )
+                                              : const SizedBox(),
+                                        );
+                                      },
+                                    ),
                                   ),
                                 ),
                               ),
-
-                              // Create New Goals Button
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: ColorsContent.newThemeColor,
-                                ),
+                          ],
+                        ),
+                      ),
+                      // Floating Action Button
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 20), // Adjust the position
+                            child: SizedBox(
+                              width: 70, // Increase width
+                              height: 70, // Increase height
+                              child: FloatingActionButton(
+                                shape: const CircleBorder(), // Ensures circular shape
+                                backgroundColor: ColorsContent.newThemeColor, // Adjust color if needed
                                 onPressed: () {
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
-                                      builder: (context) =>  AddGoalsDreamsScreen(pageNo: currentPage.toString(),),
+                                      builder: (context) => AddGoalsDreamsScreen(
+                                        pageNo: currentPage.toString(),
+                                      ),
                                     ),
                                   );
                                 },
-                                child: const Text(
-                                  "Create New Goals",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
+                                child: SvgPicture.asset(
+                                  ImageConstant.createGoals, // Path to your SVG icon
+                                  width: 70, // Adjust size to fit inside the button
+                                  height: 70,
+                                  fit: BoxFit.contain,
                                 ),
                               ),
-                              SizedBox(
-                                height: size.height * 0.01,
-                              ),
-                            ],
+                            ),
                           ),
                         ),
-                      ],
-                    );
-                  }),
+                      ),
+
+
+                    ],
+                  );
+                },
+              ),
             ),
           ],
         ),

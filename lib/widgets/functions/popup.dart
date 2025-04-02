@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 
 void customPopup({
   required BuildContext context,
@@ -17,9 +18,19 @@ void customPopup({
       return CupertinoAlertDialog(
         title: Text(
           title,
+          style:  TextStyle(
+            fontWeight: FontWeight.bold, // Bold text
+            fontSize: 18, // Adjust font size
+            color: ColorsContent.newThemeColor,
+          ),
         ),
         content: Text(
           content,
+          style:  TextStyle(
+            fontWeight: FontWeight.normal, // Bold text
+            fontSize: 14, // Adjust font size
+            color: ColorsContent.blackText,
+          ),
         ),
         actions: <Widget>[
           CupertinoDialogAction(
@@ -29,8 +40,8 @@ void customPopup({
             },
             child: Text(
               cancel ?? 'Cancel',
-              style: const TextStyle(
-                color: Colors.blue,
+              style:  TextStyle(
+                color: ColorsContent.newThemeColor,
               ),
             ),
           ),
@@ -39,8 +50,8 @@ void customPopup({
             onPressed: onPressedDelete,
             child: Text(
               yes ?? 'Delete',
-              style: const TextStyle(
-                color: Colors.blue,
+              style:  TextStyle(
+                color: ColorsContent.newThemeColor,
               ),
             ),
           ),

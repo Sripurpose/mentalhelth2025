@@ -20,6 +20,13 @@ class ColorsContent {
   static Color signInGradientColorViolet = const Color(0xFF7F6AFD);
   static Color signInGradientColorBlue = const Color(0xFF583DF5);
   static Color forgotPasswordColor = const Color(0xFFC4C4C4);
+  static Color goalCompletedColor = const Color(0xFFBEC2DE);
+  static Color goalNotCompletedColor = const Color(0xFFA296F3);
+  static Color goalCompletedTextColor = const Color(0xFF666666);
+  static Color optimalStateColor = const Color(0xFFB768F7);
+  static Color passiveStateColor = const Color(0xFFF87E69);
+  static Color stressFullStateColor = const Color(0xFF7E69F8);
+  static Color destructiveStateColor = const Color(0xFF688BF7);
 
 
 }

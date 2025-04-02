@@ -229,11 +229,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/screens/dash_borad_screen/provider/dash_board_provider.dart';
 import 'package:mentalhelth/screens/home_screen/provider/home_provider.dart';
 import 'package:mentalhelth/screens/journal_list_screen/widgets/chart_view_list.dart';
 import 'package:mentalhelth/screens/journal_list_screen/widgets/journal_list_view_widget.dart';
+import 'package:mentalhelth/screens/mental_strength_add_edit_screen/provider/mental_strenght_edit_provider.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/widgets/app_bar/appbar_leading_image.dart';
 import 'package:mentalhelth/widgets/background_image/background_imager.dart';
 import 'package:provider/provider.dart';
@@ -255,6 +258,7 @@ class _JournalListPageState extends State<JournalListPage> {
   late HomeProvider homeProvider;
   late DashBoardProvider dashBoardProvider;
   late EditProfileProvider editProfileProvider;
+  late MentalStrengthEditProvider mentalStrengthEditProvider;
   bool tokenStatus = false;
   var logger = Logger();
 
@@ -280,6 +284,7 @@ class _JournalListPageState extends State<JournalListPage> {
     dashBoardProvider = Provider.of<DashBoardProvider>(context, listen: false);
     editProfileProvider =
         Provider.of<EditProfileProvider>(context, listen: false);
+    mentalStrengthEditProvider = Provider.of<MentalStrengthEditProvider>(context, listen: false);
     scheduleMicrotask(() {
       _isTokenExpired();
     });
@@ -290,110 +295,134 @@ class _JournalListPageState extends State<JournalListPage> {
     Size size = MediaQuery.of(context).size;
     return tokenStatus == false
         ? SafeArea(
-            child: backGroundImager(
-              size: size,
-              padding: EdgeInsets.zero,
-              child: Consumer3<JournalListProvider, HomeProvider,
-                      DashBoardProvider>(
-                  builder: (context, journalListProvider, homeProvider,
-                      dashBoardProvider, _) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 0),
-                  child: Column(
-                    children: [
-                      buildAppBar(
-                        context,
-                        size,
-                        heading: "My Journals",
-                        onTap: () {
-                          dashBoardProvider.changePage(index: 0);
-                        },
+      child: backGroundImager(
+        size: size,
+        padding: EdgeInsets.zero,
+        child: Consumer4<MentalStrengthEditProvider,JournalListProvider, HomeProvider,
+            DashBoardProvider>(
+          builder: (context, mentalStrengthEditProvider,journalListProvider, homeProvider,
+              dashBoardProvider, _) {
+            return Stack(
+              children: [
+                Column(
+                  children: [
+                    buildAppBar(
+                      context,
+                      size,
+                      heading: "My Journals",
+                      onTap: () {
+                        dashBoardProvider.changePage(index: 0);
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              journalListProvider.changeListViewBar(true);
+                            },
+                            child: Container(
+                              width: size.width * 0.42,
+                              padding: EdgeInsets.symmetric(
+                                vertical: size.width * 0.03,
+                              ),
+                              decoration: BoxDecoration(
+                                color: journalListProvider.listViewBool
+                                    ? ColorsContent.newThemeColor
+                                    : ColorsContent.goalNotCompletedColor,
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                ),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  "List View",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              journalListProvider.changeListViewBar(false);
+                              journalListProvider.fetchJournalChartView();
+                            },
+                            child: Container(
+                              width: size.width * 0.42,
+                              padding: EdgeInsets.symmetric(
+                                vertical: size.width * 0.03,
+                              ),
+                              decoration: BoxDecoration(
+                                color: journalListProvider.listViewBool
+                                    ? ColorsContent.goalNotCompletedColor
+                                    : ColorsContent.newThemeColor,
+                                borderRadius: const BorderRadius.only(
+                                  topRight: Radius.circular(20),
+                                ),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  "Chart View",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 30),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                journalListProvider.changeListViewBar(true);
+                    ),
+                    SizedBox(height: size.height * 0.021),
+                    Expanded(
+                      child: journalListProvider.listViewBool
+                          ? const JournalListViewWidget()
+                          : const ChartViewList(),
+                    ),
+                  ],
+                ),
+
+// Show Floating Button only in List View
+                  if (journalListProvider.listViewBool)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 20), // Adjust the position
+                          child: SizedBox(
+                            width: 70, // Increase width
+                            height: 70, // Increase height
+                            child: FloatingActionButton(
+                              shape: const CircleBorder(), // Ensures circular shape
+                              backgroundColor: ColorsContent.newThemeColor, // Adjust color if needed
+                              onPressed: () {
+                                dashBoardProvider.changePage(index: 1);
+                                mentalStrengthEditProvider.fetchEmotions();
                               },
-                              child: Container(
-                                width: size.width * 0.42,
-                                padding: EdgeInsets.only(
-                                  left: size.width * 0.1,
-                                  right: size.width * 0.1,
-                                  top: size.width * 0.03,
-                                  bottom: size.width * 0.03,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: journalListProvider.listViewBool
-                                      ? Colors.blue
-                                      : Colors.blue[100],
-                                  borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(20),
-                                  ),
-                                ),
-                                child: const Center(
-                                  child: Text(
-                                    "List View",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold
-                                    ),
-                                  ),
-                                ),
+                              child: SvgPicture.asset(
+                                ImageConstant.createGoals, // Path to your SVG icon
+                                width: 70, // Adjust size to fit inside the button
+                                height: 70,
+                                fit: BoxFit.contain,
                               ),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                journalListProvider.changeListViewBar(false);
-                                journalListProvider.fetchJournalChartView();
-                              },
-                              child: Container(
-                                width: size.width * 0.42,
-                                padding: EdgeInsets.only(
-                                  left: size.width * 0.1,
-                                  right: size.width * 0.1,
-                                  top: size.width * 0.03,
-                                  bottom: size.width * 0.03,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: journalListProvider.listViewBool
-                                      ? Colors.blue[100]
-                                      : Colors.blue,
-                                  borderRadius: const BorderRadius.only(
-                                    topRight: Radius.circular(20),
-                                  ),
-                                ),
-                                child: const Center(
-                                  child: Text(
-                                    "Chart View",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                        fontWeight: FontWeight.bold
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       ),
-                      SizedBox(
-                        height: size.height * 0.021,
-                      ),
-                      journalListProvider.listViewBool
-                          ? const Expanded(
-                                  child: JournalListViewWidget(),
-                                )
-                          : const ChartViewList(),
-                    ],
-                  ),
-                );
-              }),
-            ),
-          )
+                    ),
+              ],
+            );
+          },
+        ),
+      ),
+    )
         : const TokenExpireScreen();
   }
+
 }

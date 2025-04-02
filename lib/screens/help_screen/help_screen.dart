@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../utils/core/image_constant.dart';
@@ -50,13 +51,7 @@ class _HelpScreenState extends State<HelpScreen> {
           width: double.infinity,
           height: double.infinity,
           decoration: BoxDecoration(
-            color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
-            image: DecorationImage(
-              image: AssetImage(
-                ImageConstant.imgGroup193,
-              ),
-              fit: BoxFit.cover,
-            ),
+            color: ColorsContent.homeBackGroundColor,
           ),
           child: SizedBox(
             width: double.maxFinite,

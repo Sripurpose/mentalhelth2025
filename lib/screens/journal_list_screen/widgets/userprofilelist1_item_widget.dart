@@ -39,8 +39,13 @@ class UserProfileList1ItemWidget extends StatelessWidget {
         vertical: 8,
       ),
       decoration: AppDecoration.outlineGray.copyWith(
-        borderRadius: BorderRadiusStyle.roundedBorder4,
+        borderRadius: BorderRadiusStyle.roundedBorder10,
+        border: Border.all(
+          color: ColorsContent.goalNotCompletedColor, // Change to desired border color
+          width: 0.5, // Border width
+        ),
       ),
+
       child: Column(
         children: [
           Row(
@@ -71,8 +76,13 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                       //color:Colors.red,
                       width: size.width * 0.50,
                       child: Text(
-                        HtmlUnescape().convert(journalsModelList.journalDesc!),
-                        style: theme.textTheme.bodyMedium,
+                        HtmlUnescape().convert(journalsModelList.journalTitle!),
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'Open Sans',
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                     Text(
@@ -89,6 +99,7 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                   builder: (contexts, journalListProvider, homeProvider,
                       mentalStrengthEditProvider, editProfileProvider, _) {
                 return PopupMenuButton<String>(
+               //   color: ColorsContent.newThemeColor,
                   onSelected: (value) {},
                   itemBuilder: (BuildContext context) {
                     return [
@@ -269,6 +280,7 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                       //   ),
                       // ),
                       PopupMenuItem<String>(
+
                         onTap: () {
                           customPopup(
                             context: context,

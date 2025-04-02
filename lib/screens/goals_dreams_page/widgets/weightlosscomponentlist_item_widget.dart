@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mentalhelth/utils/core/date_time_utils.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/utils/theme/theme_helper.dart';
 
 import '../../../utils/theme/app_decoration.dart';
@@ -37,11 +38,12 @@ class WeightLossComponentListItemWidget extends StatelessWidget {
         bottom: 10,
       ),
       decoration: status
-          ? AppDecoration.outlineGray100WithOpacity08.copyWith(
-              borderRadius: BorderRadiusStyle.roundedBorder10,
-            )
+          ? BoxDecoration(
+        color: ColorsContent.goalCompletedColor,
+        borderRadius: BorderRadiusStyle.roundedBorder10,
+      )
           : BoxDecoration(
-              color: Colors.blue[100],
+              color: ColorsContent.goalNotCompletedColor,
               borderRadius: BorderRadiusStyle.roundedBorder10,
             ),
       child: Row(
@@ -72,7 +74,12 @@ class WeightLossComponentListItemWidget extends StatelessWidget {
                 status
                     ? Text(
                         "Completed",
-                        style: CustomTextStyles.bodySmallGray700_1,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Open Sans',
+                    color:  ColorsContent.goalCompletedTextColor,
+                  ),
                       )
                     : Row(
                         children: [
@@ -80,17 +87,32 @@ class WeightLossComponentListItemWidget extends StatelessWidget {
                             formatDate(
                               int.parse(startDate),
                             ),
-                            style: theme.textTheme.bodySmall,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Open Sans',
+                              color:  ColorsContent.goalCompletedTextColor,
+                            ),
                           ),
                           Text(
                             "  to  ",
-                            style: theme.textTheme.bodySmall,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Open Sans',
+                              color:  ColorsContent.goalCompletedTextColor,
+                            ),
                           ),
                           Text(
                             endDate == ""
                                 ? ""
                                 : formatDate2(int.parse(endDate)),
-                            style: theme.textTheme.bodySmall,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Open Sans',
+                              color:  ColorsContent.goalCompletedTextColor,
+                            ),
                           ),
                         ],
                       ),
