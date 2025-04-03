@@ -6,6 +6,7 @@ import 'package:mentalhelth/utils/theme/theme_helper.dart';
 import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../../widgets/app_bar/appbar_leading_image.dart';
+import '../no_internet/duplicate_screen.dart';
 
 class TermsServiceScreen extends StatefulWidget {
   const TermsServiceScreen({Key? key})
@@ -31,69 +32,71 @@ class _TermsServiceScreenState extends State<TermsServiceScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return SafeArea(
-      child: Container(
-        width: size.width,
-        height: size.height,
-        decoration: BoxDecoration(
-          color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
-          image: DecorationImage(
-            image: AssetImage(
-              ImageConstant.imgGroup193,
-            ),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: SizedBox(
-          width: double.maxFinite,
-          child: Column(
-            children: [
-              buildAppBar(
-                context,
-                size,
-                heading: "Terms Of Service",
-                onTap: () {
-                  Navigator.of(context).pop(); // Navigate back
-                },
+    return ConnectivityWidget(
+      child: SafeArea(
+        child: Container(
+          width: size.width,
+          height: size.height,
+          decoration: BoxDecoration(
+            color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
+            image: DecorationImage(
+              image: AssetImage(
+                ImageConstant.imgGroup193,
               ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 27,
-                  top: 20,
-                  right: 27,
-                ),
-                child: Consumer<PrivacyPolicyProvider>(
-                  builder: (context, policyProvider, _) {
-                    return SizedBox(
-                      height: size.height * 0.7,
-                      child: policyProvider.policyModel == null
-                          ? const Center(
-                              child: Text("No Data"),
-                            )
-                          : policyProvider.policyModelLoading
-                              ? const Center(
-                                  child: CircularProgressIndicator(),
-                                )
-                              : WebViewWidget(
-                                  controller: WebViewController()
-                                    ..setJavaScriptMode(
-                                        JavaScriptMode.unrestricted)
-                                    ..setBackgroundColor(
-                                      Colors.transparent,
-                                    )
-                                    ..loadHtmlString(
-                                      policyProvider.policyModel!.description
-                                          .toString(),
-                                    ),
-                                ),
-                    );
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: SizedBox(
+            width: double.maxFinite,
+            child: Column(
+              children: [
+                buildAppBar(
+                  context,
+                  size,
+                  heading: "Terms Of Service",
+                  onTap: () {
+                    Navigator.of(context).pop(); // Navigate back
                   },
                 ),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 27,
+                    top: 20,
+                    right: 27,
+                  ),
+                  child: Consumer<PrivacyPolicyProvider>(
+                    builder: (context, policyProvider, _) {
+                      return SizedBox(
+                        height: size.height * 0.7,
+                        child: policyProvider.policyModel == null
+                            ? const Center(
+                                child: Text("No Data"),
+                              )
+                            : policyProvider.policyModelLoading
+                                ? const Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : WebViewWidget(
+                                    controller: WebViewController()
+                                      ..setJavaScriptMode(
+                                          JavaScriptMode.unrestricted)
+                                      ..setBackgroundColor(
+                                        Colors.transparent,
+                                      )
+                                      ..loadHtmlString(
+                                        policyProvider.policyModel!.description
+                                            .toString(),
+                                      ),
+                                  ),
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+              ],
+            ),
           ),
         ),
       ),

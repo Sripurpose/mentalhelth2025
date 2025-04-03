@@ -11,6 +11,7 @@ import 'package:mentalhelth/widgets/custom_checkbox_button.dart';
 import 'package:mentalhelth/widgets/custom_image_view.dart';
 import 'package:provider/provider.dart';
 import '../actions_screen/widgets/morningwalkcomponentlist_item_widget.dart';
+import '../no_internet/duplicate_screen.dart';
 
 // ignore: must_be_immutable
 class ActionsScreen extends StatelessWidget {
@@ -25,51 +26,53 @@ class ActionsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
-      child: Scaffold(
-        appBar: buildAppBar(
-          context,
-          size,
-          heading: "My Actions",
-        ),
-        body: Container(
-          width: double.infinity,
-          height: double.infinity,
-          decoration: BoxDecoration(
-            color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
-            image: DecorationImage(
-              image: AssetImage(
-                ImageConstant.imgGroup193,
-              ),
-              fit: BoxFit.cover,
-            ),
+      child: ConnectivityWidget(
+        child: Scaffold(
+          appBar: buildAppBar(
+            context,
+            size,
+            heading: "My Actions",
           ),
-          child: Container(
-            width: double.maxFinite,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 28,
-              // vertical: 50,
+          body: Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: BoxDecoration(
+              color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
+              image: DecorationImage(
+                image: AssetImage(
+                  ImageConstant.imgGroup193,
+                ),
+                fit: BoxFit.cover,
+              ),
             ),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  _buildMorningWalkComponentList(context),
-                  const SizedBox(height: 10),
-                  _buildEightColumn(context, size),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const AddactionsScreen(goalId: '',),
-                        ),
-                      );
-                    },
-                    child: CustomImageView(
-                      imagePath: ImageConstant.imgFloatingIconBlue300,
-                      height: size.height * 0.1,
-                      width: size.height * 0.1,
+            child: Container(
+              width: double.maxFinite,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 28,
+                // vertical: 50,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    _buildMorningWalkComponentList(context),
+                    const SizedBox(height: 10),
+                    _buildEightColumn(context, size),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const AddactionsScreen(goalId: '',),
+                          ),
+                        );
+                      },
+                      child: CustomImageView(
+                        imagePath: ImageConstant.imgFloatingIconBlue300,
+                        height: size.height * 0.1,
+                        width: size.height * 0.1,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

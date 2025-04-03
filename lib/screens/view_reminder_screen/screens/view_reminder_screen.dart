@@ -19,6 +19,7 @@ import '../../edit_add_profile_screen/provider/edit_provider.dart';
 import '../../goals_dreams_page/widgets/weightlosscomponentlist_item_widget.dart';
 import '../../home_screen/provider/home_provider.dart';
 import '../../mental_strength_add_edit_screen/provider/mental_strenght_edit_provider.dart';
+import '../../no_internet/duplicate_screen.dart';
 import '../../token_expiry/tocken_expiry_warning_screen.dart';
 import '../../token_expiry/token_expiry.dart';
 import 'add_new_reminder_screen.dart';
@@ -46,10 +47,7 @@ class _ViewReminderScreenState extends State<ViewReminderScreen> {
   final ScrollController _scrollController = ScrollController();
 
   Future<void> _isTokenExpired() async {
-    await homeProvider.fetchChartView(context);
-    await homeProvider.fetchJournals(initial: true);
     await homeProvider.fetchRemindersDetails();
-    //await editProfileProvider.fetchUserProfile();
     tokenStatus = TokenManager.checkTokenExpiry();
     if (tokenStatus) {
       setState(() {
@@ -81,6 +79,7 @@ class _ViewReminderScreenState extends State<ViewReminderScreen> {
     //homeProvider.remindersDetails?.reminders?.clear();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      logger.w("homeProvider.reminderStatusCode${homeProvider.reminderStatusCode}");
       goalsDreamsProvider.goalsanddreams = [];
       goalsDreamsProvider.goalsanddreams.clear();
       goalsDreamsProvider.fetchGoalsAndDreams(initial: true);
@@ -117,87 +116,89 @@ class _ViewReminderScreenState extends State<ViewReminderScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return tokenStatus == false ?
-    SafeArea(
-      child: backGroundImager(
-        size: size,
-        padding: EdgeInsets.zero,
-        child: Column(
-          children: [
-            Consumer<DashBoardProvider>(
-                builder: (context, dashBoardProvider, _) {
-                  return buildAppBar(
-                    context,
-                    size,
-                    heading: "My Reminders",
-                  );
-                }),
-            SizedBox(
-              height: size.height * 0.025,
-            ),
-            Expanded(
-              child: Consumer<HomeProvider>(
-                  builder: (context, homeProvider, _) {
-                    return Stack(
-                      children: [
-                        homeProvider.remindersDetailsLoading ?
-                         Center(child: CupertinoActivityIndicator(
-                          color: ColorsContent.newThemeColor,
-                          radius: 15,
-                        )):
-                            homeProvider.reminderStatusCode == 404?
-                            Center(
-                                  child: Image.asset(
-                                    ImageConstant.noData,
-                                  ),
-                                ):
-                        Container(
-                          color
-                              : ColorsContent.homeBackGroundColor,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 28,
-                          ),
-                          child: ListView.builder(
-                        //    controller: _scrollController,
-                            itemCount: homeProvider.remindersDetails?.reminders?.length,
-                            itemBuilder: (context, index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                       EditReminderScreenScreen(
-                                        title: homeProvider.remindersDetails?.reminders![index].reminderTitle ?? "",
-                                         description: homeProvider.remindersDetails?.reminders![index].reminderDesc ?? "",
-                                         startDate: homeProvider.remindersDetails?.reminders![index].reminderStartdate ?? "",
-                                         endDate: homeProvider.remindersDetails?.reminders![index].reminderEnddate ?? "",
-                                         startTime: homeProvider.remindersDetails?.reminders![index].fromTime ?? "",
-                                         endTime: homeProvider.remindersDetails?.reminders![index].toTime ?? "",
-                                         reminderBefore: homeProvider.remindersDetails?.reminders![index].reminderBefore ?? "",
-                                         repeat: homeProvider.remindersDetails?.reminders![index].reminderRepeat ?? "",
-                                         goalId: homeProvider.remindersDetails?.reminders![index].goalId ?? "",
-                                         actionId: homeProvider.remindersDetails?.reminders![index].actionId ?? "",
-                                         reminderId: homeProvider.remindersDetails?.reminders![index].reminderId ?? "",
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: ReminderListItemWidget(
-                                  headding: homeProvider.remindersDetails?.reminders![index].reminderTitle ?? "",
-                                  content: homeProvider.remindersDetails?.reminders![index].reminderDesc ?? "",
-                                  startDate: homeProvider.remindersDetails?.reminders![index].reminderStartdate ?? "",
-                                  endDate: homeProvider.remindersDetails?.reminders![index].reminderEnddate ?? "",
-                                  imagePath: homeProvider.remindersDetails?.reminders![index].imageUrl ?? "",
-                                ),
-                              );
-
-                            }
-                          ),
-                        ),
-                      ],
+    ConnectivityWidget(
+      child: SafeArea(
+        child: backGroundImager(
+          size: size,
+          padding: EdgeInsets.zero,
+          child: Column(
+            children: [
+              Consumer<DashBoardProvider>(
+                  builder: (context, dashBoardProvider, _) {
+                    return buildAppBar(
+                      context,
+                      size,
+                      heading: "My Reminders",
                     );
                   }),
-            ),
-          ],
+              SizedBox(
+                height: size.height * 0.025,
+              ),
+              Expanded(
+                child: Consumer<HomeProvider>(
+                    builder: (context, homeProvider, _) {
+                      return Stack(
+                        children: [
+                          homeProvider.remindersDetailsLoading ?
+                           Center(child: CupertinoActivityIndicator(
+                            color: ColorsContent.newThemeColor,
+                            radius: 15,
+                          )):
+                              homeProvider.reminderStatusCode == 404 ?
+                              Center(
+                                    child: Image.asset(
+                                      ImageConstant.noData,
+                                    ),
+                                  ):
+                          Container(
+                            color
+                                : ColorsContent.homeBackGroundColor,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 28,
+                            ),
+                            child: ListView.builder(
+                          //    controller: _scrollController,
+                              itemCount: homeProvider.remindersDetails?.reminders?.length,
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                         EditReminderScreenScreen(
+                                          title: homeProvider.remindersDetails?.reminders![index].reminderTitle ?? "",
+                                           description: homeProvider.remindersDetails?.reminders![index].reminderDesc ?? "",
+                                           startDate: homeProvider.remindersDetails?.reminders![index].reminderStartdate ?? "",
+                                           endDate: homeProvider.remindersDetails?.reminders![index].reminderEnddate ?? "",
+                                           startTime: homeProvider.remindersDetails?.reminders![index].fromTime ?? "",
+                                           endTime: homeProvider.remindersDetails?.reminders![index].toTime ?? "",
+                                           reminderBefore: homeProvider.remindersDetails?.reminders![index].reminderBefore ?? "",
+                                           repeat: homeProvider.remindersDetails?.reminders![index].reminderRepeat ?? "",
+                                           goalId: homeProvider.remindersDetails?.reminders![index].goalId ?? "",
+                                           actionId: homeProvider.remindersDetails?.reminders![index].actionId ?? "",
+                                           reminderId: homeProvider.remindersDetails?.reminders![index].reminderId ?? "",
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: ReminderListItemWidget(
+                                    headding: homeProvider.remindersDetails?.reminders![index].reminderTitle ?? "",
+                                    content: homeProvider.remindersDetails?.reminders![index].reminderDesc ?? "",
+                                    startDate: homeProvider.remindersDetails?.reminders![index].reminderStartdate ?? "",
+                                    endDate: homeProvider.remindersDetails?.reminders![index].reminderEnddate ?? "",
+                                    imagePath: homeProvider.remindersDetails?.reminders![index].imageUrl ?? "",
+                                  ),
+                                );
+      
+                              }
+                            ),
+                          ),
+                        ],
+                      );
+                    }),
+              ),
+            ],
+          ),
         ),
       ),
     ):

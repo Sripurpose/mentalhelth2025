@@ -21,6 +21,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../widgets/app_bar/appbar_subtitle.dart';
 import '../../../../widgets/app_bar/custom_app_bar.dart';
+import '../../no_internet/duplicate_screen.dart';
 
 class GoalAndDreamFullViewBottomParellelSheet extends StatefulWidget {
   const GoalAndDreamFullViewBottomParellelSheet(
@@ -94,469 +95,471 @@ class _GoalAndDreamFullViewBottomParellelSheetState
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return SafeArea(
-      child: Container(
-        decoration: BoxDecoration(
-          color: ColorsContent.homeBackGroundColor,
-          borderRadius: const BorderRadius.only(
-            topRight: Radius.circular(
-              0,
+    return ConnectivityWidget(
+      child: SafeArea(
+        child: Container(
+          decoration: BoxDecoration(
+            color: ColorsContent.homeBackGroundColor,
+            borderRadius: const BorderRadius.only(
+              topRight: Radius.circular(
+                0,
+              ),
+              topLeft: Radius.circular(
+                0,
+              ),
+              bottomLeft: Radius.circular(
+                0,
+              ),
+              bottomRight: Radius.circular(
+                0,
+              ),
             ),
-            topLeft: Radius.circular(
-              0,
-            ),
-            bottomLeft: Radius.circular(
-              0,
-            ),
-            bottomRight: Radius.circular(
-              0,
-            ),
+            border: Border.all(color: Colors.black, width: 0.2), // Border
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5), // Shadow color
+                spreadRadius: 5, // Spread radius
+                blurRadius: 7, // Blur radius
+                offset: const Offset(0, 3), // Offset
+              ),
+            ],
           ),
-          border: Border.all(color: Colors.black, width: 0.2), // Border
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5), // Shadow color
-              spreadRadius: 5, // Spread radius
-              blurRadius: 7, // Blur radius
-              offset: const Offset(0, 3), // Offset
-            ),
-          ],
-        ),
-        // margin: EdgeInsets.only(
-        //   top: size.height * 0.15,
-        // ),
-        padding: const EdgeInsets.only(
-          left: 20,
-          right: 20,
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Consumer<MentalStrengthEditProvider>(
-                  builder: (context, mentalStrengthEditProvider, _) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          width: size.width * 0.2,
-                        ),
-                        SizedBox(
-                          width: size.width * 0.2,
-                          child: Column(
-                            children: [
-                              SvgPicture.asset(
-                                ImageConstant.dotDot,
-                                color: ColorsContent.greyColor,
-                                height: 8,
-                                width: 8,
-                                fit: BoxFit.contain,
-                              ),
-                              SvgPicture.asset(
-                                ImageConstant.dotDot,
-                                color: ColorsContent.greyColor,
-                                height: 8,
-                                width: 8,
-                                fit: BoxFit.contain,
-                              ),
-                            ],
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            mentalStrengthEditProvider.openGoalViewSheetFunction();
-                          },
-                          child: SizedBox(
+          // margin: EdgeInsets.only(
+          //   top: size.height * 0.15,
+          // ),
+          padding: const EdgeInsets.only(
+            left: 20,
+            right: 20,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Consumer<MentalStrengthEditProvider>(
+                    builder: (context, mentalStrengthEditProvider, _) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
                             width: size.width * 0.2,
-                            child: Align(
-                              alignment: Alignment.topRight,
-                              child: CustomImageView(
-                                imagePath: ImageConstant.imgClosePrimaryNew,
-                                height: 40,
-                                width: 40,
-                              ),
-                            ),
                           ),
-                        ),
-                      ],
-                    );
-                  }),
-              Center(
-                child: SizedBox(
-                  width: size.width * 0.55,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                    child: Text(
-                      capitalText(
-                          widget.goalDetailModel.goals!.goalTitle.toString()),
-                      style: CustomTextStyles.blackText18000000W700(),
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1, // Set the maximum number of lines to 3
-                    ),
-                  ),
-                ),
-              ),
-              _buildUntitledOne(
-                context,
-                size,
-                category: widget.goalDetailModel.goals!.categoryName.toString(),
-                createDate: widget.goalDetailModel.goals!.createdAt.toString(),
-                achiveDate:
-                widget.goalDetailModel.goals!.goalEnddate.toString(),
-                status: widget.goalDetailModel.goals!.goalStatus.toString(),
-                comments: widget.goalDetailModel.goals!.goalDetails.toString(),
-              ),
-              audioList.isEmpty ? const SizedBox() : const SizedBox(height: 15),
-              SizedBox(height: 10),
-              audioList.isNotEmpty?
-              Padding(
-                padding: const EdgeInsets.only(left: 2),
-                child: Text(
-                  "Audio",
-                  style: CustomTextStyles.blackText16000000W600(),
-                ),
-              ):
-                  SizedBox(),
-              audioList.isEmpty
-                  ? const SizedBox()
-                  : const SizedBox(
-                height: 4,
-              ),
-              audioList.isNotEmpty?
-              SizedBox(
-                height: audioList.length * size.height * 0.1,
-                child: ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: audioList.length,
-                  itemBuilder: (context, index) {
-                    return JournalAudioPlayer(
-                      url: audioList[index],
-                    );
-                  },
-                ),
-              ):
-         SizedBox(),
-              imageList.isNotEmpty
-                  ? const SizedBox(
-                height: 23,
-              )
-                  : const SizedBox(),
-              imageList.isNotEmpty?
-              Padding(
-                padding: const EdgeInsets.only(left: 2),
-                child: Text(
-                  "Photo",
-                  style: CustomTextStyles.blackText16000000W600(),
-                ),
-              ):
-                  SizedBox(),
-              const SizedBox(height: 4),
-              imageList.isEmpty ?
-            SizedBox():
-              SizedBox(
-                height: imageList.isNotEmpty ? size.height * 0.2 : 0,
-                child: Stack(
-                  children: [
-                    PageView.builder(
-                      controller: photoController,
-                      itemCount: imageList.length,
-                      itemBuilder: (context, index) {
-                        return CustomImageView(
-                          fit: BoxFit.cover,
-                          imagePath: imageList[index],
-                          height: size.height * 0.27,
-                          width: size.width,
-                          alignment: Alignment.center,
-                        );
-                      },
-                      onPageChanged: (int pageIndex) {
-                        setState(() {
-                          photoCurrentIndex = pageIndex;
-                        });
-                      },
-                    ),
-                    Positioned(
-                      bottom: 10,
-                      left: 0,
-                      right: 0,
-                      child: SizedBox(
-                        width: imageList.length * size.width * 0.1,
-                        child: buildIndicators(
-                          imageList.length,
-                          photoCurrentIndex,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              videoList.isNotEmpty
-                  ? const SizedBox(
-                height: 10,
-              )
-                  : const SizedBox(),
-              const SizedBox(
-                height: 10,
-              ),
-              videoList.isNotEmpty?
-              Padding(
-                padding: const EdgeInsets.only(left: 2),
-                child: Text(
-                  "Video",
-                  style: CustomTextStyles.blackText16000000W600(),
-                ),
-              ):
-                  SizedBox(),
-              const SizedBox(height: 4),
-              videoList.isNotEmpty
-                  ?
-              SizedBox(
-                height: videoList.isNotEmpty ? size.height * 0.3 : 0,
-                child: Stack(
-                  children: [
-                    PageView.builder(
-                      controller: videoController,
-                      itemCount: videoList.length,
-                      itemBuilder: (context, index) {
-                        return VideoPlayerWidget(
-                          videoUrl: videoList[index],
-                        );
-                      },
-                      onPageChanged: (int pageIndex) {
-                        setState(() {
-                          videoCurrentIndex = pageIndex;
-                        });
-                      },
-                    ),
-                    Positioned(
-                      bottom: 10,
-                      left: 0,
-                      right: 0,
-                      child: SizedBox(
-                        width: videoList.length * size.width * 0.1,
-                        child: buildIndicators(
-                          videoList.length,
-                          videoCurrentIndex,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ):
-           SizedBox(),
-              // _buildGrid(
-              //   context,
-              //   size,
-              // ),
-              widget.goalDetailModel.goals!.location?.locationAddress != null
-                  ? const SizedBox(
-                height: 10,
-              ):
-                  SizedBox(),
-              widget.goalDetailModel.goals!.location?.locationAddress != null ?
-              Padding(
-                padding: const EdgeInsets.only(left: 2),
-                child: Text(
-                  "Your Location",
-                  style: CustomTextStyles.blackText16000000W600(),
-                ),
-              ):
-                  SizedBox(),
-              const SizedBox(height: 6),
-              widget.goalDetailModel.goals!.location?.locationAddress != null ?
-              SizedBox(
-                child: Center(
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons
-                              .location_on,
-                          color: ColorsContent.newThemeColor,
-                          size: size.width *
-                              0.06,
-                        ),
-                        Expanded(
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Text(
-                              (widget.goalDetailModel.goals?.location?.locationAddress?.isEmpty ?? true)
-                                  ? "NA"
-                                  : widget.goalDetailModel.goals!.location!.locationAddress!
-                                  .replaceAll(RegExp(r'[^a-zA-Z0-9, ]'), '') // Remove unwanted characters
-                                  .replaceAll(RegExp(r',\s*,+'), ',') // Replace multiple consecutive commas with a single comma
-                                  .replaceAll(RegExp(r'^,|,$'), '') // Remove leading and trailing commas
-                                  .trim(),
-                              style: CustomTextStyles.bodyMediumGray700_1,
-                              overflow: TextOverflow.visible,
-                              maxLines: 4, // Ensures scrolling works
-                            ),
-                          ),
-                        ),
-
-                      ],
-                    )
-                ),
-              )
-                  :
-             SizedBox(),
-              widget.goalDetailModel.goals!.location?.locationAddress != null ?
-              const SizedBox(height: 20):
-                  SizedBox(),
-              widget.goalDetailModel.goals!.action!.isNotEmpty ?
-              Padding(
-                padding: const EdgeInsets.only(left: 2),
-                child: Text(
-                  "Actions",
-                  style: CustomTextStyles.blackText16000000W600(),
-                ),
-              ):
-                  SizedBox(),
-              const SizedBox(height: 5),
-              Consumer<AdDreamsGoalsProvider>(
-                builder: (context, adDreamsGoalsProvider, _) {
-                  logger.w("adDreamsGoalsProvider.goalModelIdName${adDreamsGoalsProvider.goalModelIdName}");
-                  return
-                    widget.goalDetailModel.goals!.action!.isNotEmpty ?
-                    SizedBox(
-                      height: widget.goalDetailModel.goals!.action!.length *
-                          size.height *
-                          0.06,
-                      child: ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: widget.goalDetailModel.goals!.action!.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: Row(
+                          SizedBox(
+                            width: size.width * 0.2,
+                            child: Column(
                               children: [
-                                //  Checkbox(value: false, onChanged: (value) {}),
-                                GestureDetector(
-                                  onTap: () {
-                                    // Navigator.of(context).push(
-                                    //   MaterialPageRoute(
-                                    //     builder: (context) => ActionsFullView(
-                                    //       id: mentalStrengthEditProvider
-                                    //           .getListGoalActionsModel!
-                                    //           .actions![index]
-                                    //           .id
-                                    //           .toString(),
-                                    //       indexs: index,
-                                    //     ),
-                                    //   ),
-                                    // );
-                                  },
-                                  child: Container(
-                                    height: size.height * 0.04,
-                                    width: size.width * 0.78,
-                                    padding: const EdgeInsets.only(
-                                      bottom: 5,
-                                      top: 5,
-                                      left: 0,
-                                      right: 5,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: ColorsContent.newThemeColor,
-                                      borderRadius:
-                                      BorderRadius.circular(
-                                          8), // Makes it circular
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.center,
-                                      children: [
-
-                                        SizedBox(
-                                          width: size.width * 0.6,
-                                          child: SingleChildScrollView(
-                                            scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                                            child: Text(
-                                              widget.goalDetailModel.goals!.action![index].actionTitle ?? "",
-                                              textAlign: TextAlign.center,
-                                              style: const TextStyle(
-                                                fontSize: 17,
-                                                fontWeight: FontWeight.w500,
-                                                fontFamily: 'Open Sans',
-                                                color: Colors.white,
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 1, // Set the maximum number of lines to 3
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                SvgPicture.asset(
+                                  ImageConstant.dotDot,
+                                  color: ColorsContent.greyColor,
+                                  height: 8,
+                                  width: 8,
+                                  fit: BoxFit.contain,
+                                ),
+                                SvgPicture.asset(
+                                  ImageConstant.dotDot,
+                                  color: ColorsContent.greyColor,
+                                  height: 8,
+                                  width: 8,
+                                  fit: BoxFit.contain,
                                 ),
                               ],
                             ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              mentalStrengthEditProvider.openGoalViewSheetFunction();
+                            },
+                            child: SizedBox(
+                              width: size.width * 0.2,
+                              child: Align(
+                                alignment: Alignment.topRight,
+                                child: CustomImageView(
+                                  imagePath: ImageConstant.imgClosePrimaryNew,
+                                  height: 40,
+                                  width: 40,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    }),
+                Center(
+                  child: SizedBox(
+                    width: size.width * 0.55,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+                      child: Text(
+                        capitalText(
+                            widget.goalDetailModel.goals!.goalTitle.toString()),
+                        style: CustomTextStyles.blackText18000000W700(),
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1, // Set the maximum number of lines to 3
+                      ),
+                    ),
+                  ),
+                ),
+                _buildUntitledOne(
+                  context,
+                  size,
+                  category: widget.goalDetailModel.goals!.categoryName.toString(),
+                  createDate: widget.goalDetailModel.goals!.createdAt.toString(),
+                  achiveDate:
+                  widget.goalDetailModel.goals!.goalEnddate.toString(),
+                  status: widget.goalDetailModel.goals!.goalStatus.toString(),
+                  comments: widget.goalDetailModel.goals!.goalDetails.toString(),
+                ),
+                audioList.isEmpty ? const SizedBox() : const SizedBox(height: 15),
+                SizedBox(height: 10),
+                audioList.isNotEmpty?
+                Padding(
+                  padding: const EdgeInsets.only(left: 2),
+                  child: Text(
+                    "Audio",
+                    style: CustomTextStyles.blackText16000000W600(),
+                  ),
+                ):
+                    SizedBox(),
+                audioList.isEmpty
+                    ? const SizedBox()
+                    : const SizedBox(
+                  height: 4,
+                ),
+                audioList.isNotEmpty?
+                SizedBox(
+                  height: audioList.length * size.height * 0.1,
+                  child: ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: audioList.length,
+                    itemBuilder: (context, index) {
+                      return JournalAudioPlayer(
+                        url: audioList[index],
+                      );
+                    },
+                  ),
+                ):
+           SizedBox(),
+                imageList.isNotEmpty
+                    ? const SizedBox(
+                  height: 23,
+                )
+                    : const SizedBox(),
+                imageList.isNotEmpty?
+                Padding(
+                  padding: const EdgeInsets.only(left: 2),
+                  child: Text(
+                    "Photo",
+                    style: CustomTextStyles.blackText16000000W600(),
+                  ),
+                ):
+                    SizedBox(),
+                const SizedBox(height: 4),
+                imageList.isEmpty ?
+              SizedBox():
+                SizedBox(
+                  height: imageList.isNotEmpty ? size.height * 0.2 : 0,
+                  child: Stack(
+                    children: [
+                      PageView.builder(
+                        controller: photoController,
+                        itemCount: imageList.length,
+                        itemBuilder: (context, index) {
+                          return CustomImageView(
+                            fit: BoxFit.cover,
+                            imagePath: imageList[index],
+                            height: size.height * 0.27,
+                            width: size.width,
+                            alignment: Alignment.center,
                           );
-
-                          // _buildCloseEditText(
-                          //   context,
-                          //   content:
-                          //       adDreamsGoalsProvider.goalModelIdName[index].name,
-                          //   onTap: () {
-                          //     adDreamsGoalsProvider
-                          //         .getAddActionIdAndNameClear(index);
-                          //   },
-                          // );
+                        },
+                        onPageChanged: (int pageIndex) {
+                          setState(() {
+                            photoCurrentIndex = pageIndex;
+                          });
                         },
                       ),
-                    ):
-                 SizedBox();
-                },
-              ),
-              const SizedBox(height: 20),
+                      Positioned(
+                        bottom: 10,
+                        left: 0,
+                        right: 0,
+                        child: SizedBox(
+                          width: imageList.length * size.width * 0.1,
+                          child: buildIndicators(
+                            imageList.length,
+                            photoCurrentIndex,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                videoList.isNotEmpty
+                    ? const SizedBox(
+                  height: 10,
+                )
+                    : const SizedBox(),
+                const SizedBox(
+                  height: 10,
+                ),
+                videoList.isNotEmpty?
+                Padding(
+                  padding: const EdgeInsets.only(left: 2),
+                  child: Text(
+                    "Video",
+                    style: CustomTextStyles.blackText16000000W600(),
+                  ),
+                ):
+                    SizedBox(),
+                const SizedBox(height: 4),
+                videoList.isNotEmpty
+                    ?
+                SizedBox(
+                  height: videoList.isNotEmpty ? size.height * 0.3 : 0,
+                  child: Stack(
+                    children: [
+                      PageView.builder(
+                        controller: videoController,
+                        itemCount: videoList.length,
+                        itemBuilder: (context, index) {
+                          return VideoPlayerWidget(
+                            videoUrl: videoList[index],
+                          );
+                        },
+                        onPageChanged: (int pageIndex) {
+                          setState(() {
+                            videoCurrentIndex = pageIndex;
+                          });
+                        },
+                      ),
+                      Positioned(
+                        bottom: 10,
+                        left: 0,
+                        right: 0,
+                        child: SizedBox(
+                          width: videoList.length * size.width * 0.1,
+                          child: buildIndicators(
+                            videoList.length,
+                            videoCurrentIndex,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ):
+             SizedBox(),
+                // _buildGrid(
+                //   context,
+                //   size,
+                // ),
+                widget.goalDetailModel.goals!.location?.locationAddress != null
+                    ? const SizedBox(
+                  height: 10,
+                ):
+                    SizedBox(),
+                widget.goalDetailModel.goals!.location?.locationAddress != null ?
+                Padding(
+                  padding: const EdgeInsets.only(left: 2),
+                  child: Text(
+                    "Your Location",
+                    style: CustomTextStyles.blackText16000000W600(),
+                  ),
+                ):
+                    SizedBox(),
+                const SizedBox(height: 6),
+                widget.goalDetailModel.goals!.location?.locationAddress != null ?
+                SizedBox(
+                  child: Center(
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons
+                                .location_on,
+                            color: ColorsContent.newThemeColor,
+                            size: size.width *
+                                0.06,
+                          ),
+                          Expanded(
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Text(
+                                (widget.goalDetailModel.goals?.location?.locationAddress?.isEmpty ?? true)
+                                    ? "NA"
+                                    : widget.goalDetailModel.goals!.location!.locationAddress!
+                                    .replaceAll(RegExp(r'[^a-zA-Z0-9, ]'), '') // Remove unwanted characters
+                                    .replaceAll(RegExp(r',\s*,+'), ',') // Replace multiple consecutive commas with a single comma
+                                    .replaceAll(RegExp(r'^,|,$'), '') // Remove leading and trailing commas
+                                    .trim(),
+                                style: CustomTextStyles.bodyMediumGray700_1,
+                                overflow: TextOverflow.visible,
+                                maxLines: 4, // Ensures scrolling works
+                              ),
+                            ),
+                          ),
 
-              // widget.goalDetailModel.goals!.goalStatus == "1"
-              //     ? const Padding(
-              //   padding: EdgeInsets.only(
-              //     left: 0,
-              //     bottom: 10,
-              //   ),
-              //   child: Text(
-              //     "Completed",
-              //     textAlign: TextAlign.center,
-              //     style: TextStyle(
-              //       fontWeight: FontWeight.bold,
-              //     ),
-              //     // style: theme.textTheme.titleSmall,
-              //   ),
-              // )
-              //     : Consumer<GoalsDreamsProvider>(
-              //     builder: (context, goalsDreamsProvider, _) {
-              //       return Padding(
-              //         padding: const EdgeInsets.only(
-              //           left: 13,
-              //           bottom: 10,
-              //         ),
-              //         child: CustomCheckboxButton(
-              //           text: "Mark this goal as Completed",
-              //           value: isCompleted,
-              //           onChange: (value) async {
-              //             setState(() {
-              //               isCompleted = true;
-              //             });
-              //             await goalsDreamsProvider.updateGoalsStatus(
-              //               context,
-              //               goalId: widget.goalDetailModel.goals!.goalId!
-              //                   .toString(),
-              //               status: "1",
-              //             );
-              //             goalsDreamsProvider.fetchGoalsAndDreams(
-              //               initial: true,
-              //             );
-              //           },
-              //         ),
-              //       );
-              //     }),
-              // _buildSaveButton(context),
-              SizedBox(
-                height: size.height * 0.04,
-              ),
-            ],
+                        ],
+                      )
+                  ),
+                )
+                    :
+               SizedBox(),
+                widget.goalDetailModel.goals!.location?.locationAddress != null ?
+                const SizedBox(height: 20):
+                    SizedBox(),
+                widget.goalDetailModel.goals!.action!.isNotEmpty ?
+                Padding(
+                  padding: const EdgeInsets.only(left: 2),
+                  child: Text(
+                    "Actions",
+                    style: CustomTextStyles.blackText16000000W600(),
+                  ),
+                ):
+                    SizedBox(),
+                const SizedBox(height: 5),
+                Consumer<AdDreamsGoalsProvider>(
+                  builder: (context, adDreamsGoalsProvider, _) {
+                    logger.w("adDreamsGoalsProvider.goalModelIdName${adDreamsGoalsProvider.goalModelIdName}");
+                    return
+                      widget.goalDetailModel.goals!.action!.isNotEmpty ?
+                      SizedBox(
+                        height: widget.goalDetailModel.goals!.action!.length *
+                            size.height *
+                            0.06,
+                        child: ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: widget.goalDetailModel.goals!.action!.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8.0),
+                              child: Row(
+                                children: [
+                                  //  Checkbox(value: false, onChanged: (value) {}),
+                                  GestureDetector(
+                                    onTap: () {
+                                      // Navigator.of(context).push(
+                                      //   MaterialPageRoute(
+                                      //     builder: (context) => ActionsFullView(
+                                      //       id: mentalStrengthEditProvider
+                                      //           .getListGoalActionsModel!
+                                      //           .actions![index]
+                                      //           .id
+                                      //           .toString(),
+                                      //       indexs: index,
+                                      //     ),
+                                      //   ),
+                                      // );
+                                    },
+                                    child: Container(
+                                      height: size.height * 0.04,
+                                      width: size.width * 0.78,
+                                      padding: const EdgeInsets.only(
+                                        bottom: 5,
+                                        top: 5,
+                                        left: 0,
+                                        right: 5,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: ColorsContent.newThemeColor,
+                                        borderRadius:
+                                        BorderRadius.circular(
+                                            8), // Makes it circular
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                        children: [
+
+                                          SizedBox(
+                                            width: size.width * 0.6,
+                                            child: SingleChildScrollView(
+                                              scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+                                              child: Text(
+                                                widget.goalDetailModel.goals!.action![index].actionTitle ?? "",
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                  fontSize: 17,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: 'Open Sans',
+                                                  color: Colors.white,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1, // Set the maximum number of lines to 3
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+
+                            // _buildCloseEditText(
+                            //   context,
+                            //   content:
+                            //       adDreamsGoalsProvider.goalModelIdName[index].name,
+                            //   onTap: () {
+                            //     adDreamsGoalsProvider
+                            //         .getAddActionIdAndNameClear(index);
+                            //   },
+                            // );
+                          },
+                        ),
+                      ):
+                   SizedBox();
+                  },
+                ),
+                const SizedBox(height: 20),
+
+                // widget.goalDetailModel.goals!.goalStatus == "1"
+                //     ? const Padding(
+                //   padding: EdgeInsets.only(
+                //     left: 0,
+                //     bottom: 10,
+                //   ),
+                //   child: Text(
+                //     "Completed",
+                //     textAlign: TextAlign.center,
+                //     style: TextStyle(
+                //       fontWeight: FontWeight.bold,
+                //     ),
+                //     // style: theme.textTheme.titleSmall,
+                //   ),
+                // )
+                //     : Consumer<GoalsDreamsProvider>(
+                //     builder: (context, goalsDreamsProvider, _) {
+                //       return Padding(
+                //         padding: const EdgeInsets.only(
+                //           left: 13,
+                //           bottom: 10,
+                //         ),
+                //         child: CustomCheckboxButton(
+                //           text: "Mark this goal as Completed",
+                //           value: isCompleted,
+                //           onChange: (value) async {
+                //             setState(() {
+                //               isCompleted = true;
+                //             });
+                //             await goalsDreamsProvider.updateGoalsStatus(
+                //               context,
+                //               goalId: widget.goalDetailModel.goals!.goalId!
+                //                   .toString(),
+                //               status: "1",
+                //             );
+                //             goalsDreamsProvider.fetchGoalsAndDreams(
+                //               initial: true,
+                //             );
+                //           },
+                //         ),
+                //       );
+                //     }),
+                // _buildSaveButton(context),
+                SizedBox(
+                  height: size.height * 0.04,
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -19,6 +19,7 @@ import '../../../widgets/custom_text_form_field.dart';
 import '../../addactions_screen/provider/add_actions_provider.dart';
 import '../../addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
 import '../../mental_strength_add_edit_screen/provider/mental_strenght_edit_provider.dart';
+import '../../no_internet/duplicate_screen.dart';
 
 class AddNewReminderScreenScreen extends StatefulWidget {
   const AddNewReminderScreenScreen({
@@ -66,546 +67,548 @@ class _AddNewReminderScreenScreenState
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
     Size size = MediaQuery.of(context).size;
     return SafeArea(
-      child: Scaffold(
-        appBar:
-            buildAppBarGoalView(context, size, heading: "New Reminder", id: ""),
-        body: Padding(
-          padding: const EdgeInsets.only(
-            left: 20,
-            right: 20,
-          ),
-          child: SingleChildScrollView(
-            child: Consumer<HomeProvider>(builder: (context, homeProvider, _) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 20),
-                  _buildTitleEditText(context),
-                  const SizedBox(height: 20),
-                  _buildDescriptionEditText(context),
-                  const SizedBox(height: 50),
-                  SizedBox(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "Date",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 15),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                homeProvider.reminderStartDateFunction(
-                                  context,
-                                );
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.only(
-                                  left: 2,
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 11,
-                                  vertical: 8,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: theme.colorScheme.onSecondaryContainer
-                                      .withOpacity(1),
-                                  border: Border.all(
-                                    color: appTheme.gray700,
-                                    width: 1,
+      child: ConnectivityWidget(
+        child: Scaffold(
+          appBar:
+              buildAppBarGoalView(context, size, heading: "New Reminder", id: ""),
+          body: Padding(
+            padding: const EdgeInsets.only(
+              left: 20,
+              right: 20,
+            ),
+            child: SingleChildScrollView(
+              child: Consumer<HomeProvider>(builder: (context, homeProvider, _) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 20),
+                    _buildTitleEditText(context),
+                    const SizedBox(height: 20),
+                    _buildDescriptionEditText(context),
+                    const SizedBox(height: 50),
+                    SizedBox(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Date",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 15),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  homeProvider.reminderStartDateFunction(
+                                    context,
+                                  );
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.only(
+                                    left: 2,
                                   ),
-                                  borderRadius:
-                                      BorderRadiusStyle.roundedBorder4,
-                                ),
-                                child: SizedBox(
-                                  width: size.width * 0.32,
-                                  child: Row(
-                                    children: [
-                                      CustomImageView(
-                                        imagePath:
-                                            ImageConstant.imgThumbsUpGray700,
-                                        height: 20,
-                                        width: 20,
-                                        margin: const EdgeInsets.only(
-                                          bottom: 2,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                          left: 5,
-                                          top: 2,
-                                          bottom: 1,
-                                        ),
-                                        child: Text(
-                                          //importent
-                                          homeProvider
-                                                  .reminderStartDate.isNotEmpty
-                                              ? homeProvider.reminderStartDate
-                                              : "Choose Date   ",
-                                          style:
-                                              CustomTextStyles.bodySmallGray700,
-                                        ),
-                                      ),
-                                    ],
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 11,
+                                    vertical: 8,
                                   ),
-                                ),
-                              ),
-                            ),
-                            const Text(
-                              "To",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                homeProvider.reminderEndDateFunction(
-                                  context,
-                                );
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.only(
-                                  left: 2,
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 11,
-                                  vertical: 8,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: theme.colorScheme.onSecondaryContainer
-                                      .withOpacity(1),
-                                  border: Border.all(
-                                    color: appTheme.gray700,
-                                    width: 1,
-                                  ),
-                                  borderRadius:
-                                      BorderRadiusStyle.roundedBorder4,
-                                ),
-                                child: SizedBox(
-                                  width: size.width * 0.32,
-                                  child: Row(
-                                    children: [
-                                      CustomImageView(
-                                        imagePath:
-                                            ImageConstant.imgThumbsUpGray700,
-                                        height: 20,
-                                        width: 20,
-                                        margin: const EdgeInsets.only(
-                                          bottom: 2,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                          left: 5,
-                                          top: 2,
-                                          bottom: 1,
-                                        ),
-                                        child: Text(
-                                          homeProvider
-                                                  .reminderEndDate.isNotEmpty
-                                              ? homeProvider.reminderEndDate
-                                              : "Choose Date   ",
-                                          style:
-                                              CustomTextStyles.bodySmallGray700,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        const Text(
-                          "Time",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 15),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                homeProvider.reminderStartTimeFunction(
-                                  context,
-                                );
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.only(
-                                  left: 2,
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 11,
-                                  vertical: 8,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: theme.colorScheme.onSecondaryContainer
-                                      .withOpacity(1),
-                                  border: Border.all(
-                                    color: appTheme.gray700,
-                                    width: 1,
-                                  ),
-                                  borderRadius:
-                                      BorderRadiusStyle.roundedBorder4,
-                                ),
-                                child: SizedBox(
-                                  width: size.width * 0.32,
-                                  child: Row(
-                                    children: [
-                                      CustomImageView(
-                                        imagePath:
-                                            ImageConstant.imgThumbsUpGray700,
-                                        height: 20,
-                                        width: 20,
-                                        margin: const EdgeInsets.only(
-                                          bottom: 2,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                          left: 5,
-                                          top: 2,
-                                          bottom: 1,
-                                        ),
-                                        child: Text(
-                                          homeProvider.reminderStartTime != null
-                                              ? formatTimeOfDay(homeProvider
-                                                  .reminderStartTime!)
-                                              : "Choose Time   ",
-                                          style:
-                                              CustomTextStyles.bodySmallGray700,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const Text(
-                              "To",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                homeProvider.reminderEndTimeFunction(
-                                  context,
-                                );
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.only(
-                                  left: 2,
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 11,
-                                  vertical: 8,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: theme.colorScheme.onSecondaryContainer
-                                      .withOpacity(1),
-                                  border: Border.all(
-                                    color: appTheme.gray700,
-                                    width: 1,
-                                  ),
-                                  borderRadius:
-                                      BorderRadiusStyle.roundedBorder4,
-                                ),
-                                child: SizedBox(
-                                  width: size.width * 0.32,
-                                  child: Row(
-                                    children: [
-                                      CustomImageView(
-                                        imagePath:
-                                            ImageConstant.imgThumbsUpGray700,
-                                        height: 20,
-                                        width: 20,
-                                        margin: const EdgeInsets.only(
-                                          bottom: 2,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                          left: 5,
-                                          top: 2,
-                                          bottom: 1,
-                                        ),
-                                        child: Text(
-                                          homeProvider.reminderEndTime != null
-                                              ? formatTimeOfDay(
-                                                  homeProvider.reminderEndTime!)
-                                              : "Choose Time   ",
-                                          style:
-                                              CustomTextStyles.bodySmallGray700,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  "Remind before",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    homeProvider.remindTimeFunction(
-                                      context,
-                                    );
-                                  },
-                                  child: Container(
-                                    margin: const EdgeInsets.only(
-                                      left: 2,
+                                  decoration: BoxDecoration(
+                                    color: theme.colorScheme.onSecondaryContainer
+                                        .withOpacity(1),
+                                    border: Border.all(
+                                      color: appTheme.gray700,
+                                      width: 1,
                                     ),
-                                    padding: const EdgeInsets.only(
-                                      left: 11,
-                                      right: 8,
-                                      bottom: 6,
-                                      top: 6,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: theme
-                                          .colorScheme.onSecondaryContainer
-                                          .withOpacity(
-                                        1,
-                                      ),
-                                      border: Border.all(
-                                        color: appTheme.gray700,
-                                        width: 1,
-                                      ),
-                                      borderRadius:
-                                          BorderRadiusStyle.roundedBorder4,
-                                    ),
-                                    child: SizedBox(
-                                      width: size.width * 0.32,
-                                      child: Row(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                              left: 3,
-                                              top: 2,
-                                              bottom: 1,
-                                            ),
-                                            child: Text(
-                                              homeProvider.remindTime != null
-                                                  ?
-                                                  // formatTimeOfDay(
-                                                  //         addActionsProvider
-                                                  //             .reminderEndTime!)
-                                                  homeProvider.remindTime!
-                                                              .hour <=
-                                                          0
-                                                      ? '${homeProvider.remindTime!.minute} Minute'
-                                                      : '${homeProvider.remindTime!.hour} Hour ${homeProvider.remindTime!.minute} Minut'
-                                                  : "Choose Time   ",
-                                              style: CustomTextStyles
-                                                  .bodySmallGray700,
-                                            ),
+                                    borderRadius:
+                                        BorderRadiusStyle.roundedBorder4,
+                                  ),
+                                  child: SizedBox(
+                                    width: size.width * 0.32,
+                                    child: Row(
+                                      children: [
+                                        CustomImageView(
+                                          imagePath:
+                                              ImageConstant.imgThumbsUpGray700,
+                                          height: 20,
+                                          width: 20,
+                                          margin: const EdgeInsets.only(
+                                            bottom: 2,
                                           ),
-                                          const Spacer(),
-                                          const Icon(
-                                            Icons.keyboard_arrow_down_sharp,
-                                            color: Colors.blue,
-                                          )
-                                        ],
-                                      ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 5,
+                                            top: 2,
+                                            bottom: 1,
+                                          ),
+                                          child: Text(
+                                            //importent
+                                            homeProvider
+                                                    .reminderStartDate.isNotEmpty
+                                                ? homeProvider.reminderStartDate
+                                                : "Choose Date   ",
+                                            style:
+                                                CustomTextStyles.bodySmallGray700,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  "Repeat",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15,
+                              ),
+                              const Text(
+                                "To",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  homeProvider.reminderEndDateFunction(
+                                    context,
+                                  );
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.only(
+                                    left: 2,
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 11,
+                                    vertical: 8,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: theme.colorScheme.onSecondaryContainer
+                                        .withOpacity(1),
+                                    border: Border.all(
+                                      color: appTheme.gray700,
+                                      width: 1,
+                                    ),
+                                    borderRadius:
+                                        BorderRadiusStyle.roundedBorder4,
+                                  ),
+                                  child: SizedBox(
+                                    width: size.width * 0.32,
+                                    child: Row(
+                                      children: [
+                                        CustomImageView(
+                                          imagePath:
+                                              ImageConstant.imgThumbsUpGray700,
+                                          height: 20,
+                                          width: 20,
+                                          margin: const EdgeInsets.only(
+                                            bottom: 2,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 5,
+                                            top: 2,
+                                            bottom: 1,
+                                          ),
+                                          child: Text(
+                                            homeProvider
+                                                    .reminderEndDate.isNotEmpty
+                                                ? homeProvider.reminderEndDate
+                                                : "Choose Date   ",
+                                            style:
+                                                CustomTextStyles.bodySmallGray700,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 5,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          const Text(
+                            "Time",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 15),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  homeProvider.reminderStartTimeFunction(
+                                    context,
+                                  );
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.only(
+                                    left: 2,
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 11,
+                                    vertical: 8,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: theme.colorScheme.onSecondaryContainer
+                                        .withOpacity(1),
+                                    border: Border.all(
+                                      color: appTheme.gray700,
+                                      width: 1,
+                                    ),
+                                    borderRadius:
+                                        BorderRadiusStyle.roundedBorder4,
+                                  ),
+                                  child: SizedBox(
+                                    width: size.width * 0.32,
+                                    child: Row(
+                                      children: [
+                                        CustomImageView(
+                                          imagePath:
+                                              ImageConstant.imgThumbsUpGray700,
+                                          height: 20,
+                                          width: 20,
+                                          margin: const EdgeInsets.only(
+                                            bottom: 2,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 5,
+                                            top: 2,
+                                            bottom: 1,
+                                          ),
+                                          child: Text(
+                                            homeProvider.reminderStartTime != null
+                                                ? formatTimeOfDay(homeProvider
+                                                    .reminderStartTime!)
+                                                : "Choose Time   ",
+                                            style:
+                                                CustomTextStyles.bodySmallGray700,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    AlertDialog alert = AlertDialog(
-                                      content: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          ListTile(
-                                            onTap: () {
-                                              homeProvider.addRepeatValue(
+                              ),
+                              const Text(
+                                "To",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  homeProvider.reminderEndTimeFunction(
+                                    context,
+                                  );
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.only(
+                                    left: 2,
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 11,
+                                    vertical: 8,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: theme.colorScheme.onSecondaryContainer
+                                        .withOpacity(1),
+                                    border: Border.all(
+                                      color: appTheme.gray700,
+                                      width: 1,
+                                    ),
+                                    borderRadius:
+                                        BorderRadiusStyle.roundedBorder4,
+                                  ),
+                                  child: SizedBox(
+                                    width: size.width * 0.32,
+                                    child: Row(
+                                      children: [
+                                        CustomImageView(
+                                          imagePath:
+                                              ImageConstant.imgThumbsUpGray700,
+                                          height: 20,
+                                          width: 20,
+                                          margin: const EdgeInsets.only(
+                                            bottom: 2,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 5,
+                                            top: 2,
+                                            bottom: 1,
+                                          ),
+                                          child: Text(
+                                            homeProvider.reminderEndTime != null
+                                                ? formatTimeOfDay(
+                                                    homeProvider.reminderEndTime!)
+                                                : "Choose Time   ",
+                                            style:
+                                                CustomTextStyles.bodySmallGray700,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "Remind before",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      homeProvider.remindTimeFunction(
+                                        context,
+                                      );
+                                    },
+                                    child: Container(
+                                      margin: const EdgeInsets.only(
+                                        left: 2,
+                                      ),
+                                      padding: const EdgeInsets.only(
+                                        left: 11,
+                                        right: 8,
+                                        bottom: 6,
+                                        top: 6,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: theme
+                                            .colorScheme.onSecondaryContainer
+                                            .withOpacity(
+                                          1,
+                                        ),
+                                        border: Border.all(
+                                          color: appTheme.gray700,
+                                          width: 1,
+                                        ),
+                                        borderRadius:
+                                            BorderRadiusStyle.roundedBorder4,
+                                      ),
+                                      child: SizedBox(
+                                        width: size.width * 0.32,
+                                        child: Row(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                left: 3,
+                                                top: 2,
+                                                bottom: 1,
+                                              ),
+                                              child: Text(
+                                                homeProvider.remindTime != null
+                                                    ?
+                                                    // formatTimeOfDay(
+                                                    //         addActionsProvider
+                                                    //             .reminderEndTime!)
+                                                    homeProvider.remindTime!
+                                                                .hour <=
+                                                            0
+                                                        ? '${homeProvider.remindTime!.minute} Minute'
+                                                        : '${homeProvider.remindTime!.hour} Hour ${homeProvider.remindTime!.minute} Minut'
+                                                    : "Choose Time   ",
+                                                style: CustomTextStyles
+                                                    .bodySmallGray700,
+                                              ),
+                                            ),
+                                            const Spacer(),
+                                            const Icon(
+                                              Icons.keyboard_arrow_down_sharp,
+                                              color: Colors.blue,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "Repeat",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      AlertDialog alert = AlertDialog(
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            ListTile(
+                                              onTap: () {
+                                                homeProvider.addRepeatValue(
+                                                  "Never",
+                                                );
+                                                Navigator.of(context).pop();
+                                              },
+                                              title: const Text(
                                                 "Never",
-                                              );
-                                              Navigator.of(context).pop();
-                                            },
-                                            title: const Text(
-                                              "Never",
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          ListTile(
-                                            onTap: () {
-                                              homeProvider
-                                                  .addRepeatValue("Daily");
-                                              Navigator.of(context).pop();
-                                            },
-                                            title: const Text(
-                                              "Daily",
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
+                                            ListTile(
+                                              onTap: () {
+                                                homeProvider
+                                                    .addRepeatValue("Daily");
+                                                Navigator.of(context).pop();
+                                              },
+                                              title: const Text(
+                                                "Daily",
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          ListTile(
-                                            onTap: () {
-                                              homeProvider
-                                                  .addRepeatValue("Weekly");
-                                              Navigator.of(context).pop();
-                                            },
-                                            title: const Text(
-                                              "Weekly",
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
+                                            ListTile(
+                                              onTap: () {
+                                                homeProvider
+                                                    .addRepeatValue("Weekly");
+                                                Navigator.of(context).pop();
+                                              },
+                                              title: const Text(
+                                                "Weekly",
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          ListTile(
-                                            onTap: () {
-                                              homeProvider
-                                                  .addRepeatValue("Monthly");
-                                              Navigator.of(context).pop();
-                                            },
-                                            title: const Text(
-                                              "Monthly",
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
+                                            ListTile(
+                                              onTap: () {
+                                                homeProvider
+                                                    .addRepeatValue("Monthly");
+                                                Navigator.of(context).pop();
+                                              },
+                                              title: const Text(
+                                                "Monthly",
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          ListTile(
-                                            onTap: () {
-                                              homeProvider
-                                                  .addRepeatValue("Yearly");
-                                              Navigator.of(context).pop();
-                                            },
-                                            title: const Text(
-                                              "Yearly",
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
+                                            ListTile(
+                                              onTap: () {
+                                                homeProvider
+                                                    .addRepeatValue("Yearly");
+                                                Navigator.of(context).pop();
+                                              },
+                                              title: const Text(
+                                                "Yearly",
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
+                                      );
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return alert;
+                                        },
+                                      );
+                                    },
+                                    child: Container(
+                                      margin: const EdgeInsets.only(
+                                        left: 2,
                                       ),
-                                    );
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return alert;
-                                      },
-                                    );
-                                  },
-                                  child: Container(
-                                    margin: const EdgeInsets.only(
-                                      left: 2,
-                                    ),
-                                    padding: const EdgeInsets.only(
-                                      left: 11,
-                                      right: 8,
-                                      bottom: 6,
-                                      top: 6,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: theme
-                                          .colorScheme.onSecondaryContainer
-                                          .withOpacity(1),
-                                      border: Border.all(
-                                        color: appTheme.gray700,
-                                        width: 1,
+                                      padding: const EdgeInsets.only(
+                                        left: 11,
+                                        right: 8,
+                                        bottom: 6,
+                                        top: 6,
                                       ),
-                                      borderRadius:
-                                          BorderRadiusStyle.roundedBorder4,
-                                    ),
-                                    child: SizedBox(
-                                      width: size.width * 0.32,
-                                      child: Row(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                              left: 10,
-                                              top: 2,
-                                              bottom: 1,
+                                      decoration: BoxDecoration(
+                                        color: theme
+                                            .colorScheme.onSecondaryContainer
+                                            .withOpacity(1),
+                                        border: Border.all(
+                                          color: appTheme.gray700,
+                                          width: 1,
+                                        ),
+                                        borderRadius:
+                                            BorderRadiusStyle.roundedBorder4,
+                                      ),
+                                      child: SizedBox(
+                                        width: size.width * 0.32,
+                                        child: Row(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                left: 10,
+                                                top: 2,
+                                                bottom: 1,
+                                              ),
+                                              child: Text(
+                                                homeProvider.repeat,
+                                                style: CustomTextStyles
+                                                    .bodySmallGray700,
+                                              ),
                                             ),
-                                            child: Text(
-                                              homeProvider.repeat,
-                                              style: CustomTextStyles
-                                                  .bodySmallGray700,
-                                            ),
-                                          ),
-                                          const Spacer(),
-                                          const Icon(
-                                            Icons.keyboard_arrow_down_sharp,
-                                            color: Colors.blue,
-                                          )
-                                        ],
+                                            const Spacer(),
+                                            const Icon(
+                                              Icons.keyboard_arrow_down_sharp,
+                                              color: Colors.blue,
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 50),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: _buildSaveButton(
-                      context,
+                    const SizedBox(height: 50),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: _buildSaveButton(
+                        context,
+                      ),
                     ),
-                  ),
-                ],
-              );
-            }),
+                  ],
+                );
+              }),
+            ),
           ),
         ),
       ),

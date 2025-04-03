@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 
 import '../../utils/theme/custom_text_style.dart';
 import '../dash_borad_screen/dash_board_screen.dart';
+import '../no_internet/duplicate_screen.dart';
 import 'provider/feed_back_provider.dart';
 
 // ignore: must_be_immutable
@@ -25,85 +26,87 @@ class FeedbackScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return SafeArea(
-      child: Scaffold(
-        extendBody: true,
-        extendBodyBehindAppBar: true,
-        resizeToAvoidBottomInset: false,
-        appBar: buildAppBar(
-          context,
-          size,
-          heading: "Feedback",
-        ),
-        body: backGroundImager(
-          size: size,
-          child: SingleChildScrollView(
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewInsets.bottom,
-            ),
-            child: Form(
-              key: _formKey,
-              child: Container(
-                width: double.maxFinite,
-                padding: const EdgeInsets.only(
-                  left: 28,
-                  top: 103,
-                  right: 28,
-                ),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 80),
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 2),
-                        child: Text(
-                          "Name *",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Open Sans',
-                            color: Colors.black,
+    return ConnectivityWidget(
+      child: SafeArea(
+        child: Scaffold(
+          extendBody: true,
+          extendBodyBehindAppBar: true,
+          resizeToAvoidBottomInset: false,
+          appBar: buildAppBar(
+            context,
+            size,
+            heading: "Feedback",
+          ),
+          body: backGroundImager(
+            size: size,
+            child: SingleChildScrollView(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: Form(
+                key: _formKey,
+                child: Container(
+                  width: double.maxFinite,
+                  padding: const EdgeInsets.only(
+                    left: 28,
+                    top: 103,
+                    right: 28,
+                  ),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 80),
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 2),
+                          child: Text(
+                            "Name *",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Open Sans',
+                              color: Colors.black,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 5),
-                    _buildNameEditText(context),
-                    const SizedBox(height: 16),
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 2),
-                        child: Text(
-                          "Email *",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Open Sans',
-                            color: Colors.black,
+                      const SizedBox(height: 5),
+                      _buildNameEditText(context),
+                      const SizedBox(height: 16),
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 2),
+                          child: Text(
+                            "Email *",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Open Sans',
+                              color: Colors.black,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 5),
-                    _buildEmailEditText(context),
-                    const SizedBox(height: 24),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 2),
-                        child: Text(
-                          "Your Message",
-                          style: CustomTextStyles.bodyMedium14,
+                      const SizedBox(height: 5),
+                      _buildEmailEditText(context),
+                      const SizedBox(height: 24),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 2),
+                          child: Text(
+                            "Your Message",
+                            style: CustomTextStyles.bodyMedium14,
+                          ),
                         ),
                       ),
-                    ),
-                    _buildMessageEditText(context),
-                    const SizedBox(height: 28),
-                    _buildSubmitButton(context),
-                    const SizedBox(height: 5),
-                  ],
+                      _buildMessageEditText(context),
+                      const SizedBox(height: 28),
+                      _buildSubmitButton(context),
+                      const SizedBox(height: 5),
+                    ],
+                  ),
                 ),
               ),
             ),

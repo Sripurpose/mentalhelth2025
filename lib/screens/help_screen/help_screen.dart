@@ -5,6 +5,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import '../../utils/core/image_constant.dart';
 import '../../utils/theme/theme_helper.dart';
 import '../../widgets/app_bar/appbar_leading_image.dart';
+import '../no_internet/duplicate_screen.dart';
 
 class HelpScreen extends StatefulWidget {
   final String url;
@@ -46,29 +47,31 @@ class _HelpScreenState extends State<HelpScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
-      child: Scaffold(
-        body: Container(
-          width: double.infinity,
-          height: double.infinity,
-          decoration: BoxDecoration(
-            color: ColorsContent.homeBackGroundColor,
-          ),
-          child: SizedBox(
-            width: double.maxFinite,
-            child: Column(
-              children: [
-                buildAppBar(
-                  context,
-                  size,
-                  heading: "Help",
-                ),
-                // Use Expanded to allow WebView to take remaining space in the Column
-                Expanded(
-                  child: WebViewWidget(
-                    controller: _controller,
+      child: ConnectivityWidget(
+        child: Scaffold(
+          body: Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: BoxDecoration(
+              color: ColorsContent.homeBackGroundColor,
+            ),
+            child: SizedBox(
+              width: double.maxFinite,
+              child: Column(
+                children: [
+                  buildAppBar(
+                    context,
+                    size,
+                    heading: "Help",
                   ),
-                ),
-              ],
+                  // Use Expanded to allow WebView to take remaining space in the Column
+                  Expanded(
+                    child: WebViewWidget(
+                      controller: _controller,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

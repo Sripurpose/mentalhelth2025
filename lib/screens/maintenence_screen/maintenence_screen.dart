@@ -17,6 +17,7 @@ import '../../utils/theme/theme_helper.dart';
 import '../auth/sign_in/coninue_with_google_class.dart';
 import '../auth/sign_in/landing_register_screen.dart';
 import '../auth/splash/splash.dart';
+import '../no_internet/duplicate_screen.dart';
 
 class MaintenenceScreen extends StatefulWidget {
   const MaintenenceScreen(
@@ -66,88 +67,90 @@ class _MaintenenceScreenState extends State<MaintenenceScreen> {
           // Returning false prevents the back press
           return false;
         },
-        child: Scaffold(
-          body: backGroundImager(
-            size: size,
-            padding: EdgeInsets.zero,
-            child: Center(
-                child: SingleChildScrollView(
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom,
-                  ),
-                  child: Form(
-                    key: _formKey,
-                    child: Container(
-                      width: double.maxFinite,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 48,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            height: size.height * 0.30,
-                          ),
-                          CustomImageView(
-                            imagePath: ImageConstant.imgLogo,
-                            height: 70,
-                            width: 280,
-                            color: Colors.white,
-                          ),
-                          SizedBox(
-                            height: size.height * 0.10,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                widget.title ?? '',
-                                style: theme.textTheme.titleMedium,
-                              ),
-
-                            ],
-                          ),
-                          SizedBox(
-                            height: size.height * 0.04,
-                          ),
-                          GestureDetector(
-                            onTap: () async {
-                              setState(() {
-                              });
-                              await signInProvider.logOutUser(context);
-                              //await googleSignOut();
-                              Navigator.push(
-                                context,
-                                PageRouteBuilder(
-                                  pageBuilder: (_, __, ___) => const LandingRegisterScreenScreen(),
-                                  transitionDuration: const Duration(seconds: 0),
+        child: ConnectivityWidget(
+          child: Scaffold(
+            body: backGroundImager(
+              size: size,
+              padding: EdgeInsets.zero,
+              child: Center(
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom,
+                    ),
+                    child: Form(
+                      key: _formKey,
+                      child: Container(
+                        width: double.maxFinite,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 48,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: size.height * 0.30,
+                            ),
+                            CustomImageView(
+                              imagePath: ImageConstant.imgLogo,
+                              height: 70,
+                              width: 280,
+                              color: Colors.white,
+                            ),
+                            SizedBox(
+                              height: size.height * 0.10,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  widget.title ?? '',
+                                  style: theme.textTheme.titleMedium,
                                 ),
-                              );
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(10.0),
-                              decoration: BoxDecoration(
-                                color: Colors.transparent,
-                                borderRadius: BorderRadius.circular(5.0),
-                                border: Border.all(
-                                  color: Colors.black,
-                                  width: 0.5,
+          
+                              ],
+                            ),
+                            SizedBox(
+                              height: size.height * 0.04,
+                            ),
+                            GestureDetector(
+                              onTap: () async {
+                                setState(() {
+                                });
+                                await signInProvider.logOutUser(context);
+                                //await googleSignOut();
+                                Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    pageBuilder: (_, __, ___) => const LandingRegisterScreenScreen(),
+                                    transitionDuration: const Duration(seconds: 0),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(10.0),
+                                decoration: BoxDecoration(
+                                  color: Colors.transparent,
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  border: Border.all(
+                                    color: Colors.black,
+                                    width: 0.5,
+                                  ),
                                 ),
-                              ),
-                              child: Text(
-                                "Cancel",
-                                style: theme.textTheme.titleMedium,
+                                child: Text(
+                                  "Cancel",
+                                  style: theme.textTheme.titleMedium,
+                                ),
                               ),
                             ),
-                          ),
-
-                        ],
+          
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                )),
+                  )),
+            ),
           ),
         ),
       ),

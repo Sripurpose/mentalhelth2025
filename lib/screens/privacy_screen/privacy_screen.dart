@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../widgets/app_bar/appbar_leading_image.dart';
+import '../no_internet/duplicate_screen.dart';
 
 class PrivacyScreen extends StatefulWidget {
   const PrivacyScreen({Key? key})
@@ -31,79 +32,81 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return SafeArea(
-      child: Container(
-        width: size.width,
-        height: size.height,
-        decoration: BoxDecoration(
-          color:ColorsContent.homeBackGroundColor,
-          image: DecorationImage(
-            image: AssetImage(
-              ImageConstant.imgGroup193,
+    return ConnectivityWidget(
+      child: SafeArea(
+        child: Container(
+          width: size.width,
+          height: size.height,
+          decoration: BoxDecoration(
+            color:ColorsContent.homeBackGroundColor,
+            image: DecorationImage(
+              image: AssetImage(
+                ImageConstant.imgGroup193,
+              ),
+              fit: BoxFit.cover,
             ),
-            fit: BoxFit.cover,
           ),
-        ),
-        child: SizedBox(
-          width: double.maxFinite,
-          child: Column(
-            children: [
-              buildAppBar(
-                context,
-                size,
-                heading: "Privacy Policy",
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 27,
-                  top: 20,
-                  right: 27,
+          child: SizedBox(
+            width: double.maxFinite,
+            child: Column(
+              children: [
+                buildAppBar(
+                  context,
+                  size,
+                  heading: "Privacy Policy",
                 ),
-                child: Consumer<PrivacyPolicyProvider>(
-                  builder: (context, policyProvider, _) {
-                    return SizedBox(
-                      height: size.height * 0.75,
-                      child: policyProvider.policyModel == null
-                          ? const Center(
-                              child: Text("No Data"),
-                            )
-                          : policyProvider.policyModelLoading
-                              ? const Center(
-                                  child: CircularProgressIndicator(),
-                                )
-                              : WebViewWidget(
-                                  controller: WebViewController()
-                                    ..setJavaScriptMode(
-                                        JavaScriptMode.unrestricted)
-                                    ..setBackgroundColor(Colors.transparent)
-                                    ..loadHtmlString(
-                                      '''
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <style>
-          body {
-            background-color: transparent;
-            text-align: justify; /* Aligns text to justify */
-            padding: 0px;
-          }
-        </style>
-      </head>
-      <body>
-        ${policyProvider.policyModel!.description.toString()}
-      </body>
-      </html>
-      ''',
-                                    ),
-                                ),
-                    );
-                  },
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 27,
+                    top: 20,
+                    right: 27,
+                  ),
+                  child: Consumer<PrivacyPolicyProvider>(
+                    builder: (context, policyProvider, _) {
+                      return SizedBox(
+                        height: size.height * 0.75,
+                        child: policyProvider.policyModel == null
+                            ? const Center(
+                                child: Text("No Data"),
+                              )
+                            : policyProvider.policyModelLoading
+                                ? const Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : WebViewWidget(
+                                    controller: WebViewController()
+                                      ..setJavaScriptMode(
+                                          JavaScriptMode.unrestricted)
+                                      ..setBackgroundColor(Colors.transparent)
+                                      ..loadHtmlString(
+                                        '''
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <style>
+            body {
+              background-color: transparent;
+              text-align: justify; /* Aligns text to justify */
+              padding: 0px;
+            }
+          </style>
+        </head>
+        <body>
+          ${policyProvider.policyModel!.description.toString()}
+        </body>
+        </html>
+        ''',
+                                      ),
+                                  ),
+                      );
+                    },
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-            ],
+                const SizedBox(
+                  height: 5,
+                ),
+              ],
+            ),
           ),
         ),
       ),

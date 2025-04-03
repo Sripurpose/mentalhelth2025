@@ -12,6 +12,7 @@ import '../../../utils/theme/custom_text_style.dart';
 import '../../../utils/theme/theme_helper.dart';
 import '../../../widgets/custom_image_view.dart';
 import '../../../widgets/functions/snack_bar.dart';
+import '../../no_internet/duplicate_screen.dart';
 import '../../phone_singin_screen/provider/phone_sign_in_provider.dart';
 import '../myprofile_screen.dart';
 
@@ -23,108 +24,110 @@ class VerifyOtpPhoneScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
-      child: Scaffold(
-        extendBody: true,
-        extendBodyBehindAppBar: true,
-        resizeToAvoidBottomInset: false,
-        body: Container(
-          width: size.width,
-          height: size.height,
-          decoration: BoxDecoration(
-              color: ColorsContent.homeBackGroundColor,
-              image: DecorationImage(
-                  image: AssetImage(ImageConstant.gradientBackground),
-                  fit: BoxFit.cover)
-          ),
-          child: Container(
-            width: double.maxFinite,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 49,
-              vertical: 175,
+      child: ConnectivityWidget(
+        child: Scaffold(
+          extendBody: true,
+          extendBodyBehindAppBar: true,
+          resizeToAvoidBottomInset: false,
+          body: Container(
+            width: size.width,
+            height: size.height,
+            decoration: BoxDecoration(
+                color: ColorsContent.homeBackGroundColor,
+                image: DecorationImage(
+                    image: AssetImage(ImageConstant.gradientBackground),
+                    fit: BoxFit.cover)
             ),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(
-                    height: 34,
-                  ),
-                  CustomImageView(
-                      imagePath: ImageConstant.imgNumuLogo, height: 68, width: 280),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  Text(
-                      "Enter the code sent to your phone",
-                    style:  TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Open Sans',
-                      color: Colors.white,
+            child: Container(
+              width: double.maxFinite,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 49,
+                vertical: 175,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                      height: 34,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Consumer<EditProfileProvider>(
+                    CustomImageView(
+                        imagePath: ImageConstant.imgNumuLogo, height: 68, width: 280),
+                    const SizedBox(
+                      height: 50,
+                    ),
+                    Text(
+                        "Enter the code sent to your phone",
+                      style:  TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Open Sans',
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Consumer<EditProfileProvider>(
+                        builder: (context, editProfileProvider, _) {
+                          return CustomPinCodeTextField(
+                            context: context,
+                            onChanged: (value) {
+                              editProfileProvider.addPhoneOtpFunction(value: value);
+                            },
+                          );
+                        }),
+                    const SizedBox(
+                      height: 35,
+                    ),
+                    Consumer<EditProfileProvider>(
                       builder: (context, editProfileProvider, _) {
-                        return CustomPinCodeTextField(
-                          context: context,
-                          onChanged: (value) {
-                            editProfileProvider.addPhoneOtpFunction(value: value);
-                          },
-                        );
-                      }),
-                  const SizedBox(
-                    height: 35,
-                  ),
-                  Consumer<EditProfileProvider>(
-                    builder: (context, editProfileProvider, _) {
-                      return CustomElevatedButton(
-                        loading: editProfileProvider.verifyOtpPhoneLoading,
-                        height: 40,
-                        text: "Submit",
-                        margin: const EdgeInsets.symmetric(horizontal: 3),
-                        buttonStyle: CustomButtonStyles.signInButton,
-                        buttonTextStyle: CustomTextStyles.titleSmallHelveticaOnSecondaryContainer,
-                        onPressed: () async {
-                          if(editProfileProvider.phoneOtp.isNotEmpty){
-                            await editProfileProvider.verifyOtpPhoneFunction(context);
-                            editProfileProvider.clearTextEditingController();
-                            HomeProvider homeProvider = Provider.of<HomeProvider>(context, listen: false);
-                            // You don't need to re-declare editProfileProvider
-                            homeProvider.fetchChartView(context);
-                           // homeProvider.fetchJournals(initial: true);
-                            editProfileProvider.fetchUserProfile();
-                            if(editProfileProvider.verifyOtpPhoneStatus == 200){
-                              Navigator.of(context)
-                                  .push(
-                                MaterialPageRoute(
-                                  builder: (context) => const MyProfileScreen(),
-                                ),
-                              );
-
-                              //Navigator.of(context).pop();
-
+                        return CustomElevatedButton(
+                          loading: editProfileProvider.verifyOtpPhoneLoading,
+                          height: 40,
+                          text: "Submit",
+                          margin: const EdgeInsets.symmetric(horizontal: 3),
+                          buttonStyle: CustomButtonStyles.signInButton,
+                          buttonTextStyle: CustomTextStyles.titleSmallHelveticaOnSecondaryContainer,
+                          onPressed: () async {
+                            if(editProfileProvider.phoneOtp.isNotEmpty){
+                              await editProfileProvider.verifyOtpPhoneFunction(context);
+                              editProfileProvider.clearTextEditingController();
+                              HomeProvider homeProvider = Provider.of<HomeProvider>(context, listen: false);
+                              // You don't need to re-declare editProfileProvider
+                              homeProvider.fetchChartView(context);
+                             // homeProvider.fetchJournals(initial: true);
+                              editProfileProvider.fetchUserProfile();
+                              if(editProfileProvider.verifyOtpPhoneStatus == 200){
+                                Navigator.of(context)
+                                    .push(
+                                  MaterialPageRoute(
+                                    builder: (context) => const MyProfileScreen(),
+                                  ),
+                                );
+        
+                                //Navigator.of(context).pop();
+        
+                              }else{
+                                showToast(
+                                  context: context,
+                                  message: editProfileProvider.verifyOtpPhoneMessage ?? "",
+                                );
+                              }
                             }else{
                               showToast(
                                 context: context,
-                                message: editProfileProvider.verifyOtpPhoneMessage ?? "",
+                                message: "Please enter your otp",
                               );
                             }
-                          }else{
-                            showToast(
-                              context: context,
-                              message: "Please enter your otp",
-                            );
-                          }
-                        },
-                      );
-                    },
-                  ),
-
-                ],
+                          },
+                        );
+                      },
+                    ),
+        
+                  ],
+                ),
               ),
             ),
           ),

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:mentalhelth/utils/core/image_constant.dart';
 
 import '../../../utils/theme/colors.dart';
+import '../../no_internet/duplicate_screen.dart';
 import '../sign_in/landing_register_screen.dart';
 
 class NewSplashScreen extends StatefulWidget {
@@ -39,91 +40,93 @@ class _SplashScreenState extends State<NewSplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: Padding(
-          padding: Platform.isAndroid ?
-          const EdgeInsets.symmetric(vertical: 23.0,horizontal: 10):const EdgeInsets.symmetric(vertical: 0.0,horizontal: 10),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Image.asset(
-                _isFirstState ? ImageConstant.dummyImageSplash1 : ImageConstant.dummyImageSplash2, // Change image dynamically
+    return ConnectivityWidget(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Center(
+          child: Padding(
+            padding: Platform.isAndroid ?
+            const EdgeInsets.symmetric(vertical: 23.0,horizontal: 10):const EdgeInsets.symmetric(vertical: 0.0,horizontal: 10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Image.asset(
+                  _isFirstState ? ImageConstant.dummyImageSplash1 : ImageConstant.dummyImageSplash2, // Change image dynamically
 
-              ),
-              const SizedBox(height: 40),
-
-              /// 🔹 Progress Bar (Container)
-              Container(
-                width: 200,
-                height: 10,
-                decoration: BoxDecoration(
-                  color: Colors.grey[300], // Background color
-                  borderRadius: BorderRadius.circular(5),
                 ),
-                alignment: Alignment.centerLeft,
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 500),
-                  width: 200 * _progress, // Dynamic width based on progress
+                const SizedBox(height: 40),
+
+                /// 🔹 Progress Bar (Container)
+                Container(
+                  width: 200,
                   height: 10,
                   decoration: BoxDecoration(
-                    color: ColorsContent.newThemeColor, // Progress color
+                    color: Colors.grey[300], // Background color
                     borderRadius: BorderRadius.circular(5),
                   ),
-                ),
-              ),
-              const SizedBox(height: 50),
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: _isFirstState ? "Lorem Ipsum" : "Welcome to",
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.w800,
-                        fontFamily: 'Urbanist',
-                        color: _isFirstState ? ColorsContent.newThemeColor : Colors.black,
-                      ),
+                  alignment: Alignment.centerLeft,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 500),
+                    width: 200 * _progress, // Dynamic width based on progress
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: ColorsContent.newThemeColor, // Progress color
+                      borderRadius: BorderRadius.circular(5),
                     ),
-                     TextSpan(
-                      text: _isFirstState ? " is simply" :"",
-                      style: const TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.w800,
-                        fontFamily: 'Urbanist',
-                        color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 50),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: _isFirstState ? "Lorem Ipsum" : "Welcome to",
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w800,
+                          fontFamily: 'Urbanist',
+                          color: _isFirstState ? ColorsContent.newThemeColor : Colors.black,
+                        ),
                       ),
-                    ),
-                  ],
+                       TextSpan(
+                        text: _isFirstState ? " is simply" :"",
+                        style: const TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w800,
+                          fontFamily: 'Urbanist',
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Text(
-                _isFirstState ? "dummy text" : "Numu App",
-                style:  TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w800,
-                  color: _isFirstState ? Colors.black : ColorsContent.newThemeColor,
+                Text(
+                  _isFirstState ? "dummy text" : "Numu App",
+                  style:  TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w800,
+                    color: _isFirstState ? Colors.black : ColorsContent.newThemeColor,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: SizedBox(
-          width: 70,
-          height: 70,
-          child: ElevatedButton(
-            onPressed: _handleButtonClick, // Handle button click logic
-            style: ElevatedButton.styleFrom(
-              shape: const CircleBorder(),
-            ),
-            child: Image.asset(
-              ImageConstant.splashNextIcon, // Button icon
-              width: 80,
-              height: 80,
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: SizedBox(
+            width: 70,
+            height: 70,
+            child: ElevatedButton(
+              onPressed: _handleButtonClick, // Handle button click logic
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+              ),
+              child: Image.asset(
+                ImageConstant.splashNextIcon, // Button icon
+                width: 80,
+                height: 80,
+              ),
             ),
           ),
         ),

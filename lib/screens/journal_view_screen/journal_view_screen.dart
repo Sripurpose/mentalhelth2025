@@ -37,6 +37,7 @@ import '../addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
 import '../journal_list_screen/journal_list_page.dart';
 import '../journal_list_screen/screens/edit_journal/numu_edit_journal_screen.dart';
 import '../mental_strength_add_edit_screen/screens/goals_and_dreams_full_view/goals_and_dreams_full_view_screen.dart';
+import '../no_internet/duplicate_screen.dart';
 
 class JournalViewScreen extends StatefulWidget {
   const JournalViewScreen(
@@ -53,6 +54,7 @@ class JournalViewScreen extends StatefulWidget {
 }
 
 class _JournalViewScreenState extends State<JournalViewScreen> {
+  bool? _isConnected;
   late MentalStrengthEditProvider mentalStrengthEditProvider;
   late HomeProvider homeProvider;
   var logger = Logger();
@@ -138,558 +140,582 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
         mentalStrengthEditProvider.openGoalViewSheet = false;
         mentalStrengthEditProvider.goalDetailModel = null;
       },
-      child: SafeArea(
-        child: Consumer3<MentalStrengthEditProvider,DashBoardProvider,HomeProvider>(builder: (context,mentalStrengthEditProvider,dashBoardProvider,homeProvider, _) {
-          return Scaffold(
-            appBar: buildAppBarJournalViewScreen(context, size, heading: "View your journal",
-              onTap: (){
-                mentalStrengthEditProvider.openGoalViewSheet = false;
-                mentalStrengthEditProvider.goalDetailModel = null;
-                Navigator.of(context).pop();
-              }
-            ),
-            body: backGroundImager(
-              size: size,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    // left: 20,
-                    // right: 20,
-                    ),
-                child:
-                    Consumer<HomeProvider>(builder: (context, homeProvider, _) {
-                      logger.w("audioList.length ${audioList.length}");
-                  return SingleChildScrollView(
-                    child: mentalStrengthEditProvider.openGoalViewSheet == false?
-                    homeProvider.journalDetails == null
-                        ? shimmerView(size: size)
-                        : Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _buildUntitledOne(context, size),
-                              const SizedBox(height: 20),
-                              const Text(
-                                "In your mind",
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: 'Open Sans',
-                                  color: Colors.black,
+      child: ConnectivityWidget(
+        child: SafeArea(
+          child: Consumer3<MentalStrengthEditProvider,DashBoardProvider,HomeProvider>(builder: (context,mentalStrengthEditProvider,dashBoardProvider,homeProvider, _) {
+            return Scaffold(
+              appBar: buildAppBarJournalViewScreen(context, size, heading: "View your journal",
+                onTap: (){
+                  mentalStrengthEditProvider.openGoalViewSheet = false;
+                  mentalStrengthEditProvider.goalDetailModel = null;
+                  Navigator.of(context).pop();
+                }
+              ),
+              body: backGroundImager(
+                size: size,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      // left: 20,
+                      // right: 20,
+                      ),
+                  child:
+                      Consumer<HomeProvider>(builder: (context, homeProvider, _) {
+                        logger.w("audioList.length ${audioList.length}");
+                    return SingleChildScrollView(
+                      child: mentalStrengthEditProvider.openGoalViewSheet == false?
+                      homeProvider.journalDetails == null
+                          ? shimmerView(size: size)
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                _buildUntitledOne(context, size),
+                                const SizedBox(height: 20),
+                                const Text(
+                                  "In your mind",
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'Open Sans',
+                                    color: Colors.black,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 2),
-                              SizedBox(
-                                width: size.width * 0.70,
-                               // color: Colors.amber,
-                                child: Text(
-                                  homeProvider.journalDetails == null
-                                      ? ""
-                                      : HtmlUnescape().convert(homeProvider
-                                      .journalDetails!.journals!.journalTitle
-                                      .toString(),),
-                                  maxLines:HtmlUnescape().convert(homeProvider
-                                      .journalDetails!.journals!.journalTitle
-                                      .toString(),).length,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: CustomTextStyles.bodyMediumGray700_1,
+                                const SizedBox(height: 2),
+                                SizedBox(
+                                  width: size.width * 0.70,
+                                 // color: Colors.amber,
+                                  child: Text(
+                                    homeProvider.journalDetails == null
+                                        ? ""
+                                        : HtmlUnescape().convert(homeProvider
+                                        .journalDetails!.journals!.journalTitle
+                                        .toString(),),
+                                    maxLines:HtmlUnescape().convert(homeProvider
+                                        .journalDetails!.journals!.journalTitle
+                                        .toString(),).length,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: CustomTextStyles.bodyMediumGray700_1,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 10),
-                              const Text(
-                                "Description",
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: 'Open Sans',
-                                  color: Colors.black,
+                                const SizedBox(height: 10),
+                                const Text(
+                                  "Description",
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'Open Sans',
+                                    color: Colors.black,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 2),
-                              SizedBox(
-                                width: size.width * 0.70,
-                                // color: Colors.amber,
-                                child: Text(
-                                  homeProvider.journalDetails == null
-                                      ? ""
-                                      : HtmlUnescape().convert(homeProvider
-                                      .journalDetails!.journals!.journalDesc
-                                      .toString(),),
-                                  maxLines:HtmlUnescape().convert(homeProvider
-                                      .journalDetails!.journals!.journalDesc
-                                      .toString(),).length,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: CustomTextStyles.bodyMediumGray700_1,
+                                const SizedBox(height: 2),
+                                SizedBox(
+                                  width: size.width * 0.70,
+                                  // color: Colors.amber,
+                                  child: Text(
+                                    homeProvider.journalDetails == null
+                                        ? ""
+                                        : HtmlUnescape().convert(homeProvider
+                                        .journalDetails!.journals!.journalDesc
+                                        .toString(),),
+                                    maxLines:HtmlUnescape().convert(homeProvider
+                                        .journalDetails!.journals!.journalDesc
+                                        .toString(),).length,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: CustomTextStyles.bodyMediumGray700_1,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 15),
-                              audioList.isEmpty
-                                  ? const SizedBox()
-                                  :
-                              const Padding(
-                                      padding: EdgeInsets.only(left: 2),
-                                      child: Text(
-                                        "Audio",
-                                        style: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w500,
-                                          fontFamily: 'Open Sans',
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                    ),
-                              audioList.isEmpty
-                                  ? const SizedBox()
-                                  : const SizedBox(height: 2),
-                              audioList.isEmpty
-                                  ?
-                              const SizedBox()
-                                  :
-                              SizedBox(
-                                height: audioList.length <= 2
-                                    ? size.height * 0.1 * audioList.length // Adjust height based on the number of audios
-                                    : size.height * 0.25,  // Default height if more than 2 audios
-                                child: ListView.builder(
-                                  itemCount: audioList.length,
-                                  itemBuilder: (context, index) {
-                                    return JournalAudioPlayer(
-                                      url: audioList[index],
-                                    );
-                                  },
-                                ),
-                              ),
-
-                              imageList.isEmpty
-                                  ? const SizedBox()
-                                  : const SizedBox(
-                                      height: 23,
-                                    ),
-                              // imageList.isEmpty
-                              //     ? const SizedBox()
-                              //     :
-                              audioList.isEmpty?
-                                  const SizedBox():
-                              const SizedBox(height: 5),
-                              imageList.isEmpty?
-                                           const SizedBox():
-                              const Padding(
-                                      padding: EdgeInsets.only(left: 2),
-                                      child: Text(
-                                        "Photo",
-                                        style: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w500,
-                                          fontFamily: 'Open Sans',
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                    ),
-                              imageList.isEmpty
-                                  ? const SizedBox()
-                                  : const SizedBox(height: 4),
-                              imageList.isEmpty
-                                  ?  const SizedBox()
-                                  : SizedBox(
-                                      height: size.height * 0.3,
-                                      child: Stack(
-                                        children: [
-                                          PageView.builder(
-                                            controller: photoController,
-                                            itemCount: imageList.length,
-                                            itemBuilder: (context, index) {
-                                              return CustomImageView(
-                                                fit: BoxFit.cover,
-                                                imagePath: imageList[index],
-                                                height: size.height * 0.30,
-                                                width: size.width,
-                                                alignment: Alignment.center,
-                                              );
-                                            },
-                                            onPageChanged: (int pageIndex) {
-                                              setState(() {
-                                                photoCurrentIndex = pageIndex;
-                                              });
-                                            },
+                                const SizedBox(height: 15),
+                                audioList.isEmpty
+                                    ? const SizedBox()
+                                    :
+                                const Padding(
+                                        padding: EdgeInsets.only(left: 2),
+                                        child: Text(
+                                          "Audio",
+                                          style: TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w500,
+                                            fontFamily: 'Open Sans',
+                                            color: Colors.black,
                                           ),
-                                          Positioned(
-                                            bottom: 10,
-                                            left: 0,
-                                            right: 0,
-                                            child: SizedBox(
-                                              width: imageList.length *
-                                                  size.width *
-                                                  0.1,
-                                              child: buildIndicators(
-                                                imageList.length,
-                                                photoCurrentIndex,
-                                              ),
+                                        ),
+                                      ),
+                                audioList.isEmpty
+                                    ? const SizedBox()
+                                    : const SizedBox(height: 2),
+                                audioList.isEmpty
+                                    ?
+                                const SizedBox()
+                                    :
+                                SizedBox(
+                                  height: audioList.length <= 2
+                                      ? size.height * 0.1 * audioList.length // Adjust height based on the number of audios
+                                      : size.height * 0.25,  // Default height if more than 2 audios
+                                  child: ListView.builder(
+                                    itemCount: audioList.length,
+                                    itemBuilder: (context, index) {
+                                      return JournalAudioPlayer(
+                                        url: audioList[index],
+                                      );
+                                    },
+                                  ),
+                                ),
+        
+                                imageList.isEmpty
+                                    ? const SizedBox()
+                                    : const SizedBox(
+                                        height: 23,
+                                      ),
+                                // imageList.isEmpty
+                                //     ? const SizedBox()
+                                //     :
+                                audioList.isEmpty?
+                                    const SizedBox():
+                                const SizedBox(height: 5),
+                                imageList.isEmpty?
+                                             const SizedBox():
+                                const Padding(
+                                        padding: EdgeInsets.only(left: 2),
+                                        child: Text(
+                                          "Photo",
+                                          style: TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w500,
+                                            fontFamily: 'Open Sans',
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                imageList.isEmpty
+                                    ? const SizedBox()
+                                    : const SizedBox(height: 4),
+                                imageList.isEmpty
+                                    ?  const SizedBox()
+                                    : SizedBox(
+                                        height: size.height * 0.3,
+                                        child: Stack(
+                                          children: [
+                                            PageView.builder(
+                                              controller: photoController,
+                                              itemCount: imageList.length,
+                                              itemBuilder: (context, index) {
+                                                return CustomImageView(
+                                                  fit: BoxFit.cover,
+                                                  imagePath: imageList[index],
+                                                  height: size.height * 0.30,
+                                                  width: size.width,
+                                                  alignment: Alignment.center,
+                                                );
+                                              },
+                                              onPageChanged: (int pageIndex) {
+                                                setState(() {
+                                                  photoCurrentIndex = pageIndex;
+                                                });
+                                              },
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                              imageList.isEmpty?
-                              const SizedBox():
-                              const SizedBox(height: 28),
-                              videoList.isEmpty
-                                  ? const SizedBox()
-                                  : const SizedBox(
-                                      height: 10,
-                                    ),
-                              videoList.isEmpty
-                                  ? const SizedBox()
-                                  :
-                              const Padding(
-                                      padding: EdgeInsets.only(left: 2),
-                                      child: Text(
-                                        "Video",
-                                        style: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w500,
-                                          fontFamily: 'Open Sans',
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                    ),
-                              videoList.isEmpty
-                                  ? const SizedBox()
-                                  : const SizedBox(height: 4),
-                              videoList.isEmpty
-                                  ?  const SizedBox()
-                                  : SizedBox(
-                                      height: size.height * 0.3,
-                                      child: Stack(
-                                        children: [
-                                          PageView.builder(
-                                            controller: videoController,
-                                            itemCount: videoList.length,
-                                            itemBuilder: (context, index) {
-                                              logger.w("videoList${videoList}");
-                                              return VideoPlayerWidget(
-                                                videoUrl: videoList[index],
-                                              );
-                                            },
-                                            onPageChanged: (int pageIndex) {
-                                              setState(() {
-                                                videoCurrentIndex = pageIndex;
-                                              });
-                                            },
-                                          ),
-                                          Positioned(
-                                            bottom: 10,
-                                            left: 0,
-                                            right: 0,
-                                            child: SizedBox(
-                                              width: videoList.length *
-                                                  size.width *
-                                                  0.1,
-                                              child: buildIndicators(
-                                                videoList.length,
-                                                videoCurrentIndex,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                              videoList.isEmpty?
-                              const SizedBox():
-                              const SizedBox(height: 28),
-                              homeProvider.journalDetails!.journals!.location == null ?
-                                  const SizedBox():
-                              const Padding(
-                                padding: EdgeInsets.only(left: 2),
-                                child: Text(
-                                  "Your Location",
-                                  style: TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: 'Open Sans',
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 6),
-                              homeProvider.journalDetails!.journals!.location == null
-                                  ?
-                           const SizedBox()
-                                  :
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons
-                                        .location_on,
-                                    color: ColorsContent.newThemeColor,
-                                    size: size.width *
-                                        0.06,
-                                  ),
-                                  const SizedBox(width: 5), // Optional spacing
-                                  Expanded(
-                                    child: SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      child: Text(
-                                        homeProvider.journalDetails?.journals?.location?.locationName
-                                            ?.toString()
-                                            .replaceAll(RegExp(r'[^a-zA-Z0-9, ]'), '') // Remove unwanted characters except commas
-                                            .replaceAll(RegExp(r',\s*,+'), ',') // Replace multiple consecutive commas (with or without spaces) with a single comma
-                                            .replaceAll(RegExp(r'^,|,$'), '') // Remove leading and trailing commas
-                                            .trim() ?? "",
-                                        style: CustomTextStyles.bodyMediumGray700_1,
-                                        overflow: TextOverflow.visible, // Ensures scrolling works
-                                      ),
-                                    ),
-                                  ),
-
-                                ],
-                              ),
-
-                              homeProvider.journalDetails!.journals!.location == null ?
-                              const SizedBox():
-                              const SizedBox(height: 19),
-                              const Padding(
-                                padding: EdgeInsets.only(left: 5),
-                                child: Text(
-                                  "Rating as how you felt",
-                                  style: TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: 'Open Sans',
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 3),
-                              homeProvider.journalDetails == null
-                                  ? const SizedBox()
-                                  : CustomRatingBar(
-                                color: ColorsContent.newThemeColor,
-                                initialRating: double.parse(
-                                  homeProvider.journalDetails!.journals!.emotionValue?.toString() ?? '0',
-                                ),
-                                      itemSize: 35,
-                                isRatingStatic: true, // Set to true to make rating unchangeable
-                                    ),
-                              const SizedBox(height: 22),
-                              const Padding(
-                                padding: EdgeInsets.only(
-                                  left: 6,
-                                ),
-                                child: Text(
-                                  "Your emotional state ",
-                                  style: TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: 'Open Sans',
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 6,
-                              ),
-                              homeProvider.journalDetails == null
-                                  ? const SizedBox()
-                                  : Padding(
-                                      padding: const EdgeInsets.only(left: 6),
-                                      child: Text(
-                                        homeProvider.journalDetails!.journals!
-                                            .emotionTitle
-                                            .toString(),
-                                        style: CustomTextStyles
-                                            .bodyMediumGray700_1,
-                                      ),
-                                    ),
-                              const SizedBox(height: 22),
-                              const Padding(
-                                padding: EdgeInsets.only(left: 2),
-                                child: Text(
-                                  "Like towards the reaction to the situation?",
-                                  style: TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: 'Open Sans',
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 6),
-                              homeProvider.journalDetails == null
-                                  ? const SizedBox()
-                                  : CustomRatingBar(
-                                      color: ColorsContent.newThemeColor,
-                                      initialRating: double.parse(
-                                        (homeProvider.journalDetails!.journals!.driveValue ?? 0).toString(),
-                                      ),
-                                      itemSize: 35,
-                                isRatingStatic: true, // Set to true to make rating unchangeable
-                                    ),
-                              const SizedBox(height: 29),
-                              homeProvider.journalDetails?.journals?.goal == null?
-                              const SizedBox():
-                              const Padding(
-                                padding: EdgeInsets.only(left: 5),
-                                child: Text(
-                                  "Goal affected by your reaction",
-                                  style: TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: 'Open Sans',
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              homeProvider.journalDetails?.journals?.goal == null
-                                  ?   const SizedBox()
-                                  : GestureDetector(
-                                onTap: (){
-                                  mentalStrengthEditProvider
-                                      .openGoalViewSheetFunction();
-                                  mentalStrengthEditProvider
-                                      .fetchGoalDetails(
-                                    goalId:
-                                    homeProvider.journalDetails!
-                                        .journals!.goal!.goalId
-                                        .toString(),
-                                  );
-                                },
-                                    child: Container(
-                                      height: size.height * 0.04,
-                                      width: size.width * 0.7,
-                                      padding:
-                                      const EdgeInsets.only(
-                                        bottom: 5,
-                                        top: 5,
-                                        left: 5,
-                                        right: 5,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: ColorsContent.newThemeColor,
-                                        borderRadius:
-                                        BorderRadius.circular(
-                                            8), // Makes it circular
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment
-                                            .spaceBetween,
-                                        children: [
-                                          SizedBox(
-                                            width: size.width * 0.45,
-                                            child: SingleChildScrollView(
-                                              scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                                              child: Text(
-                                                homeProvider.journalDetails!.journals!
-                                                    .goal ==
-                                                    null
-                                                    ? ""
-                                                    : homeProvider.journalDetails!
-                                                    .journals!.goal!.goalTitle
-                                                    .toString(),
-                                                style: const TextStyle(
-                                                  fontSize: 17,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontFamily: 'Open Sans',
-                                                  color: Colors.white,
+                                            Positioned(
+                                              bottom: 10,
+                                              left: 0,
+                                              right: 0,
+                                              child: SizedBox(
+                                                width: imageList.length *
+                                                    size.width *
+                                                    0.1,
+                                                child: buildIndicators(
+                                                  imageList.length,
+                                                  photoCurrentIndex,
                                                 ),
                                               ),
                                             ),
+                                          ],
+                                        ),
+                                      ),
+                                imageList.isEmpty?
+                                const SizedBox():
+                                const SizedBox(height: 28),
+                                videoList.isEmpty
+                                    ? const SizedBox()
+                                    : const SizedBox(
+                                        height: 10,
+                                      ),
+                                videoList.isEmpty
+                                    ? const SizedBox()
+                                    :
+                                const Padding(
+                                        padding: EdgeInsets.only(left: 2),
+                                        child: Text(
+                                          "Video",
+                                          style: TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w500,
+                                            fontFamily: 'Open Sans',
+                                            color: Colors.black,
                                           ),
-
-                                          GestureDetector(
-                                            onTap: () {
-                                              mentalStrengthEditProvider
-                                                  .openGoalViewSheetFunction();
-                                              mentalStrengthEditProvider
-                                                  .fetchGoalDetails(
-                                                goalId:
-                                                homeProvider.journalDetails!
-                                                    .journals!.goal!.goalId
-                                                    .toString(),
-                                              );
-                                            },
-                                            child: CircleAvatar(
-                                              radius:
-                                              size.width * 0.04,
-                                              backgroundColor:Colors.deepPurple,
-                                              child: Icon(
-                                                Icons
-                                                    .play_arrow,
-                                                color: Colors.white,
-                                                size: size.width *
-                                                    0.04,
+                                        ),
+                                      ),
+                                videoList.isEmpty
+                                    ? const SizedBox()
+                                    : const SizedBox(height: 4),
+                                videoList.isEmpty
+                                    ?  const SizedBox()
+                                    : SizedBox(
+                                        height: size.height * 0.3,
+                                        child: Stack(
+                                          children: [
+                                            PageView.builder(
+                                              controller: videoController,
+                                              itemCount: videoList.length,
+                                              itemBuilder: (context, index) {
+                                                logger.w("videoList${videoList}");
+                                                return VideoPlayerWidget(
+                                                  videoUrl: videoList[index],
+                                                );
+                                              },
+                                              onPageChanged: (int pageIndex) {
+                                                setState(() {
+                                                  videoCurrentIndex = pageIndex;
+                                                });
+                                              },
+                                            ),
+                                            Positioned(
+                                              bottom: 10,
+                                              left: 0,
+                                              right: 0,
+                                              child: SizedBox(
+                                                width: videoList.length *
+                                                    size.width *
+                                                    0.1,
+                                                child: buildIndicators(
+                                                  videoList.length,
+                                                  videoCurrentIndex,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
+                                videoList.isEmpty?
+                                const SizedBox():
+                                const SizedBox(height: 28),
+                                homeProvider.journalDetails!.journals!.location == null ?
+                                    const SizedBox():
+                                const Padding(
+                                  padding: EdgeInsets.only(left: 2),
+                                  child: Text(
+                                    "Your Location",
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: 'Open Sans',
+                                      color: Colors.black,
                                     ),
                                   ),
-                              homeProvider.journalDetails?.journals?.goal == null ?
-                                  const SizedBox():
-                              const SizedBox(height: 33),
-                              homeProvider.journalDetails!.journals!.action!.isEmpty?
-                                  const SizedBox():
-                              const Padding(
-                                padding: EdgeInsets.only(left: 7),
-                                child: Text(
-                                  "Your action",
-                                  style: TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: 'Open Sans',
-                                    color: Colors.black,
+                                ),
+                                const SizedBox(height: 6),
+                                homeProvider.journalDetails!.journals!.location == null
+                                    ?
+                             const SizedBox()
+                                    :
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons
+                                          .location_on,
+                                      color: ColorsContent.newThemeColor,
+                                      size: size.width *
+                                          0.06,
+                                    ),
+                                    const SizedBox(width: 5), // Optional spacing
+                                    Expanded(
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Text(
+                                          homeProvider.journalDetails?.journals?.location?.locationName
+                                              ?.toString()
+                                              .replaceAll(RegExp(r'[^a-zA-Z0-9, ]'), '') // Remove unwanted characters except commas
+                                              .replaceAll(RegExp(r',\s*,+'), ',') // Replace multiple consecutive commas (with or without spaces) with a single comma
+                                              .replaceAll(RegExp(r'^,|,$'), '') // Remove leading and trailing commas
+                                              .trim() ?? "",
+                                          style: CustomTextStyles.bodyMediumGray700_1,
+                                          overflow: TextOverflow.visible, // Ensures scrolling works
+                                        ),
+                                      ),
+                                    ),
+        
+                                  ],
+                                ),
+        
+                                homeProvider.journalDetails!.journals!.location == null ?
+                                const SizedBox():
+                                const SizedBox(height: 19),
+                                const Padding(
+                                  padding: EdgeInsets.only(left: 5),
+                                  child: Text(
+                                    "Rating as how you felt",
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: 'Open Sans',
+                                      color: Colors.black,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(height: 4),
-                              homeProvider.journalDetails?.journals?.goal == null
-                                  ?
-                              const SizedBox()
-
-                                  : Padding(
-                                      padding: const EdgeInsets.only(left: 7),
-                                      child: Text(
-                                        homeProvider.journalDetails!.journals!.action == null ||
-                                            homeProvider.journalDetails!.journals!.action!.isEmpty
-                                            ? ""
-                                            : homeProvider.journalDetails!.journals!.action!
-                                            .map((e) => e.actionTitle)
-                                            .join(", "), // Join action titles with a comma, for example.
-                                        style: CustomTextStyles.bodyMediumGray700_1,
+                                const SizedBox(height: 3),
+                                homeProvider.journalDetails == null
+                                    ? const SizedBox()
+                                    : CustomRatingBar(
+                                  color: ColorsContent.newThemeColor,
+                                  initialRating: double.parse(
+                                    homeProvider.journalDetails!.journals!.emotionValue?.toString() ?? '0',
+                                  ),
+                                        itemSize: 35,
+                                  isRatingStatic: true, // Set to true to make rating unchangeable
                                       ),
-
-                              ),
-                              const SizedBox(height: 10),
-                            ],
-                          ):
-                    mentalStrengthEditProvider.goalDetailModel == null
-                        ? Container(
-                      decoration: BoxDecoration(
-                        color: appTheme.gray50,
-                        borderRadius: const BorderRadius.only(
-                          topRight: Radius.circular(25),
-                          topLeft: Radius.circular(25),
+                                const SizedBox(height: 22),
+                                const Padding(
+                                  padding: EdgeInsets.only(
+                                    left: 6,
+                                  ),
+                                  child: Text(
+                                    "Your emotional state ",
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: 'Open Sans',
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 6,
+                                ),
+                                homeProvider.journalDetails == null
+                                    ? const SizedBox()
+                                    : Padding(
+                                        padding: const EdgeInsets.only(left: 6),
+                                        child: Text(
+                                          homeProvider.journalDetails!.journals!
+                                              .emotionTitle
+                                              .toString(),
+                                          style: CustomTextStyles
+                                              .bodyMediumGray700_1,
+                                        ),
+                                      ),
+                                const SizedBox(height: 22),
+                                const Padding(
+                                  padding: EdgeInsets.only(left: 2),
+                                  child: Text(
+                                    "Like towards the reaction to the situation?",
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: 'Open Sans',
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                homeProvider.journalDetails == null
+                                    ? const SizedBox()
+                                    : CustomRatingBar(
+                                        color: ColorsContent.newThemeColor,
+                                        initialRating: double.parse(
+                                          (homeProvider.journalDetails!.journals!.driveValue ?? 0).toString(),
+                                        ),
+                                        itemSize: 35,
+                                  isRatingStatic: true, // Set to true to make rating unchangeable
+                                      ),
+                                const SizedBox(height: 29),
+                                homeProvider.journalDetails?.journals?.goal == null?
+                                const SizedBox():
+                                const Padding(
+                                  padding: EdgeInsets.only(left: 5),
+                                  child: Text(
+                                    "Goal affected by your reaction",
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: 'Open Sans',
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                homeProvider.journalDetails?.journals?.goal == null
+                                    ?   const SizedBox()
+                                    : GestureDetector(
+                                  onTap: (){
+                                    mentalStrengthEditProvider
+                                        .openGoalViewSheetFunction();
+                                    mentalStrengthEditProvider
+                                        .fetchGoalDetails(
+                                      goalId:
+                                      homeProvider.journalDetails!
+                                          .journals!.goal!.goalId
+                                          .toString(),
+                                    );
+                                  },
+                                      child: Container(
+                                        height: size.height * 0.04,
+                                        width: size.width * 0.7,
+                                        padding:
+                                        const EdgeInsets.only(
+                                          bottom: 5,
+                                          top: 5,
+                                          left: 5,
+                                          right: 5,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: ColorsContent.newThemeColor,
+                                          borderRadius:
+                                          BorderRadius.circular(
+                                              8), // Makes it circular
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment
+                                              .spaceBetween,
+                                          children: [
+                                            SizedBox(
+                                              width: size.width * 0.45,
+                                              child: SingleChildScrollView(
+                                                scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+                                                child: Text(
+                                                  homeProvider.journalDetails!.journals!
+                                                      .goal ==
+                                                      null
+                                                      ? ""
+                                                      : homeProvider.journalDetails!
+                                                      .journals!.goal!.goalTitle
+                                                      .toString(),
+                                                  style: const TextStyle(
+                                                    fontSize: 17,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontFamily: 'Open Sans',
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+        
+                                            GestureDetector(
+                                              onTap: () {
+                                                mentalStrengthEditProvider
+                                                    .openGoalViewSheetFunction();
+                                                mentalStrengthEditProvider
+                                                    .fetchGoalDetails(
+                                                  goalId:
+                                                  homeProvider.journalDetails!
+                                                      .journals!.goal!.goalId
+                                                      .toString(),
+                                                );
+                                              },
+                                              child: CircleAvatar(
+                                                radius:
+                                                size.width * 0.04,
+                                                backgroundColor:Colors.deepPurple,
+                                                child: Icon(
+                                                  Icons
+                                                      .play_arrow,
+                                                  color: Colors.white,
+                                                  size: size.width *
+                                                      0.04,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                homeProvider.journalDetails?.journals?.goal == null ?
+                                    const SizedBox():
+                                const SizedBox(height: 33),
+                                homeProvider.journalDetails!.journals!.action!.isEmpty?
+                                    const SizedBox():
+                                const Padding(
+                                  padding: EdgeInsets.only(left: 7),
+                                  child: Text(
+                                    "Your action",
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: 'Open Sans',
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                homeProvider.journalDetails?.journals?.goal == null
+                                    ?
+                                const SizedBox()
+        
+                                    : Container(
+                                  height: size.height * 0.04,
+                                  width: size.width * 0.7,
+                                  padding:
+                                  const EdgeInsets.only(
+                                    bottom: 5,
+                                    top: 5,
+                                    left: 5,
+                                    right: 5,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: ColorsContent.newThemeColor,
+                                    borderRadius:
+                                    BorderRadius.circular(
+                                        8), // Makes it circular
+                                  ),
+                                      child: Padding(
+                                          padding: const EdgeInsets.only(left: 7),
+                                          child: Text(
+                                            homeProvider.journalDetails!.journals!.action == null ||
+                                                homeProvider.journalDetails!.journals!.action!.isEmpty
+                                                ? ""
+                                                : homeProvider.journalDetails!.journals!.action!
+                                                .map((e) => e.actionTitle)
+                                                .join(", "), // Join action titles with a comma, for example.
+                                            style: const TextStyle(
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: 'Open Sans',
+                                              color: Colors.white,
+                                            ),
+                                          ),
+        
+                                                                    ),
+                                    ),
+                                const SizedBox(height: 10),
+                              ],
+                            ):
+                      mentalStrengthEditProvider.goalDetailModel == null
+                          ? Container(
+                        decoration: BoxDecoration(
+                          color: appTheme.gray50,
+                          borderRadius: const BorderRadius.only(
+                            topRight: Radius.circular(25),
+                            topLeft: Radius.circular(25),
+                          ),
+                        ),
+                        margin: EdgeInsets.only(
+                          top: size.height * 0.0,
+                        ),
+                        child: shimmerList(
+                          height: size.height * 0.8,
+                          list: 10,
+                        ),
+                      )
+                          : Center(
+                        child: GoalAndDreamFullViewBottomParellelSheet(
+                          goalDetailModel: mentalStrengthEditProvider.goalDetailModel!,
                         ),
                       ),
-                      margin: EdgeInsets.only(
-                        top: size.height * 0.0,
-                      ),
-                      child: shimmerList(
-                        height: size.height * 0.8,
-                        list: 10,
-                      ),
-                    )
-                        : Center(
-                      child: GoalAndDreamFullViewBottomParellelSheet(
-                        goalDetailModel: mentalStrengthEditProvider.goalDetailModel!,
-                      ),
-                    ),
-                  );
-                }),
+                    );
+                  }),
+                ),
               ),
-            ),
-          );
-        }),
+            );
+          }),
+        ),
       ),
     );
   }

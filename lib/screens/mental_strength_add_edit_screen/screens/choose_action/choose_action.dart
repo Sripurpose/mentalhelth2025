@@ -15,6 +15,7 @@ import '../../../../widgets/custom_image_view.dart';
 import '../../../dash_borad_screen/provider/dash_board_provider.dart';
 import '../../../edit_add_profile_screen/provider/edit_provider.dart';
 import '../../../home_screen/provider/home_provider.dart';
+import '../../../no_internet/duplicate_screen.dart';
 import '../../../token_expiry/tocken_expiry_warning_screen.dart';
 import '../../../token_expiry/token_expiry.dart';
 
@@ -73,264 +74,266 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return tokenStatus == false ?
-      Container(
-      margin: EdgeInsets.only(
-        top: size.height * 0.04,
-      ),
-      decoration: BoxDecoration(
-        color: ColorsContent.homeBackGroundColor,
-        borderRadius: const BorderRadius.only(
-          topRight: Radius.circular(
-            25,
-          ),
-          topLeft: Radius.circular(
-            25,
-          ),
+    ConnectivityWidget(
+        child: Container(
+        margin: EdgeInsets.only(
+          top: size.height * 0.04,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5), // Shadow color
-            spreadRadius: 5, // Spread radius
-            blurRadius: 7, // Blur radius
-            offset: const Offset(0, 3), // Offset
+        decoration: BoxDecoration(
+          color: ColorsContent.homeBackGroundColor,
+          borderRadius: const BorderRadius.only(
+            topRight: Radius.circular(
+              25,
+            ),
+            topLeft: Radius.circular(
+              25,
+            ),
           ),
-        ],
-      ),
-      child: Column(
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                SizedBox(
-                  height: size.height * 0.01,
-                ),
-                Consumer<MentalStrengthEditProvider>(
-                    builder: (context, mentalStrengthEditProvider, _) {
-                  return
-
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: size.width * 0.2,
-                      ),
-                      SizedBox(
-                        width: size.width * 0.2,
-                        child: Column(
-                          children: [
-                            SvgPicture.asset(
-                              ImageConstant.dotDot,
-                              color: ColorsContent.greyColor,
-                              height: 8,
-                              width: 8,
-                              fit: BoxFit.contain,
-                            ),
-                            SvgPicture.asset(
-                              ImageConstant.dotDot,
-                              color: ColorsContent.greyColor,
-                              height: 8,
-                              width: 8,
-                              fit: BoxFit.contain,
-                            ),
-                          ],
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5), // Shadow color
+              spreadRadius: 5, // Spread radius
+              blurRadius: 7, // Blur radius
+              offset: const Offset(0, 3), // Offset
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  SizedBox(
+                    height: size.height * 0.01,
+                  ),
+                  Consumer<MentalStrengthEditProvider>(
+                      builder: (context, mentalStrengthEditProvider, _) {
+                    return
+        
+        
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: size.width * 0.2,
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child:                 GestureDetector(
-                          onTap: () {
-                            mentalStrengthEditProvider.openChooseActionFunction();
-                          },
-                          child: CustomImageView(
-                            imagePath: ImageConstant.imgClosePrimaryNew,
-                            height: 40,
-                            width: 40,
+                        SizedBox(
+                          width: size.width * 0.2,
+                          child: Column(
+                            children: [
+                              SvgPicture.asset(
+                                ImageConstant.dotDot,
+                                color: ColorsContent.greyColor,
+                                height: 8,
+                                width: 8,
+                                fit: BoxFit.contain,
+                              ),
+                              SvgPicture.asset(
+                                ImageConstant.dotDot,
+                                color: ColorsContent.greyColor,
+                                height: 8,
+                                width: 8,
+                                fit: BoxFit.contain,
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                    ],
-                  );
-                }),
-                // SizedBox(
-                //   height: size.height * 0.01,
-                // ),
-                Padding(
-                  padding: EdgeInsets.all(
-                    size.width * 0.02,
-                  ),
-                  child: Consumer<MentalStrengthEditProvider>(
-                      builder: (context, mentalStrengthEditProvider, _) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            mentalStrengthEditProvider.getListGoalActionsModel != null &&
-                                mentalStrengthEditProvider.getListGoalActionsModel!.actions != null &&
-                                mentalStrengthEditProvider.getListGoalActionsModel!.actions!.isNotEmpty
-                                ? const Text(
-                              "Choose Actions",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ):
-                                SizedBox(),
-                            SizedBox(
-                              height: size.height * 0.003,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child:                 GestureDetector(
+                            onTap: () {
+                              mentalStrengthEditProvider.openChooseActionFunction();
+                            },
+                            child: CustomImageView(
+                              imagePath: ImageConstant.imgClosePrimaryNew,
+                              height: 40,
+                              width: 40,
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  "Goal: ",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(
-                                    width:size.width * 0.40,
-                                    child: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                                        child: Text(widget.goal.title.toString(),
-                                          textAlign: TextAlign.center,
-                                          overflow: TextOverflow.ellipsis, // Add this line if you want to truncate long text
-                                          maxLines: 1, // Limit to 1 line for ho
-                                        ),)),
-                              ],
-                            ),
-                          ],
+                          ),
                         ),
-                        mentalStrengthEditProvider.goalsValue.id == null
-                            ? const SizedBox()
-                            : ElevatedButton(
-                                onPressed: () {
-                                  mentalStrengthEditProvider
-                                      .openChooseActionFunction();
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.black,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                ),
-                                child: const Text(
-                                  "Proceed",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
                       ],
                     );
                   }),
-                ),
-                SizedBox(
-                  height: size.height * 0.01,
-                ),
-                Consumer<MentalStrengthEditProvider>(
-                  builder: (context, mentalStrengthEditProvider, _) {
-                    return SizedBox(
-                      height: size.height * 0.44,
-                      width: size.width * 0.8,
-                      child: mentalStrengthEditProvider
-                                  .getListGoalActionsModel ==
-                              null
-                          ? const SizedBox()
-                          : mentalStrengthEditProvider
-                                      .getListGoalActionsModel!.actions ==
-                                  null
+                  // SizedBox(
+                  //   height: size.height * 0.01,
+                  // ),
+                  Padding(
+                    padding: EdgeInsets.all(
+                      size.width * 0.02,
+                    ),
+                    child: Consumer<MentalStrengthEditProvider>(
+                        builder: (context, mentalStrengthEditProvider, _) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              mentalStrengthEditProvider.getListGoalActionsModel != null &&
+                                  mentalStrengthEditProvider.getListGoalActionsModel!.actions != null &&
+                                  mentalStrengthEditProvider.getListGoalActionsModel!.actions!.isNotEmpty
+                                  ? const Text(
+                                "Choose Actions",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ):
+                                  SizedBox(),
+                              SizedBox(
+                                height: size.height * 0.003,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "Goal: ",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                      width:size.width * 0.40,
+                                      child: SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+                                          child: Text(widget.goal.title.toString(),
+                                            textAlign: TextAlign.center,
+                                            overflow: TextOverflow.ellipsis, // Add this line if you want to truncate long text
+                                            maxLines: 1, // Limit to 1 line for ho
+                                          ),)),
+                                ],
+                              ),
+                            ],
+                          ),
+                          mentalStrengthEditProvider.goalsValue.id == null
                               ? const SizedBox()
-                              : ListView.separated(
-                                  separatorBuilder: (
-                                    context,
-                                    index,
-                                  ) {
-                                    return const SizedBox(
-                                      height: 3,
-                                    );
+                              : ElevatedButton(
+                                  onPressed: () {
+                                    mentalStrengthEditProvider
+                                        .openChooseActionFunction();
                                   },
-                                  itemCount: mentalStrengthEditProvider
-                                          .getListGoalActionsModel!
-                                          .actions!
-                                          .length +
-                                      (mentalStrengthEditProvider
-                                              .getListGoalActionsModelLoading
-                                          ? 1
-                                          : 0),
-                                  itemBuilder: (context, index) {
-                                    if (index <
-                                        mentalStrengthEditProvider
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.black,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    "Proceed",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                        ],
+                      );
+                    }),
+                  ),
+                  SizedBox(
+                    height: size.height * 0.01,
+                  ),
+                  Consumer<MentalStrengthEditProvider>(
+                    builder: (context, mentalStrengthEditProvider, _) {
+                      return SizedBox(
+                        height: size.height * 0.44,
+                        width: size.width * 0.8,
+                        child: mentalStrengthEditProvider
+                                    .getListGoalActionsModel ==
+                                null
+                            ? const SizedBox()
+                            : mentalStrengthEditProvider
+                                        .getListGoalActionsModel!.actions ==
+                                    null
+                                ? const SizedBox()
+                                : ListView.separated(
+                                    separatorBuilder: (
+                                      context,
+                                      index,
+                                    ) {
+                                      return const SizedBox(
+                                        height: 3,
+                                      );
+                                    },
+                                    itemCount: mentalStrengthEditProvider
                                             .getListGoalActionsModel!
                                             .actions!
-                                            .length) {
-                                      return GestureDetector(
-                                        onTap: () {
-                                        },
-                                        child: listActionList(
-                                          size: size,
-                                          action: mentalStrengthEditProvider
+                                            .length +
+                                        (mentalStrengthEditProvider
+                                                .getListGoalActionsModelLoading
+                                            ? 1
+                                            : 0),
+                                    itemBuilder: (context, index) {
+                                      if (index <
+                                          mentalStrengthEditProvider
                                               .getListGoalActionsModel!
-                                              .actions!,
-                                          index: index,
-                                        ),
-                                      );
-                                    } else if (mentalStrengthEditProvider
-                                        .getListGoalActionsModel!
-                                        .actions!
-                                        .isEmpty) {
-                                      return const SizedBox(
-                                        child: Center(
-                                          child: Text("No Data"),
-                                        ),
-                                      );
-                                    } else {
-                                      return const Padding(
-                                        padding: EdgeInsets.all(8.0),
-                                        child: Center(
-                                          child: CircularProgressIndicator(),
-                                        ),
-                                      );
-                                    }
-                                  },
-                                ),
-                    );
-                  },
-                ),
-                SizedBox(
-                  height: size.height * 0.01,
-                ),
-                Consumer<MentalStrengthEditProvider>(
-                    builder: (context, mentalStrengthEditProvider, _) {
-                  return ElevatedButton(
-                    onPressed: () {
-                      mentalStrengthEditProvider.openAddActionFunction();
+                                              .actions!
+                                              .length) {
+                                        return GestureDetector(
+                                          onTap: () {
+                                          },
+                                          child: listActionList(
+                                            size: size,
+                                            action: mentalStrengthEditProvider
+                                                .getListGoalActionsModel!
+                                                .actions!,
+                                            index: index,
+                                          ),
+                                        );
+                                      } else if (mentalStrengthEditProvider
+                                          .getListGoalActionsModel!
+                                          .actions!
+                                          .isEmpty) {
+                                        return const SizedBox(
+                                          child: Center(
+                                            child: Text("No Data"),
+                                          ),
+                                        );
+                                      } else {
+                                        return const Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  ),
+                      );
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: ColorsContent.newThemeColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
+                  ),
+                  SizedBox(
+                    height: size.height * 0.01,
+                  ),
+                  Consumer<MentalStrengthEditProvider>(
+                      builder: (context, mentalStrengthEditProvider, _) {
+                    return ElevatedButton(
+                      onPressed: () {
+                        mentalStrengthEditProvider.openAddActionFunction();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: ColorsContent.newThemeColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
                       ),
-                    ),
-                    child: const Text(
-                      "Create New Action",
-                      style: TextStyle(
-                        color: Colors.white,
+                      child: const Text(
+                        "Create New Action",
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                  );
-                }),
-              ],
+                    );
+                  }),
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
-    ):
+          ],
+        ),
+            ),
+      ):
     const TokenExpireScreen();
   }
 
