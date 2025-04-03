@@ -81,14 +81,14 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
     Size size = MediaQuery.of(context).size;
     return tokenStatus == false ?
       SafeArea(
-      child: ConnectivityWidget(
-        child: backGroundImager(
-          size: size,
-          padding: EdgeInsets.zero,
-          child: Column(
-            children: [
-              buildAppBar(context, size),
-              Expanded(
+      child: backGroundImager(
+        size: size,
+        padding: EdgeInsets.zero,
+        child: Column(
+          children: [
+            buildAppBar(context, size),
+            ConnectivityWidget(
+              child: Expanded(
                 child: SingleChildScrollView(
                   padding: EdgeInsets.only(
                     bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -258,7 +258,7 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                                           ),
                                         ),
                                         const SizedBox(height: 1),
-        
+                    
                                         Consumer<EditProfileProvider>(
                                           builder: (context, editProfileProvider, _) {
                                             return Container(
@@ -291,7 +291,7 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                                                                       itemBuilder: (context, index) {
                                                                         final category = categories[index];
                                                                         final isSelected = editProfileProvider.selectedCategories.contains(category);
-        
+                    
                                                                         return ListTile(
                                                                           title: Text(category.categoryName ?? ""),
                                                                           tileColor: isSelected ? Colors.white.withOpacity(0.2) : Colors.transparent,
@@ -321,12 +321,12 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                                                             );
                                                           },
                                                         );
-        
+                    
                                                         if (selectedCategories != null) {
                                                           editProfileProvider.setSelectedCategories(selectedCategories);
                                                         }
                                                       },
-        
+                    
                                                       child: SingleChildScrollView(
                                                         scrollDirection: Axis.horizontal,
                                                         child: Row(
@@ -404,8 +404,8 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                                             );
                                           },
                                         ),
-        
-        
+                    
+                    
                                         const SizedBox(height: 8),
                                         Align(
                                           alignment: Alignment.centerLeft,
@@ -513,8 +513,8 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     ):

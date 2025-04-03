@@ -13,6 +13,7 @@ import 'package:mentalhelth/utils/core/image_constant.dart';
 import 'package:mentalhelth/utils/logic/shared_prefrence.dart';
 import 'package:provider/provider.dart';
 
+import '../../no_internet/duplicate_screen.dart';
 import '../sign_in/landing_register_screen.dart';
 import 'new_splash_screen.dart';
 
@@ -96,14 +97,16 @@ class _SplashScreenState extends State<SplashScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.all(
-          30,
-        ),
-        child: SvgPicture.asset(
-          ImageConstant.logo,
+    return ConnectivityWidget(
+      child: Container(
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(
+            30,
+          ),
+          child: SvgPicture.asset(
+            ImageConstant.imgNumuLogo,
+          ),
         ),
       ),
     );

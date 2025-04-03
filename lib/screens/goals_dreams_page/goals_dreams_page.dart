@@ -157,11 +157,21 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
                           radius: 15,
                         ))
                             : goalsDreamsProvider.goalsanddreams.isEmpty
-                            ? Center(
-                          child: Image.asset(
-                            ImageConstant.noData,
-                          ),
-                        )
+                            ? Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                              child: Column(mainAxisAlignment: MainAxisAlignment.center,
+                               children: [
+                              SvgPicture.asset(
+                                ImageConstant.noDataNumu,
+                              ),
+                              const Text("No data found",
+                                  style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold)),
+                              const SizedBox(height: 10),
+                              const Text("Check back later",
+                                  style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.normal)),
+                                                        ],
+                                                      ),
+                            )
                             : ListView.builder(
                           itemCount: goalsDreamsProvider
                               .goalsanddreams.length +

@@ -21,6 +21,7 @@ import 'package:mentalhelth/screens/edit_add_profile_screen/provider/edit_provid
 import 'package:mentalhelth/screens/goals_dreams_page/provider/goals_dreams_provider.dart';
 import 'package:mentalhelth/screens/journal_list_screen/provider/journal_list_provider.dart';
 import 'package:mentalhelth/screens/mental_strength_add_edit_screen/provider/mental_strenght_edit_provider.dart';
+import 'package:mentalhelth/screens/no_internet/duplicate_screen.dart';
 import 'package:mentalhelth/utils/core/constants.dart';
 import 'package:mentalhelth/utils/core/firebase_api.dart';
 import 'package:mentalhelth/utils/core/local_notification.dart';
@@ -335,11 +336,13 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       home: isBaseUrlReady
           ? const SplashScreen() // Navigate to SplashScreen if baseUrl is ready
-          : const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(), // Show a loader while waiting
-        ),
-      ),
+          : const ConnectivityWidget(
+            child: Scaffold(
+                    body: Center(
+            child: CircularProgressIndicator(), // Show a loader while waiting
+                    ),
+                  ),
+          ),
     );
   }
 }

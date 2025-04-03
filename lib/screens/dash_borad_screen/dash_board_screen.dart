@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 import '../../utils/core/image_constant.dart';
 import '../../utils/theme/theme_helper.dart';
 import '../../widgets/custom_image_view.dart';
+import '../no_internet/duplicate_screen.dart';
 
 class DashBoardScreen extends StatelessWidget {
   const DashBoardScreen({super.key});
@@ -50,112 +51,114 @@ class DashBoardScreen extends StatelessWidget {
             content: 'Are you sure do you need Exit',
           );
         },
-        child: Scaffold(
-          body: dashBoardProvider.getPage(),
-          backgroundColor: ColorsContent.homeBackGroundColor,
-          bottomNavigationBar: Container(
-            decoration: const BoxDecoration(
-              color: Colors.transparent, // Set your background color
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30), // Adjust as needed
-                topRight: Radius.circular(30),
+        child: ConnectivityWidget(
+          child: Scaffold(
+            body: dashBoardProvider.getPage(),
+            backgroundColor: ColorsContent.homeBackGroundColor,
+            bottomNavigationBar: Container(
+              decoration: const BoxDecoration(
+                color: Colors.transparent, // Set your background color
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30), // Adjust as needed
+                  topRight: Radius.circular(30),
+                ),
               ),
-            ),
-            child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(30), // Match the radius of the container
-                topRight: Radius.circular(30),
-              ),
-              child: BottomNavigationBar(
-                type: BottomNavigationBarType.fixed,
-                selectedItemColor: ColorsContent.primaryColor,
-                selectedFontSize: 0,
-                elevation: 0,
-                backgroundColor: Colors.white, // Ensure the background matches
-                currentIndex: dashBoardProvider.currentIndex,
-                onTap: (index) async {
-                  dashBoardProvider.changePage(index: index);
-                  if (index == 0) {
-                    if (homeProvider.chartViewModel == null) {
-                      homeProvider.fetchChartView(context);
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(30), // Match the radius of the container
+                  topRight: Radius.circular(30),
+                ),
+                child: BottomNavigationBar(
+                  type: BottomNavigationBarType.fixed,
+                  selectedItemColor: ColorsContent.primaryColor,
+                  selectedFontSize: 0,
+                  elevation: 0,
+                  backgroundColor: Colors.white, // Ensure the background matches
+                  currentIndex: dashBoardProvider.currentIndex,
+                  onTap: (index) async {
+                    dashBoardProvider.changePage(index: index);
+                    if (index == 0) {
+                      if (homeProvider.chartViewModel == null) {
+                        homeProvider.fetchChartView(context);
+                      }
+                    } else if (index == 1) {
+                      mentalStrengthEditProvider.clearAllValuesInSaveTime();
+                      adDreamsGoalsProvider.clearAction();
+                      mentalStrengthEditProvider.openAllCloser();
+                      await mentalStrengthEditProvider.fetchEmotions();
+                      await editProfileProvider.fetchUserProfile();
+                    } else if (index == 2) {
+                      await journalListProvider.fetchJournalChartView();
+                      await homeProvider.fetchJournals(initial: true);
                     }
-                  } else if (index == 1) {
-                    mentalStrengthEditProvider.clearAllValuesInSaveTime();
-                    adDreamsGoalsProvider.clearAction();
-                    mentalStrengthEditProvider.openAllCloser();
-                    await mentalStrengthEditProvider.fetchEmotions();
-                    await editProfileProvider.fetchUserProfile();
-                  } else if (index == 2) {
-                    await journalListProvider.fetchJournalChartView();
-                    await homeProvider.fetchJournals(initial: true);
-                  }
-                },
-                items: [
-                  BottomNavigationBarItem(
-                    icon: CustomImageView(
-                      imagePath: ImageConstant.imgHome,
-                      height: 20,
-                      width: 20,
-                      color: theme.colorScheme.primary.withOpacity(1),
+                  },
+                  items: [
+                    BottomNavigationBarItem(
+                      icon: CustomImageView(
+                        imagePath: ImageConstant.imgHome,
+                        height: 20,
+                        width: 20,
+                        color: theme.colorScheme.primary.withOpacity(1),
+                      ),
+                      activeIcon: CustomImageView(
+                        imagePath: ImageConstant.imgHomeActive,
+                        height: 80,
+                        width: 80,
+                        color: theme.colorScheme.primary.withOpacity(1),
+                      ),
+                      label: '',
                     ),
-                    activeIcon: CustomImageView(
-                      imagePath: ImageConstant.imgHomeActive,
-                      height: 80,
-                      width: 80,
-                      color: theme.colorScheme.primary.withOpacity(1),
+                    BottomNavigationBarItem(
+                      icon: CustomImageView(
+                        imagePath: ImageConstant.imgSettings,
+                        height: 24,
+                        width: 24,
+                        color: theme.colorScheme.primary.withOpacity(1),
+                      ),
+                      activeIcon: CustomImageView(
+                        imagePath: ImageConstant.imgSettingsActive,
+                        height: 80,
+                        width: 80,
+                        color: theme.colorScheme.primary.withOpacity(1),
+                      ),
+                      label: '',
                     ),
-                    label: '',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: CustomImageView(
-                      imagePath: ImageConstant.imgSettings,
-                      height: 24,
-                      width: 24,
-                      color: theme.colorScheme.primary.withOpacity(1),
+                    BottomNavigationBarItem(
+                      icon: CustomImageView(
+                        imagePath: ImageConstant.imgMegaphone,
+                        height: 24,
+                        width: 24,
+                        color: theme.colorScheme.primary.withOpacity(1),
+                      ),
+                      activeIcon: CustomImageView(
+                        imagePath: ImageConstant.imgMegaphoneActive,
+                        height: 80,
+                        width: 80,
+                        color: theme.colorScheme.primary.withOpacity(1),
+                      ),
+                      label: '',
                     ),
-                    activeIcon: CustomImageView(
-                      imagePath: ImageConstant.imgSettingsActive,
-                      height: 80,
-                      width: 80,
-                      color: theme.colorScheme.primary.withOpacity(1),
+                    BottomNavigationBarItem(
+                      icon: CustomImageView(
+                        imagePath: ImageConstant.imgArrowDown,
+                        height: 24,
+                        width: 24,
+                        color: theme.colorScheme.primary.withOpacity(1),
+                      ),
+                      activeIcon: CustomImageView(
+                        imagePath: ImageConstant.imgArrowDownActive,
+                        height: 80,
+                        width: 80,
+                        color: theme.colorScheme.primary.withOpacity(1),
+                      ),
+                      label: '',
                     ),
-                    label: '',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: CustomImageView(
-                      imagePath: ImageConstant.imgMegaphone,
-                      height: 24,
-                      width: 24,
-                      color: theme.colorScheme.primary.withOpacity(1),
-                    ),
-                    activeIcon: CustomImageView(
-                      imagePath: ImageConstant.imgMegaphoneActive,
-                      height: 80,
-                      width: 80,
-                      color: theme.colorScheme.primary.withOpacity(1),
-                    ),
-                    label: '',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: CustomImageView(
-                      imagePath: ImageConstant.imgArrowDown,
-                      height: 24,
-                      width: 24,
-                      color: theme.colorScheme.primary.withOpacity(1),
-                    ),
-                    activeIcon: CustomImageView(
-                      imagePath: ImageConstant.imgArrowDownActive,
-                      height: 80,
-                      width: 80,
-                      color: theme.colorScheme.primary.withOpacity(1),
-                    ),
-                    label: '',
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
+          
           ),
-
         ),
       );
     });

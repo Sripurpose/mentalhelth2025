@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../utils/theme/colors.dart';
 import '../../utils/theme/custom_text_style.dart';
 import '../../utils/theme/theme_helper.dart';
 import '../auth/sign_in/coninue_with_google_class.dart';
@@ -137,7 +138,7 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
           return false;
         },
         child: Scaffold(
-          body: backGroundImager(
+          body: landingScreenImager(
             size: size,
             padding: EdgeInsets.zero,
             child: Center(
@@ -156,30 +157,38 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SizedBox(
-                        height: size.height * 0.30,
-                      ),
                       CustomImageView(
-                        imagePath: ImageConstant.imgLogo,
-                        height: 70,
+                        imagePath: ImageConstant.imgNumuLogo,
+                        height: 100,
                         width: 280,
                         color: Colors.white,
                       ),
                       SizedBox(
-                        height: size.height * 0.10,
+                        height: size.height * 0.05,
                       ),
+
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             widget.title ?? '',
-                            style: theme.textTheme.titleMedium,
+                            style: const TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: 'Open Sans',
+                              color: Colors.white,
+                            ),
                           ),
                           SizedBox(height: size.height * 0.02),
                           Text(
                             widget.message ?? '',
-                            style: theme.textTheme.bodyMedium,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Open Sans',
+                              color: Colors.white,
+                            ),
                           ),
                           SizedBox(height: size.height * 0.02),
 
@@ -187,7 +196,7 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
                             onTap: () {
                               Future.delayed(Duration(seconds: 2), () {
                                 setState(() {
-                                //signInProvider.fetchSettings(context);
+                                  //signInProvider.fetchSettings(context);
                                 });
                               });
                               String chatURL = signInProvider.settingsList[0].linkUrl ?? "";
@@ -209,47 +218,131 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
                                   MaterialPageRoute(
                                     builder: (context) =>
                                         SubscriptionInAppScreen(
-                                      url: widget.linkUrl ?? "",
-                                    ),
+                                          url: widget.linkUrl ?? "",
+                                        ),
                                   ),
                                 );
                               }
                             },
                             child: Container(
-                              padding: EdgeInsets.all(10.0),
-                              // Add padding as needed
+                              width: size.width * 0.75,
+                              padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0), // Adjust padding for better spacing
                               decoration: BoxDecoration(
-                                color: Colors.transparent,
-                                // Change to your desired background color
-                                borderRadius: BorderRadius.circular(5.0),
-                                // Optional: Add border radius
-                                border: Border.all(
-                                  color: Colors.black,
-                                  // Change to your desired border color
-                                  width: 0.5, // Optional: Adjust border width
-                                ),
+                                color: Colors.white, // Background color
+                                borderRadius: BorderRadius.circular(5.0), // Optional: Add border radius
                               ),
-                              child: RichText(
-                                text: TextSpan(
-                                  text: "Go to ",
-                                  // Regular text
-                                  style: theme.textTheme.bodyMedium,
-                                  // Regular style for "Go to"
-                                  children: [
-                                    TextSpan(
-                                      text: widget.link ?? '',
-                                      // The URL text
-                                      style: CustomTextStyles.labelLarge14
-                                          .copyWith(
-                                        decorationColor: Colors.blue,
-                                        // Optional: change the color of the underline
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Aligns items to the start
+                                crossAxisAlignment: CrossAxisAlignment.center, // Keeps items vertically aligned
+                                children: [
+                                  Icon(
+                                    Icons.language,
+                                    color: ColorsContent.newThemeColor,
+                                    size: 24, // Reduced icon size
+                                  ),
+
+                                  const SizedBox(width: 8), // Add small spacing between icon and text
+                                  Expanded(
+                                    child: Text(
+                                      widget.link ?? '',
+                                      style:  TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold, // Set font weight to bold
+                                        color:ColorsContent.newThemeColor,
+                                      ),
+                                      overflow: TextOverflow.ellipsis, // Avoid text overflow
+                                    ),
+                                  ),
+
+                                  const SizedBox(width: 10), // Adjust spacing before the forward icon
+
+                                  Container(
+                                    width: 28, // Adjust size as needed
+                                    height: 28,
+                                    decoration: BoxDecoration(
+                                      color: ColorsContent.newThemeColor, // Background color
+                                      shape: BoxShape.circle, // Circular shape
+                                    ),
+                                    child: const Center(
+                                      child: Icon(
+                                        Icons.arrow_forward,
+                                        color: Colors.white, // Icon color
+                                        size: 18, // Slightly reduced icon size
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
+
+                          // GestureDetector(
+                          //   onTap: () {
+                          //     Future.delayed(Duration(seconds: 2), () {
+                          //       setState(() {
+                          //       //signInProvider.fetchSettings(context);
+                          //       });
+                          //     });
+                          //     String chatURL = signInProvider.settingsList[0].linkUrl ?? "";
+                          //     logger.w("widget.linkUrl${ signInProvider.settingsList[0].linkUrl}");
+                          //     var url = Uri.parse(chatURL);
+                          //     if (signInProvider.settingsList[0].target ==
+                          //         "external") {
+                          //       // Navigator.of(context).push(
+                          //       //   MaterialPageRoute(
+                          //       //     builder: (context) =>
+                          //       //         SubscriptionInAppScreen(
+                          //       //           url: chatURL ?? "",
+                          //       //         ),
+                          //       //   ),
+                          //       // );
+                          //       _launchInAppWithBrowserOptions(context,url);
+                          //     } else {
+                          //       Navigator.of(context).push(
+                          //         MaterialPageRoute(
+                          //           builder: (context) =>
+                          //               SubscriptionInAppScreen(
+                          //             url: widget.linkUrl ?? "",
+                          //           ),
+                          //         ),
+                          //       );
+                          //     }
+                          //   },
+                          //   child: Container(
+                          //     padding: EdgeInsets.all(10.0),
+                          //     // Add padding as needed
+                          //     decoration: BoxDecoration(
+                          //       color: Colors.transparent,
+                          //       // Change to your desired background color
+                          //       borderRadius: BorderRadius.circular(5.0),
+                          //       // Optional: Add border radius
+                          //       border: Border.all(
+                          //         color: Colors.black,
+                          //         // Change to your desired border color
+                          //         width: 0.5, // Optional: Adjust border width
+                          //       ),
+                          //     ),
+                          //     child: RichText(
+                          //       text: TextSpan(
+                          //         text: "Go to ",
+                          //         // Regular text
+                          //         style: theme.textTheme.bodyMedium,
+                          //         // Regular style for "Go to"
+                          //         children: [
+                          //           TextSpan(
+                          //             text: widget.link ?? '',
+                          //             // The URL text
+                          //             style: CustomTextStyles.labelLarge14
+                          //                 .copyWith(
+                          //               decorationColor: Colors.blue,
+                          //               // Optional: change the color of the underline
+                          //             ),
+                          //           ),
+                          //         ],
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                       SizedBox(
@@ -271,21 +364,30 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
                           );
                         },
                         child: Container(
-                          padding: EdgeInsets.all(10.0),
+                          width: size.width * 0.75,
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 13.0), // Adjust padding for better spacing
                           decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(5.0),
-                            border: Border.all(
-                              color: Colors.blue,
-                              width: 0.5,
-                            ),
+                            color: Colors.black, // Background color
+                            borderRadius: BorderRadius.circular(5.0), // Optional: Add border radius
                           ),
-                          child: Text(
-                            "Cancel",
-                            style: theme.textTheme.titleMedium,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center, // Aligns items to the start
+                            crossAxisAlignment: CrossAxisAlignment.center, // Keeps items vertically aligned
+                            children: [
+                              Text(
+                                "Cancel",
+                                style:  TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold, // Set font weight to bold
+                                  color:ColorsContent.whiteText,
+                                ),
+                                overflow: TextOverflow.ellipsis, // Avoid text overflow
+                              ),
+                            ],
                           ),
                         ),
                       ),
+
 
                     ],
                   ),

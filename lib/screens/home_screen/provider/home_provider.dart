@@ -151,6 +151,7 @@ class HomeProvider extends ChangeNotifier {
         journalsModelLoading = false;
         notifyListeners();
       } else {
+        TokenManager.setTokenStatus(false);
         journalStatus = response.statusCode;
         logger.w("journalsModelelse ${journalsModelFromJson(response.body)}");
         journalsModelLoading = false;

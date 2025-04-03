@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:mentalhelth/screens/home_screen/provider/home_provider.dart';
 import 'package:mentalhelth/screens/journal_list_screen/provider/journal_list_provider.dart';
 import 'package:mentalhelth/utils/core/image_constant.dart';
@@ -69,7 +70,7 @@ class _JournalListViewWidgetState extends State<JournalListViewWidget> {
                     Container(
                       color: homeProvider.journalsModelList.isEmpty &&
                           !homeProvider.journalsModelLoading
-                          ? Colors.white
+                          ? Colors.transparent
                           : null,
                       padding: const EdgeInsets.symmetric(horizontal: 28),
                       child: isLoading
@@ -79,11 +80,19 @@ class _JournalListViewWidgetState extends State<JournalListViewWidget> {
                       ))
                           : homeProvider.journalsModelList.isEmpty &&
                           !homeProvider.journalsModelLoading
-                          ? Center(
-                        child: Image.asset(
-                          ImageConstant.noData,
-                        ),
-                      )
+                          ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset(
+                                                            ImageConstant.noDataNumu,
+                                                    ),
+                              const Text("No data found",
+                                  style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold)),
+                              const SizedBox(height: 10),
+                              const Text("Check back later",
+                                  style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.normal)),
+                            ],
+                          )
                           : ListView.separated(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(), // Prevent ListView from scrolling separately

@@ -645,7 +645,8 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 4),
-                                homeProvider.journalDetails?.journals?.goal == null
+                                homeProvider.journalDetails!.journals!.action == null ||
+                                    homeProvider.journalDetails!.journals!.action!.isEmpty
                                     ?
                                 const SizedBox()
         

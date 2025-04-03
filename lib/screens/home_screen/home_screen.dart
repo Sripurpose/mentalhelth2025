@@ -562,15 +562,25 @@ class _HomeScreenState extends State<HomeScreen> {
                 onTap: () {
                   dashBoardProvider.changeCommentPage(index: 8);
                 },
-                child: CustomImageView(
-                  imagePath: editProfileProvider.getProfileModel?.profileurl
-                      ?.toString() ??
-                      "",
+                child: Container(
                   height: 58,
                   width: 58,
-                  radius: BorderRadius.circular(34),
-                  fit: BoxFit.cover,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle, // Ensures the image is circular
+                    border: Border.all(
+                      color: ColorsContent.newThemeColor, // Change this to any color you want
+                      width: 0.5, // Adjust border thickness
+                    ),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(34),
+                    child: CustomImageView(
+                      imagePath: editProfileProvider.getProfileModel?.profileurl?.toString() ?? "",
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
+
               ),
               Positioned(
                 bottom: 0,

@@ -207,7 +207,8 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
                               ),
                             ],
                           ),
-                          mentalStrengthEditProvider.goalsValue.id == null
+                          mentalStrengthEditProvider
+                              .getListGoalActionsModel!.actions!.isEmpty
                               ? const SizedBox()
                               : ElevatedButton(
                                   onPressed: () {
@@ -237,75 +238,59 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
                   ),
                   Consumer<MentalStrengthEditProvider>(
                     builder: (context, mentalStrengthEditProvider, _) {
+                      final actionsList = mentalStrengthEditProvider.getListGoalActionsModel?.actions;
+
+                      if (actionsList == null) {
+                        return const SizedBox(); // If the data model is null, return nothing
+                      }
+
+                      if (actionsList.isEmpty) {
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              ImageConstant.noDataNumu,
+                            ),
+                            const Text("No data found",
+                                style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold)),
+                            const SizedBox(height: 10),
+                            const Text("Check back later",
+                                style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.normal)),
+                          ],
+                        );
+                      }
+
                       return SizedBox(
                         height: size.height * 0.44,
                         width: size.width * 0.8,
-                        child: mentalStrengthEditProvider
-                                    .getListGoalActionsModel ==
-                                null
-                            ? const SizedBox()
-                            : mentalStrengthEditProvider
-                                        .getListGoalActionsModel!.actions ==
-                                    null
-                                ? const SizedBox()
-                                : ListView.separated(
-                                    separatorBuilder: (
-                                      context,
-                                      index,
-                                    ) {
-                                      return const SizedBox(
-                                        height: 3,
-                                      );
-                                    },
-                                    itemCount: mentalStrengthEditProvider
-                                            .getListGoalActionsModel!
-                                            .actions!
-                                            .length +
-                                        (mentalStrengthEditProvider
-                                                .getListGoalActionsModelLoading
-                                            ? 1
-                                            : 0),
-                                    itemBuilder: (context, index) {
-                                      if (index <
-                                          mentalStrengthEditProvider
-                                              .getListGoalActionsModel!
-                                              .actions!
-                                              .length) {
-                                        return GestureDetector(
-                                          onTap: () {
-                                          },
-                                          child: listActionList(
-                                            size: size,
-                                            action: mentalStrengthEditProvider
-                                                .getListGoalActionsModel!
-                                                .actions!,
-                                            index: index,
-                                          ),
-                                        );
-                                      } else if (mentalStrengthEditProvider
-                                          .getListGoalActionsModel!
-                                          .actions!
-                                          .isEmpty) {
-                                        return const SizedBox(
-                                          child: Center(
-                                            child: Text("No Data"),
-                                          ),
-                                        );
-                                      } else {
-                                        return const Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: Center(
-                                            child: CircularProgressIndicator(),
-                                          ),
-                                        );
-                                      }
-                                    },
-                                  ),
+                        child: ListView.separated(
+                          separatorBuilder: (context, index) => const SizedBox(height: 3),
+                          itemCount: actionsList.length +
+                              (mentalStrengthEditProvider.getListGoalActionsModelLoading ? 1 : 0),
+                          itemBuilder: (context, index) {
+                            if (index < actionsList.length) {
+                              return GestureDetector(
+                                onTap: () {},
+                                child: listActionList(
+                                  size: size,
+                                  action: actionsList,
+                                  index: index,
+                                ),
+                              );
+                            } else if (mentalStrengthEditProvider.getListGoalActionsModelLoading) {
+                              return const Center(
+                                child: CircularProgressIndicator(), // Show loading indicator
+                              );
+                            }
+                            return null; // Ensures all cases are handled
+                          },
+                        ),
                       );
                     },
                   ),
+
                   SizedBox(
-                    height: size.height * 0.01,
+                    height: size.height * 0.05,
                   ),
                   Consumer<MentalStrengthEditProvider>(
                       builder: (context, mentalStrengthEditProvider, _) {

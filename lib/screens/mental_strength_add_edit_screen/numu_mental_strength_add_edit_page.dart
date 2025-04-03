@@ -342,7 +342,7 @@ class _NumuMentalStrengthAddEditPageState
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                        SnackBar(
-                                        content: const Text("Title or Description are required."),
+                                        content: const Text("Title and Description are required."),
                                         backgroundColor: ColorsContent.newThemeColor,
                                       ),
                                     );

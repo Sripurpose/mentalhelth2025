@@ -468,12 +468,10 @@ class SignInProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
       } else {}
       if(response.statusCode == 401){
-       // TokenManager.setTokenStatus(true);
-        //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
+
       }
       if(response.statusCode == 403){
-        //TokenManager.setTokenStatus(true);
-        //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
+
       }
       saveFirebaseLoading = false;
       notifyListeners();
@@ -589,18 +587,19 @@ class SignInProvider extends ChangeNotifier {
         notifyListeners();
       }
       else {
+        TokenManager.setTokenStatus(false);
         statusSub = response.statusCode;
         settingsLoading = false;
         notifyListeners();
       }
       if(response.statusCode == 401){
         statusSub = response.statusCode;
-        TokenManager.setTokenStatus(true);
+       // TokenManager.setTokenStatus(true);
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
       if(response.statusCode == 403){
         statusSub = response.statusCode;
-        TokenManager.setTokenStatus(true);
+       // TokenManager.setTokenStatus(true);
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
       statusSub = response.statusCode;
@@ -722,13 +721,13 @@ class SignInProvider extends ChangeNotifier {
       if(response.statusCode == 401){
         statusVersionUpdate = response.statusCode;
         logger.w("statusVersionUpdate${statusVersionUpdate}");
-        TokenManager.setTokenStatus(true);
+       // TokenManager.setTokenStatus(true);
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
       if(response.statusCode == 403){
         statusVersionUpdate = response.statusCode;
         logger.w("statusVersionUpdate${statusVersionUpdate}");
-        TokenManager.setTokenStatus(true);
+       // TokenManager.setTokenStatus(true);
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
       statusVersionUpdate = response.statusCode;

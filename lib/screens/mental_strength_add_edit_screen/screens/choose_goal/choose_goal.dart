@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mentalhelth/screens/addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
@@ -186,76 +187,55 @@ class _ScreenChooseGoalMentalStrengthState
                   // ),
                   Consumer<MentalStrengthEditProvider>(
                     builder: (context, mentalStrengthEditProvider, _) {
+                      final goalsList = mentalStrengthEditProvider.goalsList;
+
+                      if (goalsList == null || goalsList.isEmpty) {
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              ImageConstant.noDataNumu,
+                            ),
+                            const Text("No data found",
+                                style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold)),
+                            const SizedBox(height: 10),
+                            const Text("Check back later",
+                                style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.normal)),
+                          ],
+                        );
+                      }
+
                       return SizedBox(
                         height: size.height * 0.45,
                         width: size.width * 0.8,
-                        child: mentalStrengthEditProvider.goalsList != null ? ListView.separated(
+                        child: ListView.separated(
                           controller: _scrollController,
-                          separatorBuilder: (
-                            context,
-                            index,
-                          ) {
-                            return const SizedBox(
-                              height: 3,
-                            );
-                          },
-                          itemCount: mentalStrengthEditProvider.goalsList.length +
-                              (mentalStrengthEditProvider.getGoalsModelLoading
-                                  ? 1
-                                  : 0),
+                          separatorBuilder: (context, index) => const SizedBox(height: 3),
+                          itemCount: goalsList.length + (mentalStrengthEditProvider.getGoalsModelLoading ? 1 : 0),
                           itemBuilder: (context, index) {
-                            if (index <
-                                mentalStrengthEditProvider.goalsList.length) {
+                            if (index < goalsList.length) {
                               return GestureDetector(
-                                onTap: () {
-                                },
+                                onTap: () {},
                                 child: listGoalWidget(
                                   size: size,
-                                  goals: mentalStrengthEditProvider.goalsList,
+                                  goals: goalsList,
                                   index: index,
                                 ),
                               );
-                            } else if (mentalStrengthEditProvider
-                                .getGoalsModelLoading) {
-                              return shimmerList(
-                                height: size.height,
-                                list: 10,
-                                shimmerHeight: size.height * 0.07,
+                            } else if (mentalStrengthEditProvider.getGoalsModelLoading) {
+                              return CupertinoActivityIndicator(
+                                color: ColorsContent.newThemeColor,
+                                radius: 15,
                               );
                             }
-                            // else if (mentalStrengthEditProvider.goalsValue.id == null) {
-                            //   return const SizedBox(
-                            //     child: Center(
-                            //       child: Text("No Data",    style: TextStyle(
-                            //         color: Colors.red,
-                            //         fontWeight: FontWeight.bold,
-                            //       ),),
-                            //     ),
-                            //   );
-                            // } else {
-                            //   return const SizedBox(
-                            //     child: Center(
-                            //       child: Text("No Data",    style: TextStyle(
-                            //         color: Colors.red,
-                            //         fontWeight: FontWeight.bold,
-                            //       ),),
-                            //     ),
-                            //   );
-                            // }
+                            return null; // Ensures all cases are handled
                           },
-                        ):
-                        const SizedBox(
-                        child: Center(
-                        child: Text("No goals were found",    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),),
-                      ),
-                      ),
+                        ),
                       );
                     },
                   ),
-      
+                  SizedBox(height: 20,),
+
                   Consumer<MentalStrengthEditProvider>(
                       builder: (context, mentalStrengthEditProvider, _) {
                     return ElevatedButton(
