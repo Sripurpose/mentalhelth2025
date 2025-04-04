@@ -555,6 +555,7 @@ class SignInProvider extends ChangeNotifier {
   int? statusSub = 0;
 
   int? statusVersionUpdate;
+  int? statusAppSetup;
   bool versionUpdateLoading = false;
   VersionUpdateModel? versionUpdateModel;
 
@@ -568,6 +569,7 @@ class SignInProvider extends ChangeNotifier {
 
       Map<String, String> headers = {
         'authorization': token!, // Assuming token is not null
+
       };
       Uri url = Uri.parse(
         UrlConstant.appSettingsUrl,
@@ -613,58 +615,131 @@ class SignInProvider extends ChangeNotifier {
   }
 
   String? isRequired = '';
-  Future<void> fetchAppRegister(BuildContext context) async {
+  // Future<void> fetchAppRegister(BuildContext context) async {
+  //   try {
+  //     settingsRegisterModel = null;
+  //
+  //     String? token = await getUserTokenSharePref();
+  //     registerSettingsLoading = true;
+  //     logger.w("registerSettingsLoading${registerSettingsLoading}");
+  //     notifyListeners();
+  //
+  //     Uri url = Uri.parse(
+  //       UrlConstant.appRegisterUrl,
+  //     );
+  //     logger.w("url ${url}");
+  //     final response = await http.get(url,);
+  //     if (response.statusCode == 200 || response.statusCode == 201) {
+  //
+  //       settingsRegisterModel = settingsRegisterModelFromJson(response.body);
+  //       registerSettingsLoading = false;
+  //       notifyListeners();
+  //       logger.w("registerSettingsLoading${registerSettingsLoading}");
+  //       logger.w("settingsRegisterModel ${settingsRegisterModel?.settings}");
+  //       if (settingsRegisterModel != null) {
+  //         if (settingsRegisterModel!.settings != null) {
+  //           settingsRegisterList.addAll(settingsRegisterModel!.settings!);
+  //           isRequired = settingsRegisterModel!.settings![0].isRequired;
+  //           logger.w("isRequired${isRequired}");
+  //           logger.w("settingsRegisterList${jsonEncode(settingsRegisterModel)}");
+  //         }
+  //       }
+  //       registerSettingsLoading = false;
+  //       notifyListeners();
+  //     }
+  //     else {
+  //       registerSettingsLoading = false;
+  //       notifyListeners();
+  //     }
+  //     if(response.statusCode == 401){
+  //       TokenManager.setTokenStatus(true);
+  //       //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
+  //     }
+  //     if(response.statusCode == 403){
+  //       TokenManager.setTokenStatus(true);
+  //       //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
+  //     }
+  //     registerSettingsLoading = false;
+  //     notifyListeners();
+  //   } catch (e) {
+  //     registerSettingsLoading = false;
+  //     notifyListeners();
+  //   }
+  //   notifyListeners();
+  // }
+
+
+  Future<void> fetchAppRegister(
+      BuildContext context, {
+        required String deviceType,
+      }) async {
     try {
+      statusAppSetup = 0;
       settingsRegisterModel = null;
 
       String? token = await getUserTokenSharePref();
       registerSettingsLoading = true;
-      logger.w("registerSettingsLoading${registerSettingsLoading}");
+      logger.w("registerSettingsLoading $registerSettingsLoading");
       notifyListeners();
 
-      Uri url = Uri.parse(
-        UrlConstant.appRegisterUrl,
-      );
-      logger.w("url ${url}");
-      final response = await http.get(url,);
-      if (response.statusCode == 200 || response.statusCode == 201) {
+      Uri url = Uri.parse(UrlConstant.appRegisterUrl);
+      logger.w("url $url");
 
+
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
+
+      Map<String, String> headers = {
+        'Device-Type': deviceType,
+        'Version': versionCode.toString(),
+        if (token != null) 'Authorization': 'Bearer $token',
+      };
+
+      final response = await http.get(url, headers: headers);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        statusAppSetup = response.statusCode;
         settingsRegisterModel = settingsRegisterModelFromJson(response.body);
         registerSettingsLoading = false;
         notifyListeners();
-        logger.w("registerSettingsLoading${registerSettingsLoading}");
+
+        logger.w("registerSettingsLoading $registerSettingsLoading");
         logger.w("settingsRegisterModel ${settingsRegisterModel?.settings}");
-        if (settingsRegisterModel != null) {
-          if (settingsRegisterModel!.settings != null) {
-            settingsRegisterList.addAll(settingsRegisterModel!.settings!);
-            isRequired = settingsRegisterModel!.settings![0].isRequired;
-            logger.w("isRequired${isRequired}");
-            logger.w("settingsRegisterList${jsonEncode(settingsRegisterModel)}");
-          }
+
+        if (settingsRegisterModel?.settings != null) {
+          settingsRegisterList.addAll(settingsRegisterModel!.settings!);
+          isRequired = settingsRegisterModel!.settings![0].isRequired;
+          logger.w("isRequired $isRequired");
+          logger.w("settingsRegisterList ${jsonEncode(settingsRegisterModel)}");
         }
-        registerSettingsLoading = false;
-        notifyListeners();
+      } else {
+        statusAppSetup = response.statusCode;
+        logger.i("settingsRegisterModel${jsonEncode(settingsRegisterModel?.status)}");
+        if (response.statusCode == 401 || response.statusCode == 403) {
+          statusAppSetup = response.statusCode;
+          TokenManager.setTokenStatus(true);
+          // CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
+        }
       }
-      else {
-        registerSettingsLoading = false;
-        notifyListeners();
-      }
-      if(response.statusCode == 401){
-        TokenManager.setTokenStatus(true);
-        //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
-      }
-      if(response.statusCode == 403){
-        TokenManager.setTokenStatus(true);
-        //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
-      }
+      statusAppSetup = response.statusCode;
+
       registerSettingsLoading = false;
       notifyListeners();
     } catch (e) {
+      logger.e("Error fetching app register: $e");
       registerSettingsLoading = false;
       notifyListeners();
     }
-    notifyListeners();
   }
+
 
 
   Future<void> fetchVersionUpdate(BuildContext context,String deviceType) async {

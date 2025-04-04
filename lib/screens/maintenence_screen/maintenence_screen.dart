@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../utils/theme/colors.dart';
 import '../../utils/theme/custom_text_style.dart';
 import '../../utils/theme/theme_helper.dart';
 import '../auth/sign_in/coninue_with_google_class.dart';
@@ -69,7 +70,7 @@ class _MaintenenceScreenState extends State<MaintenenceScreen> {
         },
         child: ConnectivityWidget(
           child: Scaffold(
-            body: backGroundImager(
+            body: landingScreenImager(
               size: size,
               padding: EdgeInsets.zero,
               child: Center(
@@ -88,17 +89,15 @@ class _MaintenenceScreenState extends State<MaintenenceScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            SizedBox(
-                              height: size.height * 0.30,
-                            ),
+
                             CustomImageView(
-                              imagePath: ImageConstant.imgLogo,
-                              height: 70,
+                              imagePath: ImageConstant.imgNumuLogo,
+                              height: 100,
                               width: 280,
                               color: Colors.white,
                             ),
                             SizedBox(
-                              height: size.height * 0.10,
+                              height: size.height * 0.05,
                             ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -106,7 +105,12 @@ class _MaintenenceScreenState extends State<MaintenenceScreen> {
                               children: [
                                 Text(
                                   widget.title ?? '',
-                                  style: theme.textTheme.titleMedium,
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700,
+                                    fontFamily: 'Open Sans',
+                                    color: Colors.white,
+                                  ),
                                 ),
           
                               ],
@@ -123,24 +127,32 @@ class _MaintenenceScreenState extends State<MaintenenceScreen> {
                                 Navigator.push(
                                   context,
                                   PageRouteBuilder(
-                                    pageBuilder: (_, __, ___) => const LandingRegisterScreenScreen(),
+                                    pageBuilder: (_, __, ___) => const SplashScreen(),
                                     transitionDuration: const Duration(seconds: 0),
                                   ),
                                 );
                               },
                               child: Container(
-                                padding: EdgeInsets.all(10.0),
+                                width: size.width * 0.75,
+                                padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 13.0), // Adjust padding for better spacing
                                 decoration: BoxDecoration(
-                                  color: Colors.transparent,
-                                  borderRadius: BorderRadius.circular(5.0),
-                                  border: Border.all(
-                                    color: Colors.black,
-                                    width: 0.5,
-                                  ),
+                                  color: Colors.black, // Background color
+                                  borderRadius: BorderRadius.circular(5.0), // Optional: Add border radius
                                 ),
-                                child: Text(
-                                  "Cancel",
-                                  style: theme.textTheme.titleMedium,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center, // Aligns items to the start
+                                  crossAxisAlignment: CrossAxisAlignment.center, // Keeps items vertically aligned
+                                  children: [
+                                    Text(
+                                      "Cancel",
+                                      style:  TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold, // Set font weight to bold
+                                        color:ColorsContent.whiteText,
+                                      ),
+                                      overflow: TextOverflow.ellipsis, // Avoid text overflow
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -56,8 +57,9 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
     });
     signInProvider = Provider.of<SignInProvider>(context, listen: false);
     scheduleMicrotask(() async {
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
       // First, call fetchSettings
-      await signInProvider.fetchAppRegister(context);
+      await signInProvider.fetchAppRegister(context,deviceType: deviceType);
      // await signInProvider.fetchSettings(context);
     });
   }

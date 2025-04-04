@@ -303,10 +303,11 @@ class _MyAppState extends State<MyApp> {
     });
   }
   Future<void> fetchAppRegister() async {
+    String deviceType = Platform.isAndroid ? 'android' : 'ios';
     //isLoading = true;
     final signInProvider = Provider.of<SignInProvider>(context, listen: false);
 
-    await signInProvider.fetchAppRegister(context);
+    await signInProvider.fetchAppRegister(context, deviceType: deviceType);
 
   }
 

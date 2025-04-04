@@ -157,7 +157,7 @@ class PhoneSignInProvider extends ChangeNotifier {
         phoneNumberController.clear();
       } else {
         statusOtpVerify = response.statusCode;
-        showCustomSnackBar(context: context, message: 'otp failed.');
+        showCustomSnackBar(context: context, message: 'Invalid Otp');
       }
       statusOtpVerify = response.statusCode;
       if(response.statusCode == 401){

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ import '../../../utils/theme/custom_text_style.dart';
 import '../../../utils/theme/theme_helper.dart';
 import '../../edit_add_profile_screen/provider/edit_provider.dart';
 import '../../home_screen/provider/home_provider.dart';
+import '../../maintenence_screen/maintenence_screen.dart';
 import '../../no_internet/duplicate_screen.dart';
 
 class LandingRegisterScreenScreen extends StatefulWidget {
@@ -48,8 +50,22 @@ class _LandingRegisterScreenScreenState extends State<LandingRegisterScreenScree
     });
     signInProvider = Provider.of<SignInProvider>(context, listen: false);
     scheduleMicrotask(() async {
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      if(signInProvider.statusAppSetup == 503){
+        logger.w("signInProvider.statusVersionUpdate${signInProvider.statusAppSetup}");
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: signInProvider.versionUpdateModel?.message ?? "",
+              ),
+            ),
+          );
+        });
+      }
       // First, call fetchSettings
-      await signInProvider.fetchAppRegister(context);
+      //await signInProvider.fetchAppRegister(context,deviceType: deviceType);
     });
   }
 

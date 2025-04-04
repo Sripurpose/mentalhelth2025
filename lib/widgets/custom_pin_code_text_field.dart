@@ -53,6 +53,7 @@ class CustomPinCodeTextField extends StatelessWidget {
       FilteringTextInputFormatter.digitsOnly,
     ],
     enableActiveFill: true,
+    cursorColor: Colors.black, // 👈 Set cursor color here
     pinTheme: PinTheme(
       fieldHeight: 40,
       fieldWidth: 43,

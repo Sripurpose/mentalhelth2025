@@ -189,18 +189,21 @@ class _ScreenChooseGoalMentalStrengthState
                     builder: (context, mentalStrengthEditProvider, _) {
                       final goalsList = mentalStrengthEditProvider.goalsList;
 
-                      if (goalsList == null || goalsList.isEmpty) {
+                      if (!mentalStrengthEditProvider.getGoalsModelLoading &&
+                          (goalsList == null || goalsList.isEmpty)) {
                         return Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            SvgPicture.asset(
-                              ImageConstant.noDataNumu,
+                            SvgPicture.asset(ImageConstant.noDataNumu),
+                            const Text(
+                              "No data found",
+                              style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
                             ),
-                            const Text("No data found",
-                                style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold)),
                             const SizedBox(height: 10),
-                            const Text("Check back later",
-                                style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.normal)),
+                            const Text(
+                              "Check back later",
+                              style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.normal),
+                            ),
                           ],
                         );
                       }
@@ -223,17 +226,18 @@ class _ScreenChooseGoalMentalStrengthState
                                 ),
                               );
                             } else if (mentalStrengthEditProvider.getGoalsModelLoading) {
-                              return CupertinoActivityIndicator(
+                              return  CupertinoActivityIndicator(
                                 color: ColorsContent.newThemeColor,
                                 radius: 15,
                               );
                             }
-                            return null; // Ensures all cases are handled
+                            return const SizedBox.shrink();
                           },
                         ),
                       );
                     },
                   ),
+
                   SizedBox(height: 20,),
 
                   Consumer<MentalStrengthEditProvider>(

@@ -81,12 +81,14 @@ class _EditActionScreenState extends State<EditActionScreen> {
         Provider.of<EditProfileProvider>(context, listen: false);
     addActionsProvider =
         Provider.of<AddActionsProvider>(context, listen: false);
-    addActionsProvider.setRemainder = true;
     logger.w(
         "addActionsProvider.reminderStartDate${addActionsProvider.reminderStartDate}");
     alarmDetails();
     _isTokenExpired();
     init();
+
+
+
     super.initState();
   }
 
@@ -230,6 +232,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
     addActionsProvider.reminderStartDate = unixTimestampToDate(
         widget.actionsDetailsModel!.actions!.reminder?.reminder_startdate ??
             "");
+    logger.i("addActionsProvider.reminderStartTime${addActionsProvider.reminderStartTime}");
     addActionsProvider.reminderEndDate = unixTimestampToDate(
         widget.actionsDetailsModel!.actions!.reminder?.reminder_enddate ?? "");
     addActionsProvider.reminderStartTime = stringToTimeOfDay(
@@ -328,6 +331,11 @@ class _EditActionScreenState extends State<EditActionScreen> {
               : widget.actionsDetailsModel!.actions!.location!.locationAddress
                   .toString();
     }
+    if(addActionsProvider.reminderStartTime != null){
+      addActionsProvider.setRemainder = true;
+    }else{
+      addActionsProvider.setRemainder = false;
+    }
   }
 
 
@@ -386,9 +394,6 @@ class _EditActionScreenState extends State<EditActionScreen> {
                                       size,
                                     ),
                                     const SizedBox(height: 19),
-                                    // addActionsProvider.mediaSelected == 3
-                                    //     ? const AddActionGoogleMap()
-                                    //     : const SizedBox(),
                                     SizedBox(height: size.height * 0.03),
                                     Row(
                                       children: [

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/utils/theme/theme_helper.dart';
 
 // ignore: must_be_immutable
@@ -91,18 +92,39 @@ class CustomCheckboxButton extends StatelessWidget {
         style: textStyle ?? theme.textTheme.titleSmall,
       );
   Widget get checkboxWidget => SizedBox(
-        height: iconSize ?? 18,
-        width: iconSize ?? 18,
-        child: Checkbox(
-          visualDensity: const VisualDensity(
-            vertical: -4,
-            horizontal: -4,
+    height: iconSize ?? 20,
+    width: iconSize ?? 20,
+    child: Theme(
+      data: ThemeData(
+        checkboxTheme: CheckboxThemeData(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
           ),
-          value: value ?? false,
-          checkColor: theme.colorScheme.onSecondaryContainer.withOpacity(1),
-          onChanged: (value) {
-            onChange(value!);
-          },
+          side: MaterialStateBorderSide.resolveWith(
+                (states) => BorderSide(
+              color: ColorsContent.newThemeColor,
+              width: 2,
+            ),
+          ),
+          fillColor: MaterialStateProperty.resolveWith((states) {
+            if (states.contains(MaterialState.selected)) {
+              return Colors.purple; // Fill color when checked
+            }
+            return Colors.transparent; // Transparent when unchecked
+          }),
+          checkColor: MaterialStateProperty.all(
+            Colors.white, // Tick color
+          ),
         ),
-      );
+      ),
+      child: Checkbox(
+        visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+        value: value ?? false,
+        onChanged: (val) {
+          onChange(val!);
+        },
+      ),
+    ),
+  );
+
 }

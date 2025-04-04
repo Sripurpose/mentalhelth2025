@@ -55,8 +55,9 @@ class _VersionUpdateCheckScreenState extends State<VersionUpdateCheckScreen> {
     });
     signInProvider = Provider.of<SignInProvider>(context, listen: false);
     scheduleMicrotask(() async {
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
       // First, call fetchSettings
-      await signInProvider.fetchAppRegister(context);
+      await signInProvider.fetchAppRegister(context,deviceType: deviceType);
       // await signInProvider.fetchSettings(context);
     });
   }
