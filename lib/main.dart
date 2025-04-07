@@ -314,14 +314,11 @@ class _MyAppState extends State<MyApp> {
   Future<void> _requestPermissions() async {
     // Request location permission (Platform specific)
     if (Platform.isIOS) {
-      // await Permission.locationWhenInUse.request();
-      // await Permission.notification.request();
-      // await Permission.photos.request();
+
     } else if (Platform.isAndroid) {
-      //await Permission.locationWhenInUse.request();
+
       await Permission.notification.request();
-      // await Permission.storage.request(); // For storage permissions
-      // await Permission.manageExternalStorage.request(); // For Android 11 and above
+
     }
 
     // Check updated location permission status

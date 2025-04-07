@@ -229,28 +229,11 @@ class MentalStrengthEditProvider extends ChangeNotifier {
 
   //image picker section
 
-  Future<void> pickImageFunction() async {
+  Future<void> pickImageFunction(BuildContext context) async {
     final pickedImage = await ImagePicker().pickImage(
       source: ImageSource.gallery,
       imageQuality: 100,
     );
-    // if (pickedImagesMain != null) {
-    // imageFile = File(pickedImage.path);
-
-    // XFile? pickedImage = await compressImage(
-    //   File(
-    //     pickedImagesMain.path,
-    //   ),
-    // );
-    //
-    // final image = File(pickedImagesMain.path);
-    // final bytes = await image.readAsBytes();
-    // final imageSize = bytes.lengthInBytes;
-    // final image1 = File(pickedImagesMain.path);
-    // final bytes1 = await image1.readAsBytes();
-    // final imageSize1 = bytes1.lengthInBytes;
-    // print('Image size: $imageSize bytes');
-    // print('Image size: $imageSize1 bytes1');
     if (pickedImage != null) {
       String fileExtension = pickedImage.path..split('.').last;
       String lastThreeChars = fileExtension.substring(fileExtension.length - 3);
@@ -833,9 +816,11 @@ class MentalStrengthEditProvider extends ChangeNotifier {
 
   ActionsDetailsModel? actionsDetailsModel;
   bool actionsDetailsModelLoading = false;
+  int? actionDetailsStatus;
 
   Future<void> fetchActionDetails({required String actionId}) async {
     try {
+      actionDetailsStatus = 0;
       actionsDetailsModel = null;
 
       String? token = await getUserTokenSharePref();
@@ -851,13 +836,16 @@ class MentalStrengthEditProvider extends ChangeNotifier {
       print(response.body.toString() + " fetchActionDetails");
       log(token.toString() + "  $actionId", name: " tokentoken");
       if (response.statusCode == 200) {
+        actionDetailsStatus = response.statusCode;
         actionsDetailsModel = actionsDetailsModelFromJson(response.body);
         logger.w("locationLatitude${actionsDetailsModel?.actions?.location?.locationLatitude}");
         logger.w("locationLongitude${actionsDetailsModel?.actions?.location?.locationLongitude}");
         notifyListeners();
       } else {
+        actionDetailsStatus = response.statusCode;
         logger.w("actionsDetailsModelelse${actionsDetailsModel}");
       }
+      actionDetailsStatus = response.statusCode;
       if(response.statusCode == 401){
         TokenManager.setTokenStatus(true);
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);

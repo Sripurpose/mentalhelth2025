@@ -186,325 +186,326 @@ class _NumuMentalStrengthAddEditPageState
         onWillPop: (){
           return Future.value(false); // Prevents back navigation
         },
-          child: ConnectivityWidget(
-            child: SafeArea(
-                child: backGroundImagerOtherScreens(
-                  size: size,
-                  padding: EdgeInsets.zero,
-                  child: Consumer3<EditProfileProvider, MentalStrengthEditProvider,
-                      DashBoardProvider>(
-                    builder: (contexts, editProfileProvider,
-                        mentalStrengthEditProvider, dashBoardProvider, _) {
-                      return GestureDetector(
-                        onTap: () {
-                          mentalStrengthEditProvider.openAllCloser();
-                          FocusScope.of(context).unfocus();
-                        },
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 5,),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                  //  if (isSigned) {
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            buildPopupDialog(context, size),
-                                      );
-                                   // }
-                                    //else {
-            
-                                   // }
-                                  },
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                      right: size.width * 0.07,
-                                    ),
-                                    child:
-                                    SvgPicture.asset(
-                                      ImageConstant.menuBarSvg,
-                                    ),
+          child: SafeArea(
+              child: backGroundImagerOtherScreens(
+                size: size,
+                padding: EdgeInsets.zero,
+                child: Consumer3<EditProfileProvider, MentalStrengthEditProvider,
+                    DashBoardProvider>(
+                  builder: (contexts, editProfileProvider,
+                      mentalStrengthEditProvider, dashBoardProvider, _) {
+                    return GestureDetector(
+                      onTap: () {
+                        mentalStrengthEditProvider.openAllCloser();
+                        FocusScope.of(context).unfocus();
+                      },
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 5,),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                //  if (isSigned) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          buildPopupDialog(context, size),
+                                    );
+                                 // }
+                                  //else {
+
+                                 // }
+                                },
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                    right: size.width * 0.07,
                                   ),
+                                  child:
+                                  SvgPicture.asset(
+                                    ImageConstant.menuBarSvg,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10,),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: size.width * 0.05, vertical: 8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Row with Back Button (Only shown if not on the first tab) and Progress Text
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    // Show Back Button only when on the 2nd tab or beyond
+                                    if (currentTabIndex > 0)
+                                      GestureDetector(
+                                        onTap: () {
+                                          _tabController.animateTo(
+                                              currentTabIndex -
+                                                  1); // Go to previous tab
+
+                                          mentalStrengthEditProvider.openAllCloser();
+                                         // FocusScope.of(context).unfocus();
+                                        },
+                                        child: Row(
+                                          children: [
+                                            SvgPicture.asset(
+                                              ImageConstant.tabBackButton,
+                                              // Replace with your SVG file path
+                                              width: 30, // Adjust size if needed
+                                              height: 30,
+                                            ),
+                                            const SizedBox(width: 20),
+                                            // Spacing between icon and text
+                                            Text(
+                                              "Back",
+                                              style: TextStyle(
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.w500,
+                                                color: ColorsContent
+                                                    .newThemeColor, // Adjust color as needed
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    else
+                                      const SizedBox(width: 48),
+                                    // Placeholder to keep alignment when back button is hidden
+
+                                    // Progress Text (e.g., "1/6", "2/6")
+                                    Text(
+                                      "${currentTabIndex + 1}/6",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w600,
+                                        color: ColorsContent
+                                            .newThemeColor, // Adjust color as needed
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
+                                const SizedBox(height: 30),
+                                // Spacing between rows
+
+                                // Progress Bar (on a separate line)
+                                LinearProgressIndicator(
+                                  value: (currentTabIndex + 1) / 6,
+                                  // Dynamic progress
+                                  backgroundColor: Colors.grey,
+                                  valueColor:  AlwaysStoppedAnimation<Color>(
+                                      ColorsContent.newThemeColor ),
+                                  minHeight: 4,
+                                  borderRadius: BorderRadius.circular(4),
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 10,),
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: size.width * 0.05, vertical: 8),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  // Row with Back Button (Only shown if not on the first tab) and Progress Text
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      // Show Back Button only when on the 2nd tab or beyond
-                                      if (currentTabIndex > 0)
-                                        GestureDetector(
-                                          onTap: () {
-                                            _tabController.animateTo(
-                                                currentTabIndex -
-                                                    1); // Go to previous tab
-                                          },
-                                          child: Row(
-                                            children: [
-                                              SvgPicture.asset(
-                                                ImageConstant.tabBackButton,
-                                                // Replace with your SVG file path
-                                                width: 30, // Adjust size if needed
-                                                height: 30,
-                                              ),
-                                              const SizedBox(width: 20),
-                                              // Spacing between icon and text
-                                              Text(
-                                                "Back",
-                                                style: TextStyle(
-                                                  fontSize: 17,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: ColorsContent
-                                                      .newThemeColor, // Adjust color as needed
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      else
-                                        const SizedBox(width: 48),
-                                      // Placeholder to keep alignment when back button is hidden
-            
-                                      // Progress Text (e.g., "1/6", "2/6")
-                                      Text(
-                                        "${currentTabIndex + 1}/6",
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w600,
-                                          color: ColorsContent
-                                              .newThemeColor, // Adjust color as needed
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-            
-                                  const SizedBox(height: 30),
-                                  // Spacing between rows
-            
-                                  // Progress Bar (on a separate line)
-                                  LinearProgressIndicator(
-                                    value: (currentTabIndex + 1) / 6,
-                                    // Dynamic progress
-                                    backgroundColor: Colors.grey,
-                                    valueColor:  AlwaysStoppedAnimation<Color>(
-                                        ColorsContent.newThemeColor ),
-                                    minHeight: 4,
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              child: Stack(
-                                children: [
-                                  TabBarView(
-                                    controller: _tabController,
-                                    physics: const NeverScrollableScrollPhysics(), // Prevents swipe gestures
-                                    children: [
-                                      _buildFirstTab(context, mentalStrengthEditProvider, size),
-                                      _buildSecondTab(context, size),
-                                      _buildThirdTab(context, size),
-                                      _buildFourthTab(context, size),
-                                      _buildFifthTab(context, size),
-                                      _buildSixthTab(context, size),
-                                    ],
-                                  ),
-            
-                                  // Floating Button for navigation and submission
-                                if (currentTabIndex < 5)
-                        Positioned(
-                        bottom: size.height * 0.025,
-                        left: 0,
-                        right: 0,
-                        child: Center(
-                          child: SizedBox(
-                            width: 70,
-                            height: 70,
-                            child: FloatingActionButton(
-                              onPressed: () {
-                                // Check for required conditions before moving to the next tab
-                                if (currentTabIndex == 0) {
-                                  if (mentalStrengthEditProvider.titleEditTextController.text.isNotEmpty &&
-                                      mentalStrengthEditProvider.descriptionEditTextController.text.isNotEmpty) {
-                                    _tabController.animateTo(currentTabIndex + 1);
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                       SnackBar(
-                                        content: const Text("Title and Description are required."),
-                                        backgroundColor: ColorsContent.newThemeColor,
-                                      ),
-                                    );
-                                    print("Title and Description are required.");
-                                  }
-                                } else if (currentTabIndex == 1) {
-                                  if (mentalStrengthEditProvider.emotionalValueStar != null) {
-                                    _tabController.animateTo(currentTabIndex + 1);
-                                  }
-                                  else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                       SnackBar(
-                                        content: const Text("Emotional star rating is required."),
-                                        backgroundColor: ColorsContent.newThemeColor,
-                                      ),
-                                    );
-                                    print("Emotional star rating,");
-                                  }
+                          ),
+                          Expanded(
+                            child: Stack(
+                              children: [
+                                TabBarView(
+                                  controller: _tabController,
+                                  physics: const NeverScrollableScrollPhysics(), // Prevents swipe gestures
+                                  children: [
+                                    _buildFirstTab(context, mentalStrengthEditProvider, size),
+                                    _buildSecondTab(context, size),
+                                    _buildThirdTab(context, size),
+                                    _buildFourthTab(context, size),
+                                    _buildFifthTab(context, size),
+                                    _buildSixthTab(context, size),
+                                  ],
+                                ),
+
+                                // Floating Button for navigation and submission
+                              if (currentTabIndex < 5)
+                      Positioned(
+                      bottom: size.height * 0.025,
+                      left: 0,
+                      right: 0,
+                      child: Center(
+                        child: SizedBox(
+                          width: 70,
+                          height: 70,
+                          child: FloatingActionButton(
+                            onPressed: () {
+                              // Check for required conditions before moving to the next tab
+                              if (currentTabIndex == 0) {
+                                if (mentalStrengthEditProvider.titleEditTextController.text.isNotEmpty &&
+                                    mentalStrengthEditProvider.descriptionEditTextController.text.isNotEmpty) {
+                                  _tabController.animateTo(currentTabIndex + 1);
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                     SnackBar(
+                                      content: const Text("Title and Description are required."),
+                                      backgroundColor: ColorsContent.newThemeColor,
+                                    ),
+                                  );
+                                  print("Title and Description are required.");
                                 }
-                                else if (currentTabIndex == 2) {
-                                  if ( mentalStrengthEditProvider.emotionValue != null) {
-                                    _tabController.animateTo(currentTabIndex + 1);
-                                  }
-            
-                                  else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                       SnackBar(
-                                        content: const Text("Emotion selection is required."),
-                                        backgroundColor: ColorsContent.newThemeColor,
-                                      ),
-                                    );
-                                    print("Emotion selection, is required.");
-                                  }
-                                }
-                                else if (currentTabIndex == 3) {
-                                  if ( mentalStrengthEditProvider.driveValueStar != null) {
-                                    _tabController.animateTo(currentTabIndex + 1);
-                                  }
-            
-                                  else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                       SnackBar(
-                                        content: const Text("Drive star rating is required."),
-                                        backgroundColor: ColorsContent.newThemeColor,
-                                      ),
-                                    );
-                                    print("Drive star rating is required.");
-                                  }
-                                }
-                                else {
+                              } else if (currentTabIndex == 1) {
+                                if (mentalStrengthEditProvider.emotionalValueStar != null) {
                                   _tabController.animateTo(currentTabIndex + 1);
                                 }
-                              },
-                              child: Image.asset(
-                                ImageConstant.splashNextIcon,
-                                width: 90,
-                                height: 90,
-                              ),
-                              shape: const CircleBorder(),
-                              elevation: 5,
-                              heroTag: "next_button",
+                                else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                     SnackBar(
+                                      content: const Text("Emotional star rating is required."),
+                                      backgroundColor: ColorsContent.newThemeColor,
+                                    ),
+                                  );
+                                  print("Emotional star rating,");
+                                }
+                              }
+                              else if (currentTabIndex == 2) {
+                                if ( mentalStrengthEditProvider.emotionValue != null) {
+                                  _tabController.animateTo(currentTabIndex + 1);
+                                }
+
+                                else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                     SnackBar(
+                                      content: const Text("Emotion selection is required."),
+                                      backgroundColor: ColorsContent.newThemeColor,
+                                    ),
+                                  );
+                                  print("Emotion selection, is required.");
+                                }
+                              }
+                              else if (currentTabIndex == 3) {
+                                if ( mentalStrengthEditProvider.driveValueStar != null) {
+                                  _tabController.animateTo(currentTabIndex + 1);
+                                }
+
+                                else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                     SnackBar(
+                                      content: const Text("Drive star rating is required."),
+                                      backgroundColor: ColorsContent.newThemeColor,
+                                    ),
+                                  );
+                                  print("Drive star rating is required.");
+                                }
+                              }
+                              else {
+                                _tabController.animateTo(currentTabIndex + 1);
+                              }
+                            },
+                            child: Image.asset(
+                              ImageConstant.splashNextIcon,
+                              width: 90,
+                              height: 90,
                             ),
+                            shape: const CircleBorder(),
+                            elevation: 5,
+                            heroTag: "next_button",
                           ),
                         ),
-                      )
-            
-                      else
-                                    Positioned(
-                                      bottom: size.height * 0.02,
-                                      left: 0,
-                                      right: 0,
-                                      child: Center(
-                                        child: GestureDetector(
-                                          onTap: () async {
-                                            String? validationMessage;
-            
-                                            if (mentalStrengthEditProvider.descriptionEditTextController.text.isEmpty) {
-                                              validationMessage = "Description missing";
-                                            } else if (mentalStrengthEditProvider.emotionValue!.id.toString().isEmpty) {
-                                              validationMessage = "Please select an emotion";
-                                            } else if (mentalStrengthEditProvider.emotionalValueStar == null) {
-                                              validationMessage = "Please select Feeling Now emotional Rate";
-                                            } else if (mentalStrengthEditProvider.driveValueStar == null) {
-                                              validationMessage = "Please select Situation Rate";
-                                            }
-            
-                                            if (validationMessage != null) {
-                                              ScaffoldMessenger.of(context).showSnackBar(
-                                                SnackBar(
-                                                  content: Text(validationMessage),
-                                                  backgroundColor: ColorsContent.newThemeColor,
+                      ),
+                    )
+
+                    else
+                                  Positioned(
+                                    bottom: size.height * 0.02,
+                                    left: 0,
+                                    right: 0,
+                                    child: Center(
+                                      child: GestureDetector(
+                                        onTap: () async {
+                                          String? validationMessage;
+
+                                          if (mentalStrengthEditProvider.descriptionEditTextController.text.isEmpty) {
+                                            validationMessage = "Description missing";
+                                          } else if (mentalStrengthEditProvider.emotionValue!.id.toString().isEmpty) {
+                                            validationMessage = "Please select an emotion";
+                                          } else if (mentalStrengthEditProvider.emotionalValueStar == null) {
+                                            validationMessage = "Please select Feeling Now emotional Rate";
+                                          } else if (mentalStrengthEditProvider.driveValueStar == null) {
+                                            validationMessage = "Please select Situation Rate";
+                                          }
+
+                                          if (validationMessage != null) {
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              SnackBar(
+                                                content: Text(validationMessage),
+                                                backgroundColor: ColorsContent.newThemeColor,
+                                              ),
+                                            );
+                                          } else {
+                                            await mentalStrengthEditProvider.saveButtonFunction(context);
+                                            _isTokenExpired();
+                                          }
+                                        },
+                                        child: Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            SvgPicture.asset(ImageConstant.submitButtonNumuBuild),
+                                            if (mentalStrengthEditProvider.saveJournalLoading)
+                                              const Padding(
+                                                padding: EdgeInsets.only(top: 5, bottom: 5),
+                                                child: SpinKitWave(
+                                                  color: Colors.white,
+                                                  size: 25,
                                                 ),
-                                              );
-                                            } else {
-                                              await mentalStrengthEditProvider.saveButtonFunction(context);
-                                              _isTokenExpired();
-                                            }
-                                          },
-                                          child: Stack(
-                                            alignment: Alignment.center,
-                                            children: [
-                                              SvgPicture.asset(ImageConstant.submitButtonNumu),
-                                              if (mentalStrengthEditProvider.saveJournalLoading)
-                                                const Padding(
-                                                  padding: EdgeInsets.only(top: 5, bottom: 5),
-                                                  child: SpinKitWave(
-                                                    color: Colors.white,
-                                                    size: 25,
-                                                  ),
-                                                ),
-                                            ],
-                                          ),
+                                              ),
+                                          ],
                                         ),
                                       ),
                                     ),
-            
-            
-                                  // Newly Added Widgets
-                                  if (mentalStrengthEditProvider.openChooseGoal)
-                                    const ScreenChooseGoalMentalStrength(),
-            
-                                  if (mentalStrengthEditProvider.openAddGoal)
-                                    const AddGoalsDreamsBottomSheet(),
-            
-                                  if (mentalStrengthEditProvider.openGoalViewSheet)
-                                    mentalStrengthEditProvider.goalDetailModel == null
-                                        ? Container(
-                                      decoration: BoxDecoration(
-                                        color: appTheme.gray50,
-                                        borderRadius: const BorderRadius.only(
-                                          topRight: Radius.circular(25),
-                                          topLeft: Radius.circular(25),
-                                        ),
+                                  ),
+
+
+                                // Newly Added Widgets
+                                if (mentalStrengthEditProvider.openChooseGoal)
+                                  const ScreenChooseGoalMentalStrength(),
+
+                                if (mentalStrengthEditProvider.openAddGoal)
+                                  const AddGoalsDreamsBottomSheet(),
+
+                                if (mentalStrengthEditProvider.openGoalViewSheet)
+                                  mentalStrengthEditProvider.goalDetailModel == null
+                                      ? Container(
+                                    decoration: BoxDecoration(
+                                      color: appTheme.gray50,
+                                      borderRadius: const BorderRadius.only(
+                                        topRight: Radius.circular(25),
+                                        topLeft: Radius.circular(25),
                                       ),
-                                      margin: EdgeInsets.only(top: size.height * 0.15),
-                                      child: shimmerList(height: size.height * 0.8, list: 10),
-                                    )
-                                        : GoalAndDreamFullViewBottomSheet(
-                                      goalDetailModel: mentalStrengthEditProvider.goalDetailModel!,
                                     ),
-            
-                                  if (mentalStrengthEditProvider.openChooseAction)
-                                    ChooseActionMentalHelth(goal: mentalStrengthEditProvider.goalsValue),
-            
-                                  if (mentalStrengthEditProvider.openAddAction)
-                                    AddActionMentalStrengthBottomSheet(
-                                      goalId: mentalStrengthEditProvider.goalsValue.id.toString(),
-                                    ),
-            
-                                  if (mentalStrengthEditProvider.openActionFullView)
-                                    const ActionFullViewJournalCreateBottomSheet(),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      );
-                    },
-                  ),
+                                    margin: EdgeInsets.only(top: size.height * 0.15),
+                                    child: shimmerList(height: size.height * 0.8, list: 10),
+                                  )
+                                      : GoalAndDreamFullViewBottomSheet(
+                                    goalDetailModel: mentalStrengthEditProvider.goalDetailModel!,
+                                  ),
+
+                                if (mentalStrengthEditProvider.openChooseAction)
+                                  ChooseActionMentalHelth(goal: mentalStrengthEditProvider.goalsValue),
+
+                                if (mentalStrengthEditProvider.openAddAction)
+                                  AddActionMentalStrengthBottomSheet(
+                                    goalId: mentalStrengthEditProvider.goalsValue.id.toString(),
+                                  ),
+
+                                if (mentalStrengthEditProvider.openActionFullView)
+                                  const ActionFullViewJournalCreateBottomSheet(),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  },
                 ),
               ),
-          ),
+            ),
         )
         : const TokenExpireScreen();
   }
@@ -733,27 +734,33 @@ class _NumuMentalStrengthAddEditPageState
             height: 20,
           ),
           SizedBox(
-            width: 250, // Set your desired width
+            width: size.width * 0.80,
+            height: 50,
             child: ElevatedButton(
               onPressed: () {
                 _isTokenExpired();
                 mentalStrengthEditProvider.openChooseGoalFunction();
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: ColorsContent.newThemeColor,
+                backgroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                 ),
+                padding: const EdgeInsets.symmetric(horizontal: 16), // left padding
               ),
-              child: const Text(
-                "Select Goal",
-                style: TextStyle(
-                  color: Color(0xffFFFFFF),
-                  fontWeight: FontWeight.bold,
+              child: const Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Select Goal",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.normal,
+                  ),
                 ),
               ),
             ),
           ),
+
           SizedBox(
             height: size.height * 0.04,
           ),
@@ -869,8 +876,10 @@ class _NumuMentalStrengthAddEditPageState
           const SizedBox(
             height: 20,
           ),
+
           SizedBox(
-            width: 250,
+            width: size.width * 0.80,
+            height: 50,
             child: ElevatedButton(
               onPressed: () {
                 if (mentalStrengthEditProvider.goalsValue.id == null) {
@@ -884,16 +893,20 @@ class _NumuMentalStrengthAddEditPageState
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: ColorsContent.newThemeColor,
+                backgroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                 ),
+                padding: const EdgeInsets.symmetric(horizontal: 16), // left padding
               ),
-              child: const Text(
-                "Select An Action",
-                style: TextStyle(
-                  color: Color(0xffFFFFFF),
-                  fontWeight: FontWeight.bold,
+              child: const Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Select Action",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.normal,
+                  ),
                 ),
               ),
             ),
@@ -1093,7 +1106,6 @@ class _NumuMentalStrengthAddEditPageState
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-
                 SizedBox(
                   height: size.height * 0.10,
                   child: Stack(

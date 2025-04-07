@@ -127,7 +127,7 @@ class ChartCircularWidgetState extends State<ChartCircularWidget> {
             color: ColorsContent.newThemeColor,
             radius: 15,
           ))
-              : data.isNotEmpty
+              : journalListProvider.journalChartStatusCode != 404
                   ? Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30.0),
                     child: Container(

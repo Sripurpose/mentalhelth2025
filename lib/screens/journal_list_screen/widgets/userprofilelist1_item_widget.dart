@@ -291,6 +291,11 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                               )
                                   .then((value) async {
                                 Navigator.of(context).pop();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content:
+                                      Text("Journals deleted successfully")),
+                                );
                                 await homeProvider.fetchJournals(pageNo:homeProvider.currentPage.toString());
                                 if(homeProvider.journalStatus == 404){
                                   await homeProvider.fetchJournals(pageNo:1.toString());

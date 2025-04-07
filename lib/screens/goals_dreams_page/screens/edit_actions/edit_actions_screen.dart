@@ -1836,19 +1836,26 @@ class _EditActionScreenState extends State<EditActionScreen> {
                     children: [
                       GestureDetector(
                         onTap: () async {
-                          if (await requestGalleryPermission()) {
+                          if (await requestGalleryPermission() && Platform.isAndroid) {
                             addActionsProvider.selectedMedia(1);
                             await galleryBottomSheetAction(
                               context: context,
                               title: 'Gallery',
                             );
-                          } else {
+                          } else if(Platform.isIOS) {
+                            addActionsProvider.selectedMedia(1);
+                            await galleryBottomSheetAction(
+                              context: context,
+                              title: 'Gallery',
+                            );
+                          }else{
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                   content:
-                                      Text("Gallery permission is required.")),
+                                  Text("Gallery permission is required.")),
                             );
                           }
+
                         },
                         child: SvgPicture.asset(
                           ImageConstant
@@ -1952,17 +1959,24 @@ class _EditActionScreenState extends State<EditActionScreen> {
                     children: [
                       GestureDetector(
                         onTap: () async {
-                          if (await requestCameraPermission()) {
+                          if (await requestGalleryPermission() && Platform.isAndroid) {
                             addActionsProvider.selectedMedia(2);
                             cameraBottomSheetAction(
                               context: context,
                               title: "Camera",
                             );
-                          } else {
+                          } else if(Platform.isIOS) {
+                            addActionsProvider.selectedMedia(2);
+                            cameraBottomSheetAction(
+                              context: context,
+                              title: "Camera",
+                            );
+
+                          }else{
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                   content:
-                                      Text("Camera permission is required.")),
+                                  Text("Camera permission is required.")),
                             );
                           }
                         },

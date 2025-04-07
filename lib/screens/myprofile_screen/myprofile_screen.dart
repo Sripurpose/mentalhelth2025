@@ -89,251 +89,249 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         child: Column(
           children: [
             buildAppBar(context, size),
-            ConnectivityWidget(
-              child: Container(
-                height: size.height * 0.80,
-                padding: const EdgeInsets.symmetric(horizontal: 28),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Stack(
-                        alignment: Alignment.topCenter,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(top: size.height * 0.035),
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Container(
-                                height: size.height * 0.74,
-                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(
-                                    color: Colors.grey.shade300,
-                                    width: 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(30),
+            Container(
+              height: size.height * 0.80,
+              padding: const EdgeInsets.symmetric(horizontal: 28),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Stack(
+                      alignment: Alignment.topCenter,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(top: size.height * 0.035),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                              height: size.height * 0.74,
+                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(
+                                  color: Colors.grey.shade300,
+                                  width: 1.0,
                                 ),
-                                child: Column(
-                                  children: [
-                                    Expanded(
-                                      child: Consumer2<EditProfileProvider, PhoneSignInProvider>(
-                                        builder: (context, editProfileProvider, phoneSignInProvider, _) {
-                                          return editProfileProvider.getProfileLoading
-                                              ? const Center(child: CircularProgressIndicator())
-                                              : editProfileProvider.getProfileModel == null
-                                              ? const Center(child: CircularProgressIndicator())
-                                              : SingleChildScrollView(
-                                            child: Column(
-                                              children: [
-                                                SizedBox(height: size.height * 0.1),
-                                                SizedBox(
-                                                  width: size.width * 0.55,
-                                                  child: Align(
-                                                    alignment: Alignment.center,
-                                                    child: SingleChildScrollView(
-                                                      scrollDirection: Axis.horizontal,
-                                                      child: Text(
-                                                        capitalText(
-                                                          editProfileProvider.getProfileModel?.firstname.toString() ?? "",
-                                                        ),
-                                                        style: CustomTextStyles.bodyLarge18,
-                                                        textAlign: TextAlign.center,
-                                                        overflow: TextOverflow.ellipsis,
-                                                        maxLines: 1,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Align(
-                                                  alignment: Alignment.centerLeft,
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.only(left: 53),
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    child: Consumer2<EditProfileProvider, PhoneSignInProvider>(
+                                      builder: (context, editProfileProvider, phoneSignInProvider, _) {
+                                        return editProfileProvider.getProfileLoading
+                                            ? const Center(child: CircularProgressIndicator())
+                                            : editProfileProvider.getProfileModel == null
+                                            ? const Center(child: CircularProgressIndicator())
+                                            : SingleChildScrollView(
+                                          child: Column(
+                                            children: [
+                                              SizedBox(height: size.height * 0.1),
+                                              SizedBox(
+                                                width: size.width * 0.55,
+                                                child: Align(
+                                                  alignment: Alignment.center,
+                                                  child: SingleChildScrollView(
+                                                    scrollDirection: Axis.horizontal,
                                                     child: Text(
-                                                      "Member since ${editProfileProvider.getProfileModel?.createdAt == null ? "" : formatTimestampToDate(editProfileProvider.getProfileModel!.createdAt.toString())}",
-                                                      style: CustomTextStyles.bodyMediumGray700,
+                                                      capitalText(
+                                                        editProfileProvider.getProfileModel?.firstname.toString() ?? "",
+                                                      ),
+                                                      style: CustomTextStyles.bodyLarge18,
                                                       textAlign: TextAlign.center,
+                                                      overflow: TextOverflow.ellipsis,
+                                                      maxLines: 1,
                                                     ),
                                                   ),
                                                 ),
-                                                const SizedBox(height: 27),
-                                                Container(
-                                                  width: 238,
-                                                  margin: const EdgeInsets.symmetric(horizontal: 25),
-                                                  child: RichText(
-                                                    text: TextSpan(
-                                                      children: [
-                                                        editProfileProvider.getProfileModel!.phone!.isNotEmpty
-                                                            ? TextSpan(
-                                                          text:
-                                                          "${(editProfileProvider.getProfileModel?.countryCode?.isNotEmpty ?? false) ? "+${editProfileProvider.getProfileModel!.countryCode} " : ""}${editProfileProvider.getProfileModel!.phone}\n",
-                                                          style: CustomTextStyles.bodyLargeff000000,
-                                                        )
-                                                            : const TextSpan(text: ""),
-                                                        editProfileProvider.getProfileModel!.phone == null ||
-                                                            editProfileProvider.getProfileModel!.phone == ""
-                                                            ? const TextSpan(text: "\n")
-                                                            : editProfileProvider.getProfileModel!.phoneVerify == "1"
-                                                            ? const TextSpan(text: "\n")
-                                                            : TextSpan(
-                                                          text: "Verify Phone\n\n",
+                                              ),
+                                              Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.only(left: 53),
+                                                  child: Text(
+                                                    "Member since ${editProfileProvider.getProfileModel?.createdAt == null ? "" : formatTimestampToDate(editProfileProvider.getProfileModel!.createdAt.toString())}",
+                                                    style: CustomTextStyles.bodyMediumGray700,
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(height: 27),
+                                              Container(
+                                                width: 238,
+                                                margin: const EdgeInsets.symmetric(horizontal: 25),
+                                                child: RichText(
+                                                  text: TextSpan(
+                                                    children: [
+                                                      editProfileProvider.getProfileModel!.phone!.isNotEmpty
+                                                          ? TextSpan(
+                                                        text:
+                                                        "${(editProfileProvider.getProfileModel?.countryCode?.isNotEmpty ?? false) ? "+${editProfileProvider.getProfileModel!.countryCode} " : ""}${editProfileProvider.getProfileModel!.phone}\n",
+                                                        style: CustomTextStyles.bodyLargeff000000,
+                                                      )
+                                                          : const TextSpan(text: ""),
+                                                      editProfileProvider.getProfileModel!.phone == null ||
+                                                          editProfileProvider.getProfileModel!.phone == ""
+                                                          ? const TextSpan(text: "\n")
+                                                          : editProfileProvider.getProfileModel!.phoneVerify == "1"
+                                                          ? const TextSpan(text: "\n")
+                                                          : TextSpan(
+                                                        text: "Verify Phone\n\n",
+                                                        style: CustomTextStyles.labelLargeff59a9f2.copyWith(
+                                                          decoration: TextDecoration.underline,
+                                                        ),
+                                                        recognizer: TapGestureRecognizer()
+                                                          ..onTap = () async {
+                                                            await editProfileProvider.sendOtpPhoneFunction(context);
+                                                            if (editProfileProvider.sendOtpPhoneStatus == 200) {
+                                                              Future.delayed(Duration.zero, () {
+                                                                Navigator.of(context).push(MaterialPageRoute(
+                                                                  builder: (context) => const VerifyOtpPhoneScreen(),
+                                                                ));
+                                                              });
+                                                            } else {
+                                                              showToast(
+                                                                context: context,
+                                                                message: editProfileProvider.sendOtpPhoneMessage ?? "",
+                                                              );
+                                                            }
+                                                          },
+                                                      ),
+                                                      TextSpan(
+                                                        text: "${editProfileProvider.getProfileModel!.email}\n",
+                                                        style: CustomTextStyles.bodyLargeff000000,
+                                                      ),
+                                                      if (editProfileProvider.getProfileModel!.emailVerify != "1" &&
+                                                          editProfileProvider.getProfileModel!.email!.isNotEmpty)
+                                                        TextSpan(
+                                                          text: "Verify Email\n\n",
                                                           style: CustomTextStyles.labelLargeff59a9f2.copyWith(
                                                             decoration: TextDecoration.underline,
                                                           ),
                                                           recognizer: TapGestureRecognizer()
                                                             ..onTap = () async {
-                                                              await editProfileProvider.sendOtpPhoneFunction(context);
-                                                              if (editProfileProvider.sendOtpPhoneStatus == 200) {
+                                                              await editProfileProvider.sendOtpFunction(context);
+                                                              if (editProfileProvider.sendOtpStatus == 200) {
                                                                 Future.delayed(Duration.zero, () {
                                                                   Navigator.of(context).push(MaterialPageRoute(
-                                                                    builder: (context) => const VerifyOtpPhoneScreen(),
+                                                                    builder: (context) => const VerifyOtpScreen(),
                                                                   ));
                                                                 });
                                                               } else {
                                                                 showToast(
                                                                   context: context,
-                                                                  message: editProfileProvider.sendOtpPhoneMessage ?? "",
+                                                                  message: editProfileProvider.sendOtpMailMessage ?? "",
                                                                 );
                                                               }
                                                             },
                                                         ),
-                                                        TextSpan(
-                                                          text: "${editProfileProvider.getProfileModel!.email}\n",
-                                                          style: CustomTextStyles.bodyLargeff000000,
-                                                        ),
-                                                        if (editProfileProvider.getProfileModel!.emailVerify != "1" &&
-                                                            editProfileProvider.getProfileModel!.email!.isNotEmpty)
-                                                          TextSpan(
-                                                            text: "Verify Email\n\n",
-                                                            style: CustomTextStyles.labelLargeff59a9f2.copyWith(
-                                                              decoration: TextDecoration.underline,
-                                                            ),
-                                                            recognizer: TapGestureRecognizer()
-                                                              ..onTap = () async {
-                                                                await editProfileProvider.sendOtpFunction(context);
-                                                                if (editProfileProvider.sendOtpStatus == 200) {
-                                                                  Future.delayed(Duration.zero, () {
-                                                                    Navigator.of(context).push(MaterialPageRoute(
-                                                                      builder: (context) => const VerifyOtpScreen(),
-                                                                    ));
-                                                                  });
-                                                                } else {
-                                                                  showToast(
-                                                                    context: context,
-                                                                    message: editProfileProvider.sendOtpMailMessage ?? "",
-                                                                  );
-                                                                }
-                                                              },
-                                                          ),
-                                                        TextSpan(
-                                                          text: "Date Of Birth\n",
-                                                          style: CustomTextStyles.titleMediumff000000,
-                                                        ),
-                                                        TextSpan(
-                                                          text:
-                                                          "${editProfileProvider.getProfileModel!.dob == null ? "" : dateFormatter(date: editProfileProvider.getProfileModel!.dob.toString())}\n\n",
-                                                          style: CustomTextStyles.bodyLargeff000000,
-                                                        ),
-                                                        TextSpan(
-                                                          text: "Interests\n",
-                                                          style: CustomTextStyles.titleMediumff000000,
-                                                        ),
-                                                        TextSpan(
-                                                          text: editProfileProvider.getProfileModel!.interests
-                                                              ?.split(',')
-                                                              .map((e) => e.trim())
-                                                              .toSet()
-                                                              .join(', '),
-                                                          style: CustomTextStyles.bodyLargeff000000,
-                                                        )
-                                                      ],
-                                                    ),
+                                                      TextSpan(
+                                                        text: "Date Of Birth\n",
+                                                        style: CustomTextStyles.titleMediumff000000,
+                                                      ),
+                                                      TextSpan(
+                                                        text:
+                                                        "${editProfileProvider.getProfileModel!.dob == null ? "" : dateFormatter(date: editProfileProvider.getProfileModel!.dob.toString())}\n\n",
+                                                        style: CustomTextStyles.bodyLargeff000000,
+                                                      ),
+                                                      TextSpan(
+                                                        text: "Interests\n",
+                                                        style: CustomTextStyles.titleMediumff000000,
+                                                      ),
+                                                      TextSpan(
+                                                        text: editProfileProvider.getProfileModel!.interests
+                                                            ?.split(',')
+                                                            .map((e) => e.trim())
+                                                            .toSet()
+                                                            .join(', '),
+                                                        style: CustomTextStyles.bodyLargeff000000,
+                                                      )
+                                                    ],
+                                                  ),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 10),
+                                              SizedBox(
+                                                height: 80,
+                                                width: 291,
+                                                child: SingleChildScrollView(
+                                                  scrollDirection: Axis.vertical,
+                                                  child: Text(
+                                                    "${editProfileProvider.getProfileModel!.note}",
+                                                    maxLines: 20,
+                                                    overflow: TextOverflow.ellipsis,
                                                     textAlign: TextAlign.center,
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 10),
-                                                SizedBox(
-                                                  height: 80,
-                                                  width: 291,
-                                                  child: SingleChildScrollView(
-                                                    scrollDirection: Axis.vertical,
-                                                    child: Text(
-                                                      "${editProfileProvider.getProfileModel!.note}",
-                                                      maxLines: 20,
-                                                      overflow: TextOverflow.ellipsis,
-                                                      textAlign: TextAlign.center,
-                                                      style: CustomTextStyles.bodyMediumGray700_1,
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(height: Platform.isAndroid ? size.height * 0.03 : size.height * 0.01),
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                    Align(
-                                      alignment: Alignment.bottomCenter,
-                                      child: Consumer<DashBoardProvider>(
-                                        builder: (context, dashBoardProvider, _) {
-                                          return GestureDetector(
-                                            onTap: () {
-                                              dashBoardProvider.changeCommentPage(index: 9);
-                                            },
-                                            child: Container(
-                                              width: 115,
-                                              height: 34,
-                                              decoration: BoxDecoration(
-                                                color: ColorsContent.newThemeColor,
-                                                borderRadius: const BorderRadius.only(
-                                                  topLeft: Radius.circular(12),
-                                                  topRight: Radius.circular(12),
-                                                ),
-                                              ),
-                                              child: const Center(
-                                                child: Text(
-                                                  "Edit Profile",
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.bold,
+                                                    style: CustomTextStyles.bodyMediumGray700_1,
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          );
-                                        },
-                                      ),
+                                              SizedBox(height: Platform.isAndroid ? size.height * 0.03 : size.height * 0.01),
+                                            ],
+                                          ),
+                                        );
+                                      },
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: Consumer<DashBoardProvider>(
+                                      builder: (context, dashBoardProvider, _) {
+                                        return GestureDetector(
+                                          onTap: () {
+                                            dashBoardProvider.changeCommentPage(index: 9);
+                                          },
+                                          child: Container(
+                                            width: 115,
+                                            height: 34,
+                                            decoration: BoxDecoration(
+                                              color: ColorsContent.newThemeColor,
+                                              borderRadius: const BorderRadius.only(
+                                                topLeft: Radius.circular(12),
+                                                topRight: Radius.circular(12),
+                                              ),
+                                            ),
+                                            child: const Center(
+                                              child: Text(
+                                                "Edit Profile",
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                          Consumer<EditProfileProvider>(
-                            builder: (context, editProfileProvider, _) {
-                              return Container(
-                                height: size.height * 0.11,
-                                width: size.height * 0.11,
-                                decoration: AppDecoration.fillBlueGray.copyWith(
-                                  color: Colors.deepPurple,
-                                  borderRadius: BorderRadiusStyle.circleBorder54,
+                        ),
+                        Consumer<EditProfileProvider>(
+                          builder: (context, editProfileProvider, _) {
+                            return Container(
+                              height: size.height * 0.11,
+                              width: size.height * 0.11,
+                              decoration: AppDecoration.fillBlueGray.copyWith(
+                                color: Colors.deepPurple,
+                                borderRadius: BorderRadiusStyle.circleBorder54,
+                              ),
+                              child: CircleAvatar(
+                                backgroundColor: Colors.grey,
+                                backgroundImage: NetworkImage(
+                                  editProfileProvider.getProfileModel?.profileurl?.toString() ?? "",
                                 ),
-                                child: CircleAvatar(
-                                  backgroundColor: Colors.grey,
-                                  backgroundImage: NetworkImage(
-                                    editProfileProvider.getProfileModel?.profileurl?.toString() ?? "",
-                                  ),
-                                  radius: size.width * 0.1,
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                                radius: size.width * 0.1,
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),

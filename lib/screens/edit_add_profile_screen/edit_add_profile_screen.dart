@@ -68,6 +68,7 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
     dashBoardProvider = Provider.of<DashBoardProvider>(context, listen: false);
     editProfileProvider = Provider.of<EditProfileProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      logger.i("editProfileProvider.profileUrl.toString()${editProfileProvider.profileUrl.toString()}");
       editProfileProvider.initializeSelectedCategories(
         editProfileProvider.getCategoryModel?.category ?? [],
       );
@@ -87,428 +88,437 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
         child: Column(
           children: [
             buildAppBar(context, size),
-            ConnectivityWidget(
-              child: Expanded(
-                child: SingleChildScrollView(
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom,
-                  ),
-                  child: Form(
-                    key: _formKey,
-                    child: Container(
-                      width: double.maxFinite,
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 25, vertical: 1),
-                      child: Stack(
-                        alignment: Alignment.topCenter,
-                        children: [
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: size.height * 0.1,
+            Expanded(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
+                child: Form(
+                  key: _formKey,
+                  child: Container(
+                    width: double.maxFinite,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 25, vertical: 1),
+                    child: Stack(
+                      alignment: Alignment.topCenter,
+                      children: [
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: size.height * 0.1,
+                                ),
+                                Container(
+                                  margin:
+                                      const EdgeInsets.only(left: 1, bottom: 5),
+                                  padding: const EdgeInsets.all(
+                                    18,
                                   ),
-                                  Container(
-                                    margin:
-                                        const EdgeInsets.only(left: 1, bottom: 5),
-                                    padding: const EdgeInsets.all(
-                                      18,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(
+                                      30,
                                     ),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(
-                                        30,
+                                  ),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const SizedBox(height: 40),
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 10),
+                                          child: Text(
+                                            "Name *",
+                                            style: CustomTextStyles
+                                                .bodyMediumGray700,
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        const SizedBox(height: 40),
-                                        Align(
+                                      const SizedBox(
+                                        height: 2,
+                                      ),
+                                      _buildMyProfile(context),
+                                      const SizedBox(height: 11),
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 10,
+                                          ),
+                                          child: Text(
+                                            "Phone",
+                                            style: CustomTextStyles
+                                                .bodyMediumGray700,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 2),
+                                      // Consumer<EditProfileProvider>(
+                                      //   builder: (context, editProfileProvider, _) {
+                                      //     return SizedBox(
+                                      //       height: 42,
+                                      //       child: OutlinedButton(
+                                      //         style: CustomButtonStyles.outlineGrayTL5,
+                                      //         onPressed: () {
+                                      //           showCountryPicker(
+                                      //             context: context,
+                                      //             exclude: <String>['KN', 'MF'],
+                                      //             favorite: <String>['SE'],
+                                      //             showPhoneCode: true,
+                                      //             onSelect: (Country country) {
+                                      //               editProfileProvider.addCountryCode(
+                                      //                 value: country.phoneCode.toString(),
+                                      //               );
+                                      //             },
+                                      //           );
+                                      //         },
+                                      //         child: Center(
+                                      //           child: Text(
+                                      //             "+${editProfileProvider.countryCode.toString()}",
+                                      //             style: CustomTextStyles.titleSmallHelveticaOnPrimary,
+                                      //           ),
+                                      //         ),
+                                      //       ),
+                                      //     );
+                                      //   },
+                                      // ),
+                                      _buildPhone(context),
+                                      const SizedBox(height: 9),
+                                      Align(
                                           alignment: Alignment.centerLeft,
                                           child: Padding(
-                                            padding:
+                                              padding: const EdgeInsets.only(
+                                                  left: 10),
+                                              child: Text("Email *",
+                                                  style: CustomTextStyles
+                                                      .bodyMediumGray700))),
+                                      const SizedBox(height: 2),
+                                      _buildEmail(context),
+                                      const SizedBox(height: 10),
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 10),
+                                          child: Text(
+                                            "Date Of Birth *",
+                                            style: CustomTextStyles
+                                                .bodyMediumGray700,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 2),
+                                      Consumer<EditProfileProvider>(builder:
+                                          (context, editProfileProvider, _) {
+                                        return GestureDetector(
+                                          onTap: () {
+                                            editProfileProvider
+                                                .selectDate(context);
+                                          },
+                                          child: Container(
+                                            margin:
                                                 const EdgeInsets.only(left: 10),
-                                            child: Text(
-                                              "Name *",
-                                              style: CustomTextStyles
-                                                  .bodyMediumGray700,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 2,
-                                        ),
-                                        _buildMyProfile(context),
-                                        const SizedBox(height: 11),
-                                        Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                              left: 10,
-                                            ),
-                                            child: Text(
-                                              "Phone",
-                                              style: CustomTextStyles
-                                                  .bodyMediumGray700,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 2),
-                                        // Consumer<EditProfileProvider>(
-                                        //   builder: (context, editProfileProvider, _) {
-                                        //     return SizedBox(
-                                        //       height: 42,
-                                        //       child: OutlinedButton(
-                                        //         style: CustomButtonStyles.outlineGrayTL5,
-                                        //         onPressed: () {
-                                        //           showCountryPicker(
-                                        //             context: context,
-                                        //             exclude: <String>['KN', 'MF'],
-                                        //             favorite: <String>['SE'],
-                                        //             showPhoneCode: true,
-                                        //             onSelect: (Country country) {
-                                        //               editProfileProvider.addCountryCode(
-                                        //                 value: country.phoneCode.toString(),
-                                        //               );
-                                        //             },
-                                        //           );
-                                        //         },
-                                        //         child: Center(
-                                        //           child: Text(
-                                        //             "+${editProfileProvider.countryCode.toString()}",
-                                        //             style: CustomTextStyles.titleSmallHelveticaOnPrimary,
-                                        //           ),
-                                        //         ),
-                                        //       ),
-                                        //     );
-                                        //   },
-                                        // ),
-                                        _buildPhone(context),
-                                        const SizedBox(height: 9),
-                                        Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 10),
-                                                child: Text("Email *",
-                                                    style: CustomTextStyles
-                                                        .bodyMediumGray700))),
-                                        const SizedBox(height: 2),
-                                        _buildEmail(context),
-                                        const SizedBox(height: 10),
-                                        Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 10),
-                                            child: Text(
-                                              "Date Of Birth *",
-                                              style: CustomTextStyles
-                                                  .bodyMediumGray700,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 2),
-                                        Consumer<EditProfileProvider>(builder:
-                                            (context, editProfileProvider, _) {
-                                          return GestureDetector(
-                                            onTap: () {
-                                              editProfileProvider
-                                                  .selectDate(context);
-                                            },
-                                            child: Container(
-                                              margin:
-                                                  const EdgeInsets.only(left: 10),
-                                              padding: const EdgeInsets.symmetric(
-                                                  horizontal: 15, vertical: 10),
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadiusStyle.roundedBorder4,
-                                                color: Colors.white,
-                                                border: Border.all(
-                                                  color: Colors.grey, // Set the color of the border
-                                                  width: 1.0,         // Set the width of the border
-                                                ),
-                                              ),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.max,
-                                                children: [
-                                                  Text(
-                                                    editProfileProvider
-                                                        .selectedDate,
-                                                    style: CustomTextStyles
-                                                        .bodyMediumOnPrimary,
-                                                  )
-                                                ],
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 15, vertical: 10),
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadiusStyle.roundedBorder4,
+                                              color: Colors.white,
+                                              border: Border.all(
+                                                color: Colors.grey, // Set the color of the border
+                                                width: 1.0,         // Set the width of the border
                                               ),
                                             ),
-                                          );
-                                        }),
-                                        const SizedBox(height: 14),
-                                        Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(left: 10),
-                                            child: Text(
-                                              "Interests",
-                                              style: CustomTextStyles.bodyMediumGray700,
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.max,
+                                              children: [
+                                                Text(
+                                                  editProfileProvider
+                                                      .selectedDate,
+                                                  style: CustomTextStyles
+                                                      .bodyMediumOnPrimary,
+                                                )
+                                              ],
                                             ),
                                           ),
+                                        );
+                                      }),
+                                      const SizedBox(height: 14),
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(left: 10),
+                                          child: Text(
+                                            "Interests",
+                                            style: CustomTextStyles.bodyMediumGray700,
+                                          ),
                                         ),
-                                        const SizedBox(height: 1),
-                    
-                                        Consumer<EditProfileProvider>(
-                                          builder: (context, editProfileProvider, _) {
-                                            return Container(
-                                              height: size.height * 0.05, // Adjust height as needed
-                                              margin: const EdgeInsets.only(left: 10),
-                                              padding: const EdgeInsets.only(left: 2, right: 2),
-                                              decoration: const ShapeDecoration(
-                                                color: Colors.transparent,
-                                                shape: RoundedRectangleBorder(),
-                                              ),
-                                              child: Row(
-                                                children: [
-                                                  Expanded(
-                                                    child: InkWell(
-                                                      onTap: () async {
-                                                        List<Category>? selectedCategories = await showDialog<List<Category>>(
-                                                          context: context,
-                                                          builder: (BuildContext context) {
-                                                            return AlertDialog(
-                                                              backgroundColor: appTheme.blue300.withOpacity(0.95), // Adjust the opacity as needed
-                                                              title: const Text("Select Interests"),
-                                                              content: StatefulBuilder(
-                                                                builder: (context, setState) {
-                                                                  final categories = editProfileProvider.getCategoryModel?.category ?? [];
-                                                                  return SizedBox(
-                                                                    height: size.height * 0.2,
-                                                                    width: double.maxFinite,
-                                                                    child: ListView.builder(
-                                                                      itemCount: categories.length,
-                                                                      itemBuilder: (context, index) {
-                                                                        final category = categories[index];
-                                                                        final isSelected = editProfileProvider.selectedCategories.contains(category);
-                    
-                                                                        return ListTile(
-                                                                          title: Text(category.categoryName ?? ""),
-                                                                          tileColor: isSelected ? Colors.white.withOpacity(0.2) : Colors.transparent,
-                                                                          onTap: () {
-                                                                            setState(() {
-                                                                              if (isSelected) {
-                                                                                editProfileProvider.removeSelectedCategory(category);
-                                                                              } else {
-                                                                                editProfileProvider.addSelectedCategory(category);
-                                                                              }
-                                                                            });
-                                                                          },
-                                                                        );
-                                                                      },
-                                                                    ),
-                                                                  );
+                                      ),
+                                      const SizedBox(height: 1),
+
+                                      Consumer<EditProfileProvider>(
+                                        builder: (context, editProfileProvider, _) {
+                                          return Container(
+                                            height: size.height * 0.05, // Adjust height as needed
+                                            margin: const EdgeInsets.only(left: 10),
+                                            padding: const EdgeInsets.only(left: 2, right: 2),
+                                            decoration: const ShapeDecoration(
+                                              color: Colors.transparent,
+                                              shape: RoundedRectangleBorder(),
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  child: InkWell(
+                                                    onTap: () async {
+                                                      List<Category>? selectedCategories = await showDialog<List<Category>>(
+                                                        context: context,
+                                                        builder: (BuildContext context) {
+                                                          return AlertDialog(
+                                                            backgroundColor: appTheme.blue300.withOpacity(0.95), // Adjust the opacity as needed
+                                                            title: const Text("Select Interests"),
+                                                            content: StatefulBuilder(
+                                                              builder: (context, setState) {
+                                                                final categories = editProfileProvider.getCategoryModel?.category ?? [];
+                                                                return SizedBox(
+                                                                  height: size.height * 0.2,
+                                                                  width: double.maxFinite,
+                                                                  child: ListView.builder(
+                                                                    itemCount: categories.length,
+                                                                    itemBuilder: (context, index) {
+                                                                      final category = categories[index];
+                                                                      final isSelected = editProfileProvider.selectedCategories.contains(category);
+
+                                                                      return ListTile(
+                                                                        title: Text(category.categoryName ?? ""),
+                                                                        tileColor: isSelected ? Colors.white.withOpacity(0.2) : Colors.transparent,
+                                                                        onTap: () {
+                                                                          setState(() {
+                                                                            if (isSelected) {
+                                                                              editProfileProvider.removeSelectedCategory(category);
+                                                                            } else {
+                                                                              editProfileProvider.addSelectedCategory(category);
+                                                                            }
+                                                                          });
+                                                                        },
+                                                                      );
+                                                                    },
+                                                                  ),
+                                                                );
+                                                              },
+                                                            ),
+                                                            actions: [
+                                                              TextButton(
+                                                                onPressed: () {
+                                                                  Navigator.pop(context, editProfileProvider.selectedCategories);
                                                                 },
+                                                                child: const Text("Done"),
                                                               ),
-                                                              actions: [
-                                                                TextButton(
-                                                                  onPressed: () {
-                                                                    Navigator.pop(context, editProfileProvider.selectedCategories);
-                                                                  },
-                                                                  child: const Text("Done"),
-                                                                ),
-                                                              ],
-                                                            );
-                                                          },
-                                                        );
-                    
-                                                        if (selectedCategories != null) {
-                                                          editProfileProvider.setSelectedCategories(selectedCategories);
-                                                        }
-                                                      },
-                    
-                                                      child: SingleChildScrollView(
-                                                        scrollDirection: Axis.horizontal,
-                                                        child: Row(
-                                                          children: [
-                                                            if (editProfileProvider.selectedCategories.isNotEmpty)
-                                                          ...editProfileProvider.selectedCategories
-                                                          .map((category) => category.categoryName) // Extract category names
-                                                .toSet() // Convert the list to a Set to remove duplicates
-                                                .map((categoryName) {
-                                              // Find the corresponding category object based on the categoryName
-                                              final category = editProfileProvider.selectedCategories.firstWhere(
-                                                      (c) => c.categoryName == categoryName,
-                                                  orElse: () => Category(categoryName: "")); // Provide a fallback
-                                              return Padding(
-                                                padding: const EdgeInsets.only(right: 8.0),
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius: const BorderRadius.all(Radius.circular(5)),
-                                                    border: Border.all(
-                                                      color: Colors.grey
-                                                    )
-                                                  ),
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.all(8.0),
-                                                    child: Row(
-                                                      children: [
-                                                        Text(
-                                                          category.categoryName ?? "",
-                                                          style: const TextStyle(
-                                                            color: Colors.blue,
-                                                            fontWeight: FontWeight.bold,
-                                                          ),
+                                                            ],
+                                                          );
+                                                        },
+                                                      );
+
+                                                      if (selectedCategories != null) {
+                                                        editProfileProvider.setSelectedCategories(selectedCategories);
+                                                      }
+                                                    },
+
+                                                    child: SingleChildScrollView(
+                                                      scrollDirection: Axis.horizontal,
+                                                      child: Row(
+                                                        children: [
+                                                          if (editProfileProvider.selectedCategories.isNotEmpty)
+                                                        ...editProfileProvider.selectedCategories
+                                                        .map((category) => category.categoryName) // Extract category names
+                                              .toSet() // Convert the list to a Set to remove duplicates
+                                              .map((categoryName) {
+                                            // Find the corresponding category object based on the categoryName
+                                            final category = editProfileProvider.selectedCategories.firstWhere(
+                                                    (c) => c.categoryName == categoryName,
+                                                orElse: () => Category(categoryName: "")); // Provide a fallback
+                                            return Padding(
+                                              padding: const EdgeInsets.only(right: 8.0),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius: const BorderRadius.all(Radius.circular(5)),
+                                                  border: Border.all(
+                                                    color: Colors.grey
+                                                  )
+                                                ),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Row(
+                                                    children: [
+                                                      Text(
+                                                        category.categoryName ?? "",
+                                                        style: const TextStyle(
+                                                          color: Colors.blue,
+                                                          fontWeight: FontWeight.bold,
                                                         ),
-                                                        IconButton(
-                                                          icon: const Icon(Icons.close, size: 16, color: Colors.red),
-                                                          onPressed: () {
-                                                            editProfileProvider.removeSelectedCategory(category);
-                                                          },
-                                                        ),
-                                                      ],
-                                                    ),
+                                                      ),
+                                                      IconButton(
+                                                        icon: const Icon(Icons.close, size: 16, color: Colors.red),
+                                                        onPressed: () {
+                                                          editProfileProvider.removeSelectedCategory(category);
+                                                        },
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
-                                              );
-                                            }).toList()
-                                            else
-                                                              Container(
-                                                                width:size.width * 0.65,
-                                                                decoration: BoxDecoration(
-                                                                  color: Colors.white, // Keep the background color transparent
-                                                                  border: Border.all(
-                                                                    color: Colors.black, // Set the border color
-                                                                    width: 0.5, // Set the border width
-                                                                  ),
-                                                                  borderRadius: BorderRadius.circular(5), // Add rounded corners if desired
+                                              ),
+                                            );
+                                          }).toList()
+                                          else
+                                                            Container(
+                                                              width:size.width * 0.65,
+                                                              decoration: BoxDecoration(
+                                                                color: Colors.white, // Keep the background color transparent
+                                                                border: Border.all(
+                                                                  color: Colors.black, // Set the border color
+                                                                  width: 0.5, // Set the border width
                                                                 ),
-                                                                child: Padding(
-                                                                  padding: const EdgeInsets.all(10.0),
-                                                                  child: Text(
-                                                                    'Select Interests',
-                                                                    style: CustomTextStyles.bodyMediumOnPrimary,
-                                                                  ),
+                                                                borderRadius: BorderRadius.circular(5), // Add rounded corners if desired
+                                                              ),
+                                                              child: Padding(
+                                                                padding: const EdgeInsets.all(10.0),
+                                                                child: Text(
+                                                                  'Select Interests',
+                                                                  style: CustomTextStyles.bodyMediumOnPrimary,
                                                                 ),
                                                               ),
-                                                            const Gap(4),
-                                                            const Icon(Icons.arrow_drop_down,color: Colors.black,),
-                                                          ],
-                                                        ),
+                                                            ),
+                                                          const Gap(4),
+                                                          const Icon(Icons.arrow_drop_down,color: Colors.black,),
+                                                        ],
                                                       ),
                                                     ),
                                                   ),
-                                                ],
-                                              ),
-                                            );
-                                          },
-                                        ),
-                    
-                    
-                                        const SizedBox(height: 8),
-                                        Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                              left: 9,
+                                                ),
+                                              ],
                                             ),
-                                            child: Text(
-                                              "About You",
-                                              style: CustomTextStyles
-                                                  .bodyMediumGray700,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 2,
-                                        ),
-                                        _buildAboutYouValue(context),
-                                        const SizedBox(
-                                          height: 15,
-                                        ),
-                                        _buildSave(
-                                          context,
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Consumer<EditProfileProvider>(
-                              builder: (context, editProfileProvider, _) {
-                            return Positioned(
-                              top: size.height * 0.045,
-                              child: Card(
-                                clipBehavior: Clip.antiAlias,
-                                elevation: 0,
-                                margin: const EdgeInsets.all(
-                                  0,
-                                ),
-                                color: theme.colorScheme.primary.withOpacity(
-                                  1,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadiusStyle.circleBorder54,
-                                ),
-                                child: Container(
-                                  height: size.height * 0.12,
-                                  width: size.height * 0.12,
-                                  decoration: AppDecoration.fillPrimary.copyWith(
-                                    borderRadius:
-                                        BorderRadiusStyle.circleBorder54,
-                                  ),
-                                  child: Stack(
-                                    alignment: Alignment.bottomCenter,
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          editProfileProvider.getImageFromGallery(
-                                              context: context);
+                                          );
                                         },
-                                        child: editProfileProvider.images != null
-                                            ? Image.file(
-                                                editProfileProvider.images!,
-                                                height: 200,
-                                                width: 200,
-                                                fit: BoxFit.cover,
-                                              )
-                                            : CustomImageView(
-                                                imagePath: editProfileProvider
-                                                    .profileUrl
-                                                    .toString(),
-                                                height: size.height * 0.13,
-                                                width: size.height * 0.13,
-                                                radius: BorderRadius.circular(54),
-                                                alignment: Alignment.center,
-                                                fit: BoxFit.cover,
-                                              ),
                                       ),
+
+
+                                      const SizedBox(height: 8),
                                       Align(
-                                        alignment: Alignment.bottomCenter,
+                                        alignment: Alignment.centerLeft,
                                         child: Padding(
-                                          padding: EdgeInsets.only(
-                                            bottom: size.height * 0.01,
+                                          padding: const EdgeInsets.only(
+                                            left: 9,
                                           ),
                                           child: Text(
-                                            "Change Photo",
+                                            "About You",
                                             style: CustomTextStyles
-                                                .blackTextStyleCustomWhiteW800(
-                                              size: size.width * 0.03,
-                                            ),
+                                                .bodyMediumGray700,
                                           ),
                                         ),
+                                      ),
+                                      const SizedBox(
+                                        height: 2,
+                                      ),
+                                      _buildAboutYouValue(context),
+                                      const SizedBox(
+                                        height: 15,
+                                      ),
+                                      _buildSave(
+                                        context,
                                       )
                                     ],
                                   ),
                                 ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Consumer<EditProfileProvider>(
+                            builder: (context, editProfileProvider, _) {
+                          return Positioned(
+                            top: size.height * 0.045,
+                            child: Card(
+                              clipBehavior: Clip.antiAlias,
+                              elevation: 0,
+                              margin: const EdgeInsets.all(
+                                0,
                               ),
-                            );
-                          })
-                        ],
-                      ),
+                              color: theme.colorScheme.primary.withOpacity(
+                                1,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadiusStyle.circleBorder54,
+                              ),
+                              child: Container(
+                                height: size.height * 0.12,
+                                width: size.height * 0.12,
+                                decoration: AppDecoration.fillPrimary.copyWith(
+                                  borderRadius:
+                                      BorderRadiusStyle.circleBorder54,
+                                ),
+                                child: Stack(
+                                  alignment: Alignment.bottomCenter,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        editProfileProvider.getImageFromGallery(
+                                            context: context);
+                                      },
+                                      child: editProfileProvider.images != null
+                                          ? Image.file(
+                                              editProfileProvider.images!,
+                                              height: 200,
+                                              width: 200,
+                                              fit: BoxFit.cover,
+                                            )
+                                          : editProfileProvider
+                                          .profileUrl
+                                          .toString() != "https://mh.featureme.live/uploads/default/noprofile.png" ?
+                                      CustomImageView(
+                                              imagePath: editProfileProvider
+                                                  .profileUrl
+                                                  .toString(),
+                                              height: size.height * 0.13,
+                                              width: size.height * 0.13,
+                                              radius: BorderRadius.circular(54),
+                                              alignment: Alignment.center,
+                                              fit: BoxFit.cover,
+                                            ):
+                                      CustomImageView(
+                                        imagePath: "https://mh.featureme.live/uploads/default/noprofile.png",
+                                        height: size.height * 0.13,
+                                        width: size.height * 0.13,
+                                        radius: BorderRadius.circular(54),
+                                        alignment: Alignment.center,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.bottomCenter,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                          bottom: size.height * 0.01,
+                                        ),
+                                        child: Text(
+                                          "Change Photo",
+                                          style: CustomTextStyles
+                                              .blackTextStyleCustomWhiteW800(
+                                            size: size.width * 0.03,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        })
+                      ],
                     ),
                   ),
                 ),

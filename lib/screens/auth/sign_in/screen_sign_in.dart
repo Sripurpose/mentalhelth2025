@@ -249,10 +249,10 @@ class _ScreenSignInState extends State<ScreenSignIn> {
                               child:  Text(
                                 "Forgot your password ?",
                                 style: TextStyle(
-                                  fontSize: 12.50,
-                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
                                   fontFamily: 'Open Sans',
-                                  color: ColorsContent.forgotPasswordColor,
+                                  color: ColorsContent.whatsOnYourMindBoxColor,
                                 ),
                               ),
                             );

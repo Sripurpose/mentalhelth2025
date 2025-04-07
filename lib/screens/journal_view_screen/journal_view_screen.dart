@@ -6,6 +6,7 @@ import 'package:mentalhelth/screens/home_screen/model/journal_details.dart';
 import 'package:mentalhelth/screens/home_screen/provider/home_provider.dart';
 import 'package:mentalhelth/screens/journal_list_screen/provider/journal_list_provider.dart';
 import 'package:mentalhelth/screens/journal_list_screen/screens/edit_journal/edit_journal.dart';
+import 'package:mentalhelth/screens/journal_view_screen/widgets/action_view_in_parellel_screen.dart';
 import 'package:mentalhelth/screens/journal_view_screen/widgets/goal_view_in_parellel_screen.dart';
 import 'package:mentalhelth/screens/journal_view_screen/widgets/jouranl_view_google_map.dart';
 import 'package:mentalhelth/screens/journal_view_screen/widgets/journal_audio_player.dart';
@@ -580,19 +581,22 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                               width: size.width * 0.45,
                                               child: SingleChildScrollView(
                                                 scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                                                child: Text(
-                                                  homeProvider.journalDetails!.journals!
-                                                      .goal ==
-                                                      null
-                                                      ? ""
-                                                      : homeProvider.journalDetails!
-                                                      .journals!.goal!.goalTitle
-                                                      .toString(),
-                                                  style: const TextStyle(
-                                                    fontSize: 17,
-                                                    fontWeight: FontWeight.w500,
-                                                    fontFamily: 'Open Sans',
-                                                    color: Colors.white,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                                  child: Text(
+                                                    homeProvider.journalDetails!.journals!
+                                                        .goal ==
+                                                        null
+                                                        ? ""
+                                                        : homeProvider.journalDetails!
+                                                        .journals!.goal!.goalTitle
+                                                        .toString(),
+                                                    style: const TextStyle(
+                                                      fontSize: 17,
+                                                      fontWeight: FontWeight.w500,
+                                                      fontFamily: 'Open Sans',
+                                                      color: Colors.white,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -650,40 +654,107 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                     ?
                                 const SizedBox()
         
-                                    : Container(
-                                  height: size.height * 0.04,
-                                  width: size.width * 0.7,
-                                  padding:
-                                  const EdgeInsets.only(
-                                    bottom: 5,
-                                    top: 5,
-                                    left: 5,
-                                    right: 5,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: ColorsContent.newThemeColor,
-                                    borderRadius:
-                                    BorderRadius.circular(
-                                        8), // Makes it circular
-                                  ),
-                                      child: Padding(
-                                          padding: const EdgeInsets.only(left: 7),
-                                          child: Text(
-                                            homeProvider.journalDetails!.journals!.action == null ||
-                                                homeProvider.journalDetails!.journals!.action!.isEmpty
-                                                ? ""
-                                                : homeProvider.journalDetails!.journals!.action!
-                                                .map((e) => e.actionTitle)
-                                                .join(", "), // Join action titles with a comma, for example.
-                                            style: const TextStyle(
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.w500,
-                                              fontFamily: 'Open Sans',
-                                              color: Colors.white,
+                                    : GestureDetector(
+                                  onTap: () async {
+                                    final actions = homeProvider.journalDetails?.journals?.action;
+                                    final actionId = actions != null && actions.isNotEmpty ? actions.first.actionId : null;
+
+                                    if (actionId != null) {
+                                      await mentalStrengthEditProvider.fetchActionDetails(actionId: actionId);
+                                      debugPrint("✅ Fetched action details for ID: $actionId");
+                                    } else {
+                                      debugPrint("⚠️ No valid actionId found.");
+                                    }
+
+                                    if(mentalStrengthEditProvider.actionDetailsStatus == 200){
+                                      Navigator.push(
+                                        context,
+                                        PageRouteBuilder(
+                                          pageBuilder: (_, __, ___) =>
+                                          const ActionViewInParallelScreen(),
+                                          transitionDuration:
+                                          const Duration(seconds: 0),
+                                        ),
+                                      );
+                                    }
+                                  },
+
+                                  child: Container(
+                                                                        height: size.height * 0.04,
+                                                                        width: size.width * 0.7,
+                                                                        padding:
+                                                                        const EdgeInsets.only(
+                                      bottom: 5,
+                                      top: 5,
+                                      left: 5,
+                                      right: 5,
+                                                                        ),
+                                                                        decoration: BoxDecoration(
+                                      color: ColorsContent.newThemeColor,
+                                      borderRadius:
+                                      BorderRadius.circular(
+                                          8), // Makes it circular
+                                                                        ),
+                                        child: Padding(
+                                            padding: const EdgeInsets.only(left: 7),
+                                            child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Text(
+                                                  homeProvider.journalDetails!.journals!.action == null ||
+                                                      homeProvider.journalDetails!.journals!.action!.isEmpty
+                                                      ? ""
+                                                      : homeProvider.journalDetails!.journals!.action!
+                                                      .map((e) => e.actionTitle)
+                                                      .join(", "), // Join action titles with a comma, for example.
+                                                  style: const TextStyle(
+                                                    fontSize: 17,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontFamily: 'Open Sans',
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                                GestureDetector(
+                                                  onTap: () async {
+                                                    final actions = homeProvider.journalDetails?.journals?.action;
+                                                    final actionId = actions != null && actions.isNotEmpty ? actions.first.actionId : null;
+
+                                                    if (actionId != null) {
+                                                      await mentalStrengthEditProvider.fetchActionDetails(actionId: actionId);
+                                                      debugPrint("✅ Fetched action details for ID: $actionId");
+                                                    } else {
+                                                      debugPrint("⚠️ No valid actionId found.");
+                                                    }
+
+                                                    if(mentalStrengthEditProvider.actionDetailsStatus == 200){
+                                                      Navigator.push(
+                                                        context,
+                                                        PageRouteBuilder(
+                                                          pageBuilder: (_, __, ___) =>
+                                                          const ActionViewInParallelScreen(),
+                                                          transitionDuration:
+                                                          const Duration(seconds: 0),
+                                                        ),
+                                                      );
+                                                    }
+                                                  },
+                                                  child: CircleAvatar(
+                                                    radius:
+                                                    size.width * 0.04,
+                                                    backgroundColor:Colors.deepPurple,
+                                                    child: Icon(
+                                                      Icons
+                                                          .play_arrow,
+                                                      color: Colors.white,
+                                                      size: size.width *
+                                                          0.04,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          ),
-        
-                                                                    ),
+
+                                                                      ),
+                                      ),
                                     ),
                                 const SizedBox(height: 10),
                               ],
@@ -1014,9 +1085,13 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                           if(homeProvider.journalStatus == 404){
                             await homeProvider.fetchJournals(pageNo:1.toString());
                           }
-
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content:
+                                Text("Journals deleted successfully")),
+                          );
                           // Close the dialog and then close the previous screen if needed
-                          await Future.delayed(const Duration(seconds: 1));
+                          await Future.delayed(const Duration(seconds: 0));
                           Navigator.of(context).pop();
                           Navigator.of(context).pop();
                         });

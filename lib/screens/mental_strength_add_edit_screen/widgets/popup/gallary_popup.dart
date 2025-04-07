@@ -200,7 +200,7 @@ Future galleryBottomSheet({
                     GestureDetector(
                       onTap: () {
                         if (mentalStrengthEditProvider.mediaSelected == 1) {
-                          mentalStrengthEditProvider.pickImageFunction();
+                          mentalStrengthEditProvider.pickImageFunction(context);
                         }
                       },
                       child: buildAvatarImage(

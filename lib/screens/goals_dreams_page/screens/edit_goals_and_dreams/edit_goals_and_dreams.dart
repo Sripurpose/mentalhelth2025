@@ -423,49 +423,49 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                                                   children: [
                                                     GestureDetector(
                                                       onTap: () {
-                                                        Navigator.of(context)
-                                                            .push(
-                                                          MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                ActionsFullView(
-                                                              id: widget
-                                                                      .goalsanddream
-                                                                      .action?[
-                                                                          index]
-                                                                      .actionId
-                                                                      .toString() ??
-                                                                  "",
-                                                              indexs: index,
-                                                              action:
-                                                                  actionss.Action(
-                                                                id: widget
-                                                                    .goalsanddream
-                                                                    .action![
-                                                                        index]
-                                                                    .actionId,
-                                                                title: widget
-                                                                    .goalsanddream
-                                                                    .action![
-                                                                        index]
-                                                                    .actionTitle,
-                                                                actionStatus: widget
-                                                                    .goalsanddream
-                                                                    .action![
-                                                                        index]
-                                                                    .actionStatus,
-                                                                actionDate: widget
-                                                                    .goalsanddream
-                                                                    .action![
-                                                                        index]
-                                                                    .actionDatetime,
-                                                              ),
-                                                              goalId: widget
-                                                                  .goalsanddream
-                                                                  .goalId
-                                                                  .toString(),
-                                                            ),
-                                                          ),
-                                                        );
+                                                        // Navigator.of(context)
+                                                        //     .push(
+                                                        //   MaterialPageRoute(
+                                                        //     builder: (context) =>
+                                                        //         ActionsFullView(
+                                                        //       id: widget
+                                                        //               .goalsanddream
+                                                        //               .action?[
+                                                        //                   index]
+                                                        //               .actionId
+                                                        //               .toString() ??
+                                                        //           "",
+                                                        //       indexs: index,
+                                                        //       action:
+                                                        //           actionss.Action(
+                                                        //         id: widget
+                                                        //             .goalsanddream
+                                                        //             .action![
+                                                        //                 index]
+                                                        //             .actionId,
+                                                        //         title: widget
+                                                        //             .goalsanddream
+                                                        //             .action![
+                                                        //                 index]
+                                                        //             .actionTitle,
+                                                        //         actionStatus: widget
+                                                        //             .goalsanddream
+                                                        //             .action![
+                                                        //                 index]
+                                                        //             .actionStatus,
+                                                        //         actionDate: widget
+                                                        //             .goalsanddream
+                                                        //             .action![
+                                                        //                 index]
+                                                        //             .actionDatetime,
+                                                        //       ),
+                                                        //       goalId: widget
+                                                        //           .goalsanddream
+                                                        //           .goalId
+                                                        //           .toString(),
+                                                        //     ),
+                                                        //   ),
+                                                        // );
                                                       },
                                                       child: Container(
                                                         margin:
@@ -496,7 +496,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                                                         child: Row(
                                                           mainAxisAlignment:
                                                               MainAxisAlignment
-                                                                  .spaceBetween,
+                                                                  .start,
                                                           children: [
                                                             GestureDetector(
                                                               onTap: () async {
@@ -540,92 +540,95 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                                                                 ),
                                                               ),
                                                             ),
-                                                            SingleChildScrollView(
-                                                              scrollDirection:
-                                                                  Axis.horizontal,
-                                                              // Enable horizontal scrolling
-                                                              child: Text(
-                                                                data.name,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                maxLines: 1,
-                                                                // Set the maximum number of lines to 3
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style:
-                                                                    const TextStyle(
-                                                                  color:
-                                                                      Colors.grey,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            GestureDetector(
-                                                              onTap: () {
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .push(
-                                                                  MaterialPageRoute(
-                                                                    builder:
-                                                                        (context) =>
-                                                                            ActionsFullView(
-                                                                      id: widget
-                                                                              .goalsanddream
-                                                                              .action?[index]
-                                                                              .actionId
-                                                                              .toString() ??
-                                                                          "",
-                                                                      indexs:
-                                                                          index,
-                                                                      action: actionss
-                                                                          .Action(
-                                                                        id: widget
-                                                                            .goalsanddream
-                                                                            .action![
-                                                                                index]
-                                                                            .actionId,
-                                                                        title: widget
-                                                                            .goalsanddream
-                                                                            .action![
-                                                                                index]
-                                                                            .actionTitle,
-                                                                        actionStatus: widget
-                                                                            .goalsanddream
-                                                                            .action![
-                                                                                index]
-                                                                            .actionStatus,
-                                                                        actionDate: widget
-                                                                            .goalsanddream
-                                                                            .action![
-                                                                                index]
-                                                                            .actionDatetime,
-                                                                      ),
-                                                                      goalId: widget
-                                                                          .goalsanddream
-                                                                          .goalId
-                                                                          .toString(),
-                                                                    ),
+                                                            Padding(
+                                                              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                                              child: SingleChildScrollView(
+                                                                scrollDirection:
+                                                                    Axis.horizontal,
+                                                                // Enable horizontal scrolling
+                                                                child: Text(
+                                                                  data.name,
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  maxLines: 1,
+                                                                  // Set the maximum number of lines to 3
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    color:
+                                                                        Colors.grey,
                                                                   ),
-                                                                );
-                                                              },
-                                                              child: CircleAvatar(
-                                                                radius:
-                                                                    size.width *
-                                                                        0.04,
-                                                                backgroundColor:
-                                                                ColorsContent.newThemeColor,
-                                                                child: Icon(
-                                                                  Icons
-                                                                      .arrow_forward_ios_outlined,
-                                                                  color: Colors
-                                                                      .white,
-                                                                  size:
-                                                                      size.width *
-                                                                          0.04,
                                                                 ),
                                                               ),
                                                             ),
+                                                            // GestureDetector(
+                                                            //   onTap: () {
+                                                            //     Navigator.of(
+                                                            //             context)
+                                                            //         .push(
+                                                            //       MaterialPageRoute(
+                                                            //         builder:
+                                                            //             (context) =>
+                                                            //                 ActionsFullView(
+                                                            //           id: widget
+                                                            //                   .goalsanddream
+                                                            //                   .action?[index]
+                                                            //                   .actionId
+                                                            //                   .toString() ??
+                                                            //               "",
+                                                            //           indexs:
+                                                            //               index,
+                                                            //           action: actionss
+                                                            //               .Action(
+                                                            //             id: widget
+                                                            //                 .goalsanddream
+                                                            //                 .action![
+                                                            //                     index]
+                                                            //                 .actionId,
+                                                            //             title: widget
+                                                            //                 .goalsanddream
+                                                            //                 .action![
+                                                            //                     index]
+                                                            //                 .actionTitle,
+                                                            //             actionStatus: widget
+                                                            //                 .goalsanddream
+                                                            //                 .action![
+                                                            //                     index]
+                                                            //                 .actionStatus,
+                                                            //             actionDate: widget
+                                                            //                 .goalsanddream
+                                                            //                 .action![
+                                                            //                     index]
+                                                            //                 .actionDatetime,
+                                                            //           ),
+                                                            //           goalId: widget
+                                                            //               .goalsanddream
+                                                            //               .goalId
+                                                            //               .toString(),
+                                                            //         ),
+                                                            //       ),
+                                                            //     );
+                                                            //   },
+                                                            //   child: CircleAvatar(
+                                                            //     radius:
+                                                            //         size.width *
+                                                            //             0.04,
+                                                            //     backgroundColor:
+                                                            //     ColorsContent.newThemeColor,
+                                                            //     child: Icon(
+                                                            //       Icons
+                                                            //           .arrow_forward_ios_outlined,
+                                                            //       color: Colors
+                                                            //           .white,
+                                                            //       size:
+                                                            //           size.width *
+                                                            //               0.04,
+                                                            //     ),
+                                                            //   ),
+                                                            // ),
                                                           ],
                                                         ),
                                                       ),
@@ -946,17 +949,23 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                       GestureDetector(
                         onTap: () async {
                           _isTokenExpired();
-                          if (await requestGalleryPermission()) {
+                          if (await requestGalleryPermission() && Platform.isAndroid) {
                             adDreamsGoalsProvider.selectedMedia(1);
                             await galleryBottomSheetAddGoals(
                               context: context,
                               title: 'Gallery',
                             );
-                          } else {
+                          } else if(Platform.isIOS){
+                            adDreamsGoalsProvider.selectedMedia(1);
+                            await galleryBottomSheetAddGoals(
+                              context: context,
+                              title: 'Gallery',
+                            );
+                          }else{
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                   content:
-                                      Text("Gallery permission is required.")),
+                                  Text("Gallery permission is required.")),
                             );
                           }
                         },
@@ -1061,17 +1070,24 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                       GestureDetector(
                         onTap: () async {
                           _isTokenExpired();
-                          if (await requestCameraPermission()) {
+                          if (await requestCameraPermission() && Platform.isAndroid) {
                             adDreamsGoalsProvider.selectedMedia(2);
                             cameraBottomSheetAdGoals(
                               context: context,
                               title: "Camera",
                             );
-                          } else {
+                          } else if(Platform.isIOS){
+                            adDreamsGoalsProvider.selectedMedia(2);
+                            cameraBottomSheetAdGoals(
+                              context: context,
+                              title: "Camera",
+                            );
+
+                          }else{
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                   content:
-                                      Text("Camera permission is required.")),
+                                  Text("Camera permission is required.")),
                             );
                           }
                         },

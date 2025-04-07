@@ -27,6 +27,7 @@ class ColorsContent {
   static Color passiveStateColor = const Color(0xFFF87E69);
   static Color stressFullStateColor = const Color(0xFF7E69F8);
   static Color destructiveStateColor = const Color(0xFF688BF7);
+  static Color chooseGoalActionColor = const Color(0xFFCECBF7);
 
 
 }

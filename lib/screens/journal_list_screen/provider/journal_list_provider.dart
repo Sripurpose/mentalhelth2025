@@ -68,11 +68,13 @@ class JournalListProvider extends ChangeNotifier {
 
   JournalChartViewModel? journalChartViewModel;
   bool journalChartViewModelLoading = false;
+  int? journalChartStatusCode;
 
   Future<void> fetchJournalChartView() async {
     try {
       String? token = await getUserTokenSharePref();
       journalChartViewModelLoading = true;
+      journalChartStatusCode = 0;
       notifyListeners();
       final response = await http.get(
         Uri.parse(
@@ -87,6 +89,7 @@ class JournalListProvider extends ChangeNotifier {
       logger.w("responsejournalChartViewModel ${response.statusCode}");
 
       if (response.statusCode == 200) {
+        journalChartStatusCode = response.statusCode;
         journalChartViewModel = journalChartViewModelFromJson(
           response.body,
         );
@@ -94,8 +97,10 @@ class JournalListProvider extends ChangeNotifier {
 
         notifyListeners();
       } else {
+        journalChartStatusCode = response.statusCode;
         logger.w("journalChartViewModelElse $journalChartViewModel");
       }
+      journalChartStatusCode = response.statusCode;
       journalChartViewModelLoading = false;
       notifyListeners();
     } catch (e) {
