@@ -357,7 +357,7 @@ class _NumuMentalStrengthAddEditPageState
                                 else {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                      SnackBar(
-                                      content: const Text("Emotional star rating is required."),
+                                      content: const Text("This field is mandatory."),
                                       backgroundColor: ColorsContent.newThemeColor,
                                     ),
                                   );
@@ -387,7 +387,7 @@ class _NumuMentalStrengthAddEditPageState
                                 else {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                      SnackBar(
-                                      content: const Text("Drive star rating is required."),
+                                      content: const Text("This field is mandatory."),
                                       backgroundColor: ColorsContent.newThemeColor,
                                     ),
                                   );

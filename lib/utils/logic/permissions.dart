@@ -27,3 +27,13 @@ Future<bool> requestCameraPermission() async {
   }
   return status.isGranted;
 }
+
+Future<bool> requestMicrophonePermission() async {
+  var status = await Permission.microphone.status;
+  if (!status.isGranted) {
+    status = await Permission.microphone.request();
+  }
+  return status.isGranted;
+}
+
+

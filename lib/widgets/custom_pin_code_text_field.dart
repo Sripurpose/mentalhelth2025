@@ -53,24 +53,24 @@ class CustomPinCodeTextField extends StatelessWidget {
       FilteringTextInputFormatter.digitsOnly,
     ],
     enableActiveFill: true,
-    cursorColor: Colors.black, // 👈 Set cursor color here
+    cursorColor: Colors.black,
+    cursorHeight: 16, // 👈 Reduced cursor height
+    cursorWidth: 1.5, // 👈 Slimmer cursor
     pinTheme: PinTheme(
       fieldHeight: 40,
       fieldWidth: 43,
       shape: PinCodeFieldShape.box,
       borderRadius: BorderRadius.circular(5),
-      inactiveColor: Colors.transparent, // Removes inactive border
-      activeColor: Colors.transparent, // Removes active border
-      selectedColor: Colors.transparent, // Removes selected border
-      inactiveFillColor:
-      theme.colorScheme.onSecondaryContainer.withOpacity(1),
-      activeFillColor:
-      theme.colorScheme.onSecondaryContainer.withOpacity(1),
-      selectedFillColor:
-      theme.colorScheme.onSecondaryContainer.withOpacity(1),
+      inactiveColor: Colors.transparent,
+      activeColor: Colors.transparent,
+      selectedColor: Colors.transparent,
+      inactiveFillColor: theme.colorScheme.onSecondaryContainer.withOpacity(1),
+      activeFillColor: theme.colorScheme.onSecondaryContainer.withOpacity(1),
+      selectedFillColor: theme.colorScheme.onSecondaryContainer.withOpacity(1),
     ),
     onChanged: (value) => onChanged(value),
     validator: validator,
   );
+
 
 }

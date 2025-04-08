@@ -15,6 +15,7 @@ class ImageConstant {
   static String feelingDummyNumu = '$imagePath/feeling_dummy_numu.svg';
   static String submitButtonNumu = 'assets/images/submit_button_numu.svg';
   static String submitButtonNumuBuild = 'assets/images/submit_button_mental_strength.svg';
+  static String homeScreenNoData = 'assets/images/home_screen_no_data.svg';
   static String tabBackButton = 'assets/images/tab_back_button.svg';
   static String goToIcon = 'assets/images/go_to_icon.png';
   static String noInternet = 'assets/images/no_internet.svg';

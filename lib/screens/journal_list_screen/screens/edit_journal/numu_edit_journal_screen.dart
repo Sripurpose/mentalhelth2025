@@ -499,7 +499,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                           }
 
                                           dashBoardProvider.changePage(
-                                            index: 2,
+                                            index: 0,
                                           );
                                         },
                                         child: Stack(

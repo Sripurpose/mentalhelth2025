@@ -490,7 +490,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
 
-                          if(homeProvider.journalsModel?.journals != null)
+                       //   if(homeProvider.journalsModel?.journals != null)
+                          homeProvider.journalStatus == 404 ?
+                              SizedBox():
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Padding(
@@ -506,6 +508,18 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           const SizedBox(height: 20),
+                          homeProvider.journalStatus == 404 ?
+                              const SizedBox()
+                          // GestureDetector(
+                          //   onTap: (){
+                          //   },
+                          //   child: SvgPicture.asset(
+                          //     ImageConstant.homeScreenNoData,
+                          //     width:  size.width * 0.90,
+                          //     height: size.height * 0.43,
+                          //   ),
+                          // )
+                              :
                           _buildUserProfileList(context, size, homeProvider),
                           // const SizedBox(height: 10),
                           // (homeProvider.journalsModel?.journals?.length ?? 0) < 0

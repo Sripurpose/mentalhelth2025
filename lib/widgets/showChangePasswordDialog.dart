@@ -1,0 +1,176 @@
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+import '../utils/theme/colors.dart';
+
+void showChangePasswordDialog(BuildContext context) {
+  final currentPasswordController = TextEditingController();
+  final newPasswordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      bool _obscureCurrent = true;
+      bool _obscureNew = true;
+      bool _obscureConfirm = true;
+
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Stack(
+                    children: [
+                      Center(
+                        child: Text(
+                          "Change Password",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: ColorsContent.newThemeColor,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        right: 0,
+                        child: GestureDetector(
+                          onTap: () => Navigator.of(context).pop(),
+                          child: CircleAvatar(
+                            radius: 12,
+                            backgroundColor: Colors.deepPurple.shade100,
+                            child: Icon(
+                              Icons.close_sharp,
+                              color: ColorsContent.newThemeColor,
+                              size: 18,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Divider(),
+                  const SizedBox(height: 20),
+                  _buildPasswordField("Current Password", currentPasswordController, _obscureCurrent, () {
+                    setState(() => _obscureCurrent = !_obscureCurrent);
+                  }),
+                  const SizedBox(height: 10),
+                  _buildPasswordField("New Password", newPasswordController, _obscureNew, () {
+                    setState(() => _obscureNew = !_obscureNew);
+                  }),
+                  const SizedBox(height: 10),
+                  _buildPasswordField("Confirm Password", confirmPasswordController, _obscureConfirm, () {
+                    setState(() => _obscureConfirm = !_obscureConfirm);
+                  }),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: ColorsContent.newThemeColor,
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      onPressed: () {
+                        final current = currentPasswordController.text.trim();
+                        final newPass = newPasswordController.text.trim();
+                        final confirm = confirmPasswordController.text.trim();
+
+                        if (current.isEmpty) {
+                          Fluttertoast.showToast(msg: "Please enter your current password",gravity: ToastGravity.CENTER);
+                          return;
+                        }
+                        if (newPass.isEmpty) {
+                          Fluttertoast.showToast(msg: "Please enter a new password",gravity: ToastGravity.CENTER);
+                          return;
+                        }
+                        if (confirm.isEmpty) {
+                          Fluttertoast.showToast(msg: "Please confirm your new password",gravity: ToastGravity.CENTER);
+                          return;
+                        }
+                        if (newPass != confirm) {
+                          Fluttertoast.showToast(msg: "New password and confirmation do not match",gravity: ToastGravity.CENTER);
+                          return;
+                        }
+
+                        Fluttertoast.showToast(msg: "Password updated successfully!",gravity: ToastGravity.CENTER);
+                      },
+                      child: Text(
+                        "Update Password",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'Open Sans',
+                          color: ColorsContent.whiteText,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    },
+  );
+
+}
+
+Widget _buildPasswordField(
+    String label,
+    TextEditingController controller,
+    bool obscureText,
+    VoidCallback onToggle,
+    ) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        label,
+        style: TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.w400,
+          fontFamily: 'Open Sans',
+          color: ColorsContent.goalCompletedTextColor,
+        ),
+      ),
+      const SizedBox(height: 6),
+      TextField(
+        controller: controller,
+        obscureText: obscureText,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(width: 0.6, color: Colors.grey.shade400),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(width: 0.6, color: Colors.grey.shade400),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(width: 0.8, color: Colors.deepPurple),
+          ),
+          isDense: true,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          suffixIcon: GestureDetector(
+            onTap: onToggle,
+            child: Icon(
+              obscureText ? Icons.visibility_off : Icons.visibility,
+              color: Colors.grey,
+            ),
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
+

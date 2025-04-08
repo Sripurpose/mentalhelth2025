@@ -21,6 +21,7 @@ import 'package:provider/provider.dart';
 
 import '../../utils/theme/custom_text_style.dart';
 import '../../widgets/functions/snack_bar.dart';
+import '../../widgets/showChangePasswordDialog.dart';
 import '../home_screen/provider/home_provider.dart';
 import '../mental_strength_add_edit_screen/provider/mental_strenght_edit_provider.dart';
 import '../no_internet/duplicate_screen.dart';
@@ -272,37 +273,78 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                       },
                                     ),
                                   ),
-                                  Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: Consumer<DashBoardProvider>(
-                                      builder: (context, dashBoardProvider, _) {
-                                        return GestureDetector(
-                                          onTap: () {
-                                            dashBoardProvider.changeCommentPage(index: 9);
-                                          },
-                                          child: Container(
-                                            width: 115,
-                                            height: 34,
-                                            decoration: BoxDecoration(
-                                              color: ColorsContent.newThemeColor,
-                                              borderRadius: const BorderRadius.only(
-                                                topLeft: Radius.circular(12),
-                                                topRight: Radius.circular(12),
-                                              ),
-                                            ),
-                                            child: const Center(
-                                              child: Text(
-                                                "Edit Profile",
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.bottomCenter,
+                                          child: Consumer<DashBoardProvider>(
+                                            builder: (context, dashBoardProvider, _) {
+                                              return GestureDetector(
+                                                onTap: () {
+                                                  dashBoardProvider.changeCommentPage(index: 9);
+                                                },
+                                                child: Container(
+                                                  width: 115,
+                                                  height: 34,
+                                                  decoration: BoxDecoration(
+                                                    color: ColorsContent.newThemeColor,
+                                                    borderRadius: const BorderRadius.only(
+                                                      topLeft: Radius.circular(12),
+                                                      topRight: Radius.circular(12),
+                                                    ),
+                                                  ),
+                                                  child: const Center(
+                                                    child: Text(
+                                                      "Edit Profile",
+                                                      style: TextStyle(
+                                                        fontSize: 14,
+                                                        color: Colors.white,
+                                                        fontWeight: FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ),
-                                              ),
-                                            ),
+                                              );
+                                            },
                                           ),
-                                        );
-                                      },
+                                        ),
+                                        Align(
+                                          alignment: Alignment.bottomCenter,
+                                          child: Consumer<DashBoardProvider>(
+                                            builder: (context, dashBoardProvider, _) {
+                                              return GestureDetector(
+                                                onTap: () {
+                                                  showChangePasswordDialog(context);
+                                                },
+                                                child: Container(
+                                                  width: 145,
+                                                  height: 34,
+                                                  decoration: BoxDecoration(
+                                                    color: ColorsContent.blackText,
+                                                    borderRadius: const BorderRadius.only(
+                                                      topLeft: Radius.circular(12),
+                                                      topRight: Radius.circular(12),
+                                                    ),
+                                                  ),
+                                                  child: const Center(
+                                                    child: Text(
+                                                      "Change Password",
+                                                      style: TextStyle(
+                                                        fontSize: 14,
+                                                        color: Colors.white,
+                                                        fontWeight: FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
