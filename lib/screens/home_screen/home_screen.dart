@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -365,6 +366,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final signInProvider = Provider.of<SignInProvider>(context, listen: false);
+    final homeProvider = Provider.of<HomeProvider>(context, listen: false);
     Size size = MediaQuery.of(context).size;
 
     // Check if token has expired, return the TokenExpireScreen if true
@@ -490,9 +492,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
 
-                       //   if(homeProvider.journalsModel?.journals != null)
-                          homeProvider.journalStatus == 404 ?
-                              SizedBox():
+                         homeProvider.chartViewModel == null?
+                             const SizedBox():
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Padding(
@@ -508,8 +509,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           const SizedBox(height: 20),
-                          homeProvider.journalStatus == 404 ?
-                              const SizedBox()
+                          homeProvider.chartViewLoading
+                              ? Center(child: CupertinoActivityIndicator(
+                            color: ColorsContent.newThemeColor,
+                            radius: 15,
+                          ))
+                              :
+                          homeProvider.chartViewModel == null?
+                          const SizedBox():
                           // GestureDetector(
                           //   onTap: (){
                           //   },
@@ -519,7 +526,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           //     height: size.height * 0.43,
                           //   ),
                           // )
-                              :
+
                           _buildUserProfileList(context, size, homeProvider),
                           // const SizedBox(height: 10),
                           // (homeProvider.journalsModel?.journals?.length ?? 0) < 0

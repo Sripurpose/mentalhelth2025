@@ -6,6 +6,7 @@ import 'package:logger/logger.dart';
 import 'package:mentalhelth/screens/dash_borad_screen/provider/dash_board_provider.dart';
 import 'package:mentalhelth/screens/edit_add_profile_screen/provider/edit_provider.dart';
 import 'package:mentalhelth/screens/edit_add_profile_screen/widgets/dropdown_widget.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/utils/theme/custom_button_style.dart';
 import 'package:mentalhelth/widgets/background_image/background_imager.dart';
 import 'package:mentalhelth/widgets/custom_elevated_button.dart';
@@ -68,6 +69,7 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
     dashBoardProvider = Provider.of<DashBoardProvider>(context, listen: false);
     editProfileProvider = Provider.of<EditProfileProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      editProfileProvider.images = null;
       logger.i("editProfileProvider.profileUrl.toString()${editProfileProvider.profileUrl.toString()}");
       editProfileProvider.initializeSelectedCategories(
         editProfileProvider.getCategoryModel?.category ?? [],
@@ -278,12 +280,22 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                                                         context: context,
                                                         builder: (BuildContext context) {
                                                           return AlertDialog(
-                                                            backgroundColor: appTheme.blue300.withOpacity(0.95), // Adjust the opacity as needed
-                                                            title: const Text("Select Interests"),
+                                                            backgroundColor: ColorsContent.newThemeColor, // Adjust the opacity as needed
+                                                            title: const Text("Select Interests",
+                                                              style: TextStyle(
+                                                                fontSize: 16,
+                                                                fontWeight: FontWeight.w700,
+                                                                fontFamily: 'Open Sans',
+                                                                color:  Colors.white,
+                                                              ),),
                                                             content: StatefulBuilder(
                                                               builder: (context, setState) {
                                                                 final categories = editProfileProvider.getCategoryModel?.category ?? [];
-                                                                return SizedBox(
+                                                                return Container(
+                                                                  decoration: BoxDecoration(
+                                                                    border: Border.all(color: Colors.white, width: 0.5), // Border color and width
+                                                                    borderRadius: BorderRadius.circular(5), // Optional: rounded corners
+                                                                  ),
                                                                   height: size.height * 0.2,
                                                                   width: double.maxFinite,
                                                                   child: ListView.builder(
@@ -293,7 +305,12 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                                                                       final isSelected = editProfileProvider.selectedCategories.contains(category);
 
                                                                       return ListTile(
-                                                                        title: Text(category.categoryName ?? ""),
+                                                                        title: Text(category.categoryName ?? "",style: const TextStyle(
+                                                                          fontSize: 18,
+                                                                          fontWeight: FontWeight.w500,
+                                                                          fontFamily: 'Open Sans',
+                                                                          color: Colors.white,
+                                                                        ),),
                                                                         tileColor: isSelected ? Colors.white.withOpacity(0.2) : Colors.transparent,
                                                                         onTap: () {
                                                                           setState(() {
@@ -311,12 +328,27 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                                                               },
                                                             ),
                                                             actions: [
-                                                              TextButton(
-                                                                onPressed: () {
-                                                                  Navigator.pop(context, editProfileProvider.selectedCategories);
-                                                                },
-                                                                child: const Text("Done"),
+                                                              Container(
+                                                                decoration: BoxDecoration(
+                                                                  border: Border.all(color: Colors.white, width: 0.5), // Border color and width
+                                                                  borderRadius: BorderRadius.circular(5), // Optional: rounded corners
+                                                                ),
+                                                                child: TextButton(
+                                                                  onPressed: () {
+                                                                    Navigator.pop(context, editProfileProvider.selectedCategories);
+                                                                  },
+                                                                  child: const Text(
+                                                                    "Done",
+                                                                    style: TextStyle(
+                                                                      fontSize: 16,
+                                                                      fontWeight: FontWeight.w700,
+                                                                      fontFamily: 'Open Sans',
+                                                                      color: Colors.white,
+                                                                    ),
+                                                                  ),
+                                                                ),
                                                               ),
+
                                                             ],
                                                           );
                                                         },
@@ -357,16 +389,29 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                                                       Text(
                                                         category.categoryName ?? "",
                                                         style: const TextStyle(
-                                                          color: Colors.blue,
+                                                          color: Colors.black,
                                                           fontWeight: FontWeight.bold,
                                                         ),
                                                       ),
-                                                      IconButton(
-                                                        icon: const Icon(Icons.close, size: 16, color: Colors.red),
-                                                        onPressed: () {
-                                                          editProfileProvider.removeSelectedCategory(category);
-                                                        },
-                                                      ),
+                                                      Container(
+                                                        decoration: BoxDecoration(
+                                                          color: ColorsContent.newThemeColor,
+                                                          shape: BoxShape.circle,
+                                                          border: Border.all(
+                                                            color: ColorsContent.newThemeColor, // Set your desired border color
+                                                            width: 0.5, // Adjust thickness
+                                                          ),
+                                                        ),
+                                                        child: IconButton(
+                                                          icon: Icon(Icons.close, size: 16, color: ColorsContent.whiteText),
+                                                          onPressed: () {
+                                                            editProfileProvider.removeSelectedCategory(category);
+                                                          },
+                                                          padding: EdgeInsets.all(6), // Optional: controls spacing inside the circle
+                                                          constraints: BoxConstraints(), // Removes default button constraints
+                                                        ),
+                                                      )
+
                                                     ],
                                                   ),
                                                 ),
@@ -479,9 +524,7 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                                           .profileUrl
                                           .toString() != "https://mh.featureme.live/uploads/default/noprofile.png" ?
                                       CustomImageView(
-                                              imagePath: editProfileProvider
-                                                  .profileUrl
-                                                  .toString(),
+                                              imagePath: editProfileProvider.profileUrl,
                                               height: size.height * 0.13,
                                               width: size.height * 0.13,
                                               radius: BorderRadius.circular(54),

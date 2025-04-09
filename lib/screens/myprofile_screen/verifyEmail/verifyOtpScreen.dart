@@ -14,6 +14,7 @@ import '../../../utils/theme/custom_text_style.dart';
 import '../../../utils/theme/theme_helper.dart';
 import '../../../widgets/custom_image_view.dart';
 import '../../../widgets/functions/snack_bar.dart';
+import '../../dash_borad_screen/provider/dash_board_provider.dart';
 import '../../no_internet/duplicate_screen.dart';
 import '../../phone_singin_screen/provider/phone_sign_in_provider.dart';
 import '../myprofile_screen.dart';
@@ -94,8 +95,8 @@ class VerifyOtpScreen extends StatelessWidget {
                     const SizedBox(
                       height: 35,
                     ),
-                Consumer<EditProfileProvider>(
-                  builder: (context, editProfileProvider, _) {
+                Consumer2<DashBoardProvider,EditProfileProvider>(
+                  builder: (context, dashBoardProvider,editProfileProvider, _) {
                     return CustomElevatedButton(
                       loading: editProfileProvider.verifyOtpLoading,
                       height: 40,
@@ -113,20 +114,13 @@ class VerifyOtpScreen extends StatelessWidget {
                          // homeProvider.fetchJournals(initial: true);
                           editProfileProvider.fetchUserProfile();
                           if(editProfileProvider.verifyOtpStatus == 200){
-                            Navigator.of(context)
-                                .push(
-                              MaterialPageRoute(
-                                builder: (context) => const MyProfileScreen(),
-                              ),
+                            dashBoardProvider.changeCommentPage(
+                              index: 8,
                             );
-                
                             //Navigator.of(context).pop();
                 
                           }else{
-                            showToast(
-                              context: context,
-                              message: editProfileProvider.verifyOtpMailMessage ?? "",
-                            );
+
                           }
                         }else{
                           showToast(

@@ -104,8 +104,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                           child: Align(
                             alignment: Alignment.center,
                             child: Container(
-                              height: size.height * 0.74,
-                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                              height: size.height * 0.60,
+                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 border: Border.all(
@@ -137,7 +137,12 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                       capitalText(
                                                         editProfileProvider.getProfileModel?.firstname.toString() ?? "",
                                                       ),
-                                                      style: CustomTextStyles.bodyLarge18,
+                                                      style: const TextStyle(
+                                                        fontSize: 20,
+                                                        fontWeight: FontWeight.w700,
+                                                        fontFamily: 'Open Sans',
+                                                        color: Colors.black,
+                                                      ),
                                                       textAlign: TextAlign.center,
                                                       overflow: TextOverflow.ellipsis,
                                                       maxLines: 1,
@@ -145,6 +150,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                   ),
                                                 ),
                                               ),
+                                              SizedBox(height: size.height * 0.002),
                                               Align(
                                                 alignment: Alignment.centerLeft,
                                                 child: Padding(
@@ -152,7 +158,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                   child: Text(
                                                     "Member since ${editProfileProvider.getProfileModel?.createdAt == null ? "" : formatTimestampToDate(editProfileProvider.getProfileModel!.createdAt.toString())}",
                                                     style: CustomTextStyles.bodyMediumGray700,
-                                                    textAlign: TextAlign.center,
+                                                //    textAlign: TextAlign.center,
                                                   ),
                                                 ),
                                               ),
@@ -197,8 +203,14 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                             }
                                                           },
                                                       ),
+                                                      editProfileProvider.getProfileModel!.emailVerify != "1" &&
+                                                          editProfileProvider.getProfileModel!.email!.isNotEmpty ?
                                                       TextSpan(
                                                         text: "${editProfileProvider.getProfileModel!.email}\n",
+                                                        style: CustomTextStyles.bodyLargeff000000,
+                                                      ):
+                                                      TextSpan(
+                                                        text: "${editProfileProvider.getProfileModel!.email}\n\n",
                                                         style: CustomTextStyles.bodyLargeff000000,
                                                       ),
                                                       if (editProfileProvider.getProfileModel!.emailVerify != "1" &&
@@ -225,6 +237,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                               }
                                                             },
                                                         ),
+
                                                       TextSpan(
                                                         text: "Date Of Birth\n",
                                                         style: CustomTextStyles.titleMediumff000000,

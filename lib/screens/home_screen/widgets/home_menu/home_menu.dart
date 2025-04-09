@@ -415,13 +415,14 @@ Widget buildPopupDialog(BuildContext context, Size size) {
             SizedBox(
               height: size.height * 0.03,
             ),
-            Consumer<SignInProvider>(
-              builder: (context, signInProvider, _) {
+            Consumer2<EditProfileProvider,SignInProvider>(
+              builder: (context, editProfileProvider,signInProvider, _) {
                 return GestureDetector(
                   onTap: () async {
                     customPopupNew(
                       context: context,
                       onPressedDelete: () async {
+                        editProfileProvider.profileUrl = "";
                         if(Platform.isAndroid){
                           await PushNotifications.subscribeToTopic("live_doLogin");
                           await PushNotifications.unsubscribeFromTopic("message");
