@@ -629,7 +629,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                             ),
                                           ],
                                         ),
-                                      ),
+                                      )
                                     ),
                                 homeProvider.journalDetails?.journals?.goal == null ?
                                     const SizedBox():
@@ -649,113 +649,79 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 4),
-                                homeProvider.journalDetails!.journals!.action == null ||
+                                homeProvider.journalDetails?.journals?.action == null ||
                                     homeProvider.journalDetails!.journals!.action!.isEmpty
-                                    ?
-                                const SizedBox()
-        
-                                    : GestureDetector(
-                                  onTap: () async {
-                                    final actions = homeProvider.journalDetails?.journals?.action;
-                                    final actionId = actions != null && actions.isNotEmpty ? actions.first.actionId : null;
+                                    ? const SizedBox()
+                                    : SizedBox(
+                                  height: size.height * 0.50,
+                                  width: size.width * 0.7,
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: const BouncingScrollPhysics(), // Or ScrollPhysics() for default
+                                    itemCount: homeProvider.journalDetails!.journals!.action!.length,
+                                    itemBuilder: (context, index) {
+                                      final action = homeProvider.journalDetails!.journals!.action![index];
+                                      final actionId = action.actionId;
 
-                                    if (actionId != null) {
-                                      await mentalStrengthEditProvider.fetchActionDetails(actionId: actionId);
-                                      debugPrint("✅ Fetched action details for ID: $actionId");
-                                    } else {
-                                      debugPrint("⚠️ No valid actionId found.");
-                                    }
+                                      return GestureDetector(
+                                        onTap: () async {
+                                          if (actionId != null) {
+                                            await mentalStrengthEditProvider.fetchActionDetails(actionId: actionId);
+                                            debugPrint("✅ Fetched action details for ID: $actionId");
 
-                                    if(mentalStrengthEditProvider.actionDetailsStatus == 200){
-                                      Navigator.push(
-                                        context,
-                                        PageRouteBuilder(
-                                          pageBuilder: (_, __, ___) =>
-                                          const ActionViewInParallelScreen(),
-                                          transitionDuration:
-                                          const Duration(seconds: 0),
-                                        ),
-                                      );
-                                    }
-                                  },
-
-                                  child: Container(
-                                                                        height: size.height * 0.04,
-                                                                        width: size.width * 0.7,
-                                                                        padding:
-                                                                        const EdgeInsets.only(
-                                      bottom: 5,
-                                      top: 5,
-                                      left: 5,
-                                      right: 5,
-                                                                        ),
-                                                                        decoration: BoxDecoration(
-                                      color: ColorsContent.newThemeColor,
-                                      borderRadius:
-                                      BorderRadius.circular(
-                                          8), // Makes it circular
-                                                                        ),
-                                        child: Padding(
-                                            padding: const EdgeInsets.only(left: 7),
-                                            child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text(
-                                                  homeProvider.journalDetails!.journals!.action == null ||
-                                                      homeProvider.journalDetails!.journals!.action!.isEmpty
-                                                      ? ""
-                                                      : homeProvider.journalDetails!.journals!.action!
-                                                      .map((e) => e.actionTitle)
-                                                      .join(", "), // Join action titles with a comma, for example.
+                                            if (mentalStrengthEditProvider.actionDetailsStatus == 200) {
+                                              Navigator.push(
+                                                context,
+                                                PageRouteBuilder(
+                                                  pageBuilder: (_, __, ___) => const ActionViewInParallelScreen(),
+                                                  transitionDuration: const Duration(seconds: 0),
+                                                ),
+                                              );
+                                            }
+                                          } else {
+                                            debugPrint("⚠️ No valid actionId found.");
+                                          }
+                                        },
+                                        child: Container(
+                                          height: size.height * 0.05,
+                                          margin: const EdgeInsets.only(bottom: 5),
+                                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                                          decoration: BoxDecoration(
+                                            color: ColorsContent.newThemeColor,
+                                            borderRadius: BorderRadius.circular(8),
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  action.actionTitle ?? '',
                                                   style: const TextStyle(
-                                                    fontSize: 17,
+                                                    fontSize: 16,
                                                     fontWeight: FontWeight.w500,
                                                     fontFamily: 'Open Sans',
                                                     color: Colors.white,
                                                   ),
+                                                  overflow: TextOverflow.ellipsis,
                                                 ),
-                                                GestureDetector(
-                                                  onTap: () async {
-                                                    final actions = homeProvider.journalDetails?.journals?.action;
-                                                    final actionId = actions != null && actions.isNotEmpty ? actions.first.actionId : null;
-
-                                                    if (actionId != null) {
-                                                      await mentalStrengthEditProvider.fetchActionDetails(actionId: actionId);
-                                                      debugPrint("✅ Fetched action details for ID: $actionId");
-                                                    } else {
-                                                      debugPrint("⚠️ No valid actionId found.");
-                                                    }
-
-                                                    if(mentalStrengthEditProvider.actionDetailsStatus == 200){
-                                                      Navigator.push(
-                                                        context,
-                                                        PageRouteBuilder(
-                                                          pageBuilder: (_, __, ___) =>
-                                                          const ActionViewInParallelScreen(),
-                                                          transitionDuration:
-                                                          const Duration(seconds: 0),
-                                                        ),
-                                                      );
-                                                    }
-                                                  },
-                                                  child: CircleAvatar(
-                                                    radius:
-                                                    size.width * 0.04,
-                                                    backgroundColor:Colors.deepPurple,
-                                                    child: Icon(
-                                                      Icons
-                                                          .play_arrow,
-                                                      color: Colors.white,
-                                                      size: size.width *
-                                                          0.04,
-                                                    ),
-                                                  ),
+                                              ),
+                                              CircleAvatar(
+                                                radius: size.width * 0.04,
+                                                backgroundColor: Colors.deepPurple,
+                                                child: Icon(
+                                                  Icons.play_arrow,
+                                                  color: Colors.white,
+                                                  size: size.width * 0.04,
                                                 ),
-                                              ],
-                                            ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
 
-                                                                      ),
-                                      ),
-                                    ),
                                 const SizedBox(height: 10),
                               ],
                             ):

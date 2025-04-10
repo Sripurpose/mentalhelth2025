@@ -164,6 +164,7 @@ class _NumuMentalStrengthAddEditPageState
       mentalStrengthEditProvider.selectedLatitude = "";
       mentalStrengthEditProvider.selectedLocationName = "";
 
+
       _isTokenExpired();
     });
   }
@@ -915,12 +916,11 @@ class _NumuMentalStrengthAddEditPageState
             height: size.height * 0.04,
           ),
           SizedBox(
-            height: mentalStrengthEditProvider.actionList.length *
-                size.height *
-                0.060,
+            height: size.height * 0.40,
             width: size.width * 0.80,
             child: ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              physics: const BouncingScrollPhysics(), // Or ScrollPhysics() for default
               itemCount: mentalStrengthEditProvider.actionList.length,
               itemBuilder: (context, index) {
                 return Container(
@@ -932,31 +932,24 @@ class _NumuMentalStrengthAddEditPageState
                     left: 5,
                     right: 5,
                   ),
-                  margin: const EdgeInsets.only(
-                    bottom: 4,
-                  ),
+                  margin: const EdgeInsets.only(bottom: 4),
                   decoration: BoxDecoration(
                     color: ColorsContent.newThemeColor,
-                    borderRadius: BorderRadius.circular(8), // Makes it circular
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(5.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        // Delete Button
                         GestureDetector(
                           onTap: () {
                             customPopup(
                               context: context,
                               onPressedDelete: () async {
-                                mentalStrengthEditProvider
-                                    .clearActionListSelected(
-                                  index: index,
-                                );
+                                mentalStrengthEditProvider.clearActionListSelected(index: index);
                                 Navigator.of(context).pop();
-
-                                // Close the bottom sheet after deleting
-                                //  Navigator.of(context).pop();  // This will close the galleryBottomSheet as well
                               },
                               yes: "Yes",
                               title: 'Do you Need Delete ?',
@@ -973,14 +966,13 @@ class _NumuMentalStrengthAddEditPageState
                             ),
                           ),
                         ),
+                        // Title
                         SizedBox(
                           width: size.width * 0.45,
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
-                            // Enable horizontal scrolling
                             child: Text(
-                              mentalStrengthEditProvider.actionList[index].title
-                                  .toString(),
+                              mentalStrengthEditProvider.actionList[index].title.toString(),
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                 color: Colors.white,
@@ -989,20 +981,16 @@ class _NumuMentalStrengthAddEditPageState
                                 fontFamily: 'OpenSans',
                               ),
                               overflow: TextOverflow.ellipsis,
-                              // Add this line if you want to truncate long text
-                              maxLines:
-                                  1, // Limit to 1 line for horizontal scrolling
+                              maxLines: 1,
                             ),
                           ),
                         ),
+                        // Play Button
                         GestureDetector(
                           onTap: () async {
-                            mentalStrengthEditProvider
-                                .openActionFullViewFunction();
+                            mentalStrengthEditProvider.openActionFullViewFunction();
                             await mentalStrengthEditProvider.fetchActionDetails(
-                              actionId: mentalStrengthEditProvider
-                                  .actionList[index].id
-                                  .toString(),
+                              actionId: mentalStrengthEditProvider.actionList[index].id.toString(),
                             );
                           },
                           child: CircleAvatar(
@@ -1021,7 +1009,8 @@ class _NumuMentalStrengthAddEditPageState
                 );
               },
             ),
-          ),
+          )
+
         ],
       ),
     );

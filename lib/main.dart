@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart'; // Import for Crashlytics
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -26,6 +27,7 @@ import 'package:mentalhelth/utils/core/constants.dart';
 import 'package:mentalhelth/utils/core/firebase_api.dart';
 import 'package:mentalhelth/utils/core/local_notification.dart';
 import 'package:mentalhelth/utils/core/url_constant.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'screens/actions_screen/provider/my_action_provider.dart';
@@ -334,10 +336,13 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       home: isBaseUrlReady
           ? const SplashScreen() // Navigate to SplashScreen if baseUrl is ready
-          : const ConnectivityWidget(
+          :  ConnectivityWidget(
             child: Scaffold(
                     body: Center(
-            child: CircularProgressIndicator(), // Show a loader while waiting
+            child: CupertinoActivityIndicator(
+              color: ColorsContent.newThemeColor,
+              radius: 15,
+            )// Show a loader while waiting
                     ),
                   ),
           ),

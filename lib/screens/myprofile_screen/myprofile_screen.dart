@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
@@ -120,9 +121,15 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                     child: Consumer2<EditProfileProvider, PhoneSignInProvider>(
                                       builder: (context, editProfileProvider, phoneSignInProvider, _) {
                                         return editProfileProvider.getProfileLoading
-                                            ? const Center(child: CircularProgressIndicator())
+                                            ? Center(child: CupertinoActivityIndicator(
+                                          color: ColorsContent.newThemeColor,
+                                          radius: 15,
+                                        ))
                                             : editProfileProvider.getProfileModel == null
-                                            ? const Center(child: CircularProgressIndicator())
+                                            ? Center(child: CupertinoActivityIndicator(
+                                          color: ColorsContent.newThemeColor,
+                                          radius: 15,
+                                        ))
                                             : SingleChildScrollView(
                                           child: Column(
                                             children: [

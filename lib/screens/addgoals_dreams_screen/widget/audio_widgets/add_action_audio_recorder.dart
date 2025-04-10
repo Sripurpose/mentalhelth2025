@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/flutter_sound.dart';
@@ -139,43 +140,22 @@ class _AudioRecorderAddGoalsState extends State<AudioRecorderAddGoals> {
 
   Future<void> initRecorderIOs() async {
     try {
-
-      // Check if the platform is not web
       if (!kIsWeb) {
-        await Permission.microphone.request();
         var microphoneStatus = await Permission.microphone.status;
 
-        // If the permission is denied, request it
         if (microphoneStatus != PermissionStatus.granted) {
-          if (microphoneStatus == PermissionStatus.permanentlyDenied) {
-            return; // Exit the method
-          } else {
-            // Request microphone permission
-            microphoneStatus = await Permission.microphone.request();
-          }
-        }
-      }
-      var storageStatus = await Permission.storage.status;
-      if (storageStatus != PermissionStatus.granted) {
-        if (storageStatus == PermissionStatus.permanentlyDenied) {
-          await _showPermissionDialog(
-            "Storage Permission Denied",
-            "Unable to save recordings. Please enable storage permission in settings.",
-            onSettingsPressed: () async {
-              await openAppSettings(); // Direct user to app settings
-            },
-          );
-          return; // Exit the method
-        } else {
-          storageStatus = await Permission.storage.request();
-        }
+          microphoneStatus = await Permission.microphone.request();
 
-        if (storageStatus != PermissionStatus.granted) {
-          await _showPermissionDialog(
-            "Storage Permission Denied",
-            "Unable to save recordings. Please enable storage permission in settings.",
-          );
-          return; // Exit the method
+          if (microphoneStatus != PermissionStatus.granted) {
+            await _showPermissionDialog(
+              "Microphone Permission Denied",
+              "Unable to record audio. Please enable microphone permission in settings.",
+              onSettingsPressed: () async {
+                await openAppSettings();
+              },
+            );
+            return; // 🚫 Stop further execution if not granted
+          }
         }
       }
 
@@ -224,21 +204,41 @@ class _AudioRecorderAddGoalsState extends State<AudioRecorderAddGoals> {
     }
   }
 
-  Future<void> _showPermissionDialog(String title, String message, {VoidCallback? onSettingsPressed}) async {
-    return showDialog(
+  Future<void> _showPermissionDialog(
+      String title,
+      String message, {
+        VoidCallback? onSettingsPressed,
+      }) async
+  {
+    return showCupertinoDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (context) => CupertinoAlertDialog(
         title: Text(title),
-        content: Text(message),
+        content: Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Text(message),
+        ),
         actions: [
           if (onSettingsPressed != null)
-            TextButton(
+            CupertinoDialogAction(
               onPressed: onSettingsPressed,
-              child: Text("Settings"),
+              isDefaultAction: true,
+              child:  Text("Settings",style:  TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                fontFamily: 'Open Sans',
+                color:ColorsContent.newThemeColor,
+              ),),
             ),
-          TextButton(
+          CupertinoDialogAction(
             onPressed: () => Navigator.of(context).pop(),
-            child: Text("OK"),
+            isDestructiveAction: true,
+            child:  Text("OK",style:  TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              fontFamily: 'Open Sans',
+              color:ColorsContent.newThemeColor,
+            ),),
           ),
         ],
       ),
@@ -270,27 +270,77 @@ class _AudioRecorderAddGoalsState extends State<AudioRecorderAddGoals> {
     return Consumer<AdDreamsGoalsProvider>(
         builder: (context, adDreamsGoalsProvider, _) {
       return GestureDetector(
+
         onTap: () async {
           adDreamsGoalsProvider.selectedMedia(0);
+
           if (adDreamsGoalsProvider.mediaSelected == 0) {
             if (recorder.isRecording) {
-              if(Platform.isAndroid){
+              if (Platform.isAndroid) {
                 await stopAndroid();
-              }else{
+              } else {
                 await stopIos();
               }
-
             } else {
-              if(Platform.isAndroid){
-                await recordAndroid();
-              }else{
-                await recordIos();
-              }
+              if (Platform.isAndroid) {
+                var micStatus = await Permission.microphone.status;
 
+                if (!micStatus.isGranted) {
+                  micStatus = await Permission.microphone.request();
+                }
+
+                if (micStatus.isGranted) {
+                  await recordAndroid();
+                } else {
+                  Logger().w("Microphone permission denied on Android.");
+                }
+              } else {
+                var micStatus = await Permission.microphone.status;
+
+                if (micStatus != PermissionStatus.granted) {
+                  micStatus = await Permission.microphone.request();
+                }
+
+                if (micStatus == PermissionStatus.granted) {
+                  await recordIos();
+                } else if (micStatus == PermissionStatus.permanentlyDenied) {
+                  await _showPermissionDialog(
+                    "Microphone Permission Required",
+                    "Please enable microphone access in Settings to use the recording feature.",
+                    onSettingsPressed: () async {
+                      await openAppSettings();
+                    },
+                  );
+                } else {
+                  Logger().w("Microphone permission denied on iOS.");
+                }
+              }
             }
+
             setState(() {});
           }
         },
+        // onTap: () async {
+        //   adDreamsGoalsProvider.selectedMedia(0);
+        //   if (adDreamsGoalsProvider.mediaSelected == 0) {
+        //     if (recorder.isRecording) {
+        //       if(Platform.isAndroid){
+        //         await stopAndroid();
+        //       }else{
+        //         await stopIos();
+        //       }
+        //
+        //     } else {
+        //       if(Platform.isAndroid){
+        //         await recordAndroid();
+        //       }else{
+        //         await recordIos();
+        //       }
+        //
+        //     }
+        //     setState(() {});
+        //   }
+        // },
         child: Container(
           height: size.height * 0.08,
           width: size.height * 0.08,

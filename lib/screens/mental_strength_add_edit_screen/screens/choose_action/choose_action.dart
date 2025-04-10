@@ -73,231 +73,228 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return tokenStatus == false ?
-    Container(
-    margin: EdgeInsets.only(
-      top: size.height * 0.04,
-    ),
-    decoration: BoxDecoration(
-      color: ColorsContent.homeBackGroundColor,
-      borderRadius: const BorderRadius.only(
-        topRight: Radius.circular(
-          25,
-        ),
-        topLeft: Radius.circular(
-          25,
-        ),
-      ),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.5), // Shadow color
-          spreadRadius: 5, // Spread radius
-          blurRadius: 7, // Blur radius
-          offset: const Offset(0, 3), // Offset
-        ),
-      ],
-    ),
-    child: Column(
+
+    return tokenStatus == false
+        ? Stack(
       children: [
-        SingleChildScrollView(
+        Container(
+          margin: EdgeInsets.only(top: size.height * 0.04),
+          decoration: BoxDecoration(
+            color: ColorsContent.homeBackGroundColor,
+            borderRadius: const BorderRadius.only(
+              topRight: Radius.circular(25),
+              topLeft: Radius.circular(25),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 5,
+                blurRadius: 7,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
           child: Column(
-            mainAxisSize: MainAxisSize.max,
             children: [
-              SizedBox(
-                height: size.height * 0.01,
-              ),
-              Consumer<MentalStrengthEditProvider>(
-                  builder: (context, mentalStrengthEditProvider, _) {
-                return
-
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      width: size.width * 0.2,
-                    ),
-                    SizedBox(
-                      width: size.width * 0.2,
-                      child: Column(
-                        children: [
-                          SvgPicture.asset(
-                            ImageConstant.dotDot,
-                            color: ColorsContent.greyColor,
-                            height: 8,
-                            width: 8,
-                            fit: BoxFit.contain,
-                          ),
-                          SvgPicture.asset(
-                            ImageConstant.dotDot,
-                            color: ColorsContent.greyColor,
-                            height: 8,
-                            width: 8,
-                            fit: BoxFit.contain,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child:                 GestureDetector(
-                        onTap: () {
-                          mentalStrengthEditProvider.openChooseActionFunction();
-                        },
-                        child: CustomImageView(
-                          imagePath: ImageConstant.imgClosePrimaryNew,
-                          height: 40,
-                          width: 40,
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              }),
-              // SizedBox(
-              //   height: size.height * 0.01,
-              // ),
-              Padding(
-                padding: EdgeInsets.all(
-                  size.width * 0.02,
-                ),
-                child: Consumer<MentalStrengthEditProvider>(
-                    builder: (context, mentalStrengthEditProvider, _) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.only(bottom: 100), // add padding for the button
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          mentalStrengthEditProvider.getListGoalActionsModel != null &&
-                              mentalStrengthEditProvider.getListGoalActionsModel!.actions != null &&
-                              mentalStrengthEditProvider.getListGoalActionsModel!.actions!.isNotEmpty
-                              ? const Text(
-                            "Choose Actions",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ):
-                              SizedBox(),
-                          SizedBox(
-                            height: size.height * 0.003,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "Goal: ",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
+                      const SizedBox(height: 8),
+                      Consumer<MentalStrengthEditProvider>(
+                          builder: (context, mentalStrengthEditProvider, _) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(width: size.width * 0.2),
+                                SizedBox(
+                                  width: size.width * 0.2,
+                                  child: Column(
+                                    children: [
+                                      SvgPicture.asset(
+                                        ImageConstant.dotDot,
+                                        color: ColorsContent.greyColor,
+                                        height: 8,
+                                        width: 8,
+                                        fit: BoxFit.contain,
+                                      ),
+                                      SvgPicture.asset(
+                                        ImageConstant.dotDot,
+                                        color: ColorsContent.greyColor,
+                                        height: 8,
+                                        width: 8,
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                  width:size.width * 0.40,
-                                  child: SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                                      child: Text(widget.goal.title.toString(),
-                                        textAlign: TextAlign.center,
-                                        overflow: TextOverflow.ellipsis, // Add this line if you want to truncate long text
-                                        maxLines: 1, // Limit to 1 line for ho
-                                      ),)),
-                            ],
-                          ),
-                        ],
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      mentalStrengthEditProvider.openChooseActionFunction();
+                                    },
+                                    child: CustomImageView(
+                                      imagePath: ImageConstant.imgClosePrimaryNew,
+                                      height: 40,
+                                      width: 40,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }),
+                      Padding(
+                        padding: EdgeInsets.all(size.width * 0.02),
+                        child: Consumer<MentalStrengthEditProvider>(
+                            builder: (context, mentalStrengthEditProvider, _) {
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      if (mentalStrengthEditProvider.getListGoalActionsModel != null &&
+                                          mentalStrengthEditProvider.getListGoalActionsModel!.actions != null &&
+                                          mentalStrengthEditProvider
+                                              .getListGoalActionsModel!.actions!.isNotEmpty)
+                                        const Text(
+                                          "Choose Actions",
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      SizedBox(height: size.height * 0.003),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          const Text(
+                                            "Goal: ",
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: size.width * 0.4,
+                                            child: SingleChildScrollView(
+                                              scrollDirection: Axis.horizontal,
+                                              child: Text(
+                                                widget.goal.title.toString(),
+                                                textAlign: TextAlign.center,
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  if (mentalStrengthEditProvider
+                                      .getListGoalActionsModel!.actions!.isNotEmpty)
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        mentalStrengthEditProvider.openChooseActionFunction();
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.black,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        "Proceed",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              );
+                            }),
                       ),
-                      mentalStrengthEditProvider
-                          .getListGoalActionsModel!.actions!.isEmpty
-                          ? const SizedBox()
-                          : ElevatedButton(
-                              onPressed: () {
-                                mentalStrengthEditProvider
-                                    .openChooseActionFunction();
+                      const SizedBox(height: 10),
+                      Consumer<MentalStrengthEditProvider>(
+                        builder: (context, mentalStrengthEditProvider, _) {
+                          final actionsList =
+                              mentalStrengthEditProvider.getListGoalActionsModel?.actions;
+
+                          if (actionsList == null) return const SizedBox();
+
+                          if (actionsList.isEmpty) {
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(ImageConstant.noDataNumu),
+                                const Text(
+                                  "No data found",
+                                  style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(height: 10),
+                                const Text(
+                                  "Check back later",
+                                  style: TextStyle(fontSize: 18, color: Colors.black),
+                                ),
+                              ],
+                            );
+                          }
+
+                          return SizedBox(
+                            height: size.height * 0.44,
+                            width: size.width * 0.8,
+                            child: ListView.separated(
+                              separatorBuilder: (context, index) => const SizedBox(height: 3),
+                              itemCount: actionsList.length +
+                                  (mentalStrengthEditProvider.getListGoalActionsModelLoading ? 1 : 0),
+                              itemBuilder: (context, index) {
+                                if (index < actionsList.length) {
+                                  return GestureDetector(
+                                    onTap: () {},
+                                    child: listActionList(
+                                      size: size,
+                                      action: actionsList,
+                                      index: index,
+                                    ),
+                                  );
+                                } else if (mentalStrengthEditProvider.getListGoalActionsModelLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+                                return const SizedBox.shrink();
                               },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.black,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                              child: const Text(
-                                "Proceed",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
                             ),
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 20),
                     ],
-                  );
-                }),
+                  ),
+                ),
               ),
-              SizedBox(
-                height: size.height * 0.01,
-              ),
-              Consumer<MentalStrengthEditProvider>(
-                builder: (context, mentalStrengthEditProvider, _) {
-                  final actionsList = mentalStrengthEditProvider.getListGoalActionsModel?.actions;
+            ],
+          ),
+        ),
 
-                  if (actionsList == null) {
-                    return const SizedBox(); // If the data model is null, return nothing
-                  }
-
-                  if (actionsList.isEmpty) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          ImageConstant.noDataNumu,
-                        ),
-                        const Text("No data found",
-                            style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold)),
-                        const SizedBox(height: 10),
-                        const Text("Check back later",
-                            style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.normal)),
-                      ],
-                    );
-                  }
-
-                  return SizedBox(
-                    height: size.height * 0.44,
-                    width: size.width * 0.8,
-                    child: ListView.separated(
-                      separatorBuilder: (context, index) => const SizedBox(height: 3),
-                      itemCount: actionsList.length +
-                          (mentalStrengthEditProvider.getListGoalActionsModelLoading ? 1 : 0),
-                      itemBuilder: (context, index) {
-                        if (index < actionsList.length) {
-                          return GestureDetector(
-                            onTap: () {},
-                            child: listActionList(
-                              size: size,
-                              action: actionsList,
-                              index: index,
-                            ),
-                          );
-                        } else if (mentalStrengthEditProvider.getListGoalActionsModelLoading) {
-                          return const Center(
-                            child: CircularProgressIndicator(), // Show loading indicator
-                          );
-                        }
-                        return null; // Ensures all cases are handled
-                      },
-                    ),
-                  );
-                },
-              ),
-
-              SizedBox(
-                height: size.height * 0.05,
-              ),
-              Consumer<MentalStrengthEditProvider>(
-                  builder: (context, mentalStrengthEditProvider, _) {
+        // Floating Create Action Button
+        Positioned(
+          bottom: 20,
+          left: 0,
+          right: 0,
+          child: Center(
+            child: Consumer<MentalStrengthEditProvider>(
+              builder: (context, mentalStrengthEditProvider, _) {
                 return ElevatedButton(
                   onPressed: () {
                     mentalStrengthEditProvider.openAddActionFunction();
                   },
                   style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 14),
                     backgroundColor: ColorsContent.newThemeColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
@@ -307,18 +304,269 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
                     "Create New Action",
                     style: TextStyle(
                       color: Colors.white,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 );
-              }),
-            ],
+              },
+            ),
           ),
         ),
       ],
-    ),
-        ):
-    const TokenExpireScreen();
+    )
+        : const TokenExpireScreen();
   }
+
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   Size size = MediaQuery.of(context).size;
+  //   return tokenStatus == false ?
+  //   Container(
+  //   margin: EdgeInsets.only(
+  //     top: size.height * 0.04,
+  //   ),
+  //   decoration: BoxDecoration(
+  //     color: ColorsContent.homeBackGroundColor,
+  //     borderRadius: const BorderRadius.only(
+  //       topRight: Radius.circular(
+  //         25,
+  //       ),
+  //       topLeft: Radius.circular(
+  //         25,
+  //       ),
+  //     ),
+  //     boxShadow: [
+  //       BoxShadow(
+  //         color: Colors.grey.withOpacity(0.5), // Shadow color
+  //         spreadRadius: 5, // Spread radius
+  //         blurRadius: 7, // Blur radius
+  //         offset: const Offset(0, 3), // Offset
+  //       ),
+  //     ],
+  //   ),
+  //   child: Column(
+  //     children: [
+  //       SingleChildScrollView(
+  //         child: Column(
+  //           mainAxisSize: MainAxisSize.max,
+  //           children: [
+  //             SizedBox(
+  //               height: size.height * 0.01,
+  //             ),
+  //             Consumer<MentalStrengthEditProvider>(
+  //                 builder: (context, mentalStrengthEditProvider, _) {
+  //               return
+  //
+  //
+  //               Row(
+  //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                 children: [
+  //                   SizedBox(
+  //                     width: size.width * 0.2,
+  //                   ),
+  //                   SizedBox(
+  //                     width: size.width * 0.2,
+  //                     child: Column(
+  //                       children: [
+  //                         SvgPicture.asset(
+  //                           ImageConstant.dotDot,
+  //                           color: ColorsContent.greyColor,
+  //                           height: 8,
+  //                           width: 8,
+  //                           fit: BoxFit.contain,
+  //                         ),
+  //                         SvgPicture.asset(
+  //                           ImageConstant.dotDot,
+  //                           color: ColorsContent.greyColor,
+  //                           height: 8,
+  //                           width: 8,
+  //                           fit: BoxFit.contain,
+  //                         ),
+  //                       ],
+  //                     ),
+  //                   ),
+  //                   Padding(
+  //                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
+  //                     child:                 GestureDetector(
+  //                       onTap: () {
+  //                         mentalStrengthEditProvider.openChooseActionFunction();
+  //                       },
+  //                       child: CustomImageView(
+  //                         imagePath: ImageConstant.imgClosePrimaryNew,
+  //                         height: 40,
+  //                         width: 40,
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ],
+  //               );
+  //             }),
+  //             // SizedBox(
+  //             //   height: size.height * 0.01,
+  //             // ),
+  //             Padding(
+  //               padding: EdgeInsets.all(
+  //                 size.width * 0.02,
+  //               ),
+  //               child: Consumer<MentalStrengthEditProvider>(
+  //                   builder: (context, mentalStrengthEditProvider, _) {
+  //                 return Row(
+  //                   mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //                   children: [
+  //                     Column(
+  //                       crossAxisAlignment: CrossAxisAlignment.start,
+  //                       children: [
+  //                         mentalStrengthEditProvider.getListGoalActionsModel != null &&
+  //                             mentalStrengthEditProvider.getListGoalActionsModel!.actions != null &&
+  //                             mentalStrengthEditProvider.getListGoalActionsModel!.actions!.isNotEmpty
+  //                             ? const Text(
+  //                           "Choose Actions",
+  //                           style: TextStyle(
+  //                             fontSize: 18,
+  //                             fontWeight: FontWeight.bold,
+  //                           ),
+  //                         ):
+  //                             SizedBox(),
+  //                         SizedBox(
+  //                           height: size.height * 0.003,
+  //                         ),
+  //                         Row(
+  //                           mainAxisAlignment: MainAxisAlignment.start,
+  //                           children: [
+  //                             const Text(
+  //                               "Goal: ",
+  //                               style: TextStyle(
+  //                                 fontSize: 18,
+  //                                 fontWeight: FontWeight.bold,
+  //                               ),
+  //                             ),
+  //                             SizedBox(
+  //                                 width:size.width * 0.40,
+  //                                 child: SingleChildScrollView(
+  //                                     scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+  //                                     child: Text(widget.goal.title.toString(),
+  //                                       textAlign: TextAlign.center,
+  //                                       overflow: TextOverflow.ellipsis, // Add this line if you want to truncate long text
+  //                                       maxLines: 1, // Limit to 1 line for ho
+  //                                     ),)),
+  //                           ],
+  //                         ),
+  //                       ],
+  //                     ),
+  //                     mentalStrengthEditProvider
+  //                         .getListGoalActionsModel!.actions!.isEmpty
+  //                         ? const SizedBox()
+  //                         : ElevatedButton(
+  //                             onPressed: () {
+  //                               mentalStrengthEditProvider
+  //                                   .openChooseActionFunction();
+  //                             },
+  //                             style: ElevatedButton.styleFrom(
+  //                               backgroundColor: Colors.black,
+  //                               shape: RoundedRectangleBorder(
+  //                                 borderRadius: BorderRadius.circular(10),
+  //                               ),
+  //                             ),
+  //                             child: const Text(
+  //                               "Proceed",
+  //                               style: TextStyle(
+  //                                 color: Colors.white,
+  //                                 fontWeight: FontWeight.bold,
+  //                               ),
+  //                             ),
+  //                           ),
+  //                   ],
+  //                 );
+  //               }),
+  //             ),
+  //             SizedBox(
+  //               height: size.height * 0.01,
+  //             ),
+  //             Consumer<MentalStrengthEditProvider>(
+  //               builder: (context, mentalStrengthEditProvider, _) {
+  //                 final actionsList = mentalStrengthEditProvider.getListGoalActionsModel?.actions;
+  //
+  //                 if (actionsList == null) {
+  //                   return const SizedBox(); // If the data model is null, return nothing
+  //                 }
+  //
+  //                 if (actionsList.isEmpty) {
+  //                   return Column(
+  //                     mainAxisAlignment: MainAxisAlignment.center,
+  //                     children: [
+  //                       SvgPicture.asset(
+  //                         ImageConstant.noDataNumu,
+  //                       ),
+  //                       const Text("No data found",
+  //                           style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold)),
+  //                       const SizedBox(height: 10),
+  //                       const Text("Check back later",
+  //                           style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.normal)),
+  //                     ],
+  //                   );
+  //                 }
+  //
+  //                 return SizedBox(
+  //                   height: size.height * 0.44,
+  //                   width: size.width * 0.8,
+  //                   child: ListView.separated(
+  //                     separatorBuilder: (context, index) => const SizedBox(height: 3),
+  //                     itemCount: actionsList.length +
+  //                         (mentalStrengthEditProvider.getListGoalActionsModelLoading ? 1 : 0),
+  //                     itemBuilder: (context, index) {
+  //                       if (index < actionsList.length) {
+  //                         return GestureDetector(
+  //                           onTap: () {},
+  //                           child: listActionList(
+  //                             size: size,
+  //                             action: actionsList,
+  //                             index: index,
+  //                           ),
+  //                         );
+  //                       } else if (mentalStrengthEditProvider.getListGoalActionsModelLoading) {
+  //                         return const Center(
+  //                           child: CircularProgressIndicator(), // Show loading indicator
+  //                         );
+  //                       }
+  //                       return null; // Ensures all cases are handled
+  //                     },
+  //                   ),
+  //                 );
+  //               },
+  //             ),
+  //
+  //             SizedBox(
+  //               height: size.height * 0.05,
+  //             ),
+  //             Consumer<MentalStrengthEditProvider>(
+  //                 builder: (context, mentalStrengthEditProvider, _) {
+  //               return ElevatedButton(
+  //                 onPressed: () {
+  //                   mentalStrengthEditProvider.openAddActionFunction();
+  //                 },
+  //                 style: ElevatedButton.styleFrom(
+  //                   backgroundColor: ColorsContent.newThemeColor,
+  //                   shape: RoundedRectangleBorder(
+  //                     borderRadius: BorderRadius.circular(20),
+  //                   ),
+  //                 ),
+  //                 child: const Text(
+  //                   "Create New Action",
+  //                   style: TextStyle(
+  //                     color: Colors.white,
+  //                   ),
+  //                 ),
+  //               );
+  //             }),
+  //           ],
+  //         ),
+  //       ),
+  //     ],
+  //   ),
+  //       ):
+  //   const TokenExpireScreen();
+  // }
 
   Widget listActionList({
     required Size size,

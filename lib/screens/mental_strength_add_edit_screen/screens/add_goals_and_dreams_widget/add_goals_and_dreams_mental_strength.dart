@@ -490,11 +490,12 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
   Widget _buildAddActionsButton(BuildContext context) {
     return CustomElevatedButton(
       onPressed: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => const AddactionsScreen(goalId: '',),
-          ),
-        );
+        mentalStrengthEditProvider.openAddActionFunction();
+        // Navigator.of(context).push(
+        //   MaterialPageRoute(
+        //     builder: (context) => const AddactionsScreen(goalId: '',),
+        //   ),
+        // );
       },
       height: 40,
       text: "Add Action",

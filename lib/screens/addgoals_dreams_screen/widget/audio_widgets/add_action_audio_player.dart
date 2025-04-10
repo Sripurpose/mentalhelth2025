@@ -7,6 +7,7 @@ import 'package:mentalhelth/utils/theme/app_decoration.dart';
 import 'package:mentalhelth/widgets/custom_image_view.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../utils/theme/colors.dart';
 import '../../provider/ad_goals_dreams_provider.dart';
 
 class AddGoalsAndDreamsAudioPlayer extends StatefulWidget {
@@ -94,8 +95,9 @@ class _AddGoalsAndDreamsAudioPlayerState
                   bottom: 10,
                   top: 10,
                 ),
-                decoration: AppDecoration.fillBlue300.copyWith(
-                  borderRadius: BorderRadiusStyle.roundedBorder10,
+                decoration: BoxDecoration(
+                  color: ColorsContent.newThemeColor,
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

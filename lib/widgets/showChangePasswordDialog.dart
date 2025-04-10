@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -53,7 +55,7 @@ void showChangePasswordDialog(BuildContext context) {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  Divider(),
+                  const Divider(),
                   const SizedBox(height: 20),
                   _buildPasswordField("Current Password", currentPasswordController, _obscureCurrent, () {
                     setState(() => _obscureCurrent = !_obscureCurrent);
@@ -172,5 +174,4 @@ Widget _buildPasswordField(
     ],
   );
 }
-
 

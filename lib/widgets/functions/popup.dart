@@ -105,8 +105,8 @@ void customPopupNew({
               children: [
                 Text(content),
                 if (isLoading) // Show loading indicator if loading
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16.0),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 16.0),
                     child: Center(child: CupertinoActivityIndicator()),
                   ),
               ],
@@ -119,7 +119,7 @@ void customPopupNew({
                 },
                 child: Text(
                   cancel ?? 'Cancel',
-                  style: const TextStyle(color: Colors.blue),
+                  style:  TextStyle(color: ColorsContent.newThemeColor),
                 ),
               ),
               CupertinoDialogAction(
@@ -140,7 +140,7 @@ void customPopupNew({
                 },
                 child: Text(
                   yes ?? 'Delete',
-                  style: const TextStyle(color: Colors.blue),
+                  style: TextStyle(color:  ColorsContent.newThemeColor),
                 ),
               ),
             ],

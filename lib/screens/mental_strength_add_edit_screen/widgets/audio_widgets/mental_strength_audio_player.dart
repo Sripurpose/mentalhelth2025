@@ -11,6 +11,7 @@ import 'package:mentalhelth/utils/theme/app_decoration.dart';
 import 'package:mentalhelth/widgets/custom_image_view.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../utils/theme/colors.dart';
 import '../../../../widgets/functions/popup.dart';
 import '../../../../widgets/functions/snack_bar.dart';
 
@@ -144,8 +145,9 @@ class _MentalStrengthAudioPlayerState extends State<MentalStrengthAudioPlayer> {
             alignment: Alignment.bottomCenter,
             child: Container(
               padding: const EdgeInsets.all(10),
-              decoration: AppDecoration.fillBlue300.copyWith(
-                borderRadius: BorderRadiusStyle.roundedBorder10,
+              decoration: BoxDecoration(
+                color: ColorsContent.newThemeColor,
+                borderRadius: BorderRadius.circular(8),
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),

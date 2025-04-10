@@ -754,33 +754,7 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
       return CustomElevatedButton(
         loading: addActionsProvider.saveAddActionsLoading,
         onPressed: () async {
-          // if (addActionsProvider.titleEditTextController.text.isNotEmpty &&
-          //     addActionsProvider
-          //         .descriptionEditTextController.text.isNotEmpty) {
-          //   await addActionsProvider.saveGemFunction(
-          //     context,
-          //     title: addActionsProvider.titleEditTextController.text,
-          //     details: addActionsProvider.descriptionEditTextController.text,
-          //     mediaName: addActionsProvider.addMediaUploadResponseList,
-          //     locationName: addActionsProvider.selectedLocationName,
-          //     locationLatitude: addActionsProvider.selectedLatitude,
-          //     locationLongitude: addActionsProvider.locationLongitude,
-          //     locationAddress: addActionsProvider.selectedLocationAddress,
-          //     goalId: goalId,
-          //   );
-          //   adDreamsGoalsProvider.getAddActionIdAndName(
-          //     value: addActionsProvider.goalModelIdName!,
-          //   );
-          //   mentalStrengthEditProvider.fetchGoalActions(
-          //     goalId: goalId,
-          //   );
-          //   mentalStrengthEditProvider.openAddActionFunction();
-          // } else {
-          //   showCustomSnackBar(
-          //     context: context,
-          //     message: "Please fill in all the fields",
-          //   );
-          // }
+
           if (addActionsProvider.titleEditTextController.text.isNotEmpty &&
               addActionsProvider
                   .descriptionEditTextController.text.isNotEmpty) {
