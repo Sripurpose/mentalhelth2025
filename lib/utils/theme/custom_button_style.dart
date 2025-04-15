@@ -49,7 +49,7 @@ class CustomButtonStyles {
       );
 
   static ButtonStyle get continueWithPhone => OutlinedButton.styleFrom(
-    backgroundColor: ColorsContent.signInGradientColorBlue,
+    backgroundColor: ColorsContent.signInGradientColorBlueNew,
     side: BorderSide(
       color: appTheme.gray50001,
       width: 0.4,

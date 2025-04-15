@@ -143,7 +143,7 @@ class _ScreenSignInState extends State<ScreenSignIn> {
       child: Scaffold(
         appBar: Platform.isIOS
             ? AppBar(
-          backgroundColor: ColorsContent.newThemeColor,
+          backgroundColor: ColorsContent.optimalStateColor,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios,color: Colors.white,),
             onPressed: () {
@@ -171,8 +171,8 @@ class _ScreenSignInState extends State<ScreenSignIn> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CustomImageView(
-                      imagePath: ImageConstant.imgNumuLogo,
-                      height: 80,
+                      imagePath: ImageConstant.newLogoNumu,
+                      height: 130,
                       width: 280,
                       color: Colors.white,
                     ),

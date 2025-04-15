@@ -106,7 +106,7 @@ class _SplashScreenState extends State<SplashScreen> {
             30,
           ),
           child: SvgPicture.asset(
-            ImageConstant.imgNumuLogo,
+            ImageConstant.newLogoNumu,
           ),
         ),
       ),

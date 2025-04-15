@@ -51,8 +51,7 @@ class _SplashScreenState extends State<NewSplashScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Image.asset(
-                  _isFirstState ? ImageConstant.dummyImageSplash1 : ImageConstant.dummyImageSplash2, // Change image dynamically
-
+                  _isFirstState ? ImageConstant.numuNewSplash1 : ImageConstant.numuNewSplash2, // Change image dynamically
                 ),
                 const SizedBox(height: 40),
 

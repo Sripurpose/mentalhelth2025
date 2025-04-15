@@ -36,7 +36,7 @@ class VerifyOtpPhoneScreen extends StatelessWidget {
             decoration: BoxDecoration(
                 color: ColorsContent.homeBackGroundColor,
                 image: DecorationImage(
-                    image: AssetImage(ImageConstant.gradientBackground),
+                    image: AssetImage(ImageConstant.gradientBackgroundNumu),
                     fit: BoxFit.cover)
             ),
             child: Container(
@@ -54,7 +54,7 @@ class VerifyOtpPhoneScreen extends StatelessWidget {
                       height: 34,
                     ),
                     CustomImageView(
-                        imagePath: ImageConstant.imgNumuLogo, height: 68, width: 280),
+                        imagePath: ImageConstant.newLogoNumu, height: 130, width: 280),
                     const SizedBox(
                       height: 50,
                     ),

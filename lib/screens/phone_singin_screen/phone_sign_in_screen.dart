@@ -54,7 +54,7 @@ class _PhoneSignInScreenState extends State<PhoneSignInScreen> {
             decoration: BoxDecoration(
               color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
               image: DecorationImage(
-                image: AssetImage(ImageConstant.gradientBackground),
+                image: AssetImage(ImageConstant.gradientBackgroundNumu),
                 fit: BoxFit.cover,
               ),
             ),
@@ -70,8 +70,8 @@ class _PhoneSignInScreenState extends State<PhoneSignInScreen> {
                     children: [
                       //const SizedBox(height: 33),
                       CustomImageView(
-                        imagePath: ImageConstant.imgNumuLogo,
-                        height: 80,
+                        imagePath: ImageConstant.newLogoNumu,
+                        height: 130,
                         width: 280,
                         color: Colors.white,
                       ),

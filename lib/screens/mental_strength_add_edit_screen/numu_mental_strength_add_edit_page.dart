@@ -163,6 +163,10 @@ class _NumuMentalStrengthAddEditPageState
       mentalStrengthEditProvider.selectedLocationAddress = "";
       mentalStrengthEditProvider.selectedLatitude = "";
       mentalStrengthEditProvider.selectedLocationName = "";
+      mentalStrengthEditProvider.goalsValue.title = "";
+      mentalStrengthEditProvider.goalsValue.id = null;
+      logger.i("mentalStrengthEditProvider.goalsValue.id${mentalStrengthEditProvider.goalsValue.id}");
+
 
 
       _isTokenExpired();

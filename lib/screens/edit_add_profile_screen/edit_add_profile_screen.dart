@@ -641,7 +641,7 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 10, right: 1),
                 child: CustomTextFormField(
-                  fillColor: Colors.white,
+                  fillColor: editProfileProvider.phoneIsValid ? Colors.grey : Colors.white,
                   filled: true,
                   isValids: editProfileProvider.phoneIsValid,
                   textInputType: TextInputType.phone,
@@ -684,7 +684,7 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
           padding: const EdgeInsets.only(left: 10, right: 1),
           child: Form(
             child: CustomTextFormField(
-              fillColor: Colors.white,
+              fillColor: editProfileProvider.getProfileModel?.emailVerify == "1" ? Colors.grey:Colors.white,
               filled: true,
               hintStyle: const TextStyle(
                 color: Colors.black,

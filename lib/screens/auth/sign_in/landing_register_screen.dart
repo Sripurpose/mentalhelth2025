@@ -166,8 +166,8 @@ class _LandingRegisterScreenScreenState extends State<LandingRegisterScreenScree
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             CustomImageView(
-                              imagePath: ImageConstant.imgNumuLogo,
-                              height: 100,
+                              imagePath: ImageConstant.newLogoNumu,
+                              height: 130,
                               width: 280,
                               color: Colors.white,
                             ),

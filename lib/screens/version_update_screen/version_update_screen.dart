@@ -159,8 +159,8 @@ class _VersionUpdateCheckScreenState extends State<VersionUpdateCheckScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             CustomImageView(
-                              imagePath: ImageConstant.imgNumuLogo,
-                              height: 100,
+                              imagePath: ImageConstant.newLogoNumu,
+                              height: 130,
                               width: 280,
                               color: Colors.white,
                             ),

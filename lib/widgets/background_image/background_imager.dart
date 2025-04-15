@@ -72,7 +72,7 @@ Widget backGroundImagerGradient({
     decoration: BoxDecoration(
       image: DecorationImage(
         image: AssetImage(
-          ImageConstant.gradientBackground,
+          ImageConstant.gradientBackgroundNumu,
         ),
         fit: BoxFit.cover,
       ),
@@ -100,7 +100,7 @@ Widget landingScreenImager({
     decoration: BoxDecoration(
       image: DecorationImage(
         image: AssetImage(
-          ImageConstant.gradientBackground,
+          ImageConstant.gradientBackgroundNumu,
         ),
         fit: BoxFit.cover,
       ),

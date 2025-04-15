@@ -5,9 +5,12 @@ class ImageConstant {
   static String logo = 'assets/images/logo.svg';
   static String dummyImageSplash1 = 'assets/images/dummy_image_splash1.png';
   static String dummyImageSplash2 = 'assets/images/dummy_image_splash2.png';
+  static String numuNewSplash1 = 'assets/images/numu_new_splash1.png';
+  static String numuNewSplash2 = 'assets/images/numu_new_splash2.png';
   static String splashScreen1 = 'assets/images/splash_screen1.png';
   static String splashScreen2 = 'assets/images/splash_screen2.png';
   static String homeBannerNumu = 'assets/images/home_banner_numu.png';
+  static String homeBannerNumuNew = 'assets/images/home_banner_numu_new.png';
   static String menuBarSvg = 'assets/images/menu_bar.svg';
   static String splashNextIcon = 'assets/images/splash-next-icon.png';
   static String noData = '$imagePath/home/noData.gif';
@@ -44,8 +47,10 @@ class ImageConstant {
   static String imgGroup29 = '$imagePath/img_group_29.svg';
   static String imgGroup22 = '$imagePath/img_group_22.png';
   static String gradientBackground = '$imagePath/gradient_background.png';
+  static String gradientBackgroundNumu = '$imagePath/gradient_background_numu.png';
   static String imgLogo = '$imagePath/img_logo.svg';
   static String imgNumuLogo = '$imagePath/numu_new_logo.svg';
+  static String newLogoNumu = '$imagePath/new_logo_numu.svg';
 
   static String imgGroup193 = '$imagePath/img_group_193.png';
 
@@ -68,6 +73,7 @@ class ImageConstant {
   static String actionDatePickerNumu = '$imagePath/action_date_picker_numu.svg';
 
   static String imgClose = '$imagePath/img_close.svg';
+  static String imgCloseNumu = '$imagePath/img_close_numu.svg';
   static String imgFloatingIconBlue300 =
       '$imagePath/img_floating_icon_blue_300.svg';
 

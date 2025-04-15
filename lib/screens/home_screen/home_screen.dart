@@ -486,13 +486,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               mentalStrengthEditProvider.fetchEmotions();
                             },
                             child: Image.asset(
-                            ImageConstant.homeBannerNumu,
+                            ImageConstant.homeBannerNumuNew,
                               width: 400,
                               height: 200,
                             ),
                           ),
 
-                         homeProvider.chartViewModel == null?
+                          homeProvider.journalsModelList.isEmpty?
                              const SizedBox():
                           Align(
                             alignment: Alignment.centerLeft,
@@ -515,7 +515,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             radius: 15,
                           ))
                               :
-                          homeProvider.chartViewModel == null?
+                          homeProvider.journalsModelList.isEmpty == null?
                           const SizedBox():
                           // GestureDetector(
                           //   onTap: (){
@@ -738,7 +738,7 @@ class _HomeScreenState extends State<HomeScreen> {
       //   shimmerHeight: size.height * 0.07,
       // ) :
 
-      homeProvider.journalStatus == 404 ?
+      homeProvider.journalsModelList.isEmpty?
           const SizedBox():
            ListView.separated(
         physics: const NeverScrollableScrollPhysics(),

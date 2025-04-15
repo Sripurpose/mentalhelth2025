@@ -160,8 +160,8 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       CustomImageView(
-                        imagePath: ImageConstant.imgNumuLogo,
-                        height: 100,
+                        imagePath: ImageConstant.newLogoNumu,
+                        height: 130,
                         width: 280,
                         color: Colors.white,
                       ),

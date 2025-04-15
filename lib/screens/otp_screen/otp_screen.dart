@@ -10,6 +10,7 @@ import '../../utils/theme/custom_button_style.dart';
 import '../../utils/theme/custom_text_style.dart';
 import '../../utils/theme/theme_helper.dart';
 import '../../widgets/custom_image_view.dart';
+import '../../widgets/functions/snack_bar.dart';
 import '../no_internet/duplicate_screen.dart';
 import '../phone_singin_screen/provider/phone_sign_in_provider.dart';
 
@@ -46,7 +47,7 @@ class OtpScreen extends StatelessWidget {
             decoration: BoxDecoration(
                 color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
                 image: DecorationImage(
-                    image: AssetImage(ImageConstant.gradientBackground),
+                    image: AssetImage(ImageConstant.gradientBackgroundNumu),
                     fit: BoxFit.cover)),
             child: Container(
               width: double.maxFinite,
@@ -60,8 +61,8 @@ class OtpScreen extends StatelessWidget {
                 children: [
                   //const SizedBox(height: 34,),
                   CustomImageView(
-                    imagePath: ImageConstant.imgNumuLogo,
-                    height: 80,
+                    imagePath: ImageConstant.newLogoNumu,
+                    height: 130,
                     width: 280,
                     color: Colors.white,
                   ),
@@ -103,11 +104,16 @@ class OtpScreen extends StatelessWidget {
                       buttonTextStyle: CustomTextStyles
                           .titleSmallHelveticaOnSecondaryContainer,
                       onPressed: () async {
+                      if(phoneSignInProvider.otp.toString().isNotEmpty) {
                         await phoneSignInProvider.verifyFunction(
                           context,
                           phone: phoneSignInProvider.phoneNumberController.text,
                           otp: phoneSignInProvider.otp.toString(),
                         );
+                      } else{
+                        showCustomSnackBar(context: context, message: 'Please enter the otp');
+                      }
+
 
                         if(phoneSignInProvider.statusOtpVerify == 201 || phoneSignInProvider.statusOtpVerify == 200){
                           HomeProvider homeProvider =
