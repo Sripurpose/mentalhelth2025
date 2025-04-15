@@ -10,6 +10,7 @@ import 'package:mentalhelth/widgets/custom_elevated_button.dart';
 import 'package:mentalhelth/widgets/custom_text_form_field.dart';
 import 'package:provider/provider.dart';
 
+import '../../utils/theme/colors.dart';
 import '../../utils/theme/custom_button_style.dart';
 import '../../utils/theme/custom_text_style.dart';
 import '../../widgets/custom_image_view.dart';
@@ -45,10 +46,29 @@ class _PhoneSignInScreenState extends State<PhoneSignInScreen> {
         extendBody: true,
         extendBodyBehindAppBar: true,
         resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-        ),
+         appBar: AppBar(
+           backgroundColor: Colors.transparent,
+           elevation: 0,
+           leading: Padding(
+             padding: const EdgeInsets.all(8.0),
+             child: Container(
+               decoration: BoxDecoration(
+                 color: ColorsContent.recordCountColor,
+                 shape: BoxShape.circle,
+               ),
+               child: Center(
+                 child: IconButton(
+                   icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+                   onPressed: () {
+                     Navigator.of(context).pop();
+                   },
+                   iconSize: 20,
+                 ),
+               ),
+             ),
+           ),
+         ),
+
         body: ConnectivityWidget(
           child: Container(
             decoration: BoxDecoration(

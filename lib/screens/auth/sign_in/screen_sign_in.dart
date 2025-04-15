@@ -18,6 +18,7 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../utils/theme/theme_helper.dart';
 import 'forgot_password/forgot_password_screen.dart';
 import 'coninue_with_google_class.dart';
 
@@ -141,19 +142,44 @@ class _ScreenSignInState extends State<ScreenSignIn> {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
+        extendBody: true,
+        extendBodyBehindAppBar: true,
+        resizeToAvoidBottomInset: false,
         appBar: Platform.isIOS
-            ? AppBar(
-          backgroundColor: ColorsContent.optimalStateColor,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios,color: Colors.white,),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
+            ?
+        AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: ColorsContent.recordCountColor,
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  iconSize: 20,
+                ),
+              ),
+            ),
           ),
         )
+
+
             : null, // No AppBar on Android
-        body: backGroundImagerGradient(
-          size: size,
+        body: Container(
+          decoration: BoxDecoration(
+            color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
+            image: DecorationImage(
+              image: AssetImage(ImageConstant.gradientBackgroundNumu),
+              fit: BoxFit.cover,
+            ),
+          ),
           padding: EdgeInsets.zero,
           child: Center(
               child: SingleChildScrollView(

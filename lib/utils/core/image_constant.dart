@@ -6,7 +6,6 @@ class ImageConstant {
   static String dummyImageSplash1 = 'assets/images/dummy_image_splash1.png';
   static String dummyImageSplash2 = 'assets/images/dummy_image_splash2.png';
   static String numuNewSplash1 = 'assets/images/numu_new_splash1.png';
-  static String numuNewSplash2 = 'assets/images/numu_new_splash2.png';
   static String splashScreen1 = 'assets/images/splash_screen1.png';
   static String splashScreen2 = 'assets/images/splash_screen2.png';
   static String homeBannerNumu = 'assets/images/home_banner_numu.png';
@@ -29,6 +28,7 @@ class ImageConstant {
   static String cameraAddMediaNumu = '$imagePath/camera_add_media_numu.svg';
   static String recordAddMediaNumu = '$imagePath/record_add_media_numu.svg';
   static String locationAddMediaNumu = '$imagePath/location_add_media_numu.svg';
+  static String iosBackIcon = '$imagePath/ios_back_icon.svg';
 
   static String imgCamera = '$imagePath/img_camera.svg';
 

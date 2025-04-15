@@ -492,8 +492,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
 
-                          homeProvider.journalsModelList.isEmpty?
-                             const SizedBox():
+                          // homeProvider.journalsModelList.isEmpty?
+                          //    const SizedBox():
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Padding(
@@ -508,24 +508,23 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 10),
                           homeProvider.chartViewLoading
                               ? Center(child: CupertinoActivityIndicator(
                             color: ColorsContent.newThemeColor,
                             radius: 15,
                           ))
                               :
-                          homeProvider.journalsModelList.isEmpty == null?
-                          const SizedBox():
-                          // GestureDetector(
-                          //   onTap: (){
-                          //   },
-                          //   child: SvgPicture.asset(
-                          //     ImageConstant.homeScreenNoData,
-                          //     width:  size.width * 0.90,
-                          //     height: size.height * 0.43,
-                          //   ),
-                          // )
+                          homeProvider.journalsModelList.isEmpty?
+                          GestureDetector(
+                            onTap: (){
+                            },
+                            child: SvgPicture.asset(
+                              ImageConstant.homeScreenNoData,
+                              width:  size.width * 0.90,
+                              height: size.height * 0.43,
+                            ),
+                          ):
 
                           _buildUserProfileList(context, size, homeProvider),
                           // const SizedBox(height: 10),

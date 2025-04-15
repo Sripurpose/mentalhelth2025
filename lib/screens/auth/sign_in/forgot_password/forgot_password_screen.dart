@@ -29,17 +29,31 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return ConnectivityWidget(
       child: SafeArea(
         child: Scaffold(
+          extendBody: true,
+          extendBodyBehindAppBar: true,
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(
-            backgroundColor: ColorsContent.newThemeColor,
-          leading: IconButton(
-          icon: const Icon(
-            color: Colors.white,
-            Icons.arrow_back_ios,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            leading: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: ColorsContent.recordCountColor,
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: IconButton(
+                    icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    iconSize: 20,
+                  ),
+                ),
+              ),
+            ),
           ),
-      onPressed: () {
-      Navigator.of(context).pop(); // Navigate back to the previous screen
-      },
-      ),),
           body: backGroundImagerGradient(
             size: size,
             padding: EdgeInsets.zero,
