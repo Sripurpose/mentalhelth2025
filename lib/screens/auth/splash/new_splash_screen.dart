@@ -200,7 +200,7 @@ class _SplashScreenState extends State<NewSplashScreen> {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: "Be kind",
+                        text: "Welcome to",
                         style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.w800,
@@ -212,7 +212,7 @@ class _SplashScreenState extends State<NewSplashScreen> {
                   ),
                 ),
                 Text(
-                  " to your mind",
+                  " Numu app",
                   style:  TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.w800,
