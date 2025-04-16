@@ -33,17 +33,40 @@ class VerifyOtpScreen extends StatelessWidget {
           extendBodyBehindAppBar: true,
           resizeToAvoidBottomInset: false,
           appBar: Platform.isIOS
-              ? AppBar(
+              ?AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.white),
-              onPressed: () {
-                Navigator.pop(context);
-              },
+            leading: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child:  GestureDetector(
+                  onTap: (){
+                    Navigator.of(context).pop();
+                  },
+                  child: CustomImageView(
+                    imagePath: ImageConstant.allBackIcon,
+                  ),
+                ),
+              ),
             ),
           )
-              : null,
+              : AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            leading: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child:  GestureDetector(
+                  onTap: (){
+                    Navigator.of(context).pop();
+                  },
+                  child: CustomImageView(
+                    imagePath: ImageConstant.allBackIcon,
+                  ),
+                ),
+              ),
+            ),
+          ),
           body: Container(
             width: size.width,
             height: size.height,

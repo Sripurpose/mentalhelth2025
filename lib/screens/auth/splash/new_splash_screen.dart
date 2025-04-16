@@ -187,7 +187,7 @@ class _SplashScreenState extends State<NewSplashScreen> {
         body: Center(
           child: Padding(
             padding: Platform.isAndroid ?
-            const EdgeInsets.symmetric(vertical: 23.0,horizontal: 0):const EdgeInsets.symmetric(vertical: 0.0,horizontal: 0),
+            const EdgeInsets.symmetric(vertical: 0.0,horizontal: 0):const EdgeInsets.symmetric(vertical: 0.0,horizontal: 0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [

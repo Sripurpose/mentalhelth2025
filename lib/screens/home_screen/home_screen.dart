@@ -730,12 +730,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15,),
       child:
-      // homeProvider.journalsModelLoading
-      //     ? shimmerList(
-      //   height: size.height * 0.5,
-      //   list: 5,
-      //   shimmerHeight: size.height * 0.07,
-      // ) :
 
       homeProvider.journalsModelList.isEmpty?
           const SizedBox():

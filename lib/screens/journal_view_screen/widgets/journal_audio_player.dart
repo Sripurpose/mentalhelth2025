@@ -92,10 +92,19 @@ class _JournalAudioPlayerState extends State<JournalAudioPlayer> {
                       await globalAudioPlayer.play(UrlSource(widget.url));
                     }
                   },
-                  child: CircleAvatar(
-                    backgroundColor: Colors.white,
-                    child: Icon(
-                      isPlaying ? Icons.pause : Icons.play_arrow,
+                  child: Container(
+                    height: 35,
+                    width: 35,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.white, width: 1.5),
+                    ),
+                    child: CircleAvatar(
+                      backgroundColor: Colors.transparent,
+                      child: Icon(
+                        color: Colors.white,
+                        isPlaying ? Icons.pause : Icons.play_arrow,
+                      ),
                     ),
                   ),
                 ),

@@ -280,7 +280,7 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                                                         context: context,
                                                         builder: (BuildContext context) {
                                                           return AlertDialog(
-                                                            backgroundColor: ColorsContent.newThemeColor, // Adjust the opacity as needed
+                                                            backgroundColor: ColorsContent.goalNotCompletedColor, // Adjust the opacity as needed
                                                             title: const Text("Select Interests",
                                                               style: TextStyle(
                                                                 fontSize: 16,

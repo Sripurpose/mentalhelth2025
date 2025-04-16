@@ -51,22 +51,32 @@ class ImageConstant {
   static String imgLogo = '$imagePath/img_logo.svg';
   static String imgNumuLogo = '$imagePath/numu_new_logo.svg';
   static String newLogoNumu = '$imagePath/new_logo_numu.svg';
+  static String allBackIcon = '$imagePath/all_back_icon.svg';
 
   static String imgGroup193 = '$imagePath/img_group_193.png';
 
-  static String imgTelevision = '$imagePath/img_television.svg';
+  static String imgTelevision = '$imagePath/common_back_svg.svg';
 
   static String imgHome = '$imagePath/home_in_active_icon_numu.svg';
+  static String homeInactive = '$imagePath/home_inactive.svg';
   static String imgHomeActive = '$imagePath/home_active_icon_numu.svg';
+  static String homeActive = '$imagePath/home_active.svg';
 
   static String imgSettings = '$imagePath/mental_in_active_icon_numu.svg';
   static String imgSettingsActive = '$imagePath/mental_active_icon_numu.svg';
+  static String mentalActive = '$imagePath/mental_active.svg';
+  static String mentalInActive = '$imagePath/mental_inactive.svg';
+  static String journalActive = '$imagePath/journal_active.svg';
+  static String journalInActive = '$imagePath/journal_inactive.svg';
 
   static String imgMegaphone = '$imagePath/chart_view_in_active_icon_numu.svg';
   static String imgMegaphoneActive = '$imagePath/chartview_active_icon_numu.svg';
 
   static String imgArrowDown = '$imagePath/goal_in_active_icon_numu.svg';
   static String imgArrowDownActive = '$imagePath/goals_active_icon_numu.svg';
+
+  static String goalsDreamsActive = '$imagePath/goals_dreams_active.svg';
+  static String goalsDreamsInActive = '$imagePath/goals_dreams_inactive.svg';
 
   static String imgImage5 = '$imagePath/img_image_5.png';
   static String imgThumbsUpGray700 = '$imagePath/img_thumbs_up_gray_700.svg';

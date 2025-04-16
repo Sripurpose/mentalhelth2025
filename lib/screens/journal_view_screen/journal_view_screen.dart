@@ -860,6 +860,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
             builder: (contexts, dashBoardProvider,journalListProvider, homeProvider,
                 mentalStrengthEditProvider, editProfileProvider, _) {
           return PopupMenuButton<String>(
+            iconColor: ColorsContent.newThemeColor, // 👈 Change dot color here
             onSelected: (value) {},
             itemBuilder: (BuildContext context) {
               return [
@@ -1014,20 +1015,14 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                   },
                   value: 'Edit',
                   child: ListTile(
-                    leading: Icon(Icons.edit, color: ColorsContent.newThemeColor), // Edit Icon
+                    leading: Icon(Icons.mode_edit_outline_outlined, color: ColorsContent.newThemeColor), // Edit Icon
                     title: Text(
                       'Edit',
                       style: CustomTextStyles.bodyMedium14,
                     ),
                   ),
                 ),
-                // PopupMenuItem<String>(
-                //   value: 'Share',
-                //   child: Text(
-                //     'Share',
-                //     style: CustomTextStyles.bodyMedium14,
-                //   ),
-                // ),
+                const PopupMenuDivider(), // 👈 This adds the divider
                 PopupMenuItem<String>(
                   onTap: () {
                     customPopup(
@@ -1069,7 +1064,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
 
                   value: 'Delete',
                   child: ListTile(
-                    leading: Icon(Icons.delete, color: ColorsContent.newThemeColor), // Delete Icon
+                    leading: Icon(Icons.delete_outline, color: ColorsContent.newThemeColor), // Delete Icon
                     title: Text(
                       'Delete',
                       style: CustomTextStyles.bodyMedium14,

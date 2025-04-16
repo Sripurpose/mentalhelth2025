@@ -399,8 +399,14 @@ class _JournalListPageState extends State<JournalListPage> {
                             width: 70, // Increase width
                             height: 70, // Increase height
                             child: FloatingActionButton(
+                              backgroundColor: Colors.transparent,
+                              elevation: 0, // removes shadow
+                              highlightElevation: 0,
+                              focusElevation: 0,
+                              hoverElevation: 0,
+                              splashColor: Colors.transparent, // disables ripple effect
+                              foregroundColor: Colors.transparent,
                               shape: const CircleBorder(), // Ensures circular shape
-                              backgroundColor: ColorsContent.newThemeColor, // Adjust color if needed
                               onPressed: () {
                                 dashBoardProvider.changePage(index: 1);
                                 mentalStrengthEditProvider.fetchEmotions();

@@ -51,18 +51,13 @@ class _PhoneSignInScreenState extends State<PhoneSignInScreen> {
            elevation: 0,
            leading: Padding(
              padding: const EdgeInsets.all(8.0),
-             child: Container(
-               decoration: BoxDecoration(
-                 color: ColorsContent.recordCountColor,
-                 shape: BoxShape.circle,
-               ),
-               child: Center(
-                 child: IconButton(
-                   icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-                   onPressed: () {
-                     Navigator.of(context).pop();
-                   },
-                   iconSize: 20,
+             child: Center(
+               child:  GestureDetector(
+                 onTap: (){
+                   Navigator.of(context).pop();
+                 },
+                 child: CustomImageView(
+                   imagePath: ImageConstant.allBackIcon,
                  ),
                ),
              ),

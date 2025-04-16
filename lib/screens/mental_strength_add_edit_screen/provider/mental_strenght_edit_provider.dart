@@ -756,6 +756,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         getListGoalActionsModel =
             getListGoalActionsModelFromJson(response.body);
+        logger.i("getListGoalActionsModel${jsonEncode(getListGoalActionsModel)}");
 
         notifyListeners();
       } else {}

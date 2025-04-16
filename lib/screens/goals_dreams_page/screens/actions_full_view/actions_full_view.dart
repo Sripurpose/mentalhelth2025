@@ -798,6 +798,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
           builder: (context, mentalStrengthEditProvider, addActionsProvider,
               goalsDreamsProvider, _) {
             return PopupMenuButton<String>(
+              iconColor: ColorsContent.newThemeColor, // 👈 Change dot color here
               onSelected: (value) {},
               itemBuilder: (BuildContext context) {
                 return [
@@ -814,16 +815,16 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                     },
                     value: 'Edit',
                     child: ListTile(
-                      leading: Icon(Icons.edit, color: ColorsContent.newThemeColor), // Edit Icon
+                      leading: Icon(Icons.mode_edit_outline_outlined, color: ColorsContent.newThemeColor), // Edit Icon
                       title: Text(
                         'Edit',
                         style: CustomTextStyles.bodyMedium14,
                       ),
                     ),
                   ),
+                  const PopupMenuDivider(), // 👈 This adds the divider
                   PopupMenuItem<String>(
                     onTap: () async {
-
                       customPopup(
                         context: context,
                         onPressedDelete: () async {
@@ -834,6 +835,8 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                             initial: true,
                           );
                           Navigator.of(context).pop();
+
+                          Navigator.of(context).pop();
                           Navigator.of(context).pop();
                         },
                         title: 'Confirm Delete',
@@ -843,7 +846,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                     },
                     value: 'Delete',
                     child: ListTile(
-                      leading: Icon(Icons.delete, color: ColorsContent.newThemeColor), // Delete Icon
+                      leading: Icon(Icons.delete_outline, color: ColorsContent.newThemeColor), // Delete Icon
                       title: Text(
                         'Delete',
                         style: CustomTextStyles.bodyMedium14,

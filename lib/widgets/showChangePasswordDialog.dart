@@ -19,6 +19,7 @@ void showChangePasswordDialog(BuildContext context) {
       return StatefulBuilder(
         builder: (context, setState) {
           return Dialog(
+            backgroundColor: Colors.white,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             child: Padding(
               padding: const EdgeInsets.all(20),

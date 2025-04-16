@@ -1377,6 +1377,7 @@ var logger = Logger();
   //update action
   //update goal status
   bool updateActionStatus = false;
+  int? updateActionIntStatus;
 
   Future<void> updateActionStatusFunction(BuildContext context,
       {required String actionId, required String goalId}) async {
@@ -1384,6 +1385,7 @@ var logger = Logger();
       String? token = await getUserTokenSharePref();
       // log(phone);
       updateActionStatus = true;
+      updateActionIntStatus = 0;
       notifyListeners();
 
       var body = {
@@ -1402,10 +1404,14 @@ var logger = Logger();
       );
 
       if (response.statusCode == 200) {
+        updateActionIntStatus = response.statusCode;
+        logger.i("updateActionIntStatus${updateActionIntStatus}");
         showCustomSnackBar(context: context, message: 'action update success.');
       } else {
+        updateActionIntStatus = response.statusCode;
         showCustomSnackBar(context: context, message: 'action update failed.');
       }
+      updateActionIntStatus = response.statusCode;
       if(response.statusCode == 401){
         TokenManager.setTokenStatus(true);
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);

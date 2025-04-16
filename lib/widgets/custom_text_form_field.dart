@@ -275,15 +275,15 @@ class CustomTextFormFieldNumu extends StatelessWidget {
     prefixText: prefixText,
     prefixStyle: prefixStyle ?? CustomTextStyles.bodyLargeRobotoOnSecondaryContainer,
     border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10), // Curved border radius
+      borderRadius: BorderRadius.circular(8), // Curved border radius
       borderSide: BorderSide.none, // Removes border
     ),
     enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10), // Curved border radius
+      borderRadius: BorderRadius.circular(8), // Curved border radius
       borderSide: BorderSide.none, // Removes enabled border
     ),
     focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10), // Curved border radius
+      borderRadius: BorderRadius.circular(8), // Curved border radius
       borderSide: BorderSide.none, // Removes focused border
     ),
   );

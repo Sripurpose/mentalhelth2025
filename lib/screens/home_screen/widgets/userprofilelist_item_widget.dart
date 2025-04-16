@@ -23,8 +23,8 @@ class UserProfileListItemWidget extends StatelessWidget {
     //logger.w("title ${title}");
     return Container(
       padding: const EdgeInsets.symmetric(
-        horizontal: 7,
-        vertical: 6,
+        horizontal: 10,
+        vertical: 15,
       ),
       decoration: AppDecoration.outlineGray.copyWith(
         borderRadius: BorderRadiusStyle.roundedBorder10,
@@ -38,15 +38,15 @@ class UserProfileListItemWidget extends StatelessWidget {
         children: [
           image!=null?
           Container(
-            width: size.width * 0.1, // Set the desired width
-            height: size.width * 0.1, // Set the desired height
+            width: size.width * 0.12, // Set the desired width
+            height: size.width * 0.12, // Set the desired height
             decoration: BoxDecoration(
               color: Colors.grey[100], // Background color
               image: DecorationImage(
                 image: NetworkImage(image),
                 fit: BoxFit.cover, // Adjust image to fit container
               ),
-              borderRadius: BorderRadius.circular(10), // Set curved edges
+              borderRadius: BorderRadius.circular(8), // Set curved edges
             ),
           )
 
@@ -61,7 +61,7 @@ class UserProfileListItemWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
+                SizedBox(
                   width: 230,
                   //color: Colors.red,
                   child: Text(
@@ -69,7 +69,7 @@ class UserProfileListItemWidget extends StatelessWidget {
                     style: theme.textTheme.bodyMedium,
                   ),
                 ),
-
+                const SizedBox(height: 5,),
                 Text(
                   formatMilliseconds(int.parse(date)),
                   style: theme.textTheme.bodySmall,

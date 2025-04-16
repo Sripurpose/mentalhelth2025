@@ -308,6 +308,13 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                         width: 70,
                                         height: 70,
                                         child: FloatingActionButton(
+                                          backgroundColor: Colors.transparent,
+                                          elevation: 0, // removes shadow
+                                          highlightElevation: 0,
+                                          focusElevation: 0,
+                                          hoverElevation: 0,
+                                          splashColor: Colors.transparent, // disables ripple effect
+                                          foregroundColor: Colors.transparent,
                                           onPressed: () {
                                             // Check for required conditions before moving to the next tab
                                             if (currentTabIndex == 0) {
@@ -377,7 +384,6 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                             height: 90,
                                           ),
                                           shape: const CircleBorder(),
-                                          elevation: 5,
                                           heroTag: "next_button",
                                         ),
                                       ),

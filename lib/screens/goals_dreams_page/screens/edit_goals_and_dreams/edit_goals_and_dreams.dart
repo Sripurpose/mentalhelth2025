@@ -472,8 +472,8 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                                                             const EdgeInsets.only(
                                                                 bottom: 10),
                                                         height:
-                                                            size.height * 0.04,
-                                                        width: size.width * 0.85,
+                                                            size.height * 0.045,
+                                                        width: size.width * 0.86,
                                                         padding:
                                                             const EdgeInsets.only(
                                                           bottom: 5,
@@ -486,7 +486,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                                                           borderRadius:
                                                               BorderRadius
                                                                   .circular(
-                                                            100,
+                                                            5,
                                                           ),
                                                           border: Border.all(
                                                             color: Colors.grey,

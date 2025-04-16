@@ -340,6 +340,13 @@ class _NumuMentalStrengthAddEditPageState
                           width: 70,
                           height: 70,
                           child: FloatingActionButton(
+                            backgroundColor: Colors.transparent,
+                            elevation: 0, // removes shadow
+                            highlightElevation: 0,
+                            focusElevation: 0,
+                            hoverElevation: 0,
+                            splashColor: Colors.transparent, // disables ripple effect
+                            foregroundColor: Colors.transparent,
                             onPressed: () {
                               // Check for required conditions before moving to the next tab
                               if (currentTabIndex == 0) {
@@ -409,7 +416,6 @@ class _NumuMentalStrengthAddEditPageState
                               height: 90,
                             ),
                             shape: const CircleBorder(),
-                            elevation: 5,
                             heroTag: "next_button",
                           ),
                         ),
@@ -607,11 +613,11 @@ class _NumuMentalStrengthAddEditPageState
               fontFamily: 'OpenSans',
             ),
           ),
-          SizedBox(height: size.height * 0.08),
+          SizedBox(height: size.height * 0.06),
           (mentalStrengthEditProvider.getEmotionsModel == null)
               ? const SizedBox()
               : Container(
-            width: size.width * 0.70, // Controls the button width
+            width: size.width * 0.80, // Controls the button width
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0), // Border radius for rounded corners
               color: Colors.white, // Background color (optional)
@@ -748,10 +754,11 @@ class _NumuMentalStrengthAddEditPageState
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
+                elevation: 0, // removes the shadow line
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 16), // left padding
+                padding: const EdgeInsets.symmetric(horizontal: 16),
               ),
               child: const Align(
                 alignment: Alignment.centerLeft,
@@ -765,6 +772,7 @@ class _NumuMentalStrengthAddEditPageState
               ),
             ),
           ),
+
 
           SizedBox(
             height: size.height * 0.04,

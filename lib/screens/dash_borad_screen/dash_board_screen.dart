@@ -101,7 +101,7 @@ class DashBoardScreen extends StatelessWidget {
                         color: theme.colorScheme.primary.withOpacity(1),
                       ),
                       activeIcon: CustomImageView(
-                        imagePath: ImageConstant.imgHomeActive,
+                        imagePath: ImageConstant.homeActive,
                         height: 80,
                         width: 80,
                         color: theme.colorScheme.primary.withOpacity(1),

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/screens/addgoals_dreams_screen/addgoals_dreams_screen.dart';
 import 'package:mentalhelth/screens/dash_borad_screen/provider/dash_board_provider.dart';
@@ -145,11 +146,20 @@ class _ViewReminderScreenState extends State<ViewReminderScreen> {
                             radius: 15,
                           )):
                               homeProvider.reminderStatusCode == 404 ?
-                              Center(
-                                    child: Image.asset(
-                                      ImageConstant.noData,
-                                    ),
-                                  ):
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SvgPicture.asset(
+                                    ImageConstant.noDataNumu,
+                                  ),
+                                  const Text("No data found",
+                                      style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold)),
+                                  const SizedBox(height: 10),
+                                  const Text("Check back later",
+                                      style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.normal)),
+                                ],
+                              )
+                                  :
                           Container(
                             color
                                 : ColorsContent.homeBackGroundColor,
