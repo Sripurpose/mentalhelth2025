@@ -336,6 +336,9 @@ class _EditActionScreenState extends State<EditActionScreen> {
     }else{
       addActionsProvider.setRemainder = false;
     }
+
+    logger.i("addActionsProvider.reminderEndDate${addActionsProvider.reminderEndDate}");
+    logger.i("addActionsProvider.reminderEndDate${addActionsProvider.reminderStartDate}");
   }
 
 
@@ -490,16 +493,13 @@ class _EditActionScreenState extends State<EditActionScreen> {
                                                                   bottom: 1,
                                                                 ),
                                                                 child: Text(
-                                                                  //importent
-                                                                  addActionsProvider
-                                                                          .reminderStartDate
-                                                                          .isNotEmpty
-                                                                      ? addActionsProvider
-                                                                          .reminderStartDate
-                                                                      : "Choose Date   ",
-                                                                  style: CustomTextStyles
-                                                                      .bodySmallGray700,
+                                                                  (addActionsProvider.reminderStartDate.isNotEmpty &&
+                                                                      addActionsProvider.reminderStartDate != "Invalid date")
+                                                                      ? addActionsProvider.reminderStartDate
+                                                                      : "Choose Date",
+                                                                  style: CustomTextStyles.bodySmallGray700,
                                                                 ),
+
                                                               ),
                                                             ],
                                                           ),
@@ -562,15 +562,13 @@ class _EditActionScreenState extends State<EditActionScreen> {
                                                                   bottom: 1,
                                                                 ),
                                                                 child: Text(
-                                                                  addActionsProvider
-                                                                          .reminderEndDate
-                                                                          .isNotEmpty
-                                                                      ? addActionsProvider
-                                                                          .reminderEndDate
-                                                                      : "Choose Date   ",
-                                                                  style: CustomTextStyles
-                                                                      .bodySmallGray700,
+                                                                  (addActionsProvider.reminderEndDate.isNotEmpty &&
+                                                                      addActionsProvider.reminderEndDate != "Invalid date")
+                                                                      ? addActionsProvider.reminderEndDate
+                                                                      : "Choose Date",
+                                                                  style: CustomTextStyles.bodySmallGray700,
                                                                 ),
+
                                                               ),
                                                             ],
                                                           ),
