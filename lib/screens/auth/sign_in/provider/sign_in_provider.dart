@@ -47,7 +47,8 @@ class SignInProvider extends ChangeNotifier {
   int? loginStatus;
 
   Future<void> loginUser(BuildContext context,
-      {required String email, required String password}) async {
+      {required String email, required String password}) async
+  {
     try {
       loginStatus = 0;
       loginLoading = true;

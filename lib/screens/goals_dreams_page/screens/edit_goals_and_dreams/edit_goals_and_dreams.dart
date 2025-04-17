@@ -872,7 +872,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                   context,
                   listen: false,
                 );
-                goalsDreamsProvider.fetchGoalsAndDreams(initial: true);
+                // goalsDreamsProvider.fetchGoalsAndDreams(initial: true);
               } else {
                 logger.w("formattedDate${adDreamsGoalsProvider.formattedDate}");
                 logger.w("selectedDate${adDreamsGoalsProvider.selectedDate}");

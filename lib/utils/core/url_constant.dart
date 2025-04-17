@@ -4,6 +4,7 @@ class UrlConstant {
   static String loginUrl = "${baseUrl}login";
   static String logOutUrl = "${baseUrl}logout";
   static String forgotPassword = "${baseUrl}forgotpassword";
+  static String changePassword = "${baseUrl}changepassword";
   static String signupUrl = "${baseUrl}signup";
   static String plansUrl = "${baseUrl}plans";
   static String profileUrl({required String userId}) {

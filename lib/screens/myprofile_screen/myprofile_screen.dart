@@ -307,8 +307,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                   dashBoardProvider.changeCommentPage(index: 9);
                                                 },
                                                 child: Container(
-                                                  width: 115,
-                                                  height: 34,
+                                                  width: size.width * 0.30,
+                                                  height: size.height * 0.040,
                                                   decoration: BoxDecoration(
                                                     color: ColorsContent.newThemeColor,
                                                     borderRadius: const BorderRadius.only(
@@ -331,17 +331,18 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                             },
                                           ),
                                         ),
+                                        if(editProfileProvider.getProfileModel?.isPassword == 1)
                                         Align(
                                           alignment: Alignment.bottomCenter,
                                           child: Consumer<DashBoardProvider>(
                                             builder: (context, dashBoardProvider, _) {
                                               return GestureDetector(
                                                 onTap: () {
-                                                  showChangePasswordDialog(context);
+                                                  showChangePasswordDialog(context,editProfileProvider);
                                                 },
                                                 child: Container(
-                                                  width: 145,
-                                                  height: 34,
+                                                  width: size.width * 0.35,
+                                                  height: size.height * 0.040,
                                                   decoration: BoxDecoration(
                                                     color: ColorsContent.blackText,
                                                     borderRadius: const BorderRadius.only(

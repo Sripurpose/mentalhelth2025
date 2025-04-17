@@ -74,11 +74,11 @@ class EditProfileProvider extends ChangeNotifier {
         notifyListeners();
       }
       if(response.statusCode == 401){
-        TokenManager.setTokenStatus(true);
+       // TokenManager.setTokenStatus(true);
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
       if(response.statusCode == 403){
-        TokenManager.setTokenStatus(true);
+       // TokenManager.setTokenStatus(true);
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
       getProfileLoading = false;
@@ -358,7 +358,7 @@ class EditProfileProvider extends ChangeNotifier {
           fetchUserProfile();
         }
       } else if (response.statusCode == 401 || response.statusCode == 403) {
-        TokenManager.setTokenStatus(true);
+      //  TokenManager.setTokenStatus(true);
       } else {
         Map<String, dynamic> responseData = jsonDecode(response.body);
         String errorMessage = responseData['text'] ?? 'Something went wrong!';
@@ -760,5 +760,101 @@ class EditProfileProvider extends ChangeNotifier {
       selectedCategories = categoriesJson.map((json) => Category.fromJson(jsonDecode(json))).toList();
     }
     notifyListeners();
+  }
+
+  bool changePasswordLoading = false;
+  int? changePasswordStatus;
+  String? changePasswordMessage = "";
+
+  String _oldPassword = "";
+  String _newPassword = "";
+  String _confirmPassword = "";
+
+  String get oldPassword => _oldPassword;
+  String get newPassword => _newPassword;
+  String get confirmPassword => _confirmPassword;
+
+
+  void setOldPassword(String value) {
+    _oldPassword = value;
+    notifyListeners();
+  }
+
+  void setNewPassword(String value) {
+    _newPassword = value;
+    notifyListeners();
+  }
+
+  void setConfirmPassword(String value) {
+    _confirmPassword = value;
+    notifyListeners();
+  }
+
+
+  Future<void> changePassword(BuildContext context,
+      {required String oldPassword, required String newPassword}) async
+  {
+    try {
+      // Retrieve and print the token for debugging
+      String? token = await getUserTokenSharePref();
+      print('Token: $token');
+      changePasswordStatus = 0;
+      changePasswordLoading = true;
+      notifyListeners();
+      var body = {
+        'oldpass': oldPassword,
+        'newpass': newPassword,
+      };
+      logger.i("body${body}");
+      final response = await http.put(
+        Uri.parse(
+          UrlConstant.changePassword,
+        ),
+        headers: <String, String>{
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'authorization': token.toString(), // Corrected token usage
+        },
+        body: body,
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        changePasswordLoading = false;
+        changePasswordStatus = response.statusCode;
+        changePasswordMessage = response.reasonPhrase;
+      } else if(response.statusCode == 400){
+        changePasswordStatus = response.statusCode;
+        showCustomSnackBar(
+          context: context,
+          message: '"Current password is wrong!"',
+        );
+      }else{
+        changePasswordStatus = response.statusCode;
+        showCustomSnackBar(
+          context: context,
+          message: '"Current password is wrong!"',
+        );
+      }
+      if(response.statusCode == 401){
+        changePasswordStatus = response.statusCode;
+        TokenManager.setTokenStatus(true);
+        //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
+      }
+      if(response.statusCode == 403){
+        changePasswordStatus = response.statusCode;
+        TokenManager.setTokenStatus(true);
+        //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
+      }
+      if(response.statusCode == 400){
+        //TokenManager.setTokenStatus(true);
+        changePasswordStatus = response.statusCode;
+        //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
+      }
+      changePasswordStatus = response.statusCode;
+      changePasswordLoading = false;
+      notifyListeners();
+    } catch (error) {
+
+      changePasswordLoading = false;
+      notifyListeners();
+    }
   }
 }

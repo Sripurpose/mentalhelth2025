@@ -1783,7 +1783,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
               // adDreamsGoalsProvider.getAddActionIdAndName(
               //   value: addActionsProvider.goalModelIdName!,
               // );
-              //  Navigator.of(context).pop();
+               Navigator.of(context).pop();
               // Navigator.of(context).pop();
               addActionsProvider.clearFunction();
 

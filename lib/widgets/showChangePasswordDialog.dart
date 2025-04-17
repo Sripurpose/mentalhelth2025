@@ -1,11 +1,14 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 
+import '../screens/edit_add_profile_screen/provider/edit_provider.dart';
 import '../utils/theme/colors.dart';
 
-void showChangePasswordDialog(BuildContext context) {
+void showChangePasswordDialog(BuildContext context,EditProfileProvider editProfileProvider) {
   final currentPasswordController = TextEditingController();
   final newPasswordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
@@ -70,51 +73,92 @@ void showChangePasswordDialog(BuildContext context) {
                     setState(() => _obscureConfirm = !_obscureConfirm);
                   }),
                   const SizedBox(height: 20),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: ColorsContent.newThemeColor,
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      onPressed: () {
-                        final current = currentPasswordController.text.trim();
-                        final newPass = newPasswordController.text.trim();
-                        final confirm = confirmPasswordController.text.trim();
+                  Consumer<EditProfileProvider>(
+                    builder: (context, editProfileProvider, _) {
+                      return SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: ColorsContent.newThemeColor,
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          onPressed: () async {
+                            final current = currentPasswordController.text.trim();
+                            final newPass = newPasswordController.text.trim();
+                            final confirm = confirmPasswordController.text.trim();
 
-                        if (current.isEmpty) {
-                          Fluttertoast.showToast(msg: "Please enter your current password",gravity: ToastGravity.CENTER);
-                          return;
-                        }
-                        if (newPass.isEmpty) {
-                          Fluttertoast.showToast(msg: "Please enter a new password",gravity: ToastGravity.CENTER);
-                          return;
-                        }
-                        if (confirm.isEmpty) {
-                          Fluttertoast.showToast(msg: "Please confirm your new password",gravity: ToastGravity.CENTER);
-                          return;
-                        }
-                        if (newPass != confirm) {
-                          Fluttertoast.showToast(msg: "New password and confirmation do not match",gravity: ToastGravity.CENTER);
-                          return;
-                        }
+                            if (current.isEmpty) {
+                              Fluttertoast.showToast(
+                                  msg: "Please enter your current password",
+                                  gravity: ToastGravity.CENTER);
+                              return;
+                            }
+                            if (newPass.isEmpty) {
+                              Fluttertoast.showToast(
+                                  msg: "Please enter a new password",
+                                  gravity: ToastGravity.CENTER);
+                              return;
+                            }
+                            if (confirm.isEmpty) {
+                              Fluttertoast.showToast(
+                                  msg: "Please confirm your new password",
+                                  gravity: ToastGravity.CENTER);
+                              return;
+                            }
+                            if (newPass != confirm) {
+                              Fluttertoast.showToast(
+                                  msg: "New password and confirmation do not match",
+                                  gravity: ToastGravity.CENTER);
+                              return;
+                            }
 
-                        Fluttertoast.showToast(msg: "Password updated successfully!",gravity: ToastGravity.CENTER);
-                      },
-                      child: Text(
-                        "Update Password",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          fontFamily: 'Open Sans',
-                          color: ColorsContent.whiteText,
+                            await editProfileProvider.changePassword(
+                              context,
+                              oldPassword: current,
+                              newPassword: confirm,
+                            );
+
+                            if (editProfileProvider.changePasswordStatus == 200) {
+                              Fluttertoast.showToast(
+                                  msg: "Password updated successfully!",
+                                  gravity: ToastGravity.CENTER);
+
+                              Navigator.of(context).pop();
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: "Please try again later!",
+                                  gravity: ToastGravity.CENTER);
+
+                              currentPasswordController.clear();
+                              newPasswordController.clear();
+                              confirmPasswordController.clear();
+                            }
+                          },
+                          child: editProfileProvider.changePasswordLoading
+                              ? const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 5),
+                            child: SpinKitWave(
+                              color: Colors.white, // or whatever suits your theme
+                              size: 25,
+                            ),
+                          )
+                              : Text(
+                            "Update Password",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: 'Open Sans',
+                              color: ColorsContent.whiteText,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  )
+                      );
+                    },
+                  ),
+
                 ],
               ),
             ),
