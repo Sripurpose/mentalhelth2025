@@ -64,11 +64,23 @@ class _AddGoalsGoogleMapState extends State<AddGoalsGoogleMap> {
     });
   }
 
+  bool _isRequestingPermission = false;
+
   Future<void> _requestPermission() async {
-    final status = await Permission.locationWhenInUse.request();
-    setState(() {
-      permissionStatus = status;
-    });
+    if (_isRequestingPermission) return;
+
+    _isRequestingPermission = true;
+
+    try {
+      var status = await Permission.location.status;
+      if (!status.isGranted) {
+        await Permission.location.request();
+      }
+    } catch (e) {
+      debugPrint('Permission request error: $e');
+    } finally {
+      _isRequestingPermission = false;
+    }
   }
 
   void _getCurrentLocation() async {
