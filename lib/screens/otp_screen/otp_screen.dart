@@ -97,42 +97,53 @@ class OtpScreen extends StatelessWidget {
                     height: 20,
                   ),
                   Consumer<PhoneSignInProvider>(
-                      builder: (context, phoneSignInProvider, _) {
-                    return CustomElevatedButton(
-                      loading: phoneSignInProvider.verifyLoading,
-                      height: 40,
-                      text: "Sign in",
-                      margin: const EdgeInsets.symmetric(horizontal: 3),
-                      buttonStyle: CustomButtonStyles.signInButton,
-                      buttonTextStyle: CustomTextStyles
-                          .titleSmallHelveticaOnSecondaryContainer,
-                      onPressed: () async {
-                      if(phoneSignInProvider.otp.toString().isNotEmpty) {
-                        await phoneSignInProvider.verifyFunction(
-                          context,
-                          phone: phoneSignInProvider.phoneNumberController.text,
-                          otp: phoneSignInProvider.otp.toString(),
-                        );
-                      } else{
-                        showCustomSnackBar(context: context, message: 'Please enter the otp');
-                      }
+                    builder: (context, phoneSignInProvider, _) {
+                      return CustomElevatedButton(
+                        loading: phoneSignInProvider.verifyLoading,
+                        height: 40,
+                        text: "Sign in",
+                        margin: const EdgeInsets.symmetric(horizontal: 3),
+                        buttonStyle: CustomButtonStyles.signInButton,
+                        buttonTextStyle: CustomTextStyles.titleSmallHelveticaOnSecondaryContainer,
+                        onPressed: () async {
+                          FocusScope.of(context).unfocus(); // close keyboard
 
+                          if (phoneSignInProvider.otp.toString().isEmpty) {
+                            showCustomSnackBar(context: context, message: 'Please enter the otp');
+                            return;
+                          }
 
-                        if(phoneSignInProvider.statusOtpVerify == 201 || phoneSignInProvider.statusOtpVerify == 200){
-                          HomeProvider homeProvider =
-                          Provider.of<HomeProvider>(context, listen: false);
-                          EditProfileProvider editProfileProvider =
-                          Provider.of<EditProfileProvider>(context,
-                              listen: false);
-                          homeProvider.fetchChartView(context);
-                          //   homeProvider.fetchJournals(initial: true);
-                          editProfileProvider.fetchUserProfile();
-                        }
-                       // phoneSignInProvider.phoneNumberController.clear();
+                          await phoneSignInProvider.verifyFunction(
+                            context,
+                            phone: phoneSignInProvider.phoneNumberController.text,
+                            otp: phoneSignInProvider.otp.toString(),
+                          );
 
-                      },
-                    );
-                  }),
+                          if (phoneSignInProvider.statusOtpVerify == 200 ||
+                              phoneSignInProvider.statusOtpVerify == 201) {
+
+                            final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+                            final editProfileProvider = Provider.of<EditProfileProvider>(context, listen: false);
+
+                            homeProvider.fetchChartView(context);
+                            editProfileProvider.fetchUserProfile();
+
+                            // Navigate to next screen and prevent back navigation
+                            Navigator.of(context).pushReplacementNamed('/home'); // example route
+
+                          } else {
+                            // Clear any existing snackbar
+                            ScaffoldMessenger.of(context).clearSnackBars();
+
+                            if (context.mounted) {
+                              showCustomSnackBar(context: context, message: 'Invalid OTP');
+                            }
+                          }
+                        },
+                      );
+                    },
+                  ),
+
                 ],
               ),
             ),
