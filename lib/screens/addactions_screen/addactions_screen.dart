@@ -1192,7 +1192,7 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                       Navigator.of(context).pop();
                     }
                   }else if(kReleaseMode){
-                    Navigator.of(context).pop();
+                   // Navigator.of(context).pop();
                   }
                 });
 
