@@ -490,7 +490,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                                                           ),
                                                           border: Border.all(
                                                             color: Colors.grey,
-                                                            width: 1,
+                                                            width: 0.5,
                                                           ),
                                                         ),
                                                         child: Row(
@@ -556,10 +556,10 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                                                                   textAlign:
                                                                       TextAlign
                                                                           .center,
-                                                                  style:
-                                                                      const TextStyle(
-                                                                    color:
-                                                                        Colors.grey,
+                                                                  style:  const TextStyle(
+                                                                    fontSize: 16,
+                                                                    fontWeight: FontWeight.w400,
+                                                                    color: Colors.black,
                                                                   ),
                                                                 ),
                                                               ),

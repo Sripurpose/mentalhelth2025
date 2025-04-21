@@ -15,9 +15,9 @@ void showChangePasswordDialog(BuildContext context,EditProfileProvider editProfi
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      bool _obscureCurrent = true;
-      bool _obscureNew = true;
-      bool _obscureConfirm = true;
+      bool obscureCurrent = true;
+      bool obscureNew = true;
+      bool obscureConfirm = true;
 
       return StatefulBuilder(
         builder: (context, setState) {
@@ -61,16 +61,16 @@ void showChangePasswordDialog(BuildContext context,EditProfileProvider editProfi
                   const SizedBox(height: 20),
                   const Divider(),
                   const SizedBox(height: 20),
-                  _buildPasswordField("Current Password", currentPasswordController, _obscureCurrent, () {
-                    setState(() => _obscureCurrent = !_obscureCurrent);
+                  _buildPasswordField("Current Password", currentPasswordController, obscureCurrent, () {
+                    setState(() => obscureCurrent = !obscureCurrent);
                   }),
                   const SizedBox(height: 10),
-                  _buildPasswordField("New Password", newPasswordController, _obscureNew, () {
-                    setState(() => _obscureNew = !_obscureNew);
+                  _buildPasswordField("New Password", newPasswordController, obscureNew, () {
+                    setState(() => obscureNew = !obscureNew);
                   }),
                   const SizedBox(height: 10),
-                  _buildPasswordField("Confirm Password", confirmPasswordController, _obscureConfirm, () {
-                    setState(() => _obscureConfirm = !_obscureConfirm);
+                  _buildPasswordField("Confirm Password", confirmPasswordController, obscureConfirm, () {
+                    setState(() => obscureConfirm = !obscureConfirm);
                   }),
                   const SizedBox(height: 20),
                   Consumer<EditProfileProvider>(

@@ -212,16 +212,11 @@ class _NumuMentalStrengthAddEditPageState
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                //  if (isSigned) {
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) =>
                                           buildPopupDialog(context, size),
                                     );
-                                 // }
-                                  //else {
-
-                                 // }
                                 },
                                 child: Padding(
                                   padding: EdgeInsets.only(
@@ -328,10 +323,9 @@ class _NumuMentalStrengthAddEditPageState
                                     _buildSixthTab(context, size),
                                   ],
                                 ),
-
                                 // Floating Button for navigation and submission
                               if (currentTabIndex < 5)
-                      Positioned(
+                                  Positioned(
                       bottom: size.height * 0.025,
                       left: 0,
                       right: 0,
@@ -421,8 +415,7 @@ class _NumuMentalStrengthAddEditPageState
                         ),
                       ),
                     )
-
-                    else
+                                 else
                                   Positioned(
                                     bottom: size.height * 0.02,
                                     left: 0,

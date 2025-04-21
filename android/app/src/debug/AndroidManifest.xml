@@ -23,7 +23,7 @@
     <!-- Application Configuration -->
     <application
         android:icon="@mipmap/ic_launcher"
-        android:label="Mental Health"
+        android:label="Numu"
         tools:replace="android:icon, android:label">
         <!-- Your activity declarations go here, e.g. -->
         <!-- <activity android:name=".MainActivity"> -->
