@@ -75,7 +75,7 @@ class SubscriptionSuccessScreen extends StatelessWidget {
                       Provider.of<HomeProvider>(context, listen: false);
                   EditProfileProvider editProfileProvider =
                       Provider.of<EditProfileProvider>(context, listen: false);
-                  homeProvider.fetchChartView(context);
+                 // homeProvider.fetchChartView(context);
                  // homeProvider.fetchJournals(initial: true);
                   editProfileProvider.fetchUserProfile();
                   Navigator.of(context).pushAndRemoveUntil(

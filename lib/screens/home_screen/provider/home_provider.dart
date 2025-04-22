@@ -162,7 +162,7 @@ class HomeProvider extends ChangeNotifier {
       // Handle token expiry (401, 403)
       if (response.statusCode == 401 || response.statusCode == 403) {
         journalStatus = response.statusCode;
-        TokenManager.setTokenStatus(true);
+       // TokenManager.setTokenStatus(true);
         // CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
 

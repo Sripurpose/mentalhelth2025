@@ -87,7 +87,7 @@ class _SplashScreenState extends State<SplashScreen> {
     String deviceType = Platform.isAndroid ? 'android' : 'ios';
     signInProvider.fetchAppRegister(context,deviceType: deviceType);
     //signInProvider.fetchSettings(context);
-    homeProvider.fetchChartView(context);
+   // homeProvider.fetchChartView(context);
 
     //homeProvider.fetchJournals(initial: true);
     checkAndFetchVersionUpdate(context,);

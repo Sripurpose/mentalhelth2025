@@ -98,7 +98,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
   }
 
   Future<void> _isTokenExpired() async {
-    await homeProvider.fetchChartView(context);
+   // await homeProvider.fetchChartView(context);
     await homeProvider.fetchJournals(pageNo:homeProvider.currentPage.toString());
     if(homeProvider.journalStatus == 404){
       await homeProvider.fetchJournals(pageNo:1.toString());

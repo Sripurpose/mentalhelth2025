@@ -87,7 +87,7 @@ class _ScreenSignInState extends State<ScreenSignIn> {
         EditProfileProvider editProfileProvider =
         Provider.of<EditProfileProvider>(context,
             listen: false);
-        homeProvider.fetchChartView(context);
+      //  homeProvider.fetchChartView(context);
         //   homeProvider.fetchJournals(initial: true);
         editProfileProvider.fetchUserProfile();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -254,7 +254,7 @@ class _ScreenSignInState extends State<ScreenSignIn> {
                           FocusScope.of(context).unfocus();
                           await signInProvider.callSignInButton(context);
                           if(signInProvider.loginStatus == 200 || signInProvider.loginStatus == 201){
-                            homeProvider.fetchChartView(context);
+                         //   homeProvider.fetchChartView(context);
                             //  homeProvider.fetchJournals(initial: true);
                             editProfileProvider.fetchUserProfile();
                           }

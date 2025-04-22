@@ -133,7 +133,7 @@ class VerifyOtpScreen extends StatelessWidget {
                           editProfileProvider.clearTextEditingController();
                           HomeProvider homeProvider = Provider.of<HomeProvider>(context, listen: false);
                           // You don't need to re-declare editProfileProvider
-                          homeProvider.fetchChartView(context);
+                         // homeProvider.fetchChartView(context);
                          // homeProvider.fetchJournals(initial: true);
                           editProfileProvider.fetchUserProfile();
                           if(editProfileProvider.verifyOtpStatus == 200){

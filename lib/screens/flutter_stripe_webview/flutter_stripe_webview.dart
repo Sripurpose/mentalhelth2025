@@ -76,7 +76,7 @@ class _StripeWebViewState extends State<StripeWebView> {
                 );
 
                 await getLoginsDetails(context: context);
-                homeProvider.fetchChartView(context);
+              //  homeProvider.fetchChartView(context);
               //  homeProvider.fetchJournals(initial: true);
                 editProfileProvider.fetchUserProfile();
               });

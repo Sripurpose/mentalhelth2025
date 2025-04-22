@@ -93,7 +93,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
   }
 
   Future<void> _isTokenExpired() async {
-    await homeProvider.fetchChartView(context);
+   // await homeProvider.fetchChartView(context);
     await homeProvider.fetchJournals(initial: true);
     //   await editProfileProvider.fetchUserProfile();
     tokenStatus = TokenManager.checkTokenExpiry();

@@ -125,7 +125,7 @@ class OtpScreen extends StatelessWidget {
                             final homeProvider = Provider.of<HomeProvider>(context, listen: false);
                             final editProfileProvider = Provider.of<EditProfileProvider>(context, listen: false);
 
-                            homeProvider.fetchChartView(context);
+                            // homeProvider.fetchChartView(context);
                             editProfileProvider.fetchUserProfile();
 
                             // Navigate to next screen and prevent back navigation

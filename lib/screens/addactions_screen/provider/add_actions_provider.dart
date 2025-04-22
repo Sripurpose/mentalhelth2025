@@ -392,23 +392,50 @@ var logger = Logger();
   String reminderStartDate = '';
   String reminderEndDate = '';
 
+  // Future<String> selectReminder(BuildContext context,
+  //     {DateTime? reminderStartDates}) async {
+  //   final DateTime? picked = await showDatePicker(
+  //     context: context,
+  //     initialDate: reminderStartDates ?? DateTime.now().toUtc(),
+  //     firstDate: reminderStartDates ?? DateTime.now().toUtc(),
+  //     lastDate: DateTime(2100),
+  //   );
+  //
+  //   if (picked != null && picked != date) {
+  //     // reminderStartDate = ;
+  //     // selectedDate = dateFormatter(date: picked.toString());
+  //     // log(formattedDate.toString(), name: "formattedDate");
+  //     notifyListeners();
+  //   }
+  //   return formatPickedDateFor2(picked!);
+  // }
+
+
   Future<String> selectReminder(BuildContext context,
       {DateTime? reminderStartDates}) async {
+    final DateTime nowUtc = DateTime.now().toUtc();
+    final DateTime nowLocal = nowUtc.toLocal();
+
+    final DateTime initial = reminderStartDates?.toLocal() ?? nowLocal;
+
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: reminderStartDates ?? DateTime.now(),
-      firstDate: reminderStartDates ?? DateTime.now(),
+      initialDate: initial,
+      firstDate: initial,
       lastDate: DateTime(2100),
     );
 
-    if (picked != null && picked != date) {
-      // reminderStartDate = ;
-      // selectedDate = dateFormatter(date: picked.toString());
-      // log(formattedDate.toString(), name: "formattedDate");
+    if (picked != null) {
+      final DateTime localPicked = picked.toLocal(); // ⬅️ Ensure it's local
+      // Do any logic here using `localPicked`
       notifyListeners();
+
+      return formatPickedDateFor2(localPicked);
     }
-    return formatPickedDateFor2(picked!);
+
+    return formatPickedDateFor2(initial); // fallback
   }
+
 
 //fix1
   void reminderStartDateFunction(BuildContext context) async {

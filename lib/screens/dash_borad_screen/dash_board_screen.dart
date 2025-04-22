@@ -79,7 +79,7 @@ class DashBoardScreen extends StatelessWidget {
                     dashBoardProvider.changePage(index: index);
                     if (index == 0) {
                       if (homeProvider.chartViewModel == null) {
-                        homeProvider.fetchChartView(context);
+                       // homeProvider.fetchChartView(context);
                       }
                     } else if (index == 1) {
                       mentalStrengthEditProvider.clearAllValuesInSaveTime();
