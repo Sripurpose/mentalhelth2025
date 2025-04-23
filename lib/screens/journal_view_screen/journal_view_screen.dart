@@ -75,6 +75,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
     );
     await homeProvider.fetchJournalDetails(
       journalId: widget.journalId,
+      context: context
     );
     if (homeProvider.journalDetails != null) {
       addAudio(
@@ -554,6 +555,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                       homeProvider.journalDetails!
                                           .journals!.goal!.goalId
                                           .toString(),
+                                      context: context
                                     );
                                   },
                                       child: Container(
@@ -612,6 +614,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                                   homeProvider.journalDetails!
                                                       .journals!.goal!.goalId
                                                       .toString(),
+                                                  context: context
                                                 );
                                               },
                                               child: CircleAvatar(
@@ -666,7 +669,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                       return GestureDetector(
                                         onTap: () async {
                                           if (actionId != null) {
-                                            await mentalStrengthEditProvider.fetchActionDetails(actionId: actionId);
+                                            await mentalStrengthEditProvider.fetchActionDetails(actionId: actionId,context: context);
                                             debugPrint("✅ Fetched action details for ID: $actionId");
 
                                             if (mentalStrengthEditProvider.actionDetailsStatus == 200) {
@@ -683,7 +686,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                           }
                                         },
                                         child: Container(
-                                          height: size.height * 0.05,
+                                          height: size.height * 0.04,
                                           margin: const EdgeInsets.only(bottom: 5),
                                           padding: const EdgeInsets.symmetric(horizontal: 10),
                                           decoration: BoxDecoration(
@@ -706,12 +709,12 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                                 ),
                                               ),
                                               CircleAvatar(
-                                                radius: size.width * 0.04,
+                                                radius: size.width * 0.03,
                                                 backgroundColor: Colors.deepPurple,
                                                 child: Icon(
                                                   Icons.play_arrow,
                                                   color: Colors.white,
-                                                  size: size.width * 0.04,
+                                                  size: size.width * 0.03,
                                                 ),
                                               ),
                                             ],
@@ -867,7 +870,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                 PopupMenuItem<String>(
                   onTap: () async {
                     mentalStrengthEditProvider.openAllCloser();
-                    editProfileProvider.fetchUserProfile();
+                    editProfileProvider.fetchUserProfile(context);
                     if (homeProvider.journalDetails != null) {
                       mentalStrengthEditProvider
                               .descriptionEditTextController.text =
@@ -966,6 +969,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                         emotionId: homeProvider
                             .journalDetails!.journals!.emotionId
                             .toString(),
+                        context: context
                       );
                       // log(message)
 
@@ -1042,9 +1046,9 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                               break; // Stop the loop once item is removed
                             }
                           }
-                          await homeProvider.fetchJournals(pageNo:homeProvider.currentPage.toString());
+                          await homeProvider.fetchJournals(pageNo:homeProvider.currentPage.toString(),context: context);
                           if(homeProvider.journalStatus == 404){
-                            await homeProvider.fetchJournals(pageNo:1.toString());
+                            await homeProvider.fetchJournals(pageNo:1.toString(),context: context);
                           }
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(

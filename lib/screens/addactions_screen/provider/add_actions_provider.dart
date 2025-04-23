@@ -27,7 +27,9 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:video_compress/video_compress.dart';
 
+import '../../../utils/core/constent.dart';
 import '../../../utils/core/date_time_utils.dart';
+import '../../maintenence_screen/maintenence_screen.dart';
 import '../../token_expiry/token_expiry.dart';
 
 class AddActionsProvider extends ChangeNotifier {
@@ -988,7 +990,17 @@ var logger = Logger();
       updateSaveActionLoadingFunction(true);
       notifyListeners();
       String? token = await getUserTokenSharePref();
-
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       // Create the body based on the value of isReminder
       var body;
       if (isReminder == '1') {
@@ -1036,7 +1048,10 @@ var logger = Logger();
 
       final response = await http.post(
         Uri.parse(UrlConstant.savegemUrl),
-        headers: <String, String>{"authorization": "$token"},
+        headers: <String, String>{
+          'device-type': deviceType,
+          'version': versionCode.toString(),
+          "authorization": "$token"},
         body: body,
       );
 
@@ -1084,7 +1099,20 @@ var logger = Logger();
         clearFunction();
         updateSaveActionLoadingFunction(false);
         return true;
-      } else {
+      }
+      else if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+      else {
         updateSaveActionLoadingFunction(false);
       }
 
@@ -1124,6 +1152,17 @@ var logger = Logger();
         String? isReminder,
   }) async {
     try {
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       updateSaveActionLoadingFunction(true);
       notifyListeners();
       String? token = await getUserTokenSharePref();
@@ -1188,7 +1227,10 @@ var logger = Logger();
         Uri.parse(
           UrlConstant.savegemUrl,
         ),
-        headers: <String, String>{"authorization": "$token"},
+        headers: <String, String>{
+          'device-type': deviceType,
+          'version': versionCode.toString(),
+          "authorization": "$token"},
         body: body,
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -1227,7 +1269,20 @@ var logger = Logger();
           message: json.decode(response.body)["text"],
         );
         Navigator.of(context).pop();
-      } else {
+      }
+      else if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+      else {
         // Handle errors based on the status code
         showCustomSnackBar(
           context: context,
@@ -1263,8 +1318,21 @@ var logger = Logger();
     try {
       String? token = await getUserTokenSharePref();
       saveMediaUploadLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       notifyListeners();
       var headers = {
+        'device-type': deviceType,
+        'version': versionCode.toString(),
         "authorization": "$token",
       };
       var request = http.MultipartRequest(
@@ -1355,13 +1423,26 @@ var logger = Logger();
 
   bool deleteActionLoading = false;
 
-  Future<bool> deleteActionFunction({required String deleteId}) async {
+  Future<bool> deleteActionFunction({required String deleteId,required BuildContext context}) async {
     try {
       // String? userId = await getUserIdSharePref();
       String? token = await getUserTokenSharePref();
       deleteActionLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       notifyListeners();
       Map<String, String> headers = {
+        'device-type': deviceType,
+        'version': versionCode.toString(),
         'authorization': token ?? '',
       };
       notifyListeners();
@@ -1384,12 +1465,26 @@ var logger = Logger();
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
 
+      if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+
       if (response.statusCode == 200) {
         deleteActionLoading = false;
 
         notifyListeners();
         return true;
-      } else {
+      }
+      else {
         deleteActionLoading = false;
         notifyListeners();
         return false;
@@ -1412,6 +1507,17 @@ var logger = Logger();
       String? token = await getUserTokenSharePref();
       // log(phone);
       updateActionStatus = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       updateActionIntStatus = 0;
       notifyListeners();
 
@@ -1424,6 +1530,8 @@ var logger = Logger();
           UrlConstant.updateActionStatusUrl,
         ),
         headers: <String, String>{
+          'device-type': deviceType,
+          'version': versionCode.toString(),
           // 'Content-Type': 'application/x-www-form-urlencoded',
           'authorization': token!,
         },
@@ -1434,7 +1542,20 @@ var logger = Logger();
         updateActionIntStatus = response.statusCode;
         logger.i("updateActionIntStatus${updateActionIntStatus}");
         showCustomSnackBar(context: context, message: 'action update success.');
-      } else {
+      }
+      else if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+      else {
         updateActionIntStatus = response.statusCode;
         showCustomSnackBar(context: context, message: 'action update failed.');
       }

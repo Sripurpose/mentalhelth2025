@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:ffmpeg_kit_flutter_min_gpl/ffmpeg_kit.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -24,7 +25,9 @@ import 'package:mentalhelth/widgets/widget/video_compessor.dart';
 import 'package:provider/provider.dart';
 import 'package:video_compress/video_compress.dart';
 
+import '../../../utils/core/constent.dart';
 import '../../goals_dreams_page/model/actions_details_model.dart';
+import '../../maintenence_screen/maintenence_screen.dart';
 import '../../token_expiry/token_expiry.dart';
 
 class MentalStrengthEditProvider extends ChangeNotifier {
@@ -543,10 +546,21 @@ class MentalStrengthEditProvider extends ChangeNotifier {
   bool getEmotionsModelLoading = false;
   Emotion? emotionValue;
 
-  Future<void> fetchEmotions({bool editing = false, String? emotionId, String? emotion}) async {
+  Future<void> fetchEmotions({bool editing = false, String? emotionId, String? emotion,BuildContext? context}) async {
     try {
       String? token = await getUserTokenSharePref();
       getEmotionsModelLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       notifyListeners();
 
       final uri = emotion != null
@@ -557,7 +571,10 @@ class MentalStrengthEditProvider extends ChangeNotifier {
 
       final response = await http.get(
         uri,
-        headers: <String, String>{"authorization": "$token"},
+        headers: <String, String>{
+          'device-type': deviceType,
+          'version': versionCode.toString(),
+          "authorization": "$token"},
       );
 
       if (response.statusCode == 200) {
@@ -579,8 +596,21 @@ class MentalStrengthEditProvider extends ChangeNotifier {
       } else if (response.statusCode == 401 || response.statusCode == 403) {
         TokenManager.setTokenStatus(true);
       }
-
-      getEmotionsModelLoading = false;
+      else if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context!).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+      else{
+        getEmotionsModelLoading = false;
+      }
       notifyListeners();
     } catch (e) {
       print("ERR is $e");
@@ -779,12 +809,23 @@ class MentalStrengthEditProvider extends ChangeNotifier {
   GoalDetailModel? goalDetailModel;
   bool goalDetailModelLoading = false;
 
-  Future<void> fetchGoalDetails({required String goalId}) async {
+  Future<void> fetchGoalDetails({required String goalId,required BuildContext context}) async {
     try {
       goalDetailModel = null;
 
       String? token = await getUserTokenSharePref();
       goalDetailModelLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       notifyListeners();
       final response = await http.get(
         Uri.parse(
@@ -792,13 +833,29 @@ class MentalStrengthEditProvider extends ChangeNotifier {
             goalId: goalId.toString(),
           ),
         ),
-        headers: <String, String>{"authorization": "$token"},
+        headers: <String, String>{
+          'device-type': deviceType,
+          'version': versionCode.toString(),
+          "authorization": "$token"},
       );
 
       if (response.statusCode == 200) {
         goalDetailModel = goalDetailModelFromJson(response.body);
         notifyListeners();
-      } else {}
+      }
+      else if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+      else {}
       if(response.statusCode == 401){
         TokenManager.setTokenStatus(true);
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
@@ -819,19 +876,33 @@ class MentalStrengthEditProvider extends ChangeNotifier {
   bool actionsDetailsModelLoading = false;
   int? actionDetailsStatus;
 
-  Future<void> fetchActionDetails({required String actionId}) async {
+  Future<void> fetchActionDetails({required String actionId,required BuildContext context}) async {
     try {
       actionDetailsStatus = 0;
       actionsDetailsModel = null;
 
       String? token = await getUserTokenSharePref();
       actionsDetailsModelLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       notifyListeners();
       final response = await http.get(
         Uri.parse(
           UrlConstant.actionDetailsPage(actionId: actionId.toString()),
         ),
-        headers: <String, String>{"authorization": "$token"},
+        headers: <String, String>{
+          'device-type': deviceType,
+          'version': versionCode.toString(),
+          "authorization": "$token"},
       );
       logger.w("response ${response.request}");
       print(response.body.toString() + " fetchActionDetails");
@@ -842,7 +913,20 @@ class MentalStrengthEditProvider extends ChangeNotifier {
         logger.w("locationLatitude${actionsDetailsModel?.actions?.location?.locationLatitude}");
         logger.w("locationLongitude${actionsDetailsModel?.actions?.location?.locationLongitude}");
         notifyListeners();
-      } else {
+      }
+      else if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+      else {
         actionDetailsStatus = response.statusCode;
         logger.w("actionsDetailsModelelse${actionsDetailsModel}");
       }
@@ -883,6 +967,17 @@ class MentalStrengthEditProvider extends ChangeNotifier {
   }) async {
     try {
       saveJournalLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       notifyListeners();
       String? token = await getUserTokenSharePref();
       var body = {
@@ -912,6 +1007,8 @@ class MentalStrengthEditProvider extends ChangeNotifier {
           UrlConstant.journalUrl,
         ),
         headers: <String, String>{
+          'device-type': deviceType,
+          'version': versionCode.toString(),
           "authorization": "$token",
         },
         body: body,
@@ -923,6 +1020,18 @@ class MentalStrengthEditProvider extends ChangeNotifier {
       if(response.statusCode == 403){
         TokenManager.setTokenStatus(true);
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
+      }
+       if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
       }
       if (response.statusCode == 200 || response.statusCode == 201) {
         clearAllValuesInSaveTime();
@@ -969,6 +1078,17 @@ class MentalStrengthEditProvider extends ChangeNotifier {
   }) async {
     try {
       saveJournalLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       notifyListeners();
       String? token = await getUserTokenSharePref();
       var body = {
@@ -999,6 +1119,8 @@ class MentalStrengthEditProvider extends ChangeNotifier {
           "${UrlConstant.journalUrl}$journalId",
         ),
         headers: <String, String>{
+          'device-type': deviceType,
+          'version': versionCode.toString(),
           "authorization": "$token",
         },
         body: body,
@@ -1010,6 +1132,18 @@ class MentalStrengthEditProvider extends ChangeNotifier {
       if(response.statusCode == 403){
         TokenManager.setTokenStatus(true);
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
+      }
+      else if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
       }
       if (response.statusCode == 200 || response.statusCode == 201) {
         clearAllValuesInSaveTime();
@@ -1051,8 +1185,21 @@ class MentalStrengthEditProvider extends ChangeNotifier {
     try {
       String? token = await getUserTokenSharePref();
       saveMediaUploadLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       notifyListeners();
       var headers = {
+        'device-type': deviceType,
+        'version': versionCode.toString(),
         "authorization": "$token",
       };
       var request = http.MultipartRequest(
@@ -1202,6 +1349,17 @@ class MentalStrengthEditProvider extends ChangeNotifier {
     try {
       String? token = await getUserTokenSharePref();
       removeMediaLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       notifyListeners();
       var body = {
         'id': id,
@@ -1211,12 +1369,28 @@ class MentalStrengthEditProvider extends ChangeNotifier {
         Uri.parse(
           UrlConstant.removemediaUrl,
         ),
-        headers: <String, String>{"authorization": "$token"},
+        headers: <String, String>{
+          'device-type': deviceType,
+          'version': versionCode.toString(),
+          "authorization": "$token"},
         body: body,
       );
 
       if (response.statusCode == 200) {
-      } else {
+      }
+      else if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+      else {
         showCustomSnackBar(context: context, message: 'media failed.');
       }
       if(response.statusCode == 401){
@@ -1258,7 +1432,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
               Provider.of<DashBoardProvider>(context, listen: false);
           HomeProvider homeProvider =
               Provider.of<HomeProvider>(context, listen: false);
-          await homeProvider.fetchJournals(initial: true);
+          await homeProvider.fetchJournals(initial: true,context: context);
           dashBoardProvider.changePage(index: 0);
 
         }

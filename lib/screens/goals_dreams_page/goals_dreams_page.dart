@@ -47,12 +47,12 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
       currentPage = newPage;
     });
 
-    goalsDreamsProvider.fetchGoalsAndDreams(pageNo: currentPage.toString()); // Fetch new data for the updated page
+    goalsDreamsProvider.fetchGoalsAndDreams(pageNo: currentPage.toString(),context: context); // Fetch new data for the updated page
   }
 
   Future<void> _isTokenExpired() async {
    // await homeProvider.fetchChartView(context);
-    await homeProvider.fetchJournals(initial: true);
+    await homeProvider.fetchJournals(initial: true,context: context);
     //await editProfileProvider.fetchUserProfile();
     tokenStatus = TokenManager.checkTokenExpiry();
     if (tokenStatus) {
@@ -89,7 +89,7 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
        currentPage = 1;
        goalsDreamsProvider.goalsanddreams = [];
        goalsDreamsProvider.goalsanddreams.clear();
-       goalsDreamsProvider.fetchGoalsAndDreams(pageNo: currentPage.toString());
+       goalsDreamsProvider.fetchGoalsAndDreams(pageNo: currentPage.toString(),context: context);
       // mentalStrengthEditProvider.fetchGoalActions(goalId: widget.goalsanddream.goalId.toString(),);
        _isTokenExpired();
      });
@@ -210,7 +210,7 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
                                     goalsDreamsProvider
                                         .fetchGoalsAndDreams(
                                         pageNo: currentPage
-                                            .toString());
+                                            .toString(),context: context);
                                   });
                                 },
                                 child:
@@ -300,7 +300,7 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
                                                 pageNo:
                                                 goalsDreamsProvider
                                                     .currentPage
-                                                    .toString());
+                                                    .toString(),context: context);
                                           },
                                           child: goalsDreamsProvider
                                               .goalsanddreams
@@ -341,7 +341,7 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
                                                     .fetchGoalsAndDreams(
                                                     pageNo: goalsDreamsProvider
                                                         .currentPage
-                                                        .toString());
+                                                        .toString(),context: context);
                                               },
                                               child: Text(
                                                 '${index + 1}',

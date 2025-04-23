@@ -49,7 +49,7 @@ class _AddNewReminderScreenScreenState
     mentalStrengthEditProvider =
         Provider.of<MentalStrengthEditProvider>(context, listen: false);
     homeProvider = Provider.of<HomeProvider>(context, listen: false);
-    goalsDreamsProvider.fetchGoalsAndDreams(initial: true);
+    goalsDreamsProvider.fetchGoalsAndDreams(initial: true,context: context);
     addActionsProvider =
         Provider.of<AddActionsProvider>(context, listen: false);
     _loadGoalListDropDown();
@@ -58,7 +58,7 @@ class _AddNewReminderScreenScreenState
   Future<void> _loadGoalListDropDown() async {
     final homeProvider =
     Provider.of<HomeProvider>(context, listen: false);
-    await homeProvider.fetchGoals();
+    await homeProvider.fetchGoals(context: context);
   }
 
 

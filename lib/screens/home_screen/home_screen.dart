@@ -90,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _isTokenExpired() async {
 
-    await homeProvider.fetchJournals(initial: true);
+    await homeProvider.fetchJournals(initial: true,context: context);
    // await homeProvider.fetchChartView(context);
   //  checkAndFetchVersionUpdate(context);
 
@@ -125,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
     scheduleMicrotask(() async {
       getAppVersion();
       signInProvider.settingsList.clear();
-      await editProfileProvider.fetchUserProfile();
+      await editProfileProvider.fetchUserProfile(context);
       if(Platform.isIOS){
         final oneSignalId = await OneSignal.User.getOnesignalId();
         if(oneSignalId!= null){
@@ -400,8 +400,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       await signInProvider.fetchSettings(context);
                       _isTokenExpired();
                    //   homeProvider.fetchChartView(context);
-                      homeProvider.fetchJournals(initial: true);
-                      editProfileProvider.fetchUserProfile();
+                      homeProvider.fetchJournals(initial: true,context: context);
+                      editProfileProvider.fetchUserProfile(context);
                     },
                     child: SingleChildScrollView(
                       child: Column(
@@ -412,7 +412,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           GestureDetector(
                             onTap: (){
                               dashBoardProvider.changePage(index: 1);
-                              mentalStrengthEditProvider.fetchEmotions();
+                              mentalStrengthEditProvider.fetchEmotions(context: context);
                             },
                             child: Image.asset(
                             ImageConstant.homeBannerNumuNew,

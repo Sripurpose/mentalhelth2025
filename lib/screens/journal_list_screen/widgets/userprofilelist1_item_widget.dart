@@ -107,6 +107,7 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                         onTap: () async {
                           await homeProvider.fetchJournalDetails(
                             journalId: journalsModelList.journalId.toString(),
+                            context: context
                           );
                           // MentalStrengthEditProvider mentalStrengthEditProvider =
                           //     Provider.of<MentalStrengthEditProvider>(context,
@@ -117,7 +118,7 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                           //     Provider.of<EditProfileProvider>(context,
                           //         listen: false);
 
-                          editProfileProvider.fetchUserProfile();
+                          editProfileProvider.fetchUserProfile(context);
                           if (homeProvider.journalDetails != null) {
                             mentalStrengthEditProvider
                                     .descriptionEditTextController.text =
@@ -216,6 +217,7 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                               emotionId: homeProvider
                                   .journalDetails!.journals!.emotionId
                                   .toString(),
+                              context: context
                             );
                             // log(message)
 
@@ -297,9 +299,9 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                                       content:
                                       Text("Journals deleted successfully")),
                                 );
-                                await homeProvider.fetchJournals(pageNo:homeProvider.currentPage.toString());
+                                await homeProvider.fetchJournals(pageNo:homeProvider.currentPage.toString(),context: context);
                                 if(homeProvider.journalStatus == 404){
-                                  await homeProvider.fetchJournals(pageNo:1.toString());
+                                  await homeProvider.fetchJournals(pageNo:1.toString(),context: context);
                                 }
 
                                 List<int> indicesToRemove = [];

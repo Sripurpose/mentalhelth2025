@@ -108,10 +108,11 @@ class OtpScreen extends StatelessWidget {
                         onPressed: () async {
                           FocusScope.of(context).unfocus(); // close keyboard
 
-                          if (phoneSignInProvider.otp.toString().isEmpty) {
-                            showCustomSnackBar(context: context, message: 'Please enter the otp');
+                          if (phoneSignInProvider.otp == null || phoneSignInProvider.otp.trim().isEmpty) {
+                            showCustomSnackBar(context: context, message: 'Please enter the OTP');
                             return;
                           }
+
 
                           await phoneSignInProvider.verifyFunction(
                             context,
@@ -126,7 +127,7 @@ class OtpScreen extends StatelessWidget {
                             final editProfileProvider = Provider.of<EditProfileProvider>(context, listen: false);
 
                             // homeProvider.fetchChartView(context);
-                            editProfileProvider.fetchUserProfile();
+                            editProfileProvider.fetchUserProfile(context);
 
                             // Navigate to next screen and prevent back navigation
                             Navigator.of(context).pushReplacementNamed('/home'); // example route

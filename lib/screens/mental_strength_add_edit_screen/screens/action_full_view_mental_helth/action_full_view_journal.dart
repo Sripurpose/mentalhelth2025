@@ -774,9 +774,11 @@ class _ActionFullViewJournalCreateBottomSheetState
                     onTap: () async {
                       await addActionsProvider.deleteActionFunction(
                         deleteId: id,
+                        context: context
                       );
                       goalsDreamsProvider.fetchGoalsAndDreams(
                         initial: true,
+                        context: context
                       );
                       Navigator.of(context).pop();
                     },

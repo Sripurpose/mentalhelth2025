@@ -524,6 +524,7 @@ class _ScreenChooseGoalMentalStrengthState
 
                   mentalStrengthEditProvider.fetchGoalDetails(
                     goalId: goals[index].id.toString(),
+                    context: context
                   );
                 },
               );
@@ -582,6 +583,7 @@ class _ScreenChooseGoalMentalStrengthState
               onTap: () async {
                 await mentalStrengthEditProvider.fetchGoalDetails(
                   goalId: goals[index].id.toString(),
+                  context: context
                 );
                 mentalStrengthEditProvider.openGoalViewSheetFunction();
               },

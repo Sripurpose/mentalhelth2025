@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:mentalhelth/screens/auth/sign_in/provider/sign_in_provider.dart';
 import 'package:mentalhelth/screens/auth/sign_in/widget/sign_in_widget.dart';
@@ -113,7 +115,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                               onPressed: () async {
                                 if(signInProvider.forgotEmailFieldController.text.isNotEmpty){
                                   FocusScope.of(context).unfocus();
-                                  await signInProvider.forgetPassword(context);
+                                  String deviceType = Platform.isAndroid ? 'android' : 'ios';
+                                  await signInProvider.forgetPassword(context,deviceType);
                                   if(signInProvider.forgotPasswordStatus == 200){
 
                                     Navigator.of(context).pop();

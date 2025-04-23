@@ -89,7 +89,7 @@ class _ScreenSignInState extends State<ScreenSignIn> {
             listen: false);
       //  homeProvider.fetchChartView(context);
         //   homeProvider.fetchJournals(initial: true);
-        editProfileProvider.fetchUserProfile();
+        editProfileProvider.fetchUserProfile(context);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Column(
             children: [
@@ -251,12 +251,13 @@ class _ScreenSignInState extends State<ScreenSignIn> {
                         isLoading: signInProvider.loginLoading,
                         buttonText: "Sign in",
                         onPressed: () async {
+                          String deviceType = Platform.isAndroid ? 'android' : 'ios';
                           FocusScope.of(context).unfocus();
-                          await signInProvider.callSignInButton(context);
+                          await signInProvider.callSignInButton(context,deviceType);
                           if(signInProvider.loginStatus == 200 || signInProvider.loginStatus == 201){
                          //   homeProvider.fetchChartView(context);
                             //  homeProvider.fetchJournals(initial: true);
-                            editProfileProvider.fetchUserProfile();
+                            editProfileProvider.fetchUserProfile(context);
                           }
                         },
 

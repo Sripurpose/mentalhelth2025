@@ -135,7 +135,7 @@ class VerifyOtpScreen extends StatelessWidget {
                           // You don't need to re-declare editProfileProvider
                          // homeProvider.fetchChartView(context);
                          // homeProvider.fetchJournals(initial: true);
-                          editProfileProvider.fetchUserProfile();
+                          editProfileProvider.fetchUserProfile(context);
                           if(editProfileProvider.verifyOtpStatus == 200){
                             dashBoardProvider.changeCommentPage(
                               index: 8,

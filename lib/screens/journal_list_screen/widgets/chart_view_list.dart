@@ -61,7 +61,7 @@ class ChartCircularWidgetState extends State<ChartCircularWidget> {
   Future<void> _fetchData() async {
     final journalListProvider =
         Provider.of<JournalListProvider>(context, listen: false);
-    await journalListProvider.fetchJournalChartView();
+    await journalListProvider.fetchJournalChartView(context: context);
 
     if (journalListProvider.journalChartViewModel != null) {
       setState(() {

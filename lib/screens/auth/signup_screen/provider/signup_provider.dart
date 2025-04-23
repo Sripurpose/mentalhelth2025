@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mentalhelth/screens/auth/sign_in/screen_sign_in.dart';
@@ -7,6 +9,8 @@ import 'package:mentalhelth/utils/core/url_constant.dart';
 import 'package:mentalhelth/utils/logic/shared_prefrence.dart';
 import 'package:mentalhelth/widgets/functions/snack_bar.dart';
 
+import '../../../../utils/core/constent.dart';
+import '../../../maintenence_screen/maintenence_screen.dart';
 import '../../../token_expiry/token_expiry.dart';
 import '../../subscribe_plan_page/subscribe_plan_page.dart';
 import '../signup_screen.dart';
@@ -27,10 +31,20 @@ class SignUpProvider extends ChangeNotifier {
   Future<void> signUpFunction(BuildContext context,
       {required String firstName,
       required String email,
-      required String password}) async {
+      required String password,required String deviceType,}) async {
     try {
       FocusScope.of(context).unfocus();
       signUpLoading = true;
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       notifyListeners();
       var body = {
         'firstname': firstName,
@@ -42,6 +56,8 @@ class SignUpProvider extends ChangeNotifier {
           UrlConstant.signupUrl,
         ),
         headers: <String, String>{
+          'device-type': deviceType,
+          'version': versionCode.toString(),
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: body,
@@ -87,7 +103,20 @@ class SignUpProvider extends ChangeNotifier {
         // ignore: use_build_context_synchronously
         showToast(context: context, message: 'Register successful.');
         clearSignupControllers();
-      } else {
+      } else if(response.statusCode == 503){
+
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+      else {
         // ignore: use_build_context_synchronously
         showToast(context: context, message: "Email is already registered !");
       }
@@ -130,11 +159,13 @@ class SignUpProvider extends ChangeNotifier {
         confirmPasswordEditTextController.text) {
       showToastTop(context: context, message: 'Entered password not match');
     } else {
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
       signUpFunction(
         context,
         firstName: nameEditTextController.text,
         email: emailEditTextController.text,
         password: passwordEditTextController.text,
+          deviceType:deviceType
       );
     }
   }

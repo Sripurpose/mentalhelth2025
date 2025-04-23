@@ -14,6 +14,8 @@ import 'package:mentalhelth/widgets/functions/snack_bar.dart';
 import 'package:mentalhelth/widgets/widget/video_compessor.dart';
 import 'package:video_compress/video_compress.dart';
 
+import '../../../utils/core/constent.dart';
+import '../../maintenence_screen/maintenence_screen.dart';
 import '../../mental_strength_add_edit_screen/model/all_model.dart';
 import '../../token_expiry/token_expiry.dart';
 import '../model/id_model.dart';
@@ -395,6 +397,17 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
   }) async {
     try {
       saveAddActionsLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       notifyListeners();
       String? token = await getUserTokenSharePref();
       var body = {
@@ -418,7 +431,10 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
         Uri.parse(
           UrlConstant.savegemUrl,
         ),
-        headers: <String, String>{"authorization": "$token"},
+        headers: <String, String>{
+          'device-type': deviceType,
+          'version': versionCode.toString(),
+          "authorization": "$token"},
         body: body,
       );
       print(response.statusCode.toString());
@@ -431,7 +447,20 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
         if (isPop) {
           Navigator.of(context).pop();
         }
-      } else {
+      }
+      else if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+      else {
         // Handle errors based on the status code
         showCustomSnackBar(
           context: context,
@@ -473,6 +502,17 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
   }) async {
     try {
       updateGoalLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       notifyListeners();
       String? token = await getUserTokenSharePref();
       var body = {
@@ -498,7 +538,10 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
         Uri.parse(
           UrlConstant.savegemUrl,
         ),
-        headers: <String, String>{"authorization": "$token"},
+        headers: <String, String>{
+          'device-type': deviceType,
+          'version': versionCode.toString(),
+          "authorization": "$token"},
         body: body,
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -509,7 +552,20 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
         clearAction();
         Navigator.of(context).pop();
         Navigator.of(context).pop();
-      } else {
+      }
+      else if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+      else {
         // Handle errors based on the status code
         showCustomSnackBar(
           context: context,
@@ -546,8 +602,21 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
     try {
       String? token = await getUserTokenSharePref();
       saveMediaUploadLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       notifyListeners();
       var headers = {
+        'device-type': deviceType,
+        'version': versionCode.toString(),
         "authorization": "$token",
       };
       var request = http.MultipartRequest(

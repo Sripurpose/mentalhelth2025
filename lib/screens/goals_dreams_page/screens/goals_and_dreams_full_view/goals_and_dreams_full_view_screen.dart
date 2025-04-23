@@ -58,7 +58,7 @@ class _GoalAndDreamFullViewScreenState
     addVideo();
     goalsDreamsProvider= Provider.of<GoalsDreamsProvider>(context, listen: false);
     mentalStrengthEditProvider = Provider.of<MentalStrengthEditProvider>(context, listen: false);
-    goalsDreamsProvider.fetchGoalsAndDreams(initial: true);
+    goalsDreamsProvider.fetchGoalsAndDreams(initial: true,context: context);
     mentalStrengthEditProvider.fetchGoalActions(goalId: widget.goalsanddream.goalId.toString(),);
     isActionCompletedList = List.filled(widget.goalsanddream.action!.length, false);
     super.initState();
@@ -543,7 +543,7 @@ class _GoalAndDreamFullViewScreenState
                                             status: "1",
                                           );
                                           await
-                                          goalsDreamsProvider.fetchGoalsAndDreams(initial: true,);
+                                          goalsDreamsProvider.fetchGoalsAndDreams(initial: true,context: context);
                                           mentalStrengthEditProvider.fetchGoalActions(goalId: widget.goalsanddream.goalId.toString(),);
                                           setState(() {
                                             isCompleted = true;

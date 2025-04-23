@@ -77,7 +77,7 @@ class _NumuMentalStrengthAddEditPageState
   late FocusNode _titleFocusNode;
 
   Future<void> _isTokenExpired() async {
-    await homeProvider.fetchJournals(initial: true);
+    await homeProvider.fetchJournals(initial: true,context: context);
     //  await editProfileProvider.fetchUserProfile();
     tokenStatus = TokenManager.checkTokenExpiry();
     if (tokenStatus) {
@@ -185,6 +185,7 @@ class _NumuMentalStrengthAddEditPageState
   Widget build(BuildContext context) {
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
     Size size = MediaQuery.of(context).size;
+    final bool isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom != 0;
 
     return tokenStatus == false
           ? WillPopScope(
@@ -578,7 +579,7 @@ class _NumuMentalStrengthAddEditPageState
 
               mentalStrengthEditProvider
                   .fetchEmotions(
-                  emotion: "$mappedValue");
+                  emotion: "$mappedValue",context: context);
 
               mentalStrengthEditProvider.changeEmotionalValueStar(value);
               _isTokenExpired(); // Call your method after rating update.
@@ -842,6 +843,7 @@ class _NumuMentalStrengthAddEditPageState
                             mentalStrengthEditProvider.fetchGoalDetails(
                               goalId: mentalStrengthEditProvider.goalsValue.id
                                   .toString(),
+                              context: context
                             );
                           },
                           child: CircleAvatar(
@@ -996,6 +998,7 @@ class _NumuMentalStrengthAddEditPageState
                             mentalStrengthEditProvider.openActionFullViewFunction();
                             await mentalStrengthEditProvider.fetchActionDetails(
                               actionId: mentalStrengthEditProvider.actionList[index].id.toString(),
+                              context: context
                             );
                           },
                           child: CircleAvatar(

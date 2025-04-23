@@ -71,7 +71,7 @@ class _EditReminderScreenScreenScreenState
     goalsDreamsProvider= Provider.of<GoalsDreamsProvider>(context, listen: false);
     mentalStrengthEditProvider = Provider.of<MentalStrengthEditProvider>(context, listen: false);
     homeProvider = Provider.of<HomeProvider>(context, listen: false);
-    goalsDreamsProvider.fetchGoalsAndDreams(initial: true);
+    goalsDreamsProvider.fetchGoalsAndDreams(initial: true,context: context);
     addActionsProvider =  Provider.of<AddActionsProvider>(context, listen: false);
     init();
 
@@ -848,7 +848,7 @@ class _EditReminderScreenScreenScreenState
                         actionId: widget.actionId ?? "",
                         reminderId: widget.reminderId ?? ""
                     );
-                    homeProvider.fetchRemindersDetails();
+                    homeProvider.fetchRemindersDetails(context: context);
                     Fluttertoast.showToast(
                       msg: "Updated",
                       toastLength: Toast.LENGTH_SHORT,
@@ -945,8 +945,8 @@ class _EditReminderScreenScreenScreenState
                       customPopup(
                         context: context,
                         onPressedDelete: () {
-                          homeProvider.deleteReminderFunction(reminder_id: widget.reminderId ?? "");
-                          homeProvider.fetchRemindersDetails();
+                          homeProvider.deleteReminderFunction(reminder_id: widget.reminderId ?? "",context: context);
+                          homeProvider.fetchRemindersDetails(context: context);
                           Navigator.of(context).pop();
                           Navigator.of(context).pop();
                         },

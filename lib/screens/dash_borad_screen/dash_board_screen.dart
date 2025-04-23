@@ -85,11 +85,11 @@ class DashBoardScreen extends StatelessWidget {
                       mentalStrengthEditProvider.clearAllValuesInSaveTime();
                       adDreamsGoalsProvider.clearAction();
                       mentalStrengthEditProvider.openAllCloser();
-                      await mentalStrengthEditProvider.fetchEmotions();
-                      await editProfileProvider.fetchUserProfile();
+                      await mentalStrengthEditProvider.fetchEmotions(context: context);
+                      await editProfileProvider.fetchUserProfile(context);
                     } else if (index == 2) {
-                      await journalListProvider.fetchJournalChartView();
-                      await homeProvider.fetchJournals(initial: true);
+                      await journalListProvider.fetchJournalChartView(context: context);
+                      await homeProvider.fetchJournals(initial: true,context: context);
                     }
                   },
                   items: [

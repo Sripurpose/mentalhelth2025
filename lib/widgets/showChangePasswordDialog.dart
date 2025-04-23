@@ -1,4 +1,5 @@
 import 'dart:ffi';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -114,11 +115,12 @@ void showChangePasswordDialog(BuildContext context,EditProfileProvider editProfi
                                   gravity: ToastGravity.CENTER);
                               return;
                             }
-
+                            String deviceType = Platform.isAndroid ? 'android' : 'ios';
                             await editProfileProvider.changePassword(
                               context,
                               oldPassword: current,
                               newPassword: confirm,
+                                deviceType:deviceType
                             );
 
                             if (editProfileProvider.changePasswordStatus == 200) {

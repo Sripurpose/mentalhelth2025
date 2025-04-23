@@ -39,7 +39,7 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
 
   Future<void> _isTokenExpired() async {
  //   await homeProvider.fetchChartView(context);
-    await homeProvider.fetchJournals(initial: true);
+    await homeProvider.fetchJournals(initial: true,context: context);
    // await editProfileProvider.fetchUserProfile();
     tokenStatus = TokenManager.checkTokenExpiry();
     if (tokenStatus) {
@@ -631,6 +631,7 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
                 onTap: () async {
                   await mentalStrengthEditProvider.fetchActionDetails(
                     actionId: action[index].id.toString(),
+                    context: context
                   );
                   mentalStrengthEditProvider.openActionFullViewFunction();
                 },

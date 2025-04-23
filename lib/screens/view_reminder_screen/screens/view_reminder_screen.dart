@@ -48,7 +48,7 @@ class _ViewReminderScreenState extends State<ViewReminderScreen> {
   final ScrollController _scrollController = ScrollController();
 
   Future<void> _isTokenExpired() async {
-    await homeProvider.fetchRemindersDetails();
+    await homeProvider.fetchRemindersDetails(context: context);
     tokenStatus = TokenManager.checkTokenExpiry();
     if (tokenStatus) {
       setState(() {
@@ -83,7 +83,7 @@ class _ViewReminderScreenState extends State<ViewReminderScreen> {
       logger.w("homeProvider.reminderStatusCode${homeProvider.reminderStatusCode}");
       goalsDreamsProvider.goalsanddreams = [];
       goalsDreamsProvider.goalsanddreams.clear();
-      goalsDreamsProvider.fetchGoalsAndDreams(initial: true);
+      goalsDreamsProvider.fetchGoalsAndDreams(initial: true,context: context);
       // mentalStrengthEditProvider.fetchGoalActions(goalId: widget.goalsanddream.goalId.toString(),);
       _isTokenExpired();
     });
@@ -100,7 +100,7 @@ class _ViewReminderScreenState extends State<ViewReminderScreen> {
 
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
-      goalsDreamsProvider.fetchGoalsAndDreams();
+      goalsDreamsProvider.fetchGoalsAndDreams(context: context);
     }
 
     if (_scrollController.position.pixels !=

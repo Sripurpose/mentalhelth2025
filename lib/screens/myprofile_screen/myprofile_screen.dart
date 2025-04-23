@@ -51,7 +51,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
 
   Future<void> _isTokenExpired() async {
     //await homeProvider.fetchChartView(context);
-    await homeProvider.fetchJournals(initial: true);
+    await homeProvider.fetchJournals(initial: true,context: context);
     // await editProfileProvider.fetchUserProfile();
     tokenStatus = TokenManager.checkTokenExpiry();
     if (tokenStatus) {
@@ -72,7 +72,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     dashBoardProvider = Provider.of<DashBoardProvider>(context, listen: false);
     editProfileProvider = Provider.of<EditProfileProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-       editProfileProvider.fetchUserProfile();
+       editProfileProvider.fetchUserProfile(context);
       editProfileProvider.getProfileModel?.profileurl = "";
       logger.i("editProfileProvider.getProfileModel?.profileurl.toString()${editProfileProvider.getProfileModel?.profileurl.toString()}");
       _isTokenExpired();

@@ -68,7 +68,7 @@ class _MentalStrengthAddEditFullViewScreenState
   PermissionStatus permissionStatus = PermissionStatus.denied;
   late FocusNode _descriptionFocusNode;
   Future<void> _isTokenExpired() async {
-    await homeProvider.fetchJournals(initial: true);
+    await homeProvider.fetchJournals(initial: true,context: context);
     //  await editProfileProvider.fetchUserProfile();
     tokenStatus = TokenManager.checkTokenExpiry();
     if (tokenStatus) {
@@ -176,7 +176,7 @@ class _MentalStrengthAddEditFullViewScreenState
                         size,
                         heading: "Mental Strength",
                         onTap: () {
-                          homeProvider.fetchJournals(initial: true);
+                          homeProvider.fetchJournals(initial: true,context: context);
                           dashBoardProvider.changePage(index: 0);
                         },
                       ),
@@ -602,6 +602,7 @@ class _MentalStrengthAddEditFullViewScreenState
                                                           mentalStrengthEditProvider
                                                               .goalsValue.id
                                                               .toString(),
+                                                      context: context
                                                     );
                                                   },
                                                   child: CircleAvatar(
@@ -774,6 +775,7 @@ class _MentalStrengthAddEditFullViewScreenState
                                                               .actionList[index]
                                                               .id
                                                               .toString(),
+                                                      context: context
                                                     );
                                                   },
                                                   child: CircleAvatar(

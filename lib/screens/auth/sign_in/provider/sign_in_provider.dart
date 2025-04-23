@@ -15,6 +15,7 @@ import 'package:mentalhelth/utils/logic/shared_prefrence.dart';
 import 'package:mentalhelth/widgets/functions/snack_bar.dart';
 
 import '../../../../utils/core/constent.dart';
+import '../../../maintenence_screen/maintenence_screen.dart';
 import '../../../token_expiry/token_expiry.dart';
 import '../../subscribe_plan_page/subscribe_plan_page.dart';
 import '../model/app_settings_model.dart';
@@ -47,11 +48,23 @@ class SignInProvider extends ChangeNotifier {
   int? loginStatus;
 
   Future<void> loginUser(BuildContext context,
-      {required String email, required String password}) async
+      {required String email, required String password, required String deviceType,}) async
   {
     try {
       loginStatus = 0;
       loginLoading = true;
+
+
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       notifyListeners();
       var body = {
         'email': email,
@@ -63,6 +76,8 @@ class SignInProvider extends ChangeNotifier {
           UrlConstant.loginUrl,
         ),
         headers: <String, String>{
+          'device-type': deviceType,
+          'version': versionCode.toString(),
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: body,
@@ -123,7 +138,20 @@ class SignInProvider extends ChangeNotifier {
           context: context,
           message: 'This account does not exists !',
         );
-      }else{
+      } else if(response.statusCode == 503){
+        logger.w("response.statusCode == 503${response.statusCode == 503}");
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+      else{
         loginStatus = response.statusCode;
         showCustomSnackBar(
           context: context,
@@ -215,11 +243,22 @@ class SignInProvider extends ChangeNotifier {
 
   Future<void> forgetPassword(
     BuildContext context,
+      String deviceType,
   ) async {
     try {
       forgetLoading = true;
       forgotPasswordStatus = 0;
       forgotPasswordMessage = '';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       notifyListeners();
       var body = {
         'email': forgotEmailFieldController.text,
@@ -229,6 +268,8 @@ class SignInProvider extends ChangeNotifier {
           UrlConstant.forgotPassword,
         ),
         headers: <String, String>{
+          'device-type': deviceType,
+          'version': versionCode.toString(),
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: body,
@@ -243,7 +284,20 @@ class SignInProvider extends ChangeNotifier {
           message: jsonResponse['text'] ??
               "Please check your mail to reset your password!",
         );
-      } else {
+      } else if(response.statusCode == 503){
+        logger.w("response.statusCode == 503${response.statusCode == 503}");
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+      else {
         forgotPasswordStatus = response.statusCode;
         forgotPasswordMessage = response.reasonPhrase;
         logger.w("forgotPasswordMessage$forgotPasswordMessage");
@@ -482,13 +536,14 @@ class SignInProvider extends ChangeNotifier {
     }
   }
 
-  Future callSignInButton(BuildContext context) async {
+  Future callSignInButton(BuildContext context,String deviceType) async {
     if (emailFieldController.text.isNotEmpty &&
         passwordFieldController.text.isNotEmpty) {
       await loginUser(
         context,
         email: emailFieldController.text,
         password: passwordFieldController.text,
+        deviceType: deviceType
       );
     } else if (emailFieldController.text.isEmpty) {
       showCustomSnackBar(
@@ -566,9 +621,22 @@ class SignInProvider extends ChangeNotifier {
       settingsModel = null;
       String? token = await getUserTokenSharePref();
       settingsLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       notifyListeners();
 
       Map<String, String> headers = {
+        'device-type': deviceType,
+        'version': versionCode.toString(),
         'authorization': token!, // Assuming token is not null
 
       };
@@ -588,6 +656,18 @@ class SignInProvider extends ChangeNotifier {
         }
         settingsLoading = false;
         notifyListeners();
+      }
+      else if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
       }
       else {
         TokenManager.setTokenStatus(false);
@@ -721,12 +801,25 @@ class SignInProvider extends ChangeNotifier {
           logger.w("isRequired $isRequired");
           logger.w("settingsRegisterList ${jsonEncode(settingsRegisterModel)}");
         }
-      } else {
+      }
+      else if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+      else {
         statusAppSetup = response.statusCode;
         logger.i("settingsRegisterModel${jsonEncode(settingsRegisterModel?.status)}");
         if (response.statusCode == 401 || response.statusCode == 403) {
           statusAppSetup = response.statusCode;
-          TokenManager.setTokenStatus(true);
+       //   TokenManager.setTokenStatus(true);
           // CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
         }
       }
@@ -787,6 +880,18 @@ class SignInProvider extends ChangeNotifier {
         // }
         versionUpdateLoading = false;
         notifyListeners();
+      }
+      else if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
       }
       else {
         statusVersionUpdate = response.statusCode;

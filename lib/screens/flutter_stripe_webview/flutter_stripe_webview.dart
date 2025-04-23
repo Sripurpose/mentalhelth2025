@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:mentalhelth/screens/auth/sign_in/provider/sign_in_provider.dart';
 import 'package:mentalhelth/screens/auth/subscription_success_screen/subscription_success_screen.dart';
@@ -37,10 +39,12 @@ class _StripeWebViewState extends State<StripeWebView> {
         message: "Success fully created please login now",
       );
     } else {
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
       await signInProvider.loginUser(
         context,
         email: email.toString(),
         password: password.toString(),
+        deviceType: deviceType
       );
     }
   }
@@ -78,7 +82,7 @@ class _StripeWebViewState extends State<StripeWebView> {
                 await getLoginsDetails(context: context);
               //  homeProvider.fetchChartView(context);
               //  homeProvider.fetchJournals(initial: true);
-                editProfileProvider.fetchUserProfile();
+                editProfileProvider.fetchUserProfile(context);
               });
             }
             return NavigationDecision.navigate;

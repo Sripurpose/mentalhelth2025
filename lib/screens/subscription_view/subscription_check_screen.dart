@@ -10,9 +10,11 @@ import 'package:mentalhelth/utils/core/image_constant.dart';
 import 'package:mentalhelth/widgets/background_image/background_imager.dart';
 import 'package:mentalhelth/widgets/custom_image_view.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../utils/logic/shared_prefrence.dart';
 import '../../utils/theme/colors.dart';
 import '../../utils/theme/custom_text_style.dart';
 import '../../utils/theme/theme_helper.dart';
@@ -356,6 +358,14 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
                             linkUrl = ""; // Clear linkUrl on cancel
                           });
                           await signInProvider.logOutUser(context);
+                          final prefs = await SharedPreferences.getInstance();
+                          await prefs.remove('lastSkippedTimestamp');
+                          addFCMTokenToSharePref(token: "");
+                          addVersionSharePref(version:"");
+                          // GoogleSignInService.logout();
+                          await signInProvider.logOutUser(context);
+                          await removeUserDetailsSharePref(context: context);
+                          removeAllValuesLogout(context: context);
                           //await googleSignOut();
                           Navigator.push(
                             context,

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,8 @@ import 'package:mentalhelth/utils/core/url_constant.dart';
 import 'package:mentalhelth/utils/logic/shared_prefrence.dart';
 import 'package:mentalhelth/widgets/functions/snack_bar.dart';
 
+import '../../../utils/core/constent.dart';
+import '../../maintenence_screen/maintenence_screen.dart';
 import '../../mental_strength_add_edit_screen/model/get_goals_model.dart';
 import '../../mental_strength_add_edit_screen/model/list_goal_actions.dart';
 import '../../token_expiry/token_expiry.dart';
@@ -31,9 +34,22 @@ class HomeProvider extends ChangeNotifier {
       // String? userId = await getUserIdSharePref();
       String? token = await getUserTokenSharePref();
       chartViewLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       notifyListeners();
 
       Map<String, String> headers = {
+        'device-type': deviceType,
+        'version': versionCode.toString(),
         'authorization': token!, // Assuming token is not null
       };
       Uri url = Uri.parse(
@@ -59,6 +75,18 @@ class HomeProvider extends ChangeNotifier {
         }
         chartViewLoading = false;
         notifyListeners();
+      }
+      else if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
       }
 ///commented on 04-09-2024 sarath p
       // else if (response.statusCode == 403) {
@@ -104,14 +132,27 @@ class HomeProvider extends ChangeNotifier {
   bool journalsModelLoading = false;
   int journalStatus = 0;
 
-  Future fetchJournals({bool initial = false,String? pageNo}) async {
+  Future fetchJournals({bool initial = false,String? pageNo,required BuildContext context}) async {
     try {
       String? token = await getUserTokenSharePref();
       journalsModelLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       journalStatus = 0;
       notifyListeners();
 
       Map<String, String> headers = {
+        'device-type': deviceType,
+        'version': versionCode.toString(),
         'authorization': token ?? "", // Assuming token is not null
       };
 
@@ -150,7 +191,20 @@ class HomeProvider extends ChangeNotifier {
 
         journalsModelLoading = false;
         notifyListeners();
-      } else {
+      }
+      else if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+      else {
         TokenManager.setTokenStatus(false);
         journalStatus = response.statusCode;
         logger.w("journalsModelelse ${journalsModelFromJson(response.body)}");
@@ -183,13 +237,26 @@ class HomeProvider extends ChangeNotifier {
 
 
 
-  Future<void> fetchJournalDetails({required String journalId}) async {
+  Future<void> fetchJournalDetails({required String journalId,required BuildContext context}) async {
     try {
       journalDetails = null;
       String? token = await getUserTokenSharePref();
       journalDetailsLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       notifyListeners();
       Map<String, String> headers = {
+        'device-type': deviceType,
+        'version': versionCode.toString(),
         'authorization': token ?? '', // Assuming token is not null
       };
       Uri url = Uri.parse(
@@ -204,7 +271,20 @@ class HomeProvider extends ChangeNotifier {
         journalDetails = journalDetailsFromJson(response.body);
         logger.w("journalDetails ${journalDetails}");
         notifyListeners();
-      } else {
+      }
+      else if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+      else {
         journalDetailsLoading = false;
         logger.w("journalDetailsElse ${journalDetails}");
         notifyListeners();
@@ -234,13 +314,26 @@ class HomeProvider extends ChangeNotifier {
 
 
 
-  Future<void> fetchRemindersDetails() async {
+  Future<void> fetchRemindersDetails({required BuildContext context}) async {
     try {
       remindersDetails = null;
       String? token = await getUserTokenSharePref();
       remindersDetailsLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       notifyListeners();
       Map<String, String> headers = {
+        'device-type': deviceType,
+        'version': versionCode.toString(),
         'authorization': token ?? '', // Assuming token is not null
       };
       Uri url = Uri.parse(
@@ -257,7 +350,20 @@ class HomeProvider extends ChangeNotifier {
         logger.w("remindersDetails ${remindersDetails}");
         notifyListeners();
         reminderStatusCode = response.statusCode;
-      } else {
+      }
+      else if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+      else {
         remindersDetailsLoading = false;
         logger.w("remindersDetailsElse ${remindersDetails}");
         notifyListeners();
@@ -513,23 +619,50 @@ class HomeProvider extends ChangeNotifier {
   bool getGoalsModelLoading = false;
   GetGoalsModel? getGoalsModelDropDown;
 
-  Future<void> fetchGoals() async {
+  Future<void> fetchGoals({required BuildContext context}) async {
     try {
       String? token = await getUserTokenSharePref();
       getGoalsModelLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       notifyListeners();
 
       final response = await http.get(
         Uri.parse(
           UrlConstant.goalsUrl,
         ),
-        headers: <String, String>{"authorization": "$token"},
+        headers: <String, String>{
+          'device-type': deviceType,
+          'version': versionCode.toString(),
+          "authorization": "$token"},
       );
       if (response.statusCode == 200) {
         getGoalsModelDropDown = getGoalsModelFromJson(response.body);
         logger.w("getGoalsModelDropDown ${getGoalsModelDropDown}");
         notifyListeners();
-      } else {
+      }
+      else if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+      else {
 
       }
       if(response.statusCode == 401){
@@ -553,16 +686,30 @@ class HomeProvider extends ChangeNotifier {
   GetListGoalActionsModel? getListGoalActionsModel;
   bool getListGoalActionsModelLoading = false;
 
-  Future<void> fetchGoalActions({required String goalId}) async {
+  Future<void> fetchGoalActions({required String goalId,required BuildContext context}) async {
     try {
       String? token = await getUserTokenSharePref();
       getListGoalActionsModelLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       notifyListeners();
       final response = await http.get(
         Uri.parse(
           UrlConstant.goalActionsUrl(goalId: goalId.toString()),
         ),
-        headers: <String, String>{"authorization": "$token"},
+        headers: <String, String>{
+          'device-type': deviceType,
+          'version': versionCode.toString(),
+          "authorization": "$token"},
       );
 
       if (response.statusCode == 200) {
@@ -570,7 +717,20 @@ class HomeProvider extends ChangeNotifier {
             getListGoalActionsModelFromJson(response.body);
 
         notifyListeners();
-      } else {}
+      }
+      else if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+      else {}
       if(response.statusCode == 401){
         TokenManager.setTokenStatus(true);
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
@@ -588,13 +748,26 @@ class HomeProvider extends ChangeNotifier {
   }
 
   bool deleteActionLoading = false;
-  Future<bool> deleteReminderFunction({required String reminder_id}) async {
+  Future<bool> deleteReminderFunction({required String reminder_id,required BuildContext context}) async {
     try {
       // String? userId = await getUserIdSharePref();
       String? token = await getUserTokenSharePref();
       deleteActionLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       notifyListeners();
       Map<String, String> headers = {
+        'device-type': deviceType,
+        'version': versionCode.toString(),
         'authorization': token ?? '',
       };
       notifyListeners();
@@ -617,13 +790,25 @@ class HomeProvider extends ChangeNotifier {
         TokenManager.setTokenStatus(true);
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
-
+       if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
       if (response.statusCode == 200) {
         deleteActionLoading = false;
 
         notifyListeners();
         return true;
-      } else {
+      }
+      else {
         deleteActionLoading = false;
         notifyListeners();
         return false;

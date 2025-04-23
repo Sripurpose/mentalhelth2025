@@ -54,7 +54,7 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
 
   Future<void> _isTokenExpired() async {
     //await homeProvider.fetchChartView(context);
-    await homeProvider.fetchJournals(initial: true);
+    await homeProvider.fetchJournals(initial: true,context: context);
    // await editProfileProvider.fetchUserProfile();
     tokenStatus = TokenManager.checkTokenExpiry();
     if (tokenStatus) {
@@ -307,6 +307,7 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
                                     await mentalStrengthEditProvider
                                         .fetchActionDetails(
                                       actionId: data.id.toString(),
+                                      context: context
                                     );
 
                                     mentalStrengthEditProvider

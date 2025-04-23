@@ -98,7 +98,7 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
 
   Future<void> _isTokenExpired() async {
     //await homeProvider.fetchChartView(context);
-    await homeProvider.fetchJournals(initial: true);
+    await homeProvider.fetchJournals(initial: true,context: context);
     // await editProfileProvider.fetchUserProfile();
     tokenStatus = TokenManager.checkTokenExpiry();
     if (tokenStatus) {
@@ -647,9 +647,9 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
                   context,
                   listen: false,
                 );
-                goalsDreamsProvider.fetchGoalsAndDreams(pageNo: goalsDreamsProvider.currentPage.toString());
+                goalsDreamsProvider.fetchGoalsAndDreams(pageNo: goalsDreamsProvider.currentPage.toString(),context: context);
                 if(goalsDreamsProvider.fetchGoalsAndDreamsStatus == 404){
-                  goalsDreamsProvider.fetchGoalsAndDreams(pageNo: 1.toString());
+                  goalsDreamsProvider.fetchGoalsAndDreams(pageNo: 1.toString(),context: context);
                 }
 
               }

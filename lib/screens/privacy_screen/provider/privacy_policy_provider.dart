@@ -29,7 +29,8 @@ class PrivacyPolicyProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         policyModel = policyModelFromJson(response.body);
         notifyListeners();
-      } else {
+      }
+      else {
         policyModelLoading = false;
         notifyListeners();
       }

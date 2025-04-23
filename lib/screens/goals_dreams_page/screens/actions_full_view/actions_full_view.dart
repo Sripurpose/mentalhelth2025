@@ -71,6 +71,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
     );
     await mentalStrengthEditProvider.fetchActionDetails(
       actionId: widget.id,
+      context: context
     );
     //added sarath
     if( mentalStrengthEditProvider.actionsDetailsModel != null){
@@ -830,9 +831,11 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                         onPressedDelete: () async {
                           await addActionsProvider.deleteActionFunction(
                             deleteId: id,
+                            context: context
                           );
                           goalsDreamsProvider.fetchGoalsAndDreams(
                             initial: true,
+                            context: context
                           );
                           Navigator.of(context).pop();
 

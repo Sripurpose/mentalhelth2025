@@ -264,8 +264,8 @@ class _JournalListPageState extends State<JournalListPage> {
 
   Future<void> _isTokenExpired() async {
    // await homeProvider.fetchChartView(context);
-    await homeProvider.fetchJournals(initial: true);
-    await editProfileProvider.fetchUserProfile();
+    await homeProvider.fetchJournals(initial: true,context: context);
+    await editProfileProvider.fetchUserProfile(context);
     tokenStatus = TokenManager.checkTokenExpiry();
     if (tokenStatus) {
       setState(() {
@@ -350,7 +350,7 @@ class _JournalListPageState extends State<JournalListPage> {
                           GestureDetector(
                             onTap: () {
                               journalListProvider.changeListViewBar(false);
-                              journalListProvider.fetchJournalChartView();
+                              journalListProvider.fetchJournalChartView(context: context);
                             },
                             child: Container(
                               width: size.width * 0.42,
@@ -409,7 +409,7 @@ class _JournalListPageState extends State<JournalListPage> {
                               shape: const CircleBorder(), // Ensures circular shape
                               onPressed: () {
                                 dashBoardProvider.changePage(index: 1);
-                                mentalStrengthEditProvider.fetchEmotions();
+                                mentalStrengthEditProvider.fetchEmotions(context: context);
                               },
                               child: SvgPicture.asset(
                                 ImageConstant.createGoals, // Path to your SVG icon

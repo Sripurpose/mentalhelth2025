@@ -99,9 +99,9 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
 
   Future<void> _isTokenExpired() async {
    // await homeProvider.fetchChartView(context);
-    await homeProvider.fetchJournals(pageNo:homeProvider.currentPage.toString());
+    await homeProvider.fetchJournals(pageNo:homeProvider.currentPage.toString(),context: context);
     if(homeProvider.journalStatus == 404){
-      await homeProvider.fetchJournals(pageNo:1.toString());
+      await homeProvider.fetchJournals(pageNo:1.toString(),context: context);
     }
     //await editProfileProvider.fetchUserProfile();
     tokenStatus = TokenManager.checkTokenExpiry();
@@ -470,9 +470,9 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                                         seconds: 3),
                                                         () async {
                                                       //   homeProvider.currentPage == 1;
-                                                      await homeProvider.fetchJournals(pageNo:homeProvider.currentPage.toString());
+                                                      await homeProvider.fetchJournals(pageNo:homeProvider.currentPage.toString(),context: context);
                                                       if(homeProvider.journalStatus == 404){
-                                                        await homeProvider.fetchJournals(pageNo:1.toString());
+                                                        await homeProvider.fetchJournals(pageNo:1.toString(),context: context);
                                                       }
                                                       logger.i("homeProvider.currentPage${homeProvider.currentPage}");
                                                     });
@@ -1434,7 +1434,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
 
               mentalStrengthEditProvider
                   .fetchEmotions(
-                  emotion: "$mappedValue");
+                  emotion: "$mappedValue",context: context);
 
               mentalStrengthEditProvider.changeEmotionalValueStar(value);
               _isTokenExpired(); // Call your method after rating update.
@@ -1683,6 +1683,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                       mentalStrengthEditProvider.fetchGoalDetails(
                         goalId: mentalStrengthEditProvider.goalsValue.id
                             .toString(),
+                        context: context
                       );
                     },
                     child: CircleAvatar(
@@ -1844,6 +1845,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                               actionId: mentalStrengthEditProvider
                                   .actionList[index].id
                                   .toString(),
+                              context: context
                             );
                           },
                           child: CircleAvatar(

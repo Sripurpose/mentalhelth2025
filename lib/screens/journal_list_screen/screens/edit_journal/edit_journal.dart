@@ -80,9 +80,9 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
 
   Future<void> _isTokenExpired() async {
    // await homeProvider.fetchChartView(context);
-    await homeProvider.fetchJournals(pageNo:homeProvider.currentPage.toString());
+    await homeProvider.fetchJournals(pageNo:homeProvider.currentPage.toString(),context: context);
     if(homeProvider.journalStatus == 404){
-      await homeProvider.fetchJournals(pageNo:1.toString());
+      await homeProvider.fetchJournals(pageNo:1.toString(),context: context);
     }
     //await editProfileProvider.fetchUserProfile();
     tokenStatus = TokenManager.checkTokenExpiry();
@@ -658,6 +658,7 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
                                                                         .goalsValue
                                                                         .id
                                                                         .toString(),
+                                                                    context: context
                                                                   );
                                                                 },
                                                                 child:
@@ -849,6 +850,7 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
                                                                         index]
                                                                     .id
                                                                     .toString(),
+                                                            context: context
                                                           );
                                                         },
                                                         child: CircleAvatar(
@@ -951,9 +953,9 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
                                                             seconds: 3),
                                                         () async {
                                                        //   homeProvider.currentPage == 1;
-                                                          await homeProvider.fetchJournals(pageNo:homeProvider.currentPage.toString());
+                                                          await homeProvider.fetchJournals(pageNo:homeProvider.currentPage.toString(),context: context);
                                                           if(homeProvider.journalStatus == 404){
-                                                            await homeProvider.fetchJournals(pageNo:1.toString());
+                                                            await homeProvider.fetchJournals(pageNo:1.toString(),context: context);
                                                           }
                                                       logger.i("homeProvider.currentPage${homeProvider.currentPage}");
                                                     });

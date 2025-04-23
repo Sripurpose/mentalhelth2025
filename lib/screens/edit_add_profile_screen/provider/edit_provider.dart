@@ -14,6 +14,8 @@ import 'package:mentalhelth/utils/logic/shared_prefrence.dart';
 import 'package:mentalhelth/widgets/functions/snack_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../utils/core/constent.dart';
+import '../../maintenence_screen/maintenence_screen.dart';
 import '../../token_expiry/token_expiry.dart';
 
 class EditProfileProvider extends ChangeNotifier {
@@ -43,12 +45,23 @@ class EditProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchUserProfile() async {
+  Future<void> fetchUserProfile(BuildContext context,) async {
     try {
       getProfileModel = null;
       String? userId = await getUserIdSharePref();
       String? token = await getUserTokenSharePref();
       getProfileLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       notifyListeners();
       Uri url = Uri.parse(
         UrlConstant.profileUrl(
@@ -58,6 +71,8 @@ class EditProfileProvider extends ChangeNotifier {
       final response = await http.get(
         url,
         headers: <String, String>{
+          'device-type': deviceType,
+          'version': versionCode.toString(),
           'Content-Type': 'application/json',
           "authorization": "$token"
         },
@@ -69,7 +84,20 @@ class EditProfileProvider extends ChangeNotifier {
         fetchCategory();
         editProfileAddValue();
         notifyListeners();
-      } else {
+      } else if(response.statusCode == 503){
+        logger.w("response.statusCode == 503${response.statusCode == 503}");
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+      else {
         getProfileLoading = false;
         notifyListeners();
       }
@@ -185,8 +213,21 @@ class EditProfileProvider extends ChangeNotifier {
     try {
       String? token = await getUserTokenSharePref();
       saveMediaUploadLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       notifyListeners();
       var headers = {
+        'device-type': deviceType,
+        'version': versionCode.toString(),
         "authorization": "$token",
       };
       var request = http.MultipartRequest(
@@ -307,10 +348,23 @@ class EditProfileProvider extends ChangeNotifier {
   }) async {
     try {
       editLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       notifyListeners();
       String? userId = await getUserIdSharePref();
       String? token = await getUserTokenSharePref();
       final Map<String, String> headers = <String, String>{
+        'device-type': deviceType,
+        'version': versionCode.toString(),
         "authorization": "$token"
       };
       late Map<String, dynamic> body;
@@ -355,11 +409,23 @@ class EditProfileProvider extends ChangeNotifier {
         );
 
         if (responseData['status'] == true) {
-          fetchUserProfile();
+          fetchUserProfile(context);
         }
       } else if (response.statusCode == 401 || response.statusCode == 403) {
       //  TokenManager.setTokenStatus(true);
-      } else {
+      } else if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+      else {
         Map<String, dynamic> responseData = jsonDecode(response.body);
         String errorMessage = responseData['text'] ?? 'Something went wrong!';
 
@@ -384,6 +450,17 @@ class EditProfileProvider extends ChangeNotifier {
       {required String value}) async {
     try {
       saveIntrestsLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       notifyListeners();
       String? token = await getUserTokenSharePref();
       var body = {
@@ -394,13 +471,31 @@ class EditProfileProvider extends ChangeNotifier {
           UrlConstant.interestsUrl,
         ),
         headers: <String, String>{
+          'device-type': deviceType,
+          'version': versionCode.toString(),
           // 'Content-Type': 'application/json',
           "authorization": "$token"
         },
         body: body,
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
-      } else {}
+
+      }
+      else if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+      else {
+
+      }
       if(response.statusCode == 401){
         TokenManager.setTokenStatus(true);
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
@@ -499,6 +594,17 @@ class EditProfileProvider extends ChangeNotifier {
       sendOtpStatus = 0;
       sendOtpMailMessage = '';
       sendOtpLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       notifyListeners();
       String? token = await getUserTokenSharePref();
       var body = {
@@ -513,7 +619,10 @@ class EditProfileProvider extends ChangeNotifier {
         Uri.parse(
           UrlConstant.sendOtpEmailPhone,
         ),
-        headers: <String, String>{"authorization": "$token"},
+        headers: <String, String>{
+          'device-type': deviceType,
+          'version': versionCode.toString(),
+          "authorization": "$token"},
         body: body,
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -526,7 +635,20 @@ class EditProfileProvider extends ChangeNotifier {
           message: 'An OTP has been sent to your email.Please enter it to verify your account.',
         );
        // Navigator.of(context).pop();
-      } else {
+      }
+      else if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+      else {
         sendOtpLoading = false;
         sendOtpStatus = response.statusCode;
         sendOtpMailMessage =  response.reasonPhrase;
@@ -571,6 +693,17 @@ class EditProfileProvider extends ChangeNotifier {
       verifyOtpStatus = 0;
       verifyOtpMailMessage = '';
       verifyOtpLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       notifyListeners();
       String? token = await getUserTokenSharePref();
       var body = {
@@ -586,7 +719,10 @@ class EditProfileProvider extends ChangeNotifier {
         Uri.parse(
           UrlConstant.verifyOtpEmailPhone,
         ),
-        headers: <String, String>{"authorization": "$token"},
+        headers: <String, String>{
+          'device-type': deviceType,
+          'version': versionCode.toString(),
+          "authorization": "$token"},
         body: body,
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -599,7 +735,20 @@ class EditProfileProvider extends ChangeNotifier {
           message: json.decode(response.body)["text"],
         );
         Navigator.of(context).pop();
-      } else {
+      }
+      else if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+      else {
         verifyOtpLoading = false;
         verifyOtpStatus = response.statusCode;
         verifyOtpMailMessage = response.reasonPhrase;
@@ -632,6 +781,17 @@ class EditProfileProvider extends ChangeNotifier {
       sendOtpPhoneStatus = 0;
       sendOtpPhoneMessage = '';
       sendOtpPhoneLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       notifyListeners();
       String? token = await getUserTokenSharePref();
       var body = {
@@ -646,7 +806,10 @@ class EditProfileProvider extends ChangeNotifier {
         Uri.parse(
           UrlConstant.sendOtpEmailPhone,
         ),
-        headers: <String, String>{"authorization": "$token"},
+        headers: <String, String>{
+          'device-type': deviceType,
+          'version': versionCode.toString(),
+          "authorization": "$token"},
         body: body,
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -659,7 +822,20 @@ class EditProfileProvider extends ChangeNotifier {
           message: 'An OTP has been sent to your email.Please enter it to verify your account.',
         );
        // Navigator.of(context).pop();
-      } else {
+      }
+      else if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+      else {
         sendOtpPhoneLoading = false;
         sendOtpPhoneStatus = response.statusCode;
         sendOtpPhoneMessage =  response.reasonPhrase;
@@ -692,6 +868,17 @@ class EditProfileProvider extends ChangeNotifier {
       verifyOtpPhoneStatus = 0;
       verifyOtpPhoneMessage = '';
       verifyOtpPhoneLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       notifyListeners();
       String? token = await getUserTokenSharePref();
       var body = {
@@ -707,7 +894,10 @@ class EditProfileProvider extends ChangeNotifier {
         Uri.parse(
           UrlConstant.verifyOtpEmailPhone,
         ),
-        headers: <String, String>{"authorization": "$token"},
+        headers: <String, String>{
+          'device-type': deviceType,
+          'version': versionCode.toString(),
+          "authorization": "$token"},
         body: body,
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -720,7 +910,20 @@ class EditProfileProvider extends ChangeNotifier {
           message: json.decode(response.body)["text"],
         );
         Navigator.of(context).pop();
-      } else {
+      }
+      else if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+      else {
         verifyOtpPhoneLoading = false;
         verifyOtpPhoneStatus = response.statusCode;
         verifyOtpPhoneMessage = response.reasonPhrase;
@@ -792,7 +995,7 @@ class EditProfileProvider extends ChangeNotifier {
 
 
   Future<void> changePassword(BuildContext context,
-      {required String oldPassword, required String newPassword}) async
+      {required String oldPassword, required String newPassword,required String deviceType,}) async
   {
     try {
       // Retrieve and print the token for debugging
@@ -800,6 +1003,16 @@ class EditProfileProvider extends ChangeNotifier {
       print('Token: $token');
       changePasswordStatus = 0;
       changePasswordLoading = true;
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
       notifyListeners();
       var body = {
         'oldpass': oldPassword,
@@ -811,6 +1024,8 @@ class EditProfileProvider extends ChangeNotifier {
           UrlConstant.changePassword,
         ),
         headers: <String, String>{
+          'device-type': deviceType,
+          'version': versionCode.toString(),
           'Content-Type': 'application/x-www-form-urlencoded',
           'authorization': token.toString(), // Corrected token usage
         },
@@ -826,7 +1041,20 @@ class EditProfileProvider extends ChangeNotifier {
           context: context,
           message: '"Current password is wrong!"',
         );
-      }else{
+      }else if(response.statusCode == 503){
+        logger.w("response.statusCode == 503${response.statusCode == 503}");
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+      else{
         changePasswordStatus = response.statusCode;
         showCustomSnackBar(
           context: context,
