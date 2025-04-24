@@ -293,7 +293,7 @@ class _NumuMentalStrengthAddEditPageState
                                   ],
                                 ),
 
-                                const SizedBox(height: 30),
+                                const SizedBox(height: 5),
                                 // Spacing between rows
 
                                 // Progress Bar (on a separate line)
