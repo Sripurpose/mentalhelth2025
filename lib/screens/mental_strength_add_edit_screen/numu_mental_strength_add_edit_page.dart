@@ -327,7 +327,7 @@ class _NumuMentalStrengthAddEditPageState
                                 // Floating Button for navigation and submission
                                 if (currentTabIndex < 5)
                                   Positioned(
-                                    bottom: size.height * 0.005,
+                                    bottom: size.height * 0.002,
                                     left: 0,
                                     right: 0,
                                     child: Padding(
@@ -343,7 +343,7 @@ class _NumuMentalStrengthAddEditPageState
                                             topRight: Radius.circular(10),
                                           ),
                                         ),
-                                        padding: const EdgeInsets.symmetric(vertical: 20),
+                                        padding: const EdgeInsets.symmetric(vertical: 8),
                                         child: Center(
                                           child: SizedBox(
                                             width: 70,
@@ -436,7 +436,7 @@ class _NumuMentalStrengthAddEditPageState
                                   )
                                 else
                                   Positioned(
-                                    bottom: size.height * 0.02,
+                                    bottom: size.height * 0.002,
                                     left: 0,
                                     right: 0,
                                     child: Container(
@@ -552,11 +552,11 @@ class _NumuMentalStrengthAddEditPageState
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(height: size.height * 0.03),
+                SizedBox(height: size.height * 0.01),
                 _buildTitleEditText(context, mentalStrengthEditProvider),
-                SizedBox(height: size.height * 0.03),
+                SizedBox(height: size.height * 0.015),
                 _buildDescriptionEditText(context, mentalStrengthEditProvider),
-                SizedBox(height: size.height * 0.03),
+                SizedBox(height: size.height * 0.015),
                 _buildAddMediaColumn(context, size),
                 SizedBox(height: size.height * 0.05),
                 Padding(

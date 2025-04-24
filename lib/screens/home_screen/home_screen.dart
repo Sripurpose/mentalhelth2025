@@ -111,7 +111,14 @@ class _HomeScreenState extends State<HomeScreen> {
     String deviceType = Platform.isAndroid ? 'android' : 'ios';
     signInProvider.fetchVersionUpdate(context, deviceType);
   }
+  void printTimeZone() {
+    final now = DateTime.now();
+    final offset = DateTime.now().timeZoneOffset;
+    final trimmedOffset = offset.toString().split('.').first;
+    timeZone = trimmedOffset;
+    print("Trimmed Offset: $trimmedOffset"); // Output: 5:30:00 or -07:00:00
 
+  }
   @override
   void initState() {
     super.initState();
@@ -123,6 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
     dashBoardProvider = Provider.of<DashBoardProvider>(context, listen: false);
     goalsDreamsProvider = Provider.of<GoalsDreamsProvider>(context, listen: false);
     scheduleMicrotask(() async {
+      printTimeZone();
       getAppVersion();
       signInProvider.settingsList.clear();
       await editProfileProvider.fetchUserProfile(context);
@@ -632,7 +640,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
   /// Section Widget
   Widget _buildMessageColumn(BuildContext context, Size size) {
     return Container(

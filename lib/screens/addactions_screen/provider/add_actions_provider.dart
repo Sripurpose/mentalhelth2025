@@ -27,6 +27,7 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:video_compress/video_compress.dart';
 
+import '../../../utils/core/constants.dart';
 import '../../../utils/core/constent.dart';
 import '../../../utils/core/date_time_utils.dart';
 import '../../maintenence_screen/maintenence_screen.dart';
@@ -1023,6 +1024,7 @@ var logger = Logger();
           'reminder_repeat': repeat.toString(),  // Ensure repeat is a string
           'from_time': convertTimeOfDayTo12Hour(reminderStartTime!).toString(),        // Convert to string
           'to_time': convertTimeOfDayTo12Hour(reminderEndTime!).toString(),            // Convert to string
+          'timezone_offset': timeZone
         };
       } else {
         body = {
@@ -1126,7 +1128,7 @@ var logger = Logger();
       return false;
     } catch (error) {
       logger.w("error Failed $error");
-      showToast(context: context, message: "Failed");
+     // showToast(context: context, message: "Failed");
       updateSaveActionLoadingFunction(false);
       notifyListeners();
       return false;
@@ -1182,13 +1184,14 @@ var logger = Logger();
           'goal_id': goalId,
           'gem_id':actionId,
           'is_reminder': isReminder ?? '',
-          'reminder_startdate': convertToUnixTimestamp(reminderStartDate).toString(),  // Convert to string
-          'reminder_enddate': convertToUnixTimestamp(reminderEndDate).toString(),      // Convert to string
+          'reminder_startdate': reminderStartDate,  // Convert to string
+          'reminder_enddate': reminderEndDate,      // Convert to string
           //'reminder_before': '${remindTime?.hour.toString().padLeft(2, '0')}:${remindTime?.minute.toString().padLeft(2, '0')}',
           'reminder_before': '',
           'reminder_repeat': repeat.toString(),  // Ensure repeat is a string
           'from_time': convertTimeOfDayTo12Hour(reminderStartTime!).toString(),        // Convert to string
           'to_time': convertTimeOfDayTo12Hour(reminderEndTime!).toString(),            // Convert to string
+          'timezone_offset': timeZone
         };
       } else {
         body = {
@@ -1302,7 +1305,7 @@ var logger = Logger();
       updateSaveActionLoadingFunction(false);
       notifyListeners();
     } catch (error) {
-      showCustomSnackBar(context: context, message: "Failed");
+     // showCustomSnackBar(context: context, message: "Failed");
       updateSaveActionLoadingFunction(false);
       notifyListeners();
     }
