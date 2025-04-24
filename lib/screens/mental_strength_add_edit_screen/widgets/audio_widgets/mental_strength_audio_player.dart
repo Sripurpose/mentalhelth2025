@@ -48,7 +48,7 @@ class _MentalStrengthAudioPlayerState extends State<MentalStrengthAudioPlayer> {
   @override
   void initState() {
     super.initState();
-
+      logger.i("widget.url${widget.url}");
     // Set up listeners
     audioPlayer.onPlayerStateChanged.listen((event) {
       if (mounted) {
@@ -75,55 +75,89 @@ class _MentalStrengthAudioPlayerState extends State<MentalStrengthAudioPlayer> {
       }
     });
   }
-
   Future<void> playAudio() async {
     try {
       if (isPlaying) {
         await audioPlayer.pause();
       } else {
-        // Initialize audio source if not yet initialized
-        if (duration == Duration.zero) {
-          if (widget.url.startsWith("http") || widget.url.startsWith("https")) {
-            await audioPlayer.setSourceUrl(widget.url);
+        // Stop and release any previous source
+        await audioPlayer.stop();
+        await audioPlayer.release(); // Add this line
+
+        // Initialize audio source
+        if (widget.url.startsWith("http") || widget.url.startsWith("https")) {
+          await audioPlayer.setSourceUrl(widget.url);
+        } else {
+          final file = File(widget.url);
+          if (await file.exists()) {
+            await audioPlayer.setSourceDeviceFile(widget.url);
           } else {
-            final file = File(widget.url);
-            if (await file.exists()) {
-              await audioPlayer.setSourceDeviceFile(widget.url);
-            } else {
-              showCustomSnackBar(
-                context: context,
-                message: "Audio file not found at the given path.",
-              );
-              return;
-            }
+            showCustomSnackBar(
+              context: context,
+              message: "Audio file not found at the given path.",
+            );
+            return;
           }
         }
-
-        // Check duration after setting the source to ensure it is initialized
-        if (duration == Duration.zero) {
-          showCustomSnackBar(
-            context: context,
-            message: "Audio is still loading. Please wait a moment.",
-          );
-          return;
-        }
-
-        // Stop any current audio player if necessary
-        if (currentAudioPlayer != null && currentAudioPlayer != audioPlayer) {
-          await currentAudioPlayer!.stop();
-        }
-
-        currentAudioPlayer = audioPlayer;
+        // Play audio
         await audioPlayer.play(UrlSource(widget.url));
       }
     } catch (e) {
-      logger.w("error$e");
+      logger.e("Error playing audio: $e");
       showCustomSnackBar(
         context: context,
         message: "Failed to play audio: $e",
       );
     }
   }
+  // Future<void> playAudio() async {
+  //   try {
+  //     if (isPlaying) {
+  //       await audioPlayer.pause();
+  //     } else {
+  //       // Initialize audio source if not yet initialized
+  //       if (duration == Duration.zero) {
+  //         if (widget.url.startsWith("http") || widget.url.startsWith("https")) {
+  //           await audioPlayer.setSourceUrl(widget.url);
+  //         } else {
+  //           final file = File(widget.url);
+  //           if (await file.exists()) {
+  //             await audioPlayer.setSourceDeviceFile(widget.url);
+  //           } else {
+  //             showCustomSnackBar(
+  //               context: context,
+  //               message: "Audio file not found at the given path.",
+  //             );
+  //             return;
+  //           }
+  //         }
+  //       }
+  //
+  //       // Check duration after setting the source to ensure it is initialized
+  //       if (duration == Duration.zero) {
+  //         showCustomSnackBar(
+  //           context: context,
+  //           message: "Audio is still loading. Please wait a moment.",
+  //         );
+  //         return;
+  //       }
+  //
+  //       // Stop any current audio player if necessary
+  //       if (currentAudioPlayer != null && currentAudioPlayer != audioPlayer) {
+  //         await currentAudioPlayer!.stop();
+  //       }
+  //
+  //       currentAudioPlayer = audioPlayer;
+  //       await audioPlayer.play(UrlSource(widget.url));
+  //     }
+  //   } catch (e) {
+  //     logger.w("error$e");
+  //     showCustomSnackBar(
+  //       context: context,
+  //       message: "Failed to play audio: $e",
+  //     );
+  //   }
+  // }
 
 
   @override

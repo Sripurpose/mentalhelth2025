@@ -432,10 +432,10 @@ var logger = Logger();
       // Do any logic here using `localPicked`
       notifyListeners();
 
-      return formatPickedDateFor2(localPicked);
+      return formatPickedDateFor1(localPicked);
     }
 
-    return formatPickedDateFor2(initial); // fallback
+    return formatPickedDateFor1(initial); // fallback
   }
 
 
@@ -444,14 +444,16 @@ var logger = Logger();
     reminderStartDate = await selectReminder(
       context,
     );
+    logger.i("reminderStartDate${reminderStartDate}");
     notifyListeners();
   }
 
   void reminderEndDateFunction(BuildContext context) async {
     reminderEndDate = await selectReminder(
       context,
-      reminderStartDates: DateFormat('d MMM y').parse(reminderStartDate),
+      reminderStartDates: DateFormat('yyyy-MM-dd').parse(reminderStartDate),
     );
+    logger.i("reminderStartDate${reminderEndDate}");
     notifyListeners();
   }
 
@@ -1014,8 +1016,8 @@ var logger = Logger();
           'location_address': locationAddress,
           'goal_id': goalId,
           'is_reminder': isReminder ?? '',
-          'reminder_startdate': convertToUnixTimestamp(reminderStartDate).toString(),  // Convert to string
-          'reminder_enddate': convertToUnixTimestamp(reminderEndDate).toString(),      // Convert to string
+          'reminder_startdate': reminderStartDate,  // Convert to string
+          'reminder_enddate': reminderEndDate,      // Convert to string
           //'reminder_before': '${remindTime?.hour.toString().padLeft(2, '0')}:${remindTime?.minute.toString().padLeft(2, '0')}',
           'reminder_before': '',
           'reminder_repeat': repeat.toString(),  // Ensure repeat is a string

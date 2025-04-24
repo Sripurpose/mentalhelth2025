@@ -32,5 +32,6 @@ class ColorsContent {
   static Color numuThemeGradientColor1 = const Color(0xFFCECBF7);
   static Color numuThemeGradientColor2 = const Color(0xFF7F6AFD);
   static Color dummyColorAppbar = const Color(0xFFB768F7);
+  static Color numuAddColor = const Color(0xFFC7C4DA);
 
 }

@@ -325,146 +325,170 @@ class _NumuMentalStrengthAddEditPageState
                                   ],
                                 ),
                                 // Floating Button for navigation and submission
-                              if (currentTabIndex < 5)
+                                if (currentTabIndex < 5)
                                   Positioned(
-                      bottom: size.height * 0.025,
-                      left: 0,
-                      right: 0,
-                      child: Center(
-                        child: SizedBox(
-                          width: 70,
-                          height: 70,
-                          child: FloatingActionButton(
-                            backgroundColor: Colors.transparent,
-                            elevation: 0, // removes shadow
-                            highlightElevation: 0,
-                            focusElevation: 0,
-                            hoverElevation: 0,
-                            splashColor: Colors.transparent, // disables ripple effect
-                            foregroundColor: Colors.transparent,
-                            onPressed: () {
-                              // Check for required conditions before moving to the next tab
-                              if (currentTabIndex == 0) {
-                                if (mentalStrengthEditProvider.titleEditTextController.text.isNotEmpty &&
-                                    mentalStrengthEditProvider.descriptionEditTextController.text.isNotEmpty) {
-                                  _tabController.animateTo(currentTabIndex + 1);
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                     SnackBar(
-                                      content: const Text("Title and Description are required."),
-                                      backgroundColor: ColorsContent.newThemeColor,
-                                    ),
-                                  );
-                                  print("Title and Description are required.");
-                                }
-                              } else if (currentTabIndex == 1) {
-                                if (mentalStrengthEditProvider.emotionalValueStar != null) {
-                                  _tabController.animateTo(currentTabIndex + 1);
-                                }
-                                else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                     SnackBar(
-                                      content: const Text("This field is mandatory."),
-                                      backgroundColor: ColorsContent.newThemeColor,
-                                    ),
-                                  );
-                                  print("Emotional star rating,");
-                                }
-                              }
-                              else if (currentTabIndex == 2) {
-                                if ( mentalStrengthEditProvider.emotionValue != null) {
-                                  _tabController.animateTo(currentTabIndex + 1);
-                                }
+                                    bottom: size.height * 0.005,
+                                    left: 0,
+                                    right: 0,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                      child: Container(
+                                        width: double.infinity,
+                                        decoration: const BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(10),
+                                            bottomRight: Radius.circular(10),
+                                            topLeft: Radius.circular(10),
+                                            topRight: Radius.circular(10),
+                                          ),
+                                        ),
+                                        padding: const EdgeInsets.symmetric(vertical: 20),
+                                        child: Center(
+                                          child: SizedBox(
+                                            width: 70,
+                                            height: 70,
+                                            child: FloatingActionButton(
+                                              backgroundColor: Colors.transparent,
+                                              elevation: 0,
+                                              highlightElevation: 0,
+                                              focusElevation: 0,
+                                              hoverElevation: 0,
+                                              splashColor: Colors.transparent,
+                                              foregroundColor: Colors.transparent,
+                                              onPressed: () {
+                                                if (currentTabIndex == 0) {
+                                                  final title = mentalStrengthEditProvider.titleEditTextController.text.trim();
+                                                  final description = mentalStrengthEditProvider.descriptionEditTextController.text.trim();
 
-                                else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                     SnackBar(
-                                      content: const Text("Emotion selection is required."),
-                                      backgroundColor: ColorsContent.newThemeColor,
-                                    ),
-                                  );
-                                  print("Emotion selection, is required.");
-                                }
-                              }
-                              else if (currentTabIndex == 3) {
-                                if ( mentalStrengthEditProvider.driveValueStar != null) {
-                                  _tabController.animateTo(currentTabIndex + 1);
-                                }
+                                                  if (title.isEmpty) {
+                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                      SnackBar(
+                                                        content: const Text("Title is required."),
+                                                        backgroundColor: ColorsContent.newThemeColor,
+                                                      ),
+                                                    );
+                                                    print("Title is required.");
+                                                  } else if (description.isEmpty) {
+                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                      SnackBar(
+                                                        content: const Text("Description is required."),
+                                                        backgroundColor: ColorsContent.newThemeColor,
+                                                      ),
+                                                    );
+                                                    print("Description is required.");
+                                                  } else {
+                                                    _tabController.animateTo(currentTabIndex + 1);
+                                                  }
 
-                                else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                     SnackBar(
-                                      content: const Text("This field is mandatory."),
-                                      backgroundColor: ColorsContent.newThemeColor,
+                                                } else if (currentTabIndex == 1) {
+                                                  if (mentalStrengthEditProvider.emotionalValueStar != null) {
+                                                    _tabController.animateTo(currentTabIndex + 1);
+                                                  } else {
+                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                      SnackBar(
+                                                        content: const Text("This field is mandatory."),
+                                                        backgroundColor: ColorsContent.newThemeColor,
+                                                      ),
+                                                    );
+                                                    print("Emotional star rating,");
+                                                  }
+                                                } else if (currentTabIndex == 2) {
+                                                  if (mentalStrengthEditProvider.emotionValue != null) {
+                                                    _tabController.animateTo(currentTabIndex + 1);
+                                                  } else {
+                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                      SnackBar(
+                                                        content: const Text("Emotion selection is required."),
+                                                        backgroundColor: ColorsContent.newThemeColor,
+                                                      ),
+                                                    );
+                                                    print("Emotion selection is required.");
+                                                  }
+                                                } else if (currentTabIndex == 3) {
+                                                  if (mentalStrengthEditProvider.driveValueStar != null) {
+                                                    _tabController.animateTo(currentTabIndex + 1);
+                                                  } else {
+                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                      SnackBar(
+                                                        content: const Text("This field is mandatory."),
+                                                        backgroundColor: ColorsContent.newThemeColor,
+                                                      ),
+                                                    );
+                                                    print("Drive star rating is required.");
+                                                  }
+                                                } else {
+                                                  _tabController.animateTo(currentTabIndex + 1);
+                                                }
+                                              },
+                                              child: Image.asset(
+                                                ImageConstant.splashNextIcon,
+                                                width: 90,
+                                                height: 90,
+                                              ),
+                                              shape: const CircleBorder(),
+                                              heroTag: "next_button",
+                                            ),
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  );
-                                  print("Drive star rating is required.");
-                                }
-                              }
-                              else {
-                                _tabController.animateTo(currentTabIndex + 1);
-                              }
-                            },
-                            child: Image.asset(
-                              ImageConstant.splashNextIcon,
-                              width: 90,
-                              height: 90,
-                            ),
-                            shape: const CircleBorder(),
-                            heroTag: "next_button",
-                          ),
-                        ),
-                      ),
-                    )
-                                 else
+                                  )
+                                else
                                   Positioned(
                                     bottom: size.height * 0.02,
                                     left: 0,
                                     right: 0,
-                                    child: Center(
-                                      child: GestureDetector(
-                                        onTap: () async {
-                                          String? validationMessage;
+                                    child: Container(
+                                      width: double.infinity,
+                                      color: Colors.white,
+                                      padding: const EdgeInsets.symmetric(vertical: 10),
+                                      child: Center(
+                                        child: GestureDetector(
+                                          onTap: () async {
+                                            String? validationMessage;
 
-                                          if (mentalStrengthEditProvider.descriptionEditTextController.text.isEmpty) {
-                                            validationMessage = "Description missing";
-                                          } else if (mentalStrengthEditProvider.emotionValue!.id.toString().isEmpty) {
-                                            validationMessage = "Please select an emotion";
-                                          } else if (mentalStrengthEditProvider.emotionalValueStar == null) {
-                                            validationMessage = "Please select Feeling Now emotional Rate";
-                                          } else if (mentalStrengthEditProvider.driveValueStar == null) {
-                                            validationMessage = "Please select Situation Rate";
-                                          }
+                                            if (mentalStrengthEditProvider.descriptionEditTextController.text.isEmpty) {
+                                              validationMessage = "Description missing";
+                                            } else if (mentalStrengthEditProvider.emotionValue!.id.toString().isEmpty) {
+                                              validationMessage = "Please select an emotion";
+                                            } else if (mentalStrengthEditProvider.emotionalValueStar == null) {
+                                              validationMessage = "Please select Feeling Now emotional Rate";
+                                            } else if (mentalStrengthEditProvider.driveValueStar == null) {
+                                              validationMessage = "Please select Situation Rate";
+                                            }
 
-                                          if (validationMessage != null) {
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                              SnackBar(
-                                                content: Text(validationMessage),
-                                                backgroundColor: ColorsContent.newThemeColor,
-                                              ),
-                                            );
-                                          } else {
-                                            await mentalStrengthEditProvider.saveButtonFunction(context);
-                                            _isTokenExpired();
-                                          }
-                                        },
-                                        child: Stack(
-                                          alignment: Alignment.center,
-                                          children: [
-                                            SvgPicture.asset(ImageConstant.submitButtonNumuBuild),
-                                            if (mentalStrengthEditProvider.saveJournalLoading)
-                                              const Padding(
-                                                padding: EdgeInsets.only(top: 5, bottom: 5),
-                                                child: SpinKitWave(
-                                                  color: Colors.white,
-                                                  size: 25,
+                                            if (validationMessage != null) {
+                                              ScaffoldMessenger.of(context).showSnackBar(
+                                                SnackBar(
+                                                  content: Text(validationMessage),
+                                                  backgroundColor: ColorsContent.newThemeColor,
                                                 ),
-                                              ),
-                                          ],
+                                              );
+                                            } else {
+                                              await mentalStrengthEditProvider.saveButtonFunction(context);
+                                              _isTokenExpired();
+                                            }
+                                          },
+                                          child: Stack(
+                                            alignment: Alignment.center,
+                                            children: [
+                                              SvgPicture.asset(ImageConstant.submitButtonNumuBuild),
+                                              if (mentalStrengthEditProvider.saveJournalLoading)
+                                                const Padding(
+                                                  padding: EdgeInsets.only(top: 5, bottom: 5),
+                                                  child: SpinKitWave(
+                                                    color: Colors.white,
+                                                    size: 25,
+                                                  ),
+                                                ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
+
 
 
                                 // Newly Added Widgets
@@ -534,7 +558,27 @@ class _NumuMentalStrengthAddEditPageState
                 _buildDescriptionEditText(context, mentalStrengthEditProvider),
                 SizedBox(height: size.height * 0.03),
                 _buildAddMediaColumn(context, size),
-                SizedBox(height: size.height * 0.03),
+                SizedBox(height: size.height * 0.05),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Container(
+                    width: double.infinity,
+                    height: 65,
+                    color: ColorsContent.numuAddColor,
+                    child: Center(
+                      child: Text(
+                        'Numu App',
+                        style: TextStyle(
+                          color: ColorsContent.newThemeColor, // or any color that fits your background
+                          fontSize: 15,         // adjust as needed
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+
+
               ],
             ),
           ),

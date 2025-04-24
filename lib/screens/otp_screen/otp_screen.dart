@@ -15,9 +15,27 @@ import '../../widgets/functions/snack_bar.dart';
 import '../no_internet/duplicate_screen.dart';
 import '../phone_singin_screen/provider/phone_sign_in_provider.dart';
 
-class OtpScreen extends StatelessWidget {
+class OtpScreen extends StatefulWidget {
   const OtpScreen({Key? key}) : super(key: key);
 
+  @override
+  State<OtpScreen> createState() => _OtpScreenState();
+}
+
+
+
+class _OtpScreenState extends State<OtpScreen> {
+
+  late PhoneSignInProvider phoneSignInProvider;
+
+  @override
+  void initState() {
+    phoneSignInProvider = Provider.of<PhoneSignInProvider>(context, listen: false);
+    phoneSignInProvider.otp = "";
+    super.initState();
+    // You can add initialization logic here
+    print("OtpScreen initialized");
+  }
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -33,8 +51,8 @@ class OtpScreen extends StatelessWidget {
             leading: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Center(
-                child:  GestureDetector(
-                  onTap: (){
+                child: GestureDetector(
+                  onTap: () {
                     Navigator.of(context).pop();
                   },
                   child: CustomImageView(
@@ -48,30 +66,26 @@ class OtpScreen extends StatelessWidget {
             width: size.width,
             height: size.height,
             decoration: BoxDecoration(
-                color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
-                image: DecorationImage(
-                    image: AssetImage(ImageConstant.gradientBackgroundNumu),
-                    fit: BoxFit.cover)),
+              color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
+              image: DecorationImage(
+                image: AssetImage(ImageConstant.gradientBackgroundNumu),
+                fit: BoxFit.cover,
+              ),
+            ),
             child: Container(
               width: double.maxFinite,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 49,
-                vertical: 175,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 49, vertical: 175),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  //const SizedBox(height: 34,),
                   CustomImageView(
                     imagePath: ImageConstant.newLogoNumu,
                     height: 130,
                     width: 280,
                     color: Colors.white,
                   ),
-                  const SizedBox(
-                    height: 100,
-                  ),
+                  const SizedBox(height: 100),
                   const Text(
                     "Enter the code sent to your phone ",
                     style: TextStyle(
@@ -81,21 +95,18 @@ class OtpScreen extends StatelessWidget {
                       color: Colors.white,
                     ),
                   ),
-                  const SizedBox(
-                    height: 6,
-                  ),
+                  const SizedBox(height: 6),
                   Consumer<PhoneSignInProvider>(
-                      builder: (context, phoneSignInProvider, _) {
-                    return CustomPinCodeTextField(
-                      context: context,
-                      onChanged: (value) {
-                        phoneSignInProvider.addOtpFunction(value: value);
-                      },
-                    );
-                  }),
-                  const SizedBox(
-                    height: 20,
+                    builder: (context, phoneSignInProvider, _) {
+                      return CustomPinCodeTextField(
+                        context: context,
+                        onChanged: (value) {
+                          phoneSignInProvider.addOtpFunction(value: value);
+                        },
+                      );
+                    },
                   ),
+                  const SizedBox(height: 20),
                   Consumer<PhoneSignInProvider>(
                     builder: (context, phoneSignInProvider, _) {
                       return CustomElevatedButton(
@@ -108,11 +119,16 @@ class OtpScreen extends StatelessWidget {
                         onPressed: () async {
                           FocusScope.of(context).unfocus(); // close keyboard
 
-                          if (phoneSignInProvider.otp == null || phoneSignInProvider.otp.trim().isEmpty) {
-                            showCustomSnackBar(context: context, message: 'Please enter the OTP');
+                          print("phoneSignInProvider.otp ${phoneSignInProvider.otp}");
+
+                          if (phoneSignInProvider.otp == null || phoneSignInProvider.otp.isEmpty) {
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            if (context.mounted) {
+                              showCustomSnackBar(context: context, message: 'Please enter a valid OTP');
+                            }
+
                             return;
                           }
-
 
                           await phoneSignInProvider.verifyFunction(
                             context,
@@ -122,20 +138,14 @@ class OtpScreen extends StatelessWidget {
 
                           if (phoneSignInProvider.statusOtpVerify == 200 ||
                               phoneSignInProvider.statusOtpVerify == 201) {
-
                             final homeProvider = Provider.of<HomeProvider>(context, listen: false);
                             final editProfileProvider = Provider.of<EditProfileProvider>(context, listen: false);
 
-                            // homeProvider.fetchChartView(context);
                             editProfileProvider.fetchUserProfile(context);
 
-                            // Navigate to next screen and prevent back navigation
-                            Navigator.of(context).pushReplacementNamed('/home'); // example route
-
+                            Navigator.of(context).pushReplacementNamed('/home');
                           } else {
-                            // Clear any existing snackbar
                             ScaffoldMessenger.of(context).clearSnackBars();
-
                             if (context.mounted) {
                               showCustomSnackBar(context: context, message: 'Invalid OTP');
                             }
@@ -144,7 +154,6 @@ class OtpScreen extends StatelessWidget {
                       );
                     },
                   ),
-
                 ],
               ),
             ),
@@ -154,3 +163,4 @@ class OtpScreen extends StatelessWidget {
     );
   }
 }
+

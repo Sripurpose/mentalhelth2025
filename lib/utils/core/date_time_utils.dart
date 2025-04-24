@@ -92,6 +92,18 @@ String formatPickedDateFor2(DateTime pickedDate) {
   return formattedDate;
 }
 
+String formatPickedDateFor1(DateTime pickedDate) {
+  final localDate = pickedDate.toLocal(); // Ensures local time
+  return DateFormat('yyyy-MM-dd').format(localDate);
+}
+
+
+String formatPickedDateFor23(DateTime pickedDate) {
+  final localDate = pickedDate.toLocal(); // Ensures local time
+  return DateFormat('yyyy-MM-dd').format(localDate);
+}
+
+
 String formatPickedDateFromMilliseconds(int milliseconds) {
   // Create a DateTime from milliseconds since the Epoch
   DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(milliseconds);

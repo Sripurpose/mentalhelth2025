@@ -12,6 +12,7 @@ class ImageConstant {
   static String homeBannerNumuNew = 'assets/images/home_banner_numu_new.png';
   static String menuBarSvg = 'assets/images/menu_bar.svg';
   static String splashNextIcon = 'assets/images/splash-next-icon.png';
+  static String centerCut = 'assets/images/centercut.png';
   static String noData = '$imagePath/home/noData.gif';
   static String imgMenu = '$imagePath/img_menu.svg';
   static String feelingDummyNumu = '$imagePath/feeling_dummy_numu.svg';
@@ -22,6 +23,7 @@ class ImageConstant {
   static String goToIcon = 'assets/images/go_to_icon.png';
   static String noInternet = 'assets/images/no_internet.svg';
   static String noDataNumu = 'assets/images/no_data.svg';
+  static String dumImage = 'assets/images/dum.png';
 
   static String imgThumbsUp = '$imagePath/img_thumbs_up.svg';
   static String galleryAddMediaNumu = '$imagePath/gallery_add_media_numu.svg';
