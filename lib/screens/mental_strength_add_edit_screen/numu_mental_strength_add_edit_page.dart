@@ -559,24 +559,24 @@ class _NumuMentalStrengthAddEditPageState
                 SizedBox(height: size.height * 0.015),
                 _buildAddMediaColumn(context, size),
                 SizedBox(height: size.height * 0.05),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Container(
-                    width: double.infinity,
-                    height: 65,
-                    color: ColorsContent.numuAddColor,
-                    child: Center(
-                      child: Text(
-                        'Numu App',
-                        style: TextStyle(
-                          color: ColorsContent.newThemeColor, // or any color that fits your background
-                          fontSize: 15,         // adjust as needed
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                )
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                //   child: Container(
+                //     width: double.infinity,
+                //     height: 65,
+                //     color: ColorsContent.numuAddColor,
+                //     child: Center(
+                //       child: Text(
+                //         'Numu App',
+                //         style: TextStyle(
+                //           color: ColorsContent.newThemeColor, // or any color that fits your background
+                //           fontSize: 15,         // adjust as needed
+                //           fontWeight: FontWeight.bold,
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // )
 
 
               ],

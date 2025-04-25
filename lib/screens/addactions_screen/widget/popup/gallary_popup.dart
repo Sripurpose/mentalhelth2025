@@ -61,7 +61,7 @@ Future galleryBottomSheetAction({
                     GestureDetector(
                       onTap: () {
                         if (addActionsProvider.mediaSelected == 1) {
-                          addActionsProvider.pickImageFunction();
+                          addActionsProvider.pickImageFunction(context);
                         }
                       },
                       child: buildAvatarImage(

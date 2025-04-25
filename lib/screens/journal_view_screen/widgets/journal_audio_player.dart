@@ -59,71 +59,88 @@ class _JournalAudioPlayerState extends State<JournalAudioPlayer> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      margin: const EdgeInsets.only(
-        bottom: 5,
-      ),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 19,
-        vertical: 12,
-      ),
+      margin: const EdgeInsets.only(bottom: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 19, vertical: 12),
       decoration: BoxDecoration(
         color: ColorsContent.newThemeColor,
-        borderRadius:
-        BorderRadius.circular(
-            8), // Makes it circular
+        borderRadius: BorderRadius.circular(8),
       ),
-      child: Consumer<JournalListProvider>(
-          builder: (context, journalListProvider, _) {
-            return Row(
-              children: [
-                GestureDetector(
-                  onTap: () async {
-                    if (isPlaying) {
-                      await globalAudioPlayer.pause();
-                      setState(() {
-                        currentPlayingUrl = null;
-                      });
-                    } else {
-                      // Stop any other audio playing
-                      if (currentPlayingUrl != null && currentPlayingUrl != widget.url) {
-                        await globalAudioPlayer.stop();
-                      }
-                      currentPlayingUrl = widget.url;
-                      await globalAudioPlayer.play(UrlSource(widget.url));
-                    }
-                  },
-                  child: Container(
-                    height: 35,
-                    width: 35,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 1.5),
-                    ),
-                    child: CircleAvatar(
-                      backgroundColor: Colors.transparent,
-                      child: Icon(
-                        color: Colors.white,
-                        isPlaying ? Icons.pause : Icons.play_arrow,
-                      ),
-                    ),
+      child: Consumer<JournalListProvider>(builder: (context, journalListProvider, _) {
+        return Row(
+          children: [
+            GestureDetector(
+              onTap: () async {
+                if (isPlaying) {
+                  await globalAudioPlayer.pause();
+                  setState(() {
+                    currentPlayingUrl = null;
+                  });
+                } else {
+                  if (currentPlayingUrl != null && currentPlayingUrl != widget.url) {
+                    await globalAudioPlayer.stop();
+                  }
+                  currentPlayingUrl = widget.url;
+                  await globalAudioPlayer.play(UrlSource(widget.url));
+                }
+              },
+              child: Container(
+                height: 35,
+                width: 35,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 1.5),
+                ),
+                child: CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  child: Icon(
+                    color: Colors.white,
+                    isPlaying ? Icons.pause : Icons.play_arrow,
                   ),
                 ),
-                SizedBox(
-                  width: size.width * 0.65,
-                  child: Slider(
+              ),
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                children: [
+                  Slider(
                     min: 0,
-                    max: duration.inSeconds.toDouble(),
-                    value: position.inSeconds.toDouble(),
+                    max: duration.inSeconds.toDouble().clamp(0.0, double.infinity),
+                    value: position.inSeconds.toDouble().clamp(0.0, duration.inSeconds.toDouble()),
                     onChanged: (value) async {
                       final newPosition = Duration(seconds: value.toInt());
                       await globalAudioPlayer.seek(newPosition);
                       await globalAudioPlayer.resume();
                     },
                   ),
-                )
-              ],
-            );
-          }),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        _formatDuration(position),
+                        style: const TextStyle(color: Colors.white, fontSize: 12),
+                      ),
+                      Text(
+                        _formatDuration(duration),
+                        style: const TextStyle(color: Colors.white, fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      }),
     );
   }
+
 }
+
+String _formatDuration(Duration duration) {
+  String twoDigits(int n) => n.toString().padLeft(2, '0');
+  final minutes = twoDigits(duration.inMinutes.remainder(60));
+  final seconds = twoDigits(duration.inSeconds.remainder(60));
+  return "$minutes:$seconds";
+}
+

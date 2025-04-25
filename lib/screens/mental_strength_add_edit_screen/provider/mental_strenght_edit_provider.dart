@@ -20,6 +20,7 @@ import 'package:mentalhelth/screens/mental_strength_add_edit_screen/model/list_g
 import 'package:mentalhelth/screens/mental_strength_add_edit_screen/model/list_goal_actions.dart';
 import 'package:mentalhelth/utils/core/url_constant.dart';
 import 'package:mentalhelth/utils/logic/shared_prefrence.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/widgets/functions/snack_bar.dart';
 import 'package:mentalhelth/widgets/widget/video_compessor.dart';
 import 'package:provider/provider.dart';
@@ -232,7 +233,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
 
   //image picker section
 
-  Future<void> pickImageFunction(BuildContext context) async {
+  Future<void> pickImageFunctionOld(BuildContext context) async {
     final pickedImage = await ImagePicker().pickImage(
       source: ImageSource.gallery,
       imageQuality: 100,
@@ -257,6 +258,54 @@ class MentalStrengthEditProvider extends ChangeNotifier {
     }
     // }
   }
+
+  Future<void> pickImageFunction(BuildContext context) async {
+    final pickedImages = await ImagePicker().pickMultiImage(
+      imageQuality: 100,
+    );
+
+    if (pickedImages != null && pickedImages.isNotEmpty) {
+      // Show loading dialog
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) =>  AlertDialog(
+          content: Row(
+            children: [
+              CupertinoActivityIndicator(
+                color: ColorsContent.newThemeColor,
+              ),
+              const SizedBox(width: 16),
+              const Text("Uploading images..."),
+            ],
+          ),
+        ),
+      );
+
+      List<String> imagePaths = [];
+
+      for (var image in pickedImages) {
+        String fileExtension = image.path.split('.').last;
+        String lastThreeChars = fileExtension.substring(fileExtension.length - 3);
+
+        imagePaths.add(image.path);
+
+        await saveMediaUploadMental(
+          file: image.path,
+          type: "journal",
+          fileType: lastThreeChars,
+        );
+      }
+
+      pickedImagesAddFunction(imagePaths);
+      notifyListeners();
+
+      // Hide loading dialog
+      Navigator.of(context, rootNavigator: true).pop();
+    }
+  }
+
+
 
   Future<void> pickVideoFunction(BuildContext context) async {
     try {

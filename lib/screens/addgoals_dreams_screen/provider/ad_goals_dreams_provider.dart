@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:ffmpeg_kit_flutter_min_gpl/ffmpeg_kit.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -15,6 +16,7 @@ import 'package:mentalhelth/widgets/widget/video_compessor.dart';
 import 'package:video_compress/video_compress.dart';
 
 import '../../../utils/core/constent.dart';
+import '../../../utils/theme/colors.dart';
 import '../../maintenence_screen/maintenence_screen.dart';
 import '../../mental_strength_add_edit_screen/model/all_model.dart';
 import '../../token_expiry/token_expiry.dart';
@@ -110,7 +112,7 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
 
   //image picker section
 
-  Future<void> pickImageFunction(BuildContext context) async {
+  Future<void> pickImageFunctionOld(BuildContext context) async {
     final pickedImage = await ImagePicker().pickImage(
       source: ImageSource.gallery,
       imageQuality: 100,
@@ -136,6 +138,51 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
     }
     // }
   }
+
+  Future<void> pickImageFunction(BuildContext context) async {
+    final pickedImages = await ImagePicker().pickMultiImage(
+      imageQuality: 100,
+    );
+
+    if (pickedImages != null && pickedImages.isNotEmpty) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) =>  AlertDialog(
+          content: Row(
+            children: [
+              CupertinoActivityIndicator(
+                color: ColorsContent.newThemeColor,
+              ),
+              const SizedBox(width: 16),
+              const Text("Uploading images..."),
+            ],
+          ),
+        ),
+      );
+      List<String> imagePaths = [];
+
+      for (var pickedImage in pickedImages) {
+        String fileExtension = pickedImage.path.split('.').last;
+        String lastThreeChars = fileExtension.substring(fileExtension.length - 3);
+
+        imagePaths.add(pickedImage.path);
+
+        await saveMediaUploadMental(
+          file: pickedImage.path,
+          type: "goal",
+          fileType: lastThreeChars,
+          context: context,
+        );
+      }
+
+      pickedImagesAddFunction(imagePaths);
+      notifyListeners();
+
+      Navigator.of(context, rootNavigator: true).pop();
+    }
+  }
+
 
   Future<void> pickVideoFunction(BuildContext context) async {
     final pickedVideoPath = await ImagePicker().pickVideo(

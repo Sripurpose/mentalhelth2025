@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tzData;
 import 'package:ffmpeg_kit_flutter_min_gpl/ffmpeg_kit.dart';
@@ -30,6 +31,7 @@ import 'package:video_compress/video_compress.dart';
 import '../../../utils/core/constants.dart';
 import '../../../utils/core/constent.dart';
 import '../../../utils/core/date_time_utils.dart';
+import '../../../utils/theme/colors.dart';
 import '../../maintenence_screen/maintenence_screen.dart';
 import '../../token_expiry/token_expiry.dart';
 
@@ -644,7 +646,7 @@ var logger = Logger();
 
   //image picker section
 
-  Future<void> pickImageFunction() async {
+  Future<void> pickImageFunctionOld() async {
     final pickedImage = await ImagePicker().pickImage(
       source: ImageSource.gallery,
       imageQuality: 50,
@@ -686,6 +688,50 @@ var logger = Logger();
     }
     // }
   }
+
+  Future<void> pickImageFunction(BuildContext context) async {
+    final pickedImages = await ImagePicker().pickMultiImage(
+      imageQuality: 50,
+    );
+
+    if (pickedImages != null && pickedImages.isNotEmpty) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) =>  AlertDialog(
+          content: Row(
+            children: [
+              CupertinoActivityIndicator(
+                color: ColorsContent.newThemeColor,
+              ),
+              const SizedBox(width: 16),
+              const Text("Uploading images..."),
+            ],
+          ),
+        ),
+      );
+      List<String> imagePaths = [];
+
+      for (var pickedImage in pickedImages) {
+        String fileExtension = pickedImage.path.split('.').last;
+        String lastThreeChars = fileExtension.substring(fileExtension.length - 3);
+
+        imagePaths.add(pickedImage.path);
+
+        await saveMediaUploadAction(
+          file: pickedImage.path,
+          type: "action",
+          fileType: lastThreeChars,
+        );
+      }
+
+      pickedImagesAddFunction(imagePaths);
+      notifyListeners();
+
+      Navigator.of(context, rootNavigator: true).pop();
+    }
+  }
+
 
   Future<void> pickVideoFunction(BuildContext context) async {
     final pickedVideoPath = await ImagePicker().pickVideo(

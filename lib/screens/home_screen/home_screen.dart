@@ -113,13 +113,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
   void printTimeZone() {
     final offset = DateTime.now().timeZoneOffset;
-    final trimmedOffset = offset.toString().split('.').first;  // Get rid of milliseconds
-    final parts = trimmedOffset.split(':');  // Split by colon
-    final formattedOffset = "${parts[0]}:${parts[1]}";  // Get hours and minutes
-    timeZone = formattedOffset;
+    final trimmedOffset = offset.toString().split('.').first; // Remove milliseconds
+    final parts = trimmedOffset.split(':'); // Split by colon
 
-    print("Formatted Timezone Offset: $formattedOffset"); // Output: 5:30 or -07:00
+    String sign = offset.isNegative ? '' : '+';
+    final formattedOffset = "$sign${parts[0].padLeft(2, '0')}:${parts[1].padLeft(2, '0')}";
+
+     timeZone = formattedOffset;
+    print("Formatted Timezone Offset: $formattedOffset"); // Example: +05:30 or -07:00
   }
+
 
   @override
   void initState() {
