@@ -346,8 +346,8 @@ class _NumuMentalStrengthAddEditPageState
                                         padding: const EdgeInsets.symmetric(vertical: 8),
                                         child: Center(
                                           child: SizedBox(
-                                            width: 70,
-                                            height: 70,
+                                            width: 80,
+                                            height: 80,
                                             child: FloatingActionButton(
                                               backgroundColor: Colors.transparent,
                                               elevation: 0,
