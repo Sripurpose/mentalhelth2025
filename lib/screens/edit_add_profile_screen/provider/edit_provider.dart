@@ -102,11 +102,11 @@ class EditProfileProvider extends ChangeNotifier {
         notifyListeners();
       }
       if(response.statusCode == 401){
-       // TokenManager.setTokenStatus(true);
+        TokenManager.setTokenStatus(true);
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
       if(response.statusCode == 403){
-       // TokenManager.setTokenStatus(true);
+        TokenManager.setTokenStatus(true);
         //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
       getProfileLoading = false;

@@ -107,6 +107,19 @@ void main() async {
       }
     }
 
+
+    OneSignal.Notifications.addForegroundWillDisplayListener((event) {
+      print('Foreground Notification Received: ${event.notification.jsonRepresentation()}');
+    });
+
+    OneSignal.Notifications.addClickListener((event) {
+      print('Notification Clicked: ${event.notification.jsonRepresentation()}');
+    });
+
+    OneSignal.Notifications.addPermissionObserver((event) {
+      print('Notification Permission Changed: ${event.toString()}');
+    });
+
     // if (!kIsWeb) {
     //   await PushNotifications.subscribeToTopic("message");
     //   await PushNotifications.unsubscribeFromTopic("live_doLogin");
@@ -229,6 +242,8 @@ class _MyAppState extends State<MyApp> {
   String? baseUrlLive;
   String? baseUrlQA;
   bool isBaseUrlReady = false;
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 
   @override
   void initState() {

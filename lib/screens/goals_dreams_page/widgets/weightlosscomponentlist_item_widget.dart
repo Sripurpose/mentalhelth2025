@@ -43,7 +43,7 @@ class WeightLossComponentListItemWidget extends StatelessWidget {
         borderRadius: BorderRadiusStyle.roundedBorder10,
       )
           : BoxDecoration(
-              color: ColorsContent.goalNotCompletedColor,
+              color: ColorsContent.goalNotCompletedColorNew,
               borderRadius: BorderRadiusStyle.roundedBorder10,
             ),
       child: Row(
@@ -95,7 +95,7 @@ class WeightLossComponentListItemWidget extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            "  to  ",
+                            " to ",
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w400,

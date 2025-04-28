@@ -72,9 +72,9 @@ PreferredSizeWidget buildAppBar(BuildContext context, Size size,
             },
         imagePath: ImageConstant.imgTelevision,
         margin: const EdgeInsets.only(
-          left: 20,
-          top: 19,
-          bottom: 23,
+          left: 21,
+          top: 18,
+          bottom: 20,
         ),
       );
     }),

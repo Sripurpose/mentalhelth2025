@@ -150,7 +150,7 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
                         color: goalsDreamsProvider.goalsanddreams.isEmpty
                             ? ColorsContent.homeBackGroundColor
                             : null,
-                        padding: const EdgeInsets.symmetric(horizontal: 28),
+                        padding: const EdgeInsets.symmetric(horizontal: 23),
                         child: goalsDreamsProvider.goalsAndDreamsModelLoading
                             ?    Center(child: CupertinoActivityIndicator(
                           color: ColorsContent.newThemeColor,

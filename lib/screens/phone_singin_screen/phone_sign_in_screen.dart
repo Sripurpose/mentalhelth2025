@@ -32,10 +32,13 @@ class _PhoneSignInScreenState extends State<PhoneSignInScreen> {
   void initState() {
     super.initState();
     phoneSignInProvider = Provider.of<PhoneSignInProvider>(context, listen: false);
-
+    phoneSignInProvider.phoneNumberController.text = "";
+  //  phoneSignInProvider.resetCountryCode(); // Reset country code when screen is reopened
     scheduleMicrotask(() {
-      phoneSignInProvider.phoneNumberController.text = "";
-      phoneSignInProvider.resetCountryCode(); // Reset country code when screen is reopened
+      Future.delayed(Duration.zero, () {
+        context.read<PhoneSignInProvider>().initializeCountryCode();
+      });
+
     });
   }
 

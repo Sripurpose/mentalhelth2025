@@ -206,7 +206,8 @@ class _HomeScreenState extends State<HomeScreen> {
       await signInProvider.saveFirebaseToken(context,
           registrationId: fcmToken, deviceOs: 'android');
       print("Firebase token saved.");
-    }else{
+    }
+    else{
       await signInProvider.saveFirebaseToken(context,
           registrationId: oneSignalIdOriginal, deviceOs: 'ios');
       print("Firebase token saved.");

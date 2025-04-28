@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:flutter_sound_platform_interface/flutter_sound_recorder_platform_interface.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/utils/core/image_constant.dart';
 import 'package:mentalhelth/utils/logic/logic.dart';
@@ -278,6 +279,19 @@ var logger = Logger();
             mentalStrengthEditProvider.selectedMedia(0);
 
             if (mentalStrengthEditProvider.mediaSelected == 0) {
+              // 🛑 Check if already recorded audio exists
+              if ((mentalStrengthEditProvider.recordedFilePath.isNotEmpty || mentalStrengthEditProvider.alreadyRecordedFilePath.isNotEmpty)
+                  && !recorder.isRecording) {
+                Fluttertoast.showToast(
+                  textColor: ColorsContent.newThemeColor,
+                  backgroundColor: Colors.white,
+                  msg: "You can record only one audio.",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                );
+                return; // Stop further action
+              }
+
               if (recorder.isRecording) {
                 if (Platform.isAndroid) {
                   await stopAndroid();
