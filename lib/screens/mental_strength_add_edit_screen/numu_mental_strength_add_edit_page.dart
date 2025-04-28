@@ -334,9 +334,9 @@ class _NumuMentalStrengthAddEditPageState
                                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                       child: Container(
                                         width: double.infinity,
-                                        decoration: const BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.only(
+                                        decoration:  BoxDecoration(
+                                          color: ColorsContent.homeBackGroundColor,
+                                          borderRadius: const BorderRadius.only(
                                             bottomLeft: Radius.circular(10),
                                             bottomRight: Radius.circular(10),
                                             topLeft: Radius.circular(10),
@@ -441,7 +441,7 @@ class _NumuMentalStrengthAddEditPageState
                                     right: 0,
                                     child: Container(
                                       width: double.infinity,
-                                      color: Colors.white,
+                                      color: ColorsContent.homeBackGroundColor,
                                       padding: const EdgeInsets.symmetric(vertical: 10),
                                       child: Center(
                                         child: GestureDetector(
