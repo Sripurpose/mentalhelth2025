@@ -351,16 +351,14 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       home: isBaseUrlReady
           ? const SplashScreen() // Navigate to SplashScreen if baseUrl is ready
-          :  ConnectivityWidget(
-            child: Scaffold(
-                    body: Center(
-            child: CupertinoActivityIndicator(
-              color: ColorsContent.newThemeColor,
-              radius: 15,
-            )// Show a loader while waiting
-                    ),
+          :  Scaffold(
+                  body: Center(
+          child: CupertinoActivityIndicator(
+            color: ColorsContent.newThemeColor,
+            radius: 15,
+          )// Show a loader while waiting
                   ),
-          ),
+                ),
     );
   }
 }

@@ -195,6 +195,7 @@ class PhoneSignInProvider extends ChangeNotifier {
       var body = {
         'phone': phone,
         'otp': otp,
+        'country_code':countryCode
       };
       final response = await http.post(
         Uri.parse(

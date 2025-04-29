@@ -43,7 +43,7 @@ class _LandingRegisterScreenScreenState extends State<LandingRegisterScreenScree
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 1), () {
       setState(() {
         _isLoading = false;
       });
@@ -134,196 +134,191 @@ class _LandingRegisterScreenScreenState extends State<LandingRegisterScreenScree
   @override
   Widget build(BuildContext context) {
     final signInProvider = Provider.of<SignInProvider>(context, listen: false);
-    var isRequiredValue =
-        signInProvider.settingsRegisterModel?.settings?[0].isRequired;
+    var isRequiredValue = signInProvider.settingsRegisterModel?.settings?[0].isRequired;
 
     Size size = MediaQuery.of(context).size;
-    return ConnectivityWidget(
-      child: SafeArea(
-        child: WillPopScope(
-          onWillPop: () async {
-            // Returning false prevents the back press
-            return false;
-          },
-          child: Scaffold(
-            body: landingScreenImager(
-              size: size,
-              padding: EdgeInsets.zero,
-              child: Center(
-                  child: SingleChildScrollView(
-                    padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom,
-                    ),
-                    child: Form(
-                      key: _formKey,
-                      child: Container(
-                        width: double.maxFinite,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 48,
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            CustomImageView(
-                              imagePath: ImageConstant.newLogoNumu,
-                              height: 130,
-                              width: 280,
-                              color: Colors.white,
-                            ),
-                            SizedBox(
-                              height: size.height * 0.05,
-                            ),
-                            _isLoading
-                                ?    const Center(child: CupertinoActivityIndicator(
-                              color: Colors.white,
-                              radius: 15,
-                            ))
-                                :
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  signInProvider.settingsRegisterModel?.settings?[0].title ?? "",
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'Open Sans',
-                                    color: Colors.white,
-                                  ),
+    return SafeArea(
+      child: WillPopScope(
+        onWillPop: () async {
+          // Returning false prevents the back press
+          return false;
+        },
+        child:
+        Scaffold(
+          body: landingScreenImager(
+            size: size,
+            padding: EdgeInsets.zero,
+            child: Center(
+                child: SingleChildScrollView(
+                  child: Form(
+                    key: _formKey,
+                    child: Container(
+                      width: double.maxFinite,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 48,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          CustomImageView(
+                            imagePath: ImageConstant.newLogoNumu,
+                            height: 100,
+                            width: 280,
+                            color: Colors.white,
+                          ),
+                          SizedBox(
+                            height: size.height * 0.05,
+                          ),
+                          _isLoading
+                              ?    const Center(child: CupertinoActivityIndicator(
+                            color: Colors.white,
+                            radius: 15,
+                          ))
+                              :
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                signInProvider.settingsRegisterModel?.settings?[0].title ?? "",
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'Open Sans',
+                                  color: Colors.white,
                                 ),
-                                SizedBox(height: size.height * 0.02),
-                                Text(
-                                  signInProvider.settingsRegisterModel?.settings?[0].message
-                                      ?.replaceAll("with ", "with\n              ") ?? "",
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: 'Open Sans',
-                                    color: Colors.white,
-                                  ),
+                              ),
+                              SizedBox(height: size.height * 0.02),
+                              Text(
+                                signInProvider.settingsRegisterModel?.settings?[0].message
+                                    ?.replaceAll("with ", "with\n              ") ?? "",
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Open Sans',
+                                  color: Colors.white,
                                 ),
-                                SizedBox(height: size.height * 0.05),
-                                signInProvider.settingsRegisterModel?.settings?[0].link != null ?
-                                Visibility(
-                                  visible: signInProvider.settingsRegisterModel?.settings?[0].status == "1" ? true : false,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      String chatURL = signInProvider.settingsRegisterModel?.settings?[0].linkUrl ?? "";
-                                      var url = Uri.parse(chatURL);
-                                     if (signInProvider.settingsRegisterModel?.settings?[0].target ==
-                                         "external") {
-                                       _launchInAppWithBrowserOptions(url);
-                                     }
-                                     else {
-                                       _launchInAppWithWebView(url,context);
-                                     }
-                                    },
-                                    child:Container(
-                                      width: size.width * 0.75,
-                                      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0), // Adjust padding for better spacing
-                                      decoration: BoxDecoration(
-                                        color: Colors.white, // Background color
-                                        borderRadius: BorderRadius.circular(5.0), // Optional: Add border radius
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.start, // Aligns items to the start
-                                        crossAxisAlignment: CrossAxisAlignment.center, // Keeps items vertically aligned
-                                        children: [
-                                          Icon(
-                                            Icons.language,
-                                            color: ColorsContent.newThemeColor,
-                                            size: 24, // Reduced icon size
-                                          ),
-      
-                                          const SizedBox(width: 8), // Add small spacing between icon and text
-      
-                                          Expanded(
-                                            child: Text(
-                                              signInProvider.settingsRegisterModel?.settings?[0].link ?? "",
-                                              style:  TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold, // Set font weight to bold
-                                                color:ColorsContent.newThemeColor,
-                                              ),
-                                              overflow: TextOverflow.ellipsis, // Avoid text overflow
-                                            ),
-                                          ),
-      
-                                          const SizedBox(width: 10), // Adjust spacing before the forward icon
-      
-                                          Container(
-                                            width: 28, // Adjust size as needed
-                                            height: 28,
-                                            decoration: BoxDecoration(
-                                              color: ColorsContent.newThemeColor, // Background color
-                                              shape: BoxShape.circle, // Circular shape
-                                            ),
-                                            child: const Center(
-                                              child: Icon(
-                                                Icons.arrow_forward,
-                                                color: Colors.white, // Icon color
-                                                size: 18, // Slightly reduced icon size
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-      
-      
-                                  ),
-                                ):
-                                    const SizedBox(),
-                                SizedBox(height: size.height * 0.03),
-                                GestureDetector(
-                                  onTap: (){
-                                    Navigator.push(
-                                                    context,
-                                                    PageRouteBuilder(
-                                                      pageBuilder: (_, __, ___) =>
-                                                      const ScreenSignIn(),
-                                                      transitionDuration:
-                                                      const Duration(seconds: 0),
-                                                    ),
-                                                  );
+                              ),
+                              SizedBox(height: size.height * 0.05),
+                              signInProvider.settingsRegisterModel?.settings?[0].link != null ?
+                              Visibility(
+                                visible: signInProvider.settingsRegisterModel?.settings?[0].status == "1" ? true : false,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    String chatURL = signInProvider.settingsRegisterModel?.settings?[0].linkUrl ?? "";
+                                    var url = Uri.parse(chatURL);
+                                   if (signInProvider.settingsRegisterModel?.settings?[0].target ==
+                                       "external") {
+                                     _launchInAppWithBrowserOptions(url);
+                                   }
+                                   else {
+                                     _launchInAppWithWebView(url,context);
+                                   }
                                   },
-                                  child: Container(
+                                  child:Container(
                                     width: size.width * 0.75,
-                                    padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 13.0), // Adjust padding for better spacing
+                                    padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0), // Adjust padding for better spacing
                                     decoration: BoxDecoration(
-                                      color: Colors.black, // Background color
+                                      color: Colors.white, // Background color
                                       borderRadius: BorderRadius.circular(5.0), // Optional: Add border radius
                                     ),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center, // Aligns items to the start
+                                      mainAxisAlignment: MainAxisAlignment.start, // Aligns items to the start
                                       crossAxisAlignment: CrossAxisAlignment.center, // Keeps items vertically aligned
                                       children: [
-                                        Text(
-                                          "Sign in",
-                                          style:  TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold, // Set font weight to bold
-                                            color:ColorsContent.whiteText,
+                                        Icon(
+                                          Icons.language,
+                                          color: ColorsContent.newThemeColor,
+                                          size: 24, // Reduced icon size
+                                        ),
+
+                                        const SizedBox(width: 8), // Add small spacing between icon and text
+
+                                        Expanded(
+                                          child: Text(
+                                            signInProvider.settingsRegisterModel?.settings?[0].link ?? "",
+                                            style:  TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold, // Set font weight to bold
+                                              color:ColorsContent.newThemeColor,
+                                            ),
+                                            overflow: TextOverflow.ellipsis, // Avoid text overflow
                                           ),
-                                          overflow: TextOverflow.ellipsis, // Avoid text overflow
+                                        ),
+
+                                        const SizedBox(width: 10), // Adjust spacing before the forward icon
+
+                                        Container(
+                                          width: 28, // Adjust size as needed
+                                          height: 28,
+                                          decoration: BoxDecoration(
+                                            color: ColorsContent.newThemeColor, // Background color
+                                            shape: BoxShape.circle, // Circular shape
+                                          ),
+                                          child: const Center(
+                                            child: Icon(
+                                              Icons.arrow_forward,
+                                              color: Colors.white, // Icon color
+                                              size: 18, // Slightly reduced icon size
+                                            ),
+                                          ),
                                         ),
                                       ],
                                     ),
                                   ),
+
+
                                 ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: size.height * 0.10,
-                            ),
-                          ],
-                        ),
+                              ):
+                                  const SizedBox(),
+                              SizedBox(height: size.height * 0.03),
+                              GestureDetector(
+                                onTap: (){
+                                  Navigator.push(
+                                                  context,
+                                                  PageRouteBuilder(
+                                                    pageBuilder: (_, __, ___) =>
+                                                    const ScreenSignIn(),
+                                                    transitionDuration:
+                                                    const Duration(seconds: 0),
+                                                  ),
+                                                );
+                                },
+                                child: Container(
+                                  width: size.width * 0.75,
+                                  padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 13.0), // Adjust padding for better spacing
+                                  decoration: BoxDecoration(
+                                    color: Colors.black, // Background color
+                                    borderRadius: BorderRadius.circular(5.0), // Optional: Add border radius
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center, // Aligns items to the start
+                                    crossAxisAlignment: CrossAxisAlignment.center, // Keeps items vertically aligned
+                                    children: [
+                                      Text(
+                                        "Sign in",
+                                        style:  TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold, // Set font weight to bold
+                                          color:ColorsContent.whiteText,
+                                        ),
+                                        overflow: TextOverflow.ellipsis, // Avoid text overflow
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: size.height * 0.10,
+                          ),
+                        ],
                       ),
                     ),
-                  )),
-            ),
+                  ),
+                )),
           ),
         ),
       ),

@@ -12,6 +12,7 @@ class ImageConstant {
   static String homeBannerNumuNew = 'assets/images/home_banner_numu_new.png';
   static String menuBarSvg = 'assets/images/menu_bar.svg';
   static String splashNextIcon = 'assets/images/splash-next-icon.png';
+  static String numuNextIcon = 'assets/images/numu_next_icon.png';
   static String centerCut = 'assets/images/centercut.png';
   static String noData = '$imagePath/home/noData.gif';
   static String imgMenu = '$imagePath/img_menu.svg';

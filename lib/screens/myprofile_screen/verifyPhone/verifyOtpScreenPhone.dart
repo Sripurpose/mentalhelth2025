@@ -30,9 +30,27 @@ class VerifyOtpPhoneScreen extends StatelessWidget {
           extendBody: true,
           extendBodyBehindAppBar: true,
           resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            leading: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child:  GestureDetector(
+                  onTap: (){
+                    Navigator.of(context).pop();
+                  },
+                  child: CustomImageView(
+                    imagePath: ImageConstant.allBackIcon,
+                  ),
+                ),
+              ),
+            ),
+          ),
           body: Container(
             width: size.width,
             height: size.height,
+
             decoration: BoxDecoration(
                 color: ColorsContent.homeBackGroundColor,
                 image: DecorationImage(

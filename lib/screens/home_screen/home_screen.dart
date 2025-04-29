@@ -512,8 +512,8 @@ class _HomeScreenState extends State<HomeScreen> {
       DashBoardProvider dashBoardProvider) {
     return
       Padding(
-      padding: const EdgeInsets.only(
-        left: 1,
+      padding: const EdgeInsets.symmetric(
+        horizontal: 15,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -526,8 +526,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   dashBoardProvider.changeCommentPage(index: 8);
                 },
                 child: Container(
-                  height: 58,
-                  width: 58,
+                  height: 55,
+                  width: 55,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle, // Ensures the image is circular
                     border: Border.all(
@@ -589,7 +589,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          const Spacer(),
+        //  const Spacer(),
           GestureDetector(
             onTap: () {
               showDialog(
@@ -605,42 +605,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ImageConstant.menuBarSvg,
             ),
 
-            // CircleAvatar(
-            //   backgroundColor: PrimaryColors().blue300,
-            //   radius: size.width * 0.04,
-            //   child: Column(
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     children: [
-            //       Container(
-            //         height: size.height * 0.003,
-            //         width: size.width * 0.03,
-            //         decoration: const BoxDecoration(
-            //           color: Colors.white,
-            //           borderRadius: BorderRadius.all(
-            //             Radius.circular(
-            //               10,
-            //             ),
-            //           ),
-            //         ),
-            //       ),
-            //       SizedBox(
-            //         height: size.height * 0.005,
-            //       ),
-            //       Container(
-            //         height: size.height * 0.003,
-            //         width: size.width * 0.03,
-            //         decoration: const BoxDecoration(
-            //           color: Colors.white,
-            //           borderRadius: BorderRadius.all(
-            //             Radius.circular(
-            //               10,
-            //             ),
-            //           ),
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
           ),
         ],
       ),

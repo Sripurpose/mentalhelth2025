@@ -98,16 +98,14 @@ class _SplashScreenState extends State<SplashScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    return ConnectivityWidget(
-      child: Container(
-        color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.all(
-            30,
-          ),
-          child: SvgPicture.asset(
-            ImageConstant.newLogoNumu,
-          ),
+    return Container(
+      color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.all(
+          30,
+        ),
+        child: SvgPicture.asset(
+          ImageConstant.newLogoNumu,
         ),
       ),
     );

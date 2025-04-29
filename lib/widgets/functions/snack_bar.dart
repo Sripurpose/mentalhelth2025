@@ -11,7 +11,7 @@ void showCustomSnackBar({
       message,
       style: const TextStyle(color: Colors.white),
     ),
-    backgroundColor: ColorsContent.newThemeColor,
+    backgroundColor: ColorsContent.blackText,
     duration: const Duration(seconds: 3),
     behavior: SnackBarBehavior.floating,
   );

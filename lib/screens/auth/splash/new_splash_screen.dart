@@ -164,15 +164,20 @@ class _SplashScreenState extends State<NewSplashScreen> {
 
       if (_clickCount == 1) {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => const LandingRegisterScreenScreen(),
+          PageRouteBuilder(
+            pageBuilder: (context, animation1, animation2) => const LandingRegisterScreenScreen(),
+            transitionDuration: Duration.zero,
+            reverseTransitionDuration: Duration.zero,
           ),
         );
+
       } else if (_clickCount == 2) {
         // Second click: Navigate to LandingRegisterScreen
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => const LandingRegisterScreenScreen(),
+          PageRouteBuilder(
+            pageBuilder: (context, animation1, animation2) => const LandingRegisterScreenScreen(),
+            transitionDuration: Duration.zero,
+            reverseTransitionDuration: Duration.zero,
           ),
         );
       }
@@ -181,63 +186,61 @@ class _SplashScreenState extends State<NewSplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ConnectivityWidget(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: Center(
-          child: Padding(
-            padding: Platform.isAndroid ?
-            const EdgeInsets.symmetric(vertical: 0.0,horizontal: 0):const EdgeInsets.symmetric(vertical: 0.0,horizontal: 0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Image.asset(
-                 ImageConstant.numuNewSplash1
-                ),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Center(
+        child: Padding(
+          padding: Platform.isAndroid ?
+          const EdgeInsets.symmetric(vertical: 0.0,horizontal: 0):const EdgeInsets.symmetric(vertical: 0.0,horizontal: 0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Image.asset(
+               ImageConstant.numuNewSplash1
+              ),
 
-                const SizedBox(height: 40),
-                RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: "Welcome to",
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.w800,
-                          fontFamily: 'Urbanist',
-                          color: _isFirstState ? ColorsContent.newThemeColor : Colors.black,
-                        ),
+              const SizedBox(height: 40),
+              RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Welcome to",
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.w800,
+                        fontFamily: 'Urbanist',
+                        color: _isFirstState ? ColorsContent.newThemeColor : Colors.black,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                Text(
-                  " Numu app",
-                  style:  TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w800,
-                    color: _isFirstState ? Colors.black : ColorsContent.newThemeColor,
-                  ),
+              ),
+              Text(
+                " Numu app",
+                style:  TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.w800,
+                  color: _isFirstState ? Colors.black : ColorsContent.newThemeColor,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.all(50.0),
-          child: SizedBox(
-            width: 70,
-            height: 70,
-            child: ElevatedButton(
-              onPressed: _handleButtonClick, // Handle button click logic
-              style: ElevatedButton.styleFrom(
-                shape: const CircleBorder(),
-              ),
-              child: Image.asset(
-                ImageConstant.splashNextIcon, // Button icon
-                width: 80,
-                height: 80,
-              ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(50.0),
+        child: SizedBox(
+          width: 70,
+          height: 70,
+          child: ElevatedButton(
+            onPressed: _handleButtonClick, // Handle button click logic
+            style: ElevatedButton.styleFrom(
+              shape: const CircleBorder(),
+            ),
+            child: Image.asset(
+              ImageConstant.splashNextIcon, // Button icon
+              width: 80,
+              height: 80,
             ),
           ),
         ),
