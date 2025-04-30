@@ -142,24 +142,36 @@ void main() async {
       }
     }
 
-
-
-
-    // if (!kIsWeb) {
-    //   await PushNotifications.subscribeToTopic("message");
-    //   await PushNotifications.unsubscribeFromTopic("live_doLogin");
-    // }
-    // Subscribe to a topic
-
-
     // Listen to background notifications
     FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundMessage);
 
     // --- Android FCM notification tap handling ---
     if (Platform.isAndroid) {
-      // When app is in background or foreground and notification is tapped
+      // to handle foreground notifications
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        String payloadData = jsonEncode(message.data);
+        print("Got a message in foreground");
+
+        String? imageUrl = message.notification?.android?.imageUrl ??
+            message.notification?.apple?.imageUrl ??
+            message.data['image'];
+
+        print("imageUrl--$imageUrl");
+
+        if (message.notification != null) {
+          PushNotifications.showSimpleNotification(
+            title: message.notification!.title ?? "",
+            body: message.notification!.body ?? "",
+            payload: payloadData, // <- used for click handling
+            imageUrl: imageUrl,
+          );
+        }
+      });
+
+
+      // Background or resumed (user taps on the notification)
       FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-        print("Notification tapped (background/foreground): ${message.data}");
+        print("Notification tapped (background/resumed): ${message.data}");
         final data = message.data;
 
         if (data['notification_type'] == 'actionreminder') {
@@ -182,16 +194,17 @@ void main() async {
         }
       });
 
-
-      // When app is terminated and launched via notification tap
-      final RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+      // Terminated state
+      // Terminated state
+      final RemoteMessage? initialMessage =
+      await FirebaseMessaging.instance.getInitialMessage();
       if (initialMessage != null) {
         print("Notification tapped (terminated): ${initialMessage.data}");
         final data = initialMessage.data;
 
         if (data['notification_type'] == 'actionreminder') {
-          // Wait for the widget tree to build
-          Future.delayed(const Duration(seconds: 1), () {
+          // Add this to ensure context is available after app is launched
+          WidgetsBinding.instance.addPostFrameCallback((_) {
             final context = navigatorKey.currentContext;
             if (context != null) {
               final reminderData = Map<String, dynamic>.from(data);
@@ -210,57 +223,26 @@ void main() async {
           });
         }
       }
-
     }
 
 
-    // // on background notification tapped
-    // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    // ///for handling in terminated state
+    // final RemoteMessage? message =
+    // await FirebaseMessaging.instance.getInitialMessage();
+    // if (message != null) {
+    //   String payloadData = jsonEncode(message.data);
+    //   print('Got a Message in Foreground');
     //   if (message.notification != null) {
-    //     print("Background Notification Tapped");
-    //     // navigatorKey.currentState!.pushNamed("/message", arguments: message);
+    //     PushNotifications.showSimpleNotification(
+    //         title: message.notification!.title ?? "",
+    //         body: message.notification!.body ?? "",
+    //         payload: payloadData);
     //   }
-    // });
-
-// to handle foreground notifications
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      String payloadData = jsonEncode(message.data);
-      print("Got a message in foreground");
-
-      // Check and extract image URL from Android or iOS specific properties
-      String? imageUrl = message.notification?.android?.imageUrl ??
-          message.notification?.apple?.imageUrl ??
-          message.data['image'];
-
-      print("imageUrl--${imageUrl}");
-
-      if (message.notification != null) {
-        PushNotifications.showSimpleNotification(
-          title: message.notification!.title ?? "",
-          body: message.notification!.body ?? "",
-          payload: payloadData,
-          imageUrl: imageUrl,
-        );
-      }
-    });
-
-    ///for handling in terminated state
-    final RemoteMessage? message =
-    await FirebaseMessaging.instance.getInitialMessage();
-    if (message != null) {
-      String payloadData = jsonEncode(message.data);
-      print('Got a Message in Foreground');
-      if (message.notification != null) {
-        PushNotifications.showSimpleNotification(
-            title: message.notification!.title ?? "",
-            body: message.notification!.body ?? "",
-            payload: payloadData);
-      }
-      print('Launched from terminated state');
-      Future.delayed(Duration(seconds: 1), () {
-        ///if to navigate to another screen
-      });
-    }
+    //   print('Launched from terminated state');
+    //   Future.delayed(Duration(seconds: 1), () {
+    //     ///if to navigate to another screen
+    //   });
+    // }
 
     FlutterError.onError = (errorDetails) {
       FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
@@ -327,12 +309,46 @@ class _MyAppState extends State<MyApp> {
   String? baseUrlQA;
   bool isBaseUrlReady = false;
 
+  void setupNotificationTapHandler() {
+    const AndroidInitializationSettings androidInitSettings =
+    AndroidInitializationSettings('@mipmap/ic_launcher');
+    final InitializationSettings initSettings = InitializationSettings(
+      android: androidInitSettings,
+    );
 
+    flutterLocalNotificationsPlugin.initialize(
+      initSettings,
+      onDidReceiveNotificationResponse: (NotificationResponse response) {
+        final payload = response.payload;
+        if (payload != null) {
+          final data = jsonDecode(payload);
+
+          if (data['notification_type'] == 'actionreminder') {
+            final context = navigatorKey.currentContext;
+
+            if (context != null) {
+              final reminderData = Map<String, dynamic>.from(data);
+
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (_, __, ___) =>
+                      ReminderPushViewScreen(reminderData: reminderData),
+                  transitionDuration: const Duration(seconds: 0),
+                ),
+              );
+            }
+          }
+        }
+      },
+    );
+  }
   @override
   void initState() {
     super.initState();
     _checkPermissionStatus();
     _requestPermissions();
+    setupNotificationTapHandler();
     ref = FirebaseDatabase.instance.ref().child("mentalHealth");
     observeDatabase();
     // Delay the fetchAppRegister call by 2 seconds
