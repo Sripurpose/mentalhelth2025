@@ -161,35 +161,56 @@ void main() async {
       FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
         print("Notification tapped (background/foreground): ${message.data}");
         final data = message.data;
+
         if (data['notification_type'] == 'actionreminder') {
           final context = navigatorKey.currentContext;
+
           if (context != null) {
-            final dashBoardProvider = Provider.of<DashBoardProvider>(context, listen: false);
-            dashBoardProvider.changePage(index: 1);
+            final reminderData = Map<String, dynamic>.from(data);
+
+            Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (_, __, ___) =>
+                    ReminderPushViewScreen(reminderData: reminderData),
+                transitionDuration: const Duration(seconds: 0),
+              ),
+            );
           } else {
             print('Navigator context is null');
           }
         }
       });
 
+
       // When app is terminated and launched via notification tap
       final RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
       if (initialMessage != null) {
         print("Notification tapped (terminated): ${initialMessage.data}");
         final data = initialMessage.data;
+
         if (data['notification_type'] == 'actionreminder') {
-          // Wait for widget tree to be built
+          // Wait for the widget tree to build
           Future.delayed(const Duration(seconds: 1), () {
             final context = navigatorKey.currentContext;
             if (context != null) {
-              final dashBoardProvider = Provider.of<DashBoardProvider>(context, listen: false);
-              dashBoardProvider.changePage(index: 1);
+              final reminderData = Map<String, dynamic>.from(data);
+
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (_, __, ___) =>
+                      ReminderPushViewScreen(reminderData: reminderData),
+                  transitionDuration: const Duration(seconds: 0),
+                ),
+              );
             } else {
               print('Navigator context is null');
             }
           });
         }
       }
+
     }
 
 
