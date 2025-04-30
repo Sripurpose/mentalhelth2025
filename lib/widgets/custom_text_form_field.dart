@@ -844,6 +844,178 @@ class CustomTextFormFieldEmailAndPasswordNumu extends StatelessWidget {
 }
 
 
+
+
+class CustomTextFormFieldEmailAndPasswordNumuEye extends StatefulWidget {
+  const CustomTextFormFieldEmailAndPasswordNumuEye({
+    Key? key,
+    this.alignment,
+    this.width,
+    this.scrollPadding,
+    this.controller,
+    this.focusNode,
+    this.autofocus = false,
+    this.textStyle,
+    this.obscureText = false,
+    this.textInputAction = TextInputAction.next,
+    this.textInputType = TextInputType.text,
+    this.maxLines,
+    this.hintText,
+    this.hintStyle,
+    this.prefix,
+    this.prefixConstraints,
+    this.suffix,
+    this.suffixConstraints,
+    this.prefixText,
+    this.prefixStyle,
+    this.contentPadding,
+    this.borderDecoration,
+    this.fillColor,
+    this.filled = false,
+    this.validator,
+    this.onChanged,
+    this.onTap,
+    this.onEditingComplete,
+    this.textAlign,
+    this.isValids,
+    this.inputFormatters,
+    this.readOnly = false,
+  }) : super(key: key);
+
+  final Alignment? alignment;
+  final double? width;
+  final TextEditingController? scrollPadding;
+  final TextEditingController? controller;
+  final FocusNode? focusNode;
+  final bool? autofocus;
+  final TextStyle? textStyle;
+  final bool? obscureText;
+  final TextInputAction? textInputAction;
+  final TextInputType? textInputType;
+  final int? maxLines;
+  final String? hintText;
+  final TextStyle? hintStyle;
+  final Widget? prefix;
+  final BoxConstraints? prefixConstraints;
+  final Widget? suffix;
+  final BoxConstraints? suffixConstraints;
+  final String? prefixText;
+  final TextStyle? prefixStyle;
+  final EdgeInsets? contentPadding;
+  final InputBorder? borderDecoration;
+  final Color? fillColor;
+  final bool? filled;
+  final FormFieldValidator<String>? validator;
+  final void Function(String)? onChanged;
+  final VoidCallback? onTap;
+  final VoidCallback? onEditingComplete;
+  final TextAlign? textAlign;
+  final bool? isValids;
+  final List<TextInputFormatter>? inputFormatters;
+  final bool readOnly;
+
+  @override
+  State<CustomTextFormFieldEmailAndPasswordNumuEye> createState() =>
+      _CustomTextFormFieldEmailAndPasswordNumuEyeState();
+}
+
+class _CustomTextFormFieldEmailAndPasswordNumuEyeState
+    extends State<CustomTextFormFieldEmailAndPasswordNumuEye> {
+  late bool _obscureText;
+
+  @override
+  void initState() {
+    super.initState();
+    _obscureText = widget.obscureText ?? false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.alignment != null
+        ? Align(
+      alignment: widget.alignment!,
+      child: _buildTextField(context),
+    )
+        : _buildTextField(context);
+  }
+
+  Widget _buildTextField(BuildContext context) => SizedBox(
+    width: widget.width ?? double.infinity,
+    child: TextFormField(
+      textAlign: widget.textAlign ?? TextAlign.start,
+      onChanged: widget.onChanged,
+      onTap: widget.onTap,
+      onEditingComplete: () {
+        FocusScope.of(context).unfocus();
+        if (widget.onEditingComplete != null) {
+          widget.onEditingComplete!();
+        }
+      },
+      scrollPadding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom),
+      controller: widget.controller,
+      focusNode: widget.focusNode,
+      autofocus: widget.autofocus ?? false,
+      style:
+      widget.textStyle ?? CustomTextStyles.bodyMediumOnPrimary,
+      obscureText: _obscureText,
+      textInputAction: widget.textInputAction,
+      keyboardType: widget.textInputType,
+      maxLines: widget.maxLines ?? 1,
+      decoration: _inputDecoration(),
+      validator: widget.validator,
+      inputFormatters: widget.inputFormatters,
+      readOnly: widget.readOnly,
+    ),
+  );
+
+  InputDecoration _inputDecoration() => InputDecoration(
+    hintText: widget.hintText ?? "",
+    errorText: widget.isValids == null
+        ? null
+        : widget.isValids!
+        ? null
+        : 'Invalid phone number',
+    hintStyle: widget.hintStyle ??
+        CustomTextStyles.bodyLargeRobotoOnSecondaryContainer,
+    prefixIcon: widget.prefix,
+    prefixIconConstraints: widget.prefixConstraints,
+    suffixIcon: IconButton(
+      icon: Icon(
+        _obscureText ? Icons.visibility_off : Icons.visibility,
+        color: Colors.grey,
+      ),
+      onPressed: () {
+        setState(() {
+          _obscureText = !_obscureText;
+        });
+      },
+    ),
+    suffixIconConstraints: widget.suffixConstraints,
+    isDense: true,
+    contentPadding: widget.contentPadding ?? const EdgeInsets.all(11),
+    fillColor: Colors.white,
+    filled: true,
+    prefixText: widget.prefixText,
+    prefixStyle: widget.prefixStyle ??
+        CustomTextStyles.bodyLargeRobotoOnSecondaryContainer,
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5),
+      borderSide: BorderSide.none,
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5),
+      borderSide: BorderSide.none,
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5),
+      borderSide: BorderSide.none,
+    ),
+  );
+}
+
+
+
 class CustomTextFormFieldPhoneNumberNumu extends StatelessWidget {
   const CustomTextFormFieldPhoneNumberNumu({
     Key? key,

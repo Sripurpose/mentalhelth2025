@@ -296,7 +296,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                   Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: (editProfileProvider.getProfileModel?.isPassword == 1)
+                                          ? MainAxisAlignment.spaceBetween
+                                          : MainAxisAlignment.center,
                                       children: [
                                         Align(
                                           alignment: Alignment.bottomCenter,
@@ -331,43 +333,44 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                             },
                                           ),
                                         ),
-                                        if(editProfileProvider.getProfileModel?.isPassword == 1)
-                                        Align(
-                                          alignment: Alignment.bottomCenter,
-                                          child: Consumer<DashBoardProvider>(
-                                            builder: (context, dashBoardProvider, _) {
-                                              return GestureDetector(
-                                                onTap: () {
-                                                  showChangePasswordDialog(context,editProfileProvider);
-                                                },
-                                                child: Container(
-                                                  width: size.width * 0.35,
-                                                  height: size.height * 0.040,
-                                                  decoration: BoxDecoration(
-                                                    color: ColorsContent.blackText,
-                                                    borderRadius: const BorderRadius.only(
-                                                      topLeft: Radius.circular(12),
-                                                      topRight: Radius.circular(12),
+                                        if (editProfileProvider.getProfileModel?.isPassword == 1)
+                                          Align(
+                                            alignment: Alignment.bottomCenter,
+                                            child: Consumer<DashBoardProvider>(
+                                              builder: (context, dashBoardProvider, _) {
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    showChangePasswordDialog(context, editProfileProvider);
+                                                  },
+                                                  child: Container(
+                                                    width: size.width * 0.35,
+                                                    height: size.height * 0.040,
+                                                    decoration: BoxDecoration(
+                                                      color: ColorsContent.blackText,
+                                                      borderRadius: const BorderRadius.only(
+                                                        topLeft: Radius.circular(12),
+                                                        topRight: Radius.circular(12),
+                                                      ),
                                                     ),
-                                                  ),
-                                                  child: const Center(
-                                                    child: Text(
-                                                      "Change Password",
-                                                      style: TextStyle(
-                                                        fontSize: 14,
-                                                        color: Colors.white,
-                                                        fontWeight: FontWeight.bold,
+                                                    child: const Center(
+                                                      child: Text(
+                                                        "Change Password",
+                                                        style: TextStyle(
+                                                          fontSize: 14,
+                                                          color: Colors.white,
+                                                          fontWeight: FontWeight.bold,
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
-                                                ),
-                                              );
-                                            },
+                                                );
+                                              },
+                                            ),
                                           ),
-                                        ),
                                       ],
                                     ),
                                   ),
+
                                 ],
                               ),
                             ),

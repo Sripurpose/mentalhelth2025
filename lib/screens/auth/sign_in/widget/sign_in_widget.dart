@@ -30,7 +30,7 @@ Widget buildPasswordField(BuildContext context,
     {required TextEditingController passwordFieldController}) {
   return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: CustomTextFormFieldEmailAndPasswordNumu(
+      child: CustomTextFormFieldEmailAndPasswordNumuEye(
         controller: passwordFieldController,
         hintText: "Password",
         hintStyle: theme.textTheme.bodySmall,

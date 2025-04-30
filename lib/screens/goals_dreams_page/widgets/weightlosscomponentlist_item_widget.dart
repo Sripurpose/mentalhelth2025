@@ -49,7 +49,7 @@ class WeightLossComponentListItemWidget extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          image == null
+          image.isEmpty
               ? const SizedBox()
               : CircleAvatar(
                   backgroundColor: appTheme.gray50,

@@ -452,24 +452,31 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          homeProvider.chartViewLoading
-                              ? Center(child: CupertinoActivityIndicator(
-                            color: ColorsContent.newThemeColor,
-                            radius: 15,
-                          ))
-                              :
-                          homeProvider.journalsModelList.isEmpty?
-                          GestureDetector(
-                            onTap: (){
-                            },
-                            child: SvgPicture.asset(
-                              ImageConstant.homeScreenNoData,
-                              width:  size.width * 0.90,
-                              height: size.height * 0.43,
-                            ),
-                          ):
+                          SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                homeProvider.chartViewLoading
+                                    ? Center(child: CupertinoActivityIndicator(
+                                  color: ColorsContent.newThemeColor,
+                                  radius: 15,
+                                ))
+                                    :
+                                homeProvider.journalsModelList.isEmpty?
+                                GestureDetector(
+                                  onTap: (){
+                                  },
+                                  child: SvgPicture.asset(
+                                    ImageConstant.homeScreenNoData,
+                                    width:  size.width * 0.90,
+                                    height: size.height * 0.43,
+                                  ),
+                                ):
 
-                          _buildUserProfileList(context, size, homeProvider),
+                                _buildUserProfileList(context, size, homeProvider),
+                              ],
+                            ),
+                          ),
+
                           // const SizedBox(height: 10),
                           // (homeProvider.journalsModel?.journals?.length ?? 0) < 0
                           //     ? const SizedBox()
