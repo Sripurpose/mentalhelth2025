@@ -322,7 +322,7 @@ class EditProfileProvider extends ChangeNotifier {
     }
   }
 
-  String countryCode = '91';
+  String countryCode = '';
   void addCountryCode({required String value}) {
     countryCode = value;
     notifyListeners();

@@ -209,6 +209,11 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                           .actions!
                                           .actionDetails
                                           .toString(),
+                                      title: mentalStrengthEditProvider
+                                          .actionsDetailsModel!
+                                          .actions!
+                                          .actionTitle
+                                          .toString(),
                                           ),
                                     // const SizedBox(height: 10),
                                     // mentalStrengthEditProvider.actionsDetailsModel ==
@@ -663,6 +668,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
       required String achiveDate,
       required String status,
         required String comments,
+        required String title,
       }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -705,6 +711,35 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                 scrollDirection: Axis.horizontal, // Enable horizontal scrolling
                 child: Text(
                   category,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Open Sans',
+                    color: Colors.black,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1, // Set the maximum number of lines to 3
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 6,
+        ),
+        Row(
+          children: [
+            Text(
+              "Action Title : ",
+              style: CustomTextStyles.blackText16000000W700(),
+            ),
+            SizedBox(
+              // color: Colors.blue,
+              width: size.width * 0.60,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+                child: Text(
+                  title,
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w400,

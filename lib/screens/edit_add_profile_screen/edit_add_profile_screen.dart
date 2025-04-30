@@ -806,7 +806,7 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                 email: email,  // Pass the validated email
                 countryCode: editProfileProvider.countryCode.isNotEmpty
                     ? editProfileProvider.countryCode
-                    : (editProfileProvider.getProfileModel?.countryCode ?? ""), // Fallback to profileModel countryCode if countryCode is empty
+                    : (editProfileProvider.getProfileModel?.countryCode ?? ""),
                 context: context,
                 interestIds: editProfileProvider.selectedCategories.isEmpty
                     ? editProfileProvider.profileInterestIds

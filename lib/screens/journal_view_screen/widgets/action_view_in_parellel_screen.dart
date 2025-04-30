@@ -191,6 +191,11 @@ class _ActionViewInParallelScreenState
                                             .actions!
                                             .actionDetails
                                             .toString(),
+                                        title: mentalStrengthEditProvider
+                                            .actionsDetailsModel!
+                                            .actions!
+                                            .actionTitle
+                                            .toString(),
                                       ),
                                       // const SizedBox(height: 10),
                                       // mentalStrengthEditProvider.actionsDetailsModel ==
@@ -583,7 +588,8 @@ class _ActionViewInParallelScreenState
         required String createDate,
         required String achiveDate,
         required String status,
-        required String comments}) {
+        required String comments,
+        required String title,}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -612,6 +618,28 @@ class _ActionViewInParallelScreenState
                 scrollDirection: Axis.horizontal, // Enable horizontal scrolling
                 child: Text(
                   category,
+                  style: CustomTextStyles.bodyLargeGray700,
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1, // Set the maximum number of lines to 3
+                ),
+
+              ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Text(
+              "Action Title : ",
+              style: CustomTextStyles.blackText16000000W600(),
+            ),
+            SizedBox(
+              width: size.width * 0.60,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+                child: Text(
+                  title,
                   style: CustomTextStyles.bodyLargeGray700,
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,

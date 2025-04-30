@@ -23,6 +23,7 @@ import 'package:mentalhelth/screens/goals_dreams_page/provider/goals_dreams_prov
 import 'package:mentalhelth/screens/journal_list_screen/provider/journal_list_provider.dart';
 import 'package:mentalhelth/screens/mental_strength_add_edit_screen/provider/mental_strenght_edit_provider.dart';
 import 'package:mentalhelth/screens/no_internet/duplicate_screen.dart';
+import 'package:mentalhelth/screens/reminder_push_view_screen/reminder_push_view_screen.dart';
 import 'package:mentalhelth/utils/core/constants.dart';
 import 'package:mentalhelth/utils/core/firebase_api.dart';
 import 'package:mentalhelth/utils/core/local_notification.dart';
@@ -50,6 +51,8 @@ Future _firebaseBackgroundMessage(RemoteMessage message) async {
     print("Some notification Received in background...");
   }
 }
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   // Set this before initializing bindings
@@ -95,7 +98,39 @@ void main() async {
 // The promptForPushNotificationsWithUserResponse function will show the iOS or Android push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
       OneSignal.Notifications.requestPermission(true);
 
+      OneSignal.Notifications.addForegroundWillDisplayListener((event) {
+        print('Foreground Notification Received: ${event.notification.jsonRepresentation()}');
+      });
 
+      OneSignal.Notifications.addClickListener((event) {
+        print('Notification Clicked: ${event.notification.jsonRepresentation()}');
+        final data = event.notification.additionalData;
+
+        if (data != null && data['notification_type'] == 'actionreminder') {
+          final context = navigatorKey.currentContext;
+
+          if (context != null) {
+            final reminderData = Map<String, dynamic>.from(data);
+
+            Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (_, __, ___) =>
+                    ReminderPushViewScreen(reminderData: reminderData),
+                transitionDuration: const Duration(seconds: 0),
+              ),
+            );
+          } else {
+            print('Navigator context is null');
+          }
+        }
+      });
+
+
+
+      OneSignal.Notifications.addPermissionObserver((event) {
+        print('Notification Permission Changed: ${event.toString()}');
+      });
     }
     else if(Platform.isAndroid){
       await PushNotifications.init();
@@ -108,17 +143,7 @@ void main() async {
     }
 
 
-    OneSignal.Notifications.addForegroundWillDisplayListener((event) {
-      print('Foreground Notification Received: ${event.notification.jsonRepresentation()}');
-    });
 
-    OneSignal.Notifications.addClickListener((event) {
-      print('Notification Clicked: ${event.notification.jsonRepresentation()}');
-    });
-
-    OneSignal.Notifications.addPermissionObserver((event) {
-      print('Notification Permission Changed: ${event.toString()}');
-    });
 
     // if (!kIsWeb) {
     //   await PushNotifications.subscribeToTopic("message");
@@ -129,6 +154,44 @@ void main() async {
 
     // Listen to background notifications
     FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundMessage);
+
+    // --- Android FCM notification tap handling ---
+    if (Platform.isAndroid) {
+      // When app is in background or foreground and notification is tapped
+      FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+        print("Notification tapped (background/foreground): ${message.data}");
+        final data = message.data;
+        if (data['notification_type'] == 'actionreminder') {
+          final context = navigatorKey.currentContext;
+          if (context != null) {
+            final dashBoardProvider = Provider.of<DashBoardProvider>(context, listen: false);
+            dashBoardProvider.changePage(index: 1);
+          } else {
+            print('Navigator context is null');
+          }
+        }
+      });
+
+      // When app is terminated and launched via notification tap
+      final RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+      if (initialMessage != null) {
+        print("Notification tapped (terminated): ${initialMessage.data}");
+        final data = initialMessage.data;
+        if (data['notification_type'] == 'actionreminder') {
+          // Wait for widget tree to be built
+          Future.delayed(const Duration(seconds: 1), () {
+            final context = navigatorKey.currentContext;
+            if (context != null) {
+              final dashBoardProvider = Provider.of<DashBoardProvider>(context, listen: false);
+              dashBoardProvider.changePage(index: 1);
+            } else {
+              print('Navigator context is null');
+            }
+          });
+        }
+      }
+    }
+
 
     // // on background notification tapped
     // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
@@ -242,7 +305,6 @@ class _MyAppState extends State<MyApp> {
   String? baseUrlLive;
   String? baseUrlQA;
   bool isBaseUrlReady = false;
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 
   @override
@@ -348,6 +410,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return  MaterialApp(
+      navigatorKey: navigatorKey, // <-- Add this line
       debugShowCheckedModeBanner: false,
       home: isBaseUrlReady
           ? const SplashScreen() // Navigate to SplashScreen if baseUrl is ready
