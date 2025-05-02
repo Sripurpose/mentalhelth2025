@@ -764,29 +764,31 @@ class _GoalAndDreamFullViewScreenState
           height: 6,
         ),
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start, // Important for vertical alignment
           children: [
             Text(
               "Goal Description : ",
               style: CustomTextStyles.blackText16000000W700(),
             ),
-            Expanded(  // Using Expanded to prevent overflow
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                child: Text(
-                  comments,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Open Sans',
-                    color: Colors.black,
+            Expanded(
+              child: SizedBox(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Text(
+                    comments,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Open Sans',
+                      color: Colors.black,
+                    ),
                   ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1, // Set the maximum number of lines to 1
                 ),
               ),
             ),
           ],
         )
+
 
       ],
     );

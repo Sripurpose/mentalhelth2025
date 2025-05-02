@@ -102,7 +102,7 @@ class ConfirmDeleteScreen extends StatelessWidget {
           CustomElevatedButton(
             loading: deleteProvider.deleteAccountLoading,
             onPressed: () async {
-              customPopup(
+              customPopupDelete(
                 context: context,
                 onPressedDelete: () async {
                   await deleteProvider.deleteAccount(context: context);
@@ -111,9 +111,9 @@ class ConfirmDeleteScreen extends StatelessWidget {
                     index: 0,
                   );
                 },
-                yes: "Yes",
-                title: 'Are you sue you want to delete',
-                content: 'your account and data forever,you cant undo this action',
+                yes: "Delete Account",
+                title: 'Delete your account',
+                content: 'You will lose all of your data by deleting your account. This action cannot be undone',
               );
 
             },

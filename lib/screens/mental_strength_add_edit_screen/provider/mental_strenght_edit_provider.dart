@@ -93,6 +93,14 @@ class MentalStrengthEditProvider extends ChangeNotifier {
     openActionFullView = false;
   }
 
+  String? searchQuery;
+
+  void updateSearchQuery(String query) {
+    searchQuery = query;
+    notifyListeners();
+  }
+
+
   bool openChooseGoal = false;
 
   void openChooseGoalFunction() {

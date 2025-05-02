@@ -36,6 +36,8 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
   late DashBoardProvider dashBoardProvider;
   bool tokenStatus = false;
   var logger = Logger();
+  late TextEditingController _searchController;
+  String searchQuery = '';
 
   Future<void> _isTokenExpired() async {
  //   await homeProvider.fetchChartView(context);
@@ -52,6 +54,14 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
     }
 
   }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+
   @override
   void initState() {
     homeProvider = Provider.of<HomeProvider>(context, listen: false);
@@ -60,7 +70,7 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
     editProfileProvider = Provider.of<EditProfileProvider>(context, listen: false);
      mentalStrengthEditProvider =
         Provider.of<MentalStrengthEditProvider>(context, listen: false);
-
+    _searchController = TextEditingController();
      WidgetsBinding.instance.addPostFrameCallback((_) {
        mentalStrengthEditProvider.fetchGoalActions(
          goalId: widget.goal.id.toString(),
@@ -104,119 +114,141 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
                     children: [
                       const SizedBox(height: 8),
                       Consumer<MentalStrengthEditProvider>(
-                          builder: (context, mentalStrengthEditProvider, _) {
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                SizedBox(width: size.width * 0.2),
-                                SizedBox(
-                                  width: size.width * 0.2,
-                                  child: Column(
-                                    children: [
-                                      SvgPicture.asset(
-                                        ImageConstant.dotDot,
-                                        color: ColorsContent.greyColor,
-                                        height: 8,
-                                        width: 8,
-                                        fit: BoxFit.contain,
-                                      ),
-                                      SvgPicture.asset(
-                                        ImageConstant.dotDot,
-                                        color: ColorsContent.greyColor,
-                                        height: 8,
-                                        width: 8,
-                                        fit: BoxFit.contain,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      mentalStrengthEditProvider.openChooseActionFunction();
-                                    },
-                                    child: CustomImageView(
-                                      imagePath: ImageConstant.imgClosePrimaryNew,
-                                      height: 40,
-                                      width: 40,
+                        builder: (context, mentalStrengthEditProvider, _) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(width: size.width * 0.2),
+                              SizedBox(
+                                width: size.width * 0.2,
+                                child: Column(
+                                  children: [
+                                    SvgPicture.asset(
+                                      ImageConstant.dotDot,
+                                      color: ColorsContent.greyColor,
+                                      height: 8,
+                                      width: 8,
+                                      fit: BoxFit.contain,
                                     ),
+                                    SvgPicture.asset(
+                                      ImageConstant.dotDot,
+                                      color: ColorsContent.greyColor,
+                                      height: 8,
+                                      width: 8,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    mentalStrengthEditProvider.openChooseActionFunction();
+                                  },
+                                  child: CustomImageView(
+                                    imagePath: ImageConstant.imgClosePrimaryNew,
+                                    height: 40,
+                                    width: 40,
                                   ),
                                 ),
-                              ],
-                            );
-                          }),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                      // Search bar section
                       Padding(
                         padding: EdgeInsets.all(size.width * 0.02),
                         child: Consumer<MentalStrengthEditProvider>(
-                            builder: (context, mentalStrengthEditProvider, _) {
-                              return Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      if (mentalStrengthEditProvider.getListGoalActionsModel != null &&
-                                          mentalStrengthEditProvider.getListGoalActionsModel!.actions != null &&
-                                          mentalStrengthEditProvider
-                                              .getListGoalActionsModel!.actions!.isNotEmpty)
+                          builder: (context, mentalStrengthEditProvider, _) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    if (mentalStrengthEditProvider.getListGoalActionsModel != null &&
+                                        mentalStrengthEditProvider.getListGoalActionsModel!.actions != null &&
+                                        mentalStrengthEditProvider
+                                            .getListGoalActionsModel!.actions!.isNotEmpty)
+                                      const Text(
+                                        "Choose Actions",
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    SizedBox(height: size.height * 0.003),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
                                         const Text(
-                                          "Choose Actions",
+                                          "Goal: ",
                                           style: TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                      SizedBox(height: size.height * 0.003),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: [
-                                          const Text(
-                                            "Goal: ",
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
+                                        SizedBox(
+                                          width: size.width * 0.4,
+                                          child: SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal,
+                                            child: Text(
+                                              widget.goal.title.toString(),
+                                              textAlign: TextAlign.center,
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
                                             ),
                                           ),
-                                          SizedBox(
-                                            width: size.width * 0.4,
-                                            child: SingleChildScrollView(
-                                              scrollDirection: Axis.horizontal,
-                                              child: Text(
-                                                widget.goal.title.toString(),
-                                                textAlign: TextAlign.center,
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 1,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  if (mentalStrengthEditProvider
-                                      .getListGoalActionsModel!.actions!.isNotEmpty)
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        mentalStrengthEditProvider.openChooseActionFunction();
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.black,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
                                         ),
-                                      ),
-                                      child: const Text(
-                                        "Proceed",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                if (mentalStrengthEditProvider
+                                    .getListGoalActionsModel!.actions!.isNotEmpty)
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      mentalStrengthEditProvider.openChooseActionFunction();
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.black,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
                                       ),
                                     ),
-                                ],
-                              );
-                            }),
+                                    child: const Text(
+                                      "Proceed",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 10),
+                        child: TextField(
+                          controller: _searchController,
+                          onChanged: (value) {
+                            setState(() {
+                              searchQuery = value.toLowerCase();
+                            });
+                          },
+                          decoration: InputDecoration(
+                            hintText: "Search Actions...",
+                            prefixIcon: const Icon(Icons.search),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        ),
                       ),
                       const SizedBox(height: 10),
                       Consumer<MentalStrengthEditProvider>(
@@ -226,7 +258,13 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
 
                           if (actionsList == null) return const SizedBox();
 
-                          if (actionsList.isEmpty) {
+                          // Filter actions based on search query
+                          final filteredActions = actionsList
+                              .where((action) =>
+                              action.title.toString().toLowerCase().contains(searchQuery))
+                              .toList();
+
+                          if (filteredActions.isEmpty) {
                             return Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -249,15 +287,15 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
                             width: size.width * 0.8,
                             child: ListView.separated(
                               separatorBuilder: (context, index) => const SizedBox(height: 3),
-                              itemCount: actionsList.length +
+                              itemCount: filteredActions.length +
                                   (mentalStrengthEditProvider.getListGoalActionsModelLoading ? 1 : 0),
                               itemBuilder: (context, index) {
-                                if (index < actionsList.length) {
+                                if (index < filteredActions.length) {
                                   return GestureDetector(
                                     onTap: () {},
                                     child: listActionList(
                                       size: size,
-                                      action: actionsList,
+                                      action: filteredActions,
                                       index: index,
                                     ),
                                   );

@@ -699,26 +699,25 @@ class _ActionsFullViewState extends State<ActionsFullView> {
           height: 6,
         ),
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start, // Important for vertical alignment
           children: [
             Text(
               "Goal : ",
               style: CustomTextStyles.blackText16000000W700(),
             ),
-            SizedBox(
-             // color: Colors.blue,
-              width: size.width * 0.60,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                child: Text(
-                  category,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Open Sans',
-                    color: Colors.black,
+            Expanded(
+              child: SizedBox(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Text(
+                    category,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Open Sans',
+                      color: Colors.black,
+                    ),
                   ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1, // Set the maximum number of lines to 3
                 ),
               ),
             ),
@@ -728,26 +727,25 @@ class _ActionsFullViewState extends State<ActionsFullView> {
           height: 6,
         ),
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start, // Important for vertical alignment
           children: [
             Text(
               "Action Title : ",
               style: CustomTextStyles.blackText16000000W700(),
             ),
-            SizedBox(
-              // color: Colors.blue,
-              width: size.width * 0.60,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Open Sans',
-                    color: Colors.black,
+            Expanded(
+              child: SizedBox(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Open Sans',
+                      color: Colors.black,
+                    ),
                   ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1, // Set the maximum number of lines to 3
                 ),
               ),
             ),
@@ -757,30 +755,31 @@ class _ActionsFullViewState extends State<ActionsFullView> {
           height: 6,
         ),
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start, // Important for vertical alignment
           children: [
             Text(
               "Action Description : ",
               style: CustomTextStyles.blackText16000000W700(),
             ),
-            SizedBox(
-              width: size.width * 0.55,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                child: Text(
-                  comments,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Open Sans',
-                    color: Colors.black,
+            Expanded(
+              child: SizedBox(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Text(
+                    comments,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Open Sans',
+                      color: Colors.black,
+                    ),
                   ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1, // Set the maximum number of lines to 3
                 ),
               ),
             ),
           ],
         ),
+
       ],
     );
   }

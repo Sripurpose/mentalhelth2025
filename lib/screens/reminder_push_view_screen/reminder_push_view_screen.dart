@@ -141,7 +141,7 @@ class _ReminderPushViewScreenState
                                                     width: 5,
                                                   ),
                                                   Text(
-                                                    widget.reminderData['reminder_status'] == 0 ? "Active" : "Inactive",
+                                                    widget.reminderData['reminder_status'] == 0 ? "Inactive" : "Active",
                                                     style: const TextStyle(
                                                       fontSize: 16,
                                                       fontWeight: FontWeight.w400,

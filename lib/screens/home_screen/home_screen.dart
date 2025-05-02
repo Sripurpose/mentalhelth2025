@@ -190,11 +190,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void updateFCMTokenIfNeeded(String fcmToken) async {
     String? storedFCMToken = await getFCMTokenFromSharePref();  // Await the result here
-    if (fcmToken != storedFCMToken) {
+    //if (fcmToken != storedFCMToken) {
       sendPushNotificationByUser();
       addFCMTokenToSharePref(token: fcmToken);
       print(" cache fcm token    ${getFCMTokenFromSharePref()}");
-    }
+   // }
   }
 
 
@@ -417,88 +417,93 @@ class _HomeScreenState extends State<HomeScreen> {
                       homeProvider.fetchJournals(initial: true,context: context);
                       editProfileProvider.fetchUserProfile(context);
                     },
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          SizedBox(height: size.height * 0.01),
-                          _buildHeaderRow(context, size, editProfileProvider, dashBoardProvider),
-                          const SizedBox(height: 12),
-                          GestureDetector(
-                            onTap: (){
-                              dashBoardProvider.changePage(index: 1);
-                              mentalStrengthEditProvider.fetchEmotions(context: context);
-                            },
-                            child: Image.asset(
-                            ImageConstant.homeBannerNumuNew,
-                              width: 400,
-                              height: 200,
-                            ),
-                          ),
-
-                          // homeProvider.journalsModelList.isEmpty?
-                          //    const SizedBox():
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 20),
-                              child: Text(
-                                "Your Recent Journals",
-                               style:  TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w700,
-                                  color:  ColorsContent.blackThemeColor,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        SizedBox(height: size.height * 0.01),
+                        _buildHeaderRow(context, size, editProfileProvider, dashBoardProvider),
+                        Expanded(
+                          child: SingleChildScrollView(
                             child: Column(
                               children: [
-                                homeProvider.chartViewLoading
-                                    ? Center(child: CupertinoActivityIndicator(
-                                  color: ColorsContent.newThemeColor,
-                                  radius: 15,
-                                ))
-                                    :
-                                homeProvider.journalsModelList.isEmpty?
                                 GestureDetector(
                                   onTap: (){
+                                    dashBoardProvider.changePage(index: 1);
+                                    mentalStrengthEditProvider.fetchEmotions(context: context);
                                   },
-                                  child: SvgPicture.asset(
-                                    ImageConstant.homeScreenNoData,
-                                    width:  size.width * 0.90,
-                                    height: size.height * 0.43,
+                                  child: Image.asset(
+                                  ImageConstant.homeBannerNumuNew,
+                                    width: 400,
+                                    height: 200,
                                   ),
-                                ):
-
-                                _buildUserProfileList(context, size, homeProvider),
+                                ),
+                          
+                                // homeProvider.journalsModelList.isEmpty?
+                                //    const SizedBox():
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                                    child: Text(
+                                      "Your Recent Journals",
+                                     style:  TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w700,
+                                        color:  ColorsContent.blackThemeColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                SingleChildScrollView(
+                                  child: Column(
+                                    children: [
+                                      homeProvider.chartViewLoading
+                                          ? Center(child: CupertinoActivityIndicator(
+                                        color: ColorsContent.newThemeColor,
+                                        radius: 15,
+                                      ))
+                                          :
+                                      homeProvider.journalsModelList.isEmpty?
+                                      GestureDetector(
+                                        onTap: (){
+                                        },
+                                        child: SvgPicture.asset(
+                                          ImageConstant.homeScreenNoData,
+                                          width:  size.width * 0.90,
+                                          height: size.height * 0.43,
+                                        ),
+                                      ):
+                          
+                                      _buildUserProfileList(context, size, homeProvider),
+                                    ],
+                                  ),
+                                ),
+                          
+                                // const SizedBox(height: 10),
+                                // (homeProvider.journalsModel?.journals?.length ?? 0) < 0
+                                //     ? const SizedBox()
+                                //     : GestureDetector(
+                                //   onTap: () {
+                                //     dashBoardProvider.changePage(index: 2);
+                                //   },
+                                //   child: Align(
+                                //     alignment: Alignment.centerLeft,
+                                //     child: Padding(
+                                //       padding: const EdgeInsets.symmetric(horizontal: 15),
+                                //       child: Text(
+                                //         homeProvider.journalStatus == 200 ?
+                                //         "View more ..." : "",
+                                //         style: CustomTextStyles.bodyLargeRoboto,
+                                //       ),
+                                //     ),
+                                //   ),
+                                // ),
+                                const SizedBox(height: 50),
                               ],
                             ),
                           ),
-
-                          // const SizedBox(height: 10),
-                          // (homeProvider.journalsModel?.journals?.length ?? 0) < 0
-                          //     ? const SizedBox()
-                          //     : GestureDetector(
-                          //   onTap: () {
-                          //     dashBoardProvider.changePage(index: 2);
-                          //   },
-                          //   child: Align(
-                          //     alignment: Alignment.centerLeft,
-                          //     child: Padding(
-                          //       padding: const EdgeInsets.symmetric(horizontal: 15),
-                          //       child: Text(
-                          //         homeProvider.journalStatus == 200 ?
-                          //         "View more ..." : "",
-                          //         style: CustomTextStyles.bodyLargeRoboto,
-                          //       ),
-                          //     ),
-                          //   ),
-                          // ),
-                          const SizedBox(height: 50),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 );

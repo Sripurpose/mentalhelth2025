@@ -50,7 +50,11 @@ class WeightLossComponentListItemWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           image.isEmpty
-              ? const SizedBox()
+              ?  CircleAvatar(
+      backgroundColor: appTheme.gray50,
+        radius: size.height * 0.035,
+        backgroundImage: NetworkImage(image),
+      )
               : CircleAvatar(
                   backgroundColor: appTheme.gray50,
                   radius: size.height * 0.035,
@@ -65,10 +69,13 @@ class WeightLossComponentListItemWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  headding,
-                  style: CustomTextStyles.titleMedium16,
-                  overflow: TextOverflow.ellipsis,
+                Container(
+                  width:230,
+                  child: Text(
+                    headding,
+                    style: CustomTextStyles.titleMedium16,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
 
                 status

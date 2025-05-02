@@ -251,8 +251,8 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                     :
                                 SizedBox(
                                   height: audioList.length <= 2
-                                      ? size.height * 0.1 * audioList.length // Adjust height based on the number of audios
-                                      : size.height * 0.25,  // Default height if more than 2 audios
+                                      ? size.height * 0.11 * audioList.length // Adjust height based on the number of audios
+                                      : size.height * 0.5,  // Default height if more than 2 audios
                                   child: ListView.builder(
                                     itemCount: audioList.length,
                                     itemBuilder: (context, index) {

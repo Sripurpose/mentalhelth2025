@@ -821,7 +821,7 @@ class CustomTextFormFieldEmailAndPasswordNumu extends StatelessWidget {
     suffixIcon: suffix,
     suffixIconConstraints: suffixConstraints,
     isDense: true,
-    contentPadding: contentPadding ?? const EdgeInsets.all(11),
+    contentPadding: contentPadding ?? const EdgeInsets.all(14),
     fillColor: Colors.white,
     filled: true, // Ensures background color is applied
     prefixText: prefixText,

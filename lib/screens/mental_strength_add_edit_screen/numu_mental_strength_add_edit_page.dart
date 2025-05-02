@@ -636,12 +636,12 @@ class _NumuMentalStrengthAddEditPageState
 
   Widget _buildThirdTab(BuildContext context, Size size) {
     Size size = MediaQuery.of(context).size;
+    final TextEditingController searchController = TextEditingController();
+
     return Center(
       child: Column(
         children: [
-          const SizedBox(
-            height: 20,
-          ),
+          const SizedBox(height: 20),
           const Text(
             "What Is Your Emotional State?",
             style: TextStyle(
@@ -655,54 +655,77 @@ class _NumuMentalStrengthAddEditPageState
           (mentalStrengthEditProvider.getEmotionsModel == null)
               ? const SizedBox()
               : Container(
-            width: size.width * 0.80, // Controls the button width
+            width: size.width * 0.80,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0), // Border radius for rounded corners
-              color: Colors.white, // Background color (optional)
+              borderRadius: BorderRadius.circular(10.0),
+              color: Colors.white,
             ),
             child: Center(
               child: DropdownButtonHideUnderline(
-                child: DropdownButton2(
+                child: DropdownButton2<Emotion>(
                   isExpanded: true,
-                  value: mentalStrengthEditProvider.emotionValue, // Allow null value
-                  hint: const Text("Select Emotion"), // Hint when no value is selected
+                  value: mentalStrengthEditProvider.emotionValue,
+                  hint: const Text("Select Emotion"),
                   items: mentalStrengthEditProvider.getEmotionsModel?.emotions?.map((Emotion items) {
-                    return DropdownMenuItem(
+                    return DropdownMenuItem<Emotion>(
                       value: items,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: Text(
                           items.title.toString(),
                           style: TextStyle(
-                            color: ColorsContent.newThemeColor, // Change to your desired color
+                            color: ColorsContent.newThemeColor,
                           ),
                         ),
                       ),
                     );
                   }).toList(),
                   onChanged: (Emotion? newValue) {
-                    mentalStrengthEditProvider.addEmotionValue(newValue!);
+                    final matched = mentalStrengthEditProvider.getEmotionsModel?.emotions
+                        ?.firstWhere((e) => e.id == newValue?.id, orElse: () => newValue!);
+                    mentalStrengthEditProvider.addEmotionValue(matched!);
                     _isTokenExpired();
                   },
                   dropdownStyleData: DropdownStyleData(
-                    maxHeight: 350, // Set max height for dropdown list
+                    maxHeight: 350,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10), // Optional: rounded corners
-                      color: Colors.white, // Optional: background color
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
                     ),
                   ),
                   menuItemStyleData: const MenuItemStyleData(
-                    padding: EdgeInsets.all(8), // Adjust padding inside dropdown items
+                    padding: EdgeInsets.all(8),
                   ),
-                ),
+                  dropdownSearchData: DropdownSearchData(
+                    searchController: searchController,
+                    searchInnerWidgetHeight: 60, // <- Required
+                    searchInnerWidget: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: TextFormField(
+                        controller: searchController,
+                        decoration: const InputDecoration(
+                          hintText: 'Search Emotion...',
+                          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                    searchMatchFn: (item, searchValue) {
+                      return (item.value?.title ?? '')
+                          .toLowerCase()
+                          .contains(searchValue.toLowerCase());
+                    },
+                  ),
+                )
+
               ),
             ),
           ),
-
         ],
       ),
     );
   }
+
 
   Widget _buildFourthTab(BuildContext context, Size size) {
     Size size = MediaQuery.of(context).size;
