@@ -746,7 +746,7 @@ class _NumuMentalStrengthAddEditPageState
                     searchMatchFn: (item, searchValue) {
                       return (item.value?.title ?? '')
                           .toLowerCase()
-                          .contains(searchValue.toLowerCase());
+                          .startsWith(searchValue.toLowerCase());
                     },
                   ),
                 )
