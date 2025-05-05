@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:mentalhelth/screens/edit_add_profile_screen/provider/edit_provider.dart';
 import 'package:mentalhelth/screens/home_screen/provider/home_provider.dart';
@@ -85,7 +87,8 @@ class _OtpScreenState extends State<OtpScreen> {
                     width: 280,
                     color: Colors.white,
                   ),
-                  const SizedBox(height: 100),
+                  Platform.isIOS ? const SizedBox(height: 100):
+                  const SizedBox(height: 30),
                   const Text(
                     "Enter the code sent to your phone ",
                     style: TextStyle(
@@ -124,7 +127,7 @@ class _OtpScreenState extends State<OtpScreen> {
                           if (phoneSignInProvider.otp == null || phoneSignInProvider.otp.isEmpty) {
                             ScaffoldMessenger.of(context).clearSnackBars();
                             if (context.mounted) {
-                              showCustomSnackBar(context: context, message: 'Please enter a valid OTP');
+                              showCustomSnackBar(context: context, message: 'Please enter a OTP');
                             }
 
                             return;
