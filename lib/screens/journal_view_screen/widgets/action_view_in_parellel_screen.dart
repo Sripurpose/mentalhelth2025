@@ -611,6 +611,9 @@ class _ActionViewInParallelScreenState
             ),
           ],
         ),
+        const SizedBox(
+          height: 10,
+        ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start, // Important for vertical alignment
           children: [
@@ -635,6 +638,9 @@ class _ActionViewInParallelScreenState
               ),
             ),
           ],
+        ),
+        const SizedBox(
+          height: 10,
         ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start, // Important for vertical alignment
@@ -664,6 +670,9 @@ class _ActionViewInParallelScreenState
               ),
             ),
           ],
+        ),
+        const SizedBox(
+          height: 10,
         ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start, // Important for vertical alignment

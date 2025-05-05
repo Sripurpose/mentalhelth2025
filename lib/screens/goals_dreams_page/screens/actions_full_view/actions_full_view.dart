@@ -696,7 +696,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
           ],
         ),
         const SizedBox(
-          height: 6,
+          height: 10,
         ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start, // Important for vertical alignment
@@ -728,7 +728,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
           ],
         ),
         const SizedBox(
-          height: 6,
+          height: 10,
         ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start, // Important for vertical alignment
@@ -760,7 +760,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
           ],
         ),
         const SizedBox(
-          height: 6,
+          height: 10,
         ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start, // Important for vertical alignment
