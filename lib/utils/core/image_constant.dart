@@ -17,10 +17,12 @@ class ImageConstant {
   static String noData = '$imagePath/home/noData.gif';
   static String imgMenu = '$imagePath/img_menu.svg';
   static String feelingDummyNumu = '$imagePath/feeling_dummy_numu.svg';
+  static String lineNumu = '$imagePath/line_numu.svg';
   static String submitButtonNumu = 'assets/images/submit_button_numu.svg';
   static String submitButtonNumuBuild = 'assets/images/submit_button_mental_strength.svg';
   static String homeScreenNoData = 'assets/images/home_screen_no_data.svg';
   static String tabBackButton = 'assets/images/tab_back_button.svg';
+  static String numuMentalBackButton = 'assets/images/numu_mental_back.svg';
   static String goToIcon = 'assets/images/go_to_icon.png';
   static String noInternet = 'assets/images/no_internet.svg';
   static String noDataNumu = 'assets/images/no_data.svg';

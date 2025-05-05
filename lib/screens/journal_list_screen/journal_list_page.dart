@@ -392,9 +392,9 @@ class _JournalListPageState extends State<JournalListPage> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15.0),
                       child: Align(
-                        alignment: Alignment.bottomLeft,
+                        alignment: Alignment.bottomCenter,
                         child: Padding(
-                          padding: const EdgeInsets.only(bottom: 20), // Adjust the position
+                          padding: const EdgeInsets.only(bottom: 10), // Adjust the position
                           child: SizedBox(
                             width: 70, // Increase width
                             height: 70, // Increase height

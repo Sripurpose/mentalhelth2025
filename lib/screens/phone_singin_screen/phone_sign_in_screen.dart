@@ -104,7 +104,7 @@ class _PhoneSignInScreenState extends State<PhoneSignInScreen> {
                                 return SizedBox(
                                   height: 42,
                                   child: OutlinedButton(
-                                    style: CustomButtonStyles.outlineGrayTL5,
+                                    style: CustomButtonStyles.outlineWhiteNew,
                                     onPressed: () {
                                       showCountryPicker(
                                         context: context,

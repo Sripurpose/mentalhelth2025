@@ -38,6 +38,7 @@ import '../../widgets/custom_rating_bar.dart';
 import '../../widgets/functions/popup.dart';
 import '../addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
 import '../auth/sign_in/provider/sign_in_provider.dart';
+import '../dash_borad_screen/dash_board_screen.dart';
 import '../home_screen/provider/home_provider.dart';
 import '../home_screen/widgets/home_menu/home_menu.dart';
 import '../no_internet/duplicate_screen.dart';
@@ -257,12 +258,12 @@ class _NumuMentalStrengthAddEditPageState
                                         child: Row(
                                           children: [
                                             SvgPicture.asset(
-                                              ImageConstant.tabBackButton,
+                                              ImageConstant.numuMentalBackButton,
                                               // Replace with your SVG file path
                                               width: 30, // Adjust size if needed
                                               height: 30,
                                             ),
-                                            const SizedBox(width: 20),
+                                            const SizedBox(width: 10),
                                             // Spacing between icon and text
                                             Text(
                                               "Back",
@@ -277,7 +278,35 @@ class _NumuMentalStrengthAddEditPageState
                                         ),
                                       )
                                     else
-                                      const SizedBox(width: 48),
+                                      GestureDetector(
+                                        onTap: () {
+                                      dashBoardProvider.changePage(index: 0);
+
+                                          mentalStrengthEditProvider.openAllCloser();
+                                          // FocusScope.of(context).unfocus();
+                                        },
+                                        child: Row(
+                                          children: [
+                                            SvgPicture.asset(
+                                              ImageConstant.numuMentalBackButton,
+                                              // Replace with your SVG file path
+                                              width: 30, // Adjust size if needed
+                                              height: 30,
+                                            ),
+                                            const SizedBox(width: 10),
+                                            // Spacing between icon and text
+                                            Text(
+                                              "Back",
+                                              style: TextStyle(
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.w500,
+                                                color: ColorsContent
+                                                    .newThemeColor, // Adjust color as needed
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     // Placeholder to keep alignment when back button is hidden
 
                                     // Progress Text (e.g., "1/6", "2/6")
@@ -609,7 +638,11 @@ class _NumuMentalStrengthAddEditPageState
           SvgPicture.asset(
             ImageConstant.feelingDummyNumu, // Button icon
           ),
-          SizedBox(height: size.height * 0.05),
+          SizedBox(height: size.height * 0.03),
+          SvgPicture.asset(
+            ImageConstant.lineNumu, // Button icon
+          ),
+          SizedBox(height: size.height * 0.03),
           CustomRatingBar(
             initialRating: mentalStrengthEditProvider.emotionalValueStar,
             itemSize: 60,
@@ -836,7 +869,7 @@ class _NumuMentalStrengthAddEditPageState
 
 
           SizedBox(
-            height: size.height * 0.04,
+            height: size.height * 0.02,
           ),
           mentalStrengthEditProvider.goalsValue.id == null
               ? const SizedBox()

@@ -81,6 +81,17 @@ class CustomButtonStyles {
         ),
       );
 
+  static ButtonStyle get outlineWhiteNew => OutlinedButton.styleFrom(
+    backgroundColor: ColorsContent.whiteText,
+    side: BorderSide(
+      color: appTheme.gray700,
+      width: 0.5,
+    ),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(5),
+    ),
+  );
+
   static ButtonStyle get editProfileCountryCode => OutlinedButton.styleFrom(
     backgroundColor: Colors.transparent,
     side: BorderSide(

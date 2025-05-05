@@ -147,6 +147,8 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
                   return Stack(
                     children: [
                       Container(
+                        height: goalsDreamsProvider.goalsAndDreamsModel?.pageCount == 1 ?
+                        size.height * 0.635 : size.height * 0.59,
                         color: goalsDreamsProvider.goalsanddreams.isEmpty
                             ? ColorsContent.homeBackGroundColor
                             : null,
@@ -257,9 +259,7 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
                           },
                         ),
                       ),
-                      goalsDreamsProvider.isScrolling
-                          ? const SizedBox()
-                          : Align(
+               Align(
                         alignment: Alignment.bottomCenter,
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
@@ -272,7 +272,7 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
                                 1)
                               Padding(
                                 padding:
-                                const EdgeInsets.only(bottom: 0),
+                                const EdgeInsets.only(bottom: 83),
                                 child: GestureDetector(
                                   child: Row(
                                     mainAxisAlignment:
@@ -370,9 +370,9 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15.0),
                         child: Align(
-                          alignment: Alignment.bottomRight,
+                          alignment: Alignment.bottomCenter,
                           child: Padding(
-                            padding: const EdgeInsets.only(bottom: 20), // Adjust the position
+                            padding: const EdgeInsets.only(bottom: 10), // Adjust the position
                             child: SizedBox(
                               width: 70, // Increase width
                               height: 70, // Increase height

@@ -145,7 +145,7 @@ class _JournalListViewWidgetState extends State<JournalListViewWidget> {
               // Pagination Row - Always Visible
               if (homeProvider.journalsModelList.isNotEmpty)
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 5.0),
+                  padding: const EdgeInsets.only(bottom: 80.0),
                   child: Visibility(
                     visible: (homeProvider.journalsModel?.pageCount ?? 0) > 1,
                     child: Row(
