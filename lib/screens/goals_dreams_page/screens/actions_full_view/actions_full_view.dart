@@ -539,7 +539,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                                                     ),
                                                                     mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.from_time != null &&
                                                                         mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.to_time != null
-                                                                        ? "${formatTimeOfDay(stringToTimeOfDay(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.from_time!)!)} "
+                                                                        ? ":${formatTimeOfDay(stringToTimeOfDay(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.from_time!)!)} "
                                                                         "to ${formatTimeOfDay(stringToTimeOfDay(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.to_time!)!)}"
                                                                         : ""
                                                                 ),
@@ -702,7 +702,11 @@ class _ActionsFullViewState extends State<ActionsFullView> {
           crossAxisAlignment: CrossAxisAlignment.start, // Important for vertical alignment
           children: [
             Text(
-              "Goal : ",
+              "Goal",
+              style: CustomTextStyles.blackText16000000W700(),
+            ),
+            Text(
+              "              : ",
               style: CustomTextStyles.blackText16000000W700(),
             ),
             Expanded(
@@ -730,7 +734,11 @@ class _ActionsFullViewState extends State<ActionsFullView> {
           crossAxisAlignment: CrossAxisAlignment.start, // Important for vertical alignment
           children: [
             Text(
-              "Action Title : ",
+              "Action \nTitle",
+              style: CustomTextStyles.blackText16000000W700(),
+            ),
+            Text(
+              "         : ",
               style: CustomTextStyles.blackText16000000W700(),
             ),
             Expanded(
@@ -758,7 +766,11 @@ class _ActionsFullViewState extends State<ActionsFullView> {
           crossAxisAlignment: CrossAxisAlignment.start, // Important for vertical alignment
           children: [
             Text(
-              "Action Description : ",
+              "Action \nDescription",
+              style: CustomTextStyles.blackText16000000W700(),
+            ),
+            Text(
+              ": ",
               style: CustomTextStyles.blackText16000000W700(),
             ),
             Expanded(
