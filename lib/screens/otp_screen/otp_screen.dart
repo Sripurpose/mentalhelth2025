@@ -150,6 +150,7 @@ class _OtpScreenState extends State<OtpScreen> {
                           } else {
                             ScaffoldMessenger.of(context).clearSnackBars();
                             if (context.mounted) {
+                              phoneSignInProvider.otp = "";
                               showCustomSnackBar(context: context, message: 'Invalid OTP');
                             }
                           }
