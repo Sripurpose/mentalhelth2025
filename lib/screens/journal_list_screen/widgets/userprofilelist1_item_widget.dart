@@ -49,7 +49,7 @@ class UserProfileList1ItemWidget extends StatelessWidget {
       child: Column(
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
                 width: size.width * 0.1, // Set the desired width

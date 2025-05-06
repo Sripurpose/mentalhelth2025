@@ -138,8 +138,8 @@ class CustomOutlinedButtonContinueWithPhoneNumu extends BaseButton {
       style: buttonStyle,
       onPressed: isDisabled ?? false ? null : onPressed ?? () {},
       child: Row(
-        // mainAxisAlignment: MainAxisAlignment.center,
-        // crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
             height: 23,
@@ -147,7 +147,7 @@ class CustomOutlinedButtonContinueWithPhoneNumu extends BaseButton {
             child: leftIcon ?? const SizedBox.shrink(),
           ),
           const SizedBox(
-            width: 15,
+            width: 10,
           ),
           Center(
             child: Text(

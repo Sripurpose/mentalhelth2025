@@ -155,7 +155,7 @@ class _LandingRegisterScreenScreenState extends State<LandingRegisterScreenScree
                     child: Container(
                       width: double.maxFinite,
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 48,
+                        horizontal: 65,
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -163,7 +163,7 @@ class _LandingRegisterScreenScreenState extends State<LandingRegisterScreenScree
                         children: [
                           CustomImageView(
                             imagePath: ImageConstant.newLogoNumu,
-                            height: 100,
+                            height: 130,
                             width: 280,
                             color: Colors.white,
                           ),

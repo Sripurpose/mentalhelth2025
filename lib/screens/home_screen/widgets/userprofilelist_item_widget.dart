@@ -3,6 +3,7 @@ import 'package:logger/logger.dart';
 import 'package:mentalhelth/utils/core/date_time_utils.dart';
 import 'package:mentalhelth/utils/theme/app_decoration.dart';
 import 'package:html_unescape/html_unescape.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import '../../../utils/theme/theme_helper.dart';
 
 // ignore: must_be_immutable
@@ -29,12 +30,12 @@ class UserProfileListItemWidget extends StatelessWidget {
       decoration: AppDecoration.outlineGray.copyWith(
         borderRadius: BorderRadiusStyle.roundedBorder10,
         border:  Border.all(
-          color: Colors.grey.shade400, // Black border color
-          width: 0.8,          // Border width
+          color: ColorsContent.newThemeColor, // Black border color
+          width: 0.3,          // Border width
         ),
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           image!=null?
           Container(

@@ -122,7 +122,7 @@ class _PhoneSignInScreenState extends State<PhoneSignInScreen> {
                                       child: Center(
                                         child: Text(
                                           "+${phoneSignInProvider.countryCode.toString()}",
-                                          style: CustomTextStyles.titleSmallHelveticaOnPrimary,
+                                          style: CustomTextStyles.bodyMediumOnPrimary,
                                         ),
                                       ),
                                     ),
@@ -189,12 +189,12 @@ class _PhoneSignInScreenState extends State<PhoneSignInScreen> {
                             textAlign: TextAlign.justify,
                           ),
                         ),
-                        const SizedBox(height: 12),
+                        //const SizedBox(height: 10),
                         Consumer<PhoneSignInProvider>(
                           builder: (context, phoneSignInProvider, _) {
                             return CustomElevatedButton(
                               loading: phoneSignInProvider.loginLoading,
-                              height: 40,
+                              height: 45,
                               text: "Send Code",
                               margin: const EdgeInsets.only(right: 10),
                               buttonStyle: CustomButtonStyles.signInButton,

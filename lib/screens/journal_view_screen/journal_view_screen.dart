@@ -714,7 +714,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                                 child: Icon(
                                                   Icons.play_arrow,
                                                   color: Colors.white,
-                                                  size: size.width * 0.03,
+                                                  size: size.width * 0.04,
                                                 ),
                                               ),
                                             ],
@@ -725,7 +725,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                   ),
                                 ),
 
-                                const SizedBox(height: 10),
+                               // const SizedBox(height: 10),
                               ],
                             ):
                       mentalStrengthEditProvider.goalDetailModel == null

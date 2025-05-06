@@ -848,24 +848,32 @@ class _NumuMentalStrengthAddEditPageState
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
-                elevation: 0, // removes the shadow line
+                elevation: 0,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5),
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 16),
               ),
-              child: const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Select Goal",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.normal,
+              child:Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Select Goal",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.normal,
+                    ),
                   ),
-                ),
+                  Icon(
+                    size: 30,
+                    Icons.arrow_drop_down,
+                    color: ColorsContent.newThemeColor,
+                  ),
+                ],
               ),
             ),
           ),
+
 
 
           SizedBox(
@@ -1007,15 +1015,22 @@ class _NumuMentalStrengthAddEditPageState
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 16), // left padding
               ),
-              child: const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Select Action",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.normal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Select Action",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.normal,
+                    ),
                   ),
-                ),
+                  Icon(
+                    size: 30,
+                    Icons.arrow_drop_down,
+                    color: ColorsContent.newThemeColor,
+                  ),
+                ],
               ),
             ),
           ),
@@ -1237,7 +1252,7 @@ class _NumuMentalStrengthAddEditPageState
                         ),
                       ),
                       Positioned(
-                        bottom: 50, // Adjust this value as needed
+                        bottom: 60, // Adjust this value as needed
                         right: 0, // Move to the right
                         left: 40,
                         child: Consumer<MentalStrengthEditProvider>(
@@ -1318,7 +1333,7 @@ class _NumuMentalStrengthAddEditPageState
                         ),
                       ),
                       Positioned(
-                        bottom: 40, // Adjust this value as needed
+                        bottom: 50, // Adjust this value as needed
                         right: 0, // Move to the right
                         left: 40,
                         child: Consumer<MentalStrengthEditProvider>(
@@ -1384,7 +1399,7 @@ class _NumuMentalStrengthAddEditPageState
                         ),
                       ),
                       Positioned(
-                        bottom: 40, // Adjust this value as needed
+                        bottom: 50, // Adjust this value as needed
                         right: 0, // Move to the right
                         left: 40,
                         child: Consumer<MentalStrengthEditProvider>(
@@ -1501,7 +1516,7 @@ class _NumuMentalStrengthAddEditPageState
                         ),
                       ),
                       Positioned(
-                        bottom: 40, // Adjust this value as needed
+                        bottom: 50, // Adjust this value as needed
                         right: 0, // Move to the right
                         left: 40,
                         child: Consumer<MentalStrengthEditProvider>(

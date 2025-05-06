@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 
 // ignore: must_be_immutable
 class CustomRatingBar extends StatelessWidget {
@@ -37,20 +38,21 @@ class CustomRatingBar extends StatelessWidget {
   }
 
   Widget get ratingBarWidget => RatingBar.builder(
-    ignoreGestures: ignoreGestures ?? isRatingStatic, // Make unclickable if isRatingStatic is true
+    ignoreGestures: ignoreGestures ?? isRatingStatic,
     initialRating: initialRating ?? 0.0,
     minRating: 0.1,
     direction: Axis.horizontal,
     allowHalfRating: false,
     itemSize: itemSize ?? 26,
-    unratedColor: unselectedColor ?? Colors.grey,
+    unratedColor: ColorsContent.newThemeColor, // set to transparent to handle our own logic
     itemCount: itemCount ?? 5,
     updateOnDrag: true,
-    itemBuilder: (context, _) {
+    itemBuilder: (context, index) {
+      bool isRated = (initialRating ?? 0.0) > index;
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4.0),
         child: Icon(
-          Icons.star,
+          isRated ? Icons.star : Icons.star_border,
           color: color ?? Colors.yellow,
         ),
       );

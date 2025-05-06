@@ -231,7 +231,8 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
                           },
                         ),
                       ),
-
+                      if (mentalStrengthEditProvider
+                          .getListGoalActionsModel!.actions!.isNotEmpty)
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 10),
                         child: TextField(

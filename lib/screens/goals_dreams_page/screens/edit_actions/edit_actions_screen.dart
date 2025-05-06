@@ -1862,7 +1862,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
                       ),
 
                       Positioned(
-                        bottom: 40, // Adjust this value as needed
+                        bottom: 50, // Adjust this value as needed
                         right: 0, // Move to the right
                         left: 40,
                         child: Consumer<AddActionsProvider>(
@@ -1985,7 +1985,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
                       ),
 
                       Positioned(
-                        bottom: 40, // Adjust this value as needed
+                        bottom: 50, // Adjust this value as needed
                         right: 0, // Move to the right
                         left: 40,
                         child: Consumer<AddActionsProvider>(
@@ -2091,7 +2091,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
                         ),
                       ),
                       Positioned(
-                        bottom: 40, // Adjust this value as needed
+                        bottom: 50, // Adjust this value as needed
                         right: 0, // Move to the right
                         left: 40,
                         child: Consumer<AddActionsProvider>(
@@ -2250,7 +2250,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
                       ),
 
                       Positioned(
-                        bottom: 40, // Adjust this value as needed
+                        bottom: 50, // Adjust this value as needed
                         right: 0, // Move to the right
                         left: 40,
                         child: Consumer<AddActionsProvider>(
