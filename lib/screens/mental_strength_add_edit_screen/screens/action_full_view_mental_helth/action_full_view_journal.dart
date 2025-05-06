@@ -655,45 +655,71 @@ class _ActionFullViewJournalCreateBottomSheetState
           ],
         ),
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start, // Important for vertical alignment
           children: [
             Text(
               "Goal : ",
-              style: CustomTextStyles.blackText16000000W600(),
+              style: CustomTextStyles.blackText16000000W700(),
             ),
-            SizedBox(
-              width: size.width * 0.60,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                child: Text(
-                  category,
-                  style: CustomTextStyles.bodyLargeGray700,
-                  textAlign: TextAlign.center,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1, // Set the maximum number of lines to 3
-                ),
+            Expanded(
+              child: SizedBox(
+                child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: category != null ? Text(
+                      category,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Open Sans',
+                        color: Colors.black,
+                      ),
+                    ):
+                    const Text(
+                      "NA",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Open Sans',
+                        color: Colors.black,
+                      ),
+                    )
 
+                ),
               ),
             ),
           ],
         ),
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start, // Important for vertical alignment
           children: [
             Text(
               "Action Description : ",
-              style: CustomTextStyles.blackText16000000W600(),
+              style: CustomTextStyles.blackText16000000W700(),
             ),
-            SizedBox(
-              width: size.width * 0.60,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                child: Text(
-                  comments,
-                  style: CustomTextStyles.bodyLargeGray700,
-                  textAlign: TextAlign.center,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1, // Set the maximum number of lines to 3
-                ),
+            Expanded(
+              child: SizedBox(
+                child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: comments != null ? Text(
+                      comments,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Open Sans',
+                        color: Colors.black,
+                      ),
+                    ):
+                    const Text(
+                      "NA",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Open Sans',
+                        color: Colors.black,
+                      ),
+                    )
 
+                ),
               ),
             ),
           ],

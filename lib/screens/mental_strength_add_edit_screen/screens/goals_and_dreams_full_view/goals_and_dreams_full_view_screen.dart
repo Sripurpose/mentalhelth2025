@@ -722,37 +722,35 @@ class _GoalAndDreamFullViewBottomSheetState
           height: 6,
         ),
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start, // Important for vertical alignment
           children: [
             Text(
               "Goal Description : ",
-              style: CustomTextStyles.blackText16000000W600(),
+              style: CustomTextStyles.blackText16000000W700(),
             ),
-            SizedBox(
-              width: size.width * 0.55,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                child: comments != null ?
-                Text(
-                 comments,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Open Sans',
-                    color: Colors.black,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1, // Set the maximum number of lines to 3
-                ):
-                const Text(
-                  "NA",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Open Sans',
-                    color: Colors.black,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1, // Set the maximum number of lines to 3
+            Expanded(
+              child: SizedBox(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: comments != null ? Text(
+                    comments,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Open Sans',
+                      color: Colors.black,
+                    ),
+                  ):
+                  const Text(
+                    "NA",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Open Sans',
+                      color: Colors.black,
+                    ),
+                  )
+
                 ),
               ),
             ),
