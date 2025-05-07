@@ -43,6 +43,7 @@ class _LandingRegisterScreenScreenState extends State<LandingRegisterScreenScree
   @override
   void initState() {
     super.initState();
+
     Future.delayed(const Duration(seconds: 1), () {
       setState(() {
         _isLoading = false;
@@ -129,6 +130,15 @@ class _LandingRegisterScreenScreenState extends State<LandingRegisterScreenScree
         print("Error launching URL: $e");
       }
     }
+  }
+
+  Future<void> fetchAppRegister() async {
+    String deviceType = Platform.isAndroid ? 'android' : 'ios';
+    //isLoading = true;
+    final signInProvider = Provider.of<SignInProvider>(context, listen: false);
+
+    await signInProvider.fetchAppRegister(context, deviceType: deviceType);
+
   }
 
   @override

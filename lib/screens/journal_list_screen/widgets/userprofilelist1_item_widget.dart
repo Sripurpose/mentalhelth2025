@@ -99,6 +99,7 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                   builder: (contexts, journalListProvider, homeProvider,
                       mentalStrengthEditProvider, editProfileProvider, _) {
                 return PopupMenuButton<String>(
+                  color: Colors.white,
                   iconColor: ColorsContent.newThemeColor, // 👈 Change dot color here
                   onSelected: (value) {},
                   itemBuilder: (BuildContext context) {

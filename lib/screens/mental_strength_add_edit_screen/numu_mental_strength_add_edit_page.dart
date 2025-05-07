@@ -1110,11 +1110,11 @@ class _NumuMentalStrengthAddEditPageState
                         // Play Button
                         GestureDetector(
                           onTap: () async {
-                            mentalStrengthEditProvider.openActionFullViewFunction();
                             await mentalStrengthEditProvider.fetchActionDetails(
-                              actionId: mentalStrengthEditProvider.actionList[index].id.toString(),
-                              context: context
+                                actionId: mentalStrengthEditProvider.actionList[index].id.toString(),
+                                context: context
                             );
+                            mentalStrengthEditProvider.openActionFullViewFunction();
                           },
                           child: CircleAvatar(
                             radius: size.width * 0.04,

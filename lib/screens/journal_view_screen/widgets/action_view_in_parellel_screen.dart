@@ -197,108 +197,116 @@ class _ActionViewInParallelScreenState
                                             .actionTitle
                                             .toString(),
                                       ),
-                                      // const SizedBox(height: 10),
-                                      // mentalStrengthEditProvider.actionsDetailsModel ==
-                                      //         null
-                                      //     ? shimmerList(
-                                      //         height: 50,
-                                      //       )
-                                      //     : Container(
-                                      //   //color: Colors.amber,
-                                      //       width: size.width * 0.75,
-                                      //       child: Text(
-                                      //           capitalText(mentalStrengthEditProvider
-                                      //               .actionsDetailsModel!
-                                      //               .actions!
-                                      //               .actionDetails
-                                      //               .toString()),
-                                      //           maxLines: mentalStrengthEditProvider
-                                      //               .actionsDetailsModel!
-                                      //               .actions!
-                                      //               .actionDetails?.length,
-                                      //           overflow: TextOverflow.ellipsis,
-                                      //           style: CustomTextStyles
-                                      //               .blackText15GreyTextW400(),
-                                      //         ),
-                                      //     ),
-                                      const SizedBox(height: 15),
-                                      // audioList.isEmpty
-                                      //     ? const SizedBox()
-                                      //     :
-                                      audioList.isEmpty?
-                                      SizedBox():
-                                      Padding(padding: const EdgeInsets.only(left: 2),
-                                        child: Text(
-                                          "Audio",
-                                          style: CustomTextStyles
-                                              .blackText16000000W700(),
-                                        ),
-                                      ),
+                                      audioList.isEmpty ?
+                                      const SizedBox():
+                                      const SizedBox(height: 10),
                                       audioList.isEmpty
-                                          ?      SizedBox()
-                                          :
-                                      SizedBox(
-                                        height:size.height * 0.12,
-                                        child: ListView.builder(
-                                          itemCount: audioList.length,
-                                          itemBuilder: (context, index) {
-                                            return JournalAudioPlayer(
-                                              url: audioList[index],
-                                            );
-                                          },
+                                          ? const SizedBox() :
+                                      Container(
+                                        padding: const EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(5),
+                                        ),
+                                        height: size.height * 0.18, // Adjusted height for text + list
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              children: [
+                                                SvgPicture.asset(
+                                                  ImageConstant.actionDetailsMark, // Replace with your actual SVG asset path
+                                                ),
+                                                const SizedBox(width: 10),
+                                                Text(
+                                                  "Audio",
+                                                  style: CustomTextStyles.blackText16000000W700(),
+                                                ),
+                                                Text(
+                                                  " : ",
+                                                  style: CustomTextStyles.blackText16000000W700(),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 10), // Space between text row and list
+                                            Expanded(
+                                              child: ListView.builder(
+                                                itemCount: audioList.length,
+                                                itemBuilder: (context, index) {
+                                                  return JournalAudioPlayer(
+                                                    url: audioList[index],
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      imageList.isEmpty?
-                                      SizedBox():
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      imageList.isEmpty?
-                                      SizedBox():
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 2),
-                                        child: Text(
-                                          "Photo",
-                                          style: CustomTextStyles
-                                              .blackText16000000W700(),
-                                        ),
-                                      ),
+                                      imageList.isEmpty?const SizedBox():
+                                      const SizedBox(height: 10),
                                       imageList.isEmpty
-                                          ?   SizedBox()
-                                          : SizedBox(
-                                        height: imageList.isNotEmpty ? size.height * 0.3 : 0,
-                                        child: Stack(
+                                          ?  const SizedBox() :
+                                      Container(
+                                        padding: const EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(5),
+                                        ),
+                                        height: imageList.isNotEmpty ? size.height * 0.35 : 0, // increased for label + images
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            PageView.builder(
-                                              controller: photoController,
-                                              itemCount: imageList.length,
-                                              itemBuilder: (context, index) {
-                                                return CustomImageView(
-                                                  fit: BoxFit.cover,
-                                                  imagePath: imageList[index],
-                                                  height: size.height * 0.30,
-                                                  width: size.width,
-                                                  alignment: Alignment.center,
-                                                );
-                                              },
-                                              onPageChanged: (int pageIndex) {
-                                                setState(() {
-                                                  photoCurrentIndex = pageIndex;
-                                                });
-                                              },
-                                            ),
-                                            Positioned(
-                                              bottom: 10,
-                                              left: 0,
-                                              right: 0,
-                                              child: SizedBox(
-                                                width: imageList.length *
-                                                    size.width *
-                                                    0.1,
-                                                child: buildIndicators(
-                                                  imageList.length,
-                                                  photoCurrentIndex,
+                                            Row(
+                                              children: [
+                                                SvgPicture.asset(
+                                                  ImageConstant.actionDetailsMark, // Replace with your photo SVG path
                                                 ),
+                                                const SizedBox(width: 10),
+                                                Text(
+                                                  "Photo",
+                                                  style: CustomTextStyles.blackText16000000W700(),
+                                                ),
+                                                Text(
+                                                  " : ",
+                                                  style: CustomTextStyles.blackText16000000W700(),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Expanded(
+                                              child: Stack(
+                                                children: [
+                                                  PageView.builder(
+                                                    controller: photoController,
+                                                    itemCount: imageList.length,
+                                                    itemBuilder: (context, index) {
+                                                      return CustomImageView(
+                                                        fit: BoxFit.cover,
+                                                        imagePath: imageList[index],
+                                                        height: size.height * 0.30,
+                                                        width: size.width,
+                                                        alignment: Alignment.center,
+                                                      );
+                                                    },
+                                                    onPageChanged: (int pageIndex) {
+                                                      setState(() {
+                                                        photoCurrentIndex = pageIndex;
+                                                      });
+                                                    },
+                                                  ),
+                                                  Positioned(
+                                                    bottom: 10,
+                                                    left: 0,
+                                                    right: 0,
+                                                    child: Center(
+                                                      child: buildIndicators(
+                                                        imageList.length,
+                                                        photoCurrentIndex,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
                                           ],
@@ -309,116 +317,142 @@ class _ActionViewInParallelScreenState
                                       const SizedBox(
                                         height: 10,
                                       ),
+                                      videoList.isEmpty? const SizedBox():
+                                      const SizedBox(
+                                        height: 0,
+                                      ),
                                       videoList.isEmpty
                                           ? const SizedBox()
-                                          : const SizedBox(
-                                        height: 10,
-                                      ),
-                                      videoList.isEmpty?
-                                      SizedBox():
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 2),
-                                        child: Text(
-                                          "Video",
-                                          style: CustomTextStyles
-                                              .blackText16000000W700(),
+                                          : Container(
+                                        padding: const EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(5),
                                         ),
-                                      ),
-                                      videoList.isEmpty
-                                          ?   SizedBox()
-                                          : const SizedBox(height: 4),
-                                      videoList.isEmpty
-                                          ? const SizedBox()
-                                          : SizedBox(
-                                        height: size.height * 0.3,
-                                        child: Stack(
+                                        height: videoList.isNotEmpty ? size.height * 0.35 : 0, // increased to include title
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            PageView.builder(
-                                              controller: videoController,
-                                              itemCount: videoList.length,
-                                              itemBuilder: (context, index) {
-                                                return VideoPlayerWidget(
-                                                  videoUrl: videoList[index],
-                                                );
-                                              },
-                                              onPageChanged: (int pageIndex) {
-                                                setState(() {
-                                                  videoCurrentIndex = pageIndex;
-                                                });
-                                              },
-                                            ),
-                                            Positioned(
-                                              bottom: 10,
-                                              left: 0,
-                                              right: 0,
-                                              child: SizedBox(
-                                                width: videoList.length *
-                                                    size.width *
-                                                    0.1,
-                                                child: buildIndicators(
-                                                  videoList.length,
-                                                  videoCurrentIndex,
+                                            Row(
+                                              children: [
+                                                SvgPicture.asset(
+                                                  ImageConstant.actionDetailsMark, // Replace with your SVG icon for video
                                                 ),
+                                                const SizedBox(width: 10),
+                                                Text(
+                                                  "Video",
+                                                  style: CustomTextStyles.blackText16000000W700(),
+                                                ),
+                                                Text(
+                                                  " : ",
+                                                  style: CustomTextStyles.blackText16000000W700(),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Expanded(
+                                              child: Stack(
+                                                children: [
+                                                  PageView.builder(
+                                                    controller: videoController,
+                                                    itemCount: videoList.length,
+                                                    itemBuilder: (context, index) {
+                                                      return VideoPlayerWidget(
+                                                        videoUrl: videoList[index],
+                                                      );
+                                                    },
+                                                    onPageChanged: (int pageIndex) {
+                                                      setState(() {
+                                                        videoCurrentIndex = pageIndex;
+                                                      });
+                                                    },
+                                                  ),
+                                                  Positioned(
+                                                    bottom: 10,
+                                                    left: 0,
+                                                    right: 0,
+                                                    child: Center(
+                                                      child: buildIndicators(
+                                                        videoList.length,
+                                                        videoCurrentIndex,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
                                           ],
                                         ),
                                       ),
-                                      // _buildGrid(
-                                      //   context,
-                                      //   size,
-                                      // ),
-                                      mentalStrengthEditProvider.actionsDetailsModel!.actions!.location?.locationAddress != null ?
-                                      const SizedBox(height: 10):
-                                      SizedBox(),
-                                      mentalStrengthEditProvider.actionsDetailsModel!.actions!.location?.locationAddress != null ?
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 2),
-                                        child: Text(
-                                          "Your Location",
-                                          style: CustomTextStyles.blackText16000000W700(),
-                                        ),
-                                      ):
-                                      SizedBox(),
-                                      const SizedBox(height: 6),
                                       mentalStrengthEditProvider.actionsDetailsModel!.actions!.location?.locationAddress != null?
-                                      SizedBox(
-                                        child: Center(
-                                            child: Row(
+                                      const SizedBox(height: 10):const SizedBox(),
+                                      mentalStrengthEditProvider.actionsDetailsModel!.actions!.location?.locationAddress != null?
+                                      Container(
+                                        padding: const EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(5),
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                SvgPicture.asset(
+                                                  ImageConstant.actionDetailsMark, // Replace with your location SVG asset
+                                                ),
+                                                const SizedBox(width: 10),
+                                                Text(
+                                                  "Location",
+                                                  style: CustomTextStyles.blackText16000000W700(),
+                                                ),
+                                                Text(
+                                                  " : ",
+                                                  style: CustomTextStyles.blackText16000000W700(),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Row(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Icon(
-                                                  Icons
-                                                      .location_on,
+                                                  Icons.location_on,
                                                   color: ColorsContent.newThemeColor,
-                                                  size: size.width *
-                                                      0.06,
+                                                  size: 20,
                                                 ),
+                                                const SizedBox(width: 8),
                                                 Expanded(
                                                   child: SingleChildScrollView(
                                                     scrollDirection: Axis.vertical,
                                                     child: Text(
                                                       mentalStrengthEditProvider.actionsDetailsModel?.actions?.location?.locationAddress
                                                           ?.replaceAll(RegExp(r'[^a-zA-Z0-9, ]'), '') // Remove unwanted characters
-                                                          .replaceAll(RegExp(r',\s*,+'), ',') // Replace multiple consecutive commas with a single comma
-                                                          .replaceAll(RegExp(r'^,|,$'), '') // Remove leading and trailing commas
-                                                          .trim() ?? "",
-                                                      style: CustomTextStyles.bodyMediumGray700_1,
+                                                          .replaceAll(RegExp(r',\s*,+'), ',') // Replace multiple consecutive commas
+                                                          .replaceAll(RegExp(r'^,|,$'), '') // Trim leading/trailing commas
+                                                          .trim() ??
+                                                          "",
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.w400,
+                                                        fontFamily: 'Open Sans',
+                                                        color: Colors.black,
+                                                      ),
                                                       overflow: TextOverflow.visible,
-                                                      maxLines: 4, // Ensures scrolling works
+                                                      maxLines: 4,
                                                     ),
                                                   ),
                                                 ),
                                               ],
-                                            )
+                                            ),
+                                          ],
                                         ),
                                       )
                                           :
-                                      SizedBox(),
-                                      const SizedBox(height: 15),
-                                      mentalStrengthEditProvider.actionsDetailsModel!.actions!.actionStatus == "1" ||
-                                          mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder == null ?
-                                      const SizedBox(height: 10):
                                       const SizedBox(),
+                                      const SizedBox(height: 2),
+                                      mentalStrengthEditProvider.actionsDetailsModel!.actions!.actionStatus == "1" ||
+                                          mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder == null ? const SizedBox():const SizedBox(height: 10),
                                       Consumer<AddActionsProvider>(
                                           builder: (context, addActionsProvider, _) {
                                             return Column(
@@ -426,142 +460,144 @@ class _ActionViewInParallelScreenState
                                                 mentalStrengthEditProvider.actionsDetailsModel!.actions!.actionStatus == "1" ||
                                                     mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder == null
                                                     ? const SizedBox()
-                                                    :  Padding(
-                                                  padding: EdgeInsets.symmetric(horizontal: 5.0),
-                                                  child: Row(
-                                                    children: [
-                                                      // Checkbox(
-                                                      //   value: addActionsProvider
-                                                      //       .setRemainder,
-                                                      //   onChanged: (value) {
-                                                      //     addActionsProvider
-                                                      //         .changeSetRemainder(value!);
-                                                      //   },
-                                                      // ),
-                                                      // SizedBox(
-                                                      //   width: size.width * 0.01,
-                                                      // ),
-                                                      Text(
-                                                        "Reminder",
-                                                        style: CustomTextStyles.blackText16000000W700(),
-                                                      ),
-                                                    ],
+                                                    : Container(
+                                                  padding: const EdgeInsets.all(10),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius: BorderRadius.circular(5),
                                                   ),
-                                                ),
-                                                const SizedBox(height: 15),
-                                                Padding(
-                                                    padding: EdgeInsets.only(
-                                                      left: size.width * 0.04,
-                                                      bottom: 10,
-                                                    ),
-                                                    child:
-                                                    mentalStrengthEditProvider.actionsDetailsModel!.actions!.actionStatus == "1" ||
-                                                        mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder == null
-                                                        ? const SizedBox()
-                                                        : SizedBox(
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                        crossAxisAlignment:
-                                                        CrossAxisAlignment.start,
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      // Header row with SVG and "Reminder" label
+                                                      Row(
+                                                        crossAxisAlignment: CrossAxisAlignment.center,
                                                         children: [
-                                                          Row(
-                                                            children: [
-                                                              const Text(
-                                                                "Date",
-                                                                style: const TextStyle(
-                                                                  fontSize: 16,
-                                                                  fontWeight: FontWeight.w600,
-                                                                  fontFamily: 'Open Sans',
-                                                                  color: Colors.black,
+                                                          Expanded(
+                                                            child: Row(
+                                                              mainAxisSize: MainAxisSize.min,
+                                                              children: [
+                                                                SvgPicture.asset(
+                                                                  ImageConstant.actionDetailsMark,
                                                                 ),
-                                                              ),
-                                                              const SizedBox(
-                                                                width: 5,
-                                                              ),
-                                                              Text(
-                                                                  style: const TextStyle(
+                                                                const SizedBox(width: 10),
+                                                                Text(
+                                                                  "Reminder",
+                                                                  style: CustomTextStyles.blackText16000000W700(),
+                                                                ),
+                                                                const Text(
+                                                                  " : ",
+                                                                  style: TextStyle(
                                                                     fontSize: 16,
-                                                                    fontWeight: FontWeight.w400,
+                                                                    fontWeight: FontWeight.w600,
                                                                     fontFamily: 'Open Sans',
                                                                     color: Colors.black,
                                                                   ),
-                                                                  mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.reminder_startdate != null &&
-                                                                      mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.reminder_enddate != null
-                                                                      ? ": ${unixTimestampToDate(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.reminder_startdate!)} "
-                                                                      "to ${unixTimestampToDate(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.reminder_enddate!)}"
-                                                                      : ""
-                                                              ),
-
-                                                            ],
-                                                          ),
-                                                          const SizedBox(
-                                                            height: 5,
-                                                          ),
-                                                          Row(
-                                                            children: [
-                                                              const Text(
-                                                                "Time",
-                                                                style: TextStyle(
-                                                                  fontSize: 16,
-                                                                  fontWeight: FontWeight.w600,
-                                                                  fontFamily: 'Open Sans',
-                                                                  color: Colors.black,
                                                                 ),
-                                                              ),
-                                                              const SizedBox(
-                                                                width: 5,
-                                                              ),
-                                                              Text(
-                                                                  style: const TextStyle(
-                                                                    fontSize: 16,
-                                                                    fontWeight: FontWeight.w400,
-                                                                    fontFamily: 'Open Sans',
-                                                                    color: Colors.black,
-                                                                  ),
-                                                                  mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.from_time != null &&
-                                                                      mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.to_time != null
-                                                                      ? ":${formatTimeOfDay(stringToTimeOfDay(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.from_time!)!)} "
-                                                                      "to ${formatTimeOfDay(stringToTimeOfDay(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.to_time!)!)}"
-                                                                      : ""
-                                                              ),
-
-                                                            ],
+                                                              ],
+                                                            ),
                                                           ),
-                                                          const SizedBox(
-                                                            height: 5,
-                                                          ),
-                                                          Row(
-                                                            children: [
-                                                              const Text(
-                                                                "Repeat",
-                                                                style: TextStyle(
-                                                                  fontSize: 16,
-                                                                  fontWeight: FontWeight.w600,
-                                                                  fontFamily: 'Open Sans',
-                                                                  color: Colors.black,
-                                                                ),
-                                                              ),
-                                                              const SizedBox(
-                                                                width: 5,
-                                                              ),
-                                                              Text(
-                                                                  style: const TextStyle(
-                                                                    fontSize: 16,
-                                                                    fontWeight: FontWeight.w400,
-                                                                    fontFamily: 'Open Sans',
-                                                                    color: Colors.black,
-                                                                  ),
-                                                                  mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.reminder_repeat != null
-                                                                      ? ": ${mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.reminder_repeat!}"
-                                                                      : ""
-                                                              ),
+                                                          SvgPicture.asset(
+                                                            ImageConstant.reminderClock,
 
-                                                            ],
                                                           ),
                                                         ],
                                                       ),
-                                                    )
+
+                                                      const SizedBox(height: 10),
+
+                                                      // Date row
+                                                      Row(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          const Text(
+                                                            "Date  : ",
+                                                            style: TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight: FontWeight.w600,
+                                                              fontFamily: 'Open Sans',
+                                                              color: Colors.black,
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            child: Text(
+                                                              mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.reminder_startdate != null &&
+                                                                  mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.reminder_enddate != null
+                                                                  ? "${unixTimestampToDate(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.reminder_startdate!)} to ${unixTimestampToDate(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.reminder_enddate!)}"
+                                                                  : "",
+                                                              style: const TextStyle(
+                                                                fontSize: 16,
+                                                                fontWeight: FontWeight.w400,
+                                                                fontFamily: 'Open Sans',
+                                                                color: Colors.black,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+
+                                                      const SizedBox(height: 5),
+
+                                                      // Time row
+                                                      Row(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          const Text(
+                                                            "Time  : ",
+                                                            style: TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight: FontWeight.w600,
+                                                              fontFamily: 'Open Sans',
+                                                              color: Colors.black,
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            child: Text(
+                                                              mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.from_time != null &&
+                                                                  mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.to_time != null
+                                                                  ? "${formatTimeOfDay(stringToTimeOfDay(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.from_time!)!)} to ${formatTimeOfDay(stringToTimeOfDay(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.to_time!)!)}"
+                                                                  : "",
+                                                              style: const TextStyle(
+                                                                fontSize: 16,
+                                                                fontWeight: FontWeight.w400,
+                                                                fontFamily: 'Open Sans',
+                                                                color: Colors.black,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+
+                                                      const SizedBox(height: 5),
+
+                                                      // Repeat row
+                                                      Row(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          const Text(
+                                                            "Repeat: ",
+                                                            style: TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight: FontWeight.w600,
+                                                              fontFamily: 'Open Sans',
+                                                              color: Colors.black,
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            child: Text(
+                                                              mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.reminder_repeat ?? "",
+                                                              style: const TextStyle(
+                                                                fontSize: 16,
+                                                                fontWeight: FontWeight.w400,
+                                                                fontFamily: 'Open Sans',
+                                                                color: Colors.black,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
                                                 )
                                               ],
                                             );
@@ -594,35 +630,70 @@ class _ActionViewInParallelScreenState
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Row(
-          children: [
-            Text(
-              "Status           : ",
-              style: CustomTextStyles.blackText16000000W600(),
-            ),
-            Text(
-              status == "0" ? "Active" : "DeActive",
-              style:const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w400,
-                fontFamily: 'Open Sans',
-                color: Colors.black,
+        Container(
+          padding: const EdgeInsets.all(8), // Optional: adds inner spacing
+          decoration: BoxDecoration(
+            color: Colors.white, // White background
+            borderRadius: BorderRadius.circular(5), // Rounded corners
+          ),
+          child: Row(
+            children: [
+              SvgPicture.asset(
+                ImageConstant.actionDetailsMark, // Replace with your actual asset path
               ),
-            ),
-          ],
+              const SizedBox(width: 10,),
+              Text(
+                "Status : ",
+                style: CustomTextStyles.blackText16000000W700(),
+              ),
+              SizedBox(
+                // color: Colors.blue,
+                width: size.width * 0.60,
+                child: Text(
+                  status == "0" ? "Active" : "DeActive",
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Open Sans',
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
         const SizedBox(
           height: 10,
         ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start, // Important for vertical alignment
-          children: [
-            Text(
-              "Goal               : ",
-              style: CustomTextStyles.blackText16000000W700(),
-            ),
-            Expanded(
-              child: SizedBox(
+        Container(
+          padding: const EdgeInsets.all(10), // Optional: adds inner spacing
+          decoration: BoxDecoration(
+            color: Colors.white, // White background
+            borderRadius: BorderRadius.circular(5), // Rounded corners
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start, // Important for vertical alignment
+                children: [
+                  SvgPicture.asset(
+                    ImageConstant.actionDetailsMark, // Replace with your actual asset path
+                  ),
+                  const SizedBox(width: 10,),
+                  Text(
+                    "Goal",
+                    style: CustomTextStyles.blackText16000000W700(),
+                  ),
+                  Text(
+                    " : ",
+                    style: CustomTextStyles.blackText16000000W700(),
+                  ),
+
+                ],
+              ),
+              SizedBox(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   child: Text(
@@ -636,25 +707,40 @@ class _ActionViewInParallelScreenState
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         const SizedBox(
           height: 10,
         ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start, // Important for vertical alignment
-          children: [
-            Text(
-              "Action\nTitle",
-              style: CustomTextStyles.blackText16000000W700(),
-            ),
-            Text(
-              "           : ",
-              style: CustomTextStyles.blackText16000000W700(),
-            ),
-            Expanded(
-              child: SizedBox(
+        Container(
+          padding: const EdgeInsets.all(10), // Optional: adds inner spacing
+          decoration: BoxDecoration(
+            color: Colors.white, // White background
+            borderRadius: BorderRadius.circular(5), // Rounded corners
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start, // Important for vertical alignment
+                children: [
+                  SvgPicture.asset(
+                    ImageConstant.actionDetailsMark, // Replace with your actual asset path
+                  ),
+                  const SizedBox(width: 10,),
+                  Text(
+                    "Title",
+                    style: CustomTextStyles.blackText16000000W700(),
+                  ),
+                  Text(
+                    " : ",
+                    style: CustomTextStyles.blackText16000000W700(),
+                  ),
+                ],
+              ),
+              SizedBox(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   child: Text(
@@ -668,25 +754,41 @@ class _ActionViewInParallelScreenState
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         const SizedBox(
           height: 10,
         ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start, // Important for vertical alignment
-          children: [
-            Text(
-              "Action\nDescription",
-              style: CustomTextStyles.blackText16000000W700(),
-            ),
-            Text(
-              " : ",
-              style: CustomTextStyles.blackText16000000W700(),
-            ),
-            Expanded(
-              child: SizedBox(
+        Container(
+          padding: const EdgeInsets.all(10), // Optional: adds inner spacing
+          decoration: BoxDecoration(
+            color: Colors.white, // White background
+            borderRadius: BorderRadius.circular(5), // Rounded corners
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start, // Important for vertical alignment
+                children: [
+                  SvgPicture.asset(
+                    ImageConstant.actionDetailsMark, // Replace with your actual asset path
+                  ),
+                  const SizedBox(width: 10,),
+                  Text(
+                    "Description",
+                    style: CustomTextStyles.blackText16000000W700(),
+                  ),
+                  Text(
+                    " : ",
+                    style: CustomTextStyles.blackText16000000W700(),
+                  ),
+
+                ],
+              ),
+              SizedBox(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   child: Text(
@@ -700,8 +802,8 @@ class _ActionViewInParallelScreenState
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     );
@@ -796,7 +898,13 @@ class _ActionViewInParallelScreenState
             margin: const EdgeInsets.symmetric(horizontal: 4),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: index == currentIndex ? Colors.blue : Colors.grey,
+              color: index == currentIndex
+                  ? ColorsContent.newThemeColor
+                  : Colors.blue,
+              border: Border.all(
+                color: Colors.white, // Change to your desired border color
+                width: 1.0,           // Adjust thickness as needed
+              ),
             ),
           );
         },

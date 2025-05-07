@@ -250,7 +250,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                 const SizedBox()
                                     :
                                 SizedBox(
-                                  height:  size.height * 0.10,  // Default height if more than 2 audios
+                                  height:  size.height * 0.12,  // Default height if more than 2 audios
                                   child: ListView.builder(
                                     itemCount: audioList.length,
                                     itemBuilder: (context, index) {
@@ -264,7 +264,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                 imageList.isEmpty
                                     ? const SizedBox()
                                     : const SizedBox(
-                                        height: 23,
+                                        height: 0,
                                       ),
                                 // imageList.isEmpty
                                 //     ? const SizedBox()
@@ -861,6 +861,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
             builder: (contexts, dashBoardProvider,journalListProvider, homeProvider,
                 mentalStrengthEditProvider, editProfileProvider, _) {
           return PopupMenuButton<String>(
+            color: Colors.white,
             iconColor: ColorsContent.newThemeColor, // 👈 Change dot color here
             onSelected: (value) {},
             itemBuilder: (BuildContext context) {

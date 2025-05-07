@@ -228,7 +228,7 @@ class _SplashScreenState extends State<NewSplashScreen> {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding:  EdgeInsets.symmetric(vertical: Platform.isIOS ? 80.0: 50.0),
+        padding:  EdgeInsets.symmetric(vertical: Platform.isIOS ? 80.0: 100.0),
         child: SizedBox(
           width: 70,
           height: 70,
