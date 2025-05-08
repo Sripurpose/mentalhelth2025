@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/screens/addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
 import 'package:mentalhelth/screens/goals_dreams_page/model/goals_and_dreams_model.dart';
@@ -28,7 +29,10 @@ import '../../../no_internet/duplicate_screen.dart';
 
 class GoalAndDreamFullViewScreen extends StatefulWidget {
   const GoalAndDreamFullViewScreen(
-      {Key? key, required this.goalsanddream, required this.indexs,required this.goalStatus})
+      {Key? key,
+      required this.goalsanddream,
+      required this.indexs,
+      required this.goalStatus})
       : super(
           key: key,
         );
@@ -56,11 +60,16 @@ class _GoalAndDreamFullViewScreenState
     addAudio();
     addImage();
     addVideo();
-    goalsDreamsProvider= Provider.of<GoalsDreamsProvider>(context, listen: false);
-    mentalStrengthEditProvider = Provider.of<MentalStrengthEditProvider>(context, listen: false);
-    goalsDreamsProvider.fetchGoalsAndDreams(initial: true,context: context);
-    mentalStrengthEditProvider.fetchGoalActions(goalId: widget.goalsanddream.goalId.toString(),);
-    isActionCompletedList = List.filled(widget.goalsanddream.action!.length, false);
+    goalsDreamsProvider =
+        Provider.of<GoalsDreamsProvider>(context, listen: false);
+    mentalStrengthEditProvider =
+        Provider.of<MentalStrengthEditProvider>(context, listen: false);
+    goalsDreamsProvider.fetchGoalsAndDreams(initial: true, context: context);
+    mentalStrengthEditProvider.fetchGoalActions(
+      goalId: widget.goalsanddream.goalId.toString(),
+    );
+    isActionCompletedList =
+        List.filled(widget.goalsanddream.action!.length, false);
     super.initState();
   }
 
@@ -118,7 +127,7 @@ class _GoalAndDreamFullViewScreenState
           appBar: buildAppBarGoalView(context, size,
               heading: widget.goalsanddream.goalTitle.toString(),
               id: widget.goalsanddream.goalId.toString(),
-          goalStatus: widget.goalStatus),
+              goalStatus: widget.goalStatus),
           body: Stack(
             children: [
               Positioned.fill(
@@ -142,421 +151,534 @@ class _GoalAndDreamFullViewScreenState
                         _buildUntitledOne(
                           context,
                           size,
-                          category: widget.goalsanddream.categoryName.toString(),
+                          category:
+                              widget.goalsanddream.categoryName.toString(),
                           createDate: widget.goalsanddream.createdAt.toString(),
-                          achiveDate: widget.goalsanddream.goalEnddate.toString(),
+                          achiveDate:
+                              widget.goalsanddream.goalEnddate.toString(),
                           status: widget.goalsanddream.goalStatus.toString(),
                           comments: widget.goalsanddream.goalDetails.toString(),
                         ),
-        
-                        audioList.isNotEmpty?
-                        const SizedBox(height: 28):SizedBox(),
+
+                        audioList.isNotEmpty
+                            ? const SizedBox(height: 10)
+                            : const SizedBox(),
                         audioList.isEmpty
-                            ? const SizedBox()
-                            :
-                        Padding(
-                                padding: const EdgeInsets.only(left: 2),
-                                child: Text(
+                            ? const SizedBox() :
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(
+                                color: ColorsContent.newThemeColor,
+                                width: 0.3), // Light purple border
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: ColorsContent.goalTextColor, // Light purple background
+                                  borderRadius:
+                                  const BorderRadius.vertical(top: Radius.circular(5)),
+                                ),
+                                child:  Text(
                                   "Audio",
-                                  style: CustomTextStyles.blackText16000000W700(),
+                                  style: TextStyle(
+                                    color:ColorsContent.signInGradientColorViolet, // Purple text
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
-                        const SizedBox(height: 4),
-                        audioList.isEmpty?
-                     const SizedBox()
-                            :
-                        SizedBox(
-                          height: size.height * 0.15,
-                          child: ListView.builder(
-                         //   physics: const NeverScrollableScrollPhysics(),
-                            itemCount: audioList.length,
-                            itemBuilder: (context, index) {
-                              return JournalAudioPlayer(
-                                url: audioList[index],
-                              );
-                            },
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(10),
+                                decoration: const BoxDecoration(
+                                  color: Colors.white, // Off-white background
+                                  borderRadius:
+                                  BorderRadius.vertical(bottom: Radius.circular(5)),
+                                ),
+                                child: SizedBox(
+                                  height: size.height * 0.113,
+                                  child: ListView.builder(
+                                    //   physics: const NeverScrollableScrollPhysics(),
+                                    itemCount: audioList.length,
+                                    itemBuilder: (context, index) {
+                                      return JournalAudioPlayer(
+                                        url: audioList[index],
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        // imageList.isNotEmpty
-                        //     ? const SizedBox(
-                        //         height: 23,
-                        //       )
-                        //     : const SizedBox(),
-                        const SizedBox(height: 4),
-                        imageList.isNotEmpty?
-                        Padding(
-                                padding: const EdgeInsets.only(left: 2),
-                                child: Text(
-                                  "Photo",
-                                  style: CustomTextStyles.blackText16000000W700(),
-                                ),
-                              ):
-                            SizedBox(),
-                        const SizedBox(height: 4),
-                        imageList.isNotEmpty?
-                        SizedBox(
-                          height: imageList.isNotEmpty ? size.height * 0.3 : 0,
-                          child: Stack(
+
+
+                        imageList.isNotEmpty
+                            ? const SizedBox(height: 10)
+                            : const SizedBox(),
+                        imageList.isNotEmpty
+                            ?
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(
+                                color: ColorsContent.newThemeColor,
+                                width: 0.3), // Light purple border
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              PageView.builder(
-                                controller: photoController,
-                                itemCount: imageList.length,
-                                itemBuilder: (context, index) {
-                                  return CustomImageView(
-                                    fit: BoxFit.cover,
-                                    imagePath: imageList[index],
-                                    height: size.height * 0.30,
-                                    width: size.width,
-                                    alignment: Alignment.center,
-                                    radius: BorderRadius.circular(8),
-                                  );
-                                },
-                                onPageChanged: (int pageIndex) {
-                                  setState(() {
-                                    photoCurrentIndex = pageIndex;
-                                  });
-                                },
-                              ),
-                              Positioned(
-                                bottom: 10,
-                                left: 0,
-                                right: 0,
-                                child: SizedBox(
-                                  width: imageList.length * size.width * 0.1,
-                                  child: buildIndicators(
-                                    imageList.length,
-                                    photoCurrentIndex,
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: ColorsContent.goalTextColor, // Light purple background
+                                  borderRadius:
+                                  const BorderRadius.vertical(top: Radius.circular(5)),
+                                ),
+                                child:  Text(
+                                  "Photo",
+                                  style: TextStyle(
+                                    color:ColorsContent.signInGradientColorViolet, // Purple text
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
                                   ),
+                                ),
+                              ),
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(10),
+                                decoration: const BoxDecoration(
+                                  color: Colors.white, // Off-white background
+                                  borderRadius:
+                                  BorderRadius.vertical(bottom: Radius.circular(5)),
+                                ),
+                                child:  SizedBox(
+                                  height: imageList.isNotEmpty
+                                      ? size.height * 0.3
+                                      : 0,
+                                  child: Stack(
+                                    children: [
+                                      PageView.builder(
+                                        controller: photoController,
+                                        itemCount: imageList.length,
+                                        itemBuilder: (context, index) {
+                                          return CustomImageView(
+                                            fit: BoxFit.cover,
+                                            imagePath: imageList[index],
+                                            height: size.height * 0.30,
+                                            width: size.width,
+                                            alignment: Alignment.center,
+                                            radius: BorderRadius.circular(8),
+                                          );
+                                        },
+                                        onPageChanged: (int pageIndex) {
+                                          setState(() {
+                                            photoCurrentIndex = pageIndex;
+                                          });
+                                        },
+                                      ),
+                                      Positioned(
+                                        bottom: 10,
+                                        left: 0,
+                                        right: 0,
+                                        child: SizedBox(
+                                          width:
+                                          imageList.length * size.width * 0.1,
+                                          child: buildIndicators(
+                                            imageList.length,
+                                            photoCurrentIndex,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ),
+                            ],
+                          ),
+                        )
+                            : const SizedBox(),
+
+                        videoList.isNotEmpty
+                            ?   const SizedBox(height: 10)
+                            : const SizedBox(),
+                        videoList.isNotEmpty
+                            ?
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(
+                                color: ColorsContent.newThemeColor,
+                                width: 0.3), // Light purple border
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: ColorsContent.goalTextColor, // Light purple background
+                                  borderRadius:
+                                  const BorderRadius.vertical(top: Radius.circular(5)),
+                                ),
+                                child:  Text(
+                                  "Video",
+                                  style: TextStyle(
+                                    color:ColorsContent.signInGradientColorViolet, // Purple text
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white, // Off-white background
+                                    borderRadius:
+                                    BorderRadius.vertical(bottom: Radius.circular(5)),
+                                  ),
+                                  child:  SizedBox(
+                                    height: videoList.isNotEmpty
+                                        ? size.height * 0.3
+                                        : 0,
+                                    child: Stack(
+                                      children: [
+                                        PageView.builder(
+                                          controller: videoController,
+                                          itemCount: videoList.length,
+                                          itemBuilder: (context, index) {
+                                            return VideoPlayerWidget(
+                                              videoUrl: videoList[index],
+                                            );
+                                          },
+                                          onPageChanged: (int pageIndex) {
+                                            setState(() {
+                                              videoCurrentIndex = pageIndex;
+                                            });
+                                          },
+                                        ),
+                                        Positioned(
+                                          bottom: 10,
+                                          left: 0,
+                                          right: 0,
+                                          child: SizedBox(
+                                            width:
+                                            videoList.length * size.width * 0.1,
+                                            child: buildIndicators(
+                                              videoList.length,
+                                              videoCurrentIndex,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                              ),
+                            ],
+                          ),
+                        )
+                            : const SizedBox(),
+
+                        widget.goalsanddream.location?.locationAddress != null
+                            ? const SizedBox(
+                          height: 10,
+                        )
+                            : const SizedBox(),
+                        widget
+                            .goalsanddream.location?.locationAddress !=
+                            null ?
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(
+                                color: ColorsContent.newThemeColor,
+                                width: 0.3), // Light purple border
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: ColorsContent.goalTextColor, // Light purple background
+                                  borderRadius:
+                                  const BorderRadius.vertical(top: Radius.circular(5)),
+                                ),
+                                child:  Text(
+                                  "Your Location",
+                                  style: TextStyle(
+                                    color:ColorsContent.signInGradientColorViolet, // Purple text
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(10),
+                                decoration: const BoxDecoration(
+                                  color: Colors.white, // Off-white background
+                                  borderRadius:
+                                  BorderRadius.vertical(bottom: Radius.circular(5)),
+                                ),
+                                child:  Row(
+                                  children: [
+                                    Icon(
+                                      Icons.location_on,
+                                      color: ColorsContent.newThemeColor,
+                                      size: size.width * 0.06,
+                                    ),
+                                    Expanded(
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.vertical,
+                                        child: Text(
+                                          widget.goalsanddream.location
+                                              ?.locationAddress
+                                              ?.replaceAll(
+                                              RegExp(r'[^a-zA-Z0-9, ]'),
+                                              '') // Remove unwanted characters
+                                              .replaceAll(RegExp(r',\s*,+'),
+                                              ',') // Replace multiple consecutive commas with a single comma
+                                              .replaceAll(RegExp(r'^,|,$'),
+                                              '') // Remove leading and trailing commas
+                                              .trim() ??
+                                              "",
+                                          style: CustomTextStyles
+                                              .bodyMediumGray700_1,
+                                          overflow: TextOverflow.visible,
+                                          maxLines: 4, // Ensures scrolling works
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
                           ),
                         ):
                         const SizedBox(),
-                        // videoList.isNotEmpty
-                        //     ?
-                        imageList.isNotEmpty?
-                        const SizedBox(height: 28):SizedBox(),
-                        videoList.isNotEmpty?
-                        Padding(
-                                padding: const EdgeInsets.only(left: 2),
-                                child: Text(
-                                  "Video",
-                                  style: CustomTextStyles.blackText16000000W700(),
-                                ),
-                              ):
-                            SizedBox(),
-                        const SizedBox(height: 4),
-                        videoList.isNotEmpty?
-                        SizedBox(
-                          height: videoList.isNotEmpty ? size.height * 0.3 : 0,
-                          child: Stack(
-                            children: [
-                              PageView.builder(
-                                controller: videoController,
-                                itemCount: videoList.length,
-                                itemBuilder: (context, index) {
-                                  return VideoPlayerWidget(
-                                    videoUrl: videoList[index],
-                                  );
-                                },
-                                onPageChanged: (int pageIndex) {
-                                  setState(() {
-                                    videoCurrentIndex = pageIndex;
-                                  });
-                                },
-                              ),
-                              Positioned(
-                                bottom: 10,
-                                left: 0,
-                                right: 0,
-                                child: SizedBox(
-                                  width: videoList.length * size.width * 0.1,
-                                  child: buildIndicators(
-                                    videoList.length,
-                                    videoCurrentIndex,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ):
-                SizedBox(),
-                        // _buildGrid(
-                        //   context,
-                        //   size,
-                        // ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (videoList.isNotEmpty) const SizedBox(height: 28),
-                            if (widget.goalsanddream.location?.locationAddress != null) ...[
-                              Padding(
-                                padding: const EdgeInsets.only(left: 2),
-                                child: Text(
-                                  "Your Location",
-                                  style: CustomTextStyles.blackText16000000W700(),
-                                  overflow: TextOverflow.fade,
-                                ),
-                              ),
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons
-                                        .location_on,
-                                    color: ColorsContent.newThemeColor,
-                                    size: size.width *
-                                        0.06,
-                                  ),
-        
-                                  Expanded(
-                                    child: SingleChildScrollView(
-                                      scrollDirection: Axis.vertical,
-                                      child: Text(
-                                        widget.goalsanddream.location?.locationAddress
-                                            ?.replaceAll(RegExp(r'[^a-zA-Z0-9, ]'), '') // Remove unwanted characters
-                                            .replaceAll(RegExp(r',\s*,+'), ',') // Replace multiple consecutive commas with a single comma
-                                            .replaceAll(RegExp(r'^,|,$'), '') // Remove leading and trailing commas
-                                            .trim() ?? "",
-                                        style: CustomTextStyles.bodyMediumGray700_1,
-                                        overflow: TextOverflow.visible,
-                                        maxLines: 4, // Ensures scrolling works
-                                      ),
+
+                        widget.goalsanddream.action!.isEmpty
+                            ? const SizedBox()
+                            :  const SizedBox(height: 10),
+                        widget.goalsanddream.action!.isEmpty
+                            ? const SizedBox()
+                            : Consumer3<MentalStrengthEditProvider,
+                                AddActionsProvider, AdDreamsGoalsProvider>(
+                                builder: (context,
+                                    mentalStrengthEditProvider,
+                                    addActionsProvider,
+                                    adDreamsGoalsProvider,
+                                    _) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                        border: Border.all(
+                                            color: ColorsContent.newThemeColor,
+                                            width: 0.3)
                                     ),
-                                  ),
-        
-        
-        
-                                ],
-                              ),
-                            ] else const SizedBox(height: 6),
-                          ],
-                        ),
-        
-                        SizedBox(),
-                        widget.goalsanddream.location?.locationAddress != null ? SizedBox(height: 10,):
-                           SizedBox(),
-        
-                        widget
-                            .goalsanddream.action!.isEmpty ?
-                            SizedBox():
-                        Padding(
-                          padding: const EdgeInsets.only(left: 2),
-                          child: Text(
-                            "Actions",
-                            style: CustomTextStyles.blackText16000000W700(),
-                          ),
-                        ),
-        
-                        const SizedBox(height: 20),
-                        widget
-                            .goalsanddream.action!.isEmpty ?
-                            const SizedBox():
-                        Consumer3<MentalStrengthEditProvider,AddActionsProvider,AdDreamsGoalsProvider>(
-                          builder: (context,mentalStrengthEditProvider,addActionsProvider, adDreamsGoalsProvider, _) {
-                            return SizedBox(
-                              height: widget.goalsanddream.action!.length *
-                                  size.height *
-                                  0.06,
-                              child: ListView.builder(
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: widget.goalsanddream.action!.length,
-                                itemBuilder: (context, index) {
-                                  logger.w("${widget.goalsanddream
-                                      .action![index].actionTitle}--widget.goalsanddream");
-                                  return Row(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (context) => ActionsFullView(
-                                                id: widget.goalsanddream.action![index]
-                                                    .actionId
-                                                    .toString(),
-                                                indexs: index,
-                                                action: actionss.Action(
-                                                  id: widget.goalsanddream
-                                                      .action![index].actionId,
-                                                  title: widget.goalsanddream
-                                                      .action![index].actionTitle,
-                                                  actionStatus: widget.goalsanddream
-                                                      .action![index].actionStatus,
-                                                  actionDate: widget.goalsanddream
-                                                      .action![index].actionDatetime,
-                                                ),
-                                                goalId: widget.goalsanddream.goalId
-                                                    .toString(),
-                                                actionStatus:  mentalStrengthEditProvider.getListGoalActionsModel?.actions?[index].actionStatus,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        child: Center(
-                                          child: Container(
-                                            margin: const EdgeInsets.only(
-                                              bottom: 4,
-                                            ),
-                                            height: size.height * 0.04,
-                                            width: size.width * 0.87,
-                                            padding: const EdgeInsets.only(
-                                              bottom: 5,
-                                              top: 5,
-                                              left: 0,
-                                              right: 5,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: ColorsContent.newThemeColor,
-                                              borderRadius:
-                                              BorderRadius.circular(
-                                                  8), // Makes it circular
-                                            ),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                mentalStrengthEditProvider.getListGoalActionsModel?.actions != null &&
-                                                    index < isActionCompletedList.length &&
-                                                    mentalStrengthEditProvider.getListGoalActionsModel!.actions![index].actionStatus != "1"
-                                                    ?
-                                                Padding(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                                  child: CustomCheckboxButton(
-                                                    text: "",
-                                                    value: isActionCompletedList[index],
-                                                    onChange: (value) async {
-                                                      customPopup(
-                                                        context: context,
-                                                        onPressedDelete: () async {
-                                                          setState(() {
-                                                            isActionCompletedList[index] = value!;
-                                                          });
-                                                          await addActionsProvider.updateActionStatusFunction(
-                                                            context,
-                                                            goalId:widget.goalsanddream.goalId ?? "",
-                                                            actionId:
-                                                            widget.goalsanddream
-                                                                .action![index].actionId ?? "",
-                                                          );
-                                                          mentalStrengthEditProvider
-                                                              .fetchGoalActions(
-                                                            goalId: widget.goalsanddream.goalId ?? "",
-                                                          );
-                                                          Navigator.of(context).pop();
-                                                        },
-                                                        yes: "Yes",
-                                                        title: 'Action Completed',
-                                                        content:
-                                                        'Are you sure You want to mark this action as completed?',
-                                                      );
-        
-        
-                                                    },
-                                                  ),
-                                                ):
-                                                    const SizedBox(),
-                                                SizedBox(
-                                                  width: size.width * 0.45,
-                                                  child: Text(
-                                                    widget.goalsanddream.action![index]
-                                                        .actionTitle
-                                                        .toString(),
-                                                    overflow: TextOverflow.ellipsis,
-                                                    maxLines: 1, // Set the maximum number of lines to 3
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                      fontSize: 17,
-                                                      fontWeight: FontWeight.w500,
-                                                      fontFamily: 'Open Sans',
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                ),
-                                                 CircleAvatar(
-                                                  radius:
-                                                  size.width * 0.04,
-                                                  backgroundColor:Colors.deepPurple,
-                                                  child: Icon(
-                                                    Icons
-                                                        .arrow_forward_ios,
-                                                    color: Colors.white,
-                                                    size: size.width *
-                                                        0.03,
-                                                  ),
-                                                ),
-                                              ],
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        // Header container for "Actions"
+                                        Container(
+                                          width: double.infinity,
+                                          padding: const EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                            color: ColorsContent.goalTextColor, // Light purple background
+                                            borderRadius: const BorderRadius.vertical(top: Radius.circular(5)),
+                                          ),
+                                          child:  Text(
+                                            "Actions",
+                                            style: TextStyle(
+                                              color:ColorsContent.signInGradientColorViolet, // Purple text
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                        // Content container
+                                        Container(
+                                          width: double.infinity,
+                                          padding: const EdgeInsets.symmetric(vertical: 8),
+                                          decoration: const BoxDecoration(
+                                            color:Colors.white, // Light background
+                                            borderRadius: BorderRadius.vertical(bottom: Radius.circular(5)),
+                                          ),
+                                          child: SizedBox(
+                                            height: widget.goalsanddream.action!.length * size.height * 0.04,
+                                            child: ListView.builder(
+                                            //  physics: const NeverScrollableScrollPhysics(),
+                                              itemCount: widget.goalsanddream.action!.length,
+                                              itemBuilder: (context, index) {
+                                                logger.w("${widget.goalsanddream.action![index].actionTitle}--widget.goalsanddream");
+                                                return Row(
+                                                  children: [
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        Navigator.of(context).push(
+                                                          MaterialPageRoute(
+                                                            builder: (context) => ActionsFullView(
+                                                              id: widget.goalsanddream.action![index].actionId.toString(),
+                                                              indexs: index,
+                                                              action: actionss.Action(
+                                                                id: widget.goalsanddream.action![index].actionId,
+                                                                title: widget.goalsanddream.action![index].actionTitle,
+                                                                actionStatus: widget.goalsanddream.action![index].actionStatus,
+                                                                actionDate: widget.goalsanddream.action![index].actionDatetime,
+                                                              ),
+                                                              goalId: widget.goalsanddream.goalId.toString(),
+                                                              actionStatus: mentalStrengthEditProvider.getListGoalActionsModel?.actions?[index].actionStatus,
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                      child: Center(
+                                                        child: Padding(
+                                                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                                          child: Container(
+                                                            margin: const EdgeInsets.only(bottom: 8),
+                                                            height: size.height * 0.05,
+                                                            width: size.width * 0.84,
+                                                            padding: const EdgeInsets.only(bottom: 5, top: 5, right: 5),
+                                                            decoration: BoxDecoration(
+                                                              color: ColorsContent.newThemeColor,
+                                                              borderRadius: BorderRadius.circular(5),
+                                                            ),
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                              children: [
+                                                                mentalStrengthEditProvider.getListGoalActionsModel?.actions != null &&
+                                                                    index < isActionCompletedList.length &&
+                                                                    mentalStrengthEditProvider.getListGoalActionsModel!.actions![index].actionStatus != "1"
+                                                                    ? Padding(
+                                                                  padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                                                                  child: CustomCheckboxButton(
+                                                                    text: "",
+                                                                    value: isActionCompletedList[index],
+                                                                    onChange: (value) async {
+                                                                      customPopup(
+                                                                        context: context,
+                                                                        onPressedDelete: () async {
+                                                                          setState(() {
+                                                                            isActionCompletedList[index] = value!;
+                                                                          });
+                                                                          await addActionsProvider.updateActionStatusFunction(
+                                                                            context,
+                                                                            goalId: widget.goalsanddream.goalId ?? "",
+                                                                            actionId: widget.goalsanddream.action![index].actionId ?? "",
+                                                                          );
+                                                                          mentalStrengthEditProvider.fetchGoalActions(
+                                                                            goalId: widget.goalsanddream.goalId ?? "",
+                                                                          );
+                                                                          Navigator.of(context).pop();
+                                                                        },
+                                                                        yes: "Yes",
+                                                                        title: 'Action Completed',
+                                                                        content: 'Are you sure You want to mark this action as completed?',
+                                                                      );
+                                                                    },
+                                                                  ),
+                                                                )
+                                                                    : const SizedBox(),
+                                                                SizedBox(
+                                                                  width: size.width * 0.45,
+                                                                  child: Text(
+                                                                    widget.goalsanddream.action![index].actionTitle.toString(),
+                                                                    overflow: TextOverflow.ellipsis,
+                                                                    maxLines: 1,
+                                                                   // textAlign: TextAlign.center,
+                                                                    style: const TextStyle(
+                                                                      fontSize: 17,
+                                                                      fontWeight: FontWeight.w500,
+                                                                      fontFamily: 'Open Sans',
+                                                                      color: Colors.white,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(width: 90,),
+                                                                CircleAvatar(
+                                                                  radius: size.width * 0.03,
+                                                                  backgroundColor: ColorsContent.actionBackColor,
+                                                                  child: Icon(
+                                                                    Icons.arrow_forward_ios,
+                                                                    color: Colors.white,
+                                                                    size: size.width * 0.03,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   );
-        
-                                  // _buildCloseEditText(
-                                  //   context,
-                                  //   content:
-                                  //       adDreamsGoalsProvider.goalModelIdName[index].name,
-                                  //   onTap: () {
-                                  //     adDreamsGoalsProvider
-                                  //         .getAddActionIdAndNameClear(index);
-                                  //   },
-                                  // );
+
                                 },
                               ),
-                            );
-                          },
-                        ),
                         const SizedBox(height: 20),
                         widget.goalsanddream.goalStatus == "1"
-                            ? const Padding(
-                                padding: EdgeInsets.only(
-                                  left: 0,
-                                  bottom: 10,
-                                ),
-                                child: Text(
-                                  "Completed",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  // style: theme.textTheme.titleSmall,
-                                ),
-                              )
+                            ? const Text(
+                              "Completed",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                              // style: theme.textTheme.titleSmall,
+                            )
                             : Consumer<GoalsDreamsProvider>(
                                 builder: (context, goalsDreamsProvider, _) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 13,
-                                    bottom: 10,
-                                  ),
-                                  child: CustomCheckboxButton(
-                                    text: "Mark this goal as Completed",
-                                    value: isCompleted,
-                                    onChange: (value) async {
-                                      customPopup(
-                                        context: context,
-                                        onPressedDelete: () async {
-                                          await goalsDreamsProvider.updateGoalsStatus(
-                                            context,
-                                            goalId:
-                                                widget.goalsanddream.goalId.toString(),
-                                            status: "1",
-                                          );
-                                          await
-                                          goalsDreamsProvider.fetchGoalsAndDreams(initial: true,context: context);
-                                          mentalStrengthEditProvider.fetchGoalActions(goalId: widget.goalsanddream.goalId.toString(),);
-                                          setState(() {
-                                            isCompleted = true;
-                                          });
-                                          Navigator.of(context).pop();
-                                        },
-                                        yes: "Yes",
-                                        title: 'Goal Completed',
-                                        content:
-                                            'Are you sure You want to mark this goal as completed?',
-                                      );
-                                    },
-                                  ),
+                                return CustomCheckboxButton(
+                                  text: "Mark this goal as Completed",
+                                  value: isCompleted,
+                                  onChange: (value) async {
+                                    customPopup(
+                                      context: context,
+                                      onPressedDelete: () async {
+                                        await goalsDreamsProvider
+                                            .updateGoalsStatus(
+                                          context,
+                                          goalId: widget.goalsanddream.goalId
+                                              .toString(),
+                                          status: "1",
+                                        );
+                                        await goalsDreamsProvider
+                                            .fetchGoalsAndDreams(
+                                                initial: true,
+                                                context: context);
+                                        mentalStrengthEditProvider
+                                            .fetchGoalActions(
+                                          goalId: widget.goalsanddream.goalId
+                                              .toString(),
+                                        );
+                                        setState(() {
+                                          isCompleted = true;
+                                        });
+                                        Navigator.of(context).pop();
+                                      },
+                                      yes: "Yes",
+                                      title: 'Goal Completed',
+                                      content:
+                                          'Are you sure You want to mark this goal as completed?',
+                                    );
+                                  },
                                 );
                               }),
                         // _buildSaveButton(context),
@@ -675,121 +797,253 @@ class _GoalAndDreamFullViewScreenState
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Row(
-          children: [
-            Text(
-              "Category : ",
-              style: CustomTextStyles.blackText16000000W700(),
-            ),
-            SizedBox(
-              width: size.width * 0.6,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            border: Border.all(
+                color: ColorsContent.newThemeColor,
+            width: 0.3), // Light purple border
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: ColorsContent.goalTextColor, // Light purple background
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(5)),
+                ),
+                child:  Text(
+                  "Category",
+                  style: TextStyle(
+                    color:ColorsContent.signInGradientColorViolet, // Purple text
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: const BoxDecoration(
+                  color: Colors.white, // Off-white background
+                  borderRadius:
+                      BorderRadius.vertical(bottom: Radius.circular(5)),
+                ),
                 child: Text(
-                  category,
+                  category, // e.g., "Health & Fitness"
                   style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Open Sans',
                     color: Colors.black,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1, // Set the maximum number of lines to 3
-                ),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 6,
-        ),
-        Row(
-          children: [
-            Text(
-              "Created Date : ",
-              style: CustomTextStyles.blackText16000000W700(),
-            ),
-            Text(
-              formatDate(int.parse(createDate)),
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w400,
-                fontFamily: 'Open Sans',
-                color: Colors.black,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 6,
-        ),
-        Row(
-          children: [
-            Text(
-              "Achievement Date : ",
-              style: CustomTextStyles.blackText16000000W700(),
-            ),
-            Text(
-              achiveDate == "" ? "" : formatDate2(int.parse(achiveDate)),
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w400,
-                fontFamily: 'Open Sans',
-                color: Colors.black,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 6,
-        ),
-        Row(
-          children: [
-            Text(
-              "Status : ",
-              style: CustomTextStyles.blackText16000000W700(),
-            ),
-            Text(
-              status == "0" ? "Active" : "DeActive",
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w400,
-                fontFamily: 'Open Sans',
-                color: Colors.black,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 6,
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start, // Important for vertical alignment
-          children: [
-            Text(
-              "Goal Description : ",
-              style: CustomTextStyles.blackText16000000W700(),
-            ),
-            Expanded(
-              child: SizedBox(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Text(
-                    comments,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Open Sans',
-                      color: Colors.black,
-                    ),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
               ),
-            ),
-          ],
-        )
-
-
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            border: Border.all(
+                color: ColorsContent.newThemeColor,
+                width: 0.3), // Light purple border
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: ColorsContent.goalTextColor, // Light purple background
+                  borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(5)),
+                ),
+                child:  Text(
+                  "Created Date",
+                  style: TextStyle(
+                    color:ColorsContent.signInGradientColorViolet, // Purple text
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: const BoxDecoration(
+                  color: Colors.white, // Off-white background
+                  borderRadius:
+                  BorderRadius.vertical(bottom: Radius.circular(5)),
+                ),
+                child: Text(
+                  formatDate(int.parse(createDate)), // e.g., "Health & Fitness"
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            border: Border.all(
+                color: ColorsContent.newThemeColor,
+                width: 0.3), // Light purple border
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: ColorsContent.goalTextColor, // Light purple background
+                  borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(5)),
+                ),
+                child:  Text(
+                  "Achievement Date",
+                  style: TextStyle(
+                    color:ColorsContent.signInGradientColorViolet, // Purple text
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: const BoxDecoration(
+                  color: Colors.white, // Off-white background
+                  borderRadius:
+                  BorderRadius.vertical(bottom: Radius.circular(5)),
+                ),
+                child: Text(
+                  achiveDate == "" ? "" : formatDate2(int.parse(achiveDate)),
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            border: Border.all(
+                color: ColorsContent.newThemeColor,
+                width: 0.3), // Light purple border
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: ColorsContent.goalTextColor, // Light purple background
+                  borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(5)),
+                ),
+                child:  Text(
+                  "Status",
+                  style: TextStyle(
+                    color:ColorsContent.signInGradientColorViolet, // Purple text
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: const BoxDecoration(
+                  color: Colors.white, // Off-white background
+                  borderRadius:
+                  BorderRadius.vertical(bottom: Radius.circular(5)),
+                ),
+                child: Text(
+                  status == "0" ? "Active" : "DeActive",
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            border: Border.all(
+                color: ColorsContent.newThemeColor,
+                width: 0.3), // Light purple border
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: ColorsContent.goalTextColor, // Light purple background
+                  borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(5)),
+                ),
+                child:  Text(
+                  "Description",
+                  style: TextStyle(
+                    color:ColorsContent.signInGradientColorViolet, // Purple text
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: const BoxDecoration(
+                  color: Colors.white, // Off-white background
+                  borderRadius:
+                  BorderRadius.vertical(bottom: Radius.circular(5)),
+                ),
+                child: Text(
+                  comments,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -800,14 +1054,20 @@ class _GoalAndDreamFullViewScreenState
       crossAxisAlignment: CrossAxisAlignment.end,
       children: List.generate(
         pageCount,
-        (index) {
+            (index) {
           return Container(
             width: 12,
             height: 12,
             margin: const EdgeInsets.symmetric(horizontal: 4),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: index == currentIndex ? Colors.blue : Colors.grey,
+              color: index == currentIndex
+                  ? ColorsContent.newThemeColor
+                  : ColorsContent.goalNotCompletedColorNew,
+              border: Border.all(
+                color: Colors.white, // Change to your desired border color
+                width: 1.0,           // Adjust thickness as needed
+              ),
             ),
           );
         },
@@ -820,7 +1080,7 @@ class _GoalAndDreamFullViewScreenState
     Size size, {
     String? heading,
     required String id,
-        required String goalStatus,
+    required String goalStatus,
   }) {
     return CustomAppBarNumu(
       backgroundColor: ColorsContent.homeBackGroundColor,
@@ -846,7 +1106,9 @@ class _GoalAndDreamFullViewScreenState
         Consumer<GoalsDreamsProvider>(
           builder: (contexts, goalsDreamsProvider, _) {
             return PopupMenuButton<String>(
-              iconColor: ColorsContent.newThemeColor, // 👈 Change dot color here
+              color: Colors.white,
+              iconColor: ColorsContent.newThemeColor,
+              // 👈 Change dot color here
               onSelected: (value) {},
               itemBuilder: (BuildContext context) {
                 return [
@@ -863,7 +1125,8 @@ class _GoalAndDreamFullViewScreenState
                       },
                       value: 'Edit',
                       child: ListTile(
-                        leading: Icon(Icons.mode_edit_outline_outlined, color: ColorsContent.newThemeColor), // Edit Icon
+                        leading: Icon(Icons.mode_edit_outline_outlined,
+                            color: ColorsContent.newThemeColor), // Edit Icon
                         title: Text(
                           'Edit',
                           style: CustomTextStyles.bodyMedium14,
@@ -890,7 +1153,8 @@ class _GoalAndDreamFullViewScreenState
                     },
                     value: 'Delete',
                     child: ListTile(
-                      leading: Icon(Icons.delete_outline, color: ColorsContent.newThemeColor), // Delete Icon
+                      leading: Icon(Icons.delete_outline,
+                          color: ColorsContent.newThemeColor), // Delete Icon
                       title: Text(
                         'Delete',
                         style: CustomTextStyles.bodyMedium14,
@@ -903,7 +1167,6 @@ class _GoalAndDreamFullViewScreenState
           },
         ),
       ],
-
     );
   }
 }

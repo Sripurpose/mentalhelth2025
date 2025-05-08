@@ -8,6 +8,7 @@ class ColorsContent {
   static Color greyText = const Color(0xFF666666);
   static Color whiteText = const Color(0xFFFFFFFF);
   static Color newThemeColor = const Color(0xFF7E69F8);
+  static Color actionBackColor = const Color(0xFF604DD1);
   static Color hintColor = const Color(0xFFAAAAAA);
   static Color homeBackGroundColor = const Color(0xFFE8EAF7);
   static Color blackThemeColor = const Color(0xFF16161B);
@@ -18,6 +19,7 @@ class ColorsContent {
   static Color recordCountColor = const Color(0xFFA153E1);
   static Color locationCountColor = const Color(0xFF755EF9);
   static Color signInGradientColorViolet = const Color(0xFF7F6AFD);
+  static Color goalTextColor = const Color(0xFFDBD5FF);
   static Color signInGradientColorBlue = const Color(0xFF583DF5);
   static Color signInGradientColorBlueNew = const Color(0xFF6233C4);
   static Color forgotPasswordColor = const Color(0xFFC4C4C4);

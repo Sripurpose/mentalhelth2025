@@ -793,27 +793,27 @@ class _ActionFullViewJournalCreateBottomSheetState
         const SizedBox(
           height: 10,
         ),
+
         Container(
-          padding: const EdgeInsets.all(10), // Optional: adds inner spacing
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: Colors.white, // White background
-            borderRadius: BorderRadius.circular(5), // Rounded corners
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(5),
             border: Border.all(
-                color: ColorsContent.newThemeColor, // You can change this to any color you want
+                color:ColorsContent.newThemeColor, // You can change this to any color you want
                 width: 0.3           // Adjust the thickness of the border
             ),
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                crossAxisAlignment: CrossAxisAlignment.start, // Important for vertical alignment
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SvgPicture.asset(
-                    ImageConstant.actionDetailsMark, // Replace with your actual asset path
+                    ImageConstant.actionDetailsMark,
                   ),
-                  const SizedBox(width: 10,),
+                  const SizedBox(width: 10),
                   Text(
                     "Goal",
                     style: CustomTextStyles.blackText16000000W700(),
@@ -822,23 +822,35 @@ class _ActionFullViewJournalCreateBottomSheetState
                     " : ",
                     style: CustomTextStyles.blackText16000000W700(),
                   ),
-
+                  if (category.length < 25)
+                    Flexible(
+                      child: Text(
+                        category,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Open Sans',
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
                 ],
               ),
-              SizedBox(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Text(
-                    category,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Open Sans',
-                      color: Colors.black,
+              if (category.length >= 25)
+                SizedBox(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Text(
+                      category,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Open Sans',
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ),
-              ),
             ],
           ),
         ),
@@ -846,26 +858,25 @@ class _ActionFullViewJournalCreateBottomSheetState
           height: 10,
         ),
         Container(
-          padding: const EdgeInsets.all(10), // Optional: adds inner spacing
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: Colors.white, // White background
-            borderRadius: BorderRadius.circular(5), // Rounded corners
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(5),
             border: Border.all(
-                color: ColorsContent.newThemeColor, // You can change this to any color you want
+                color:ColorsContent.newThemeColor, // You can change this to any color you want
                 width: 0.3           // Adjust the thickness of the border
             ),
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                crossAxisAlignment: CrossAxisAlignment.start, // Important for vertical alignment
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SvgPicture.asset(
-                    ImageConstant.actionDetailsMark, // Replace with your actual asset path
+                    ImageConstant.actionDetailsMark,
                   ),
-                  const SizedBox(width: 10,),
+                  const SizedBox(width: 10),
                   Text(
                     "Title",
                     style: CustomTextStyles.blackText16000000W700(),
@@ -874,49 +885,62 @@ class _ActionFullViewJournalCreateBottomSheetState
                     " : ",
                     style: CustomTextStyles.blackText16000000W700(),
                   ),
+                  if (title.length < 25)
+                    Flexible(
+                      child: Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Open Sans',
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
                 ],
               ),
-              SizedBox(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Open Sans',
-                      color: Colors.black,
+              if (title.length >= 25)
+                SizedBox(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Open Sans',
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ),
-              ),
             ],
           ),
         ),
         const SizedBox(
           height: 10,
         ),
+
         Container(
-          padding: const EdgeInsets.all(10), // Optional: adds inner spacing
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: Colors.white, // White background
-            borderRadius: BorderRadius.circular(5), // Rounded corners
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(5),
             border: Border.all(
-                color: ColorsContent.newThemeColor, // You can change this to any color you want
+                color:ColorsContent.newThemeColor, // You can change this to any color you want
                 width: 0.3           // Adjust the thickness of the border
             ),
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                crossAxisAlignment: CrossAxisAlignment.start, // Important for vertical alignment
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SvgPicture.asset(
-                    ImageConstant.actionDetailsMark, // Replace with your actual asset path
+                    ImageConstant.actionDetailsMark,
                   ),
-                  const SizedBox(width: 10,),
+                  const SizedBox(width: 10),
                   Text(
                     "Description",
                     style: CustomTextStyles.blackText16000000W700(),
@@ -925,23 +949,35 @@ class _ActionFullViewJournalCreateBottomSheetState
                     " : ",
                     style: CustomTextStyles.blackText16000000W700(),
                   ),
-
+                  if (comments.length < 25)
+                    Flexible(
+                      child: Text(
+                        comments,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Open Sans',
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
                 ],
               ),
-              SizedBox(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Text(
-                    comments,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Open Sans',
-                      color: Colors.black,
+              if (comments.length >= 25)
+                SizedBox(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Text(
+                      comments,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Open Sans',
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ),
-              ),
             ],
           ),
         ),

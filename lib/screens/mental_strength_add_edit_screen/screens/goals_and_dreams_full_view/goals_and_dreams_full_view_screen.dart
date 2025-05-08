@@ -179,7 +179,8 @@ class _GoalAndDreamFullViewBottomSheetState
                   ],
                 );
               }),
-              Center(
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 3.0),
                 child: SizedBox(
                   width: size.width * 0.55,
                   child: SingleChildScrollView(
@@ -195,6 +196,7 @@ class _GoalAndDreamFullViewBottomSheetState
                   ),
                 ),
               ),
+              const SizedBox(height: 10,),
               _buildUntitledOne(
                 context,
                 size,
@@ -205,326 +207,426 @@ class _GoalAndDreamFullViewBottomSheetState
                 status: widget.goalDetailModel.goals!.goalStatus.toString(),
                 comments: widget.goalDetailModel.goals!.goalDetails.toString(),
               ),
-              audioList.isEmpty ? const SizedBox() : const SizedBox(height: 15),
-              //SizedBox(height: 10),
-              audioList.isEmpty ?
-                  SizedBox():
-                  Padding(
-                      padding: const EdgeInsets.only(left: 2),
-                      child: Text(
-                        "Audio",
-                        style: CustomTextStyles.blackText16000000W600(),
-                      ),
-                    ),
-              audioList.isEmpty
-                  ? const SizedBox()
-                  : const SizedBox(
-                      height: 4,
-                    ),
-              audioList.isNotEmpty?
-              SizedBox(
-                height: audioList.length * size.height * 0.1,
-                child: ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: audioList.length,
-                  itemBuilder: (context, index) {
-                    return JournalAudioPlayer(
-                      url: audioList[index],
-                    );
-                  },
-                ),
-              ):
-        SizedBox(),
-              imageList.isNotEmpty
-                  ? const SizedBox(
-                      height: 23,
-                    )
+
+
+              audioList.isNotEmpty
+                  ? const SizedBox(height: 10)
                   : const SizedBox(),
-              imageList.isNotEmpty?
-            Padding(
-                      padding: const EdgeInsets.only(left: 2),
-                      child: Text(
-                        "Photo",
-                        style: CustomTextStyles.blackText16000000W600(),
-                      ),
-                    ):
-                  SizedBox(),
-              const SizedBox(height: 4),
-              imageList.isEmpty ?
-            SizedBox():
-              SizedBox(
-                height: imageList.isNotEmpty ? size.height * 0.2 : 0,
-                child: Stack(
+              audioList.isEmpty
+                  ? const SizedBox() :
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(
+                      color: ColorsContent.newThemeColor,
+                      width: 0.3), // Light purple border
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    PageView.builder(
-                      controller: photoController,
-                      itemCount: imageList.length,
-                      itemBuilder: (context, index) {
-                        return CustomImageView(
-                          fit: BoxFit.cover,
-                          imagePath: imageList[index],
-                          height: size.height * 0.27,
-                          width: size.width,
-                          alignment: Alignment.center,
-                        );
-                      },
-                      onPageChanged: (int pageIndex) {
-                        setState(() {
-                          photoCurrentIndex = pageIndex;
-                        });
-                      },
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: ColorsContent.goalTextColor, // Light purple background
+                        borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(5)),
+                      ),
+                      child:  Text(
+                        "Audio",
+                        style: TextStyle(
+                          color:ColorsContent.signInGradientColorViolet, // Purple text
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                    Positioned(
-                      bottom: 10,
-                      left: 0,
-                      right: 0,
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(10),
+                      decoration: const BoxDecoration(
+                        color: Colors.white, // Off-white background
+                        borderRadius:
+                        BorderRadius.vertical(bottom: Radius.circular(5)),
+                      ),
                       child: SizedBox(
-                        width: imageList.length * size.width * 0.1,
-                        child: buildIndicators(
-                          imageList.length,
-                          photoCurrentIndex,
+                        height: size.height * 0.113,
+                        child: ListView.builder(
+                          //   physics: const NeverScrollableScrollPhysics(),
+                          itemCount: audioList.length,
+                          itemBuilder: (context, index) {
+                            return JournalAudioPlayer(
+                              url: audioList[index],
+                            );
+                          },
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
-              videoList.isNotEmpty
-                  ? const SizedBox(
-                      height: 10,
-                    )
-                  : const SizedBox(),
 
-              videoList.isEmpty ?
-                  SizedBox():
-             Padding(
-                      padding: const EdgeInsets.only(left: 2),
-                      child: Text(
-                        "Video",
-                        style: CustomTextStyles.blackText16000000W600(),
-                      ),
-                    ),
-              const SizedBox(height: 4),
-              videoList.isNotEmpty
+
+
+              imageList.isNotEmpty
+                  ? const SizedBox(height: 10)
+                  : const SizedBox(),
+              imageList.isNotEmpty
                   ?
-              SizedBox(
-                height: videoList.isNotEmpty ? size.height * 0.3 : 0,
-                child: Stack(
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(
+                      color: ColorsContent.newThemeColor,
+                      width: 0.3), // Light purple border
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    PageView.builder(
-                      controller: videoController,
-                      itemCount: videoList.length,
-                      itemBuilder: (context, index) {
-                        return VideoPlayerWidget(
-                          videoUrl: videoList[index],
-                        );
-                      },
-                      onPageChanged: (int pageIndex) {
-                        setState(() {
-                          videoCurrentIndex = pageIndex;
-                        });
-                      },
-                    ),
-                    Positioned(
-                      bottom: 10,
-                      left: 0,
-                      right: 0,
-                      child: SizedBox(
-                        width: videoList.length * size.width * 0.1,
-                        child: buildIndicators(
-                          videoList.length,
-                          videoCurrentIndex,
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: ColorsContent.goalTextColor, // Light purple background
+                        borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(5)),
+                      ),
+                      child:  Text(
+                        "Photo",
+                        style: TextStyle(
+                          color:ColorsContent.signInGradientColorViolet, // Purple text
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ):
-            SizedBox(),
-              // _buildGrid(
-              //   context,
-              //   size,
-              // ),
-              widget.goalDetailModel.goals!.location?.locationAddress != null ?
-              const SizedBox(height: 28):SizedBox(),
-              widget.goalDetailModel.goals!.location?.locationAddress != null ?
-              Padding(
-                padding: const EdgeInsets.only(left: 2),
-                child: Text(
-                  "Your Location",
-                  style: CustomTextStyles.blackText16000000W600(),
-                ),
-              ):
-                  SizedBox(),
-              const SizedBox(height: 6),
-              widget.goalDetailModel.goals!.location?.locationAddress != null ?
-              SizedBox(
-                child: Center(
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons
-                              .location_on,
-                          color: ColorsContent.newThemeColor,
-                          size: size.width *
-                              0.06,
+                    Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(10),
+                        decoration: const BoxDecoration(
+                          color: Colors.white, // Off-white background
+                          borderRadius:
+                          BorderRadius.vertical(bottom: Radius.circular(5)),
                         ),
-                        Text(
-                          widget.goalDetailModel.goals!.location!.locationAddress!.isEmpty
-                              ? ""
-                              :
-                          widget.goalDetailModel.goals!.location!.locationAddress.toString(),
-                          style: CustomTextStyles.bodyMediumGray700_1,
-                        ),
-             SizedBox(),
-                      ],
-                    )
-                ),
-              )
-                  :
-            SizedBox(),
-              widget.goalDetailModel.goals!.location?.locationAddress == null ?
-                  SizedBox():
-              const SizedBox(height: 20),
-              widget.goalDetailModel.goals!.action!.isNotEmpty?
-              Padding(
-                padding: const EdgeInsets.only(left: 2),
-                child: Text(
-                  "Actions",
-                  style: CustomTextStyles.blackText16000000W600(),
-                ),
-              ):
-                  SizedBox(),
-              const SizedBox(height: 5),
-              Consumer<AdDreamsGoalsProvider>(
-                builder: (context, adDreamsGoalsProvider, _) {
-                  logger.w("adDreamsGoalsProvider.goalModelIdName${adDreamsGoalsProvider.goalModelIdName}");
-                  return
-                    widget.goalDetailModel.goals!.action!.isNotEmpty ?
-                    SizedBox(
-                    height: widget.goalDetailModel.goals!.action!.length *
-                        size.height *
-                        0.06,
-                    child: ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: widget.goalDetailModel.goals!.action!.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 15.0), // Adds space between items
-                          child: Row(
+                        child:  SizedBox(
+                          height: imageList.isNotEmpty
+                              ? size.height * 0.3
+                              : 0,
+                          child: Stack(
                             children: [
-                              GestureDetector(
-                                onTap: () {
-                                  // Navigator.of(context).push(
-                                  //   MaterialPageRoute(
-                                  //     builder: (context) => ActionsFullView(
-                                  //       id: mentalStrengthEditProvider
-                                  //           .getListGoalActionsModel!
-                                  //           .actions![index]
-                                  //           .id
-                                  //           .toString(),
-                                  //       indexs: index,
-                                  //     ),
-                                  //   ),
-                                  // );
+                              PageView.builder(
+                                controller: photoController,
+                                itemCount: imageList.length,
+                                itemBuilder: (context, index) {
+                                  return CustomImageView(
+                                    fit: BoxFit.cover,
+                                    imagePath: imageList[index],
+                                    height: size.height * 0.30,
+                                    width: size.width,
+                                    alignment: Alignment.center,
+                                    radius: BorderRadius.circular(8),
+                                  );
                                 },
-                                child: Container(
-                                  height: size.height * 0.04,
-                                  width: size.width * 0.78,
-                                  padding: const EdgeInsets.only(
-                                    bottom: 5,
-                                    top: 5,
-                                    left: 0,
-                                    right: 5,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: ColorsContent.newThemeColor,
-                                    borderRadius:
-                                    BorderRadius.circular(
-                                        8), // Makes it circular
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      SizedBox(
-                                        width: size.width * 0.6,
-                                        child: SingleChildScrollView(
-                                          scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                                          child: Text(
-                                            widget.goalDetailModel.goals!.action![index].actionTitle ?? "",
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.w500,
-                                              fontFamily: 'Open Sans',
-                                              color: Colors.white,
-                                            ),
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                onPageChanged: (int pageIndex) {
+                                  setState(() {
+                                    photoCurrentIndex = pageIndex;
+                                  });
+                                },
+                              ),
+                              Positioned(
+                                bottom: 10,
+                                left: 0,
+                                right: 0,
+                                child: SizedBox(
+                                  width:
+                                  imageList.length * size.width * 0.1,
+                                  child: buildIndicators(
+                                    imageList.length,
+                                    photoCurrentIndex,
                                   ),
                                 ),
                               ),
                             ],
                           ),
-                        );
-                      },
+                        )
                     ),
-                  ):
-                 SizedBox();
+                  ],
+                ),
+              )
+                  : const SizedBox(),
+
+
+
+              videoList.isNotEmpty
+                  ?   const SizedBox(height: 10)
+                  : const SizedBox(),
+              videoList.isNotEmpty
+                  ?
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(
+                      color: ColorsContent.newThemeColor,
+                      width: 0.3), // Light purple border
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: ColorsContent.goalTextColor, // Light purple background
+                        borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(5)),
+                      ),
+                      child:  Text(
+                        "Video",
+                        style: TextStyle(
+                          color:ColorsContent.signInGradientColorViolet, // Purple text
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(10),
+                        decoration: const BoxDecoration(
+                          color: Colors.white, // Off-white background
+                          borderRadius:
+                          BorderRadius.vertical(bottom: Radius.circular(5)),
+                        ),
+                        child:  SizedBox(
+                          height: videoList.isNotEmpty
+                              ? size.height * 0.3
+                              : 0,
+                          child: Stack(
+                            children: [
+                              PageView.builder(
+                                controller: videoController,
+                                itemCount: videoList.length,
+                                itemBuilder: (context, index) {
+                                  return VideoPlayerWidget(
+                                    videoUrl: videoList[index],
+                                  );
+                                },
+                                onPageChanged: (int pageIndex) {
+                                  setState(() {
+                                    videoCurrentIndex = pageIndex;
+                                  });
+                                },
+                              ),
+                              Positioned(
+                                bottom: 10,
+                                left: 0,
+                                right: 0,
+                                child: SizedBox(
+                                  width:
+                                  videoList.length * size.width * 0.1,
+                                  child: buildIndicators(
+                                    videoList.length,
+                                    videoCurrentIndex,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                    ),
+                  ],
+                ),
+              )
+                  : const SizedBox(),
+
+
+
+              widget.goalDetailModel.goals!.location?.locationAddress != null
+                  ? const SizedBox(
+                height: 10,
+              )
+                  : const SizedBox(),
+              widget.goalDetailModel.goals!.location?.locationAddress !=
+                  null ?
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(
+                      color: ColorsContent.newThemeColor,
+                      width: 0.3), // Light purple border
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: ColorsContent.goalTextColor, // Light purple background
+                        borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(5)),
+                      ),
+                      child:  Text(
+                        "Your Location",
+                        style: TextStyle(
+                          color:ColorsContent.signInGradientColorViolet, // Purple text
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(10),
+                      decoration: const BoxDecoration(
+                        color: Colors.white, // Off-white background
+                        borderRadius:
+                        BorderRadius.vertical(bottom: Radius.circular(5)),
+                      ),
+                      child:  Row(
+                        children: [
+                          Icon(
+                            Icons.location_on,
+                            color: ColorsContent.newThemeColor,
+                            size: size.width * 0.06,
+                          ),
+                          Expanded(
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.vertical,
+                              child: Text(
+                                widget.goalDetailModel.goals!.location?.locationAddress
+                                    ?.replaceAll(
+                                    RegExp(r'[^a-zA-Z0-9, ]'),
+                                    '') // Remove unwanted characters
+                                    .replaceAll(RegExp(r',\s*,+'),
+                                    ',') // Replace multiple consecutive commas with a single comma
+                                    .replaceAll(RegExp(r'^,|,$'),
+                                    '') // Remove leading and trailing commas
+                                    .trim() ??
+                                    "",
+                                style: CustomTextStyles
+                                    .bodyMediumGray700_1,
+                                overflow: TextOverflow.visible,
+                                maxLines: 4, // Ensures scrolling works
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ):
+              const SizedBox(),
+              
+
+
+              widget.goalDetailModel.goals!.action!.isEmpty
+                  ? const SizedBox()
+                  :  const SizedBox(height: 10),
+              Consumer<AdDreamsGoalsProvider>(
+                builder: (context, adDreamsGoalsProvider, _) {
+                  logger.w("adDreamsGoalsProvider.goalModelIdName: ${adDreamsGoalsProvider.goalModelIdName}");
+
+                  return widget.goalDetailModel.goals!.action!.isNotEmpty
+                      ? Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(
+                        color: ColorsContent.newThemeColor,
+                        width: 0.3,
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Header container
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: ColorsContent.goalTextColor,
+                            borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(5),
+                            ),
+                          ),
+                          child: Text(
+                            "Actions",
+                            style: TextStyle(
+                              color: ColorsContent.signInGradientColorViolet,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+
+                        // Content container
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.vertical(
+                              bottom: Radius.circular(5),
+                            ),
+                          ),
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: widget.goalDetailModel.goals!.action!.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 4),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    // Handle tap
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 8,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: ColorsContent.newThemeColor,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal,
+                                            child: Text(
+                                              widget.goalDetailModel.goals!.action![index].actionTitle ?? "",
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500,
+                                                fontFamily: 'Open Sans',
+                                                color: Colors.white,
+                                              ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                      : const SizedBox();
                 },
               ),
-              // const SizedBox(height: 20),
-              //
-              // widget.goalDetailModel.goals!.goalStatus == "1"
-              //     ? const Padding(
-              //         padding: EdgeInsets.only(
-              //           left: 0,
-              //           bottom: 10,
-              //         ),
-              //         child: Text(
-              //           "Completed",
-              //           textAlign: TextAlign.center,
-              //           style: TextStyle(
-              //             fontWeight: FontWeight.bold,
-              //           ),
-              //           // style: theme.textTheme.titleSmall,
-              //         ),
-              //       )
-              //     : Consumer<GoalsDreamsProvider>(
-              //         builder: (context, goalsDreamsProvider, _) {
-              //         return Padding(
-              //           padding: const EdgeInsets.only(
-              //             left: 13,
-              //             bottom: 10,
-              //           ),
-              //           child: CustomCheckboxButton(
-              //             text: "Mark this goal as Completed",
-              //             value: isCompleted,
-              //             onChange: (value) async {
-              //               setState(() {
-              //                 isCompleted = true;
-              //               });
-              //               await goalsDreamsProvider.updateGoalsStatus(
-              //                 context,
-              //                 goalId: widget.goalDetailModel.goals!.goalId!
-              //                     .toString(),
-              //                 status: "1",
-              //               );
-              //               goalsDreamsProvider.fetchGoalsAndDreams(
-              //                 initial: true,
-              //               );
-              //             },
-              //           ),
-              //         );
-              //       }),
-              // _buildSaveButton(context),
+
               SizedBox(
                 height: size.height * 0.04,
               ),
+
             ],
           ),
         ),
@@ -624,139 +726,260 @@ class _GoalAndDreamFullViewBottomSheetState
 
   Widget _buildUntitledOne(BuildContext context, Size size,
       {required String category,
-      required String createDate,
-      required String achiveDate,
-      required String status,
-      required String comments}) {
+        required String createDate,
+        required String achiveDate,
+        required String status,
+        required String comments}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Row(
-          children: [
-            Text(
-              "Category : ",
-              style: CustomTextStyles.blackText16000000W600(),
-            ),
-            SizedBox(
-              width: size.width * 0.45,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                child: Text(
-                  category,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Open Sans',
-                    color: Colors.black,
-                  ),
-                  textAlign: TextAlign.center,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1, // Set the maximum number of lines to 3
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            border: Border.all(
+                color: ColorsContent.newThemeColor,
+                width: 0.3), // Light purple border
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: ColorsContent.goalTextColor, // Light purple background
+                  borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(5)),
                 ),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 6,
-        ),
-        Row(
-          children: [
-            Text(
-              "Created Date : ",
-              style: CustomTextStyles.blackText16000000W600(),
-            ),
-            Text(
-              formatDate(int.parse(createDate)),
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w400,
-                fontFamily: 'Open Sans',
-                color: Colors.black,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 6,
-        ),
-        Row(
-          children: [
-            Text(
-              "Achievement Date : ",
-              style: CustomTextStyles.blackText16000000W600(),
-            ),
-            Text(
-              achiveDate == "" ? "" : formatDate2(int.parse(achiveDate)),
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w400,
-                fontFamily: 'Open Sans',
-                color: Colors.black,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 6,
-        ),
-        Row(
-          children: [
-            Text(
-              "Status : ",
-              style: CustomTextStyles.blackText16000000W600(),
-            ),
-            Text(
-              status == "0" ? "Active" : "DeActive",
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w400,
-                fontFamily: 'Open Sans',
-                color: Colors.black,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 6,
-        ),
-        Row(
-          children: [
-            Text(
-              "Goal Description : ",
-              style: CustomTextStyles.blackText16000000W600(),
-            ),
-            SizedBox(
-              width: size.width * 0.55,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                child: comments != null ?
-                Text(
-                 comments,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Open Sans',
-                    color: Colors.black,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1, // Set the maximum number of lines to 3
-                ):
-                const Text(
-                  "NA",
+                child:  Text(
+                  "Category",
                   style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Open Sans',
-                    color: Colors.black,
+                    color:ColorsContent.signInGradientColorViolet, // Purple text
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1, // Set the maximum number of lines to 3
                 ),
               ),
-            ),
-          ],
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: const BoxDecoration(
+                  color: Colors.white, // Off-white background
+                  borderRadius:
+                  BorderRadius.vertical(bottom: Radius.circular(5)),
+                ),
+                child: Text(
+                  category, // e.g., "Health & Fitness"
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            border: Border.all(
+                color: ColorsContent.newThemeColor,
+                width: 0.3), // Light purple border
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: ColorsContent.goalTextColor, // Light purple background
+                  borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(5)),
+                ),
+                child:  Text(
+                  "Created Date",
+                  style: TextStyle(
+                    color:ColorsContent.signInGradientColorViolet, // Purple text
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: const BoxDecoration(
+                  color: Colors.white, // Off-white background
+                  borderRadius:
+                  BorderRadius.vertical(bottom: Radius.circular(5)),
+                ),
+                child: Text(
+                  formatDate(int.parse(createDate)), // e.g., "Health & Fitness"
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            border: Border.all(
+                color: ColorsContent.newThemeColor,
+                width: 0.3), // Light purple border
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: ColorsContent.goalTextColor, // Light purple background
+                  borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(5)),
+                ),
+                child:  Text(
+                  "Achievement Date",
+                  style: TextStyle(
+                    color:ColorsContent.signInGradientColorViolet, // Purple text
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: const BoxDecoration(
+                  color: Colors.white, // Off-white background
+                  borderRadius:
+                  BorderRadius.vertical(bottom: Radius.circular(5)),
+                ),
+                child: Text(
+                  achiveDate == "" ? "" : formatDate2(int.parse(achiveDate)),
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            border: Border.all(
+                color: ColorsContent.newThemeColor,
+                width: 0.3), // Light purple border
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: ColorsContent.goalTextColor, // Light purple background
+                  borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(5)),
+                ),
+                child:  Text(
+                  "Status",
+                  style: TextStyle(
+                    color:ColorsContent.signInGradientColorViolet, // Purple text
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: const BoxDecoration(
+                  color: Colors.white, // Off-white background
+                  borderRadius:
+                  BorderRadius.vertical(bottom: Radius.circular(5)),
+                ),
+                child: Text(
+                  status == "0" ? "Active" : "DeActive",
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            border: Border.all(
+                color: ColorsContent.newThemeColor,
+                width: 0.3), // Light purple border
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: ColorsContent.goalTextColor, // Light purple background
+                  borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(5)),
+                ),
+                child:  Text(
+                  "Description",
+                  style: TextStyle(
+                    color:ColorsContent.signInGradientColorViolet, // Purple text
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: const BoxDecoration(
+                  color: Colors.white, // Off-white background
+                  borderRadius:
+                  BorderRadius.vertical(bottom: Radius.circular(5)),
+                ),
+                child: Text(
+                  comments,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );
@@ -768,14 +991,20 @@ class _GoalAndDreamFullViewBottomSheetState
       crossAxisAlignment: CrossAxisAlignment.end,
       children: List.generate(
         pageCount,
-        (index) {
+            (index) {
           return Container(
             width: 12,
             height: 12,
             margin: const EdgeInsets.symmetric(horizontal: 4),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: index == currentIndex ? Colors.blue : Colors.grey,
+              color: index == currentIndex
+                  ? ColorsContent.newThemeColor
+                  : ColorsContent.goalNotCompletedColorNew,
+              border: Border.all(
+                color: Colors.white, // Change to your desired border color
+                width: 1.0,           // Adjust thickness as needed
+              ),
             ),
           );
         },
