@@ -695,59 +695,69 @@ class _NumuMentalStrengthAddEditPageState
             ),
             child: Center(
               child: DropdownButtonHideUnderline(
-                child: DropdownButton2<Emotion>(
-                  isExpanded: true,
-                  value: mentalStrengthEditProvider.emotionValue,
-                  hint: const Text("Select Emotion"),
-                  items: mentalStrengthEditProvider.getEmotionsModel?.emotions?.map((Emotion items) {
-                    return DropdownMenuItem<Emotion>(
-                      value: items,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text(
-                          items.title.toString(),
-                          style: TextStyle(
-                            color: ColorsContent.newThemeColor,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: DropdownButton2<Emotion>(
+                    isExpanded: true,
+                    value: mentalStrengthEditProvider.emotionValue,
+                    hint: const Text("Select Emotion"),
+                    items: mentalStrengthEditProvider.getEmotionsModel?.emotions?.map((Emotion items) {
+                      return DropdownMenuItem<Emotion>(
+                        value: items,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Text(
+                            items.title.toString(),
+                            style: TextStyle(
+                              color: ColorsContent.newThemeColor,
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (Emotion? newValue) {
+                      final matched = mentalStrengthEditProvider.getEmotionsModel?.emotions
+                          ?.firstWhere((e) => e.id == newValue?.id, orElse: () => newValue!);
+                      mentalStrengthEditProvider.addEmotionValue(matched!);
+                      _isTokenExpired();
+                    },
+                    dropdownStyleData: DropdownStyleData(
+                      maxHeight: 350,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
+                      ),
+                    ),
+                    menuItemStyleData: const MenuItemStyleData(
+                      padding: EdgeInsets.all(8),
+                    ),
+                    dropdownSearchData: DropdownSearchData(
+                      searchController: searchController,
+                      searchInnerWidgetHeight: 60, // <- Required
+                      searchInnerWidget: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: TextFormField(
+                          controller: searchController,
+                          decoration: const InputDecoration(
+                            hintText: 'Search Emotion...',
+                            contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                            border: OutlineInputBorder(),
                           ),
                         ),
                       ),
-                    );
-                  }).toList(),
-                  onChanged: (Emotion? newValue) {
-                    final matched = mentalStrengthEditProvider.getEmotionsModel?.emotions
-                        ?.firstWhere((e) => e.id == newValue?.id, orElse: () => newValue!);
-                    mentalStrengthEditProvider.addEmotionValue(matched!);
-                    _isTokenExpired();
-                  },
-                  dropdownStyleData: DropdownStyleData(
-                    maxHeight: 350,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white,
+                      searchMatchFn: (item, searchValue) {
+                        return (item.value?.title ?? '')
+                            .toLowerCase()
+                            .startsWith(searchValue.toLowerCase());
+                      },
                     ),
-                  ),
-                  menuItemStyleData: const MenuItemStyleData(
-                    padding: EdgeInsets.all(8),
-                  ),
-                  dropdownSearchData: DropdownSearchData(
-                    searchController: searchController,
-                    searchInnerWidgetHeight: 60, // <- Required
-                    searchInnerWidget: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: TextFormField(
-                        controller: searchController,
-                        decoration: const InputDecoration(
-                          hintText: 'Search Emotion...',
-                          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                          border: OutlineInputBorder(),
-                        ),
+                    iconStyleData: IconStyleData(
+                      icon: Icon(
+                        Icons.arrow_drop_down,
+                        size: 30,
+                        color: ColorsContent.newThemeColor, // Change the color of the dropdown icon here
                       ),
                     ),
-                    searchMatchFn: (item, searchValue) {
-                      return (item.value?.title ?? '')
-                          .toLowerCase()
-                          .startsWith(searchValue.toLowerCase());
-                    },
                   ),
                 )
 
