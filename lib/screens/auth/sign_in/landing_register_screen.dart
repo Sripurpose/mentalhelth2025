@@ -200,16 +200,31 @@ class _LandingRegisterScreenScreenState extends State<LandingRegisterScreenScree
                                 ),
                               ),
                               SizedBox(height: size.height * 0.02),
-                              Text(
-                                signInProvider.settingsRegisterModel?.settings?[0].message
-                                    ?.replaceAll("with ", "with\n              ") ?? "",
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Open Sans',
-                                  color: Colors.white,
+                              // Text(
+                              //   signInProvider.settingsRegisterModel?.settings?[0].message
+                              //       ?.replaceAll("with ", "with\n              ") ?? "",
+                              //   style: const TextStyle(
+                              //     fontSize: 14,
+                              //     fontWeight: FontWeight.w400,
+                              //     fontFamily: 'Open Sans',
+                              //     color: Colors.white,
+                              //   ),
+                              // ),
+                              RichText(
+                                text: const TextSpan(
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Open Sans',
+                                    color: Colors.white,
+                                  ),
+                                  children: [
+                                    TextSpan(text: 'Empower your mental well-being with\n'),
+                                    TextSpan(text: '              simple, effective tools!'),
+                                  ],
                                 ),
                               ),
+
                               SizedBox(height: size.height * 0.05),
                               signInProvider.settingsRegisterModel?.settings?[0].link != null ?
                               Visibility(

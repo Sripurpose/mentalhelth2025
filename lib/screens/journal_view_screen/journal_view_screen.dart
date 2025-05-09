@@ -299,12 +299,15 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                               controller: photoController,
                                               itemCount: imageList.length,
                                               itemBuilder: (context, index) {
-                                                return CustomImageView(
-                                                  fit: BoxFit.cover,
-                                                  imagePath: imageList[index],
-                                                  height: size.height * 0.30,
-                                                  width: size.width,
-                                                  alignment: Alignment.center,
+                                                return ClipRRect(
+                                                  borderRadius: BorderRadius.circular(5), // adjust as needed
+                                                  child: CustomImageView(
+                                                    fit: BoxFit.cover,
+                                                    imagePath: imageList[index],
+                                                    height: size.height * 0.30,
+                                                    width: size.width,
+                                                    alignment: Alignment.center,
+                                                  ),
                                                 );
                                               },
                                               onPageChanged: (int pageIndex) {
@@ -367,8 +370,11 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                               itemCount: videoList.length,
                                               itemBuilder: (context, index) {
                                                 logger.w("videoList${videoList}");
-                                                return VideoPlayerWidget(
-                                                  videoUrl: videoList[index],
+                                                return ClipRRect(
+                                                  borderRadius: BorderRadius.circular(5), // adjust as needed
+                                                  child: VideoPlayerWidget(
+                                                    videoUrl: videoList[index],
+                                                  ),
                                                 );
                                               },
                                               onPageChanged: (int pageIndex) {
@@ -497,8 +503,12 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                           homeProvider.journalDetails!.journals!
                                               .emotionTitle
                                               .toString(),
-                                          style: CustomTextStyles
-                                              .bodyMediumGray700_1,
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily: 'Open Sans',
+                                              color:  ColorsContent.stressFullStateColor,
+                                            ),
                                         ),
                                       ),
                                 const SizedBox(height: 22),
@@ -557,40 +567,23 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                     );
                                   },
                                       child: Container(
-                                        height: size.height * 0.04,
+                                        height: size.height * 0.05,
                                         width: size.width * 0.7,
-                                        padding:
-                                        const EdgeInsets.only(
-                                          bottom: 5,
-                                          top: 5,
-                                          left: 5,
-                                          right: 5,
-                                        ),
+                                        padding: const EdgeInsets.symmetric(horizontal: 8),
                                         decoration: BoxDecoration(
                                           color: ColorsContent.newThemeColor,
-                                          borderRadius:
-                                          BorderRadius.circular(
-                                              8), // Makes it circular
+                                          borderRadius: BorderRadius.circular(8),
                                         ),
                                         child: Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment
-                                              .spaceBetween,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
-                                            SizedBox(
-                                              width: size.width * 0.45,
-                                              child: SingleChildScrollView(
-                                                scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                                                child: Padding(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                            Expanded(
+                                              child: Center( // ✅ Ensures vertical centering
+                                                child: SingleChildScrollView(
+                                                  scrollDirection: Axis.horizontal,
                                                   child: Text(
-                                                    homeProvider.journalDetails!.journals!
-                                                        .goal ==
-                                                        null
-                                                        ? ""
-                                                        : homeProvider.journalDetails!
-                                                        .journals!.goal!.goalTitle
-                                                        .toString(),
+                                                    homeProvider.journalDetails?.journals?.goal?.goalTitle ?? '',
                                                     style: const TextStyle(
                                                       fontSize: 17,
                                                       fontWeight: FontWeight.w500,
@@ -601,37 +594,29 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                                 ),
                                               ),
                                             ),
-        
                                             GestureDetector(
                                               onTap: () {
-                                                mentalStrengthEditProvider
-                                                    .openGoalViewSheetFunction();
-                                                mentalStrengthEditProvider
-                                                    .fetchGoalDetails(
-                                                  goalId:
-                                                  homeProvider.journalDetails!
-                                                      .journals!.goal!.goalId
-                                                      .toString(),
-                                                  context: context
+                                                mentalStrengthEditProvider.openGoalViewSheetFunction();
+                                                mentalStrengthEditProvider.fetchGoalDetails(
+                                                  goalId: homeProvider.journalDetails!.journals!.goal!.goalId.toString(),
+                                                  context: context,
                                                 );
                                               },
                                               child: CircleAvatar(
-                                                radius:
-                                                size.width * 0.04,
-                                                backgroundColor:Colors.deepPurple,
+                                                radius: size.width * 0.03,
+                                                backgroundColor: ColorsContent.actionBackColor,
                                                 child: Icon(
-                                                  Icons
-                                                      .play_arrow,
+                                                  Icons.play_arrow,
                                                   color: Colors.white,
-                                                  size: size.width *
-                                                      0.04,
+                                                  size: size.width * 0.04,
                                                 ),
                                               ),
                                             ),
                                           ],
                                         ),
                                       )
-                                    ),
+
+                                ),
                                 homeProvider.journalDetails?.journals?.goal == null ?
                                     const SizedBox():
                                 const SizedBox(height: 33),
@@ -684,7 +669,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                           }
                                         },
                                         child: Container(
-                                          height: size.height * 0.04,
+                                          height: size.height * 0.05, // slightly increased for better alignment
                                           margin: const EdgeInsets.only(bottom: 5),
                                           padding: const EdgeInsets.symmetric(horizontal: 10),
                                           decoration: BoxDecoration(
@@ -692,23 +677,27 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                           child: Row(
+                                            crossAxisAlignment: CrossAxisAlignment.center, // ensure vertical alignment
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                               Expanded(
-                                                child: Text(
-                                                  action.actionTitle ?? '',
-                                                  style: const TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w500,
-                                                    fontFamily: 'Open Sans',
-                                                    color: Colors.white,
+                                                child: Align(
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                    action.actionTitle ?? '',
+                                                    style: const TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w500,
+                                                      fontFamily: 'Open Sans',
+                                                      color: Colors.white,
+                                                    ),
+                                                    overflow: TextOverflow.ellipsis,
                                                   ),
-                                                  overflow: TextOverflow.ellipsis,
                                                 ),
                                               ),
                                               CircleAvatar(
                                                 radius: size.width * 0.03,
-                                                backgroundColor: Colors.deepPurple,
+                                                backgroundColor: ColorsContent.actionBackColor,
                                                 child: Icon(
                                                   Icons.play_arrow,
                                                   color: Colors.white,
@@ -718,6 +707,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                             ],
                                           ),
                                         ),
+
                                       );
                                     },
                                   ),
@@ -863,6 +853,11 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
           return PopupMenuButton<String>(
             color: Colors.white,
             iconColor: ColorsContent.newThemeColor, // 👈 Change dot color here
+            padding: EdgeInsets.zero, // Removes extra padding
+            constraints: const BoxConstraints(
+              minWidth: 100, // 👈 Reduce width here
+              maxWidth: 100,
+            ),
             onSelected: (value) {},
             itemBuilder: (BuildContext context) {
               return [
@@ -1017,11 +1012,21 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
 
                   },
                   value: 'Edit',
-                  child: ListTile(
-                    leading: Icon(Icons.mode_edit_outline_outlined, color: ColorsContent.newThemeColor), // Edit Icon
-                    title: Text(
-                      'Edit',
-                      style: CustomTextStyles.bodyMedium14,
+                  height: 30, // 👈 Reduce height here
+                  child:
+                  Center(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.mode_edit_outline_outlined, color: ColorsContent.newThemeColor),
+                        const SizedBox(width: 8),
+                        const Text('Edit', style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'Roboto',
+                          color:  Colors.black,
+                        )),
+                      ],
                     ),
                   ),
                 ),
@@ -1064,13 +1069,23 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                       content: 'Are you sure you want to delete this journals?',
                     );
                   },
-
+                  height: 30, // 👈 Reduce height here
                   value: 'Delete',
-                  child: ListTile(
-                    leading: Icon(Icons.delete_outline, color: ColorsContent.newThemeColor), // Delete Icon
-                    title: Text(
-                      'Delete',
-                      style: CustomTextStyles.bodyMedium14,
+                  child:
+                  Center(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.delete_outline, color: ColorsContent.newThemeColor),
+                        const SizedBox(width: 8),
+                        const Text('Delete',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: 'Roboto',
+                              color:  Colors.black,
+                            )),
+                      ],
                     ),
                   ),
                 ),
