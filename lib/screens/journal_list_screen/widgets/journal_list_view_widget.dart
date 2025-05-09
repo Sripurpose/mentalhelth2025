@@ -72,7 +72,7 @@ class _JournalListViewWidgetState extends State<JournalListViewWidget> {
                           !homeProvider.journalsModelLoading
                           ? Colors.transparent
                           : null,
-                      padding: const EdgeInsets.symmetric(horizontal: 28),
+                      padding: const EdgeInsets.symmetric(horizontal: 28,vertical: 10),
                       child: isLoading
                           ?   Center(child: CupertinoActivityIndicator(
                         color: ColorsContent.newThemeColor,

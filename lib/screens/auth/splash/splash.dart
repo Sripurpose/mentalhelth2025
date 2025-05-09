@@ -100,13 +100,13 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.all(
+      child: const Padding(
+        padding: EdgeInsets.all(
           30,
         ),
-        child: SvgPicture.asset(
-          ImageConstant.newLogoNumu,
-        ),
+        // child: SvgPicture.asset(
+        //   ImageConstant.newLogoNumu,
+        // ),
       ),
     );
   }

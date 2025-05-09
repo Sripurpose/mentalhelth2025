@@ -27,6 +27,8 @@ class ImageConstant {
   static String noInternet = 'assets/images/no_internet.svg';
   static String noDataNumu = 'assets/images/no_data.svg';
   static String dumImage = 'assets/images/dum.png';
+  static String actionDetailsMark = 'assets/images/action_details_mark.svg';
+  static String reminderClock = 'assets/images/reminder_clock.svg';
 
   static String imgThumbsUp = '$imagePath/img_thumbs_up.svg';
   static String galleryAddMediaNumu = '$imagePath/gallery_add_media_numu.svg';

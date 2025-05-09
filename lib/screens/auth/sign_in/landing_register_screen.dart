@@ -43,6 +43,7 @@ class _LandingRegisterScreenScreenState extends State<LandingRegisterScreenScree
   @override
   void initState() {
     super.initState();
+
     Future.delayed(const Duration(seconds: 1), () {
       setState(() {
         _isLoading = false;
@@ -131,6 +132,15 @@ class _LandingRegisterScreenScreenState extends State<LandingRegisterScreenScree
     }
   }
 
+  Future<void> fetchAppRegister() async {
+    String deviceType = Platform.isAndroid ? 'android' : 'ios';
+    //isLoading = true;
+    final signInProvider = Provider.of<SignInProvider>(context, listen: false);
+
+    await signInProvider.fetchAppRegister(context, deviceType: deviceType);
+
+  }
+
   @override
   Widget build(BuildContext context) {
     final signInProvider = Provider.of<SignInProvider>(context, listen: false);
@@ -190,16 +200,31 @@ class _LandingRegisterScreenScreenState extends State<LandingRegisterScreenScree
                                 ),
                               ),
                               SizedBox(height: size.height * 0.02),
-                              Text(
-                                signInProvider.settingsRegisterModel?.settings?[0].message
-                                    ?.replaceAll("with ", "with\n              ") ?? "",
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Open Sans',
-                                  color: Colors.white,
+                              // Text(
+                              //   signInProvider.settingsRegisterModel?.settings?[0].message
+                              //       ?.replaceAll("with ", "with\n              ") ?? "",
+                              //   style: const TextStyle(
+                              //     fontSize: 14,
+                              //     fontWeight: FontWeight.w400,
+                              //     fontFamily: 'Open Sans',
+                              //     color: Colors.white,
+                              //   ),
+                              // ),
+                              RichText(
+                                text: const TextSpan(
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Open Sans',
+                                    color: Colors.white,
+                                  ),
+                                  children: [
+                                    TextSpan(text: 'Empower your mental well-being with\n'),
+                                    TextSpan(text: '              simple, effective tools!'),
+                                  ],
                                 ),
                               ),
+
                               SizedBox(height: size.height * 0.05),
                               signInProvider.settingsRegisterModel?.settings?[0].link != null ?
                               Visibility(

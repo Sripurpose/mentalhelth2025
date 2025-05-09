@@ -2016,7 +2016,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                             ),
                           ),
                           Positioned(
-                            bottom: 50, // Adjust this value as needed
+                            bottom: Platform.isIOS ? 50 : 45, // Adjust this value as needed
                             right: 0, // Move to the right
                             left: 40,
                             child: Consumer<MentalStrengthEditProvider>(
@@ -2138,7 +2138,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                             ),
                           ),
                           Positioned(
-                            bottom: 50, // Adjust this value as needed
+                            bottom: Platform.isIOS ? 50 : 45, // Adjust this value as needed
                             right: 0, // Move to the right
                             left: 40,
                             child: Consumer<MentalStrengthEditProvider>(
@@ -2244,7 +2244,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                           ),
 
                           Positioned(
-                            bottom: 50, // Adjust this value as needed
+                            bottom: Platform.isIOS ? 50 : 45, // Adjust this value as needed
                             right: 0, // Move to the right
                             left: 40,
                             child: Consumer<MentalStrengthEditProvider>(
@@ -2407,7 +2407,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                             ),
                           ),
                           Positioned(
-                            bottom: 50, // Adjust this value as needed
+                            bottom: Platform.isIOS ? 50 :45, // Adjust this value as needed
                             right: 0, // Move to the right
                             left: 40,
                             child: Consumer<MentalStrengthEditProvider>(

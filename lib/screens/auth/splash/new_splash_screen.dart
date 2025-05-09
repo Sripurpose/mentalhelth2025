@@ -223,28 +223,40 @@ class _SplashScreenState extends State<NewSplashScreen> {
                   color: _isFirstState ? Colors.black : ColorsContent.newThemeColor,
                 ),
               ),
+              const SizedBox(height: 25),
+              ElevatedButton(
+                onPressed: _handleButtonClick, // Handle button click logic
+                style: ElevatedButton.styleFrom(
+                  shape: const CircleBorder(),
+                ),
+                child: Image.asset(
+                  ImageConstant.splashNextIcon, // Button icon
+                  width: 80,
+                  height: 80,
+                ),
+              ),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding:  EdgeInsets.symmetric(vertical: Platform.isIOS ? 80.0: 50.0),
-        child: SizedBox(
-          width: 70,
-          height: 70,
-          child: ElevatedButton(
-            onPressed: _handleButtonClick, // Handle button click logic
-            style: ElevatedButton.styleFrom(
-              shape: const CircleBorder(),
-            ),
-            child: Image.asset(
-              ImageConstant.splashNextIcon, // Button icon
-              width: 80,
-              height: 80,
-            ),
-          ),
-        ),
-      ),
+      // bottomNavigationBar: Padding(
+      //   padding:  EdgeInsets.symmetric(vertical: Platform.isIOS ? 80.0: 100.0),
+      //   child: SizedBox(
+      //     width: 70,
+      //     height: 70,
+      //     child: ElevatedButton(
+      //       onPressed: _handleButtonClick, // Handle button click logic
+      //       style: ElevatedButton.styleFrom(
+      //         shape: const CircleBorder(),
+      //       ),
+      //       child: Image.asset(
+      //         ImageConstant.splashNextIcon, // Button icon
+      //         width: 80,
+      //         height: 80,
+      //       ),
+      //     ),
+      //   ),
+      // ),
     );
   }
 }

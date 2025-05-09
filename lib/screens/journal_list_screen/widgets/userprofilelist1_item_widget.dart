@@ -99,7 +99,13 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                   builder: (contexts, journalListProvider, homeProvider,
                       mentalStrengthEditProvider, editProfileProvider, _) {
                 return PopupMenuButton<String>(
+                  color: Colors.white,
                   iconColor: ColorsContent.newThemeColor, // 👈 Change dot color here
+                  padding: EdgeInsets.zero, // Removes extra padding
+                  constraints: const BoxConstraints(
+                    minWidth: 100, // 👈 Reduce width here
+                    maxWidth: 100,
+                  ),
                   onSelected: (value) {},
                   itemBuilder: (BuildContext context) {
                     return [
@@ -266,11 +272,21 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                           );
                         },
                         value: 'Edit',
-                        child: ListTile(
-                          leading: Icon(Icons.mode_edit_outline_outlined, color: ColorsContent.newThemeColor), // Edit Icon
-                          title: Text(
-                            'Edit',
-                            style: CustomTextStyles.bodyMedium14,
+                        height: 30, // 👈 Reduce height here
+                        child:
+                        Center(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.mode_edit_outline_outlined, color: ColorsContent.newThemeColor),
+                              const SizedBox(width: 8),
+                              const Text('Edit', style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'Roboto',
+                                color:  Colors.black,
+                              )),
+                            ],
                           ),
                         ),
                       ),
@@ -326,12 +342,23 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                                 'Are you sure You want to Delete this Journal?',
                           );
                         },
+                        height: 30, // 👈 Reduce height here
                         value: 'Delete',
-                        child: ListTile(
-                          leading: Icon(Icons.delete_outline, color: ColorsContent.newThemeColor), // Delete Icon
-                          title: Text(
-                            'Delete',
-                            style: CustomTextStyles.bodyMedium14,
+                        child:
+                        Center(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.delete_outline, color: ColorsContent.newThemeColor),
+                              const SizedBox(width: 8),
+                              const Text('Delete',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'Roboto',
+                                    color:  Colors.black,
+                                  )),
+                            ],
                           ),
                         ),
                       ),

@@ -101,7 +101,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                       alignment: Alignment.topCenter,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(top: size.height * 0.035),
+                          padding: EdgeInsets.only(top: size.height * 0.050),
                           child: Align(
                             alignment: Alignment.center,
                             child: Container(
