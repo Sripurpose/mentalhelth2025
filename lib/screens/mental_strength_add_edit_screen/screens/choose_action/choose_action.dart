@@ -181,7 +181,7 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
                                       ),
                                     SizedBox(height: size.height * 0.003),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         const Text(
                                           "Goal: ",
@@ -192,18 +192,17 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
                                         ),
                                         SizedBox(
                                           width: size.width * 0.4,
-                                          child: SingleChildScrollView(
-                                            scrollDirection: Axis.horizontal,
-                                            child: Text(
-                                              widget.goal.title.toString(),
-                                              textAlign: TextAlign.center,
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 1,
-                                            ),
+                                          child: Text(
+                                            "${widget.goal.title}",
+                                            overflow: TextOverflow.visible,
+                                            maxLines: null,
+                                            textAlign: TextAlign.start,
+                                            style: const TextStyle(fontSize: 16),
                                           ),
                                         ),
                                       ],
                                     ),
+
                                   ],
                                 ),
                                 if (mentalStrengthEditProvider

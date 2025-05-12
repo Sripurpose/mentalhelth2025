@@ -1242,6 +1242,7 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                     children: [
                       GestureDetector(
                         onTap: () async {
+                          FocusScope.of(context).requestFocus(FocusNode());
                           _isTokenExpired();
                           if (await requestGalleryPermission() && Platform.isAndroid) {
                             addActionsProvider.selectedMedia(1);
@@ -1351,6 +1352,7 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                     children: [
                       GestureDetector(
                         onTap: () async {
+                          FocusScope.of(context).requestFocus(FocusNode());
                           _isTokenExpired();
                           if (await requestCameraPermission() && Platform.isAndroid) {
                             addActionsProvider.selectedMedia(2);
@@ -1460,6 +1462,7 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                     children: [
                       GestureDetector(
                         onTap: () async {
+                          FocusScope.of(context).requestFocus(FocusNode());
                           _isTokenExpired();
                           addActionsProvider.selectedMedia(0);
                           await audioBottomSheetAction(
@@ -1555,6 +1558,7 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                     children: [
                       GestureDetector(
                         onTap: () async {
+                          FocusScope.of(context).requestFocus(FocusNode());
                           // _checkPermissionStatus();
                           // _requestPermissions();
                           addActionsProvider.selectedMedia(

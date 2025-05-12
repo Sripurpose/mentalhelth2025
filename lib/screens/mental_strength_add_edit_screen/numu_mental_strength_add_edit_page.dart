@@ -1234,6 +1234,7 @@ class _NumuMentalStrengthAddEditPageState
                     children: [
                       GestureDetector(
                         onTap: () async {
+                          FocusScope.of(context).requestFocus(FocusNode());
                           _isTokenExpired();
                           if (await requestGalleryPermission() &&
                               Platform.isAndroid) {
@@ -1315,6 +1316,7 @@ class _NumuMentalStrengthAddEditPageState
                     children: [
                       GestureDetector(
                         onTap: () async {
+                          FocusScope.of(context).requestFocus(FocusNode());
                           _isTokenExpired();
                           if (await requestCameraPermission() &&
                               Platform.isAndroid) {
@@ -1396,6 +1398,7 @@ class _NumuMentalStrengthAddEditPageState
                     children: [
                       GestureDetector(
                         onTap: () async {
+                          FocusScope.of(context).requestFocus(FocusNode());
                           _isTokenExpired();
                           mentalStrengthEditProvider.selectedMedia(0);
                           await audioBottomSheet(
@@ -1462,6 +1465,7 @@ class _NumuMentalStrengthAddEditPageState
                     children: [
                       GestureDetector(
                         onTap: () async {
+                          FocusScope.of(context).requestFocus(FocusNode());
                           _isTokenExpired();
                           mentalStrengthEditProvider.selectedMedia(
                             3,

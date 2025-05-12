@@ -215,21 +215,15 @@ class _ActionFullViewJournalCreateBottomSheetState
                     ),
                     mentalStrengthEditProvider.actionsDetailsModel == null
                         ? const SizedBox()
-                        : Center(
-                            child: SizedBox(
-                              width: size.width * 0.55,
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                                child: Text(
-                                  capitalText(mentalStrengthEditProvider.actionsDetailsModel!.actions!.actionTitle.toString(),),
-                                  textAlign: TextAlign.center,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1, // Set the maximum number of lines to 3
-                                  style: CustomTextStyles.blackText18000000W700(),
-                                ),
-                              ),
-                            ),
+                        : SizedBox(
+                          width: size.width * 0.80,
+                          child: Text(
+                            capitalText(mentalStrengthEditProvider.actionsDetailsModel!.actions!.actionTitle.toString(),),
+                           // textAlign: TextAlign.center,
+                            maxLines: 4, // Set the maximum number of lines to 3
+                            style: CustomTextStyles.blackText18000000W700(),
                           ),
+                        ),
                     SizedBox(
                       height: size.height * 0.005,
                     ),

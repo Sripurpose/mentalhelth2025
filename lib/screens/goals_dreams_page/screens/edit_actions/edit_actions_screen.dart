@@ -1834,6 +1834,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
                     children: [
                       GestureDetector(
                         onTap: () async {
+                          FocusScope.of(context).requestFocus(FocusNode());
                           if (await requestGalleryPermission() && Platform.isAndroid) {
                             addActionsProvider.selectedMedia(1);
                             await galleryBottomSheetAction(
@@ -1957,6 +1958,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
                     children: [
                       GestureDetector(
                         onTap: () async {
+                          FocusScope.of(context).requestFocus(FocusNode());
                           if (await requestGalleryPermission() && Platform.isAndroid) {
                             addActionsProvider.selectedMedia(2);
                             cameraBottomSheetAction(
@@ -2078,6 +2080,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
                     children: [
                       GestureDetector(
                         onTap: () async {
+                          FocusScope.of(context).requestFocus(FocusNode());
                           addActionsProvider.selectedMedia(0);
                           await audioBottomSheetAction(
                             context: context,
@@ -2185,6 +2188,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
                     children: [
                       GestureDetector(
                         onTap: () async {
+                          FocusScope.of(context).requestFocus(FocusNode());
                           _checkPermissionStatus();
                           _requestPermissions();
                           addActionsProvider.selectedMedia(

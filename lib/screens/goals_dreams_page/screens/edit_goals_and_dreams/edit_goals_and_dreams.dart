@@ -949,6 +949,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                     children: [
                       GestureDetector(
                         onTap: () async {
+                          FocusScope.of(context).requestFocus(FocusNode());
                           _isTokenExpired();
                           if (await requestGalleryPermission() && Platform.isAndroid) {
                             adDreamsGoalsProvider.selectedMedia(1);
@@ -1070,6 +1071,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                     children: [
                       GestureDetector(
                         onTap: () async {
+                          FocusScope.of(context).requestFocus(FocusNode());
                           _isTokenExpired();
                           if (await requestCameraPermission() && Platform.isAndroid) {
                             adDreamsGoalsProvider.selectedMedia(2);
@@ -1191,6 +1193,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                     children: [
                       GestureDetector(
                         onTap: () async {
+                          FocusScope.of(context).requestFocus(FocusNode());
                           _isTokenExpired();
                           adDreamsGoalsProvider.selectedMedia(0);
                           await audioBottomSheetAddGoals(
@@ -1298,6 +1301,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                     children: [
                       GestureDetector(
                         onTap: () async {
+                          FocusScope.of(context).requestFocus(FocusNode());
                           _checkPermissionStatus();
                           _requestPermissions();
                           adDreamsGoalsProvider.selectedMedia(

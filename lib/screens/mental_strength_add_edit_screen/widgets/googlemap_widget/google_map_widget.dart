@@ -111,10 +111,14 @@ class _MentalGoogleMapState extends State<MentalGoogleMap> {
           position: _selectedLocation,
           draggable: true,
           onDragEnd: _onMarkerDragEnd,
+          onTap: () {
+            _onMapTapped(_selectedLocation); // Trigger the same logic as map tap
+          },
         ),
       );
     });
   }
+
 
   final Set<Marker> _markers = {};
 
@@ -174,13 +178,14 @@ class _MentalGoogleMapState extends State<MentalGoogleMap> {
           //     'Selected Address: ${_selectedAddress.isNotEmpty ? _selectedAddress : (widget.edit ? savedLocationAddress : "Location not available")}',
           //   ),
           // ),
-
+          _selectedAddress.isNotEmpty ||  savedLocationAddress!.isNotEmpty ?
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
               'Selected Address: ${_selectedAddress.isNotEmpty ? _selectedAddress.replaceAll(RegExp(r'[^a-zA-Z0-9\s,]'), '').trim() : (widget.edit ? savedLocationAddress?.replaceAll(RegExp(r'[^a-zA-Z0-9\s,]'), '').trim() : "")}',
             ),
-          ),
+          ):
+              SizedBox(),
 
         ],
       ),

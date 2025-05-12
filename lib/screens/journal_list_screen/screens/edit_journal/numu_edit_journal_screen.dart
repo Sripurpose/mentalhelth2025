@@ -1989,6 +1989,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                         children: [
                           GestureDetector(
                             onTap: () async {
+                              FocusScope.of(context).requestFocus(FocusNode());
                               _isTokenExpired();
                               if (await requestGalleryPermission() && Platform.isAndroid) {
                                 mentalStrengthEditProvider.selectedMedia(1);
@@ -2110,6 +2111,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                         children: [
                           GestureDetector(
                             onTap: () async {
+                              FocusScope.of(context).requestFocus(FocusNode());
                               _isTokenExpired();
                               if (await requestCameraPermission() && Platform.isAndroid) {
                                 mentalStrengthEditProvider.selectedMedia(2);
@@ -2228,6 +2230,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                         children: [
                           GestureDetector(
                             onTap: () async {
+                              FocusScope.of(context).requestFocus(FocusNode());
                               _isTokenExpired();
                               mentalStrengthEditProvider.selectedMedia(0);
                               // if (mentalStrengthEditProvider.mediaSelected == 1) {
@@ -2334,13 +2337,13 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                       ),
                     ),
 
-
                     SizedBox(
                       height: size.height * 0.09,
                       child: Stack(
                         children: [
                           GestureDetector(
                             onTap: () async {
+                              FocusScope.of(context).requestFocus(FocusNode());
                               mentalStrengthEditProvider.selectedMedia(
                                 3,
                               );
