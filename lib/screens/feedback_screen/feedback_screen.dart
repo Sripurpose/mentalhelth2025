@@ -121,7 +121,7 @@ class FeedbackScreen extends StatelessWidget {
     return Consumer<FeedBackProvider>(builder: (context, feedBackProvider, _) {
       return CustomTextFormFieldPhoneNumberFeedbackNumu(
         controller: feedBackProvider.nameEditTextController,
-        hintText: "Josh_Peter",
+        hintText: "enter the name",
       );
     });
   }
@@ -131,7 +131,7 @@ class FeedbackScreen extends StatelessWidget {
     return Consumer<FeedBackProvider>(builder: (context, feedBackProvider, _) {
       return CustomTextFormFieldPhoneNumberFeedbackNumu(
         controller: feedBackProvider.emailEditTextController,
-        hintText: "Josh_Peter@gmail.com",
+        hintText: "enter the email",
         textInputType: TextInputType.emailAddress,
       );
     });
