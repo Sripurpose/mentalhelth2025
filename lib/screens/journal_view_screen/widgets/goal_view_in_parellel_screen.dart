@@ -187,17 +187,12 @@ class _GoalAndDreamFullViewBottomParellelSheetState
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 2.0),
                   child: SizedBox(
-                    width: size.width * 0.55,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                      child: Text(
-                        capitalText(
-                            widget.goalDetailModel.goals!.goalTitle.toString()),
-                        style: CustomTextStyles.blackText18000000W700(),
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1, // Set the maximum number of lines to 3
-                      ),
+                    width: size.width * 0.70,
+                    child: Text(
+                      capitalText(
+                          widget.goalDetailModel.goals!.goalTitle.toString()),
+                      style: CustomTextStyles.blackText18000000W700(),
+                      maxLines: 4, // Set the maximum number of lines to 3
                     ),
                   ),
                 ),

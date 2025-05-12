@@ -619,7 +619,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                 ),
                                 homeProvider.journalDetails?.journals?.goal == null ?
                                     const SizedBox():
-                                const SizedBox(height: 33),
+                                const SizedBox(height: 20),
                                 homeProvider.journalDetails!.journals!.action!.isEmpty?
                                     const SizedBox():
                                 const Padding(
@@ -639,7 +639,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                     homeProvider.journalDetails!.journals!.action!.isEmpty
                                     ? const SizedBox()
                                     : SizedBox(
-                                  height: size.height * 0.50,
+                                  height: (homeProvider.journalDetails?.journals?.action?.length ?? 0) * (size.height * 0.065),
                                   width: size.width * 0.7,
                                   child: ListView.builder(
                                     shrinkWrap: true,

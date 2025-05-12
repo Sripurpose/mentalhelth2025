@@ -80,7 +80,7 @@ class _JournalAudioPlayerState extends State<JournalAudioPlayer> {
                     await globalAudioPlayer.stop();
                   }
                   currentPlayingUrl = widget.url;
-                  await globalAudioPlayer.play(UrlSource(widget.url));
+                   globalAudioPlayer.play(UrlSource(widget.url));
                 }
               },
               child: Container(
