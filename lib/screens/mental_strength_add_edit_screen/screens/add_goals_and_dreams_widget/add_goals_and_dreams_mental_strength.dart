@@ -605,6 +605,7 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
                     children: [
                       GestureDetector(
                         onTap: () async {
+                          FocusScope.of(context).requestFocus(FocusNode());
                           _isTokenExpired();
                           mentalStrengthEditProvider.selectedMedia(1);
                           await galleryBottomSheetAddGoals(
@@ -697,6 +698,7 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
                     children: [
                       GestureDetector(
                         onTap: () {
+                          FocusScope.of(context).requestFocus(FocusNode());
                           _isTokenExpired();
                           mentalStrengthEditProvider.selectedMedia(2);
                           cameraBottomSheetAdGoals(
@@ -790,6 +792,7 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
                     children: [
                       GestureDetector(
                         onTap: () async {
+                          FocusScope.of(context).requestFocus(FocusNode());
                           _isTokenExpired();
                           mentalStrengthEditProvider.selectedMedia(0);
                           await audioBottomSheetAddGoals(
@@ -886,6 +889,7 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
                     children: [
                       GestureDetector(
                         onTap: () {
+                          FocusScope.of(context).requestFocus(FocusNode());
                           mentalStrengthEditProvider.selectedMedia(
                             3,
                           );

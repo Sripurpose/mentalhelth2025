@@ -857,6 +857,7 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () async {
+                          FocusScope.of(context).requestFocus(FocusNode());
                           addActionsProvider.selectedMedia(1);
                           await galleryBottomSheetAction(
                             context: context,
@@ -962,6 +963,7 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
+                          FocusScope.of(context).requestFocus(FocusNode());
                           addActionsProvider.selectedMedia(2);
                           cameraBottomSheetAction(
                             context: context,
@@ -1067,6 +1069,7 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () async {
+                          FocusScope.of(context).requestFocus(FocusNode());
                           addActionsProvider.selectedMedia(0);
                           await audioBottomSheetAction(
                             context: context,
@@ -1174,6 +1177,7 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
+                          FocusScope.of(context).requestFocus(FocusNode());
                           addActionsProvider.selectedMedia(
                             3,
                           );
