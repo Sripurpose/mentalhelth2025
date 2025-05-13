@@ -472,7 +472,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                                                             const EdgeInsets.only(
                                                                 bottom: 10),
                                                         height:
-                                                            size.height * 0.045,
+                                                            size.height * 0.055,
                                                         width: size.width * 0.86,
                                                         padding:
                                                             const EdgeInsets.only(
@@ -547,20 +547,23 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                                                                 scrollDirection:
                                                                     Axis.horizontal,
                                                                 // Enable horizontal scrolling
-                                                                child: Text(
-                                                                  data.name,
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
-                                                                  maxLines: 1,
-                                                                  // Set the maximum number of lines to 3
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style:  const TextStyle(
-                                                                    fontSize: 16,
-                                                                    fontWeight: FontWeight.w400,
-                                                                    color: Colors.black,
+                                                                child: SizedBox(
+                                                                  width: 250,
+                                                                  child: Text(
+                                                                    data.name,
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    maxLines: 4,
+                                                                    // Set the maximum number of lines to 3
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style:  const TextStyle(
+                                                                      fontSize: 14,
+                                                                      fontWeight: FontWeight.w400,
+                                                                      color: Colors.black,
+                                                                    ),
                                                                   ),
                                                                 ),
                                                               ),

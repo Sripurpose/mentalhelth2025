@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:logger/logger.dart';
@@ -1907,57 +1908,87 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
   }
 
   /// Section Widget
-  Widget _buildTitleEditText(BuildContext context,MentalStrengthEditProvider mentalStrengthEditProvider) {
+  Widget _buildTitleEditText(BuildContext context, MentalStrengthEditProvider mentalStrengthEditProvider) {
     return Consumer<MentalStrengthEditProvider>(
-        builder: (context, mentalStrengthEditProvider, _) {
-          // Decode the text before setting it to the controller
-          String decodedText = HtmlUnescape().convert(
-              mentalStrengthEditProvider.titleEditTextController.text);
-          mentalStrengthEditProvider.titleEditTextController.text =
-              decodedText;
+      builder: (context, mentalStrengthEditProvider, _) {
+        // Decode the text before setting it to the controller
+        String decodedText = HtmlUnescape().convert(mentalStrengthEditProvider.titleEditTextController.text);
+        mentalStrengthEditProvider.titleEditTextController.text = decodedText;
 
-          return CustomTextFormFieldNumu(
-            controller: mentalStrengthEditProvider.titleEditTextController,
-            hintText: "Title",
-            hintStyle: CustomTextStyles.bodySmallGray700,
-            textInputAction: TextInputAction.done,
-            maxLines: 1,
-            focusNode: _titleFocusNode,
-            onTap: () => setState(() {}),
-            // Rebuild when tapped
-            onEditingComplete: () {
-              _titleFocusNode.unfocus(); // Ensure focus is removed when done
-              setState(() {});
-            },
-          );
-        });
+        return CustomTextFormFieldNumu(
+          controller: mentalStrengthEditProvider.titleEditTextController,
+          hintText: "Title",
+          hintStyle: CustomTextStyles.bodySmallGray700,
+          textInputAction: TextInputAction.done,
+          maxLines: 1,
+          focusNode: _titleFocusNode,
+          onTap: () => setState(() {}),
+          // Rebuild when tapped
+          onEditingComplete: () {
+            _titleFocusNode.unfocus(); // Ensure focus is removed when done
+            setState(() {});
+          },
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9\s]')),
+          ],
+          onChanged: (text) {
+            // Ensure space is allowed only if at least one letter is typed
+            if (text.isNotEmpty && !text.trim().isEmpty && text.trim().length == 1 && text.contains(' ')) {
+              // Remove space if there's no letter typed yet
+              mentalStrengthEditProvider.titleEditTextController.text = text.trim();
+              mentalStrengthEditProvider.titleEditTextController.selection = TextSelection.collapsed(offset: text.length);
+            } else if (text.trim().isEmpty) {
+              // Prevent space if text is empty or contains only spaces
+              mentalStrengthEditProvider.titleEditTextController.text = text.trim();
+              mentalStrengthEditProvider.titleEditTextController.selection = TextSelection.collapsed(offset: text.length);
+            }
+          },
+        );
+      },
+    );
   }
 
-  Widget _buildDescriptionEditText(BuildContext context,MentalStrengthEditProvider mentalStrengthEditProvider) {
-    return Consumer<MentalStrengthEditProvider>(
-        builder: (context, mentalStrengthEditProvider, _) {
-          // Decode the text before setting it to the controller
-          String decodedText = HtmlUnescape().convert(
-              mentalStrengthEditProvider.descriptionEditTextController.text);
-          mentalStrengthEditProvider.descriptionEditTextController.text =
-              decodedText;
 
-          return CustomTextFormFieldNumu(
-            controller: mentalStrengthEditProvider.descriptionEditTextController,
-            hintText: "Description",
-            hintStyle: CustomTextStyles.bodySmallGray700,
-            textInputAction: TextInputAction.done,
-            maxLines: 4,
-            focusNode: _descriptionFocusNode,
-            onTap: () => setState(() {}),
-            // Rebuild when tapped
-            onEditingComplete: () {
-              _descriptionFocusNode.unfocus(); // Ensure focus is removed when done
-              setState(() {});
-            },
-          );
-        });
+  Widget _buildDescriptionEditText(BuildContext context, MentalStrengthEditProvider mentalStrengthEditProvider) {
+    return Consumer<MentalStrengthEditProvider>(
+      builder: (context, mentalStrengthEditProvider, _) {
+        // Decode the text before setting it to the controller
+        String decodedText = HtmlUnescape().convert(mentalStrengthEditProvider.descriptionEditTextController.text);
+        mentalStrengthEditProvider.descriptionEditTextController.text = decodedText;
+
+        return CustomTextFormFieldNumu(
+          controller: mentalStrengthEditProvider.descriptionEditTextController,
+          hintText: "Description",
+          hintStyle: CustomTextStyles.bodySmallGray700,
+          textInputAction: TextInputAction.done,
+          maxLines: 4,
+          focusNode: _descriptionFocusNode,
+          onTap: () => setState(() {}),
+          // Rebuild when tapped
+          onEditingComplete: () {
+            _descriptionFocusNode.unfocus(); // Ensure focus is removed when done
+            setState(() {});
+          },
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9\s]')),
+          ],
+          onChanged: (text) {
+            // Ensure space is allowed only if at least one letter is typed
+            if (text.isNotEmpty && !text.trim().isEmpty && text.trim().length == 1 && text.contains(' ')) {
+              // Remove space if there's no letter typed yet
+              mentalStrengthEditProvider.descriptionEditTextController.text = text.trim();
+              mentalStrengthEditProvider.descriptionEditTextController.selection = TextSelection.collapsed(offset: text.length);
+            } else if (text.trim().isEmpty) {
+              // Prevent space if text is empty or contains only spaces
+              mentalStrengthEditProvider.descriptionEditTextController.text = text.trim();
+              mentalStrengthEditProvider.descriptionEditTextController.selection = TextSelection.collapsed(offset: text.length);
+            }
+          },
+        );
+      },
+    );
   }
+
 
   Widget _buildAddMediaColumn(BuildContext context, Size size) {
     return Consumer<MentalStrengthEditProvider>(

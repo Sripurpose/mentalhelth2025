@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -29,12 +31,14 @@ class _MentalGoogleMapState extends State<MentalGoogleMap> {
   double? savedLatitude = 0.0;
   double? savedLongitude = 0.0;
   String? savedLocationAddress = '';
+  String cacheSelectedAddress = '';
   var logger = Logger();
 
   @override
   void initState() {
     super.initState();
     homeProvider = Provider.of<HomeProvider>(context, listen: false);
+
 
     if (widget.edit) {
       savedLatitude = double.parse(homeProvider.journalDetails?.journals?.location?.locationLatitude ?? "0.0");

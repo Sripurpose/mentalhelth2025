@@ -515,7 +515,7 @@ class _GoalAndDreamFullViewScreenState
                                             borderRadius: BorderRadius.vertical(bottom: Radius.circular(5)),
                                           ),
                                           child: SizedBox(
-                                            height: widget.goalsanddream.action!.length * size.height * 0.04,
+                                            height: widget.goalsanddream.action!.length * size.height * 0.065,
                                             child: ListView.builder(
                                             //  physics: const NeverScrollableScrollPhysics(),
                                               itemCount: widget.goalsanddream.action!.length,

@@ -31,6 +31,7 @@ import 'package:mentalhelth/utils/core/url_constant.dart';
 import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'screens/actions_screen/provider/my_action_provider.dart';
 import 'screens/addactions_screen/provider/add_actions_provider.dart';
 import 'screens/addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
@@ -151,6 +152,7 @@ void main() async {
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
         String payloadData = jsonEncode(message.data);
         print("Got a message in foreground");
+        print("payloadData$payloadData");
 
         String? imageUrl = message.notification?.android?.imageUrl ??
             message.notification?.apple?.imageUrl ??
@@ -173,6 +175,7 @@ void main() async {
       FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
         print("Notification tapped (background/resumed): ${message.data}");
         final data = message.data;
+        print("dataasdfgb$data");
 
         if (data['notification_type'] == 'actionreminder') {
           final context = navigatorKey.currentContext;
@@ -192,20 +195,34 @@ void main() async {
             print('Navigator context is null');
           }
         }
+        else if (data['notification_type'] == 'subscription') {
+          final urlString = data['url'];
+          if (urlString != null && urlString.isNotEmpty) {
+            final context = navigatorKey.currentContext;
+            if (context != null) {
+              _launchInAppWithBrowserOptions(Uri.parse(urlString));
+            } else {
+              print('Navigator context is null for subscription');
+            }
+          } else {
+            print('URL is missing in subscription notification');
+          }
+        }
       });
+
 
       // Terminated state
       // Terminated state
-      final RemoteMessage? initialMessage =
-      await FirebaseMessaging.instance.getInitialMessage();
+      final RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+
       if (initialMessage != null) {
         print("Notification tapped (terminated): ${initialMessage.data}");
         final data = initialMessage.data;
 
-        if (data['notification_type'] == 'actionreminder') {
-          // Add this to ensure context is available after app is launched
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            final context = navigatorKey.currentContext;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          final context = navigatorKey.currentContext;
+
+          if (data['notification_type'] == 'actionreminder') {
             if (context != null) {
               final reminderData = Map<String, dynamic>.from(data);
 
@@ -218,11 +235,23 @@ void main() async {
                 ),
               );
             } else {
-              print('Navigator context is null');
+              print('Navigator context is null for actionreminder');
             }
-          });
-        }
+          } else if (data['notification_type'] == 'subscription') {
+            final urlString = data['url'];
+            if (urlString != null && urlString.isNotEmpty) {
+              if (context != null) {
+                _launchInAppWithBrowserOptions(Uri.parse(urlString));
+              } else {
+                print('Navigator context is null for subscription');
+              }
+            } else {
+              print('URL is missing in subscription notification');
+            }
+          }
+        });
       }
+
     }
 
 
@@ -293,6 +322,24 @@ void main() async {
   }
 }
 
+Future<void> _launchInAppWithBrowserOptions(Uri url) async {
+  // Check if the URL is a deep link
+  if (url.scheme == "mental") {
+    // Handle the deep link (navigate to a specific screen in your app)
+    // For example, navigate to a MentalScreen page
+    //Navigator.pushNamed(context, '/mentalScreen', arguments: url);
+  } else {
+    // If it's a regular URL, open it in an in-app browser
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.inAppBrowserView,
+      browserConfiguration: const BrowserConfiguration(showTitle: true),
+    )) {
+      throw Exception('Could not launch $url');
+    }
+  }
+}
+
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -309,6 +356,25 @@ class _MyAppState extends State<MyApp> {
   String? baseUrlQA;
   bool isBaseUrlReady = false;
 
+
+  Future<void> _launchInAppWithBrowserOptions(Uri url) async {
+    // Check if the URL is a deep link
+    if (url.scheme == "mental") {
+      // Handle the deep link (navigate to a specific screen in your app)
+      // For example, navigate to a MentalScreen page
+      Navigator.pushNamed(context, '/mentalScreen', arguments: url);
+    } else {
+      // If it's a regular URL, open it in an in-app browser
+      if (!await launchUrl(
+        url,
+        mode: LaunchMode.inAppBrowserView,
+        browserConfiguration: const BrowserConfiguration(showTitle: true),
+      )) {
+        throw Exception('Could not launch $url');
+      }
+    }
+  }
+
   void setupNotificationTapHandler() {
     const AndroidInitializationSettings androidInitSettings =
     AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -320,6 +386,7 @@ class _MyAppState extends State<MyApp> {
       initSettings,
       onDidReceiveNotificationResponse: (NotificationResponse response) {
         final payload = response.payload;
+        print("payload$payload");
         if (payload != null) {
           final data = jsonDecode(payload);
 
@@ -338,11 +405,26 @@ class _MyAppState extends State<MyApp> {
                 ),
               );
             }
+          } else {
+            if (payload != null) {
+              try {
+                final Map<String, dynamic> data = jsonDecode(payload);
+                final String? url = data['url'];
+                if (url != null && url.isNotEmpty) {
+                  _launchInAppWithBrowserOptions(Uri.parse(url));
+                } else {
+                  print("URL is missing in payload.");
+                }
+              } catch (e) {
+                print("Error decoding payload: $e");
+              }
+            }
           }
         }
       },
     );
   }
+
   @override
   void initState() {
     super.initState();

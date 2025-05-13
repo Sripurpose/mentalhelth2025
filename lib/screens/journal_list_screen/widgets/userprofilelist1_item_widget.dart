@@ -98,6 +98,7 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                       MentalStrengthEditProvider, EditProfileProvider>(
                   builder: (contexts, journalListProvider, homeProvider,
                       mentalStrengthEditProvider, editProfileProvider, _) {
+                    bool isDeleting = false; // Define this in your StatefulWidget
                 return PopupMenuButton<String>(
                   color: Colors.white,
                   iconColor: ColorsContent.newThemeColor, // 👈 Change dot color here
@@ -257,13 +258,6 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                               ));
                             }
                           }
-                          // Navigator.of(context).push(
-                          //   MaterialPageRoute(
-                          //     builder: (context) =>
-                          //         const EditJournalMentalStrength(),
-                          //   ),
-                          // );
-
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) =>
@@ -290,17 +284,13 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                           ),
                         ),
                       ),
-                      // PopupMenuItem<String>(
-                      //   value: 'Share',
-                      //   child: Text(
-                      //     'Share',
-                      //     style: CustomTextStyles.bodyMedium14,
-                      //   ),
-                      // ),
                       const PopupMenuDivider(), // 👈 This adds the divider
                       PopupMenuItem<String>(
+                        onTap: () async {
+                          if (isDeleting) return; // Prevent double tap
+                         isDeleting = true; // Disable on first tap
 
-                        onTap: () {
+                          await Future.delayed(Duration.zero); // Ensure dialog runs after tap
                           customPopup(
                             context: context,
                             onPressedDelete: () async {
@@ -309,55 +299,56 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                                 journalId: journalsModelList.journalId.toString(),
                               )
                                   .then((value) async {
-                                Navigator.of(context).pop();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content:
-                                      Text("Journals deleted successfully")),
-                                );
-                                await homeProvider.fetchJournals(pageNo:homeProvider.currentPage.toString(),context: context);
-                                if(homeProvider.journalStatus == 404){
-                                  await homeProvider.fetchJournals(pageNo:1.toString(),context: context);
+                                if (Navigator.canPop(context)) {
+                                  Navigator.of(context).pop(); // Only pop if still mounted
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(content: Text("Journals deleted successfully")),
+                                  );
+                                }
+                                await homeProvider.fetchJournals(
+                                    pageNo: homeProvider.currentPage.toString(), context: context);
+
+                                if (homeProvider.journalStatus == 404) {
+                                  await homeProvider.fetchJournals(pageNo: "1", context: context);
                                 }
 
                                 List<int> indicesToRemove = [];
-                                for (int i = 0;
-                                    i < homeProvider.journalsModelList.length;
-                                    i++) {
+                                for (int i = 0; i < homeProvider.journalsModelList.length; i++) {
                                   var journals = homeProvider.journalsModelList[i];
-                                  if (journals.journalId ==
-                                      journalsModelList.journalId.toString()) {
+                                  if (journals.journalId == journalsModelList.journalId.toString()) {
                                     indicesToRemove.add(i);
                                   }
                                 }
+
                                 indicesToRemove.sort((a, b) => b.compareTo(a));
                                 for (int index in indicesToRemove) {
                                   homeProvider.journalsModelList.removeAt(index);
                                 }
 
+                                isDeleting = false; // Re-enable after complete
                               });
                             },
                             title: 'Confirm Delete',
-                            content:
-                                'Are you sure You want to Delete this Journal?',
+                            content: 'Are you sure You want to Delete this Journal?',
                           );
                         },
-                        height: 30, // 👈 Reduce height here
+                        height: 30,
                         value: 'Delete',
-                        child:
-                        Center(
+                        child: Center(
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Icon(Icons.delete_outline, color: ColorsContent.newThemeColor),
                               const SizedBox(width: 8),
-                              const Text('Delete',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: 'Roboto',
-                                    color:  Colors.black,
-                                  )),
+                              const Text(
+                                'Delete',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: 'Roboto',
+                                  color: Colors.black,
+                                ),
+                              ),
                             ],
                           ),
                         ),

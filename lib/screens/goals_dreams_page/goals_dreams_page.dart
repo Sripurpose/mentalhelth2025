@@ -140,7 +140,7 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
                 );
               },
             ),
-            SizedBox(height: 20,),
+            const SizedBox(height: 20,),
             Expanded(
               child: Consumer<GoalsDreamsProvider>(
                 builder: (context, goalsDreamsProvider, _) {

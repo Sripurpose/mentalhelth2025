@@ -306,6 +306,7 @@ class _JournalListPageState extends State<JournalListPage> {
               children: [
                 Column(
                   children: [
+                    const SizedBox(height: 20),
                     buildAppBar(
                       context,
                       size,
@@ -314,7 +315,7 @@ class _JournalListPageState extends State<JournalListPage> {
                         dashBoardProvider.changePage(index: 0);
                       },
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 30),
                       child: Row(
@@ -378,7 +379,7 @@ class _JournalListPageState extends State<JournalListPage> {
                         ],
                       ),
                     ),
-                    SizedBox(height: size.height * 0.021),
+                    SizedBox(height: size.height * 0.011),
                     Expanded(
                       child: journalListProvider.listViewBool
                           ? const JournalListViewWidget()

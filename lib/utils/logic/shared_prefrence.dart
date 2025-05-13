@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mentalhelth/screens/addactions_screen/provider/add_actions_provider.dart';
 import 'package:mentalhelth/screens/addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
 import 'package:mentalhelth/screens/auth/sign_in/landing_register_screen.dart';
@@ -69,6 +70,54 @@ Future<String?> getUserTokenSharePref() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   return prefs.getString("token");
 }
+
+//ad user location
+void saveLocationSharePref({required String location}) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString("location", location);
+}
+
+//get user location
+Future<String?> getSaveLocationSharePref() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.getString("location");
+}
+
+//ad user location
+void saveLocationCoSharePref({required LatLng location}) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  // Convert LatLng to string (latitude,longitude)
+  String locationString = '${location.latitude},${location.longitude}';
+
+  // Save the string to SharedPreferences
+  await prefs.setString("locationCo", locationString);
+}
+
+
+//get user location
+Future<LatLng?> getSaveLocationCoSharePref() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  // Get the saved location string
+  String? locationString = prefs.getString("locationCo");
+
+  if (locationString != null) {
+    // Split the string into latitude and longitude
+    List<String> coordinates = locationString.split(',');
+
+    // Parse the latitude and longitude
+    double latitude = double.parse(coordinates[0]);
+    double longitude = double.parse(coordinates[1]);
+
+    // Return the LatLng object
+    return LatLng(latitude, longitude);
+  } else {
+    // Return null if no location is saved
+    return null;
+  }
+}
+
 
 //ad user status
 void addUserStatusSharePref({required bool token}) async {

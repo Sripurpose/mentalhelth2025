@@ -44,7 +44,7 @@ class _LandingRegisterScreenScreenState extends State<LandingRegisterScreenScree
   void initState() {
     super.initState();
 
-    Future.delayed(const Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 3), () {
       setState(() {
         _isLoading = false;
       });
