@@ -105,27 +105,45 @@ void main() async {
 
       OneSignal.Notifications.addClickListener((event) {
         print('Notification Clicked: ${event.notification.jsonRepresentation()}');
+
         final data = event.notification.additionalData;
 
-        if (data != null && data['notification_type'] == 'actionreminder') {
-          final context = navigatorKey.currentContext;
+        if (data == null) {
+          print('No additional data found in notification');
+          return;
+        }
 
-          if (context != null) {
-            final reminderData = Map<String, dynamic>.from(data);
+        final notificationType = data['notification_type'];
+        final context = navigatorKey.currentContext;
 
-            Navigator.push(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (_, __, ___) =>
-                    ReminderPushViewScreen(reminderData: reminderData),
-                transitionDuration: const Duration(seconds: 0),
-              ),
-            );
+        if (context == null) {
+          print('Navigator context is null');
+          return;
+        }
+
+        if (notificationType == 'actionreminder') {
+          final reminderData = Map<String, dynamic>.from(data);
+
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (_, __, ___) =>
+                  ReminderPushViewScreen(reminderData: reminderData),
+              transitionDuration: const Duration(seconds: 0),
+            ),
+          );
+        } else if (notificationType == 'subscription') {
+          final urlString = data['url'];
+          if (urlString != null && urlString.isNotEmpty) {
+            _launchInAppWithBrowserOptions(Uri.parse(urlString));
           } else {
-            print('Navigator context is null');
+            print('URL is missing in subscription notification');
           }
+        } else {
+          print('Unhandled notification type: $notificationType');
         }
       });
+
 
 
 
