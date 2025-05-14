@@ -933,7 +933,7 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
                                                             .selectedLatitude,
                                                     locationLongitude:
                                                         mentalStrengthEditProvider
-                                                            .locationLongitude,
+                                                            .selectedLongitude,
                                                     mediaName:
                                                         mentalStrengthEditProvider
                                                             .addMediaUploadResponseList,

@@ -56,7 +56,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
     selectedLocationName = selectedLocationNames;
     selectedLocationAddress = selectedLocationAddresss;
     selectedLatitude = selectedLatitudes;
-    locationLongitude = locationLongitudes;
+    selectedLongitude = locationLongitudes;
     emotionalValueStar = emotionalValueStars;
     emotionValue = emotion;
     driveValueStar = driveValueStars;
@@ -69,18 +69,38 @@ class MentalStrengthEditProvider extends ChangeNotifier {
   String selectedLocationName = '';
   String selectedLocationAddress = '';
   String selectedLatitude = '';
-  String locationLongitude = '';
+  String selectedLongitude = '';
   bool isVideoUploading = false;
   List<String> addMediaUploadResponseList = [];
 
-  void addLocationSection(
-      {required String selectedAddress,
-      required Placemark placemark,
-      required LatLng location}) {
-    selectedLocationName = selectedLocationAddress = "${placemark.name}, ${placemark.locality}, ${placemark.administrativeArea}, ${placemark.country}";
-    selectedAddress.toString();
+  LatLng? _selectedLocation;
+  String _selectedAddress = '';
+
+  LatLng? get selectedLocation => _selectedLocation;
+  String get selectedAddress => _selectedAddress;
+
+  void addLocationSection({
+    required String selectedAddress,
+    required Placemark placemark,
+    required LatLng location,
+  }) {
+    selectedLocationName =
+        selectedLocationAddress =
+    "${placemark.name}, ${placemark.locality}, ${placemark.administrativeArea}, ${placemark.country}";
     selectedLatitude = location.latitude.toString();
-    locationLongitude = location.longitude.toString();
+    selectedLongitude = location.longitude.toString();
+    _selectedLocation = location;
+    _selectedAddress = selectedAddress;
+    notifyListeners();
+  }
+
+  void clearLocationSelection() {
+    selectedLocationName = '';
+    selectedLocationAddress = '';
+    selectedLatitude = '';
+    selectedLongitude = '';
+    _selectedLocation = null;
+    _selectedAddress = '';
     notifyListeners();
   }
 
@@ -1052,6 +1072,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
         'location_longitude': locationLongitude,
         'journal_title': journalTitle,
       };
+      logger.i("body$body");
       for (int i = 0; i < mediaName.length; i++) {
         body['media_name[$i]'] = mediaName[i];
       }
@@ -1339,7 +1360,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
     // goalsValue = Goal();
     selectedLocationName = '';
     selectedLatitude = '';
-    locationLongitude = '';
+    selectedLongitude = '';
     addMediaUploadResponseList = [];
     selectedLocationAddress = '';
     recordedFilePath.clear();
@@ -1479,7 +1500,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
           goalId: goalsValue.id.toString(),
           locationName: selectedLocationName,
           locationLatitude: selectedLatitude,
-          locationLongitude: locationLongitude,
+          locationLongitude: selectedLongitude,
           mediaName: addMediaUploadResponseList,
           locationAddress: selectedLocationAddress,
           actionIdList: actionList.map((e) => e.id ?? "").toList(),

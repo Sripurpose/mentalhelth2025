@@ -532,7 +532,7 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
                 mediaName: adDreamsGoalsProvider.addMediaUploadResponseList,
                 locationName: adDreamsGoalsProvider.selectedLocationName,
                 locationLatitude: adDreamsGoalsProvider.selectedLatitude,
-                locationLongitude: adDreamsGoalsProvider.locationLongitude,
+                locationLongitude: adDreamsGoalsProvider.selectedLongitude,
                 locationAddress: adDreamsGoalsProvider.selectedLocationAddress,
                 categoryId: editProfileProvider.categorys!.id.toString(),
                 gemEndDate: adDreamsGoalsProvider.formattedDate,

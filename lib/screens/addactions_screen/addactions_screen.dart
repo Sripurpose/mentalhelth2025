@@ -108,6 +108,7 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
     addActionsProvider.mediaSelected = 0;
     addActionsProvider.setRemainder = false;
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      addActionsProvider.clearLocationSelection();
       editProfileProvider.fetchCategory();
       _isTokenExpired();
     });
@@ -1145,7 +1146,7 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                     mediaName: addActionsProvider.addMediaUploadResponseList,
                     locationName: addActionsProvider.selectedLocationName,
                     locationLatitude: addActionsProvider.selectedLatitude,
-                    locationLongitude: addActionsProvider.locationLongitude,
+                    locationLongitude: addActionsProvider.selectedLongitude,
                     locationAddress: addActionsProvider.selectedLocationAddress,
                     goalId: widget.goalId,
                     isReminder: "1",
@@ -1175,7 +1176,7 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                   mediaName: addActionsProvider.addMediaUploadResponseList,
                   locationName: addActionsProvider.selectedLocationName,
                   locationLatitude: addActionsProvider.selectedLatitude,
-                  locationLongitude: addActionsProvider.locationLongitude,
+                  locationLongitude: addActionsProvider.selectedLongitude,
                   locationAddress: addActionsProvider.selectedLocationAddress,
                   goalId: widget.goalId,
                   isReminder: "0",

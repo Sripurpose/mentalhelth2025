@@ -771,7 +771,7 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                   mediaName: addActionsProvider.addMediaUploadResponseList,
                   locationName: addActionsProvider.selectedLocationName,
                   locationLatitude: addActionsProvider.selectedLatitude,
-                  locationLongitude: addActionsProvider.locationLongitude,
+                  locationLongitude: addActionsProvider.selectedLongitude,
                   locationAddress: addActionsProvider.selectedLocationAddress,
                   goalId: goalId,
                     isReminder: "1"
@@ -801,7 +801,7 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                 mediaName: addActionsProvider.addMediaUploadResponseList,
                 locationName: addActionsProvider.selectedLocationName,
                 locationLatitude: addActionsProvider.selectedLatitude,
-                locationLongitude: addActionsProvider.locationLongitude,
+                locationLongitude: addActionsProvider.selectedLongitude,
                 locationAddress: addActionsProvider.selectedLocationAddress,
                 goalId: goalId,
                   isReminder: "0"

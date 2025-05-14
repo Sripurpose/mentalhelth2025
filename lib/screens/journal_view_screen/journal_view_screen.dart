@@ -948,7 +948,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                 .locationLatitude!
                                 .toString();
 
-                        mentalStrengthEditProvider.locationLongitude =
+                        mentalStrengthEditProvider.selectedLongitude =
                             homeProvider.journalDetails!.journals!.location!
                                 .locationLongitude!
                                 .toString();

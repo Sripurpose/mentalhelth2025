@@ -23,6 +23,7 @@ class _AddActionGoogleMapState extends State<AddActionGoogleMap> {
   PermissionStatus permissionStatus = PermissionStatus.denied;
   Position? _currentLocation;
   late MentalStrengthEditProvider mentalStrengthEditProvider;
+  late AddActionsProvider addActionsProvider;
   double? savedLatitude = 0.0;
   double? savedLongitude = 0.0;
   String? savedLocationAddress = '';
@@ -36,12 +37,26 @@ class _AddActionGoogleMapState extends State<AddActionGoogleMap> {
   void initState() {
     super.initState();
     mentalStrengthEditProvider = Provider.of<MentalStrengthEditProvider>(context, listen: false);
+    addActionsProvider = Provider.of<AddActionsProvider>(context, listen: false);
     _initializeLocation();
   }
 
   void _initializeLocation() async {
-    savedLatitude = double.tryParse(mentalStrengthEditProvider.actionsDetailsModel?.actions?.location?.locationLatitude ?? "0.0");
-    savedLongitude = double.tryParse(mentalStrengthEditProvider.actionsDetailsModel?.actions?.location?.locationLongitude ?? "0.0");
+    // 1. Check if provider already has a selected location (persisted from previous interaction)
+    if (addActionsProvider.selectedLocation != null) {
+      _selectedLocation = addActionsProvider.selectedLocation!;
+      _selectedAddress = addActionsProvider.selectedAddress;
+      _updateMarkerPosition();
+      return;
+    }
+
+    // 2. Fallback to saved model data
+    savedLatitude = double.tryParse(
+        mentalStrengthEditProvider.actionsDetailsModel?.actions?.location?.locationLatitude ?? "0.0"
+    );
+    savedLongitude = double.tryParse(
+        mentalStrengthEditProvider.actionsDetailsModel?.actions?.location?.locationLongitude ?? "0.0"
+    );
     savedLocationAddress = mentalStrengthEditProvider.actionsDetailsModel?.actions?.location?.locationAddress ?? "";
 
     logger.w("Saved Latitude: $savedLatitude");
@@ -49,11 +64,25 @@ class _AddActionGoogleMapState extends State<AddActionGoogleMap> {
 
     if (savedLatitude != 0.0 && savedLongitude != 0.0) {
       _selectedLocation = LatLng(savedLatitude!, savedLongitude!);
+      _selectedAddress = savedLocationAddress ?? '';
       _updateMarkerPosition();
+
+      // Also update provider for persistence in this session
+      addActionsProvider.addLocationSection(
+        selectedAddress: _selectedAddress,
+        placemark: Placemark(
+          name: '', // Optionally parse from address string if needed
+          locality: '',
+          administrativeArea: '',
+          country: '',
+        ),
+        location: _selectedLocation,
+      );
     } else {
       await _fetchCurrentLocation();
     }
   }
+
 
   Future<void> _fetchCurrentLocation() async {
     await _checkPermissionStatus();
@@ -157,6 +186,11 @@ class _AddActionGoogleMapState extends State<AddActionGoogleMap> {
               myLocationButtonEnabled: true,
               onMapCreated: (GoogleMapController controller) {
                 mapController = controller;
+                if (_selectedLocation.latitude != 0 && _selectedLocation.longitude != 0) {
+                  mapController.animateCamera(
+                    CameraUpdate.newLatLngZoom(_selectedLocation, 15.0),
+                  );
+                }
               },
               onTap: _onMapTapped,
               initialCameraPosition: CameraPosition(
@@ -191,31 +225,40 @@ class _AddActionGoogleMapState extends State<AddActionGoogleMap> {
   }
 
   void _onMapTapped(LatLng location) async {
-    AddActionsProvider addActionsProvider =
-    Provider.of<AddActionsProvider>(context, listen: false);
+    final addActionsProvider = Provider.of<AddActionsProvider>(context, listen: false);
+
+    // Update marker position immediately for responsiveness
     setState(() {
       _selectedLocation = location;
     });
 
     try {
-      List<Placemark> placemarks =
-      await placemarkFromCoordinates(location.latitude, location.longitude);
+      // Reverse geocode to get placemark/address
+      List<Placemark> placemarks = await placemarkFromCoordinates(location.latitude, location.longitude);
       if (placemarks.isNotEmpty) {
-        Placemark placemark = placemarks[0];
+        final placemark = placemarks[0];
+        final address = '${placemark.name}, ${placemark.locality}, ${placemark.administrativeArea}, ${placemark.country}';
+
+        // Update local state for UI
         setState(() {
-          _selectedAddress =
-          '${placemark.name}, ${placemark.locality}, ${placemark.administrativeArea}, ${placemark.country}';
-          addActionsProvider.addLocationSection(
-              selectedAddress: _selectedAddress,
-              placemark: placemark,
-              location: location);
+          _selectedAddress = address;
         });
+
+        // Update provider for app-wide state
+        addActionsProvider.addLocationSection(
+          selectedAddress: address,
+          placemark: placemark,
+          location: location,
+        );
       }
       _updateMarkerPosition();
-    } catch (e) {}
+    } catch (e) {
+      // Optionally log or handle the error
+    }
   }
 
   void _onMarkerDragEnd(LatLng location) {
     _onMapTapped(location);
   }
+
 }

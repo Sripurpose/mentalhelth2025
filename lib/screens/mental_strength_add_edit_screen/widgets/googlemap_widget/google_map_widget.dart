@@ -28,6 +28,7 @@ class _MentalGoogleMapState extends State<MentalGoogleMap> {
   PermissionStatus permissionStatus = PermissionStatus.denied;
   Position? _currentLocation;
   late HomeProvider homeProvider;
+  late MentalStrengthEditProvider mentalStrengthEditProvider;
   double? savedLatitude = 0.0;
   double? savedLongitude = 0.0;
   String? savedLocationAddress = '';
@@ -38,18 +39,33 @@ class _MentalGoogleMapState extends State<MentalGoogleMap> {
   void initState() {
     super.initState();
     homeProvider = Provider.of<HomeProvider>(context, listen: false);
+    mentalStrengthEditProvider = Provider.of<MentalStrengthEditProvider>(context, listen: false);
 
-
-    if (widget.edit) {
+    // Use provider's selected location if available
+    if (mentalStrengthEditProvider.selectedLocation != null) {
+      _selectedLocation = mentalStrengthEditProvider.selectedLocation!;
+      _selectedAddress = mentalStrengthEditProvider.selectedAddress;
+      _updateMarkerPosition();
+    } else if (widget.edit) {
       savedLatitude = double.parse(homeProvider.journalDetails?.journals?.location?.locationLatitude ?? "0.0");
       savedLongitude = double.parse(homeProvider.journalDetails?.journals?.location?.locationLongitude ?? "0.0");
       savedLocationAddress = homeProvider.journalDetails?.journals?.location?.locationAddress ?? "";
-      logger.w("savedLatitude: $savedLatitude");
-      logger.w("savedLongitude: $savedLongitude");
 
       if (savedLatitude != 0.0 && savedLongitude != 0.0) {
         _selectedLocation = LatLng(savedLatitude!, savedLongitude!);
+        _selectedAddress = savedLocationAddress ?? '';
         _updateMarkerPosition();
+        // Also update provider for persistence
+        mentalStrengthEditProvider.addLocationSection(
+          selectedAddress: _selectedAddress,
+          placemark: Placemark(
+            name: '', // You may want to parse this from savedLocationAddress if needed
+            locality: '',
+            administrativeArea: '',
+            country: '',
+          ),
+          location: _selectedLocation,
+        );
       } else {
         _fetchCurrentLocation();
       }
@@ -57,6 +73,7 @@ class _MentalGoogleMapState extends State<MentalGoogleMap> {
       _fetchCurrentLocation();
     }
   }
+
 
   Future<void> _fetchCurrentLocation() async {
     await _checkPermissionStatus();
@@ -156,7 +173,13 @@ class _MentalGoogleMapState extends State<MentalGoogleMap> {
               myLocationButtonEnabled: true,
               onMapCreated: (GoogleMapController controller) {
                 mapController = controller;
+                if (_selectedLocation.latitude != 0 && _selectedLocation.longitude != 0) {
+                  mapController.animateCamera(
+                    CameraUpdate.newLatLngZoom(_selectedLocation, 15.0),
+                  );
+                }
               },
+
               onTap: _onMapTapped,
               initialCameraPosition: CameraPosition(
                 target: (widget.edit && savedLatitude != 0.0 && savedLongitude != 0.0)
@@ -197,25 +220,25 @@ class _MentalGoogleMapState extends State<MentalGoogleMap> {
   }
 
   void _onMapTapped(LatLng location) async {
-    MentalStrengthEditProvider mentalStrengthEditProvider =
-    Provider.of<MentalStrengthEditProvider>(context, listen: false);
     setState(() {
       _selectedLocation = location;
     });
 
     try {
-      List<Placemark> placemarks =
-      await placemarkFromCoordinates(location.latitude, location.longitude);
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+          location.latitude, location.longitude);
       if (placemarks.isNotEmpty) {
         Placemark placemark = placemarks[0];
+        String address = '${placemark.name}, ${placemark.locality}, '
+            '${placemark.administrativeArea}, ${placemark.country}';
         setState(() {
-          _selectedAddress =
-          '${placemark.name}, ${placemark.locality}, ${placemark.administrativeArea}, ${placemark.country}';
-          mentalStrengthEditProvider.addLocationSection(
-              selectedAddress: _selectedAddress,
-              placemark: placemark,
-              location: location);
+          _selectedAddress = address;
         });
+        mentalStrengthEditProvider.addLocationSection(
+          selectedAddress: address,
+          placemark: placemark,
+          location: location,
+        );
       }
       _updateMarkerPosition();
     } catch (e) {}
@@ -224,4 +247,5 @@ class _MentalGoogleMapState extends State<MentalGoogleMap> {
   void _onMarkerDragEnd(LatLng location) {
     _onMapTapped(location);
   }
+
 }

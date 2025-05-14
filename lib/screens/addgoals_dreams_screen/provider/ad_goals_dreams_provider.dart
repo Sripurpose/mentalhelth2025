@@ -23,15 +23,29 @@ import '../../token_expiry/token_expiry.dart';
 import '../model/id_model.dart';
 
 class AdDreamsGoalsProvider extends ChangeNotifier {
-  void addLocationSection(
-      {required String selectedAddress,
-      required Placemark placemark,
-      required LatLng location}) {
+
+  void addLocationSection({
+    required String selectedAddress,
+    required Placemark placemark,
+    required LatLng location,
+  }) {
     selectedLocationName =
-        selectedLocationAddress = "${placemark.name}, ${placemark.locality}, ${placemark.administrativeArea}, ${placemark.country}";
-    selectedAddress.toString();
+        selectedLocationAddress =
+    "${placemark.name}, ${placemark.locality}, ${placemark.administrativeArea}, ${placemark.country}";
     selectedLatitude = location.latitude.toString();
-    locationLongitude = location.longitude.toString();
+    selectedLongitude = location.longitude.toString();
+    _selectedLocation = location;
+    _selectedAddress = selectedAddress;
+    notifyListeners();
+  }
+
+  void clearLocationSelection() {
+    selectedLocationName = '';
+    selectedLocationAddress = '';
+    selectedLatitude = '';
+    selectedLongitude = '';
+    _selectedLocation = null;
+    _selectedAddress = '';
     notifyListeners();
   }
 
@@ -44,9 +58,15 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
   String selectedLocationName = '';
   String selectedLocationAddress = '';
   String selectedLatitude = '';
-  String locationLongitude = '';
+  String selectedLongitude = '';
   bool isVideoUploading = false;
   List<String> addMediaUploadResponseList = [];
+
+  LatLng? _selectedLocation;
+  String _selectedAddress = '';
+
+  LatLng? get selectedLocation => _selectedLocation;
+  String get selectedAddress => _selectedAddress;
 
   void addMediaUploadResponseListFunction(List<String> value) {
     addMediaUploadResponseList.addAll(value);
@@ -736,7 +756,7 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
     addMediaUploadResponseList = [];
     selectedLocationName = '';
     selectedLatitude = '';
-    locationLongitude = '';
+    selectedLongitude = '';
     selectedLocationAddress = '';
     formattedDate = '';
     selectedDate = '';

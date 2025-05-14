@@ -162,74 +162,84 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
                         padding: EdgeInsets.all(size.width * 0.02),
                         child: Consumer<MentalStrengthEditProvider>(
                           builder: (context, mentalStrengthEditProvider, _) {
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    if (mentalStrengthEditProvider.getListGoalActionsModel != null &&
-                                        mentalStrengthEditProvider.getListGoalActionsModel!.actions != null &&
-                                        mentalStrengthEditProvider
-                                            .getListGoalActionsModel!.actions!.isNotEmpty)
-                                      const Text(
-                                        "Choose Actions",
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    SizedBox(height: size.height * 0.003),
-                                    Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        const Text(
-                                          "Goal: ",
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: size.width * 0.4,
-                                          child: Text(
-                                            "${widget.goal.title}",
-                                            overflow: TextOverflow.visible,
-                                            maxLines: null,
-                                            textAlign: TextAlign.start,
-                                            style: const TextStyle(fontSize: 16),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                            bool showActions = mentalStrengthEditProvider.getListGoalActionsModel != null &&
+                                mentalStrengthEditProvider.getListGoalActionsModel!.actions != null &&
+                                mentalStrengthEditProvider.getListGoalActionsModel!.actions!.isNotEmpty;
 
-                                  ],
-                                ),
-                                if (mentalStrengthEditProvider
-                                    .getListGoalActionsModel!.actions!.isNotEmpty)
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      mentalStrengthEditProvider.openChooseActionFunction();
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.black,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                    ),
-                                    child: const Text(
-                                      "Proceed",
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (showActions)
+                                  const Padding(
+                                    padding: EdgeInsets.symmetric(horizontal:20.0),
+                                    child: Text(
+                                      "Choose Actions",
                                       style: TextStyle(
-                                        color: Colors.white,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ),
+                                Padding(
+                                  padding: showActions ? const EdgeInsets.symmetric(horizontal: 0.0): const EdgeInsets.symmetric(horizontal: 20.0),
+                                  child: Row(
+                                    mainAxisAlignment: showActions ? MainAxisAlignment.spaceAround : MainAxisAlignment.start,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              const Text(
+                                                "Goal: ",
+                                                style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: showActions ? size.width * 0.45 : size.width * 0.70,
+                                                child: Text(
+                                                  "${widget.goal.title}",
+                                                  overflow: TextOverflow.visible,
+                                                  maxLines: null,
+                                                  textAlign: TextAlign.start,
+                                                  style: const TextStyle(fontSize: 18),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      if (showActions)
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            mentalStrengthEditProvider.openChooseActionFunction();
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.black,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                          ),
+                                          child: const Text(
+                                            "Proceed",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ),
                               ],
                             );
                           },
                         ),
                       ),
+
                       if (mentalStrengthEditProvider
                           .getListGoalActionsModel!.actions!.isNotEmpty)
                       Padding(

@@ -149,6 +149,7 @@ class _NumuMentalStrengthAddEditPageState
     logger.w(
         "mentalStrengthEditProvider.driveValueStar${mentalStrengthEditProvider.driveValueStar}");
     scheduleMicrotask(() {
+      mentalStrengthEditProvider.clearLocationSelection();
       mentalStrengthEditProvider.mediaSelected = -1;
       mentalStrengthEditProvider.descriptionEditTextController.text = "";
       mentalStrengthEditProvider.titleEditTextController.text = "";

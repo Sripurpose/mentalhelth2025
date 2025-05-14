@@ -219,7 +219,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
           widget.goalsanddream.location == null
               ? ""
               : widget.goalsanddream.location!.locationLatitude.toString();
-      adDreamsGoalsProvider.locationLongitude =
+      adDreamsGoalsProvider.selectedLongitude =
           widget.goalsanddream.location == null
               ? ""
               : widget.goalsanddream.location!.locationLongitude.toString();
@@ -863,7 +863,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                   mediaName: adDreamsGoalsProvider.addMediaUploadResponseList,
                   locationName: adDreamsGoalsProvider.selectedLocationName,
                   locationLatitude: adDreamsGoalsProvider.selectedLatitude,
-                  locationLongitude: adDreamsGoalsProvider.locationLongitude,
+                  locationLongitude: adDreamsGoalsProvider.selectedLongitude,
                   locationAddress:
                       adDreamsGoalsProvider.selectedLocationAddress,
                   categoryId: editProfileProvider.categorys!.id.toString(),
@@ -887,7 +887,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                   mediaName: adDreamsGoalsProvider.addMediaUploadResponseList,
                   locationName: adDreamsGoalsProvider.selectedLocationName,
                   locationLatitude: adDreamsGoalsProvider.selectedLatitude,
-                  locationLongitude: adDreamsGoalsProvider.locationLongitude,
+                  locationLongitude: adDreamsGoalsProvider.selectedLongitude,
                   locationAddress:
                       adDreamsGoalsProvider.selectedLocationAddress,
                   categoryId: editProfileProvider.categorys!.id.toString(),

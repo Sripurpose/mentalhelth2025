@@ -209,7 +209,7 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                                       .locationLatitude!
                                       .toString();
 
-                              mentalStrengthEditProvider.locationLongitude =
+                              mentalStrengthEditProvider.selectedLongitude =
                                   homeProvider.journalDetails!.journals!.location!
                                       .locationLongitude!
                                       .toString();

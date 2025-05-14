@@ -35,21 +35,42 @@ class _AddGoalsGoogleMapState extends State<AddGoalsGoogleMap> {
     super.initState();
     adDreamsGoalsProvider = Provider.of<AdDreamsGoalsProvider>(context, listen: false);
 
-    // Retrieve saved location if available
-    savedLatitude = double.parse(widget.goalsanddream?.location?.locationLatitude ?? "0.0");
-    savedLongitude = double.parse(widget.goalsanddream?.location?.locationLongitude ?? "0.0");
-    savedLocationAddress = widget.goalsanddream?.location?.locationAddress ?? "";
-
-    logger.w("Saved Latitude: $savedLatitude");
-    logger.w("Saved Longitude: $savedLongitude");
-
-    if (savedLatitude != 0.0 && savedLongitude != 0.0) {
-      _selectedLocation = LatLng(savedLatitude!, savedLongitude!);
+    // Check if provider already has a selected location (persisted from previous interaction)
+    if (adDreamsGoalsProvider.selectedLocation != null) {
+      _selectedLocation = adDreamsGoalsProvider.selectedLocation!;
+      _selectedAddress = adDreamsGoalsProvider.selectedAddress;
       _updateMarkerPosition();
     } else {
-      _fetchCurrentLocation();
+      // Retrieve saved location from the model if available
+      savedLatitude = double.parse(widget.goalsanddream?.location?.locationLatitude ?? "0.0");
+      savedLongitude = double.parse(widget.goalsanddream?.location?.locationLongitude ?? "0.0");
+      savedLocationAddress = widget.goalsanddream?.location?.locationAddress ?? "";
+
+      logger.w("Saved Latitude: $savedLatitude");
+      logger.w("Saved Longitude: $savedLongitude");
+
+      if (savedLatitude != 0.0 && savedLongitude != 0.0) {
+        _selectedLocation = LatLng(savedLatitude!, savedLongitude!);
+        _selectedAddress = savedLocationAddress ?? '';
+        _updateMarkerPosition();
+
+        // Also update provider for persistence
+        adDreamsGoalsProvider.addLocationSection(
+          selectedAddress: _selectedAddress,
+          placemark: Placemark(
+            name: '', // Optionally parse from address string if needed
+            locality: '',
+            administrativeArea: '',
+            country: '',
+          ),
+          location: _selectedLocation,
+        );
+      } else {
+        _fetchCurrentLocation();
+      }
     }
   }
+
 
   Future<void> _fetchCurrentLocation() async {
     await _checkPermissionStatus();
@@ -160,6 +181,11 @@ class _AddGoalsGoogleMapState extends State<AddGoalsGoogleMap> {
               myLocationEnabled: true,
               onMapCreated: (GoogleMapController controller) {
                 mapController = controller;
+                if (_selectedLocation.latitude != 0 && _selectedLocation.longitude != 0) {
+                  mapController.animateCamera(
+                    CameraUpdate.newLatLngZoom(_selectedLocation, 15.0),
+                  );
+                }
               },
               onTap: _onMapTapped,
               initialCameraPosition: CameraPosition(
@@ -195,26 +221,30 @@ class _AddGoalsGoogleMapState extends State<AddGoalsGoogleMap> {
   }
 
   void _onMapTapped(LatLng location) async {
-    AdDreamsGoalsProvider adDreamsGoalsProvider =
-    Provider.of<AdDreamsGoalsProvider>(context, listen: false);
+    // Get the provider instance only once
+    final adDreamsGoalsProvider = Provider.of<AdDreamsGoalsProvider>(context, listen: false);
+
+    // Optimistically update the local marker
     setState(() {
       _selectedLocation = location;
     });
 
     try {
-      List<Placemark> placemarks =
-      await placemarkFromCoordinates(location.latitude, location.longitude);
+      // Get the address from coordinates
+      List<Placemark> placemarks = await placemarkFromCoordinates(location.latitude, location.longitude);
       if (placemarks.isNotEmpty) {
-        Placemark placemark = placemarks[0];
+        final placemark = placemarks[0];
+        final address = '${placemark.name}, ${placemark.locality}, ${placemark.administrativeArea}, ${placemark.country}';
+
+        // Update local state and provider
         setState(() {
-          _selectedAddress =
-          '${placemark.name}, ${placemark.locality}, ${placemark.administrativeArea}, ${placemark.country}';
-          adDreamsGoalsProvider.addLocationSection(
-            selectedAddress: _selectedAddress,
-            placemark: placemark,
-            location: location,
-          );
+          _selectedAddress = address;
         });
+        adDreamsGoalsProvider.addLocationSection(
+          selectedAddress: address,
+          placemark: placemark,
+          location: location,
+        );
       }
       _updateMarkerPosition();
     } catch (e) {
@@ -225,4 +255,5 @@ class _AddGoalsGoogleMapState extends State<AddGoalsGoogleMap> {
   void _onMarkerDragEnd(LatLng location) {
     _onMapTapped(location);
   }
+
 }

@@ -89,6 +89,7 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
     adDreamsGoalsProvider.mediaSelected = 0;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      adDreamsGoalsProvider.clearLocationSelection();
       _isTokenExpired();
       editProfileProvider.fetchCategory();
       adDreamsGoalsProvider.goalModelIdName.clear();
@@ -635,7 +636,7 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
                   mediaName: adDreamsGoalsProvider.addMediaUploadResponseList,
                   locationName: adDreamsGoalsProvider.selectedLocationName,
                   locationLatitude: adDreamsGoalsProvider.selectedLatitude,
-                  locationLongitude: adDreamsGoalsProvider.locationLongitude,
+                  locationLongitude: adDreamsGoalsProvider.selectedLongitude,
                   locationAddress:
                       adDreamsGoalsProvider.selectedLocationAddress,
                   categoryId: editProfileProvider.categorys!.id.toString(),

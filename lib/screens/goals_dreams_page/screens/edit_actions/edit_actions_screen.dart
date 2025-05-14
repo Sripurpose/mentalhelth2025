@@ -320,7 +320,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
               ? ""
               : widget.actionsDetailsModel!.actions!.location!.locationLatitude
                   .toString();
-      addActionsProvider.locationLongitude =
+      addActionsProvider.selectedLongitude =
           widget.actionsDetailsModel!.actions!.location == null
               ? ""
               : widget.actionsDetailsModel!.actions!.location!.locationLongitude
@@ -1752,7 +1752,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
                     mediaName: addActionsProvider.addMediaUploadResponseList,
                     locationName: addActionsProvider.selectedLocationName,
                     locationLatitude: addActionsProvider.selectedLatitude,
-                    locationLongitude: addActionsProvider.locationLongitude,
+                    locationLongitude: addActionsProvider.selectedLongitude,
                     locationAddress: addActionsProvider.selectedLocationAddress,
                     actionId: widget.actionsDetailsModel!.actions!.actionId
                         .toString(),
@@ -1766,7 +1766,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
                     mediaName: addActionsProvider.addMediaUploadResponseList,
                     locationName: addActionsProvider.selectedLocationName,
                     locationLatitude: addActionsProvider.selectedLatitude,
-                    locationLongitude: addActionsProvider.locationLongitude,
+                    locationLongitude: addActionsProvider.selectedLongitude,
                     locationAddress: addActionsProvider.selectedLocationAddress,
                     actionId: widget.actionsDetailsModel!.actions!.actionId
                         .toString(),

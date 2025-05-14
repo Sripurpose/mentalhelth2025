@@ -455,7 +455,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                                     .selectedLatitude,
                                                 locationLongitude:
                                                 mentalStrengthEditProvider
-                                                    .locationLongitude,
+                                                    .selectedLongitude,
                                                 mediaName:
                                                 mentalStrengthEditProvider
                                                     .addMediaUploadResponseList,
