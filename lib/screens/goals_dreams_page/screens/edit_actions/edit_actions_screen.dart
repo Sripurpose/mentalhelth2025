@@ -2233,13 +2233,29 @@ class _EditActionScreenState extends State<EditActionScreen> {
                           }
                           if (await Permission.locationWhenInUse.isGranted){
                             if (mounted) {
+
                               showModalBottomSheet(
                                 context: context,
+                                isScrollControlled: true, // <== Helps with full height layout
+                                backgroundColor: Colors.transparent, // Optional for rounded corners
                                 builder: (BuildContext context) {
-                                  return Container(
-                                    width: double.infinity,
-                                    padding: const EdgeInsets.all(20),
-                                    child: const AddActionGoogleMap(),
+                                  return SafeArea(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                        bottom: MediaQuery.of(context).viewInsets.bottom, // Avoid overlap with keyboard or bottom inset
+                                      ),
+                                      child: Container(
+                                        width: double.infinity,
+                                        padding: const EdgeInsets.all(20),
+                                        decoration: const BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                                        ),
+                                        child: const AddActionGoogleMap(
+
+                                        ),
+                                      ),
+                                    ),
                                   );
                                 },
                               );

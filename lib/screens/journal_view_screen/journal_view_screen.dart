@@ -235,8 +235,8 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                         child: Text(
                                           "Audio",
                                           style: TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.w500,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
                                             fontFamily: 'Open Sans',
                                             color: Colors.black,
                                           ),
@@ -279,8 +279,8 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                         child: Text(
                                           "Photo",
                                           style: TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.w500,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
                                             fontFamily: 'Open Sans',
                                             color: Colors.black,
                                           ),
@@ -349,8 +349,8 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                         child: Text(
                                           "Video",
                                           style: TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.w500,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
                                             fontFamily: 'Open Sans',
                                             color: Colors.black,
                                           ),
@@ -410,8 +410,8 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                   child: Text(
                                     "Your Location",
                                     style: TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
                                       fontFamily: 'Open Sans',
                                       color: Colors.black,
                                     ),
@@ -819,7 +819,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                   children: [
                     Icon(
                       Icons
-                          .location_on,
+                          .location_on_rounded,
                       color: ColorsContent.newThemeColor,
                       size: size.width *
                           0.06,

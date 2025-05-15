@@ -430,10 +430,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                     dashBoardProvider.changePage(index: 1);
                                     mentalStrengthEditProvider.fetchEmotions(context: context);
                                   },
-                                  child: Image.asset(
-                                  ImageConstant.homeBannerNumuNew,
-                                    width: 400,
+                                  child: SizedBox(
+                                    width: 500,
                                     height: 200,
+                                    child: Image.asset(
+                                      ImageConstant.homeBannerNumuNew,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
                           

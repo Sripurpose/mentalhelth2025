@@ -232,12 +232,12 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                         child: Row(
                                           children: [
                                             SvgPicture.asset(
-                                              ImageConstant.tabBackButton,
+                                              ImageConstant.numuMentalBackButton,
                                               // Replace with your SVG file path
                                               width: 30, // Adjust size if needed
                                               height: 30,
                                             ),
-                                            const SizedBox(width: 20),
+                                            const SizedBox(width: 10),
                                             // Spacing between icon and text
                                             Text(
                                               "Back",
@@ -268,7 +268,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                   ],
                                 ),
 
-                                const SizedBox(height: 30),
+                                const SizedBox(height: 10),
                                 // Spacing between rows
 
                                 // Progress Bar (on a separate line)
@@ -1389,13 +1389,13 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(height: size.height * 0.03),
+                SizedBox(height: size.height * 0.02),
                 _buildTitleEditText(context, mentalStrengthEditProvider),
-                SizedBox(height: size.height * 0.03),
+                SizedBox(height: size.height * 0.02),
                 _buildDescriptionEditText(context, mentalStrengthEditProvider),
-                SizedBox(height: size.height * 0.03),
+                SizedBox(height: size.height * 0.02),
                 _buildAddMediaColumn(context, size),
-                SizedBox(height: size.height * 0.03),
+                SizedBox(height: size.height * 0.01),
               ],
             ),
           ),
@@ -1425,7 +1425,11 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
           SvgPicture.asset(
             ImageConstant.feelingDummyNumu, // Button icon
           ),
-          SizedBox(height: size.height * 0.05),
+          SizedBox(height: size.height * 0.03),
+          SvgPicture.asset(
+            ImageConstant.lineNumu, // Button icon
+          ),
+          SizedBox(height: size.height * 0.03),
           CustomRatingBar(
             initialRating: mentalStrengthEditProvider.emotionalValueStar,
             itemSize: 60,
@@ -1472,7 +1476,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
           SizedBox(height: size.height * 0.08),
           if (emotions.isNotEmpty)
             Container(
-              width: size.width * 0.70,
+              width: size.width * 0.80,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.0),
                 color: Colors.white,
@@ -1534,6 +1538,13 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                             .toLowerCase()
                             .contains(searchValue.toLowerCase());
                       },
+                    ),
+                    iconStyleData: IconStyleData(
+                      icon: Icon(
+                        Icons.arrow_drop_down,
+                        size: 30,
+                        color: ColorsContent.newThemeColor, // Change the color of the dropdown icon here
+                      ),
                     ),
                   ),
                 ),
@@ -1624,24 +1635,37 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
             height: 20,
           ),
           SizedBox(
-            width: 250, // Set your desired width
+            width: size.width * 0.80,
+            height: 50,
             child: ElevatedButton(
               onPressed: () {
                 _isTokenExpired();
                 mentalStrengthEditProvider.openChooseGoalFunction();
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: ColorsContent.newThemeColor,
+                backgroundColor: Colors.white,
+                elevation: 0,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                 ),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
               ),
-              child: const Text(
-                "Select Goal",
-                style: TextStyle(
-                  color: Color(0xffFFFFFF),
-                  fontWeight: FontWeight.bold,
-                ),
+              child:Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Select Goal",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                  Icon(
+                    size: 30,
+                    Icons.arrow_drop_down,
+                    color: ColorsContent.newThemeColor,
+                  ),
+                ],
               ),
             ),
           ),
@@ -1762,7 +1786,8 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
             height: 20,
           ),
           SizedBox(
-            width: 250,
+            width: size.width * 0.80,
+            height: 50,
             child: ElevatedButton(
               onPressed: () {
                 if (mentalStrengthEditProvider.goalsValue.id == null) {
@@ -1776,17 +1801,28 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: ColorsContent.newThemeColor,
+                backgroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(5),
                 ),
+                padding: const EdgeInsets.symmetric(horizontal: 16), // left padding
               ),
-              child: const Text(
-                "Select An Action",
-                style: TextStyle(
-                  color: Color(0xffFFFFFF),
-                  fontWeight: FontWeight.bold,
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Select Action",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                  Icon(
+                    size: 30,
+                    Icons.arrow_drop_down,
+                    color: ColorsContent.newThemeColor,
+                  ),
+                ],
               ),
             ),
           ),
@@ -2419,13 +2455,27 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                 if (mounted) {
                                   showModalBottomSheet(
                                     context: context,
+                                    isScrollControlled: true, // <== Helps with full height layout
+                                    backgroundColor: Colors.transparent, // Optional for rounded corners
                                     builder: (BuildContext context) {
-                                      return Container(
-                                          width: double.infinity,
-                                          padding: const EdgeInsets.all(20),
-                                          child: const MentalGoogleMap(
-                                            edit: true,
-                                          ));
+                                      return SafeArea(
+                                        child: Padding(
+                                          padding: EdgeInsets.only(
+                                            bottom: MediaQuery.of(context).viewInsets.bottom, // Avoid overlap with keyboard or bottom inset
+                                          ),
+                                          child: Container(
+                                            width: double.infinity,
+                                            padding: const EdgeInsets.all(20),
+                                            decoration: const BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                                            ),
+                                            child: const MentalGoogleMap(
+                                              edit: true,
+                                            ),
+                                          ),
+                                        ),
+                                      );
                                     },
                                   );
                                 }
