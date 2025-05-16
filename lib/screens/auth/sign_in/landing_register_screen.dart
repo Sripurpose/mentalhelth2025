@@ -158,7 +158,7 @@ class _LandingRegisterScreenScreenState
                               SizedBox(height: size.height * 0.02),
                               RichText(
                                 textAlign: TextAlign.center,
-                                text: TextSpan(
+                                text: const TextSpan(
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,
