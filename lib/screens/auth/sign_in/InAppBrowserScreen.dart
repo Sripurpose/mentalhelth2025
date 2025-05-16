@@ -6,6 +6,8 @@ import 'package:mentalhelth/screens/auth/sign_in/screen_sign_in.dart';
 import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../../../widgets/app_bar/appbar_leading_image.dart';
+
 // This widget is a full-screen webview with a Done button.
 class InAppBrowserScreen extends StatefulWidget {
   final Uri initialUrl;
@@ -90,26 +92,32 @@ class _InAppBrowserScreenState extends State<InAppBrowserScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Stack(
       children: [
         Scaffold(
-          appBar: AppBar(
-            title: Text(_currentUrl ?? 'Loading...'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (_) => const ScreenSignIn()),
-                  );
-                },
-                child: const Text(
-                  "Done",
-                  style: TextStyle(color: Colors.white),
-                ),
-              )
-            ],
-          ),
+          appBar: buildAppBarWebScreen(context, size, heading: 'Numu Registration',
+        onTap: (){
+          Navigator.of(context).pop();
+        }
+    ),
+          // AppBar(
+          //   title: Text(_currentUrl ?? 'Loading...'),
+          //   actions: [
+          //     TextButton(
+          //       onPressed: () {
+          //         Navigator.pushReplacement(
+          //           context,
+          //           MaterialPageRoute(builder: (_) => const ScreenSignIn()),
+          //         );
+          //       },
+          //       child: const Text(
+          //         "Done",
+          //         style: TextStyle(color: Colors.white),
+          //       ),
+          //     )
+          //   ],
+          // ),
           body: WebViewWidget(controller: _controller),
         ),
         if (_showLoading)

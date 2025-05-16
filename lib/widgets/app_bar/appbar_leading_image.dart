@@ -251,3 +251,30 @@ PreferredSizeWidget buildAppBarJournalViewScreen(BuildContext context, Size size
     ),
   );
 }
+
+PreferredSizeWidget buildAppBarWebScreen(BuildContext context, Size size,
+    {String? heading, Function? onTap, bool isSigned = true}) {
+  return CustomAppBarNumu(
+    backgroundColor: ColorsContent.homeBackGroundColor,
+    leadingWidth: 36,
+    leading:
+    Consumer<DashBoardProvider>(builder: (context, dashBoardProvider, _) {
+      return AppbarLeadingImage(
+        onTap: onTap ??
+                () {
+                Navigator.pop(context);
+            },
+        imagePath: ImageConstant.allBackIcon,
+        margin: const EdgeInsets.only(
+          left: 8,
+        ),
+      );
+    }),
+    title: AppbarSubtitle(
+      text: heading ?? "My profile",
+      margin: const EdgeInsets.only(
+        left: 11,
+      ),
+    ),
+  );
+}
