@@ -12,7 +12,6 @@ import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/widgets/background_image/background_imager.dart';
 import 'package:mentalhelth/widgets/custom_image_view.dart';
 import 'package:provider/provider.dart';
-import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'InAppBrowserScreen.dart';
@@ -67,28 +66,6 @@ class _LandingRegisterScreenScreenState
   void dispose() {
     _sub?.cancel();
     super.dispose();
-  }
-
-  void _handleIncomingDeepLinks() {
-    _sub = uriLinkStream.listen((Uri? uri) {
-      logger.i("Full URI: ${uri.toString()}");
-      logger.i("Scheme: ${uri?.scheme}");
-      logger.i("Host: ${uri?.host}");
-      logger.i("Path: ${uri?.path}");
-      logger.i("Query Params: ${uri?.queryParameters}");
-
-      debugPrint("Deep link received: $uri");
-
-      if (uri != null && uri.scheme == "mental") {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const ScreenSignIn()),
-        );
-      }
-    }, onError: (err) {
-      logger.e("Deep link error: $err");
-      debugPrint("Deep link error: $err");
-    });
   }
 
 

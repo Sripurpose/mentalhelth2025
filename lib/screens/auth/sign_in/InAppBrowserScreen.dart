@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mentalhelth/screens/auth/sign_in/screen_sign_in.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 // This widget is a full-screen webview with a Done button.
@@ -18,6 +19,8 @@ class _InAppBrowserScreenState extends State<InAppBrowserScreen> {
   late final WebViewController _controller;
   String? _currentUrl;
   Timer? _redirectTimer;
+  bool _showLoading = false;
+
 
   static const String successUrl = "https://staging4.featureme.live/v1/success";
 
@@ -45,8 +48,17 @@ class _InAppBrowserScreenState extends State<InAppBrowserScreen> {
             debugPrint("Page finished: $url");
 
             if (url == successUrl) {
-              // Start 15 seconds timer after success page finished loading
-              _redirectTimer = Timer(const Duration(seconds: 5), () {
+              // Show loading after 5 seconds
+              Timer(const Duration(seconds: 5), () {
+                if (mounted) {
+                  setState(() {
+                    _showLoading = true;
+                  });
+                }
+              });
+
+              // Redirect after 15 seconds
+              _redirectTimer = Timer(const Duration(seconds: 10), () {
                 if (mounted) {
                   Navigator.pushReplacement(
                     context,
@@ -55,9 +67,13 @@ class _InAppBrowserScreenState extends State<InAppBrowserScreen> {
                 }
               });
             } else {
-              // If navigated to some other page, cancel timer
+              // If navigated to another page, cancel timer and loading
               _redirectTimer?.cancel();
+              setState(() {
+                _showLoading = false;
+              });
             }
+
           },
           onNavigationRequest: (request) {
             return NavigationDecision.navigate;
@@ -74,27 +90,42 @@ class _InAppBrowserScreenState extends State<InAppBrowserScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(_currentUrl ?? 'Loading...'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => const ScreenSignIn()),
-              );
-            },
-            child: const Text(
-              "Done",
-              style: TextStyle(color: Colors.white),
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: AppBar(
+            title: Text(_currentUrl ?? 'Loading...'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (_) => const ScreenSignIn()),
+                  );
+                },
+                child: const Text(
+                  "Done",
+                  style: TextStyle(color: Colors.white),
+                ),
+              )
+            ],
+          ),
+          body: WebViewWidget(controller: _controller),
+        ),
+        if (_showLoading)
+          Container(
+            color: Colors.black.withOpacity(0.5),
+            child:  Center(
+              child: CupertinoActivityIndicator(
+                color: ColorsContent.whiteText,
+                radius: 15,
+              )
             ),
-          )
-        ],
-      ),
-      body: WebViewWidget(controller: _controller),
+          ),
+      ],
     );
   }
+
 }
 
 
