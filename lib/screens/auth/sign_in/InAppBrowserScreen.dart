@@ -23,8 +23,7 @@ class _InAppBrowserScreenState extends State<InAppBrowserScreen> {
   Timer? _redirectTimer;
   bool _showLoading = false;
 
-
-  static const String successUrl = "https://staging4.featureme.live/v1/success";
+   String? successUrl;
 
   @override
   void initState() {
@@ -49,7 +48,10 @@ class _InAppBrowserScreenState extends State<InAppBrowserScreen> {
             });
             debugPrint("Page finished: $url");
 
-            if (url == successUrl) {
+            // Check if URL ends with "/success"
+            if (url.endsWith("/success")) {
+              debugPrint("Matched success URL: $url");
+
               // Show loading after 5 seconds
               Timer(const Duration(seconds: 5), () {
                 if (mounted) {
@@ -59,7 +61,7 @@ class _InAppBrowserScreenState extends State<InAppBrowserScreen> {
                 }
               });
 
-              // Redirect after 15 seconds
+              // Redirect after 15 seconds total (5 for loading + 10 more)
               _redirectTimer = Timer(const Duration(seconds: 10), () {
                 if (mounted) {
                   Navigator.pushReplacement(
@@ -69,14 +71,14 @@ class _InAppBrowserScreenState extends State<InAppBrowserScreen> {
                 }
               });
             } else {
-              // If navigated to another page, cancel timer and loading
+              // Cancel timer if navigating away
               _redirectTimer?.cancel();
               setState(() {
                 _showLoading = false;
               });
             }
-
           },
+
           onNavigationRequest: (request) {
             return NavigationDecision.navigate;
           },
@@ -96,36 +98,20 @@ class _InAppBrowserScreenState extends State<InAppBrowserScreen> {
     return Stack(
       children: [
         Scaffold(
-          appBar: buildAppBarWebScreen(context, size, heading: 'Numu Registration',
-        onTap: (){
-          Navigator.of(context).pop();
-        }
-    ),
-          // AppBar(
-          //   title: Text(_currentUrl ?? 'Loading...'),
-          //   actions: [
-          //     TextButton(
-          //       onPressed: () {
-          //         Navigator.pushReplacement(
-          //           context,
-          //           MaterialPageRoute(builder: (_) => const ScreenSignIn()),
-          //         );
-          //       },
-          //       child: const Text(
-          //         "Done",
-          //         style: TextStyle(color: Colors.white),
-          //       ),
-          //     )
-          //   ],
-          // ),
+          appBar: buildAppBarWebScreen(context, size, heading: "Numu Registration",
+              onTap: (){
+
+                Navigator.of(context).pop();
+              }
+          ),
           body: WebViewWidget(controller: _controller),
         ),
         if (_showLoading)
           Container(
             color: Colors.black.withOpacity(0.5),
             child:  Center(
-              child: CupertinoActivityIndicator(
-                color: ColorsContent.whiteText,
+              child:   CupertinoActivityIndicator(
+                color: Colors.white,
                 radius: 15,
               )
             ),
