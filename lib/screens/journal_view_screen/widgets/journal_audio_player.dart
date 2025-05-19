@@ -60,7 +60,7 @@ class _JournalAudioPlayerState extends State<JournalAudioPlayer> {
     Size size = MediaQuery.of(context).size;
     return Container(
       margin: const EdgeInsets.only(bottom: 5),
-      padding: const EdgeInsets.symmetric(horizontal: 19, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 19, vertical: 8),
       decoration: BoxDecoration(
         color: ColorsContent.newThemeColor,
         borderRadius: BorderRadius.circular(8),
