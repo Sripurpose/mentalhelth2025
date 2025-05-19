@@ -21,6 +21,7 @@ import '../../utils/theme/theme_helper.dart';
 import '../auth/sign_in/coninue_with_google_class.dart';
 import '../auth/sign_in/landing_register_screen.dart';
 import '../auth/splash/splash.dart';
+import 'WebViewScreen.dart';
 
 class SubscriptionCheckScreen extends StatefulWidget {
   const SubscriptionCheckScreen(
@@ -208,15 +209,13 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
                               var url = Uri.parse(chatURL);
                               if (signInProvider.settingsList[0].target ==
                                   "external") {
-                                // Navigator.of(context).push(
-                                //   MaterialPageRoute(
-                                //     builder: (context) =>
-                                //         SubscriptionInAppScreen(
-                                //           url: chatURL ?? "",
-                                //         ),
-                                //   ),
-                                // );
-                                _launchInAppWithBrowserOptions(context,url);
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => WebViewScreen(initialUrl: url),
+                                  ),
+                                );
+
+                                //_launchInAppWithBrowserOptions(context,url);
                               } else {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
