@@ -145,8 +145,6 @@ class _OtpScreenState extends State<OtpScreen> {
                             final editProfileProvider = Provider.of<EditProfileProvider>(context, listen: false);
 
                             editProfileProvider.fetchUserProfile(context);
-
-                            Navigator.of(context).pushReplacementNamed('/home');
                           } else {
                             ScaffoldMessenger.of(context).clearSnackBars();
                             if (context.mounted) {
