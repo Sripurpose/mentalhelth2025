@@ -1,7 +1,7 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mentalhelth/screens/dash_borad_screen/dash_board_screen.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'dart:async';
 
 class WebViewScreen extends StatefulWidget {
   final Uri initialUrl;
@@ -19,6 +19,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
   @override
   void initState() {
     super.initState();
+
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(
@@ -26,11 +27,13 @@ class _WebViewScreenState extends State<WebViewScreen> {
           onPageStarted: (String url) async {
             final uri = Uri.parse(url);
 
-            // Check if path ends with "/success"
-            if (!_hasRedirected && uri.pathSegments.isNotEmpty && uri.pathSegments.last == 'success') {
+            // ✅ Match any URL ending in "/success"
+            if (!_hasRedirected &&
+                uri.pathSegments.isNotEmpty &&
+                uri.pathSegments.last == 'success') {
               _hasRedirected = true;
 
-              // Optional: wait 5 seconds
+              // Wait for 5 seconds
               await Future.delayed(const Duration(seconds: 5));
 
               if (mounted) {
@@ -43,6 +46,21 @@ class _WebViewScreenState extends State<WebViewScreen> {
         ),
       )
       ..loadRequest(widget.initialUrl);
+
+    // 🧠 Inject viewport JavaScript after small delay (once page loads)
+    Future.delayed(const Duration(milliseconds: 500), () {
+      _injectViewportFix();
+    });
+  }
+
+  // 🧠 Prevent zoom/scroll issues on iOS by setting viewport
+  void _injectViewportFix() {
+    _controller.runJavaScript('''
+      var meta = document.createElement('meta');
+      meta.name = 'viewport';
+      meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+      document.getElementsByTagName('head')[0].appendChild(meta);
+    ''');
   }
 
   @override
