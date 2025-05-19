@@ -209,13 +209,16 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
                               var url = Uri.parse(chatURL);
                               if (signInProvider.settingsList[0].target ==
                                   "external") {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => WebViewScreen(initialUrl: url),
-                                  ),
-                                );
+                                if(Platform.isAndroid){
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => WebViewScreen(initialUrl: url),
+                                    ),
+                                  );
+                                }else{
+                                  _launchInAppWithBrowserOptions(context,url);
+                                }
 
-                                //_launchInAppWithBrowserOptions(context,url);
                               } else {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
