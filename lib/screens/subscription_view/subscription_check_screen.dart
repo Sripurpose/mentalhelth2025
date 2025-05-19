@@ -218,7 +218,6 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
                                 }else{
                                   _launchInAppWithBrowserOptions(context,url);
                                 }
-
                               } else {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
