@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -75,6 +77,13 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
         editProfileProvider.getCategoryModel?.category ?? [],
       );
       _isTokenExpired();
+    });
+
+    scheduleMicrotask(() {
+      Future.delayed(Duration.zero, () {
+        context.read<EditProfileProvider>().initializeCountryCode();
+      });
+
     });
     super.initState();
   }
@@ -641,7 +650,7 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 10, right: 1),
                 child: CustomTextFormField(
-                  fillColor: editProfileProvider.phoneIsValid ? Colors.grey : Colors.white,
+                  fillColor: editProfileProvider.getProfileModel?.phoneVerify == "1" ? Colors.grey:Colors.white,
                   filled: true,
                   isValids: editProfileProvider.phoneIsValid,
                   textInputType: TextInputType.phone,
@@ -651,9 +660,9 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                     color: Colors.black,
                   ),
                   readOnly: isPhoneVerified, // Make field read-only if phone is verified
-                  prefixText: editProfileProvider.getProfileModel?.countryCode?.isNotEmpty == true
-                      ? "+${editProfileProvider.getProfileModel!.countryCode} "
-                      : "",
+                  // prefixText: editProfileProvider.getProfileModel?.countryCode?.isNotEmpty == true
+                  //     ? "+${editProfileProvider.getProfileModel!.countryCode} "
+                  //     : "",
                   prefixStyle: const TextStyle(
                     color: Colors.black,
                   ),

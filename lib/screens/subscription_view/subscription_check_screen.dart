@@ -18,9 +18,11 @@ import '../../utils/logic/shared_prefrence.dart';
 import '../../utils/theme/colors.dart';
 import '../../utils/theme/custom_text_style.dart';
 import '../../utils/theme/theme_helper.dart';
+import '../auth/sign_in/InAppBrowserScreen.dart';
 import '../auth/sign_in/coninue_with_google_class.dart';
 import '../auth/sign_in/landing_register_screen.dart';
 import '../auth/splash/splash.dart';
+import 'WebViewIosScreen.dart';
 import 'WebViewScreen.dart';
 
 class SubscriptionCheckScreen extends StatefulWidget {
@@ -48,6 +50,7 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isLoading = true;
   late String linkUrl;
+  StreamSubscription? _sub;
 
   @override
   void initState() {
@@ -65,6 +68,12 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
       await signInProvider.fetchAppRegister(context,deviceType: deviceType);
      // await signInProvider.fetchSettings(context);
     });
+  }
+
+  @override
+  void dispose() {
+    _sub?.cancel();
+    super.dispose();
   }
   Future googleSignOut() async {
     try {
@@ -127,6 +136,19 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
       // Handle errors like invalid URLs
       print("Error launching URL: $e");
     }
+  }
+
+
+  Future<void> _launchInAppWithBrowserOptions1(Uri url) async {
+    logger.i("Launching URL in custom in-app browser: $url");
+    if (!mounted) return;
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => InAppBrowserScreen(initialUrl: url),
+      ),
+    );
   }
 
   @override
@@ -216,7 +238,9 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
                                     ),
                                   );
                                 }else{
+
                                   _launchInAppWithBrowserOptions(context,url);
+                                 // _launchInAppWithBrowserOptions1(url);
                                 }
                               } else {
                                 Navigator.of(context).push(

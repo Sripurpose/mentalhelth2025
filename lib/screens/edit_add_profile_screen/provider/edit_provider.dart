@@ -2,7 +2,10 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
@@ -322,7 +325,56 @@ class EditProfileProvider extends ChangeNotifier {
     }
   }
 
-  String countryCode = '';
+  String countryCode = '91';
+  String countryIsoCode = 'IN'; // To store country code like IN, US, etc.
+  // Call this inside initState
+  Future<void> initializeCountryCode() async {
+    try {
+      bool serviceEnabled;
+      LocationPermission permission;
+
+      serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        return;
+      }
+
+      permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          return;
+        }
+      }
+      if (permission == LocationPermission.deniedForever) {
+        return;
+      }
+
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+          position.latitude, position.longitude);
+
+      if (placemarks.isNotEmpty) {
+        String countryIsoCode = placemarks.first.isoCountryCode ?? 'IN';
+
+        // 🔥 Here change: find matching Country
+        final Country? country = Country.tryParse(countryIsoCode);
+
+        if (country != null) {
+          countryCode = country.phoneCode;
+          print("Detected country code: +$countryCode");
+        } else {
+          print("Could not find matching country, using default +91");
+          countryCode = '91';
+        }
+        notifyListeners();
+      }
+    } catch (e) {
+      print('Error getting location: $e');
+    }
+  }
+
   void addCountryCode({required String value}) {
     countryCode = value;
     notifyListeners();
