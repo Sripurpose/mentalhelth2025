@@ -22,7 +22,6 @@ import '../auth/sign_in/InAppBrowserScreen.dart';
 import '../auth/sign_in/coninue_with_google_class.dart';
 import '../auth/sign_in/landing_register_screen.dart';
 import '../auth/splash/splash.dart';
-import 'WebViewIosScreen.dart';
 import 'WebViewScreen.dart';
 
 class SubscriptionCheckScreen extends StatefulWidget {
