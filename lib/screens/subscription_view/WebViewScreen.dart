@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mentalhelth/screens/dash_borad_screen/dash_board_screen.dart';
+import 'package:mentalhelth/screens/subscription_view/subscription_check_screen.dart';
+import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'dart:async';
+
+import '../auth/sign_in/provider/sign_in_provider.dart';
 
 class WebViewScreen extends StatefulWidget {
   final Uri initialUrl;
@@ -47,9 +51,23 @@ class _WebViewScreenState extends State<WebViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("In-App Browser")),
-      body: WebViewWidget(controller: _controller),
+    final signInProvider = Provider.of<SignInProvider>(context, listen: false);
+
+    return WillPopScope(
+      onWillPop: () async {
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const DashBoardScreen()
+            ),
+          );
+        });
+        return false; // prevent default back
+      },
+      child: Scaffold(
+        appBar: AppBar(title: const Text("Subscription")),
+        body: WebViewWidget(controller: _controller),
+      ),
     );
   }
 }
