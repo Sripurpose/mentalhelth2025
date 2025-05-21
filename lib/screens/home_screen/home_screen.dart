@@ -144,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
         final oneSignalId = await OneSignal.User.getOnesignalId();
         if(oneSignalId!= null){
           oneSignalIdOriginal = oneSignalId;
-          await OneSignal.login("individual_${editProfileProvider.getProfileModel?.userId}");
+          await OneSignal.login("individual_${UrlConstant.oneSignalRemote}_${editProfileProvider.getProfileModel?.userId}");
           print("oneSignalId--${oneSignalId}");
         }
         print("oneSignalId--${oneSignalId}");
