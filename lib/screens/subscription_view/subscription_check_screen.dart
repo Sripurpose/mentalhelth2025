@@ -9,11 +9,13 @@ import 'package:mentalhelth/screens/subscription_view/subscription_in_app_screen
 import 'package:mentalhelth/utils/core/image_constant.dart';
 import 'package:mentalhelth/widgets/background_image/background_imager.dart';
 import 'package:mentalhelth/widgets/custom_image_view.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../utils/core/firebase_api.dart';
 import '../../utils/logic/shared_prefrence.dart';
 import '../../utils/theme/colors.dart';
 import '../../utils/theme/custom_text_style.dart';
@@ -381,6 +383,14 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
                           setState(() {
                             linkUrl = ""; // Clear linkUrl on cancel
                           });
+                          if(Platform.isAndroid){
+                            await PushNotifications.subscribeToTopic("live_doLogin");
+                            await PushNotifications.unsubscribeFromTopic("message");
+                          }else{
+                            OneSignal.logout();
+                            OneSignal.User.addTagWithKey("topic","live_doLogin");
+                            OneSignal.User.removeTag("message");
+                          }
                           await signInProvider.logOutUser(context);
                           final prefs = await SharedPreferences.getInstance();
                           await prefs.remove('lastSkippedTimestamp');

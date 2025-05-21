@@ -28,6 +28,7 @@ import '../../utils/core/constants.dart';
 import '../../utils/core/constent.dart';
 import '../../utils/core/firebase_api.dart';
 import '../../utils/core/image_constant.dart';
+import '../../utils/core/url_constant.dart';
 import '../../utils/logic/shared_prefrence.dart';
 import '../../utils/theme/colors.dart';
 import '../../utils/theme/custom_button_style.dart';
@@ -209,7 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     else{
       await signInProvider.saveFirebaseToken(context,
-          registrationId: oneSignalIdOriginal, deviceOs: 'ios');
+          registrationId: "${UrlConstant.oneSignalRemote}$oneSignalIdOriginal", deviceOs: 'ios');
       print("Firebase token saved.");
     }
 

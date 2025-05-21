@@ -1,5 +1,6 @@
 class UrlConstant {
   static String baseUrl = "";
+  static String oneSignalRemote = "";
 
   static String loginUrl = "${baseUrl}login";
   static String logOutUrl = "${baseUrl}logout";

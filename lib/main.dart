@@ -374,6 +374,9 @@ class _MyAppState extends State<MyApp> {
   String? baseUrlQA;
   bool isBaseUrlReady = false;
 
+  String? oneSignalLive;
+  String? oneSignalStaging;
+
 
   Future<void> _launchInAppWithBrowserOptions(Uri url) async {
     // Check if the URL is a deep link
@@ -466,6 +469,8 @@ class _MyAppState extends State<MyApp> {
         setState(() {
           baseUrlLive = value["base_url_live"] as String?;
           baseUrlQA = value["base_url_qa"] as String?;
+          oneSignalLive = value["onesignal_live"] as String?;
+          oneSignalStaging = value["onesignal_qa"] as String?;
         });
 
         setupRemoteConfig();
@@ -484,6 +489,7 @@ class _MyAppState extends State<MyApp> {
     if (kDebugMode) {
       if(baseUrlQA!.isNotEmpty){
         UrlConstant.baseUrl = baseUrlQA ?? "";
+        UrlConstant.oneSignalRemote = oneSignalStaging ?? "";
         isBaseUrlReady = true;
         print("QA Base URL set to1: $baseUrlQA");
       }
@@ -492,6 +498,7 @@ class _MyAppState extends State<MyApp> {
     } else if (kReleaseMode) {
       if(baseUrlLive!.isNotEmpty){
         UrlConstant.baseUrl = baseUrlLive ?? "";
+        UrlConstant.oneSignalRemote = oneSignalLive ?? "";
         isBaseUrlReady = true;
         print("Live Base URL set to1: $baseUrlLive");
       }
@@ -505,6 +512,8 @@ class _MyAppState extends State<MyApp> {
     // Your remote config setup logic here
     print("Live Base URL set to: $baseUrlLive");
     print("QA Base URL set to: $baseUrlQA");
+    print("Live onesignalset to: $oneSignalLive");
+    print("staging onesiganl set to: $oneSignalStaging");
   }
 
   void hideLoader() {

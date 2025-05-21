@@ -619,27 +619,30 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
             if (!isPhoneVerified) // Show country picker button only if phone is not verified
               Consumer<EditProfileProvider>(
                 builder: (context, editProfileProvider, _) {
-                  return SizedBox(
-                    height: 40,
-                    child: OutlinedButton(
-                      style: CustomButtonStyles.editProfileCountryCode,
-                      onPressed: () {
-                        showCountryPicker(
-                          context: context,
-                          exclude: <String>['KN', 'MF'],
-                          favorite: <String>['SE'],
-                          showPhoneCode: true,
-                          onSelect: (Country country) {
-                            editProfileProvider.addCountryCode(
-                              value: country.phoneCode.toString(),
-                            );
-                          },
-                        );
-                      },
-                      child: Center(
-                        child: Text(
-                          "+${editProfileProvider.countryCode.toString()}",
-                          style: CustomTextStyles.titleSmallHelveticaOnPrimary,
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: SizedBox(
+                      height: 40,
+                      child: OutlinedButton(
+                        style: CustomButtonStyles.editProfileCountryCode,
+                        onPressed: () {
+                          showCountryPicker(
+                            context: context,
+                            exclude: <String>['KN', 'MF'],
+                            favorite: <String>['SE'],
+                            showPhoneCode: true,
+                            onSelect: (Country country) {
+                              editProfileProvider.addCountryCode(
+                                value: country.phoneCode.toString(),
+                              );
+                            },
+                          );
+                        },
+                        child: Center(
+                          child: Text(
+                            "+${editProfileProvider.countryCode.toString()}",
+                            style: CustomTextStyles.titleSmallHelveticaOnPrimary,
+                          ),
                         ),
                       ),
                     ),
@@ -648,7 +651,7 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
               ),
             Expanded( // Ensure proper layout within the row
               child: Padding(
-                padding: const EdgeInsets.only(left: 10, right: 1),
+                padding: const EdgeInsets.only(left: 1, right: 1),
                 child: CustomTextFormField(
                   fillColor: editProfileProvider.getProfileModel?.phoneVerify == "1" ? Colors.grey:Colors.white,
                   filled: true,
