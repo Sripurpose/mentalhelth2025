@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
@@ -413,7 +414,7 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                                                         ),
                                                         child:
                                                         IconButton(
-                                                          icon: Icon(Icons.close, size: size.height * 0.017, color: ColorsContent.whiteText),
+                                                          icon: Icon(Icons.close, size: Platform.isIOS ? size.height * 0.017 : size.height * 0.015, color: ColorsContent.whiteText),
                                                           onPressed: () {
                                                             editProfileProvider.removeSelectedCategory(category);
                                                           },
