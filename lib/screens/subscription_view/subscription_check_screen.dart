@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/screens/auth/sign_in/provider/sign_in_provider.dart';
+import 'package:mentalhelth/screens/dash_borad_screen/dash_board_screen.dart';
 import 'package:mentalhelth/screens/subscription_view/subscription_in_app_screen.dart';
 import 'package:mentalhelth/utils/core/image_constant.dart';
 import 'package:mentalhelth/widgets/background_image/background_imager.dart';
@@ -98,7 +99,7 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
       // Handle the deep link by navigating to a specific screen
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => const SplashScreen(), // Adjust as needed
+          builder: (context) => const DashBoardScreen(), // Adjust as needed
         ),
       );
       return; // Exit the function early to avoid launching the URL
@@ -122,7 +123,7 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
           // Navigate to LandingRegisterScreenScreen after closing the browser
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => const SplashScreen(),
+              builder: (context) => const DashBoardScreen(),
             ),
           );
         });

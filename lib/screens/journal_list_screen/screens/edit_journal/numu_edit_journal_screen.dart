@@ -516,7 +516,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                         child: Stack(
                                           alignment: Alignment.center,
                                           children: [
-                                            SvgPicture.asset(ImageConstant.submitButtonNumu),
+                                            SvgPicture.asset(ImageConstant.submitButtonNumuBuild),
                                             if (mentalStrengthEditProvider
                                                 .saveJournalLoading)
                                               const Padding(

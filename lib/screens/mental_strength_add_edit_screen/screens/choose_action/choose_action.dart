@@ -171,7 +171,7 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
                               children: [
                                 if (showActions)
                                   const Padding(
-                                    padding: EdgeInsets.symmetric(horizontal:20.0),
+                                    padding: EdgeInsets.symmetric(horizontal:13.0),
                                     child: Text(
                                       "Choose Actions",
                                       style: TextStyle(
