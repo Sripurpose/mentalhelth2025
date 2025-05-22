@@ -446,7 +446,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                                    padding: const EdgeInsets.symmetric(horizontal: 22),
                                     child: Text(
                                       "Your Recent Journals",
                                      style:  TextStyle(

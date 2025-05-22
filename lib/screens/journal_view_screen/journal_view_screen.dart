@@ -852,7 +852,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                 mentalStrengthEditProvider, editProfileProvider, _) {
           return PopupMenuButton<String>(
             color: Colors.white,
-            iconColor: ColorsContent.newThemeColor, // 👈 Change dot color here
+            icon: Icon(Icons.more_vert, color: ColorsContent.newThemeColor), // 👈 Vertical dots icon
             padding: EdgeInsets.zero, // Removes extra padding
             constraints: const BoxConstraints(
               minWidth: 100, // 👈 Reduce width here

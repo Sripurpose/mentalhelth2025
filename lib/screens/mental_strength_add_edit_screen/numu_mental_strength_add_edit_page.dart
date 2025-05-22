@@ -233,7 +233,7 @@ class _NumuMentalStrengthAddEditPageState
                               ),
                             ],
                           ),
-                          const SizedBox(height: 10,),
+                         // const SizedBox(height: 10,),
                           Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: size.width * 0.05, vertical: 8),
@@ -323,7 +323,7 @@ class _NumuMentalStrengthAddEditPageState
                                   ],
                                 ),
 
-                                const SizedBox(height: 5),
+                                const SizedBox(height: 10),
                                 // Spacing between rows
 
                                 // Progress Bar (on a separate line)

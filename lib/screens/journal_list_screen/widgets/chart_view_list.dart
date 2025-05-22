@@ -306,37 +306,40 @@ class CustomLegend extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: data.map((ChartData dataPoint) {
-        final color = colorMap[dataPoint.x] ?? Colors.grey;
-        return Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: Row(
-            children: [
-              Container(
-                width: 16,
-                height: 16,
-                decoration: BoxDecoration(
-                  color: color,
-                  shape: BoxShape.circle,
-                ),
-              ),
-              const SizedBox(width: 10),
-              Text(
-                dataPoint.x,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                ),
-              ),
-            ],
+    List<Widget> legendItems = data.map((ChartData dataPoint) {
+      final color = colorMap[dataPoint.x] ?? Colors.grey;
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 16,
+            height: 16,
+            decoration: BoxDecoration(
+              color: color,
+              shape: BoxShape.circle,
+            ),
           ),
-        );
-      }).toList(),
+          const SizedBox(width: 6),
+          Text(
+            dataPoint.x,
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+            ),
+          ),
+        ],
+      );
+    }).toList();
+
+    return Wrap(
+      spacing: 20, // Horizontal space between items
+      runSpacing: 10, // Vertical space between rows
+      alignment: WrapAlignment.start, // Center align the row
+      children: legendItems,
     );
   }
 }
+
 
 class ChartData {
   ChartData(this.x, this.y);

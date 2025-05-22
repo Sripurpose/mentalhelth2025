@@ -1107,7 +1107,7 @@ class _GoalAndDreamFullViewScreenState
           builder: (contexts, goalsDreamsProvider, _) {
             return PopupMenuButton<String>(
               color: Colors.white,
-              iconColor: ColorsContent.newThemeColor,
+              icon: Icon(Icons.more_vert, color: ColorsContent.newThemeColor), // 👈 Vertical dots icon
               padding: EdgeInsets.zero, // Removes extra padding
               constraints: const BoxConstraints(
                 minWidth: 100, // 👈 Reduce width here

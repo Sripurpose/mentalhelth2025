@@ -965,7 +965,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
           builder: (context, mentalStrengthEditProvider, addActionsProvider,
               goalsDreamsProvider, _) {
             return PopupMenuButton<String>(
-              iconColor: ColorsContent.newThemeColor, // 👈 Change dot color here
+              icon: Icon(Icons.more_vert, color: ColorsContent.newThemeColor), // 👈 Vertical dots icon
               padding: EdgeInsets.zero, // Removes extra padding
               constraints: const BoxConstraints(
                 minWidth: 100, // 👈 Reduce width here

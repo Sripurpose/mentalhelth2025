@@ -101,7 +101,7 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                     bool isDeleting = false; // Define this in your StatefulWidget
                 return PopupMenuButton<String>(
                   color: Colors.white,
-                  iconColor: ColorsContent.newThemeColor, // 👈 Change dot color here
+                  icon: Icon(Icons.more_vert, color: ColorsContent.newThemeColor), // 👈 Vertical dots icon
                   padding: EdgeInsets.zero, // Removes extra padding
                   constraints: const BoxConstraints(
                     minWidth: 100, // 👈 Reduce width here
