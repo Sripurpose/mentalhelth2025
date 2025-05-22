@@ -94,62 +94,76 @@ class DashBoardScreen extends StatelessWidget {
                   },
                   items: [
                     BottomNavigationBarItem(
-                      icon: CustomImageView(
+                      icon:
+
+                      CustomImageView(
                         imagePath: ImageConstant.imgHome,
-                        height: 20,
-                        width: 20,
+                        height: 25,
+                        width: 25,
                         color: theme.colorScheme.primary.withOpacity(1),
                       ),
-                      activeIcon: CustomImageView(
-                        imagePath: ImageConstant.homeActive,
-                        height: 80,
-                        width: 80,
-                        color: theme.colorScheme.primary.withOpacity(1),
+                      activeIcon: Padding(
+                        padding: const EdgeInsets.only(top: 10.0),
+                        child: CustomImageView(
+                          imagePath: ImageConstant.homeActive,
+                          height: 90,
+                          width: 90,
+                          color: theme.colorScheme.primary.withOpacity(1),
+                        ),
                       ),
                       label: '',
                     ),
                     BottomNavigationBarItem(
                       icon: CustomImageView(
                         imagePath: ImageConstant.imgSettings,
-                        height: 24,
-                        width: 24,
+                        height: 25,
+                        width: 25,
                         color: theme.colorScheme.primary.withOpacity(1),
                       ),
-                      activeIcon: CustomImageView(
-                        imagePath: ImageConstant.imgSettingsActive,
-                        height: 80,
-                        width: 80,
-                        color: theme.colorScheme.primary.withOpacity(1),
+                      activeIcon: Padding(
+                        padding: const EdgeInsets.only(top: 10.0),
+                        child: CustomImageView(
+                          imagePath: ImageConstant.imgSettingsActive,
+                          height: 90,
+                          width: 90,
+                          color: theme.colorScheme.primary.withOpacity(1),
+                        ),
                       ),
                       label: '',
                     ),
                     BottomNavigationBarItem(
                       icon: CustomImageView(
                         imagePath: ImageConstant.imgMegaphone,
-                        height: 24,
-                        width: 24,
+                        height: 25,
+                        width: 25,
                         color: theme.colorScheme.primary.withOpacity(1),
                       ),
-                      activeIcon: CustomImageView(
-                        imagePath: ImageConstant.imgMegaphoneActive,
-                        height: 80,
-                        width: 80,
-                        color: theme.colorScheme.primary.withOpacity(1),
+                      activeIcon: Padding(
+                        padding: const EdgeInsets.only(top: 10.0),
+                        child: CustomImageView(
+                          imagePath: ImageConstant.imgMegaphoneActive,
+                          height: 90,
+                          width: 90,
+                          color: theme.colorScheme.primary.withOpacity(1),
+                        ),
                       ),
                       label: '',
                     ),
                     BottomNavigationBarItem(
                       icon: CustomImageView(
                         imagePath: ImageConstant.imgArrowDown,
-                        height: 24,
-                        width: 24,
+                        height: 25,
+                        width: 25,
                         color: theme.colorScheme.primary.withOpacity(1),
                       ),
-                      activeIcon: CustomImageView(
-                        imagePath: ImageConstant.imgArrowDownActive,
-                        height: 80,
-                        width: 80,
-                        color: theme.colorScheme.primary.withOpacity(1),
+                      activeIcon: Padding(
+                        padding: const EdgeInsets.only(top: 10.0),
+                        child: CustomImageView(
+                          imagePath: ImageConstant.imgArrowDownActive,
+                          height: 90,
+                          width: 90,
+                          color: theme.colorScheme.primary.withOpacity(1),
+                        ),
                       ),
                       label: '',
                     ),
