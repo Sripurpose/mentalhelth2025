@@ -411,8 +411,9 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                                                             width: 0.5, // Adjust thickness
                                                           ),
                                                         ),
-                                                        child: IconButton(
-                                                          icon: Icon(Icons.close, size: 16, color: ColorsContent.whiteText),
+                                                        child:
+                                                        IconButton(
+                                                          icon: Icon(Icons.close, size: size.height * 0.017, color: ColorsContent.whiteText),
                                                           onPressed: () {
                                                             editProfileProvider.removeSelectedCategory(category);
                                                           },
@@ -651,7 +652,7 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
               ),
             Expanded( // Ensure proper layout within the row
               child: Padding(
-                padding: const EdgeInsets.only(left: 1, right: 1),
+                padding: EdgeInsets.only(left: isPhoneVerified ? 8 : 1, right: 1),
                 child: CustomTextFormField(
                   fillColor: editProfileProvider.getProfileModel?.phoneVerify == "1" ? Colors.grey:Colors.white,
                   filled: true,
@@ -663,9 +664,9 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                     color: Colors.black,
                   ),
                   readOnly: isPhoneVerified, // Make field read-only if phone is verified
-                  // prefixText: editProfileProvider.getProfileModel?.countryCode?.isNotEmpty == true
-                  //     ? "+${editProfileProvider.getProfileModel!.countryCode} "
-                  //     : "",
+                  prefixText: isPhoneVerified ? editProfileProvider.getProfileModel?.countryCode?.isNotEmpty == true
+                      ? "+${editProfileProvider.getProfileModel!.countryCode} "
+                      : "" : "",
                   prefixStyle: const TextStyle(
                     color: Colors.black,
                   ),
