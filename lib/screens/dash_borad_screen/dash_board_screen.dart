@@ -95,7 +95,6 @@ class DashBoardScreen extends StatelessWidget {
                   items: [
                     BottomNavigationBarItem(
                       icon:
-
                       CustomImageView(
                         imagePath: ImageConstant.imgHome,
                         height: 25,
@@ -106,8 +105,8 @@ class DashBoardScreen extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 10.0),
                         child: CustomImageView(
                           imagePath: ImageConstant.homeActive,
-                          height: 90,
-                          width: 90,
+                          height: 80,
+                          width: 80,
                           color: theme.colorScheme.primary.withOpacity(1),
                         ),
                       ),
@@ -124,8 +123,8 @@ class DashBoardScreen extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 10.0),
                         child: CustomImageView(
                           imagePath: ImageConstant.imgSettingsActive,
-                          height: 90,
-                          width: 90,
+                          height: 80,
+                          width: 80,
                           color: theme.colorScheme.primary.withOpacity(1),
                         ),
                       ),
@@ -142,8 +141,8 @@ class DashBoardScreen extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 10.0),
                         child: CustomImageView(
                           imagePath: ImageConstant.imgMegaphoneActive,
-                          height: 90,
-                          width: 90,
+                          height: 80,
+                          width: 80,
                           color: theme.colorScheme.primary.withOpacity(1),
                         ),
                       ),
@@ -160,8 +159,8 @@ class DashBoardScreen extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 10.0),
                         child: CustomImageView(
                           imagePath: ImageConstant.imgArrowDownActive,
-                          height: 90,
-                          width: 90,
+                          height: 80,
+                          width: 80,
                           color: theme.colorScheme.primary.withOpacity(1),
                         ),
                       ),
