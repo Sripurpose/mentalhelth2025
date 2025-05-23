@@ -386,6 +386,7 @@ class EditProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  int? statusCodeEditProfile ;
 
   Future<void> editProfileFunction({
     required String firstName,
@@ -399,6 +400,7 @@ class EditProfileProvider extends ChangeNotifier {
     required List<String> interestIds,
   }) async {
     try {
+      statusCodeEditProfile = 0;
       editLoading = true;
       String deviceType = Platform.isAndroid ? 'android' : 'ios';
       String? versionCode = '';
@@ -451,6 +453,7 @@ class EditProfileProvider extends ChangeNotifier {
       );
       Map<String, dynamic> responseData = jsonDecode(response.body);
       if (response.statusCode == 200) {
+        statusCodeEditProfile = response.statusCode;
         Map<String, dynamic> responseData = jsonDecode(response.body);
 
         String message = responseData['text'] ?? 'Profile Updated Successfully.';
@@ -464,8 +467,10 @@ class EditProfileProvider extends ChangeNotifier {
           fetchUserProfile(context);
         }
       } else if (response.statusCode == 401 || response.statusCode == 403) {
+        statusCodeEditProfile = response.statusCode;
       //  TokenManager.setTokenStatus(true);
       } else if(response.statusCode == 503){
+        statusCodeEditProfile = response.statusCode;
         Future.delayed(Duration.zero, () {
           Navigator.of(context).push(
             MaterialPageRoute(
@@ -478,6 +483,7 @@ class EditProfileProvider extends ChangeNotifier {
         });
       }
       else {
+        statusCodeEditProfile = response.statusCode;
         Map<String, dynamic> responseData = jsonDecode(response.body);
         String errorMessage = responseData['text'] ?? 'Something went wrong!';
 

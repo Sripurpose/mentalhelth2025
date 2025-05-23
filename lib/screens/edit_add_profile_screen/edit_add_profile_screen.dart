@@ -789,12 +789,22 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                 r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
             RegExp regex = RegExp(emailPattern);
 
+
+            bool isFakePhoneNumber(String phone) {
+              return RegExp(r'^(\d)\1{9}$').hasMatch(phone); // matches 0000000000, 1111111111, etc.
+            }
+
+
             // Check if required fields are filled and if the email is valid
             if (editProfileProvider.myProfileController.text.isEmpty) {
               showToastProfile(context: context, message: 'Please enter your name');
-            } else if (!editProfileProvider.phoneIsValid) {
+            }
+            else if (!editProfileProvider.phoneIsValid ||
+                isFakePhoneNumber(editProfileProvider.phoneController.text)) {
               showToastProfile(context: context, message: 'Invalid phone number');
-            } else if (editProfileProvider.selectedDate.isEmpty) {
+            }
+
+            else if (editProfileProvider.selectedDate.isEmpty) {
               showToastProfile(context: context, message: 'Select your date of birth');
             } else if (editProfileProvider.phoneController.text.isEmpty) {
               showToastProfile(context: context, message: 'Enter your phone number');
@@ -830,9 +840,11 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
 
               );
               // Navigate to the comment page
-              dashBoardProvider.changeCommentPage(
-                index: 8,
-              );
+              if(editProfileProvider. statusCodeEditProfile == 200){
+                dashBoardProvider.changeCommentPage(
+                  index: 8,
+                );
+              }
             }
           },
         );
