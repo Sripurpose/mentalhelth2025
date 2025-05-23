@@ -248,15 +248,19 @@ class _HomeScreenState extends State<HomeScreen> {
       if (signInProvider.settingsModel?.isSubscribed.toString() == "0" &&
           signInProvider.settingsModel?.settings?[0].isRequired.toString() == "1") {
         Future.delayed(Duration.zero, () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => SubscriptionCheckScreen(
-                linkUrl: signInProvider.settingsList[0].linkUrl ?? "",link: signInProvider.settingsList[0].link ?? "",
-                title: signInProvider.settingsList[0].title ?? "",message: signInProvider.settingsList[0].message ?? "",
+          if(mounted){
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => SubscriptionCheckScreen(
+                  linkUrl: signInProvider.settingsList[0].linkUrl ?? "",
+                  link: signInProvider.settingsList[0].link ?? "",
+                  title: signInProvider.settingsList[0].title ?? "",
+                  message: signInProvider.settingsList[0].message ?? "",
+                ),
               ),
-            ),
+            );
 
-          );
+          }
         });
       } else {
       }
@@ -402,7 +406,9 @@ class _HomeScreenState extends State<HomeScreen> {
           return Center(child: Text('Error: ${snapshot.error}')); // Handle error
         } else {
           // Now you can safely check your conditions and show the main content
-          checkSubscriptionStatus();
+          if(mounted){
+            checkSubscriptionStatus();
+          }
           checkVersionUpdate();
           // The main content if no token issues or settingsPopup
           return SafeArea(

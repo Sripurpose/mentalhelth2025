@@ -25,6 +25,7 @@ import '../auth/sign_in/InAppBrowserScreen.dart';
 import '../auth/sign_in/coninue_with_google_class.dart';
 import '../auth/sign_in/landing_register_screen.dart';
 import '../auth/splash/splash.dart';
+import 'InAppBrowserPaymentScreen.dart';
 import 'WebViewScreen.dart';
 
 class SubscriptionCheckScreen extends StatefulWidget {
@@ -148,7 +149,7 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => InAppBrowserScreen(initialUrl: url),
+        builder: (_) => InAppBrowserPaymentScreen(initialUrl: url),
       ),
     );
   }
@@ -241,8 +242,8 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
                                   );
                                 }else{
 
-                                  _launchInAppWithBrowserOptions(context,url);
-                                 // _launchInAppWithBrowserOptions1(url);
+                                 // _launchInAppWithBrowserOptions(context,url);
+                                  _launchInAppWithBrowserOptions1(url);
                                 }
                               } else {
                                 Navigator.of(context).push(

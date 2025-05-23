@@ -170,20 +170,45 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 if (showActions)
-                                  const Padding(
-                                    padding: EdgeInsets.symmetric(horizontal:13.0),
-                                    child: Text(
-                                      "Choose Actions",
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal:20.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        const Text(
+                                          "Choose Actions",
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        if (showActions)
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              mentalStrengthEditProvider.openChooseActionFunction();
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.black,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(10),
+                                              ),
+                                            ),
+                                            child: const Text(
+                                              "Proceed",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                      ],
                                     ),
                                   ),
+                                const SizedBox(height: 8,),
                                 Padding(
-                                  padding: showActions ? const EdgeInsets.symmetric(horizontal: 0.0): const EdgeInsets.symmetric(horizontal: 20.0),
+                                  padding: showActions ? const EdgeInsets.symmetric(horizontal: 20.0): const EdgeInsets.symmetric(horizontal: 20.0),
                                   child: Row(
-                                    mainAxisAlignment: showActions ? MainAxisAlignment.spaceAround : MainAxisAlignment.start,
+                                    mainAxisAlignment: showActions ? MainAxisAlignment.start : MainAxisAlignment.start,
                                     children: [
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,7 +224,7 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
                                                 ),
                                               ),
                                               SizedBox(
-                                                width: showActions ? size.width * 0.45 : size.width * 0.70,
+                                                width: showActions ? size.width * 0.70 : size.width * 0.70,
                                                 child: Text(
                                                   "${widget.goal.title}",
                                                   overflow: TextOverflow.visible,
@@ -212,25 +237,7 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
                                           ),
                                         ],
                                       ),
-                                      if (showActions)
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            mentalStrengthEditProvider.openChooseActionFunction();
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.black,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(10),
-                                            ),
-                                          ),
-                                          child: const Text(
-                                            "Proceed",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
+
                                     ],
                                   ),
                                 ),
