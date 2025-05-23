@@ -235,11 +235,12 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
                               if (signInProvider.settingsList[0].target ==
                                   "external") {
                                 if(Platform.isAndroid){
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => WebViewScreen(initialUrl: url),
-                                    ),
-                                  );
+                                  // Navigator.of(context).push(
+                                  //   MaterialPageRoute(
+                                  //     builder: (context) => WebViewScreen(initialUrl: url),
+                                  //   ),
+                                  // );
+                                  _launchInAppWithBrowserOptions1(url);
                                 }else{
 
                                  // _launchInAppWithBrowserOptions(context,url);
