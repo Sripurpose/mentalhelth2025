@@ -408,6 +408,7 @@ class _HomeScreenState extends State<HomeScreen> {
           // Now you can safely check your conditions and show the main content
           if(mounted){
             checkSubscriptionStatus();
+            updateFCMTokenIfNeeded(fcmToken);
           }
           checkVersionUpdate();
           // The main content if no token issues or settingsPopup
