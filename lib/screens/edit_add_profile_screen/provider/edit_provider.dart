@@ -666,7 +666,7 @@ class EditProfileProvider extends ChangeNotifier {
       notifyListeners();
       String? token = await getUserTokenSharePref();
       var body = {
-        'type': getProfileModel!.email,
+        'type': "email",
       };
 
       logger.w("body $body");
@@ -853,7 +853,7 @@ class EditProfileProvider extends ChangeNotifier {
       notifyListeners();
       String? token = await getUserTokenSharePref();
       var body = {
-        'type': getProfileModel!.phone,
+        'type': "phone",
       };
 
       logger.w("body $body");
