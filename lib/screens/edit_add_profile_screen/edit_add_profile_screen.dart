@@ -840,7 +840,7 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
 
               );
               // Navigate to the comment page
-              if(editProfileProvider. statusCodeEditProfile == 200){
+              if(editProfileProvider.statusCodeEditProfile == 200){
                 dashBoardProvider.changeCommentPage(
                   index: 8,
                 );
