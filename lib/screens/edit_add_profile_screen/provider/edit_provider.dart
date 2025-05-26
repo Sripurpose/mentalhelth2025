@@ -690,7 +690,7 @@ class EditProfileProvider extends ChangeNotifier {
         sendOtpMailMessage = response.reasonPhrase;
         showCustomSnackBar(
           context: context,
-          message: 'An OTP has been sent to your email.Please enter it to verify your account.',
+          message: 'An OTP has been sent to your registered email. Please enter it to verify',
         );
        // Navigator.of(context).pop();
       }
@@ -877,7 +877,7 @@ class EditProfileProvider extends ChangeNotifier {
         sendOtpPhoneMessage = response.reasonPhrase;
         showCustomSnackBar(
           context: context,
-          message: 'An OTP has been sent to your email.Please enter it to verify your account.',
+          message: 'An OTP has been sent to your registered phone number. Please enter it to verify.',
         );
        // Navigator.of(context).pop();
       }

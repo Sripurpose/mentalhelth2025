@@ -130,9 +130,6 @@ void showChangePasswordDialog(BuildContext context,EditProfileProvider editProfi
 
                               Navigator.of(context).pop();
                             } else {
-                              Fluttertoast.showToast(
-                                  msg: "Please try again later!",
-                                  gravity: ToastGravity.CENTER);
 
                               currentPasswordController.clear();
                               newPasswordController.clear();
