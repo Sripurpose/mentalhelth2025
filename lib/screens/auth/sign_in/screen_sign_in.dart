@@ -293,7 +293,7 @@ class _ScreenSignInState extends State<ScreenSignIn> {
                               ),
                             );
                           }),
-                          isRequiredValue == "1"
+                          signInProvider.settingsRegisterList.isNotEmpty
                               ? Text(
                                   "",
                                   style: CustomTextStyles.bodySmallOnPrimary,
@@ -318,7 +318,7 @@ class _ScreenSignInState extends State<ScreenSignIn> {
                                     ),
                                   ],
                                 )
-                              : isRequiredValue == "1"
+                              : signInProvider.settingsRegisterList.isNotEmpty
                                   ? const SizedBox()
                                   : GestureDetector(
                                       onTap: () {
