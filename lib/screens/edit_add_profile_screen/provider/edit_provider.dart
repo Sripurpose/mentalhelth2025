@@ -853,7 +853,7 @@ class EditProfileProvider extends ChangeNotifier {
       notifyListeners();
       String? token = await getUserTokenSharePref();
       var body = {
-        'type': "phone",
+        'type': 'phone',
       };
 
       logger.w("body $body");
