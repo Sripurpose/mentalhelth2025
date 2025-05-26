@@ -1,14 +1,11 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mentalhelth/screens/auth/sign_in/screen_sign_in.dart';
 import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-
 import '../../../widgets/app_bar/appbar_leading_image.dart';
 
-// This widget is a full-screen webview with a Done button.
 class InAppBrowserScreen extends StatefulWidget {
   final Uri initialUrl;
   const InAppBrowserScreen({Key? key, required this.initialUrl}) : super(key: key);
@@ -21,47 +18,50 @@ class _InAppBrowserScreenState extends State<InAppBrowserScreen> {
   late final WebViewController _controller;
   String? _currentUrl;
   Timer? _redirectTimer;
-  bool _showLoading = false;
-
-   String? successUrl;
+  bool _showLoadingOverlay = false;
+  double _progress = 0.0;
 
   @override
   void initState() {
     super.initState();
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(widget.initialUrl)
       ..setNavigationDelegate(
         NavigationDelegate(
           onPageStarted: (url) {
             setState(() {
               _currentUrl = url;
+              _progress = 0.0;
             });
-            debugPrint("Page started: $url");
-
-            // Cancel any existing timer if user navigates away
             _redirectTimer?.cancel();
+            debugPrint("Page started: $url");
+          },
+          onProgress: (progress) {
+            // progress is from 0 to 100
+            setState(() {
+              _progress = progress / 100.0;
+            });
           },
           onPageFinished: (url) {
             setState(() {
               _currentUrl = url;
+              _progress = 1.0;
             });
             debugPrint("Page finished: $url");
 
-            // Check if URL ends with "/success"
             if (url.endsWith("/success")) {
               debugPrint("Matched success URL: $url");
 
-              // Show loading after 5 seconds
+              // Show loading overlay after 5 seconds
               Timer(const Duration(seconds: 5), () {
                 if (mounted) {
                   setState(() {
-                    _showLoading = true;
+                    _showLoadingOverlay = true;
                   });
                 }
               });
 
-              // Redirect after 15 seconds total (5 for loading + 10 more)
+              // Redirect after a total of 15 seconds
               _redirectTimer = Timer(const Duration(seconds: 10), () {
                 if (mounted) {
                   Navigator.pushReplacement(
@@ -71,19 +71,16 @@ class _InAppBrowserScreenState extends State<InAppBrowserScreen> {
                 }
               });
             } else {
-              // Cancel timer if navigating away
               _redirectTimer?.cancel();
               setState(() {
-                _showLoading = false;
+                _showLoadingOverlay = false;
               });
             }
           },
-
-          onNavigationRequest: (request) {
-            return NavigationDecision.navigate;
-          },
+          onNavigationRequest: (request) => NavigationDecision.navigate,
         ),
-      );
+      )
+      ..loadRequest(widget.initialUrl);
   }
 
   @override
@@ -98,28 +95,39 @@ class _InAppBrowserScreenState extends State<InAppBrowserScreen> {
     return Stack(
       children: [
         Scaffold(
-          appBar: buildAppBarWebScreen(context, size, heading: "Numu Registration",
-              onTap: (){
-
-                Navigator.of(context).pop();
-              }
+          appBar: buildAppBarWebScreen(
+            context,
+            size,
+            heading: "Numu Registration",
+            onTap: () {
+              Navigator.of(context).pop();
+            },
           ),
-          body: WebViewWidget(controller: _controller),
+          body: Column(
+            children: [
+              if (_progress < 1.0)
+                LinearProgressIndicator(
+                  value: _progress,
+                  backgroundColor: Colors.grey,
+                  valueColor: AlwaysStoppedAnimation<Color>(ColorsContent.newThemeColor),
+                ),
+              Expanded(
+                child: WebViewWidget(controller: _controller),
+              ),
+            ],
+          ),
         ),
-        if (_showLoading)
+        if (_showLoadingOverlay)
           Container(
             color: Colors.black.withOpacity(0.5),
-            child:  Center(
-              child:   CupertinoActivityIndicator(
+            child: const Center(
+              child: CupertinoActivityIndicator(
                 color: Colors.white,
                 radius: 15,
-              )
+              ),
             ),
           ),
       ],
     );
   }
-
 }
-
-
