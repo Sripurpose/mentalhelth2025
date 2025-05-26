@@ -22,6 +22,17 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>www.mental.com</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>mental</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>FacebookAdvertiserIDCollectionEnabled</key>
@@ -41,8 +52,6 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-    <key>io.flutter.embedded_views_preview</key>
-    <true/>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>This app requires access to your media library to enable features such as saving and sharing photos and videos. Your privacy is important, and we will only use this access to enhance your experience within the app.</string>
 	<key>NSCameraUsageDescription</key>
@@ -76,17 +85,6 @@
 		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
-    <key>CFBundleURLTypes</key>
-        <array>
-            <dict>
-                <key>CFBundleURLSchemes</key>
-                <array>
-                    <string>mental</string>
-                </array>
-                <key>CFBundleURLName</key>
-                <string>www.mental.com</string>
-            </dict>
-        </array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -104,5 +102,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
 </dict>
 </plist>
