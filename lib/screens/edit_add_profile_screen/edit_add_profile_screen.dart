@@ -72,6 +72,7 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
     dashBoardProvider = Provider.of<DashBoardProvider>(context, listen: false);
     editProfileProvider = Provider.of<EditProfileProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      editProfileProvider.loadInitialCountryCode();
       editProfileProvider.images = null;
       logger.i("editProfileProvider.profileUrl.toString()${editProfileProvider.profileUrl.toString()}");
       editProfileProvider.initializeSelectedCategories(
@@ -82,7 +83,6 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
 
     scheduleMicrotask(() {
       Future.delayed(Duration.zero, () {
-        context.read<EditProfileProvider>().initializeCountryCode();
       });
 
     });
@@ -641,10 +641,13 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                           );
                         },
                         child: Center(
-                          child: Text(
-                            "+${editProfileProvider.countryCode.toString()}",
+                          child:Text(
+                            "+${editProfileProvider.countryCode}",
                             style: CustomTextStyles.titleSmallHelveticaOnPrimary,
                           ),
+
+
+
                         ),
                       ),
                     ),
