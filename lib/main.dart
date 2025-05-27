@@ -370,6 +370,7 @@ class _MyAppState extends State<MyApp> {
   PermissionStatus permissionStatus = PermissionStatus.denied;
 
   late DatabaseReference ref;
+  String? baseUrlLiveIos;
   String? baseUrlLive;
   String? baseUrlQA;
   bool isBaseUrlReady = false;
@@ -471,6 +472,7 @@ class _MyAppState extends State<MyApp> {
           baseUrlQA = value["base_url_qa"] as String?;
           oneSignalLive = value["onesignal_live"] as String?;
           oneSignalStaging = value["onesignal_qa"] as String?;
+          baseUrlLiveIos = value["base_url_live_ios"] as String?;
         });
 
         setupRemoteConfig();
@@ -485,7 +487,7 @@ class _MyAppState extends State<MyApp> {
 
 
   void setupRemoteConfig() {
-
+    String deviceType = Platform.isAndroid ? 'android' : 'ios';
     if (kDebugMode) {
       if(baseUrlQA!.isNotEmpty){
         UrlConstant.baseUrl = baseUrlQA ?? "";
@@ -497,10 +499,20 @@ class _MyAppState extends State<MyApp> {
       // Debug-specific code here
     } else if (kReleaseMode) {
       if(baseUrlLive!.isNotEmpty){
-        UrlConstant.baseUrl = baseUrlLive ?? "";
-        UrlConstant.oneSignalRemote = oneSignalLive ?? "";
-        isBaseUrlReady = true;
-        print("Live Base URL set to1: $baseUrlLive");
+        if(deviceType == "ios"){
+          UrlConstant.baseUrl = baseUrlLiveIos ?? "";
+         // UrlConstant.baseUrl = baseUrlLive ?? "";
+          UrlConstant.oneSignalRemote = oneSignalLive ?? "";
+          isBaseUrlReady = true;
+          print("Live Base URL set to1: $baseUrlLiveIos");
+        }
+        else{
+          UrlConstant.baseUrl = baseUrlLive ?? "";
+          UrlConstant.oneSignalRemote = oneSignalLive ?? "";
+          isBaseUrlReady = true;
+          print("Live Base URL set to1: $baseUrlLive");
+        }
+
       }
 
       print("App is running in Release mode.");
