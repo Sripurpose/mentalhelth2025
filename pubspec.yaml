@@ -81,7 +81,7 @@ dependencies:
   fluttertoast: ^8.2.6
   logger: ^2.0.2
   html_unescape: ^2.0.0
-  ffmpeg_kit_flutter_new: ^1.6.1
+  ffmpeg_kit_flutter_min_gpl: ^6.0.3
   win32: ^5.5.4
   lottie: ^2.4.0
   gap: ^3.0.1
