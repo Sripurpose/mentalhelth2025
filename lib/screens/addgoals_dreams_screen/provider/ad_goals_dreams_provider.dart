@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:ffmpeg_kit_flutter_min_gpl/ffmpeg_kit.dart';
+
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -204,7 +204,6 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
     }
   }
 
-
   Future<void> pickVideoFunction(BuildContext context) async {
     final pickedVideoPath = await ImagePicker().pickVideo(
       source: ImageSource.gallery,
@@ -223,41 +222,22 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
           videoPaths.add(pickedVideoPath.path);
           pickedImagesAddFunction(videoPaths);
 
-          // Path for compressed video output
-          final String outputPath = '${pickedVideoPath.path}_compressed.mp4';
+          // Generate thumbnail from the original video
+          File thumbNailFile = await generateThumbnail(File(pickedVideoPath.path));
 
-          // Compress video using optimized settings
-          await FFmpegKit.execute(
-              '-y -i ${pickedVideoPath.path} -vcodec libx264 -preset veryfast -crf 30 -movflags +faststart -vf "scale=320:240" -r 12 -b:v 200k -acodec aac -b:a 32k -ac 1 $outputPath'
-          ).then((session) async {
-            final returnCode = await session.getReturnCode();
-
-            if (returnCode!.isValueSuccess()) {
-              // Video compression successful
-              File thumbNailFile = await generateThumbnail(File(outputPath));
-
-              await saveMediaUploadMental(
-                file: outputPath,
-                type: "goal",
-                fileType: "mp4",
-                thumbNail: thumbNailFile.path,
-                context: context,
-              );
-            } else {
-              showCustomSnackBar(
-                context: context,
-                message: "Video compression failed.",
-              );
-            }
-          });
+          await saveMediaUploadMental(
+            file: pickedVideoPath.path,
+            type: "goal",
+            fileType: lastThreeChars,
+            thumbNail: thumbNailFile.path,
+            context: context,
+          );
         } catch (e) {
-          // Handle any errors that occur during the process
           showCustomSnackBar(
             context: context,
             message: "An error occurred: $e",
           );
         } finally {
-          // Ensure this is always executed, regardless of success or failure
           isVideoUploading = false;
           notifyListeners();
         }
@@ -269,6 +249,71 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
       );
     }
   }
+
+  // Future<void> pickVideoFunction(BuildContext context) async {
+  //   final pickedVideoPath = await ImagePicker().pickVideo(
+  //     source: ImageSource.gallery,
+  //   );
+  //
+  //   if (!isVideoUploading) {
+  //     if (pickedVideoPath != null) {
+  //       try {
+  //         isVideoUploading = true;
+  //         notifyListeners();
+  //
+  //         String fileExtension = pickedVideoPath.path.split('.').last;
+  //         String lastThreeChars = fileExtension.substring(fileExtension.length - 3);
+  //
+  //         List<String> videoPaths = [];
+  //         videoPaths.add(pickedVideoPath.path);
+  //         pickedImagesAddFunction(videoPaths);
+  //
+  //         // Path for compressed video output
+  //         final String outputPath = '${pickedVideoPath.path}_compressed.mp4';
+  //
+  //         // Compress video using optimized settings
+  //         await FFmpegKit.execute(
+  //             '-y -i ${pickedVideoPath.path} -vcodec libx264 -preset veryfast -crf 30 -movflags +faststart -vf "scale=320:240" -r 12 -b:v 200k -acodec aac -b:a 32k -ac 1 $outputPath'
+  //         ).then((session) async {
+  //           final returnCode = await session.getReturnCode();
+  //
+  //           if (returnCode!.isValueSuccess()) {
+  //             // Video compression successful
+  //             File thumbNailFile = await generateThumbnail(File(outputPath));
+  //
+  //             await saveMediaUploadMental(
+  //               file: outputPath,
+  //               type: "goal",
+  //               fileType: "mp4",
+  //               thumbNail: thumbNailFile.path,
+  //               context: context,
+  //             );
+  //           } else {
+  //             showCustomSnackBar(
+  //               context: context,
+  //               message: "Video compression failed.",
+  //             );
+  //           }
+  //         });
+  //       } catch (e) {
+  //         // Handle any errors that occur during the process
+  //         showCustomSnackBar(
+  //           context: context,
+  //           message: "An error occurred: $e",
+  //         );
+  //       } finally {
+  //         // Ensure this is always executed, regardless of success or failure
+  //         isVideoUploading = false;
+  //         notifyListeners();
+  //       }
+  //     }
+  //   } else {
+  //     showCustomSnackBar(
+  //       context: context,
+  //       message: "Please Wait, Video is Uploading",
+  //     );
+  //   }
+  // }
 
 
   List<AllModel> alreadyPickedImages = [];
@@ -311,56 +356,87 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
         imagePaths.add(pickedFile.path);
         takedImagesAddFunction(imagePaths);
 
-        // Check if the file is a video based on its extension
-        if (lastThreeChars.toLowerCase() == 'mp4' ||
-            lastThreeChars.toLowerCase() == 'mov' ||
-            lastThreeChars.toLowerCase() == 'avi') {
-          // Path for compressed video output
-          final String outputPath = '${pickedFile.path}_compressed.mp4';
-
-          // Compress the video using FFmpeg
-          await FFmpegKit.execute(
-              '-y -i ${pickedFile.path} -vcodec libx264 -preset veryfast -crf 30 -movflags +faststart -vf "scale=320:240" -r 12 -b:v 200k -acodec aac -b:a 32k -ac 1 $outputPath'
-          ).then((session) async {
-            final returnCode = await session.getReturnCode();
-
-            if (returnCode!.isValueSuccess()) {
-              // Compression successful, save the compressed video
-              await saveMediaUploadMental(
-                file: outputPath,
-                type: "goal",
-                fileType: lastThreeChars,
-                context: context,
-              );
-            } else {
-              // Handle compression failure
-              showCustomSnackBar(
-                context: context,
-                message: "Video compression failed.",
-              );
-            }
-          });
-        } else {
-          // Save the image without compression
-          await saveMediaUploadMental(
-            file: pickedFile.path,
-            type: "goal",
-            fileType: lastThreeChars,
-            context: context,
-          );
-        }
+        // Directly save image or video without compression
+        await saveMediaUploadMental(
+          file: pickedFile.path,
+          type: "goal",
+          fileType: lastThreeChars,
+          context: context,
+        );
       } catch (e) {
-        // Handle errors during the process
         showCustomSnackBar(
           context: context,
           message: "An error occurred: $e",
         );
       } finally {
-        // Notify listeners to update UI
         notifyListeners();
       }
     }
   }
+
+  // Future<void> takeFileFunction(BuildContext context) async {
+  //   final ImagePicker picker = ImagePicker();
+  //   final XFile? pickedFile = await picker.pickImage(source: ImageSource.camera);
+  //
+  //   if (pickedFile != null) {
+  //     try {
+  //       String fileExtension = pickedFile.path.split('.').last;
+  //       String lastThreeChars = fileExtension.substring(fileExtension.length - 3);
+  //
+  //       List<String> imagePaths = [];
+  //       imagePaths.add(pickedFile.path);
+  //       takedImagesAddFunction(imagePaths);
+  //
+  //       // Check if the file is a video based on its extension
+  //       if (lastThreeChars.toLowerCase() == 'mp4' ||
+  //           lastThreeChars.toLowerCase() == 'mov' ||
+  //           lastThreeChars.toLowerCase() == 'avi') {
+  //         // Path for compressed video output
+  //         final String outputPath = '${pickedFile.path}_compressed.mp4';
+  //
+  //         // Compress the video using FFmpeg
+  //         await FFmpegKit.execute(
+  //             '-y -i ${pickedFile.path} -vcodec libx264 -preset veryfast -crf 30 -movflags +faststart -vf "scale=320:240" -r 12 -b:v 200k -acodec aac -b:a 32k -ac 1 $outputPath'
+  //         ).then((session) async {
+  //           final returnCode = await session.getReturnCode();
+  //
+  //           if (returnCode!.isValueSuccess()) {
+  //             // Compression successful, save the compressed video
+  //             await saveMediaUploadMental(
+  //               file: outputPath,
+  //               type: "goal",
+  //               fileType: lastThreeChars,
+  //               context: context,
+  //             );
+  //           } else {
+  //             // Handle compression failure
+  //             showCustomSnackBar(
+  //               context: context,
+  //               message: "Video compression failed.",
+  //             );
+  //           }
+  //         });
+  //       } else {
+  //         // Save the image without compression
+  //         await saveMediaUploadMental(
+  //           file: pickedFile.path,
+  //           type: "goal",
+  //           fileType: lastThreeChars,
+  //           context: context,
+  //         );
+  //       }
+  //     } catch (e) {
+  //       // Handle errors during the process
+  //       showCustomSnackBar(
+  //         context: context,
+  //         message: "An error occurred: $e",
+  //       );
+  //     } finally {
+  //       // Notify listeners to update UI
+  //       notifyListeners();
+  //     }
+  //   }
+  // }
 
 
   Future<void> takeVideoFunction(BuildContext context) async {
@@ -374,7 +450,6 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
           isVideoUploading = true;
           notifyListeners();
 
-          // Extract the file extension
           String fileExtension = pickeVideo.path.split('.').last;
           String lastThreeChars = fileExtension.substring(fileExtension.length - 3);
 
@@ -382,41 +457,23 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
           imagePaths.add(pickeVideo.path);
           takedImagesAddFunction(imagePaths);
 
-          // Path for compressed video output
-          final String outputPath = '${pickeVideo.path}_compressed.mp4';
+          // Generate thumbnail
+          File thumbNailFile = await generateThumbnail(File(pickeVideo.path));
 
-          // Compress video using optimized settings
-          await FFmpegKit.execute(
-              '-y -i ${pickeVideo.path} -vcodec libx264 -preset veryfast -crf 30 -movflags +faststart -vf "scale=320:240" -r 12 -b:v 200k -acodec aac -b:a 32k -ac 1 $outputPath'
-          ).then((session) async {
-            final returnCode = await session.getReturnCode();
-
-            if (returnCode!.isValueSuccess()) {
-              // Video compression successful
-              File thumbNailFile = await generateThumbnail(File(outputPath));
-
-              await saveMediaUploadMental(
-                file: outputPath,
-                type: "goal",
-                fileType: "mp4",
-                thumbNail: thumbNailFile.path,
-                context: context,
-              );
-            } else {
-              showCustomSnackBar(
-                context: context,
-                message: "Video compression failed.",
-              );
-            }
-          });
+          // Save original video without compression
+          await saveMediaUploadMental(
+            file: pickeVideo.path,
+            type: "goal",
+            fileType: "mp4",
+            thumbNail: thumbNailFile.path,
+            context: context,
+          );
         } catch (e) {
-          // Handle any errors that occur during the process
           showCustomSnackBar(
             context: context,
             message: "An error occurred: $e",
           );
         } finally {
-          // Ensure this is always executed, regardless of success or failure
           isVideoUploading = false;
           notifyListeners();
         }
@@ -428,6 +485,73 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
       );
     }
   }
+
+
+  // Future<void> takeVideoFunction(BuildContext context) async {
+  //   final pickeVideo = await ImagePicker().pickVideo(
+  //     source: ImageSource.camera,
+  //   );
+  //
+  //   if (!isVideoUploading) {
+  //     if (pickeVideo != null) {
+  //       try {
+  //         isVideoUploading = true;
+  //         notifyListeners();
+  //
+  //         // Extract the file extension
+  //         String fileExtension = pickeVideo.path.split('.').last;
+  //         String lastThreeChars = fileExtension.substring(fileExtension.length - 3);
+  //
+  //         List<String> imagePaths = [];
+  //         imagePaths.add(pickeVideo.path);
+  //         takedImagesAddFunction(imagePaths);
+  //
+  //         // Path for compressed video output
+  //         final String outputPath = '${pickeVideo.path}_compressed.mp4';
+  //
+  //         // Compress video using optimized settings
+  //         await FFmpegKit.execute(
+  //             '-y -i ${pickeVideo.path} -vcodec libx264 -preset veryfast -crf 30 -movflags +faststart -vf "scale=320:240" -r 12 -b:v 200k -acodec aac -b:a 32k -ac 1 $outputPath'
+  //         ).then((session) async {
+  //           final returnCode = await session.getReturnCode();
+  //
+  //           if (returnCode!.isValueSuccess()) {
+  //             // Video compression successful
+  //             File thumbNailFile = await generateThumbnail(File(outputPath));
+  //
+  //             await saveMediaUploadMental(
+  //               file: outputPath,
+  //               type: "goal",
+  //               fileType: "mp4",
+  //               thumbNail: thumbNailFile.path,
+  //               context: context,
+  //             );
+  //           } else {
+  //             showCustomSnackBar(
+  //               context: context,
+  //               message: "Video compression failed.",
+  //             );
+  //           }
+  //         });
+  //       } catch (e) {
+  //         // Handle any errors that occur during the process
+  //         showCustomSnackBar(
+  //           context: context,
+  //           message: "An error occurred: $e",
+  //         );
+  //       } finally {
+  //         // Ensure this is always executed, regardless of success or failure
+  //         isVideoUploading = false;
+  //         notifyListeners();
+  //       }
+  //     }
+  //   } else {
+  //     showCustomSnackBar(
+  //       context: context,
+  //       message: "Please Wait, Video is Uploading",
+  //     );
+  //   }
+  // }
 
 
   List<String> takedImages = [];
