@@ -82,7 +82,8 @@ void main() async {
     if(Platform.isIOS){
       OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
 
-      OneSignal.initialize("efe6e3e8-86a4-4d67-851b-ce8151850bc1");
+      //OneSignal.initialize("efe6e3e8-86a4-4d67-851b-ce8151850bc1");
+      OneSignal.initialize("2c9a2265-f0a5-45a8-8f88-9faa90a04040");
       // OneSignal.Notifications.addClickListener((event) {
       //   print("object");
       //   // Handle notification click
