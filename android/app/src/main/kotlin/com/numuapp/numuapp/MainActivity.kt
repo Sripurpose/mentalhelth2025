@@ -1,4 +1,4 @@
-package com.mentalhelth.mentalhelth
+package com.numuapp.numuapp
 
 import io.flutter.embedding.android.FlutterActivity
 

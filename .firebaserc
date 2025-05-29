@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "staging": "numu-app-2ca93",
+    "default": "numu-app-2ca93"
+  },
+  "targets": {},
+  "etags": {}
+}

@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -33,10 +30,7 @@ class DefaultFirebaseOptions {
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -50,22 +44,44 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyA6_D5666hHBnQqoBm6vjF6XVZhcDyfyY4',
-    appId: '1:38607290109:android:3ef8d141fc16804717c894',
-    messagingSenderId: '38607290109',
-    projectId: 'mental-strength',
-    storageBucket: 'mental-strength.appspot.com',
+    apiKey: 'AIzaSyDtYgTCi0QnbBLXGU9lVD82BCfMfpy0pN8',
+    appId: '1:451304047939:android:2833a2b8ca9673ad785bf6',
+    messagingSenderId: '451304047939',
+    projectId: 'numu-app-2ca93',
+    databaseURL: 'https://numu-app-2ca93-default-rtdb.firebaseio.com',
+    storageBucket: 'numu-app-2ca93.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyA_ZS9AmYWRroqgUwQDhLTx4SHqZl7N7y4',
-    appId: '1:38607290109:ios:f76a899a71e7322317c894',
-    messagingSenderId: '38607290109',
-    projectId: 'mental-strength',
-    storageBucket: 'mental-strength.appspot.com',
-    androidClientId: '38607290109-h93ue15kib3bguhgcvmqp00u9hr4mqtt.apps.googleusercontent.com',
-    iosClientId: '38607290109-mudgmkhoghqg650lqprihoti6njui85p.apps.googleusercontent.com',
-    iosBundleId: 'com.mentalhelth.mentalhelth',
+    apiKey: 'AIzaSyBXJ9ypXwTWQzdQIrjRGbOLNYPa1wz9HzE',
+    appId: '1:451304047939:ios:f0c6b04a6cd61546785bf6',
+    messagingSenderId: '451304047939',
+    projectId: 'numu-app-2ca93',
+    databaseURL: 'https://numu-app-2ca93-default-rtdb.firebaseio.com',
+    storageBucket: 'numu-app-2ca93.firebasestorage.app',
+    iosBundleId: 'com.numuapp.numuapp',
+  );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyDFuX2YP8KsHoeSy4GRAHQ7rSSPKz2S8ss',
+    appId: '1:451304047939:web:702e28e507f8fb3e785bf6',
+    messagingSenderId: '451304047939',
+    projectId: 'numu-app-2ca93',
+    authDomain: 'numu-app-2ca93.firebaseapp.com',
+    databaseURL: 'https://numu-app-2ca93-default-rtdb.firebaseio.com',
+    storageBucket: 'numu-app-2ca93.firebasestorage.app',
+    measurementId: 'G-2ERB9P0B03',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyDFuX2YP8KsHoeSy4GRAHQ7rSSPKz2S8ss',
+    appId: '1:451304047939:web:3d10447382799d5b785bf6',
+    messagingSenderId: '451304047939',
+    projectId: 'numu-app-2ca93',
+    authDomain: 'numu-app-2ca93.firebaseapp.com',
+    databaseURL: 'https://numu-app-2ca93-default-rtdb.firebaseio.com',
+    storageBucket: 'numu-app-2ca93.firebasestorage.app',
+    measurementId: 'G-43VK93KMLV',
   );
 
 }

@@ -2,24 +2,18 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CLIENT_ID</key>
-	<string>38607290109-mudgmkhoghqg650lqprihoti6njui85p.apps.googleusercontent.com</string>
-	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.38607290109-mudgmkhoghqg650lqprihoti6njui85p</string>
-	<key>ANDROID_CLIENT_ID</key>
-	<string>38607290109-h93ue15kib3bguhgcvmqp00u9hr4mqtt.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyA_ZS9AmYWRroqgUwQDhLTx4SHqZl7N7y4</string>
+	<string>AIzaSyBXJ9ypXwTWQzdQIrjRGbOLNYPa1wz9HzE</string>
 	<key>GCM_SENDER_ID</key>
-	<string>38607290109</string>
+	<string>451304047939</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.mentalhelth.mentalhelth</string>
+	<string>com.numuapp.numuapp</string>
 	<key>PROJECT_ID</key>
-	<string>mental-strength</string>
+	<string>numu-app-2ca93</string>
 	<key>STORAGE_BUCKET</key>
-	<string>mental-strength.appspot.com</string>
+	<string>numu-app-2ca93.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:38607290109:ios:f76a899a71e7322317c894</string>
+	<string>1:451304047939:ios:f0c6b04a6cd61546785bf6</string>
 </dict>
 </plist>

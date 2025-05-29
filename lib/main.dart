@@ -70,7 +70,7 @@ void main() async {
       );
     }else if(Platform.isIOS){
       await Firebase.initializeApp(
-        name: 'mentalhealth',
+        name: 'numuapp',
         options: DefaultFirebaseOptions.currentPlatform,
       );
     } else if (kIsWeb) { // Check for web platform

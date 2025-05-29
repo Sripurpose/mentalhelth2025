@@ -1,43 +1,27 @@
 {
   "project_info": {
-    "project_number": "38607290109",
-    "project_id": "mental-strength",
-    "storage_bucket": "mental-strength.appspot.com"
+    "project_number": "451304047939",
+    "firebase_url": "https://numu-app-2ca93-default-rtdb.firebaseio.com",
+    "project_id": "numu-app-2ca93",
+    "storage_bucket": "numu-app-2ca93.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:38607290109:android:3ef8d141fc16804717c894",
+        "mobilesdk_app_id": "1:451304047939:android:2833a2b8ca9673ad785bf6",
         "android_client_info": {
-          "package_name": "com.mentalhelth.mentalhelth"
+          "package_name": "com.numuapp.numuapp"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "38607290109-0ku1cg6uum3oui58tnclc2emn96k3tli.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyA6_D5666hHBnQqoBm6vjF6XVZhcDyfyY4"
+          "current_key": "AIzaSyDtYgTCi0QnbBLXGU9lVD82BCfMfpy0pN8"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "38607290109-0ku1cg6uum3oui58tnclc2emn96k3tli.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "38607290109-mudgmkhoghqg650lqprihoti6njui85p.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.mentalhelth.mentalhelth"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
