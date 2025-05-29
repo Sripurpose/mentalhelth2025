@@ -83,12 +83,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyBXJ9ypXwTWQzdQIrjRGbOLNYPa1wz9HzE',
-    appId: '1:451304047939:ios:f0c6b04a6cd61546785bf6',
+    appId: '1:451304047939:ios:d396a1553b2378f4785bf6',
     messagingSenderId: '451304047939',
     projectId: 'numu-app-2ca93',
     databaseURL: 'https://numu-app-2ca93-default-rtdb.firebaseio.com',
     storageBucket: 'numu-app-2ca93.firebasestorage.app',
-    iosBundleId: 'com.numuapp.numuapp',
+    iosBundleId: 'com.numuapp.numuapp.macos',
   );
 
 }
