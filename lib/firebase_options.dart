@@ -25,10 +25,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         return windows;
       case TargetPlatform.linux:
@@ -82,6 +79,16 @@ class DefaultFirebaseOptions {
     databaseURL: 'https://numu-app-2ca93-default-rtdb.firebaseio.com',
     storageBucket: 'numu-app-2ca93.firebasestorage.app',
     measurementId: 'G-43VK93KMLV',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyBXJ9ypXwTWQzdQIrjRGbOLNYPa1wz9HzE',
+    appId: '1:451304047939:ios:f0c6b04a6cd61546785bf6',
+    messagingSenderId: '451304047939',
+    projectId: 'numu-app-2ca93',
+    databaseURL: 'https://numu-app-2ca93-default-rtdb.firebaseio.com',
+    storageBucket: 'numu-app-2ca93.firebasestorage.app',
+    iosBundleId: 'com.numuapp.numuapp',
   );
 
 }
