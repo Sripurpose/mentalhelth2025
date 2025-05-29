@@ -85,7 +85,7 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
         <head>
           <style>
             body {
-              background-color: transparent;
+              background-color: ${ColorsContent.homeBackGroundColor};
               text-align: justify; /* Aligns text to justify */
               padding: 0px;
             }

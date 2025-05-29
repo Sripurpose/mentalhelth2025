@@ -65,7 +65,6 @@ class DashBoardProvider extends ChangeNotifier {
           return const ViewReminderScreen();
         case 11:
           return const TermsOfServicesScreen(
-            url: "https://mh.featureme.live/v1/terms",
           );
         case 12:
           return const HelpScreen(
