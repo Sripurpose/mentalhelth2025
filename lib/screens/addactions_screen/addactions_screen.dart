@@ -1160,9 +1160,10 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                     if (!kReleaseMode) { // ✅ Only execute in debug mode
                       if (context.mounted) {
                         Navigator.of(context).pop();
-                      }else if(kReleaseMode){
-                        Navigator.of(context).pop();
                       }
+                    }
+                    else if(kReleaseMode){
+                      Navigator.of(context).pop();
                     }
                   });
                 }
@@ -1193,7 +1194,7 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                       Navigator.of(context).pop();
                     }
                   }else if(kReleaseMode){
-                   // Navigator.of(context).pop();
+                    Navigator.of(context).pop();
                   }
                 });
 

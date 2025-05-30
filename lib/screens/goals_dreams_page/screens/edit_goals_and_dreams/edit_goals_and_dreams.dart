@@ -406,7 +406,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                                             height: adDreamsGoalsProvider
                                                     .goalModelIdName.length *
                                                 size.height *
-                                                0.06,
+                                                0.065,
                                             child: ListView.builder(
                                               physics:
                                                   const NeverScrollableScrollPhysics(),

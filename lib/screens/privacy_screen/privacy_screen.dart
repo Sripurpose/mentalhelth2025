@@ -67,7 +67,7 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
                         height: size.height * 0.75,
                         child: policyProvider.policyModel == null
                             ? const Center(
-                                child: Text("No Data"),
+                                child: Text(""),
                               )
                             : policyProvider.policyModelLoading
                                 ? const Center(

@@ -323,13 +323,6 @@ Widget buildPopupDialog(BuildContext context, Size size) {
                   onTap: () {
                     dashBoardProvider.changeCommentPage(index: 11);
                     Navigator.of(context).pop();
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => const HelpScreen(
-                    //       url: "https://mh.featureme.live/v1/terms",
-                    //     ),
-                    //   ),
-                    // );
                   },
                   child: Align(
                     alignment: Alignment.topLeft,
@@ -379,9 +372,16 @@ Widget buildPopupDialog(BuildContext context, Size size) {
               ),
               GestureDetector(
                 onTap: () async {
+
+                  if(Platform.isIOS){
+                    await Share.share(
+                        "Download Now https://apps.apple.com/apps/details?id=${Constent.appId}");
+                  }else{
+                    await Share.share(
+                        "Download Now https://play.google.com/store/apps/details?id=${Constent.appId}");
+                  }
                   // final url
-                  await Share.share(
-                      "Download Now https://play.google.com/store/apps/details?id=${Constent.appId}");
+
                 },
                 child: Align(
                   alignment: Alignment.topLeft,
