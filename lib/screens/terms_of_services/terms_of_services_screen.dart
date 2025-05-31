@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mentalhelth/screens/privacy_screen/provider/privacy_policy_provider.dart';
 import 'package:mentalhelth/utils/core/image_constant.dart';
@@ -12,8 +13,8 @@ import '../no_internet/duplicate_screen.dart';
 class TermsOfServicesScreen extends StatefulWidget {
   const TermsOfServicesScreen({Key? key})
       : super(
-    key: key,
-  );
+          key: key,
+        );
 
   @override
   State<TermsOfServicesScreen> createState() => _TermsOfServicesScreenState();
@@ -23,7 +24,7 @@ class _TermsOfServicesScreenState extends State<TermsOfServicesScreen> {
   @override
   void initState() {
     PrivacyPolicyProvider privacyPolicyProvider =
-    Provider.of<PrivacyPolicyProvider>(context, listen: false);
+        Provider.of<PrivacyPolicyProvider>(context, listen: false);
     privacyPolicyProvider.fetchPolicy(type: "terms");
 
     super.initState();
@@ -38,16 +39,13 @@ class _TermsOfServicesScreenState extends State<TermsOfServicesScreen> {
           width: size.width,
           height: size.height,
           decoration: BoxDecoration(
-            color:ColorsContent.homeBackGroundColor,
+            color: ColorsContent.homeBackGroundColor,
             image: DecorationImage(
-              image: AssetImage(
-                ImageConstant.imgGroup193,
-              ),
+              image: AssetImage(ImageConstant.imgGroup193),
               fit: BoxFit.cover,
             ),
           ),
-          child: SizedBox(
-            width: double.maxFinite,
+          child: SingleChildScrollView(
             child: Column(
               children: [
                 buildAppBar(
@@ -56,55 +54,46 @@ class _TermsOfServicesScreenState extends State<TermsOfServicesScreen> {
                   heading: "Terms of Service",
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(
-                    left: 27,
-                    top: 20,
-                    right: 27,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: Consumer<PrivacyPolicyProvider>(
                     builder: (context, policyProvider, _) {
                       return SizedBox(
-                        height: size.height * 0.75,
+                        height: size.height * 0.75, // Adjust height as needed
                         child: policyProvider.policyModel == null
-                            ? const Center(
-                          child: Text(""),
-                        )
+                            ? const Center(child: Text(""))
                             : policyProvider.policyModelLoading
-                            ? const Center(
-                          child: CircularProgressIndicator(),
-                        )
-                            : WebViewWidget(
-                          controller: WebViewController()
-                            ..setJavaScriptMode(
-                                JavaScriptMode.unrestricted)
-                            ..setBackgroundColor(Colors.transparent)
-                            ..loadHtmlString(
-                              '''
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <style>
-            body {
-              background-color: ${ColorsContent.homeBackGroundColor};
-              text-align: justify; /* Aligns text to justify */
-              padding: 0px;
-            }
-          </style>
-        </head>
-        <body>
-          ${policyProvider.policyModel!.description.toString()}
-        </body>
-        </html>
-        ''',
-                            ),
-                        ),
+                                ? const Center(child: CupertinoActivityIndicator())
+                                : WebViewWidget(
+                                    controller: WebViewController()
+                                      ..setJavaScriptMode(
+                                          JavaScriptMode.unrestricted)
+                                      ..setBackgroundColor(Colors.transparent)
+                                      ..loadHtmlString(
+                                        '''
+                  <!DOCTYPE html>
+                  <html>
+                  <head>
+                    <style>
+                      body {
+                        background-color: ${ColorsContent.homeBackGroundColor};
+                        text-align: justify;
+                        padding: 10px;
+                        color: white;
+                      }
+                    </style>
+                  </head>
+                  <body>
+                    ${policyProvider.policyModel?.description.toString()}
+                  </body>
+                  </html>
+                  ''',
+                                      ),
+                                  ),
                       );
                     },
                   ),
                 ),
-                const SizedBox(
-                  height: 5,
-                ),
+                const SizedBox(height: 20),
               ],
             ),
           ),
