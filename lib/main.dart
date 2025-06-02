@@ -337,6 +337,7 @@ void main() async {
       ),
     );
   } catch (error, stackTrace) {
+    print("Uncaught error during main initialization: $error");
     FirebaseCrashlytics.instance.recordError(error, stackTrace);
   }
 }
@@ -399,53 +400,59 @@ class _MyAppState extends State<MyApp> {
   }
 
   void setupNotificationTapHandler() {
-    const AndroidInitializationSettings androidInitSettings =
-    AndroidInitializationSettings('@mipmap/ic_launcher');
-    final InitializationSettings initSettings = InitializationSettings(
-      android: androidInitSettings,
-    );
+    if(Platform.isAndroid){
+      const AndroidInitializationSettings androidInitSettings =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+      final InitializationSettings initSettings = InitializationSettings(
+        android: androidInitSettings,
+      );
 
-    flutterLocalNotificationsPlugin.initialize(
-      initSettings,
-      onDidReceiveNotificationResponse: (NotificationResponse response) {
-        final payload = response.payload;
-        print("payload$payload");
-        if (payload != null) {
-          final data = jsonDecode(payload);
+      flutterLocalNotificationsPlugin.initialize(
+        initSettings,
+        onDidReceiveNotificationResponse: (NotificationResponse response) {
+          final payload = response.payload;
+          print("payload$payload");
+          if (payload != null) {
+            final data = jsonDecode(payload);
 
-          if (data['notification_type'] == 'actionreminder') {
-            final context = navigatorKey.currentContext;
+            if (data['notification_type'] == 'actionreminder') {
+              final context = navigatorKey.currentContext;
 
-            if (context != null) {
-              final reminderData = Map<String, dynamic>.from(data);
+              if (context != null) {
+                final reminderData = Map<String, dynamic>.from(data);
 
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (_, __, ___) =>
-                      ReminderPushViewScreen(reminderData: reminderData),
-                  transitionDuration: const Duration(seconds: 0),
-                ),
-              );
-            }
-          } else {
-            if (payload != null) {
-              try {
-                final Map<String, dynamic> data = jsonDecode(payload);
-                final String? url = data['url'];
-                if (url != null && url.isNotEmpty) {
-                  _launchInAppWithBrowserOptions(Uri.parse(url));
-                } else {
-                  print("URL is missing in payload.");
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (_, __, ___) =>
+                        ReminderPushViewScreen(reminderData: reminderData),
+                    transitionDuration: const Duration(seconds: 0),
+                  ),
+                );
+              }
+            } else {
+              if (payload != null) {
+                try {
+                  final Map<String, dynamic> data = jsonDecode(payload);
+                  final String? url = data['url'];
+                  if (url != null && url.isNotEmpty) {
+                    _launchInAppWithBrowserOptions(Uri.parse(url));
+                  } else {
+                    print("URL is missing in payload.");
+                  }
+                } catch (e) {
+                  print("Error decoding payload: $e");
                 }
-              } catch (e) {
-                print("Error decoding payload: $e");
               }
             }
           }
-        }
-      },
-    );
+        },
+      );
+    }
+    else{
+      print("Skipping flutter_local_notifications initialization on iOS.");
+    }
+
   }
 
   @override
