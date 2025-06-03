@@ -46,7 +46,7 @@ class _LandingRegisterScreenScreenState
       final deviceType = Platform.isAndroid ? 'android' : 'ios';
       if (signInProvider.statusAppSetup == 503) {
         logger.w("App in maintenance: ${signInProvider.statusAppSetup}");
-        WidgetsBinding.instance.addPostFrameCallback((_) {
+       // WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => MaintenenceScreen(
@@ -56,7 +56,7 @@ class _LandingRegisterScreenScreenState
               ),
             ),
           );
-        });
+       // });
       }
     });
   }
