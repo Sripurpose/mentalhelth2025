@@ -557,10 +557,11 @@ class _GoalAndDreamFullViewScreenState
                                                             child: Row(
                                                               mainAxisAlignment: MainAxisAlignment.start,
                                                               children: [
-                                                                mentalStrengthEditProvider.getListGoalActionsModel?.actions != null &&
-                                                                    index < isActionCompletedList.length &&
-                                                                    mentalStrengthEditProvider.getListGoalActionsModel!.actions![index].actionStatus != "1"
-                                                                    ? Padding(
+                                                                // mentalStrengthEditProvider.getListGoalActionsModel?.actions != null &&
+                                                                //     index < isActionCompletedList.length &&
+                                                                //     mentalStrengthEditProvider.getListGoalActionsModel!.actions![index].actionStatus != "1"
+                                                                //     ?
+                                                                Padding(
                                                                   padding: const EdgeInsets.symmetric(horizontal: 0.0),
                                                                   child: CustomCheckboxButton(
                                                                     text: "",
@@ -588,8 +589,8 @@ class _GoalAndDreamFullViewScreenState
                                                                       );
                                                                     },
                                                                   ),
-                                                                )
-                                                                    : const SizedBox(),
+                                                                ),
+                                                                    // : const SizedBox(),
                                                                 SizedBox(
                                                                   width: size.width * 0.45,
                                                                   child: Text(
@@ -1147,6 +1148,7 @@ class _GoalAndDreamFullViewScreenState
                         ),
                       ),
                     ),
+                  if (goalStatus == "0")
                   const PopupMenuDivider(), // 👈 This adds the divider
                   PopupMenuItem<String>(
                     onTap: () {

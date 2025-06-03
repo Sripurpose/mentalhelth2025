@@ -1004,6 +1004,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                       ),
                     ),
                   ),
+                  if(actionStatus == "0")
                   const PopupMenuDivider(), // 👈 This adds the divider
                   PopupMenuItem<String>(
                     onTap: () async {

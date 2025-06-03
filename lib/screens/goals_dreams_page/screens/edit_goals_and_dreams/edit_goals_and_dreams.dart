@@ -38,6 +38,7 @@ import '../../../../utils/core/date_time_utils.dart';
 import '../../../../utils/logic/permissions.dart';
 import '../../../../widgets/app_bar/custom_app_bar.dart';
 import '../../../../widgets/functions/popup.dart';
+import '../../../addactions_screen/add_edit_action_screen.dart';
 import '../../../addactions_screen/addactions_screen.dart';
 import '../../../addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
 import '../../../dash_borad_screen/provider/dash_board_provider.dart';
@@ -794,7 +795,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
       onPressed: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => AddactionsScreen(
+            builder: (context) => AddEditActionScreen(
               goalId: widget.goalsanddream.goalId.toString(),
             ),
           ),
