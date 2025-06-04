@@ -552,13 +552,13 @@ Widget buildPopupDialog(BuildContext context, Size size) {
 
 Future<void> shareImageWithText() async {
   // Load image from assets
-  final byteData = await rootBundle.load(ImageConstant.numuNextIcon);
+  final byteData = await rootBundle.load(ImageConstant.shareLogoIcon);
 
   // Get temp directory
   final tempDir = await getTemporaryDirectory();
 
   // Extract file name only
-  final fileName = ImageConstant.numuNextIcon.split('/').last;
+  final fileName = ImageConstant.shareLogoIcon.split('/').last;
   final file = File('${tempDir.path}/$fileName');
 
   // Save image file
@@ -568,9 +568,9 @@ Future<void> shareImageWithText() async {
   await Share.shareXFiles(
     [XFile(file.path)],
     text: '''
-Check out the Mental Health app! 🌿
+Check out the Numu app! 🌿
 
-Boost your well-being with expert tips, tools, and personalized insights.
+Build mental strength,reduce anxiety,and stay focused on your goals with Numu.
 
 Download now: https://mh.featureme.live/downloads
 ''',
