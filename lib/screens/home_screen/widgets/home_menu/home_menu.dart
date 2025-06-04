@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mentalhelth/screens/auth/sign_in/provider/sign_in_provider.dart';
 import 'package:mentalhelth/screens/dash_borad_screen/provider/dash_board_provider.dart';
 import 'package:mentalhelth/screens/edit_add_profile_screen/provider/edit_provider.dart';
@@ -11,6 +12,7 @@ import 'package:mentalhelth/utils/logic/shared_prefrence.dart';
 import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/widgets/functions/popup.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -370,33 +372,61 @@ Widget buildPopupDialog(BuildContext context, Size size) {
               SizedBox(
                 height: size.height * 0.001,
               ),
-              GestureDetector(
-                onTap: () async {
+              // GestureDetector(
+              //   onTap: () async {
+              //
+              //     if(Platform.isIOS){
+              //       await Share.share(
+              //           "https://mh.featureme.live/downloads");
+              //     }else{
+              //       await Share.share(
+              //           "https://mh.featureme.live/downloads");
+              //     }
+              //     // final url
+              //
+              //   },
+              //   child: Align(
+              //     alignment: Alignment.topLeft,
+              //     child: Text(
+              //       "App share",
+              //       maxLines: 13,
+              //       overflow: TextOverflow.ellipsis,
+              //       style: CustomTextStyles.titleMediumOnSecondaryContainerMedium
+              //           .copyWith(
+              //         height: 2.19,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+          GestureDetector(
+          onTap: () async {
+            shareImageWithText();
+//           const shareMessage = '''
+// Check out the Numu app! 🌿
+//
+// Build mental strength,reduce anxiety,and stay focused on your goals with Numu.
+//
+// Download now: https://mh.featureme.live/downloads
+// ''';
+//
+//           await Share.share(shareMessage);
+          },
+          child: Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+          "App share",
+          maxLines: 13,
+          overflow: TextOverflow.ellipsis,
+          style: CustomTextStyles.titleMediumOnSecondaryContainerMedium.copyWith(
+          height: 2.19,
+          ),
+          ),
+          ),
+          ),
 
-                  if(Platform.isIOS){
-                    await Share.share(
-                        "https://mh.featureme.live/downloads");
-                  }else{
-                    await Share.share(
-                        "https://mh.featureme.live/downloads");
-                  }
-                  // final url
 
-                },
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    "App share",
-                    maxLines: 13,
-                    overflow: TextOverflow.ellipsis,
-                    style: CustomTextStyles.titleMediumOnSecondaryContainerMedium
-                        .copyWith(
-                      height: 2.19,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
+
+          SizedBox(
                 height: size.height * 0.005,
               ),
               GestureDetector(
@@ -518,3 +548,33 @@ Widget buildPopupDialog(BuildContext context, Size size) {
     ),
   );
 }
+
+
+Future<void> shareImageWithText() async {
+  // Load image from assets
+  final byteData = await rootBundle.load(ImageConstant.numuNextIcon);
+
+  // Get temp directory
+  final tempDir = await getTemporaryDirectory();
+
+  // Extract file name only
+  final fileName = ImageConstant.numuNextIcon.split('/').last;
+  final file = File('${tempDir.path}/$fileName');
+
+  // Save image file
+  await file.writeAsBytes(byteData.buffer.asUint8List());
+
+  // Share image with text
+  await Share.shareXFiles(
+    [XFile(file.path)],
+    text: '''
+Check out the Mental Health app! 🌿
+
+Boost your well-being with expert tips, tools, and personalized insights.
+
+Download now: https://mh.featureme.live/downloads
+''',
+  );
+}
+
+
