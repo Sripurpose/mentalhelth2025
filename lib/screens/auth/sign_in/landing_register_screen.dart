@@ -171,7 +171,7 @@ class _LandingRegisterScreenScreenState
                                         'Empower your mental well-being with\n'),
                                     TextSpan(
                                         text:
-                                        '              simple, effective tools!'),
+                                        'simple, effective tools!'),
                                   ],
                                 ),
                               ),
