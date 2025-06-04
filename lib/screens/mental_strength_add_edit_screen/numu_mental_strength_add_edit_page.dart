@@ -697,7 +697,7 @@ class _NumuMentalStrengthAddEditPageState
             child: Center(
               child: DropdownButtonHideUnderline(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: DropdownButton2<Emotion>(
                     isExpanded: true,
                     value: mentalStrengthEditProvider.emotionValue,
@@ -1264,7 +1264,7 @@ class _NumuMentalStrengthAddEditPageState
                         ),
                       ),
                       Positioned(
-                        bottom: Platform.isIOS ?60:50, // Adjust this value as needed
+                        bottom: Platform.isIOS ? 60:50, // Adjust this value as needed
                         right: 0, // Move to the right
                         left: 40,
                         child: Consumer<MentalStrengthEditProvider>(
@@ -1312,7 +1312,7 @@ class _NumuMentalStrengthAddEditPageState
                 ),
 
                 SizedBox(
-                  height: size.height * 0.09,
+                  height: size.height * 0.10,
                   child: Stack(
                     children: [
                       GestureDetector(
@@ -1346,7 +1346,7 @@ class _NumuMentalStrengthAddEditPageState
                         ),
                       ),
                       Positioned(
-                        bottom: Platform.isIOS ? 50 : 45, // Adjust this value as needed
+                        bottom: Platform.isIOS ? 60:50, // Adjust this value as needed
                         right: 0, // Move to the right
                         left: 40,
                         child: Consumer<MentalStrengthEditProvider>(
@@ -1394,7 +1394,7 @@ class _NumuMentalStrengthAddEditPageState
                 ),
 
                 SizedBox(
-                  height: size.height * 0.09,
+                  height: size.height * 0.10,
                   child: Stack(
                     children: [
                       GestureDetector(
@@ -1413,7 +1413,7 @@ class _NumuMentalStrengthAddEditPageState
                         ),
                       ),
                       Positioned(
-                        bottom: Platform.isIOS ? 50 : 45, // Adjust this value as needed
+                        bottom: Platform.isIOS ? 60:50, // Adjust this value as needed
                         right: 0, // Move to the right
                         left: 40,
                         child: Consumer<MentalStrengthEditProvider>(
@@ -1461,7 +1461,7 @@ class _NumuMentalStrengthAddEditPageState
                 ),
 
                 SizedBox(
-                  height: size.height * 0.09,
+                  height: size.height * 0.10,
                   child: Stack(
                     children: [
                       GestureDetector(
@@ -1545,7 +1545,7 @@ class _NumuMentalStrengthAddEditPageState
                         ),
                       ),
                       Positioned(
-                        bottom: Platform.isIOS ? 50 : 45, // Adjust this value as needed
+                        bottom: Platform.isIOS ? 60:50, // Adjust this value as needed
                         right: 0, // Move to the right
                         left: 40,
                         child: Consumer<MentalStrengthEditProvider>(
