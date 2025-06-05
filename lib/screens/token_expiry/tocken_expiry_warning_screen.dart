@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:mentalhelth/screens/token_expiry/token_expiry.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:provider/provider.dart';
 import '../../utils/logic/shared_prefrence.dart';
 import '../../utils/theme/custom_text_style.dart';
@@ -110,14 +111,7 @@ class _TokenExpireScreenState extends State<TokenExpireScreen> {
                                       height: 40,
                                       clipBehavior: Clip.antiAlias,
                                       decoration: ShapeDecoration(
-                                        gradient: const LinearGradient(
-                                          begin: Alignment(105.598, -73.2617),
-                                          end: Alignment(-130.141, 80.5293),
-                                          colors: [
-                                            Colors.blue,
-                                            Colors.blueAccent,
-                                          ],
-                                        ),
+                                        color: ColorsContent.newThemeColor,
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(14),
                                         ),
@@ -164,14 +158,7 @@ class _TokenExpireScreenState extends State<TokenExpireScreen> {
                                       height: 40,
                                       clipBehavior: Clip.antiAlias,
                                       decoration: ShapeDecoration(
-                                        gradient: const LinearGradient(
-                                          begin: Alignment(105.598, -73.2617),
-                                          end: Alignment(-130.141, 80.5293),
-                                          colors: [
-                                           Colors.blue,
-                                            Colors.blueAccent,
-                                          ],
-                                        ),
+                                    color: ColorsContent.newThemeColor,
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(14),
                                         ),
