@@ -498,7 +498,7 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
         //   ),
         // );
       },
-      height: 40,
+      height: 45,
       text: "Add Action",
       margin: const EdgeInsets.only(left: 2),
       buttonStyle: CustomButtonStyles.addActionButtonStyle,
@@ -564,7 +564,7 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
             );
           }
         },
-        height: 40,
+        height: 45,
         text: "Save",
         margin: const EdgeInsets.only(left: 2),
         buttonStyle: CustomButtonStyles.outlinePrimaryTL5,

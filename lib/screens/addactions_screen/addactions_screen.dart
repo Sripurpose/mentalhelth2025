@@ -1201,7 +1201,7 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
               }
             }
           },
-          height: 40,
+          height: 45,
           text: "Save",
           buttonStyle:  CustomButtonStyles.addActionButtonStyle,
           buttonTextStyle:const TextStyle(

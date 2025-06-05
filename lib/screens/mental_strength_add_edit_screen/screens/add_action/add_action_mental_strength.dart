@@ -822,7 +822,7 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
             );
           }
         },
-        height: 40,
+        height: 45,
         text: "Save",
         buttonStyle: CustomButtonStyles.outlinePrimaryTL5,
         buttonTextStyle:

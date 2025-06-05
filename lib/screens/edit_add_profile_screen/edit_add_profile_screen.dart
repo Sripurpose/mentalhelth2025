@@ -780,6 +780,7 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
           loading: editProfileProvider.editLoading,
           buttonStyle: CustomButtonStyles.outlineNewTheme,
           width: 104,
+          //height: 40,
           text: "Save",
           onPressed: () async {
             // Get the email entered by the user

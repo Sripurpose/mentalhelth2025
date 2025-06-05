@@ -1799,7 +1799,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
             );
           }
         },
-        height: 40,
+        height: 45,
         text: "Update",
         buttonStyle: CustomButtonStyles.outlinePrimaryTL5,
         buttonTextStyle:
