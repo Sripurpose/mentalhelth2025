@@ -47,7 +47,7 @@ Widget buildSignInButton(BuildContext context,
     required void Function()? onPressed}) {
   return CustomElevatedButton(
     loading: isLoading,
-    height: 40,
+    height: 45,
     text: buttonText,
     margin: const EdgeInsets.symmetric(
       horizontal: 4,
