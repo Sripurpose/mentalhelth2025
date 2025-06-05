@@ -552,13 +552,13 @@ Widget buildPopupDialog(BuildContext context, Size size) {
 
 Future<void> shareImageWithText() async {
   // Load image from assets
-  final byteData = await rootBundle.load(ImageConstant.shareLogoIcon);
+  final byteData = await rootBundle.load(ImageConstant.appsharenew);
 
   // Get temp directory
   final tempDir = await getTemporaryDirectory();
 
   // Extract file name only
-  final fileName = ImageConstant.shareLogoIcon.split('/').last;
+  final fileName = ImageConstant.appsharenew.split('/').last;
   final file = File('${tempDir.path}/$fileName');
 
   // Save image file

@@ -14,6 +14,7 @@ class ImageConstant {
   static String splashNextIcon = 'assets/images/splash_next_icon_2.png';
   static String numuNextIcon = 'assets/images/numu_next_icon.png';
   static String shareLogoIcon = 'assets/images/sharelogo.png';
+  static String appsharenew = 'assets/images/mbanner.png';
   static String centerCut = 'assets/images/centercut.png';
   static String noData = '$imagePath/home/noData.gif';
   static String imgMenu = '$imagePath/img_menu.svg';
