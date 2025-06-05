@@ -156,25 +156,36 @@ class _LandingRegisterScreenScreenState
                                 ),
                               ),
                               SizedBox(height: size.height * 0.02),
-                              RichText(
+
+                              Text(
+                                settings?.message ?? '',
                                 textAlign: TextAlign.center,
-                                text: const TextSpan(
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: 'Open Sans',
-                                    color: Colors.white,
-                                  ),
-                                  children: [
-                                    TextSpan(
-                                        text:
-                                        'Empower your mental well-being with\n'),
-                                    TextSpan(
-                                        text:
-                                        'simple, effective tools!'),
-                                  ],
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Open Sans',
+                                  color: Colors.white,
                                 ),
                               ),
+                              // RichText(
+                              //   textAlign: TextAlign.center,
+                              //   text: const TextSpan(
+                              //     style: TextStyle(
+                              //       fontSize: 14,
+                              //       fontWeight: FontWeight.w400,
+                              //       fontFamily: 'Open Sans',
+                              //       color: Colors.white,
+                              //     ),
+                              //     children: [
+                              //       TextSpan(
+                              //           text:
+                              //           'Empower your mental well-being with\n'),
+                              //       TextSpan(
+                              //           text:
+                              //           'simple, effective tools!'),
+                              //     ],
+                              //   ),
+                              // ),
                               SizedBox(height: size.height * 0.05),
                               if (settings?.link != null &&
                                   settings?.status == "1")

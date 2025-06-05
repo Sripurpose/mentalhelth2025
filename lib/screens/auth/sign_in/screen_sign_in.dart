@@ -137,6 +137,8 @@ class _ScreenSignInState extends State<ScreenSignIn> {
     final signInProvider = Provider.of<SignInProvider>(context, listen: false);
     var isRequiredValue =
         signInProvider.settingsRegisterModel?.settings?[0].isRequired;
+
+    final settings = signInProvider.settingsRegisterModel?.showPhonelogin;
     print("isRequired value: $isRequiredValue");
 
     Size size = MediaQuery.of(context).size;
@@ -340,6 +342,7 @@ class _ScreenSignInState extends State<ScreenSignIn> {
                     const SizedBox(
                       height: 44,
                     ),
+                    if(settings == "1")
                     Consumer<SignInProvider>(
                         builder: (context, signInProvider, _) {
                       return buildContinueWithPhoneButton(

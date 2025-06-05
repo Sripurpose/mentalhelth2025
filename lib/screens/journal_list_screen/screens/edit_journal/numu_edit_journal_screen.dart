@@ -1443,9 +1443,16 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
               // Map the value from 1-5 to -2 to 2 as an integer
               int mappedValue = ((value - 1) * 4 / (5 - 1) - 2).round();
 
-              mentalStrengthEditProvider
-                  .fetchEmotions(
-                  emotion: "$mappedValue",context: context);
+              // mentalStrengthEditProvider
+              //     .fetchEmotions(
+              //     emotion: "$mappedValue",context: context);
+
+              mentalStrengthEditProvider.fetchEmotionsEdit(
+                emotion: "$mappedValue",
+                emotionId: mentalStrengthEditProvider.emotionValue?.id?.toString(),
+                context: context,
+              );
+
 
               mentalStrengthEditProvider.changeEmotionalValueStar(value);
               _isTokenExpired(); // Call your method after rating update.
@@ -1489,7 +1496,10 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
                     child: DropdownButton2<Emotion>(
                       isExpanded: true,
-                      value: mentalStrengthEditProvider.emotionValue,
+                      value: emotions.any((e) => e.id == mentalStrengthEditProvider.emotionValue?.id)
+                          ? emotions.firstWhere(
+                              (e) => e.id == mentalStrengthEditProvider.emotionValue?.id)
+                          : null,
                       hint: const Text("Select Emotion"),
                       items: emotions.map((Emotion item) {
                         return DropdownMenuItem<Emotion>(

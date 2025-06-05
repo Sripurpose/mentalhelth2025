@@ -8,17 +8,20 @@ String settingsRegisterModelToJson(SettingsRegisterModel data) => json.encode(da
 class SettingsRegisterModel {
   bool? status;
   String? text;
+  String? showPhonelogin;
   List<SettingRegister>? settings;
 
   SettingsRegisterModel({
     this.status,
     this.text,
+    this.showPhonelogin,
     this.settings,
   });
 
   factory SettingsRegisterModel.fromJson(Map<String, dynamic> json) => SettingsRegisterModel(
     status: json["status"],
     text: json["text"],
+    showPhonelogin: json["show_phonelogin"],
     settings: json["settings"] == null
         ? []
         : List<SettingRegister>.from(json["settings"].map((x) => SettingRegister.fromJson(x))),
@@ -27,6 +30,7 @@ class SettingsRegisterModel {
   Map<String, dynamic> toJson() => {
     "status": status,
     "text": text,
+    "show_phonelogin":showPhonelogin,
     "settings": settings == null
         ? []
         : List<dynamic>.from(settings!.map((x) => x.toJson())),

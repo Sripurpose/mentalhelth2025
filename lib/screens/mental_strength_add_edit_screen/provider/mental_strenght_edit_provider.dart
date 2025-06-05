@@ -815,6 +815,89 @@ class MentalStrengthEditProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> fetchEmotionsEdit({
+    bool editing = false,
+    String? emotionId,
+    String? emotion,
+    BuildContext? context,
+  }) async {
+    try {
+      String? token = await getUserTokenSharePref();
+      getEmotionsModelLoading = true;
+
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = Platform.isAndroid
+          ? (Constent.versionCodeAndroid.isNotEmpty
+          ? Constent.versionCodeAndroid
+          : await getVersionSharePref())
+          : (Constent.versionCodeIOS.isNotEmpty
+          ? Constent.versionCodeIOS
+          : await getVersionSharePref());
+
+      notifyListeners();
+
+      final uri = emotion != null
+          ? Uri.parse('${UrlConstant.emotionsUrl}$emotion')
+          : Uri.parse(UrlConstant.emotionsUrl);
+
+      final response = await http.get(
+        uri,
+        headers: {
+          'device-type': deviceType,
+          'version': versionCode.toString(),
+          'authorization': "$token",
+        },
+      );
+
+      if (response.statusCode == 200) {
+        getEmotionsModel = getEmotionsModelFromJson(response.body);
+
+        // Preserve current selected emotion if it still exists
+        if (emotionValue != null) {
+          final exists = getEmotionsModel!.emotions!
+              .any((e) => e.id == emotionValue?.id);
+          if (!exists) {
+            emotionValue = null;
+          }
+        }
+
+        // Reassign value from emotionId if needed (only if editing mode)
+        if (editing && emotionId != null) {
+          final match = getEmotionsModel!.emotions!
+              .firstWhere((e) => e.id.toString() == emotionId,
+              orElse: () => getEmotionsModel!.emotions!.first);
+          emotionValue = match;
+        }
+
+        getEmotionsModelLoading = false;
+        notifyListeners();
+      } else if (response.statusCode == 401 || response.statusCode == 403) {
+        TokenManager.setTokenStatus(true);
+      } else if (response.statusCode == 503) {
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context!).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title:
+                "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      } else {
+        getEmotionsModelLoading = false;
+      }
+
+      notifyListeners();
+    } catch (e) {
+      print("ERR is $e");
+      getEmotionsModelLoading = false;
+      notifyListeners();
+    }
+  }
+
+
 
 
 
