@@ -174,7 +174,8 @@ Future galleryBottomSheetAddGoals({
                                                                   index]
                                                               .value,
                                                         ),
-                                                        fit: BoxFit.fill,
+                                              height: 200,
+                                              fit: BoxFit.cover,
                                               width: size.width,
                                                       ),
                                           ),
@@ -286,7 +287,8 @@ Future galleryBottomSheetAddGoals({
                                                                   .pickedImages[
                                                               index],
                                                         ),
-                                                        fit: BoxFit.fill,
+                                              height: 200,
+                                              fit: BoxFit.cover,
                                               width: size.width,
                                                       ),
                                           ),

@@ -112,6 +112,15 @@ class CustomButtonStyles {
         elevation: 38,
       );
 
+  static ButtonStyle get outlinePrimaryDelete => ElevatedButton.styleFrom(
+    backgroundColor: ColorsContent.newThemeColor,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(5),
+    ),
+    shadowColor: theme.colorScheme.primary,
+    elevation: 38,
+  );
+
   static ButtonStyle get outlineNewTheme => ElevatedButton.styleFrom(
     backgroundColor: ColorsContent.newThemeColor,
     shape: RoundedRectangleBorder(

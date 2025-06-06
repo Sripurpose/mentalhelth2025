@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mentalhelth/screens/dash_borad_screen/provider/dash_board_provider.dart';
 import 'package:mentalhelth/utils/logic/shared_prefrence.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/utils/theme/custom_button_style.dart';
 import 'package:mentalhelth/utils/theme/custom_text_style.dart';
 import 'package:mentalhelth/widgets/app_bar/appbar_leading_image.dart';
@@ -29,7 +30,7 @@ class ConfirmDeleteScreen extends StatelessWidget {
         width: size.width,
         height: size.height,
         decoration: BoxDecoration(
-          color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
+          color: ColorsContent.homeBackGroundColor,
           image: DecorationImage(
             image: AssetImage(
               ImageConstant.imgGroup193,
@@ -47,7 +48,7 @@ class ConfirmDeleteScreen extends StatelessWidget {
             children: [
               buildAppBar(context, size, heading: "Delete Account"),
               const Spacer(
-                flex: 44,
+                flex: 50,
               ),
               Container(
                 width: 249,
@@ -56,23 +57,26 @@ class ConfirmDeleteScreen extends StatelessWidget {
                   right: 41,
                 ),
                 child: RichText(
+                  textAlign: TextAlign.center,
                   text: TextSpan(
                     children: [
                       TextSpan(
                         text: "Are you sure you want to ",
-                        style: CustomTextStyles.bodyMediumRobotoff333333,
+                        style: CustomTextStyles.bodyMediumRoboto16,
                       ),
                       TextSpan(
-                        text:
-                            "delete your account and data forever, you cannot undo this action",
-                        style:
-                            CustomTextStyles.titleSmallRobotoff333333ExtraBold,
+                        text: "delete your account and data",
+                        style: CustomTextStyles.titleSmallRobotoff333333ExtraBoldDelete,
+                      ),
+                      TextSpan(
+                        text: " and forever, you cannot undo this action",
+                        style: CustomTextStyles.bodyMediumRoboto16,
                       ),
                     ],
                   ),
-                  textAlign: TextAlign.center,
                 ),
               ),
+
               const Spacer(
                 flex: 55,
               ),
@@ -106,10 +110,8 @@ class ConfirmDeleteScreen extends StatelessWidget {
                 context: context,
                 onPressedDelete: () async {
                   await deleteProvider.deleteAccount(context: context);
+                  await removeUserDetailsSharePref(context: context);
                   removeAllValuesLogout(context: context);
-                  dashBoardProvider.changeCommentPage(
-                    index: 0,
-                  );
                 },
                 yes: "Delete Account",
                 title: 'Delete your account',
@@ -120,7 +122,7 @@ class ConfirmDeleteScreen extends StatelessWidget {
             width: 104,
             text: "Delete",
             margin: const EdgeInsets.only(top: 1),
-            buttonStyle: CustomButtonStyles.outlinePrimary,
+            buttonStyle: CustomButtonStyles.outlinePrimaryDelete,
           ),
           CustomElevatedButton(
             width: 104,

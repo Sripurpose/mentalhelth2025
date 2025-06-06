@@ -44,7 +44,7 @@ class ImageConstant {
   static String imgLinkedin = '$imagePath/img_linkedin.svg';
   static String imgClosePrimary = '$imagePath/img_close_primary.svg';
   static String imgClosePrimaryNew = '$imagePath/close_icon_new.svg';
-
+  static String delete_account_icon_png = '$imagePath/delete_account_icon_png.png';
 
   static String imgGroup27 = '$imagePath/img_group_27.svg';
 

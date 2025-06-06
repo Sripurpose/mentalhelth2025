@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mentalhelth/utils/theme/colors.dart';
 
+import '../../utils/core/image_constant.dart';
+
 void customPopup({
   required BuildContext context,
   required void Function()? onPressedDelete,
@@ -103,10 +105,17 @@ void customPopupDelete({
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
-                Icons.error,
-                color: Colors.red,
-                size: 60,
+              // const Icon(
+              //   Icons.error,
+              //   color: Colors.red,
+              //   size: 60,
+              // ),
+
+              Image.asset(
+                ImageConstant.delete_account_icon_png, // This should be the path to your PNG image
+                // color: theme.colorScheme.primary.withOpacity(1),
+                height: 60,
+                width: 60,
               ),
               const SizedBox(height: 16),
               Text(
@@ -131,7 +140,7 @@ void customPopupDelete({
                 width: double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
+                    backgroundColor: ColorsContent.newThemeColor,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
@@ -157,7 +166,7 @@ void customPopupDelete({
                   },
                   child: Text(
                     cancel ?? 'Cancel',
-                    style: const TextStyle(color: Colors.grey,fontSize: 18,fontWeight: FontWeight.bold),
+                    style: const TextStyle(color: Colors.grey,fontSize: 17,fontWeight: FontWeight.bold),
                   ),
                 ),
               ),

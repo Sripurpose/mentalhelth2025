@@ -126,6 +126,12 @@ class CustomTextStyles {
         fontSize: 14,
       );
 
+  static get bodyMediumRoboto16 =>
+      theme.textTheme.bodyMedium!.roboto.copyWith(
+        color: const Color(0XFF333333),
+        fontSize: 16,
+      );
+
   static get bodySmall10 => theme.textTheme.bodySmall!.copyWith(
         fontSize: 10,
       );
@@ -348,6 +354,13 @@ class CustomTextStyles {
       theme.textTheme.titleSmall!.roboto.copyWith(
         color: const Color(0XFF333333),
         fontWeight: FontWeight.w800,
+      );
+
+  static get titleSmallRobotoff333333ExtraBoldDelete =>
+      theme.textTheme.titleSmall!.roboto.copyWith(
+        color: const Color(0XFF333333),
+        fontWeight: FontWeight.w800,
+        fontSize: 16
       );
 
   static blackTextStyleCustom({required double size}) {

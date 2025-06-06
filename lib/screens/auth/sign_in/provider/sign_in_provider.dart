@@ -82,7 +82,7 @@ class SignInProvider extends ChangeNotifier {
         },
         body: body,
       );
-      if (response.statusCode == 200 || response.statusCode == 201) {
+      if (response.statusCode == 200) {
         loginStatus = response.statusCode;
         TokenManager.setTokenStatus(false);
         loginModel = loginModelFromJson(
@@ -150,6 +150,12 @@ class SignInProvider extends ChangeNotifier {
             ),
           );
         });
+      } else if(response.statusCode == 201){
+        loginStatus = response.statusCode;
+        showCustomSnackBar(
+          context: context,
+          message: 'Your account is already registered but not activated. Please check your email for the activation link!!',
+        );
       }
       else{
         loginStatus = response.statusCode;

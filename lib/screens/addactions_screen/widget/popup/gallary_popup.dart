@@ -172,7 +172,8 @@ Future galleryBottomSheetAction({
                                                                   index]
                                                               .value,
                                                         ),
-                                                        fit: BoxFit.fill,
+                                              height: 200,
+                                              fit: BoxFit.cover,
                                                         width: size.width,
                                                       ),
                                           ),
@@ -282,7 +283,8 @@ Future galleryBottomSheetAction({
                                                                   .pickedImages[
                                                               index],
                                                         ),
-                                                        fit: BoxFit.fill,
+                                              height: 200,
+                                              fit: BoxFit.cover,
                                               width: size.width,
                                                       ),
                                             // Image.file(

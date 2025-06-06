@@ -311,8 +311,9 @@ Future galleryBottomSheet({
                                                                   index]
                                                               .value,
                                                         ),
-                                                        fit: BoxFit.fill,
+                                              fit: BoxFit.cover,
                                                         width: size.width,
+                                              height: 200, // Avoid too small height
                                                       ),
                                           ),
                                           GestureDetector(
@@ -418,15 +419,14 @@ Future galleryBottomSheet({
                                                         alignment:
                                                             Alignment.center,
                                                       )
-                                                    : Image.file(
-                                                      width: size.width,
-                                                        File(
-                                                          mentalStrengthEditProvider
-                                                                  .pickedImages[
-                                                              index],
-                                                        ),
-                                                        fit: BoxFit.fill,
-                                                      ),
+                                                    :
+                                            Image.file(
+                                              File(mentalStrengthEditProvider.pickedImages[index]),
+                                              width: size.width,
+                                              height: 200,
+                                              fit: BoxFit.cover,
+                                            ),
+
                                           ),
                                           GestureDetector(
                                             onTap: () {
