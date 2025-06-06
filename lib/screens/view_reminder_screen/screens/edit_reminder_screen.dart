@@ -14,6 +14,7 @@ import '../../../../widgets/app_bar/appbar_subtitle.dart';
 import '../../../../widgets/app_bar/custom_app_bar.dart';
 import '../../../utils/logic/date_format.dart';
 import '../../../utils/theme/app_decoration.dart';
+import '../../../utils/theme/colors.dart';
 import '../../../utils/theme/custom_button_style.dart';
 import '../../../utils/theme/theme_helper.dart';
 import '../../../widgets/custom_elevated_button.dart';
@@ -198,9 +199,10 @@ class _EditReminderScreenScreenScreenState
   Widget build(BuildContext context) {
    // final homeProvider = Provider.of<HomeProvider>(context, listen: false);
     Size size = MediaQuery.of(context).size;
-    return SafeArea(
-      child: ConnectivityWidget(
+    return ConnectivityWidget(
+      child: SafeArea(
         child: Scaffold(
+          backgroundColor: ColorsContent.homeBackGroundColor, // Replace image with a solid color,
           appBar: buildAppBarGoalView(context, size,
               heading: widget.title,
               id: ""),
@@ -220,7 +222,7 @@ class _EditReminderScreenScreenScreenState
                       _buildTitleEditText(context),
                       const SizedBox(height: 20),
                       _buildDescriptionEditText(context),
-                      const SizedBox(height: 50),
+                      const SizedBox(height: 40),
                       SizedBox(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -252,16 +254,16 @@ class _EditReminderScreenScreenScreenState
                                     ),
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 11,
-                                      vertical: 8,
+                                      vertical: 10,
                                     ),
                                     decoration: BoxDecoration(
                                       color: theme.colorScheme
                                           .onSecondaryContainer
                                           .withOpacity(1),
-                                      border: Border.all(
-                                        color: appTheme.gray700,
-                                        width: 1,
-                                      ),
+                                      // border: Border.all(
+                                      //   color: appTheme.gray700,
+                                      //   width: 1,
+                                      // ),
                                       borderRadius: BorderRadiusStyle
                                           .roundedBorder4,
                                     ),
@@ -271,11 +273,13 @@ class _EditReminderScreenScreenScreenState
                                         children: [
                                           CustomImageView(
                                             imagePath: ImageConstant
-                                                .imgThumbsUpGray700,
+                                                .actionDatePickerNumu,
                                             height: 20,
                                             width: 20,
+
                                             margin:
-                                            const EdgeInsets.only(
+                                            const EdgeInsets
+                                                .only(
                                               bottom: 2,
                                             ),
                                           ),
@@ -318,16 +322,16 @@ class _EditReminderScreenScreenScreenState
                                     ),
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 11,
-                                      vertical: 8,
+                                      vertical: 10,
                                     ),
                                     decoration: BoxDecoration(
                                       color: theme.colorScheme
                                           .onSecondaryContainer
                                           .withOpacity(1),
-                                      border: Border.all(
-                                        color: appTheme.gray700,
-                                        width: 1,
-                                      ),
+                                      // border: Border.all(
+                                      //   color: appTheme.gray700,
+                                      //   width: 1,
+                                      // ),
                                       borderRadius: BorderRadiusStyle
                                           .roundedBorder4,
                                     ),
@@ -337,11 +341,13 @@ class _EditReminderScreenScreenScreenState
                                         children: [
                                           CustomImageView(
                                             imagePath: ImageConstant
-                                                .imgThumbsUpGray700,
+                                                .actionDatePickerNumu,
                                             height: 20,
                                             width: 20,
+
                                             margin:
-                                            const EdgeInsets.only(
+                                            const EdgeInsets
+                                                .only(
                                               bottom: 2,
                                             ),
                                           ),
@@ -396,16 +402,16 @@ class _EditReminderScreenScreenScreenState
                                     ),
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 11,
-                                      vertical: 8,
+                                      vertical: 10,
                                     ),
                                     decoration: BoxDecoration(
                                       color: theme.colorScheme
                                           .onSecondaryContainer
                                           .withOpacity(1),
-                                      border: Border.all(
-                                        color: appTheme.gray700,
-                                        width: 1,
-                                      ),
+                                      // border: Border.all(
+                                      //   color: appTheme.gray700,
+                                      //   width: 1,
+                                      // ),
                                       borderRadius: BorderRadiusStyle
                                           .roundedBorder4,
                                     ),
@@ -415,11 +421,13 @@ class _EditReminderScreenScreenScreenState
                                         children: [
                                           CustomImageView(
                                             imagePath: ImageConstant
-                                                .imgThumbsUpGray700,
+                                                .actionDatePickerNumu,
                                             height: 20,
                                             width: 20,
+
                                             margin:
-                                            const EdgeInsets.only(
+                                            const EdgeInsets
+                                                .only(
                                               bottom: 2,
                                             ),
                                           ),
@@ -465,16 +473,16 @@ class _EditReminderScreenScreenScreenState
                                     ),
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 11,
-                                      vertical: 8,
+                                      vertical: 10,
                                     ),
                                     decoration: BoxDecoration(
                                       color: theme.colorScheme
                                           .onSecondaryContainer
                                           .withOpacity(1),
-                                      border: Border.all(
-                                        color: appTheme.gray700,
-                                        width: 1,
-                                      ),
+                                      // border: Border.all(
+                                      //   color: appTheme.gray700,
+                                      //   width: 1,
+                                      // ),
                                       borderRadius: BorderRadiusStyle
                                           .roundedBorder4,
                                     ),
@@ -484,11 +492,13 @@ class _EditReminderScreenScreenScreenState
                                         children: [
                                           CustomImageView(
                                             imagePath: ImageConstant
-                                                .imgThumbsUpGray700,
+                                                .actionDatePickerNumu,
                                             height: 20,
                                             width: 20,
+
                                             margin:
-                                            const EdgeInsets.only(
+                                            const EdgeInsets
+                                                .only(
                                               bottom: 2,
                                             ),
                                           ),
@@ -737,16 +747,17 @@ class _EditReminderScreenScreenScreenState
                                           color: theme.colorScheme
                                               .onSecondaryContainer
                                               .withOpacity(1),
-                                          border: Border.all(
-                                            color: appTheme.gray700,
-                                            width: 1,
-                                          ),
+                                          // border: Border.all(
+                                          //   color: appTheme.gray700,
+                                          //   width: 1,
+                                          // ),
                                           borderRadius:
                                           BorderRadiusStyle
                                               .roundedBorder4,
                                         ),
                                         child: SizedBox(
                                           width: size.width * 0.32,
+                                          height: 28,
                                           child: Row(
                                             children: [
                                               Padding(
@@ -792,7 +803,7 @@ class _EditReminderScreenScreenScreenState
                     ],
                   );
                 }
-        
+
               ),
             ),
           ),
@@ -804,7 +815,7 @@ class _EditReminderScreenScreenScreenState
   Widget _buildTitleEditText(BuildContext context) {
     return Consumer<HomeProvider>(
         builder: (context, homeProvider, _) {
-          return CustomTextFormField(
+          return CustomTextFormFieldGoalOrActionName(
             controller: homeProvider.titleEditTextController,
             hintText: "Title",
             hintStyle: CustomTextStyles.bodySmallGray700,
@@ -817,7 +828,7 @@ class _EditReminderScreenScreenScreenState
   Widget _buildDescriptionEditText(BuildContext context) {
     return Consumer<HomeProvider>(
         builder: (context, homeProvider, _) {
-          return CustomTextFormField(
+          return CustomTextFormFieldGoalOrActionDesc(
             controller: homeProvider.descriptionEditTextController,
             hintText: "Description",
             hintStyle: CustomTextStyles.bodySmallGray700,
@@ -883,7 +894,7 @@ class _EditReminderScreenScreenScreenState
 
 
             },
-            height: 40,
+            height: 45,
             text: "Update Reminder",
             buttonStyle: CustomButtonStyles.outlinePrimaryTL5,
             buttonTextStyle:
@@ -921,25 +932,32 @@ class _EditReminderScreenScreenScreenState
         Consumer2<HomeProvider,GoalsDreamsProvider>(
           builder: (contexts, homeProvider,goalsDreamsProvider, _) {
             return PopupMenuButton<String>(
+              color: Colors.white,
+              icon: Icon(Icons.more_vert, color: ColorsContent.newThemeColor), // 👈 Vertical dots icon
+              padding: EdgeInsets.zero, // Removes extra padding
+              constraints: const BoxConstraints(
+                minWidth: 100, // 👈 Reduce width here
+                maxWidth: 100,
+              ),
               onSelected: (value) {},
               itemBuilder: (BuildContext context) {
                 return [
-                  PopupMenuItem<String>(
-                    onTap: () {
-                      // Navigator.of(context).push(
-                      //   MaterialPageRoute(
-                      //     builder: (context) => EditGoalsScreen(
-                      //       goalsanddream: widget.goalsanddream,
-                      //     ),
-                      //   ),
-                      // );
-                    },
-                    value: 'Edit',
-                    child: Text(
-                      'Edit',
-                      style: CustomTextStyles.bodyMedium14,
-                    ),
-                  ),
+                  // PopupMenuItem<String>(
+                  //   onTap: () {
+                  //     // Navigator.of(context).push(
+                  //     //   MaterialPageRoute(
+                  //     //     builder: (context) => EditGoalsScreen(
+                  //     //       goalsanddream: widget.goalsanddream,
+                  //     //     ),
+                  //     //   ),
+                  //     // );
+                  //   },
+                  //   value: 'Edit',
+                  //   child: Text(
+                  //     'Edit',
+                  //     style: CustomTextStyles.bodyMedium14,
+                  //   ),
+                  // ),
                   PopupMenuItem<String>(
                     onTap: () {
                       customPopup(
@@ -954,10 +972,23 @@ class _EditReminderScreenScreenScreenState
                         content: 'Are you sure You want to Delete this Reminder ?',
                       );
                     },
+                    height: 30, // 👈 Reduce height here
                     value: 'Delete',
-                    child: Text(
-                      'Delete',
-                      style: CustomTextStyles.bodyMedium14,
+                    child:  Center(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.delete_outline, color: ColorsContent.newThemeColor),
+                          const SizedBox(width: 8),
+                          const Text('Delete',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'Roboto',
+                                color:  Colors.black,
+                              )),
+                        ],
+                      ),
                     ),
                   ),
                 ];

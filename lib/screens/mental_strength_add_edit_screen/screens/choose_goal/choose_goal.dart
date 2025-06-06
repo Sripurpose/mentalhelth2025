@@ -105,14 +105,14 @@ class _ScreenChooseGoalMentalStrengthState
                                   children: [
                                     SvgPicture.asset(
                                       ImageConstant.dotDot,
-                                      color: ColorsContent.greyColor,
+                                      color: ColorsContent.newThemeColor,
                                       height: 8,
                                       width: 8,
                                       fit: BoxFit.contain,
                                     ),
                                     SvgPicture.asset(
                                       ImageConstant.dotDot,
-                                      color: ColorsContent.greyColor,
+                                      color: ColorsContent.newThemeColor,
                                       height: 8,
                                       width: 8,
                                       fit: BoxFit.contain,

@@ -103,12 +103,18 @@ class DashBoardScreen extends StatelessWidget {
                       ),
                       activeIcon: Padding(
                         padding: const EdgeInsets.only(top: 10.0),
-                        child: CustomImageView(
-                          imagePath: ImageConstant.homeActive,
+                        child: Image.asset(
+                          ImageConstant.home_active_png, // This should be the path to your PNG image
+                         // color: theme.colorScheme.primary.withOpacity(1),
                           height: 80,
                           width: 80,
-                          color: theme.colorScheme.primary.withOpacity(1),
                         ),
+                        // CustomImageView(
+                        //   imagePath: ImageConstant.check_home_icon,
+                        //   height: 80,
+                        //   width: 80,
+                        //   color: theme.colorScheme.primary.withOpacity(1),
+                        // ),
                       ),
                       label: '',
                     ),
@@ -121,11 +127,11 @@ class DashBoardScreen extends StatelessWidget {
                       ),
                       activeIcon: Padding(
                         padding: const EdgeInsets.only(top: 10.0),
-                        child: CustomImageView(
-                          imagePath: ImageConstant.imgSettingsActive,
+                        child: Image.asset(
+                          ImageConstant.mental_active_png, // This should be the path to your PNG image
+                          // color: theme.colorScheme.primary.withOpacity(1),
                           height: 80,
                           width: 80,
-                          color: theme.colorScheme.primary.withOpacity(1),
                         ),
                       ),
                       label: '',
@@ -139,11 +145,11 @@ class DashBoardScreen extends StatelessWidget {
                       ),
                       activeIcon: Padding(
                         padding: const EdgeInsets.only(top: 10.0),
-                        child: CustomImageView(
-                          imagePath: ImageConstant.imgMegaphoneActive,
+                        child: Image.asset(
+                          ImageConstant.listview_active_png, // This should be the path to your PNG image
+                          // color: theme.colorScheme.primary.withOpacity(1),
                           height: 80,
                           width: 80,
-                          color: theme.colorScheme.primary.withOpacity(1),
                         ),
                       ),
                       label: '',
@@ -157,11 +163,11 @@ class DashBoardScreen extends StatelessWidget {
                       ),
                       activeIcon: Padding(
                         padding: const EdgeInsets.only(top: 10.0),
-                        child: CustomImageView(
-                          imagePath: ImageConstant.imgArrowDownActive,
+                        child: Image.asset(
+                          ImageConstant.goal_active_png, // This should be the path to your PNG image
+                          // color: theme.colorScheme.primary.withOpacity(1),
                           height: 80,
                           width: 80,
-                          color: theme.colorScheme.primary.withOpacity(1),
                         ),
                       ),
                       label: '',

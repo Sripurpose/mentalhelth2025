@@ -30,7 +30,7 @@ class _HelpScreenState extends State<HelpScreen> {
             // Inject CSS to justify text and add padding
             await _controller.runJavaScript('''
               document.body.style.textAlign = "justify";
-              document.body.style.padding = "0 60px"; // Adjust the padding as needed
+         
             ''');
           },
           onNavigationRequest: (NavigationRequest request) {

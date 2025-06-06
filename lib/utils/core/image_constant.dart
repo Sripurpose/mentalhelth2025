@@ -70,6 +70,10 @@ class ImageConstant {
   static String homeInactive = '$imagePath/home_inactive.svg';
   static String imgHomeActive = '$imagePath/home_active_icon_numu.svg';
   static String homeActive = '$imagePath/home_active.svg';
+  static String home_active_png = '$imagePath/home_active_icon_png.png';
+  static String mental_active_png = '$imagePath/mental_active_icon_png.png';
+  static String listview_active_png = '$imagePath/listview_active_icon_png.png';
+  static String goal_active_png = '$imagePath/goal_active_icon_png.png';
 
   static String imgSettings = '$imagePath/mental_in_active_icon_numu.svg';
   static String imgSettingsActive = '$imagePath/mental_active_icon_numu.svg';
