@@ -32,27 +32,55 @@ class ReminderListItemWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 14,
-        vertical: 13,
+        vertical: 4,
       ),
       margin: const EdgeInsets.only(
         bottom: 10,
       ),
       decoration: BoxDecoration(
-        color: ColorsContent.goalNotCompletedColor,
-        borderRadius: BorderRadiusStyle.roundedBorder10,
+        color: Colors.white,
+        borderRadius: BorderRadiusStyle.roundedBorder8,
+        border: Border.all(
+          color: ColorsContent.goalNotCompletedColor, // Change to desired border color
+          width: 0.5,         // 🔁 Change thickness if required
+        ),
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           imagePath != null && imagePath.isNotEmpty ?
-           CircleAvatar(
-             backgroundColor: appTheme.gray50,
-             radius: size.height * 0.032,
-             backgroundImage: NetworkImage(imagePath),
-           ):
-          SvgPicture.asset(
-            'assets/images/alarmclock_fill.svg',  // Assuming 'image' is a URL to an SVG
-            fit: BoxFit.cover, // Optional: Adjust fit as needed
+          Container(
+            height: size.height * 0.06,
+            width: size.height * 0.06, // Same as height for square, adjust as needed
+            decoration: BoxDecoration(
+              color: appTheme.gray50,
+              borderRadius: BorderRadius.circular(5), // ⬅ Rounded corners (optional)
+              image: DecorationImage(
+                image: NetworkImage(imagePath),
+                fit: BoxFit.cover,
+              ),
+              border: Border.all(
+                color: ColorsContent.goalNotCompletedColor, // Change to desired border color
+                width: 0.5,         // 🔁 Change thickness if required
+              ),
+            ),
+          ) :
+          Container(
+            height: size.height * 0.06,
+            width: size.height * 0.06, // Same as height for square, adjust as needed
+            decoration: BoxDecoration(
+              color: appTheme.gray50,
+              borderRadius: BorderRadius.circular(5), // ⬅ Rounded corners (optional)
+              image: DecorationImage(
+                image: NetworkImage(imagePath),
+                fit: BoxFit.cover,
+              ),
+              border: Border.all(
+                color: ColorsContent.goalNotCompletedColor, // Change to desired border color
+                width: 0.5,         // 🔁 Change thickness if required
+              ),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.only(

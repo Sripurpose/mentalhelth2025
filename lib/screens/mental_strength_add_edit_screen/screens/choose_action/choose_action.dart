@@ -249,24 +249,38 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
 
                       if (mentalStrengthEditProvider
                           .getListGoalActionsModel!.actions!.isNotEmpty)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 10),
-                        child: TextField(
-                          controller: _searchController,
-                          onChanged: (value) {
-                            setState(() {
-                              searchQuery = value.toLowerCase();
-                            });
-                          },
-                          decoration: InputDecoration(
-                            hintText: "Search Actions...",
-                            prefixIcon: const Icon(Icons.search),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 10),
+                          child: TextField(
+                            controller: _searchController,
+                            onChanged: (value) {
+                              setState(() {
+                                searchQuery = value.toLowerCase();
+                              });
+                            },
+                            decoration: InputDecoration(
+                              hintText: "Find Actions",
+                              prefixIcon: const Icon(Icons.search),
+                              filled: true,
+                              fillColor: Colors.white, // 🔁 Background color
+                              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10), // 🎯 Curved all 4 sides
+                                borderSide: BorderSide.none, // ❌ No visible border
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide.none,
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide.none,
+                              ),
                             ),
+                            style: const TextStyle(fontSize: 16),
                           ),
                         ),
-                      ),
+
                       const SizedBox(height: 10),
                       Consumer<MentalStrengthEditProvider>(
                         builder: (context, mentalStrengthEditProvider, _) {

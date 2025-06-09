@@ -691,7 +691,7 @@ class _NumuMentalStrengthAddEditPageState
               : Container(
             width: size.width * 0.80,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
+              borderRadius: BorderRadius.circular(8.0),
               color: Colors.white,
             ),
             child: Center(
@@ -725,7 +725,7 @@ class _NumuMentalStrengthAddEditPageState
                     dropdownStyleData: DropdownStyleData(
                       maxHeight: 350,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(8),
                         color: Colors.white,
                       ),
                     ),
@@ -1046,7 +1046,7 @@ class _NumuMentalStrengthAddEditPageState
             ),
           ),
           SizedBox(
-            height: size.height * 0.04,
+            height: size.height * 0.02,
           ),
           SizedBox(
             height: size.height * 0.40,

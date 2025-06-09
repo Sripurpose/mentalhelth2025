@@ -526,19 +526,22 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                                                                       'Are you sure do you need delete',
                                                                 );
                                                               },
-                                                              child: CircleAvatar(
-                                                                radius:
-                                                                    size.width *
-                                                                        0.04,
-                                                                backgroundColor:
-                                                                    ColorsContent.newThemeColor,
-                                                                child: Icon(
-                                                                  Icons.close,
-                                                                  color: Colors
-                                                                      .white,
-                                                                  size:
+                                                              child: Padding(
+                                                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                                                child: CircleAvatar(
+                                                                  radius:
                                                                       size.width *
                                                                           0.04,
+                                                                  backgroundColor:
+                                                                      ColorsContent.newThemeColor,
+                                                                  child: Icon(
+                                                                    Icons.close_outlined,
+                                                                    color: Colors
+                                                                        .white,
+                                                                    size:
+                                                                        size.width *
+                                                                            0.04,
+                                                                  ),
                                                                 ),
                                                               ),
                                                             ),

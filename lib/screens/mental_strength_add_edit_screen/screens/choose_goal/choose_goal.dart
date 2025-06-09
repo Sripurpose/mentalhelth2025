@@ -206,12 +206,27 @@ class _ScreenChooseGoalMentalStrengthState
                                   decoration: InputDecoration(
                                     hintText: "Find Goal",
                                     prefixIcon: const Icon(Icons.search),
+                                    filled: true,
+                                    fillColor: Colors.white, // 🎨 Change as needed
+                                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                                     border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10), // 🎯 Curved all 4 sides
+                                      borderSide: BorderSide.none, // ❌ Remove visible border
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide.none,
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide.none,
                                     ),
                                   ),
+                                  style: const TextStyle(fontSize: 16),
                                 ),
                               ),
+
+
                               if (!mentalStrengthEditProvider.getGoalsModelLoading && filteredGoals.isEmpty)
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,

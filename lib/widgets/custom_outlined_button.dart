@@ -130,7 +130,7 @@ class CustomOutlinedButtonContinueWithPhoneNumu extends BaseButton {
   }
 
   Widget get buildOutlinedButtonWidget => Container(
-    height: height ?? 40,
+    height: height ?? 45,
     width: width ?? double.maxFinite,
     margin: margin,
     decoration: decoration,

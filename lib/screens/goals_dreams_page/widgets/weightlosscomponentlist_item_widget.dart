@@ -32,34 +32,58 @@ class WeightLossComponentListItemWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 14,
-        vertical: 13,
+        vertical: 5,
       ),
       margin: const EdgeInsets.only(
         bottom: 10,
       ),
       decoration: status
           ? BoxDecoration(
-        color: ColorsContent.goalCompletedColor,
-        borderRadius: BorderRadiusStyle.roundedBorder10,
+        color: ColorsContent.shadeColor,
+        borderRadius: BorderRadiusStyle.roundedBorder8,
+        border: Border.all(
+          color: ColorsContent.goalNotCompletedColor, // Change to desired border color
+          width: 0.5,         // 🔁 Change thickness if required
+        ),
       )
           : BoxDecoration(
-              color: ColorsContent.goalNotCompletedColorNew,
-              borderRadius: BorderRadiusStyle.roundedBorder10,
+              color: Colors.white,
+              borderRadius: BorderRadiusStyle.roundedBorder8,
+        border: Border.all(
+          color: ColorsContent.goalNotCompletedColor, // Change to desired border color
+          width: 0.5,         // 🔁 Change thickness if required
+        ),
             ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           image.isEmpty
-              ?  CircleAvatar(
-      backgroundColor: appTheme.gray50,
-        radius: size.height * 0.035,
-        backgroundImage: NetworkImage(image),
-      )
-              : CircleAvatar(
-                  backgroundColor: appTheme.gray50,
-                  radius: size.height * 0.035,
-                  backgroundImage: NetworkImage(image),
-                ),
+              ?  Container(
+            height: size.height * 0.06,
+            width: size.height * 0.06, // Same as height for square, adjust as needed
+            decoration: BoxDecoration(
+              color: appTheme.gray50,
+              borderRadius: BorderRadius.circular(5), // ⬅ Rounded corners (optional)
+              image: DecorationImage(
+                image: NetworkImage(image),
+                fit: BoxFit.cover,
+              ),
+            ),
+          )
+
+              : Container(
+            height: size.height * 0.06,
+            width: size.height * 0.06, // Same as height for square, adjust as needed
+            decoration: BoxDecoration(
+              color: appTheme.gray50,
+              borderRadius: BorderRadius.circular(5), // ⬅ Rounded corners (optional)
+              image: DecorationImage(
+                image: NetworkImage(image),
+                fit: BoxFit.cover,
+              ),
+            ),
+          )
+          ,
           Padding(
             padding: const EdgeInsets.only(
               left: 15,

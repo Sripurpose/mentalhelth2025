@@ -46,6 +46,9 @@ class ImageConstant {
   static String imgClosePrimaryNew = '$imagePath/close_icon_new.svg';
   static String delete_account_icon_png = '$imagePath/delete_account_icon_png.png';
 
+  static String goal_proceed_icon_png = '$imagePath/goal_proceed_icon.png';
+  static String create_new_goal_icon_png = '$imagePath/create_new_goal_icon.png';
+
   static String imgGroup27 = '$imagePath/img_group_27.svg';
 
   static String imgLightBulb = '$imagePath/img_light_bulb.svg';

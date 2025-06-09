@@ -63,14 +63,14 @@ class FeedbackScreen extends StatelessWidget {
                             "Name *",
                             style: TextStyle(
                               fontSize: 16,
-                              fontWeight: FontWeight.w400,
+                              fontWeight: FontWeight.w500,
                               fontFamily: 'Open Sans',
                               color: Colors.black,
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(height: 5),
+                      const SizedBox(height: 10),
                       _buildNameEditText(context),
                       const SizedBox(height: 16),
                       const Align(
@@ -81,26 +81,32 @@ class FeedbackScreen extends StatelessWidget {
                             "Email *",
                             style: TextStyle(
                               fontSize: 16,
-                              fontWeight: FontWeight.w400,
+                              fontWeight: FontWeight.w500,
                               fontFamily: 'Open Sans',
                               color: Colors.black,
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(height: 5),
+                      const SizedBox(height: 10),
                       _buildEmailEditText(context),
                       const SizedBox(height: 24),
-                      Align(
+                      const Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 2),
+                          padding: EdgeInsets.only(left: 2),
                           child: Text(
-                            "Your Message",
-                            style: CustomTextStyles.bodyMedium14,
+                            "Your Message *",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: 'Open Sans',
+                              color: Colors.black,
+                            ),
                           ),
                         ),
                       ),
+                      const SizedBox(height: 10),
                       _buildMessageEditText(context),
                       const SizedBox(height: 28),
                       _buildSubmitButton(context),
@@ -143,6 +149,7 @@ class FeedbackScreen extends StatelessWidget {
       return CustomTextFormFieldPhoneNumberFeedbackNumu(
         maxLines: 8,
         controller: feedBackProvider.messageEditTextController,
+        hintText: "Enter your Message",
         textInputAction: TextInputAction.done,
       );
     });
