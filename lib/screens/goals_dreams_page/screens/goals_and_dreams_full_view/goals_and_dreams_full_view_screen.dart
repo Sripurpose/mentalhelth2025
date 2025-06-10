@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:logger/logger.dart';
@@ -268,13 +269,54 @@ class _GoalAndDreamFullViewScreenState
                                         controller: photoController,
                                         itemCount: imageList.length,
                                         itemBuilder: (context, index) {
-                                          return CustomImageView(
-                                            fit: BoxFit.cover,
-                                            imagePath: imageList[index],
-                                            height: size.height * 0.30,
-                                            width: size.width,
-                                            alignment: Alignment.center,
-                                            radius: BorderRadius.circular(8),
+                                          return GestureDetector(
+                                            onTap: () {
+                                              showDialog(
+                                                context: context,
+                                                barrierDismissible: true,
+                                                builder: (_) => Dialog(
+                                                  insetPadding: EdgeInsets.zero,
+                                                  backgroundColor: Colors.black,
+                                                  shape: const RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.zero, // Remove rounded corners
+                                                  ),
+                                                  child: Stack(
+                                                    children: [
+                                                      InteractiveViewer(
+                                                        child: Center(
+                                                          child: Image.network(
+                                                            imageList[index],
+                                                            fit: BoxFit.contain,
+                                                            loadingBuilder: (context, child, loadingProgress) {
+                                                              if (loadingProgress == null) return child;
+                                                              return const Center(child: CupertinoActivityIndicator());
+                                                            },
+                                                            errorBuilder: (context, error, stackTrace) =>
+                                                            const Center(child: Icon(Icons.broken_image, color: Colors.white)),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Positioned(
+                                                        top: 40,
+                                                        right: 20,
+                                                        child: IconButton(
+                                                          icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                                                          onPressed: () => Navigator.of(context).pop(),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: CustomImageView(
+                                              fit: BoxFit.cover,
+                                              imagePath: imageList[index],
+                                              height: size.height * 0.30,
+                                              width: size.width,
+                                              alignment: Alignment.center,
+                                              radius: BorderRadius.circular(8), // your original radius
+                                            ),
                                           );
                                         },
                                         onPageChanged: (int pageIndex) {
@@ -283,6 +325,7 @@ class _GoalAndDreamFullViewScreenState
                                           });
                                         },
                                       ),
+
                                       Positioned(
                                         bottom: 10,
                                         left: 0,

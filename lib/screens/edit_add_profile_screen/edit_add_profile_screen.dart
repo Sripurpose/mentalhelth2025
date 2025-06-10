@@ -663,7 +663,7 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                   isValids: editProfileProvider.phoneIsValid,
                   textInputType: TextInputType.phone,
                   controller: editProfileProvider.phoneController,
-                  hintText: "0000000000", // Phone number hint
+                  hintText: "(xxx)xxx-xxxx", // Phone number hint
                   hintStyle: const TextStyle(
                     color: Colors.black,
                   ),

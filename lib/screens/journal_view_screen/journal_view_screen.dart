@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/screens/dash_borad_screen/provider/dash_board_provider.dart';
@@ -299,14 +300,53 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                               controller: photoController,
                                               itemCount: imageList.length,
                                               itemBuilder: (context, index) {
-                                                return ClipRRect(
-                                                  borderRadius: BorderRadius.circular(5), // adjust as needed
-                                                  child: CustomImageView(
-                                                    fit: BoxFit.cover,
-                                                    imagePath: imageList[index],
-                                                    height: size.height * 0.30,
-                                                    width: size.width,
-                                                    alignment: Alignment.center,
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    showDialog(
+                                                      context: context,
+                                                      barrierDismissible: true,
+                                                      builder: (_) => Dialog(
+                                                        insetPadding: EdgeInsets.zero,
+                                                        backgroundColor: Colors.black,
+                                                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero), // <-- removes curves
+                                                        child: Stack(
+                                                          children: [
+                                                            InteractiveViewer(
+                                                              child: Center(
+                                                                child: Image.network(
+                                                                  imageList[index],
+                                                                  fit: BoxFit.contain,
+                                                                  loadingBuilder: (context, child, loadingProgress) {
+                                                                    if (loadingProgress == null) return child;
+                                                                    return const Center(child: CupertinoActivityIndicator());
+                                                                  },
+                                                                  errorBuilder: (context, error, stackTrace) =>
+                                                                  const Center(child: Icon(Icons.broken_image, color: Colors.white)),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Positioned(
+                                                              top: 40,
+                                                              right: 20,
+                                                              child: IconButton(
+                                                                icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                                                                onPressed: () => Navigator.of(context).pop(),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                  child: ClipRRect(
+                                                    borderRadius: BorderRadius.circular(5),
+                                                    child: CustomImageView(
+                                                      fit: BoxFit.cover,
+                                                      imagePath: imageList[index],
+                                                      height: size.height * 0.30,
+                                                      width: size.width,
+                                                      alignment: Alignment.center,
+                                                    ),
                                                   ),
                                                 );
                                               },
@@ -316,6 +356,75 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                                 });
                                               },
                                             ),
+                                            // PageView.builder(
+                                            //   controller: photoController,
+                                            //   itemCount: imageList.length,
+                                            //   itemBuilder: (context, index) {
+                                            //     return GestureDetector(
+                                            //       onTap: () {
+                                            //         showDialog(
+                                            //           context: context,
+                                            //           barrierDismissible: true,
+                                            //           builder: (_) {
+                                            //             PageController dialogController = PageController(initialPage: index);
+                                            //             return Dialog(
+                                            //               insetPadding: EdgeInsets.zero,
+                                            //               backgroundColor: Colors.black,
+                                            //               shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                                            //               child: Stack(
+                                            //                 children: [
+                                            //                   PageView.builder(
+                                            //                     controller: dialogController,
+                                            //                     itemCount: imageList.length,
+                                            //                     itemBuilder: (context, dialogIndex) {
+                                            //                       return InteractiveViewer(
+                                            //                         child: Center(
+                                            //                           child: Image.network(
+                                            //                             imageList[dialogIndex],
+                                            //                             fit: BoxFit.contain,
+                                            //                             loadingBuilder: (context, child, loadingProgress) {
+                                            //                               if (loadingProgress == null) return child;
+                                            //                               return const Center(child: CupertinoActivityIndicator());
+                                            //                             },
+                                            //                             errorBuilder: (context, error, stackTrace) =>
+                                            //                             const Center(child: Icon(Icons.broken_image, color: Colors.white)),
+                                            //                           ),
+                                            //                         ),
+                                            //                       );
+                                            //                     },
+                                            //                   ),
+                                            //                   Positioned(
+                                            //                     top: 40,
+                                            //                     right: 20,
+                                            //                     child: IconButton(
+                                            //                       icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                                            //                       onPressed: () => Navigator.of(context).pop(),
+                                            //                     ),
+                                            //                   ),
+                                            //                 ],
+                                            //               ),
+                                            //             );
+                                            //           },
+                                            //         );
+                                            //       },
+                                            //       child: ClipRRect(
+                                            //         borderRadius: BorderRadius.circular(5),
+                                            //         child: CustomImageView(
+                                            //           fit: BoxFit.cover,
+                                            //           imagePath: imageList[index],
+                                            //           height: size.height * 0.30,
+                                            //           width: size.width,
+                                            //           alignment: Alignment.center,
+                                            //         ),
+                                            //       ),
+                                            //     );
+                                            //   },
+                                            //   onPageChanged: (int pageIndex) {
+                                            //     setState(() {
+                                            //       photoCurrentIndex = pageIndex;
+                                            //     });
+                                            //   },
+                                            // ),
                                             Positioned(
                                               bottom: 10,
                                               left: 0,

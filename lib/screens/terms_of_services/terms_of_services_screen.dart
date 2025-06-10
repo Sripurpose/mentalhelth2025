@@ -58,7 +58,7 @@ class _TermsOfServicesScreenState extends State<TermsOfServicesScreen> {
                   child: Consumer<PrivacyPolicyProvider>(
                     builder: (context, policyProvider, _) {
                       return SizedBox(
-                        height: size.height * 0.75, // Adjust height as needed
+                        height: size.height * 2.65, // Adjust height as needed
                         child: policyProvider.policyModel == null
                             ? const Center(child: Text(""))
                             : policyProvider.policyModelLoading
