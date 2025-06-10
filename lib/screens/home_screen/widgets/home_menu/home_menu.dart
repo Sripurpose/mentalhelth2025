@@ -400,16 +400,16 @@ Widget buildPopupDialog(BuildContext context, Size size) {
               // ),
           GestureDetector(
           onTap: () async {
-            shareImageWithText();
-//           const shareMessage = '''
-// Check out the Numu app! 🌿
-//
-// Build mental strength,reduce anxiety,and stay focused on your goals with Numu.
-//
-// Download now: https://mh.featureme.live/downloads
-// ''';
-//
-//           await Share.share(shareMessage);
+          //  shareImageWithText();
+          const shareMessage = '''
+Check out the Numu app! 🌿
+
+Build mental strength,reduce anxiety,and stay focused on your goals with Numu.
+
+Download now: https://mh.featureme.live/downloads
+''';
+
+          await Share.share(shareMessage);
           },
           child: Align(
           alignment: Alignment.topLeft,
