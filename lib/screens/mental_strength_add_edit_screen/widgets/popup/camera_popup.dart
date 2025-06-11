@@ -279,13 +279,17 @@ Future cameraBottomSheet({
                                                       mentalStrengthEditProvider
                                                           .takedImages[index],
                                                 )
-                                              : Image.file(
-                                                  File(
-                                                      mentalStrengthEditProvider
-                                                          .takedImages[index]),
-                                                  fit: BoxFit.cover,
-                                            width: size.width,
-                                                ),
+                                              : ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(4),
+                                                child: Image.file(
+                                                    File(
+                                                        mentalStrengthEditProvider
+                                                            .takedImages[index]),
+                                                    fit: BoxFit.cover,
+                                                                                            width: size.width,
+                                                  ),
+                                              ),
                                         ),
                                         GestureDetector(
                                           onTap: () {

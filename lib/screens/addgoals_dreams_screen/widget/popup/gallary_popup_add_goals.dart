@@ -65,7 +65,7 @@ Future galleryBottomSheetAddGoals({
                         }
                       },
                       child: buildAvatarImage(
-                        widget:  Icon(
+                        widget: Icon(
                           Icons.image,
                           color: ColorsContent.newThemeColor,
                         ),
@@ -80,7 +80,7 @@ Future galleryBottomSheetAddGoals({
                         }
                       },
                       child: buildAvatarImage(
-                        widget:  Icon(
+                        widget: Icon(
                           Icons.video_collection_rounded,
                           color: ColorsContent.newThemeColor,
                         ),
@@ -106,14 +106,17 @@ Future galleryBottomSheetAddGoals({
                           ),
                           adDreamsGoalsProvider.mediaSelected == 1
                               ? Container(
-                            width: size.width * 0.85,
-                            height: adDreamsGoalsProvider
-                                .alreadyPickedImages.isEmpty
-                                ? 0
-                                : ((adDreamsGoalsProvider
-                                .alreadyPickedImages.length / 2).ceil() *
-                                size.height *
-                                0.217),
+                                  width: size.width * 0.85,
+                                  height: adDreamsGoalsProvider
+                                          .alreadyPickedImages.isEmpty
+                                      ? 0
+                                      : ((adDreamsGoalsProvider
+                                                      .alreadyPickedImages
+                                                      .length /
+                                                  2)
+                                              .ceil() *
+                                          size.height *
+                                          0.217),
                                   child: GridView.builder(
                                     physics:
                                         const NeverScrollableScrollPhysics(),
@@ -154,29 +157,39 @@ Future galleryBottomSheetAddGoals({
                                                                 index]
                                                             .value
                                                             .startsWith("https")
-                                                    ? CustomImageView(
-                                                        fit: BoxFit.cover,
-                                                        imagePath:
+                                                    ? ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(4),
+                                                        child: CustomImageView(
+                                                          fit: BoxFit.cover,
+                                                          imagePath:
+                                                              adDreamsGoalsProvider
+                                                                  .alreadyPickedImages[
+                                                                      index]
+                                                                  .value,
+                                                          height: size.height *
+                                                              0.27,
+                                                          width: size.width,
+                                                          alignment:
+                                                              Alignment.center,
+                                                        ),
+                                                      )
+                                                    : ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(4),
+                                                        child: Image.file(
+                                                          File(
                                                             adDreamsGoalsProvider
                                                                 .alreadyPickedImages[
                                                                     index]
                                                                 .value,
-                                                        height:
-                                                            size.height * 0.27,
-                                                        width: size.width,
-                                                        alignment:
-                                                            Alignment.center,
-                                                      )
-                                                    : Image.file(
-                                                        File(
-                                                          adDreamsGoalsProvider
-                                                              .alreadyPickedImages[
-                                                                  index]
-                                                              .value,
+                                                          ),
+                                                          height: 200,
+                                                          fit: BoxFit.cover,
+                                                          width: size.width,
                                                         ),
-                                              height: 200,
-                                              fit: BoxFit.cover,
-                                              width: size.width,
                                                       ),
                                           ),
                                           GestureDetector(
@@ -188,23 +201,26 @@ Future galleryBottomSheetAddGoals({
                                                       .removeMediaFunction(
                                                     context: context,
                                                     id: adDreamsGoalsProvider
-                                                        .alreadyPickedImages[index]
+                                                        .alreadyPickedImages[
+                                                            index]
                                                         .id
                                                         .toString(),
                                                     type: "goal",
                                                   );
                                                   adDreamsGoalsProvider
                                                       .alreadyPickedImagesRemove(
-                                                      index);
+                                                          index);
 
                                                   Navigator.of(context).pop();
 
                                                   // Close the bottom sheet after deleting
-                                                  Navigator.of(context).pop();  // This will close the galleryBottomSheet as well
+                                                  Navigator.of(context)
+                                                      .pop(); // This will close the galleryBottomSheet as well
                                                 },
                                                 yes: "Yes",
                                                 title: 'Do you Need Delete',
-                                                content: 'Are you sure do you need delete',
+                                                content:
+                                                    'Are you sure do you need delete',
                                               );
                                             },
                                             child: CustomImageView(
@@ -227,7 +243,7 @@ Future galleryBottomSheetAddGoals({
                               : const SizedBox(),
                           adDreamsGoalsProvider.mediaSelected == 1
                               ? SizedBox(
-                            width: size.width * 0.85,
+                                  width: size.width * 0.85,
                                   height:
                                       adDreamsGoalsProvider.pickedImages.isEmpty
                                           ? 0
@@ -269,32 +285,41 @@ Future galleryBottomSheetAddGoals({
                                                         adDreamsGoalsProvider
                                                             .pickedImages[index]
                                                             .startsWith("https")
-                                                    ? CustomImageView(
-                                                        fit: BoxFit.cover,
-                                                        imagePath:
+                                                    ? ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(4),
+                                                        child: CustomImageView(
+                                                          fit: BoxFit.cover,
+                                                          imagePath:
+                                                              adDreamsGoalsProvider
+                                                                      .pickedImages[
+                                                                  index],
+                                                          height: size.height *
+                                                              0.27,
+                                                          width: size.width,
+                                                          alignment:
+                                                              Alignment.center,
+                                                        ),
+                                                      )
+                                                    : ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(4),
+                                                        child: Image.file(
+                                                          File(
                                                             adDreamsGoalsProvider
                                                                     .pickedImages[
                                                                 index],
-                                                        height:
-                                                            size.height * 0.27,
-                                                        width: size.width,
-                                                        alignment:
-                                                            Alignment.center,
-                                                      )
-                                                    : Image.file(
-                                                        File(
-                                                          adDreamsGoalsProvider
-                                                                  .pickedImages[
-                                                              index],
+                                                          ),
+                                                          height: 200,
+                                                          fit: BoxFit.cover,
+                                                          width: size.width,
                                                         ),
-                                              height: 200,
-                                              fit: BoxFit.cover,
-                                              width: size.width,
                                                       ),
                                           ),
                                           GestureDetector(
                                             onTap: () {
-
                                               customPopup(
                                                 context: context,
                                                 onPressedDelete: () async {
@@ -305,16 +330,20 @@ Future galleryBottomSheetAddGoals({
                                                   //       .pickedImages[index],
                                                   //   type: "goal",
                                                   // );
-                                                  adDreamsGoalsProvider.pickedImagesRemove(index);
+                                                  adDreamsGoalsProvider
+                                                      .pickedImagesRemove(
+                                                          index);
                                                   Navigator.of(context).pop();
-                                                  adDreamsGoalsProvider.removeMediaUploadResponseListFunction(index);
+                                                  adDreamsGoalsProvider
+                                                      .removeMediaUploadResponseListFunction(
+                                                          index);
                                                   Navigator.of(context).pop();
                                                 },
                                                 yes: "Yes",
                                                 title: 'Do you Need Delete',
-                                                content: 'Are you sure do you need delete?',
+                                                content:
+                                                    'Are you sure do you need delete?',
                                               );
-
                                             },
                                             child: CustomImageView(
                                               imagePath:

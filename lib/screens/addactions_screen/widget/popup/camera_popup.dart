@@ -132,11 +132,15 @@ Future cameraBottomSheetAction({
                                                   videoUrl: addActionsProvider
                                                       .takedImages[index],
                                                 )
-                                              : Image.file(
-                                                  File(addActionsProvider
-                                                      .takedImages[index]),
-                                                  fit: BoxFit.cover,
-                                                ),
+                                              : ClipRRect(
+                                            borderRadius:
+                                            BorderRadius.circular(4),
+                                                child: Image.file(
+                                                    File(addActionsProvider
+                                                        .takedImages[index]),
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                              ),
                                         ),
                                         GestureDetector(
                                           onTap: () {

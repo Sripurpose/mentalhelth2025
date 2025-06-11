@@ -58,7 +58,7 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
                   child: Consumer<PrivacyPolicyProvider>(
                     builder: (context, policyProvider, _) {
                       return SizedBox(
-                        height: size.height * 2.45, // Adjust height as needed
+                        height: size.height * 1.23, // Adjust height as needed
                         child: policyProvider.policyModel == null
                             ? const Center(
                                 child: Text(""),

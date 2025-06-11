@@ -65,7 +65,7 @@ Future galleryBottomSheetAction({
                         }
                       },
                       child: buildAvatarImage(
-                        widget:  Icon(
+                        widget: Icon(
                           Icons.image,
                           color: ColorsContent.newThemeColor,
                         ),
@@ -80,7 +80,7 @@ Future galleryBottomSheetAction({
                         }
                       },
                       child: buildAvatarImage(
-                        widget:  Icon(
+                        widget: Icon(
                           Icons.video_collection_rounded,
                           color: ColorsContent.newThemeColor,
                         ),
@@ -106,13 +106,16 @@ Future galleryBottomSheetAction({
                           ),
                           addActionsProvider.mediaSelected == 1
                               ? SizedBox(
-                            width: size.width * 0.85,
-                            height: addActionsProvider
-                                .alreadyPickedImages.isEmpty
-                                ? 0
-                                : ((addActionsProvider.alreadyPickedImages.length / 2).ceil() *
-                                size.height *
-                                0.217),
+                                  width: size.width * 0.85,
+                                  height: addActionsProvider
+                                          .alreadyPickedImages.isEmpty
+                                      ? 0
+                                      : ((addActionsProvider.alreadyPickedImages
+                                                      .length /
+                                                  2)
+                                              .ceil() *
+                                          size.height *
+                                          0.217),
                                   child: GridView.builder(
                                     physics:
                                         const NeverScrollableScrollPhysics(),
@@ -152,30 +155,40 @@ Future galleryBottomSheetAction({
                                                                 index]
                                                             .value
                                                             .startsWith("https")
-                                                    ? CustomImageView(
-                                                        fit: BoxFit.cover,
-                                                        imagePath:
+                                                    ? ClipRRect(
+                                              borderRadius:
+                                              BorderRadius
+                                                  .circular(4),
+                                                      child: CustomImageView(
+                                                          fit: BoxFit.cover,
+                                                          imagePath:
+                                                              addActionsProvider
+                                                                  .alreadyPickedImages[
+                                                                      index]
+                                                                  .value,
+                                                          height:
+                                                              size.height * 0.27,
+                                                          width: size.width,
+                                                          alignment:
+                                                              Alignment.center,
+                                                        ),
+                                                    )
+                                                    : ClipRRect(
+                                              borderRadius:
+                                              BorderRadius
+                                                  .circular(4),
+                                                      child: Image.file(
+                                                          File(
                                                             addActionsProvider
                                                                 .alreadyPickedImages[
                                                                     index]
                                                                 .value,
-                                                        height:
-                                                            size.height * 0.27,
-                                                        width: size.width,
-                                                        alignment:
-                                                            Alignment.center,
-                                                      )
-                                                    : Image.file(
-                                                        File(
-                                                          addActionsProvider
-                                                              .alreadyPickedImages[
-                                                                  index]
-                                                              .value,
+                                                          ),
+                                                          height: 200,
+                                                          fit: BoxFit.cover,
+                                                          width: size.width,
                                                         ),
-                                              height: 200,
-                                              fit: BoxFit.cover,
-                                                        width: size.width,
-                                                      ),
+                                                    ),
                                           ),
                                           GestureDetector(
                                             onTap: () {
@@ -186,25 +199,27 @@ Future galleryBottomSheetAction({
                                                       .removeMediaFunction(
                                                     context: context,
                                                     id: addActionsProvider
-                                                        .alreadyPickedImages[index]
+                                                        .alreadyPickedImages[
+                                                            index]
                                                         .id
                                                         .toString(),
                                                     type: "action",
                                                   );
                                                   addActionsProvider
                                                       .alreadyPickedImagesRemove(
-                                                      index);
+                                                          index);
 
                                                   Navigator.of(context).pop();
 
                                                   // Close the bottom sheet after deleting
-                                                  Navigator.of(context).pop();  // This will close the galleryBottomSheet as well
+                                                  Navigator.of(context)
+                                                      .pop(); // This will close the galleryBottomSheet as well
                                                 },
                                                 yes: "Yes",
                                                 title: 'Do you Need Delete',
-                                                content: 'Are you sure do you need delete',
+                                                content:
+                                                    'Are you sure do you need delete',
                                               );
-
                                             },
                                             child: CustomImageView(
                                               imagePath:
@@ -226,7 +241,7 @@ Future galleryBottomSheetAction({
                               : const SizedBox(),
                           addActionsProvider.mediaSelected == 1
                               ? SizedBox(
-                            width: size.width * 0.85,
+                                  width: size.width * 0.85,
                                   height: addActionsProvider
                                           .pickedImages.isEmpty
                                       ? 0
@@ -265,27 +280,37 @@ Future galleryBottomSheetAction({
                                                         addActionsProvider
                                                             .pickedImages[index]
                                                             .startsWith("https")
-                                                    ? CustomImageView(
-                                                        fit: BoxFit.cover,
-                                                        imagePath:
+                                                    ? ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(4),
+                                                        child: CustomImageView(
+                                                          fit: BoxFit.cover,
+                                                          imagePath:
+                                                              addActionsProvider
+                                                                      .pickedImages[
+                                                                  index],
+                                                          height: size.height *
+                                                              0.27,
+                                                          width: size.width,
+                                                          alignment:
+                                                              Alignment.center,
+                                                        ),
+                                                      )
+                                                    : ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(4),
+                                                        child: Image.file(
+                                                          File(
                                                             addActionsProvider
                                                                     .pickedImages[
                                                                 index],
-                                                        height:
-                                                            size.height * 0.27,
-                                                        width: size.width,
-                                                        alignment:
-                                                            Alignment.center,
-                                                      )
-                                                    : Image.file(
-                                                        File(
-                                                          addActionsProvider
-                                                                  .pickedImages[
-                                                              index],
+                                                          ),
+                                                          height: 200,
+                                                          fit: BoxFit.cover,
+                                                          width: size.width,
                                                         ),
-                                              height: 200,
-                                              fit: BoxFit.cover,
-                                              width: size.width,
                                                       ),
                                             // Image.file(
                                             //   File(
@@ -309,18 +334,19 @@ Future galleryBottomSheetAction({
                                                   );
                                                   addActionsProvider
                                                       .pickedImagesRemove(
-                                                      index);
+                                                          index);
 
                                                   Navigator.of(context).pop();
 
                                                   // Close the bottom sheet after deleting
-                                                  Navigator.of(context).pop();  // This will close the galleryBottomSheet as well
+                                                  Navigator.of(context)
+                                                      .pop(); // This will close the galleryBottomSheet as well
                                                 },
                                                 yes: "Yes",
                                                 title: 'Do you Need Delete',
-                                                content: 'Are you sure do you need delete',
+                                                content:
+                                                    'Are you sure do you need delete',
                                               );
-
                                             },
                                             child: CustomImageView(
                                               imagePath:

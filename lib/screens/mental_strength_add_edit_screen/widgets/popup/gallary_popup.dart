@@ -296,31 +296,37 @@ Future galleryBottomSheet({
                                                                 index]
                                                             .value
                                                             .startsWith("https")
-                                                    ? CustomImageView(
-                                                        fit: BoxFit.cover,
-                                                        imagePath:
+                                                    ? ClipRRect(
+                                                borderRadius: BorderRadius.circular(8),
+                                                      child: CustomImageView(
+                                                          fit: BoxFit.cover,
+                                                          imagePath:
+                                                              mentalStrengthEditProvider
+                                                                  .alreadyPickedImages[
+                                                                      index]
+                                                                  .value,
+                                                          height:
+                                                              size.height * 0.27,
+                                                          width: size.width,
+                                                          alignment:
+                                                              Alignment.center,
+                                                        ),
+                                                    )
+                                                    :
+                                            ClipRRect(
+                                              borderRadius: BorderRadius.circular(8),
+                                              child: Image.file(
+                                                          File(
                                                             mentalStrengthEditProvider
                                                                 .alreadyPickedImages[
                                                                     index]
                                                                 .value,
-                                                        height:
-                                                            size.height * 0.27,
-                                                        width: size.width,
-                                                        alignment:
-                                                            Alignment.center,
-                                                      )
-                                                    :
-                                            Image.file(
-                                                        File(
-                                                          mentalStrengthEditProvider
-                                                              .alreadyPickedImages[
-                                                                  index]
-                                                              .value,
+                                                          ),
+                                                fit: BoxFit.cover,
+                                                          width: size.width,
+                                                height: 200, // Avoid too small height
                                                         ),
-                                              fit: BoxFit.cover,
-                                                        width: size.width,
-                                              height: 200, // Avoid too small height
-                                                      ),
+                                            ),
 
                                             // Container(
                                             //   width: size.width,
@@ -400,7 +406,7 @@ Future galleryBottomSheet({
                           mentalStrengthEditProvider.mediaSelected == 1
                               ? Container(
                                  // color: Colors.blueGrey,
-                                  width: size.width * 0.85,
+                                  width: size.width * 0.90,
                                   height: mentalStrengthEditProvider
                                           .pickedImages.isEmpty
                                       ? 0
@@ -442,24 +448,30 @@ Future galleryBottomSheet({
                                                         mentalStrengthEditProvider
                                                             .pickedImages[index]
                                                             .startsWith("https")
-                                                    ? CustomImageView(
-                                                        fit: BoxFit.cover,
-                                                        imagePath:
-                                                            mentalStrengthEditProvider
-                                                                    .pickedImages[
-                                                                index],
-                                                        height:
-                                                            size.height * 0.27,
-                                                        width: size.width,
-                                                        alignment:
-                                                            Alignment.center,
-                                                      )
+                                                    ? ClipRRect(
+                                              borderRadius: BorderRadius.circular(4),
+                                                      child: CustomImageView(
+                                                          fit: BoxFit.cover,
+                                                          imagePath:
+                                                              mentalStrengthEditProvider
+                                                                      .pickedImages[
+                                                                  index],
+                                                          height:
+                                                              size.height * 0.27,
+                                                          width: size.width,
+                                                          alignment:
+                                                              Alignment.center,
+                                                        ),
+                                                    )
                                                     :
-                                            Image.file(
-                                              File(mentalStrengthEditProvider.pickedImages[index]),
-                                              width: size.width,
-                                              height: 200,
-                                              fit: BoxFit.cover,
+                                            ClipRRect(
+                                              borderRadius: BorderRadius.circular(4),
+                                              child: Image.file(
+                                                File(mentalStrengthEditProvider.pickedImages[index]),
+                                                width: size.width,
+                                                height: 200,
+                                                fit: BoxFit.cover,
+                                              ),
                                             ),
 
                                               // Container(

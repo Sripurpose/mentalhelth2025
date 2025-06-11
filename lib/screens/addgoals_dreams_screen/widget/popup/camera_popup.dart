@@ -122,37 +122,29 @@ Future cameraBottomSheetAdGoals({
                                       (BuildContext context, int index) {
                                     return Stack(
                                       children: [
-                                        Container(
-                                          color: Colors.grey,
-                                          height: size.height * 0.20,
-                                          child: SizedBox(
-                                            height: size.height * 0.20,
-                                            width: double.infinity,
-                                            child: isVideoPath(
-                                              adDreamsGoalsProvider
-                                                  .takedImages[index],
-                                            )
-                                                ? SizedBox(
-                                                    height: size.height * 0.20,
-                                                    width: double.infinity,
-                                                    child: VideoPlayerWidget(
-                                                      videoUrl:
-                                                          adDreamsGoalsProvider
-                                                                  .takedImages[
-                                                              index],
-                                                    ),
-                                                  )
-                                                : SizedBox(
-                                                    height: size.height * 0.20,
-                                                    width: double.infinity,
-                                                    child: Image.file(
-                                                      File(adDreamsGoalsProvider
-                                                          .takedImages[index]),
-                                                      fit: BoxFit.cover,
-                                                      width: size.width,
-                                                    ),
-                                                  ),
-                                          ),
+                                        SizedBox(
+                                          height: size.height * 0.2,
+                                          width: double.infinity,
+                                          child: isVideoPath(
+                                            adDreamsGoalsProvider
+                                                .takedImages[index],
+                                          )
+                                              ? VideoPlayerWidget(
+                                                videoUrl:
+                                                    adDreamsGoalsProvider
+                                                            .takedImages[
+                                                        index],
+                                              )
+                                              : ClipRRect(
+                                                borderRadius:
+                                                BorderRadius.circular(4),
+                                                child: Image.file(
+                                                  File(adDreamsGoalsProvider
+                                                      .takedImages[index]),
+                                                  fit: BoxFit.cover,
+                                                  width: size.width,
+                                                ),
+                                              ),
                                         ),
                                         GestureDetector(
                                           onTap: () {
