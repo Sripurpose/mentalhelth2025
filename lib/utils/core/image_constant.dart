@@ -31,6 +31,7 @@ class ImageConstant {
   static String dumImage = 'assets/images/dum.png';
   static String actionDetailsMark = 'assets/images/action_details_mark.svg';
   static String reminderClock = 'assets/images/reminder_clock.svg';
+  static String sessionExpiredLogo = 'assets/images/session_expired_logo.png';
 
   static String imgThumbsUp = '$imagePath/img_thumbs_up.svg';
   static String galleryAddMediaNumu = '$imagePath/gallery_add_media_numu.svg';
