@@ -137,6 +137,7 @@
 //   );
 // }
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
@@ -148,6 +149,10 @@ import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/widgets/custom_image_view.dart';
 import 'package:mentalhelth/widgets/video_player.dart';
 import 'package:provider/provider.dart';
+
+import 'dart:io';
+import 'dart:ui' as ui;
+import 'package:flutter/material.dart';
 
 import '../../../../widgets/functions/popup.dart';
 
@@ -266,7 +271,7 @@ Future galleryBottomSheet({
                                       return Stack(
                                         children: [
                                           SizedBox(
-                                            height: size.height * 0.2,
+                                            height: size.height * 0.20,
                                             // width: double.infinity,
                                             child: isVideoPath(
                                               mentalStrengthEditProvider
@@ -292,7 +297,7 @@ Future galleryBottomSheet({
                                                             .value
                                                             .startsWith("https")
                                                     ? CustomImageView(
-                                                        fit: BoxFit.fill,
+                                                        fit: BoxFit.cover,
                                                         imagePath:
                                                             mentalStrengthEditProvider
                                                                 .alreadyPickedImages[
@@ -304,7 +309,8 @@ Future galleryBottomSheet({
                                                         alignment:
                                                             Alignment.center,
                                                       )
-                                                    : Image.file(
+                                                    :
+                                            Image.file(
                                                         File(
                                                           mentalStrengthEditProvider
                                                               .alreadyPickedImages[
@@ -315,6 +321,35 @@ Future galleryBottomSheet({
                                                         width: size.width,
                                               height: 200, // Avoid too small height
                                                       ),
+
+                                            // Container(
+                                            //   width: size.width,
+                                            //   height: 200,
+                                            //   decoration: BoxDecoration(
+                                            //     border: Border.all(
+                                            //       color: Colors.grey,
+                                            //       width: 0.5,
+                                            //     ),
+                                            //     borderRadius: BorderRadius.circular(8),
+                                            //   ),
+                                            //   clipBehavior: Clip.hardEdge,
+                                            //   child: FutureBuilder<ui.Image>(
+                                            //     future: getImage(File(mentalStrengthEditProvider.pickedImages[index])),
+                                            //     builder: (context, snapshot) {
+                                            //       if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+                                            //         final image = snapshot.data!;
+                                            //         final isHorizontal = image.width > image.height;
+                                            //         return Image.file(
+                                            //           File(mentalStrengthEditProvider.pickedImages[index]),
+                                            //           fit: isHorizontal ? BoxFit.cover : BoxFit.contain,
+                                            //         );
+                                            //       } else {
+                                            //         // Show a placeholder or loader while loading
+                                            //         return const Center(child: CircularProgressIndicator());
+                                            //       }
+                                            //     },
+                                            //   ),
+                                            // )
                                           ),
                                           GestureDetector(
                                             onTap: () {
@@ -389,7 +424,7 @@ Future galleryBottomSheet({
                                       return Stack(
                                         children: [
                                           SizedBox(
-                                            height: size.height * 0.2,
+                                            height: size.height * 0.20,
                                             child: isVideoPath(
                                               mentalStrengthEditProvider
                                                   .pickedImages[index],
@@ -426,6 +461,54 @@ Future galleryBottomSheet({
                                               height: 200,
                                               fit: BoxFit.cover,
                                             ),
+
+                                              // Container(
+                                              //   width: size.width,
+                                              //   height: 200,
+                                              //   decoration: BoxDecoration(
+                                              //     border: Border.all(
+                                              //       color: Colors.grey, // Change color as needed
+                                              //       width: 2,           // Change width as needed
+                                              //     ),
+                                              //     borderRadius: BorderRadius.circular(8), // Optional: rounded corners
+                                              //   ),
+                                              //   clipBehavior: Clip.hardEdge, // Ensures image respects border radius
+                                              //   child: Image.file(
+                                              //     File(mentalStrengthEditProvider.pickedImages[index]),
+                                              //     fit: BoxFit.contain,
+                                              //   ),
+                                              // )
+
+                                            ///og///
+                                            // Container(
+                                            //   width: size.width,
+                                            //   height: 200,
+                                            //   decoration: BoxDecoration(
+                                            //     border: Border.all(
+                                            //       color: Colors.grey,
+                                            //       width: 0.5,
+                                            //     ),
+                                            //     borderRadius: BorderRadius.circular(8),
+                                            //   ),
+                                            //   clipBehavior: Clip.hardEdge,
+                                            //   child: FutureBuilder<ui.Image>(
+                                            //     future: getImage(File(mentalStrengthEditProvider.pickedImages[index])),
+                                            //     builder: (context, snapshot) {
+                                            //       if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+                                            //         final image = snapshot.data!;
+                                            //         final isHorizontal = image.width > image.height;
+                                            //         return Image.file(
+                                            //           File(mentalStrengthEditProvider.pickedImages[index]),
+                                            //           fit: isHorizontal ? BoxFit.cover : BoxFit.contain,
+                                            //         );
+                                            //       } else {
+                                            //         // Show a placeholder or loader while loading
+                                            //         return Center(child: CircularProgressIndicator());
+                                            //       }
+                                            //     },
+                                            //   ),
+                                            // )
+
 
                                           ),
                                           GestureDetector(
@@ -496,4 +579,12 @@ Future galleryBottomSheet({
       );
     },
   );
+}
+
+
+Future<ui.Image> getImage(File file) async {
+  final data = await file.readAsBytes();
+  final codec = await ui.instantiateImageCodec(data);
+  final frame = await codec.getNextFrame();
+  return frame.image;
 }
