@@ -855,7 +855,7 @@ var logger = Logger();
         await saveMediaUploadAction(
           file: videoToUpload.path,
           type: "action",
-          fileType: lastThreeChars,
+          fileType: "mp4",
           thumbNail: thumbNailFile.path,
         );
 
@@ -1028,6 +1028,8 @@ var logger = Logger();
 
 
 
+
+
   // Future<void> takeFileFunction(BuildContext context) async {
   //   final ImagePicker picker = ImagePicker();
   //   final XFile? pickedFile = await picker.pickImage(source: ImageSource.camera);
@@ -1133,7 +1135,7 @@ var logger = Logger();
           await saveMediaUploadAction(
             file: pickeVideo.path,
             type: "action",
-            fileType: lastThreeChars,
+            fileType: "mp4",
             thumbNail: thumbNailFile.path,
           );
         } catch (e) {
@@ -1154,6 +1156,8 @@ var logger = Logger();
       );
     }
   }
+
+
 
 
   // Future<void> takeVideoFunction(BuildContext context) async {

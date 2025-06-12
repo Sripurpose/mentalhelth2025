@@ -1,113 +1,94 @@
-// import 'package:chewie/chewie.dart';
-import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
 import 'dart:io';
-
-// class VideoScreen extends StatefulWidget {
-//   const VideoScreen({super.key, required this.videoUrl});
-//
-//   final String videoUrl;
-//   @override
-//   VideoScreenState createState() => VideoScreenState();
-// }
-//
-// class VideoScreenState extends State<VideoScreen> {
-//   late VideoPlayerController _videoPlayerController;
-//  // late ChewieController _chewieController;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     // ignore: deprecated_member_use
-//     _videoPlayerController = VideoPlayerController.network(
-//       widget.videoUrl,
-//     );
-//     // _chewieController = ChewieController(
-//     //   videoPlayerController: _videoPlayerController,
-//     //   autoPlay: false,
-//     //   looping: false,
-//     //   // Other customization options...
-//     // );
-//   }
-//
-//   @override
-//   void dispose() {
-//     _videoPlayerController.dispose();
-//     //_chewieController.dispose();
-//     super.dispose();
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     Size size = MediaQuery.of(context).size;
-//
-//     return SizedBox(
-//       width: size.width * 0.3,
-//       child: const Center(
-//         child:SizedBox() ,
-//         // Chewie(
-//         //   controller: _chewieController,
-//         // ),
-//       ),
-//     );
-//   }
-// }
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
+import 'package:video_player/video_player.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
 
 class VideoPlayerWidget extends StatefulWidget {
   const VideoPlayerWidget({super.key, required this.videoUrl});
 
   final String videoUrl;
+
   @override
-  // ignore: library_private_types_in_public_api
   _VideoPlayerWidgetState createState() => _VideoPlayerWidgetState();
 }
 
 class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   late VideoPlayerController _controller;
-
-  @override
+  bool _isLoading = true;
+  bool _hasError = false;
 
   @override
   void initState() {
     super.initState();
+    _initVideo();
+  }
 
-    // Check if the videoUrl is a network URL (starts with http/https) or a local file path
-    if (widget.videoUrl.startsWith("http") || widget.videoUrl.startsWith("https")) {
-      // Initialize VideoPlayerController with a network URL
-      _controller = VideoPlayerController.network(widget.videoUrl)
-        ..initialize().then((_) {
-          setState(() {}); // Update the UI when the video is initialized
-        }).catchError((error) {
-          print("Error initializing video from network: $error"); // Debug log for errors
-        });
-    } else {
-      // Initialize VideoPlayerController with a file path
-      File videoFile = File(widget.videoUrl);
-      _controller = VideoPlayerController.file(videoFile)
-        ..initialize().then((_) {
-          setState(() {}); // Update UI when the video is initialized
-        }).catchError((error) {
-          print("Error initializing video from file: $error"); // Debug log for errors
-        });
+  Future<void> _initVideo() async {
+    try {
+      File videoFile;
+
+      if (widget.videoUrl.startsWith('http')) {
+        // Download video to local file
+        final response = await http.get(Uri.parse(widget.videoUrl));
+        if (response.statusCode == 200) {
+          final tempDir = await getTemporaryDirectory();
+          final filePath = '${tempDir.path}/${DateTime.now().millisecondsSinceEpoch}.mp4';
+          videoFile = File(filePath);
+          await videoFile.writeAsBytes(response.bodyBytes);
+        } else {
+          throw Exception('Failed to download video');
+        }
+      } else {
+        // Use directly if local path
+        videoFile = File(widget.videoUrl);
+      }
+
+      _controller = VideoPlayerController.file(videoFile);
+      await _controller.initialize();
+      setState(() => _isLoading = false);
+    } catch (e) {
+      print('Error initializing video: $e');
+      setState(() {
+        _hasError = true;
+        _isLoading = false;
+      });
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return  Center(
+        child:  CupertinoActivityIndicator(
+          color: ColorsContent.newThemeColor,
+          radius: 15,
+        )
+      );
+    }
+
+    if (_hasError) {
+      return const Center(
+        child: Text(
+          'Failed to load video',
+          style: TextStyle(color: Colors.red),
+        ),
+      );
+    }
+
     return Stack(
       fit: StackFit.expand,
       children: [
-        _controller.value.isInitialized
-            ? FittedBox(
+        FittedBox(
           fit: BoxFit.cover,
           child: SizedBox(
             width: _controller.value.size.width,
             height: _controller.value.size.height,
             child: VideoPlayer(_controller),
           ),
-        )
-            : Container(color: Colors.black), // Optional: fallback background
+        ),
         Center(
           child: GestureDetector(
             onTap: () {
@@ -120,7 +101,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
             child: Icon(
               _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
               color: Colors.white,
-              size: 30,
+              size: 40,
             ),
           ),
         )
@@ -128,10 +109,9 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     );
   }
 
-
   @override
   void dispose() {
-    super.dispose();
     _controller.dispose();
+    super.dispose();
   }
 }

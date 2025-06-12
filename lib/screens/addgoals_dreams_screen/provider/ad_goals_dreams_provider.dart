@@ -302,7 +302,7 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
         await saveMediaUploadMental(
           file: videoToUpload.path,
           type: "goal",
-          fileType: lastThreeChars,
+          fileType: "mp4",
           thumbNail: thumbNailFile.path,
           context: context,
         );
@@ -469,6 +469,7 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
       }
     }
   }
+
 
 
   // Future<void> takeFileFunction(BuildContext context) async {

@@ -398,8 +398,46 @@ class _GoalAndDreamFullViewScreenState
                                           controller: videoController,
                                           itemCount: videoList.length,
                                           itemBuilder: (context, index) {
-                                            return VideoPlayerWidget(
-                                              videoUrl: videoList[index],
+                                            return GestureDetector(
+                                              onTap: () {
+                                                showDialog(
+                                                  context: context,
+                                                  barrierDismissible: true,
+                                                  builder: (_) => Dialog(
+                                                    insetPadding: EdgeInsets.zero,
+                                                    backgroundColor: Colors.black,
+                                                    shape: const RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.zero,
+                                                    ),
+                                                    child: Stack(
+                                                      children: [
+                                                        Center(
+                                                          child: AspectRatio(
+                                                            aspectRatio: 16 / 9,
+                                                            child: VideoPlayerWidget(
+                                                              videoUrl: videoList[index],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Positioned(
+                                                          top: 40,
+                                                          right: 20,
+                                                          child: IconButton(
+                                                            icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                                                            onPressed: () => Navigator.of(context).pop(),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius.circular(5),
+                                                child: VideoPlayerWidget(
+                                                  videoUrl: videoList[index],
+                                                ),
+                                              ),
                                             );
                                           },
                                           onPageChanged: (int pageIndex) {
@@ -408,6 +446,20 @@ class _GoalAndDreamFullViewScreenState
                                             });
                                           },
                                         ),
+                                        // PageView.builder(
+                                        //   controller: videoController,
+                                        //   itemCount: videoList.length,
+                                        //   itemBuilder: (context, index) {
+                                        //     return VideoPlayerWidget(
+                                        //       videoUrl: videoList[index],
+                                        //     );
+                                        //   },
+                                        //   onPageChanged: (int pageIndex) {
+                                        //     setState(() {
+                                        //       videoCurrentIndex = pageIndex;
+                                        //     });
+                                        //   },
+                                        // ),
                                         Positioned(
                                           bottom: 10,
                                           left: 0,

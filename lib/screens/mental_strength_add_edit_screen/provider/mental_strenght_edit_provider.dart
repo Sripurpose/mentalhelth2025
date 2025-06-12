@@ -747,7 +747,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
           await saveMediaUploadMental(
             file: pickedVideo.path,
             type: "journal",
-            fileType: pickedVideo.path.split('.').last.toLowerCase(),
+            fileType: "mp4",
           );
           logger.i("pickedVideo.path.split('.').last.toLowerCase()${pickedVideo.path.split('.').last.toLowerCase()}");
         } catch (e) {
@@ -768,6 +768,8 @@ class MentalStrengthEditProvider extends ChangeNotifier {
       );
     }
   }
+
+
 
 
 
