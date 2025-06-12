@@ -139,12 +139,17 @@ Future galleryBottomSheetAddGoals({
                                                   .alreadyPickedImages[index]
                                                   .value,
                                             )
-                                                ? VideoPlayerWidget(
-                                                    videoUrl:
-                                                        adDreamsGoalsProvider
-                                                            .alreadyPickedImages[
-                                                                index]
-                                                            .value,
+                                                ? ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4),
+                                                    child: VideoPlayerWidget(
+                                                      videoUrl:
+                                                          adDreamsGoalsProvider
+                                                              .alreadyPickedImages[
+                                                                  index]
+                                                              .value,
+                                                    ),
                                                   )
                                                 : adDreamsGoalsProvider
                                                             .alreadyPickedImages[
@@ -272,11 +277,16 @@ Future galleryBottomSheetAddGoals({
                                               adDreamsGoalsProvider
                                                   .pickedImages[index],
                                             )
-                                                ? VideoPlayerWidget(
-                                                    videoUrl:
-                                                        adDreamsGoalsProvider
-                                                                .pickedImages[
-                                                            index],
+                                                ? ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4),
+                                                    child: VideoPlayerWidget(
+                                                      videoUrl:
+                                                          adDreamsGoalsProvider
+                                                                  .pickedImages[
+                                                              index],
+                                                    ),
                                                   )
                                                 : adDreamsGoalsProvider
                                                             .pickedImages[index]

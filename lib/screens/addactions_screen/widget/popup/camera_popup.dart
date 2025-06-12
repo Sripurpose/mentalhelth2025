@@ -128,10 +128,14 @@ Future cameraBottomSheetAction({
                                             addActionsProvider
                                                 .takedImages[index],
                                           )
-                                              ? VideoPlayerWidget(
-                                                  videoUrl: addActionsProvider
-                                                      .takedImages[index],
-                                                )
+                                              ? ClipRRect(
+                                            borderRadius:
+                                            BorderRadius.circular(4),
+                                                child: VideoPlayerWidget(
+                                                    videoUrl: addActionsProvider
+                                                        .takedImages[index],
+                                                  ),
+                                              )
                                               : ClipRRect(
                                             borderRadius:
                                             BorderRadius.circular(4),

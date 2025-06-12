@@ -278,13 +278,18 @@ Future galleryBottomSheet({
                                                   .alreadyPickedImages[index]
                                                   .value,
                                             )
-                                                ? VideoPlayerWidget(
-                                                    videoUrl:
-                                                        mentalStrengthEditProvider
-                                                            .alreadyPickedImages[
-                                                                index]
-                                                            .value,
-                                                  )
+                                                ? ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4),
+                                                    child: VideoPlayerWidget(
+                                                      videoUrl:
+                                                          mentalStrengthEditProvider
+                                                              .alreadyPickedImages[
+                                                                  index]
+                                                              .value,
+                                                    ),
+                                                )
                                                 : mentalStrengthEditProvider
                                                             .alreadyPickedImages[
                                                                 index]
@@ -435,12 +440,15 @@ Future galleryBottomSheet({
                                               mentalStrengthEditProvider
                                                   .pickedImages[index],
                                             )
-                                                ? VideoPlayerWidget(
-                                                    videoUrl:
-                                                        mentalStrengthEditProvider
-                                                                .pickedImages[
-                                                            index],
-                                                  )
+                                                ? ClipRRect(
+                                              borderRadius: BorderRadius.circular(4),
+                                                  child: VideoPlayerWidget(
+                                                      videoUrl:
+                                                          mentalStrengthEditProvider
+                                                                  .pickedImages[
+                                                              index],
+                                                    ),
+                                                )
                                                 : mentalStrengthEditProvider
                                                             .pickedImages[index]
                                                             .startsWith(

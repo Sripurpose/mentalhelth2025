@@ -138,12 +138,15 @@ Future galleryBottomSheetAction({
                                                   .alreadyPickedImages[index]
                                                   .value,
                                             )
-                                                ? VideoPlayerWidget(
-                                                    videoUrl: addActionsProvider
-                                                        .alreadyPickedImages[
-                                                            index]
-                                                        .value,
-                                                  )
+                                                ? ClipRRect(
+                                              borderRadius: BorderRadius.circular(4),
+                                                  child: VideoPlayerWidget(
+                                                      videoUrl: addActionsProvider
+                                                          .alreadyPickedImages[
+                                                              index]
+                                                          .value,
+                                                    ),
+                                                )
                                                 : addActionsProvider
                                                             .alreadyPickedImages[
                                                                 index]
@@ -269,10 +272,13 @@ Future galleryBottomSheetAction({
                                               addActionsProvider
                                                   .pickedImages[index],
                                             )
-                                                ? VideoPlayerWidget(
-                                                    videoUrl: addActionsProvider
-                                                        .pickedImages[index],
-                                                  )
+                                                ? ClipRRect(
+                                              borderRadius: BorderRadius.circular(4),
+                                                  child: VideoPlayerWidget(
+                                                      videoUrl: addActionsProvider
+                                                          .pickedImages[index],
+                                                    ),
+                                                )
                                                 : addActionsProvider
                                                             .pickedImages[index]
                                                             .startsWith(

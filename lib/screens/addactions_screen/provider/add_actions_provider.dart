@@ -716,10 +716,23 @@ var logger = Logger();
     );
 
     if (pickedImages != null && pickedImages.isNotEmpty) {
+      // Filter out GIF files
+      final validImages = pickedImages.where((image) {
+        final extension = image.path.toLowerCase().split('.').last;
+        return extension != 'gif';
+      }).toList();
+
+      if (validImages.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("GIF files are not supported.")),
+        );
+        return;
+      }
+
       showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (_) =>  AlertDialog(
+        builder: (_) => AlertDialog(
           content: Row(
             children: [
               CupertinoActivityIndicator(
@@ -731,9 +744,10 @@ var logger = Logger();
           ),
         ),
       );
+
       List<String> imagePaths = [];
 
-      for (var pickedImage in pickedImages) {
+      for (var pickedImage in validImages) {
         String fileExtension = pickedImage.path.split('.').last;
         String lastThreeChars = fileExtension.substring(fileExtension.length - 3);
 
@@ -754,6 +768,7 @@ var logger = Logger();
   }
 
 
+
   Future<void> pickVideoFunction(BuildContext context) async {
     final pickedVideoPath = await ImagePicker().pickVideo(
       source: ImageSource.gallery,
@@ -764,6 +779,23 @@ var logger = Logger();
         try {
           isVideoUploading = true;
           notifyListeners();
+
+          // Show loading dialog
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) => AlertDialog(
+              content: Row(
+                children: [
+                  CupertinoActivityIndicator(
+                    color: ColorsContent.newThemeColor,
+                  ),
+                  const SizedBox(width: 16),
+                  const Text("Uploading video..."),
+                ],
+              ),
+            ),
+          );
 
           String fileExtension = pickedVideoPath.path.split('.').last;
           String lastThreeChars = fileExtension.substring(fileExtension.length - 3);
@@ -781,7 +813,12 @@ var logger = Logger();
             fileType: lastThreeChars,
             thumbNail: thumbNailFile.path,
           );
+
+          // Dismiss dialog after upload
+          Navigator.pop(context);
         } catch (e) {
+          // Ensure dialog is dismissed if error occurs
+          Navigator.pop(context);
           showCustomSnackBar(
             context: context,
             message: "An error occurred: $e",
@@ -798,6 +835,7 @@ var logger = Logger();
       );
     }
   }
+
 
 
   // Future<void> pickVideoFunction(BuildContext context) async {
@@ -899,6 +937,23 @@ var logger = Logger();
 
     if (pickedFile != null) {
       try {
+        // Show loading dialog
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => AlertDialog(
+            content: Row(
+              children: [
+                CupertinoActivityIndicator(
+                  color: ColorsContent.newThemeColor,
+                ),
+                const SizedBox(width: 16),
+                const Text("Capturing images..."),
+              ],
+            ),
+          ),
+        );
+
         // Extract file extension
         String fileExtension = pickedFile.path.split('.').last;
         String lastThreeChars = fileExtension.substring(fileExtension.length - 3);
@@ -920,11 +975,14 @@ var logger = Logger();
           message: "An error occurred: $e",
         );
       } finally {
+        // Dismiss loading dialog
+        Navigator.of(context, rootNavigator: true).pop();
         // Notify listeners to update UI
         notifyListeners();
       }
     }
   }
+
 
 
   // Future<void> takeFileFunction(BuildContext context) async {
@@ -1002,12 +1060,28 @@ var logger = Logger();
           isVideoUploading = true;
           notifyListeners();
 
+          // Show loading dialog
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) => AlertDialog(
+              content: Row(
+                children: [
+                  CupertinoActivityIndicator(
+                    color: ColorsContent.newThemeColor,
+                  ),
+                  const SizedBox(width: 16),
+                  const Text("Uploading video..."),
+                ],
+              ),
+            ),
+          );
+
           // Extract the file extension
           String fileExtension = pickeVideo.path.split('.').last;
           String lastThreeChars = fileExtension.substring(fileExtension.length - 3);
 
-          List<String> imagePaths = [];
-          imagePaths.add(pickeVideo.path);
+          List<String> imagePaths = [pickeVideo.path];
           takedImagesAddFunction(imagePaths);
 
           // Generate thumbnail from the original video
@@ -1026,16 +1100,18 @@ var logger = Logger();
           );
         } finally {
           isVideoUploading = false;
+          Navigator.of(context, rootNavigator: true).pop(); // Dismiss loading dialog
           notifyListeners();
         }
       }
     } else {
       showCustomSnackBar(
         context: context,
-        message: "Please Wait, Video is Uploading",
+        message: "Please wait, video is uploading.",
       );
     }
   }
+
 
   // Future<void> takeVideoFunction(BuildContext context) async {
   //   final pickeVideo = await ImagePicker().pickVideo(

@@ -274,11 +274,15 @@ Future cameraBottomSheet({
                                             mentalStrengthEditProvider
                                                 .takedImages[index],
                                           )
-                                              ? VideoPlayerWidget(
-                                                  videoUrl:
-                                                      mentalStrengthEditProvider
-                                                          .takedImages[index],
-                                                )
+                                              ? ClipRRect(
+                                            borderRadius:
+                                            BorderRadius.circular(4),
+                                                child: VideoPlayerWidget(
+                                                    videoUrl:
+                                                        mentalStrengthEditProvider
+                                                            .takedImages[index],
+                                                  ),
+                                              )
                                               : ClipRRect(
                                                   borderRadius:
                                                       BorderRadius.circular(4),

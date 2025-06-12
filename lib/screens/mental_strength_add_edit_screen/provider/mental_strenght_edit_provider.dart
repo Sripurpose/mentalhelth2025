@@ -293,11 +293,24 @@ class MentalStrengthEditProvider extends ChangeNotifier {
     );
 
     if (pickedImages != null && pickedImages.isNotEmpty) {
+      // Filter out GIF files
+      final validImages = pickedImages.where((image) {
+        final extension = image.path.toLowerCase().split('.').last;
+        return extension != 'gif';
+      }).toList();
+
+      if (validImages.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("GIF files are not supported.")),
+        );
+        return;
+      }
+
       // Show loading dialog
       showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (_) =>  AlertDialog(
+        builder: (_) => AlertDialog(
           content: Row(
             children: [
               CupertinoActivityIndicator(
@@ -312,7 +325,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
 
       List<String> imagePaths = [];
 
-      for (var image in pickedImages) {
+      for (var image in validImages) {
         String fileExtension = image.path.split('.').last;
         String lastThreeChars = fileExtension.substring(fileExtension.length - 3);
 
@@ -334,6 +347,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
   }
 
 
+
   Future<void> pickVideoFunction(BuildContext context) async {
     try {
       // Pick video from gallery
@@ -353,11 +367,29 @@ class MentalStrengthEditProvider extends ChangeNotifier {
         isVideoUploading = true;
         notifyListeners();
 
+        // Show loading dialog
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => AlertDialog(
+            content: Row(
+              children: [
+                CupertinoActivityIndicator(
+                  color: ColorsContent.newThemeColor,
+                ),
+                const SizedBox(width: 16),
+                const Text("Uploading video..."),
+              ],
+            ),
+          ),
+        );
+
         List<String> videoPaths = [pickedVideoPath.path];
         pickedImagesAddFunction(videoPaths);
 
         // Generate thumbnail from original video
-        File thumbNailFile = await generateThumbnail(File(pickedVideoPath.path));
+        File thumbNailFile =
+        await generateThumbnail(File(pickedVideoPath.path));
 
         // Upload original video directly without compression
         await saveMediaUploadMental(
@@ -366,6 +398,9 @@ class MentalStrengthEditProvider extends ChangeNotifier {
           fileType: "mp4",
           thumbNail: thumbNailFile.path,
         );
+
+        // Dismiss the dialog after upload is complete
+        Navigator.pop(context);
       } else {
         showCustomSnackBar(
           context: context,
@@ -373,6 +408,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
         );
       }
     } catch (e) {
+      Navigator.pop(context); // Ensure dialog is dismissed on error
       showCustomSnackBar(
         context: context,
         message: "An error occurred: $e",
@@ -382,6 +418,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
 
 
   // Future<void> pickVideoFunction(BuildContext context) async {
@@ -528,6 +565,23 @@ class MentalStrengthEditProvider extends ChangeNotifier {
 
     if (pickedFile != null) {
       try {
+        // Show loading dialog
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => AlertDialog(
+            content: Row(
+              children: [
+                CupertinoActivityIndicator(
+                  color: ColorsContent.newThemeColor,
+                ),
+                const SizedBox(width: 16),
+                const Text("Capturing images..."),
+              ],
+            ),
+          ),
+        );
+
         String fileExtension = pickedFile.path.split('.').last.toLowerCase();
 
         List<String> imagePaths = [pickedFile.path];
@@ -545,10 +599,12 @@ class MentalStrengthEditProvider extends ChangeNotifier {
           message: "An error occurred: $e",
         );
       } finally {
+        Navigator.of(context, rootNavigator: true).pop(); // Dismiss loading dialog
         notifyListeners();
       }
     }
   }
+
 
 
   // Future<void> takeFileFunction(BuildContext context) async {
@@ -626,6 +682,23 @@ class MentalStrengthEditProvider extends ChangeNotifier {
           isVideoUploading = true;
           notifyListeners();
 
+          // Show loading dialog
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) => AlertDialog(
+              content: Row(
+                children: [
+                  CupertinoActivityIndicator(
+                    color: ColorsContent.newThemeColor,
+                  ),
+                  const SizedBox(width: 16),
+                  const Text("Uploading video..."),
+                ],
+              ),
+            ),
+          );
+
           List<String> videoPaths = [pickedVideo.path];
           takedImagesAddFunction(videoPaths);
 
@@ -642,16 +715,18 @@ class MentalStrengthEditProvider extends ChangeNotifier {
           );
         } finally {
           isVideoUploading = false;
+          Navigator.of(context, rootNavigator: true).pop(); // Dismiss loading dialog
           notifyListeners();
         }
       }
     } else {
       showCustomSnackBar(
         context: context,
-        message: "Please Wait, Video is Uploading",
+        message: "Please wait, video is uploading.",
       );
     }
   }
+
 
 
   // Future<void> takeVideoFunction(BuildContext context) async {

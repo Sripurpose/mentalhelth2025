@@ -129,11 +129,15 @@ Future cameraBottomSheetAdGoals({
                                             adDreamsGoalsProvider
                                                 .takedImages[index],
                                           )
-                                              ? VideoPlayerWidget(
-                                                videoUrl:
-                                                    adDreamsGoalsProvider
-                                                            .takedImages[
-                                                        index],
+                                              ? ClipRRect(
+                                            borderRadius:
+                                            BorderRadius.circular(4),
+                                                child: VideoPlayerWidget(
+                                                  videoUrl:
+                                                      adDreamsGoalsProvider
+                                                              .takedImages[
+                                                          index],
+                                                ),
                                               )
                                               : ClipRRect(
                                                 borderRadius:
