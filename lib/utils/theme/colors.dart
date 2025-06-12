@@ -14,6 +14,7 @@ class ColorsContent {
   static Color blackThemeColor = const Color(0xFF16161B);
   static Color whatsOnYourMindBoxColor = const Color(0xFFE6EBFF);
   static Color closeActionsColor = const Color(0xFF5E4CCC);
+  static Color tokenExpiryTextColor = const Color(0xFF4A4A4A);
 
   static Color galleryCountColor = const Color(0xFF6551DC);
   static Color cameraCountColor = const Color(0xFF4B73EF);
