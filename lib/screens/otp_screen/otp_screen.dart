@@ -114,7 +114,7 @@ class _OtpScreenState extends State<OtpScreen> {
                     builder: (context, phoneSignInProvider, _) {
                       return CustomElevatedButton(
                         loading: phoneSignInProvider.verifyLoading,
-                        height: 40,
+                        height: 45,
                         text: "Sign in",
                         margin: const EdgeInsets.symmetric(horizontal: 3),
                         buttonStyle: CustomButtonStyles.signInButton,
