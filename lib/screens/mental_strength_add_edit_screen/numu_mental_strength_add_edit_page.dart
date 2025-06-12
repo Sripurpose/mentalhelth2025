@@ -1268,7 +1268,7 @@ class _NumuMentalStrengthAddEditPageState
               style: theme.textTheme.titleSmall,
             ),
             const SizedBox(
-              height: 10,
+              height: 5,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
