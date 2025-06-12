@@ -140,12 +140,16 @@ Future galleryBottomSheetAction({
                                             )
                                                 ? ClipRRect(
                                               borderRadius: BorderRadius.circular(4),
-                                                  child: VideoPlayerWidget(
-                                                      videoUrl: addActionsProvider
-                                                          .alreadyPickedImages[
-                                                              index]
-                                                          .value,
-                                                    ),
+                                                  child: SizedBox(
+                                                    height: 200,
+                                                    width: double.infinity,
+                                                    child: VideoPlayerWidget(
+                                                        videoUrl: addActionsProvider
+                                                            .alreadyPickedImages[
+                                                                index]
+                                                            .value,
+                                                      ),
+                                                  ),
                                                 )
                                                 : addActionsProvider
                                                             .alreadyPickedImages[
@@ -274,10 +278,14 @@ Future galleryBottomSheetAction({
                                             )
                                                 ? ClipRRect(
                                               borderRadius: BorderRadius.circular(4),
-                                                  child: VideoPlayerWidget(
-                                                      videoUrl: addActionsProvider
-                                                          .pickedImages[index],
-                                                    ),
+                                                  child: SizedBox(
+                                                    height: 200,
+                                                    width: double.infinity,
+                                                    child: VideoPlayerWidget(
+                                                        videoUrl: addActionsProvider
+                                                            .pickedImages[index],
+                                                      ),
+                                                  ),
                                                 )
                                                 : addActionsProvider
                                                             .pickedImages[index]

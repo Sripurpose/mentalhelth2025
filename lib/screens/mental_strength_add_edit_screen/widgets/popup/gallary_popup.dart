@@ -279,17 +279,16 @@ Future galleryBottomSheet({
                                                   .value,
                                             )
                                                 ? ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            4),
-                                                    child: VideoPlayerWidget(
-                                                      videoUrl:
-                                                          mentalStrengthEditProvider
-                                                              .alreadyPickedImages[
-                                                                  index]
-                                                              .value,
-                                                    ),
-                                                )
+                                              borderRadius: BorderRadius.circular(4),
+                                              child: SizedBox(
+                                                height: 200,
+                                                width: double.infinity,
+                                                child: VideoPlayerWidget(
+                                                  videoUrl: mentalStrengthEditProvider.pickedImages[index],
+                                                ),
+                                              ),
+                                            )
+
                                                 : mentalStrengthEditProvider
                                                             .alreadyPickedImages[
                                                                 index]
@@ -440,15 +439,20 @@ Future galleryBottomSheet({
                                               mentalStrengthEditProvider
                                                   .pickedImages[index],
                                             )
-                                                ? ClipRRect(
+                                                ?
+                                            ClipRRect(
                                               borderRadius: BorderRadius.circular(4),
-                                                  child: VideoPlayerWidget(
-                                                      videoUrl:
-                                                          mentalStrengthEditProvider
-                                                                  .pickedImages[
-                                                              index],
-                                                    ),
-                                                )
+                                              child: SizedBox(
+                                                height: 200,
+                                                width: double.infinity,
+                                                child: VideoPlayerWidget(
+                                                  videoUrl:
+                                                  mentalStrengthEditProvider
+                                                      .pickedImages[
+                                                  index],
+                                                ),
+                                              ),
+                                            )
                                                 : mentalStrengthEditProvider
                                                             .pickedImages[index]
                                                             .startsWith(

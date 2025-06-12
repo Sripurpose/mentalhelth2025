@@ -143,12 +143,16 @@ Future galleryBottomSheetAddGoals({
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             4),
-                                                    child: VideoPlayerWidget(
-                                                      videoUrl:
-                                                          adDreamsGoalsProvider
-                                                              .alreadyPickedImages[
-                                                                  index]
-                                                              .value,
+                                                    child: SizedBox(
+                                                      height: 200,
+                                                      width: double.infinity,
+                                                      child: VideoPlayerWidget(
+                                                        videoUrl:
+                                                            adDreamsGoalsProvider
+                                                                .alreadyPickedImages[
+                                                                    index]
+                                                                .value,
+                                                      ),
                                                     ),
                                                   )
                                                 : adDreamsGoalsProvider
@@ -281,11 +285,15 @@ Future galleryBottomSheetAddGoals({
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             4),
-                                                    child: VideoPlayerWidget(
-                                                      videoUrl:
-                                                          adDreamsGoalsProvider
-                                                                  .pickedImages[
-                                                              index],
+                                                    child: SizedBox(
+                                                      height: 200,
+                                                      width: double.infinity,
+                                                      child: VideoPlayerWidget(
+                                                        videoUrl:
+                                                            adDreamsGoalsProvider
+                                                                    .pickedImages[
+                                                                index],
+                                                      ),
                                                     ),
                                                   )
                                                 : adDreamsGoalsProvider

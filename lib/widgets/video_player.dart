@@ -96,17 +96,18 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   @override
   Widget build(BuildContext context) {
     return Stack(
+      fit: StackFit.expand,
       children: [
-        Center(
-          child: _controller.value.isInitialized
-              ?
-              // ? AspectRatio(
-              //     aspectRatio: _controller.value.aspectRatio,
-              //     child: VideoPlayer(_controller),
-              //   )
-              VideoPlayer(_controller)
-              : Container(),
-        ),
+        _controller.value.isInitialized
+            ? FittedBox(
+          fit: BoxFit.cover,
+          child: SizedBox(
+            width: _controller.value.size.width,
+            height: _controller.value.size.height,
+            child: VideoPlayer(_controller),
+          ),
+        )
+            : Container(color: Colors.black), // Optional: fallback background
         Center(
           child: GestureDetector(
             onTap: () {
@@ -119,12 +120,14 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
             child: Icon(
               _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
               color: Colors.white,
+              size: 30,
             ),
           ),
         )
       ],
     );
   }
+
 
   @override
   void dispose() {
