@@ -769,72 +769,115 @@ var logger = Logger();
 
 
 
+
   Future<void> pickVideoFunction(BuildContext context) async {
     final pickedVideoPath = await ImagePicker().pickVideo(
       source: ImageSource.gallery,
     );
 
-    if (!isVideoUploading) {
-      if (pickedVideoPath != null) {
-        try {
-          isVideoUploading = true;
-          notifyListeners();
+    if (!isVideoUploading && pickedVideoPath != null) {
+      try {
+        isVideoUploading = true;
+        notifyListeners();
 
-          // Show loading dialog
+        // Check file size
+        File originalFile = File(pickedVideoPath.path);
+        final fileSizeInBytes = await originalFile.length();
+        final fileSizeInMB = fileSizeInBytes / (1024 * 1024);
+
+        print("📦 Original video size: ${fileSizeInMB.toStringAsFixed(2)} MB");
+
+        File videoToUpload = originalFile;
+
+        // Compress if file size is over 100MB
+        if (fileSizeInMB > 100) {
           showDialog(
             context: context,
             barrierDismissible: false,
             builder: (_) => AlertDialog(
               content: Row(
                 children: [
-                  CupertinoActivityIndicator(
-                    color: ColorsContent.newThemeColor,
-                  ),
+                  CupertinoActivityIndicator(color: ColorsContent.newThemeColor),
                   const SizedBox(width: 16),
-                  const Text("Uploading video..."),
+                  const Text("Compressing video..."),
                 ],
               ),
             ),
           );
 
-          String fileExtension = pickedVideoPath.path.split('.').last;
-          String lastThreeChars = fileExtension.substring(fileExtension.length - 3);
-
-          List<String> videoPaths = [];
-          videoPaths.add(pickedVideoPath.path);
-          pickedImagesAddFunction(videoPaths);
-
-          // Generate thumbnail from original video (no compression)
-          File thumbNailFile = await generateThumbnail(File(pickedVideoPath.path));
-
-          await saveMediaUploadAction(
-            file: pickedVideoPath.path,
-            type: "action",
-            fileType: lastThreeChars,
-            thumbNail: thumbNailFile.path,
+          final compressedVideoInfo = await VideoCompress.compressVideo(
+            pickedVideoPath.path,
+            quality: VideoQuality.LowQuality, // Minimum clarity
+            deleteOrigin: false,
           );
 
-          // Dismiss dialog after upload
-          Navigator.pop(context);
-        } catch (e) {
-          // Ensure dialog is dismissed if error occurs
-          Navigator.pop(context);
-          showCustomSnackBar(
-            context: context,
-            message: "An error occurred: $e",
-          );
-        } finally {
-          isVideoUploading = false;
-          notifyListeners();
+          Navigator.pop(context); // Dismiss compression dialog
+
+          if (compressedVideoInfo == null || compressedVideoInfo.file == null) {
+            showCustomSnackBar(
+              context: context,
+              message: "Video compression failed.",
+            );
+            isVideoUploading = false;
+            notifyListeners();
+            return;
+          }
+
+          videoToUpload = compressedVideoInfo.file!;
+          final compressedSize = await videoToUpload.length();
+          print("📉 Compressed video size: ${(compressedSize / (1024 * 1024)).toStringAsFixed(2)} MB");
         }
+
+        // Show loading dialog for upload
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => AlertDialog(
+            content: Row(
+              children: [
+                CupertinoActivityIndicator(color: ColorsContent.newThemeColor),
+                const SizedBox(width: 16),
+                const Text("Uploading video..."),
+              ],
+            ),
+          ),
+        );
+
+        String fileExtension = videoToUpload.path.split('.').last;
+        String lastThreeChars = fileExtension.substring(fileExtension.length - 3);
+
+        List<String> videoPaths = [videoToUpload.path];
+        pickedImagesAddFunction(videoPaths);
+
+        // Generate thumbnail from video (compressed if applicable)
+        File thumbNailFile = await generateThumbnail(videoToUpload);
+
+        await saveMediaUploadAction(
+          file: videoToUpload.path,
+          type: "action",
+          fileType: lastThreeChars,
+          thumbNail: thumbNailFile.path,
+        );
+
+        Navigator.pop(context); // Dismiss upload dialog
+      } catch (e) {
+        Navigator.pop(context); // Ensure dialog is dismissed
+        showCustomSnackBar(
+          context: context,
+          message: "An error occurred: $e",
+        );
+      } finally {
+        isVideoUploading = false;
+        notifyListeners();
       }
-    } else {
+    } else if (isVideoUploading) {
       showCustomSnackBar(
         context: context,
         message: "Please Wait, Video is Uploading",
       );
     }
   }
+
 
 
 

@@ -224,68 +224,108 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
       source: ImageSource.gallery,
     );
 
-    if (!isVideoUploading) {
-      if (pickedVideoPath != null) {
-        try {
-          isVideoUploading = true;
-          notifyListeners();
+    if (!isVideoUploading && pickedVideoPath != null) {
+      try {
+        isVideoUploading = true;
+        notifyListeners();
 
-          // Show loading dialog
+        File originalFile = File(pickedVideoPath.path);
+        final fileSizeInBytes = await originalFile.length();
+        final fileSizeInMB = fileSizeInBytes / (1024 * 1024);
+
+        print("📦 Original video size: ${fileSizeInMB.toStringAsFixed(2)} MB");
+
+        File videoToUpload = originalFile;
+
+        // Compress if size > 100 MB
+        if (fileSizeInMB > 100) {
           showDialog(
             context: context,
             barrierDismissible: false,
             builder: (_) => AlertDialog(
               content: Row(
                 children: [
-                  CupertinoActivityIndicator(
-                    color: ColorsContent.newThemeColor,
-                  ),
+                  CupertinoActivityIndicator(color: ColorsContent.newThemeColor),
                   const SizedBox(width: 16),
-                  const Text("Uploading video..."),
+                  const Text("Compressing video..."),
                 ],
               ),
             ),
           );
 
-          String fileExtension = pickedVideoPath.path.split('.').last;
-          String lastThreeChars = fileExtension.substring(fileExtension.length - 3);
-
-          List<String> videoPaths = [];
-          videoPaths.add(pickedVideoPath.path);
-          pickedImagesAddFunction(videoPaths);
-
-          // Generate thumbnail from the original video
-          File thumbNailFile = await generateThumbnail(File(pickedVideoPath.path));
-
-          await saveMediaUploadMental(
-            file: pickedVideoPath.path,
-            type: "goal",
-            fileType: lastThreeChars,
-            thumbNail: thumbNailFile.path,
-            context: context,
+          final compressedVideoInfo = await VideoCompress.compressVideo(
+            pickedVideoPath.path,
+            quality: VideoQuality.LowQuality,
+            deleteOrigin: false,
           );
 
-          // Dismiss the loading dialog
-          Navigator.pop(context);
-        } catch (e) {
-          // Ensure dialog is dismissed even if an error occurs
-          Navigator.pop(context);
-          showCustomSnackBar(
-            context: context,
-            message: "An error occurred: $e",
-          );
-        } finally {
-          isVideoUploading = false;
-          notifyListeners();
+          Navigator.pop(context); // dismiss compression dialog
+
+          if (compressedVideoInfo == null || compressedVideoInfo.file == null) {
+            showCustomSnackBar(
+              context: context,
+              message: "Video compression failed.",
+            );
+            isVideoUploading = false;
+            notifyListeners();
+            return;
+          }
+
+          videoToUpload = compressedVideoInfo.file!;
+          final compressedSize = await videoToUpload.length();
+          print("📉 Compressed video size: ${(compressedSize / (1024 * 1024)).toStringAsFixed(2)} MB");
         }
+
+        // Show loading dialog for upload
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => AlertDialog(
+            content: Row(
+              children: [
+                CupertinoActivityIndicator(color: ColorsContent.newThemeColor),
+                const SizedBox(width: 16),
+                const Text("Uploading video..."),
+              ],
+            ),
+          ),
+        );
+
+        String fileExtension = videoToUpload.path.split('.').last;
+        String lastThreeChars = fileExtension.substring(fileExtension.length - 3);
+
+        List<String> videoPaths = [videoToUpload.path];
+        pickedImagesAddFunction(videoPaths);
+
+        File thumbNailFile = await generateThumbnail(videoToUpload);
+
+        await saveMediaUploadMental(
+          file: videoToUpload.path,
+          type: "goal",
+          fileType: lastThreeChars,
+          thumbNail: thumbNailFile.path,
+          context: context,
+        );
+
+        Navigator.pop(context); // Dismiss upload dialog
+      } catch (e) {
+        Navigator.pop(context); // Ensure dialog is dismissed
+        showCustomSnackBar(
+          context: context,
+          message: "An error occurred: $e",
+        );
+      } finally {
+        isVideoUploading = false;
+        notifyListeners();
       }
-    } else {
+    } else if (isVideoUploading) {
       showCustomSnackBar(
         context: context,
         message: "Please Wait, Video is Uploading",
       );
     }
   }
+
 
 
   // Future<void> pickVideoFunction(BuildContext context) async {

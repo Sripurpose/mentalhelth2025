@@ -350,7 +350,6 @@ class MentalStrengthEditProvider extends ChangeNotifier {
 
   Future<void> pickVideoFunction(BuildContext context) async {
     try {
-      // Pick video from gallery
       final pickedVideoPath = await ImagePicker().pickVideo(
         source: ImageSource.gallery,
       );
@@ -363,20 +362,63 @@ class MentalStrengthEditProvider extends ChangeNotifier {
         return;
       }
 
-      if (!isVideoUploading) {
-        isVideoUploading = true;
-        notifyListeners();
+      final file = File(pickedVideoPath.path);
+      final fileSizeInBytes = await file.length();
+      final fileSizeInMB = fileSizeInBytes / (1024 * 1024);
 
-        // Show loading dialog
+      print("📦 Video file size: $fileSizeInBytes bytes");
+      print("📦 Video file size: ${fileSizeInMB.toStringAsFixed(2)} MB");
+
+      File videoToUpload = file;
+
+      if (fileSizeInMB > 100) {
         showDialog(
           context: context,
           barrierDismissible: false,
           builder: (_) => AlertDialog(
             content: Row(
               children: [
-                CupertinoActivityIndicator(
-                  color: ColorsContent.newThemeColor,
-                ),
+                CupertinoActivityIndicator(color: ColorsContent.newThemeColor),
+                const SizedBox(width: 16),
+                const Text("Compressing video..."),
+              ],
+            ),
+          ),
+        );
+
+        final compressedVideoInfo = await VideoCompress.compressVideo(
+          pickedVideoPath.path,
+          quality: VideoQuality.LowQuality, // Minimum clarity
+          deleteOrigin: false, // Set to true if you want to remove original
+        );
+
+        Navigator.pop(context); // Dismiss compression dialog
+
+        if (compressedVideoInfo == null || compressedVideoInfo.file == null) {
+          showCustomSnackBar(
+            context: context,
+            message: "Video compression failed.",
+          );
+          return;
+        }
+
+        videoToUpload = compressedVideoInfo.file!;
+        final compressedSize = await videoToUpload.length();
+        print("📉 Compressed video size: ${(compressedSize / (1024 * 1024)).toStringAsFixed(2)} MB");
+      }
+
+      if (!isVideoUploading) {
+        isVideoUploading = true;
+        notifyListeners();
+
+        // Show uploading dialog
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => AlertDialog(
+            content: Row(
+              children: [
+                CupertinoActivityIndicator(color: ColorsContent.newThemeColor),
                 const SizedBox(width: 16),
                 const Text("Uploading video..."),
               ],
@@ -384,23 +426,21 @@ class MentalStrengthEditProvider extends ChangeNotifier {
           ),
         );
 
-        List<String> videoPaths = [pickedVideoPath.path];
+        List<String> videoPaths = [videoToUpload.path];
         pickedImagesAddFunction(videoPaths);
 
-        // Generate thumbnail from original video
-        File thumbNailFile =
-        await generateThumbnail(File(pickedVideoPath.path));
+        // Generate thumbnail
+        File thumbNailFile = await generateThumbnail(videoToUpload);
 
-        // Upload original video directly without compression
+        // Upload video
         await saveMediaUploadMental(
-          file: pickedVideoPath.path,
+          file: videoToUpload.path,
           type: "journal",
           fileType: "mp4",
           thumbNail: thumbNailFile.path,
         );
 
-        // Dismiss the dialog after upload is complete
-        Navigator.pop(context);
+        Navigator.pop(context); // Dismiss upload dialog
       } else {
         showCustomSnackBar(
           context: context,
@@ -408,7 +448,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
         );
       }
     } catch (e) {
-      Navigator.pop(context); // Ensure dialog is dismissed on error
+      Navigator.pop(context);
       showCustomSnackBar(
         context: context,
         message: "An error occurred: $e",
@@ -418,6 +458,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
 
 
 
@@ -708,6 +749,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
             type: "journal",
             fileType: pickedVideo.path.split('.').last.toLowerCase(),
           );
+          logger.i("pickedVideo.path.split('.').last.toLowerCase()${pickedVideo.path.split('.').last.toLowerCase()}");
         } catch (e) {
           showCustomSnackBar(
             context: context,
