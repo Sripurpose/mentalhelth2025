@@ -412,11 +412,11 @@ class _JournalListPageState extends State<JournalListPage> {
                                 dashBoardProvider.changePage(index: 1);
                                 mentalStrengthEditProvider.fetchEmotions(context: context);
                               },
-                              child: SvgPicture.asset(
-                                ImageConstant.createGoals, // Path to your SVG icon
-                                width: 70, // Adjust size to fit inside the button
+                              child: Image.asset(
+                                ImageConstant.createGoalsPng, // Make sure this points to your PNG file
+                                width: 70,
                                 height: 70,
-                                fit: BoxFit.contain,
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),

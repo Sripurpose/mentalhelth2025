@@ -58,6 +58,7 @@ class ImageConstant {
   static String imgDots = '$imagePath/img_dots.svg';
   static String createGoals = '$imagePath/create_goals.svg';
   static String createGoalsSvg = '$imagePath/create_goals_svg.svg';
+  static String createGoalsPng = '$imagePath/create_goal_png.png';
   static String imgGroup29 = '$imagePath/img_group_29.svg';
   static String imgGroup22 = '$imagePath/img_group_22.png';
   static String gradientBackground = '$imagePath/gradient_background.png';

@@ -394,11 +394,11 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
                                     ),
                                   );
                                 },
-                                child: SvgPicture.asset(
-                                  ImageConstant.createGoalsSvg, // Path to your SVG icon
-                                  width: 70, // Adjust size to fit inside the button
+                                child:Image.asset(
+                                  ImageConstant.createGoalsPng, // Make sure this points to your PNG file
+                                  width: 70,
                                   height: 70,
-                                  fit: BoxFit.contain,
+                                  fit: BoxFit.cover,
                                 ),
                               ),
                             ),
