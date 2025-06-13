@@ -1091,7 +1091,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                           Icon(Icons.mode_edit_outline_outlined, color: ColorsContent.newThemeColor),
                           const SizedBox(width: 8),
                           const Padding(
-                            padding: EdgeInsets.only(right: 10.0),
+                            padding: EdgeInsets.only(right: 12.0),
                             child: Text('Edit', style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
