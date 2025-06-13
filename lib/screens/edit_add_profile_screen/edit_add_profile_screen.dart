@@ -290,6 +290,9 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                                                         context: context,
                                                         builder: (BuildContext context) {
                                                           return AlertDialog(
+                                                            shape: RoundedRectangleBorder(
+                                                              borderRadius: BorderRadius.circular(8), // Adjust radius here
+                                                            ),
                                                             backgroundColor: ColorsContent.whiteText, // Adjust the opacity as needed
                                                             title: const Text("Select Interests",
                                                               style: TextStyle(
@@ -315,13 +318,13 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                                                                       final isSelected = editProfileProvider.selectedCategories.contains(category);
 
                                                                       return ListTile(
-                                                                        title: Text(category.categoryName ?? "",style: const TextStyle(
+                                                                        title: Text(category.categoryName ?? "",style: TextStyle(
                                                                           fontSize: 18,
                                                                           fontWeight: FontWeight.w500,
                                                                           fontFamily: 'Open Sans',
-                                                                          color: Colors.black,
+                                                                          color: isSelected ? ColorsContent.newThemeColor : Colors.black,
                                                                         ),),
-                                                                        tileColor: isSelected ? ColorsContent.goalCompletedColor : Colors.transparent,
+                                                                        tileColor: isSelected ? ColorsContent.dropdownSelectedColor : Colors.transparent,
                                                                         onTap: () {
                                                                           setState(() {
                                                                             if (isSelected) {

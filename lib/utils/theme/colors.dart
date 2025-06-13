@@ -39,5 +39,6 @@ class ColorsContent {
   static Color numuAddColor = const Color(0xFFC7C4DA);
   static Color goalNotCompletedColorNew = const Color(0xFFBCB6F5);
   static Color shadeColor = const Color(0xFFDEDEDE);
+  static Color dropdownSelectedColor = const Color(0xFFF2F0FF);
 
 }

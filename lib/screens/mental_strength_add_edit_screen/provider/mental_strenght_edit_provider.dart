@@ -330,18 +330,17 @@ class MentalStrengthEditProvider extends ChangeNotifier {
 
       for (var image in validImages) {
         final originalFile = File(image.path);
-        final fileSizeInBytes = await originalFile.length();
-        final fileSizeInMB = fileSizeInBytes / (1024 * 1024);
 
-        final fileExtension = image.path.split('.').last.toLowerCase();
-        final lastThreeChars = fileExtension.length >= 3
-            ? fileExtension.substring(fileExtension.length - 3)
-            : fileExtension;
+        // Get image dimensions
+        final decodedImage = await decodeImageFromList(originalFile.readAsBytesSync());
+        final int width = decodedImage.width;
+        final int height = decodedImage.height;
+        final int totalPixels = width * height;
 
         String pathToUpload = originalFile.path;
 
-        if (fileSizeInMB > 5) {
-          // Save compressed image as .jpg
+        // Compress only if pixel count is high (e.g., > 2MP)
+        if (totalPixels > 2000000) {
           final targetPath =
               "${originalFile.parent.path}/compressed_${DateTime.now().millisecondsSinceEpoch}.jpg";
 
@@ -361,7 +360,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
         await saveMediaUploadMental(
           file: pathToUpload,
           type: "journal",
-          fileType: 'jpg', // Use jpg because output is forced to .jpg if compressed
+          fileType: 'jpg', // compressed output is always .jpg
         );
       }
 
@@ -371,6 +370,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
       Navigator.of(context, rootNavigator: true).pop();
     }
   }
+
 
 
 

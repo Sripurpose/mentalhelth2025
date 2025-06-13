@@ -713,11 +713,10 @@ var logger = Logger();
 
   Future<void> pickImageFunction(BuildContext context) async {
     final pickedImages = await ImagePicker().pickMultiImage(
-      imageQuality: 50, // Used for initial pick (may be redundant with compression)
+      imageQuality: 50, // Initial quality, may be ignored
     );
 
     if (pickedImages != null && pickedImages.isNotEmpty) {
-      // Filter out GIF files
       final validImages = pickedImages.where((image) {
         final extension = image.path.toLowerCase().split('.').last;
         return extension != 'gif';
@@ -748,14 +747,18 @@ var logger = Logger();
 
       for (var pickedImage in validImages) {
         final originalFile = File(pickedImage.path);
-        final fileSizeInBytes = await originalFile.length();
-        final fileSizeInMB = fileSizeInBytes / (1024 * 1024);
 
-        String pathToUpload = pickedImage.path;
+        // Read image resolution
+        final decodedImage = await decodeImageFromList(originalFile.readAsBytesSync());
+        final int width = decodedImage.width;
+        final int height = decodedImage.height;
+        final int totalPixels = width * height;
+
+        String pathToUpload = originalFile.path;
         String fileType = pickedImage.path.split('.').last.toLowerCase();
 
-        // Compress only if file is larger than 5MB
-        if (fileSizeInMB > 5) {
+        // Compress only if pixel count is more than 2 million
+        if (totalPixels > 2000000) {
           final targetPath =
               "${originalFile.parent.path}/compressed_${DateTime.now().millisecondsSinceEpoch}.jpg";
 
@@ -767,7 +770,7 @@ var logger = Logger();
 
           if (compressedFile != null) {
             pathToUpload = compressedFile.path;
-            fileType = 'jpg'; // update fileType after compression
+            fileType = 'jpg';
           }
         }
 
@@ -786,6 +789,7 @@ var logger = Logger();
       Navigator.of(context, rootNavigator: true).pop(); // Dismiss loading
     }
   }
+
 
 
 

@@ -167,7 +167,6 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
     );
 
     if (pickedImages != null && pickedImages.isNotEmpty) {
-      // Filter out GIF files
       final validImages = pickedImages.where((image) {
         final extension = image.path.toLowerCase().split('.').last;
         return extension != 'gif';
@@ -198,14 +197,17 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
 
       for (var pickedImage in validImages) {
         final originalFile = File(pickedImage.path);
-        final fileSizeInBytes = await originalFile.length();
-        final fileSizeInMB = fileSizeInBytes / (1024 * 1024);
+        final decodedImage = await decodeImageFromList(originalFile.readAsBytesSync());
+
+        final int width = decodedImage.width;
+        final int height = decodedImage.height;
+        final int totalPixels = width * height;
 
         String pathToUpload = pickedImage.path;
         String fileType = pickedImage.path.split('.').last.toLowerCase();
 
-        // Compress if size > 5 MB
-        if (fileSizeInMB > 5) {
+        // Compress if image resolution is high (e.g., over 2 million pixels)
+        if (totalPixels > 2000000) {
           final targetPath =
               "${originalFile.parent.path}/compressed_${DateTime.now().millisecondsSinceEpoch}.jpg";
 
@@ -217,7 +219,7 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
 
           if (compressedFile != null) {
             pathToUpload = compressedFile.path;
-            fileType = 'jpg'; // Compressed output is jpg
+            fileType = 'jpg'; // override since output is .jpg
           }
         }
 
@@ -237,6 +239,7 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
       Navigator.of(context, rootNavigator: true).pop();
     }
   }
+
 
 
 
