@@ -213,6 +213,7 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
                           SizedBox(height: size.height * 0.02),
                           Text(
                             widget.message ?? '',
+                            textAlign: TextAlign.center, // <-- Center alignment
                             style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
@@ -220,7 +221,7 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
                               color: Colors.white,
                             ),
                           ),
-                          SizedBox(height: size.height * 0.02),
+                          SizedBox(height: size.height * 0.04),
 
                           GestureDetector(
                             onTap: () {
@@ -312,7 +313,7 @@ class _SubscriptionCheckScreenState extends State<SubscriptionCheckScreen> {
                         ],
                       ),
                       SizedBox(
-                        height: size.height * 0.04,
+                        height: size.height * 0.02,
                       ),
                       GestureDetector(
                         onTap: () async {

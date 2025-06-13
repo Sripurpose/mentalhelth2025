@@ -185,7 +185,7 @@ class _ScreenSignInState extends State<ScreenSignIn> {
         ),
         body: Container(
           decoration: BoxDecoration(
-            color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
+            color: ColorsContent.optimalStateColor,
             image: DecorationImage(
               image: AssetImage(ImageConstant.gradientBackgroundNumu),
               fit: BoxFit.cover,
@@ -359,107 +359,6 @@ class _ScreenSignInState extends State<ScreenSignIn> {
                     SizedBox(
                       height: size.height * 0.05,
                     ),
-                    // Column(
-                    //   children: [
-                    //     _isLoading
-                    //         ? Shimmer.fromColors(
-                    //             baseColor: Colors.grey[300]!,
-                    //             highlightColor: Colors.grey[100]!,
-                    //             child: Column(
-                    //               children: [
-                    //                 Center(
-                    //                   child: Container(
-                    //                     color: Colors.grey[100],
-                    //                     height: 40.0,
-                    //                     width: size.width * 0.75,
-                    //                   ),
-                    //                 ),
-                    //               ],
-                    //             ),
-                    //           )
-                    //         : signInProvider.settingsRegisterModel?.settings?[0]
-                    //                     .isRequired ==
-                    //                 "1"
-                    //             ? Column(
-                    //                 children: [
-                    //                   Text(
-                    //                     signInProvider.settingsRegisterModel
-                    //                             ?.settings?[0].message ??
-                    //                         "",
-                    //                     style:
-                    //                         CustomTextStyles.bodySmallOnPrimary,
-                    //                   ),
-                    //                   GestureDetector(
-                    //                     onTap: () {
-                    //                       String chatURL = signInProvider
-                    //                               .settingsRegisterModel
-                    //                               ?.settings?[0]
-                    //                               .linkUrl ??
-                    //                           "";
-                    //                       var url = Uri.parse(chatURL);
-                    //                       _launchInAppWithBrowserOptions(url);
-                    //                     },
-                    //                     child:Text(
-                    //                       signInProvider.settingsRegisterModel?.settings?[0].link ?? "",
-                    //                       style: CustomTextStyles.labelLarge16.copyWith(
-                    //                         decoration: TextDecoration.underline,
-                    //                         decorationColor: Colors.blue, // Optional: change the color of the underline
-                    //                         decorationThickness: 1.5, // Optional: adjust the thickness of the underline
-                    //                       ),
-                    //                     ),
-                    //                   ),
-                    //
-                    //
-                    //                 ],
-                    //               )
-                    //             : const SizedBox(),
-                    //   ],
-                    // ),
-
-                    // const SizedBox(
-                    //   height: 10,
-                    // ),
-                    // Consumer<SignInProvider>(
-                    //     builder: (context, signInProvider, _) {
-                    //   return buildContinueWithPhoneButton(
-                    //     context,
-                    //     message: "Continue with Facebook",
-                    //     imageMessage: ImageConstant.imgFacebook,
-                    //     onPressed: () {
-                    //       signInProvider.signInWithFacebook();
-                    //     },
-                    //   );
-                    // }),
-                    // const SizedBox(
-                    //   height: 8,
-                    // // ),
-                    // Consumer<SignInProvider>(
-                    //   builder: (context, signInProvider, _) {
-                    //     return buildContinueWithPhoneButton(
-                    //       context,
-                    //       message: _isSignedIn ? "Sign Out from Google" : "Continue with Google",
-                    //       imageMessage: ImageConstant.imgGoogle,
-                    //       onPressed: () async {
-                    //         handleGoogleSignInSignOut();
-                    //       },
-                    //     );
-                    //   },
-                    // ),
-                    // const SizedBox(
-                    //   height: 8,
-                    // ),
-                    // Consumer<SignInProvider>(
-                    //   builder: (context, signInProvider, _) {
-                    //     return buildContinueWithPhoneButton(
-                    //       context,
-                    //       message: "Continue with Apple",
-                    //       imageMessage: ImageConstant.imgPath4,
-                    //       onPressed: () {
-                    //         signInProvider.googleSignOut();
-                    //       },
-                    //     );
-                    //   },
-                    // ),
                   ],
                 ),
               ),

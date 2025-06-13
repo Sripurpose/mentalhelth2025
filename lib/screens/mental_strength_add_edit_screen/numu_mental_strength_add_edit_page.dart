@@ -223,7 +223,7 @@ class _NumuMentalStrengthAddEditPageState
                                 },
                                 child: Padding(
                                   padding: EdgeInsets.only(
-                                    right: size.width * 0.07,
+                                    right: size.width * 0.05,
                                   ),
                                   child:
                                   SvgPicture.asset(
