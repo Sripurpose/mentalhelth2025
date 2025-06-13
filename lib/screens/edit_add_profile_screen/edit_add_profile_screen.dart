@@ -449,7 +449,7 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                                                               ),
                                                             ),
                                                           const Gap(4),
-                                                          const Icon(Icons.arrow_drop_down,color: Colors.black,),
+                                                           Icon(Icons.arrow_drop_down,color: ColorsContent.newThemeColor,),
                                                         ],
                                                       ),
                                                     ),
