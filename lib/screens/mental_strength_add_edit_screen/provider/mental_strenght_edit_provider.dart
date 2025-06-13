@@ -372,6 +372,103 @@ class MentalStrengthEditProvider extends ChangeNotifier {
   }
 
 
+  // Future<void> pickImageFunctionDiscuss(BuildContext context) async {
+  //   final pickedImages = await ImagePicker().pickMultiImage(
+  //     imageQuality: 100, // Highest initial quality
+  //   );
+  //
+  //   if (pickedImages != null && pickedImages.isNotEmpty) {
+  //     final validImages = pickedImages.where((image) {
+  //       final extension = image.path.toLowerCase().split('.').last;
+  //       return extension != 'gif';
+  //     }).toList();
+  //
+  //     if (validImages.isEmpty) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         const SnackBar(content: Text("GIF files are not supported.")),
+  //       );
+  //       return;
+  //     }
+  //
+  //     showDialog(
+  //       context: context,
+  //       barrierDismissible: false,
+  //       builder: (_) => AlertDialog(
+  //         content: Row(
+  //           children: [
+  //             CupertinoActivityIndicator(color: ColorsContent.newThemeColor),
+  //             const SizedBox(width: 16),
+  //             const Text("Uploading images..."),
+  //           ],
+  //         ),
+  //       ),
+  //     );
+  //
+  //     List<String> imagePaths = [];
+  //
+  //     for (var image in validImages) {
+  //       final originalFile = File(image.path);
+  //       final fileSizeBytes = await originalFile.length();
+  //
+  //       // Get image resolution
+  //       final decodedImage = await decodeImageFromList(originalFile.readAsBytesSync());
+  //       final int width = decodedImage.width;
+  //       final int height = decodedImage.height;
+  //       final int totalPixels = width * height;
+  //
+  //       String pathToUpload = originalFile.path;
+  //       int quality;
+  //
+  //       // Dynamically determine compression quality
+  //       if (totalPixels <= 1000000) {
+  //         quality = 90;
+  //       } else if (totalPixels <= 2000000) {
+  //         quality = 80;
+  //       } else if (totalPixels <= 5000000) {
+  //         quality = 70;
+  //       } else {
+  //         quality = 60;
+  //       }
+  //
+  //       // Further reduce quality if file is too large (>5MB)
+  //       if (fileSizeBytes > 5 * 1024 * 1024) {
+  //         quality = (quality - 10).clamp(30, 80);
+  //       }
+  //
+  //       // Only compress if necessary
+  //       if (totalPixels > 1000000 || fileSizeBytes > 2 * 1024 * 1024) {
+  //         final targetPath =
+  //             "${originalFile.parent.path}/compressed_${DateTime.now().millisecondsSinceEpoch}.jpg";
+  //
+  //         final compressedFile = await FlutterImageCompress.compressAndGetFile(
+  //           originalFile.absolute.path,
+  //           targetPath,
+  //           quality: quality,
+  //         );
+  //
+  //         if (compressedFile != null) {
+  //           pathToUpload = compressedFile.path;
+  //         }
+  //       }
+  //
+  //       imagePaths.add(pathToUpload);
+  //
+  //       await saveMediaUploadMental(
+  //         file: pathToUpload,
+  //         type: "journal",
+  //         fileType: 'jpg',
+  //       );
+  //     }
+  //
+  //     pickedImagesAddFunction(imagePaths);
+  //     notifyListeners();
+  //
+  //     Navigator.of(context, rootNavigator: true).pop(); // Dismiss loading
+  //   }
+  // }
+
+
+
 
 
 

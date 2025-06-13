@@ -83,18 +83,21 @@ class _JournalAudioPlayerState extends State<JournalAudioPlayer> {
                   await globalAudioPlayer.play(UrlSource(widget.url));
                 }
               },
-              child: Container(
-                height: 35,
-                width: 35,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 1.5),
-                ),
-                child: CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  child: Icon(
-                    color: Colors.white,
-                    isPlaying ? Icons.pause : Icons.play_arrow,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 15.0),
+                child: Container(
+                  height: 35,
+                  width: 35,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 1.5),
+                  ),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    child: Icon(
+                      color: Colors.white,
+                      isPlaying ? Icons.pause : Icons.play_arrow,
+                    ),
                   ),
                 ),
               ),

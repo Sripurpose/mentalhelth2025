@@ -177,8 +177,8 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                 const Text(
                                   "In your mind",
                                   style: TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
                                     fontFamily: 'Open Sans',
                                     color: Colors.black,
                                   ),
@@ -204,8 +204,8 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                 const Text(
                                   "Description",
                                   style: TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
                                     fontFamily: 'Open Sans',
                                     color: Colors.black,
                                   ),
@@ -598,8 +598,8 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                   child: Text(
                                     "Rating as how you felt",
                                     style: TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
                                       fontFamily: 'Open Sans',
                                       color: Colors.black,
                                     ),
@@ -624,8 +624,8 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                   child: Text(
                                     "Your emotional state ",
                                     style: TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
                                       fontFamily: 'Open Sans',
                                       color: Colors.black,
                                     ),
@@ -656,8 +656,8 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                   child: Text(
                                     "Like towards the reaction to the situation?",
                                     style: TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
                                       fontFamily: 'Open Sans',
                                       color: Colors.black,
                                     ),
@@ -682,8 +682,8 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                   child: Text(
                                     "Goal affected by your reaction",
                                     style: TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
                                       fontFamily: 'Open Sans',
                                       color: Colors.black,
                                     ),
@@ -707,7 +707,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                   },
                                       child: Container(
                                         height: size.height * 0.05,
-                                        width: size.width * 0.7,
+                                        width: size.width * 0.88,
                                         padding: const EdgeInsets.symmetric(horizontal: 8),
                                         decoration: BoxDecoration(
                                           color: ColorsContent.newThemeColor,
@@ -745,7 +745,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                                 radius: size.width * 0.03,
                                                 backgroundColor: ColorsContent.actionBackColor,
                                                 child: Icon(
-                                                  Icons.play_arrow,
+                                                  Icons.arrow_forward_ios,
                                                   color: Colors.white,
                                                   size: size.width * 0.04,
                                                 ),
@@ -766,8 +766,8 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                   child: Text(
                                     "Your action",
                                     style: TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
                                       fontFamily: 'Open Sans',
                                       color: Colors.black,
                                     ),
@@ -779,7 +779,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                     ? const SizedBox()
                                     : SizedBox(
                                   height: (homeProvider.journalDetails?.journals?.action?.length ?? 0) * (size.height * 0.065),
-                                  width: size.width * 0.7,
+                                  width: size.width * 0.88,
                                   child: ListView.builder(
                                     shrinkWrap: true,
                                     physics: const BouncingScrollPhysics(), // Or ScrollPhysics() for default
@@ -838,7 +838,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                                 radius: size.width * 0.03,
                                                 backgroundColor: ColorsContent.actionBackColor,
                                                 child: Icon(
-                                                  Icons.play_arrow,
+                                                  Icons.arrow_forward_ios,
                                                   color: Colors.white,
                                                   size: size.width * 0.04,
                                                 ),
