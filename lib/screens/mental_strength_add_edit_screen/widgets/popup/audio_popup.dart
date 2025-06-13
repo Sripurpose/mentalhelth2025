@@ -83,14 +83,17 @@ Future audioBottomSheet({
             mainAxisSize: MainAxisSize.min,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const SizedBox(),
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                  const SizedBox(width: 40), // Placeholder for left side
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
                   GestureDetector(

@@ -1233,12 +1233,15 @@ class _GoalAndDreamFullViewScreenState
                           children: [
                             Icon(Icons.mode_edit_outline_outlined, color: ColorsContent.newThemeColor),
                             const SizedBox(width: 8),
-                            const Text('Edit', style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: 'Roboto',
-                              color:  Colors.black,
-                            )),
+                            const Padding(
+                              padding: EdgeInsets.only(right: 10.0),
+                              child: Text('Edit', style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'Roboto',
+                                color:  Colors.black,
+                              )),
+                            ),
                           ],
                         ),
                       ),
