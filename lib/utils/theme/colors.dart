@@ -40,5 +40,6 @@ class ColorsContent {
   static Color goalNotCompletedColorNew = const Color(0xFFBCB6F5);
   static Color shadeColor = const Color(0xFFDEDEDE);
   static Color dropdownSelectedColor = const Color(0xFFF2F0FF);
+  static Color allBorderColor = const Color(0xFFDDDBF6);
 
 }

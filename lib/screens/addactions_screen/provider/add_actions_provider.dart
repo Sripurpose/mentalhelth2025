@@ -733,15 +733,23 @@ var logger = Logger();
         context: context,
         barrierDismissible: false,
         builder: (_) => AlertDialog(
+          backgroundColor: ColorsContent.newThemeColor,
           content: Row(
             children: [
-              CupertinoActivityIndicator(color: ColorsContent.newThemeColor),
+              CupertinoActivityIndicator(color: ColorsContent.whiteText),
               const SizedBox(width: 16),
-              const Text("Uploading images..."),
+              const Text("Uploading images...",
+                style:const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Open Sans',
+                  color: Colors.white,
+                ),),
             ],
           ),
         ),
       );
+
 
       List<String> imagePaths = [];
 
@@ -845,15 +853,23 @@ var logger = Logger();
           context: context,
           barrierDismissible: false,
           builder: (_) => AlertDialog(
+            backgroundColor: ColorsContent.newThemeColor,
             content: Row(
               children: [
-                CupertinoActivityIndicator(color: ColorsContent.newThemeColor),
+                CupertinoActivityIndicator(color: ColorsContent.whiteText),
                 const SizedBox(width: 16),
-                const Text("Compressing video..."),
+                const Text("Compressing video...",
+                  style:const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Open Sans',
+                    color: Colors.white,
+                  ),),
               ],
             ),
           ),
         );
+
 
         final MediaInfo? compressedVideoInfo = await VideoCompress.compressVideo(
           originalFile.path,
@@ -884,15 +900,23 @@ var logger = Logger();
           context: context,
           barrierDismissible: false,
           builder: (_) => AlertDialog(
+            backgroundColor: ColorsContent.newThemeColor,
             content: Row(
               children: [
-                CupertinoActivityIndicator(color: ColorsContent.newThemeColor),
+                CupertinoActivityIndicator(color: ColorsContent.whiteText),
                 const SizedBox(width: 16),
-                const Text("Uploading video..."),
+                const Text("Uploading video...",
+                  style:const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Open Sans',
+                    color: Colors.white,
+                  ),),
               ],
             ),
           ),
         );
+
 
         // Get file extension if needed
         String fileExtension = videoToUpload.path.split('.').last;
@@ -1040,13 +1064,18 @@ var logger = Logger();
           context: context,
           barrierDismissible: false,
           builder: (_) => AlertDialog(
+            backgroundColor: ColorsContent.newThemeColor,
             content: Row(
               children: [
-                CupertinoActivityIndicator(
-                  color: ColorsContent.newThemeColor,
-                ),
+                CupertinoActivityIndicator(color: ColorsContent.whiteText),
                 const SizedBox(width: 16),
-                const Text("Capturing images..."),
+                const Text("Capturing images...",
+                  style:const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Open Sans',
+                    color: Colors.white,
+                  ),),
               ],
             ),
           ),
@@ -1165,13 +1194,18 @@ var logger = Logger();
             context: context,
             barrierDismissible: false,
             builder: (_) => AlertDialog(
+              backgroundColor: ColorsContent.newThemeColor,
               content: Row(
                 children: [
-                  CupertinoActivityIndicator(
-                    color: ColorsContent.newThemeColor,
-                  ),
+                  CupertinoActivityIndicator(color: ColorsContent.whiteText),
                   const SizedBox(width: 16),
-                  const Text("Uploading video..."),
+                  const Text("Capturing video...",
+                    style:TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Open Sans',
+                      color: Colors.white,
+                    ),),
                 ],
               ),
             ),

@@ -183,15 +183,23 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
         context: context,
         barrierDismissible: false,
         builder: (_) => AlertDialog(
+          backgroundColor: ColorsContent.newThemeColor,
           content: Row(
             children: [
-              CupertinoActivityIndicator(color: ColorsContent.newThemeColor),
+              CupertinoActivityIndicator(color: ColorsContent.whiteText),
               const SizedBox(width: 16),
-              const Text("Uploading images..."),
+              const Text("Uploading images...",
+                style:const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Open Sans',
+                  color: Colors.white,
+                ),),
             ],
           ),
         ),
       );
+
 
       List<String> imagePaths = [];
 
@@ -290,19 +298,28 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
         }
 
         // Show compressing dialog
+
         showDialog(
           context: context,
           barrierDismissible: false,
           builder: (_) => AlertDialog(
+            backgroundColor: ColorsContent.newThemeColor,
             content: Row(
               children: [
-                CupertinoActivityIndicator(color: ColorsContent.newThemeColor),
+                CupertinoActivityIndicator(color: ColorsContent.whiteText),
                 const SizedBox(width: 16),
-                const Text("Compressing video..."),
+                const Text("Compressing video...",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Open Sans',
+                    color: Colors.white,
+                  ),),
               ],
             ),
           ),
         );
+
 
         final MediaInfo? compressedVideoInfo = await VideoCompress.compressVideo(
           originalFile.path,
@@ -333,11 +350,18 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
           context: context,
           barrierDismissible: false,
           builder: (_) => AlertDialog(
+            backgroundColor: ColorsContent.newThemeColor,
             content: Row(
               children: [
-                CupertinoActivityIndicator(color: ColorsContent.newThemeColor),
+                CupertinoActivityIndicator(color: ColorsContent.whiteText),
                 const SizedBox(width: 16),
-                const Text("Uploading video..."),
+                const Text("Uploading video...",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Open Sans',
+                    color: Colors.white,
+                  ),),
               ],
             ),
           ),

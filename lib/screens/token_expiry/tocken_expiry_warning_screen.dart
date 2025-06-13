@@ -1,9 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:mentalhelth/screens/token_expiry/token_expiry.dart';
 import 'package:mentalhelth/utils/theme/colors.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../utils/core/firebase_api.dart';
 import '../../utils/core/image_constant.dart';
 import '../../utils/logic/shared_prefrence.dart';
 import '../../utils/theme/custom_text_style.dart';
@@ -162,7 +167,7 @@ class _TokenExpireScreenState extends State<TokenExpireScreen> {
                                 ),
                                 const Gap(20),
                                 GestureDetector(
-                                  onTap: () {
+                                  onTap: () async {
                                     TokenManager.setTokenStatus(false);
                                     addUserEmailSharePref(
                                       email: "",
@@ -170,7 +175,22 @@ class _TokenExpireScreenState extends State<TokenExpireScreen> {
                                     addUserPasswordSharePref(
                                       password: "",
                                     );
-                                    SystemNavigator.pop();
+                                    if(Platform.isAndroid){
+                                      await PushNotifications.subscribeToTopic("live_doLogin");
+                                      await PushNotifications.unsubscribeFromTopic("message");
+                                    }else{
+                                      OneSignal.logout();
+                                      OneSignal.User.addTagWithKey("topic","live_doLogin");
+                                      OneSignal.User.removeTag("message");
+                                    }
+                                    final prefs = await SharedPreferences.getInstance();
+                                    await prefs.remove('lastSkippedTimestamp');
+                                    addFCMTokenToSharePref(token: "");
+                                    addVersionSharePref(version:"");
+                                    // GoogleSignInService.logout();
+                                    await signInProvider.logOutUser(context);
+                                    await removeUserDetailsSharePref(context: context);
+                                    removeAllValuesLogout(context: context);
                                   },
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,

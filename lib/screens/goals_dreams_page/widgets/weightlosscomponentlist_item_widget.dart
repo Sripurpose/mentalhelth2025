@@ -32,7 +32,7 @@ class WeightLossComponentListItemWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 14,
-        vertical: 5,
+        vertical: 10,
       ),
       margin: const EdgeInsets.only(
         bottom: 10,
@@ -42,16 +42,16 @@ class WeightLossComponentListItemWidget extends StatelessWidget {
         color: ColorsContent.shadeColor,
         borderRadius: BorderRadiusStyle.roundedBorder8,
         border: Border.all(
-          color: ColorsContent.goalNotCompletedColor, // Change to desired border color
-          width: 0.5,         // 🔁 Change thickness if required
+          color: ColorsContent.allBorderColor, // Change to desired border color
+          width: 1.5,         // 🔁 Change thickness if required
         ),
       )
           : BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadiusStyle.roundedBorder8,
         border: Border.all(
-          color: ColorsContent.goalNotCompletedColor, // Change to desired border color
-          width: 0.5,         // 🔁 Change thickness if required
+          color: ColorsContent.allBorderColor, // Change to desired border color
+          width: 1.5,         // 🔁 Change thickness if required
         ),
             ),
       child: Row(
@@ -97,7 +97,12 @@ class WeightLossComponentListItemWidget extends StatelessWidget {
                   width:230,
                   child: Text(
                     headding,
-                    style: CustomTextStyles.titleMedium16,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Open Sans',
+                      color: Colors.black,
+                    ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),

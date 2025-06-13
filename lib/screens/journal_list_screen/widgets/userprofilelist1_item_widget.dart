@@ -41,8 +41,8 @@ class UserProfileList1ItemWidget extends StatelessWidget {
       decoration: AppDecoration.outlineGray.copyWith(
         borderRadius: BorderRadiusStyle.roundedBorder10,
         border: Border.all(
-          color: ColorsContent.goalNotCompletedColor, // Change to desired border color
-          width: 0.5, // Border width
+          color: ColorsContent.allBorderColor, // Change to desired border color
+          width: 1.5, // Border width
         ),
       ),
 
@@ -52,8 +52,8 @@ class UserProfileList1ItemWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                width: size.width * 0.1, // Set the desired width
-                height: size.width * 0.1, // Set the desired height
+                width: size.width * 0.135, // Set the desired width
+                height: size.width * 0.135, // Set the desired height
                 decoration: BoxDecoration(
                   color: Colors.grey[100], // Background color
                   image: DecorationImage(

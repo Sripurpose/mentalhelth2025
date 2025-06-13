@@ -30,8 +30,8 @@ class UserProfileListItemWidget extends StatelessWidget {
       decoration: AppDecoration.outlineGray.copyWith(
         borderRadius: BorderRadiusStyle.roundedBorder10,
         border:  Border.all(
-          color: ColorsContent.newThemeColor, // Black border color
-          width: 0.3,          // Border width
+          color: ColorsContent.allBorderColor, // Black border color
+          width: 1.5,          // Border width
         ),
       ),
       child: Row(
@@ -67,7 +67,12 @@ class UserProfileListItemWidget extends StatelessWidget {
                   //color: Colors.red,
                   child: Text(
                     HtmlUnescape().convert(title.toString()), // Decoding HTML entities
-                    style: theme.textTheme.bodyMedium,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Open Sans',
+                      color: Colors.black,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 5,),

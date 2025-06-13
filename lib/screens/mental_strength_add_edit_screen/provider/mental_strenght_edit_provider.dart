@@ -316,11 +316,18 @@ class MentalStrengthEditProvider extends ChangeNotifier {
         context: context,
         barrierDismissible: false,
         builder: (_) => AlertDialog(
+          backgroundColor: ColorsContent.newThemeColor,
           content: Row(
             children: [
-              CupertinoActivityIndicator(color: ColorsContent.newThemeColor),
+              CupertinoActivityIndicator(color: ColorsContent.whiteText),
               const SizedBox(width: 16),
-              const Text("Uploading images..."),
+              const Text("Uploading images...",
+              style:const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                fontFamily: 'Open Sans',
+                color: Colors.white,
+              ),),
             ],
           ),
         ),
@@ -528,11 +535,18 @@ class MentalStrengthEditProvider extends ChangeNotifier {
         context: context,
         barrierDismissible: false,
         builder: (_) => AlertDialog(
+          backgroundColor: ColorsContent.newThemeColor,
           content: Row(
             children: [
-              CupertinoActivityIndicator(color: ColorsContent.newThemeColor),
+              CupertinoActivityIndicator(color: ColorsContent.whiteText),
               const SizedBox(width: 16),
-              const Text("Compressing video..."),
+              const Text("Compressing video...",
+                style:const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Open Sans',
+                  color: Colors.white,
+                ),),
             ],
           ),
         ),
@@ -565,15 +579,23 @@ class MentalStrengthEditProvider extends ChangeNotifier {
         notifyListeners();
 
         // Show uploading dialog
+
         showDialog(
           context: context,
           barrierDismissible: false,
           builder: (_) => AlertDialog(
+            backgroundColor: ColorsContent.newThemeColor,
             content: Row(
               children: [
-                CupertinoActivityIndicator(color: ColorsContent.newThemeColor),
+                CupertinoActivityIndicator(color: ColorsContent.whiteText),
                 const SizedBox(width: 16),
-                const Text("Uploading video..."),
+                const Text("Uploading video...",
+                  style:const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Open Sans',
+                    color: Colors.white,
+                  ),),
               ],
             ),
           ),
@@ -762,21 +784,28 @@ class MentalStrengthEditProvider extends ChangeNotifier {
     if (pickedFile != null) {
       try {
         // Show loading dialog
+
         showDialog(
           context: context,
           barrierDismissible: false,
           builder: (_) => AlertDialog(
+            backgroundColor: ColorsContent.newThemeColor,
             content: Row(
               children: [
-                CupertinoActivityIndicator(
-                  color: ColorsContent.newThemeColor,
-                ),
+                CupertinoActivityIndicator(color: ColorsContent.whiteText),
                 const SizedBox(width: 16),
-                const Text("Capturing images..."),
+                const Text("Capturing images...",
+                  style:const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Open Sans',
+                    color: Colors.white,
+                  ),),
               ],
             ),
           ),
         );
+
 
         String fileExtension = pickedFile.path.split('.').last.toLowerCase();
 
@@ -879,17 +908,23 @@ class MentalStrengthEditProvider extends ChangeNotifier {
           notifyListeners();
 
           // Show loading dialog
+
           showDialog(
             context: context,
             barrierDismissible: false,
             builder: (_) => AlertDialog(
+              backgroundColor: ColorsContent.newThemeColor,
               content: Row(
                 children: [
-                  CupertinoActivityIndicator(
-                    color: ColorsContent.newThemeColor,
-                  ),
+                  CupertinoActivityIndicator(color: ColorsContent.whiteText),
                   const SizedBox(width: 16),
-                  const Text("Uploading video..."),
+                  const Text("Capturing video...",
+                    style:const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Open Sans',
+                      color: Colors.white,
+                    ),),
                 ],
               ),
             ),
