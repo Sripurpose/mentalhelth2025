@@ -4,6 +4,7 @@ import 'dart:io';
 
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tzData;
 import 'package:flutter/material.dart';
@@ -712,7 +713,7 @@ var logger = Logger();
 
   Future<void> pickImageFunction(BuildContext context) async {
     final pickedImages = await ImagePicker().pickMultiImage(
-      imageQuality: 50,
+      imageQuality: 50, // Used for initial pick (may be redundant with compression)
     );
 
     if (pickedImages != null && pickedImages.isNotEmpty) {
@@ -735,9 +736,7 @@ var logger = Logger();
         builder: (_) => AlertDialog(
           content: Row(
             children: [
-              CupertinoActivityIndicator(
-                color: ColorsContent.newThemeColor,
-              ),
+              CupertinoActivityIndicator(color: ColorsContent.newThemeColor),
               const SizedBox(width: 16),
               const Text("Uploading images..."),
             ],
@@ -748,24 +747,46 @@ var logger = Logger();
       List<String> imagePaths = [];
 
       for (var pickedImage in validImages) {
-        String fileExtension = pickedImage.path.split('.').last;
-        String lastThreeChars = fileExtension.substring(fileExtension.length - 3);
+        final originalFile = File(pickedImage.path);
+        final fileSizeInBytes = await originalFile.length();
+        final fileSizeInMB = fileSizeInBytes / (1024 * 1024);
 
-        imagePaths.add(pickedImage.path);
+        String pathToUpload = pickedImage.path;
+        String fileType = pickedImage.path.split('.').last.toLowerCase();
+
+        // Compress only if file is larger than 5MB
+        if (fileSizeInMB > 5) {
+          final targetPath =
+              "${originalFile.parent.path}/compressed_${DateTime.now().millisecondsSinceEpoch}.jpg";
+
+          final compressedFile = await FlutterImageCompress.compressAndGetFile(
+            originalFile.absolute.path,
+            targetPath,
+            quality: 70,
+          );
+
+          if (compressedFile != null) {
+            pathToUpload = compressedFile.path;
+            fileType = 'jpg'; // update fileType after compression
+          }
+        }
+
+        imagePaths.add(pathToUpload);
 
         await saveMediaUploadAction(
-          file: pickedImage.path,
+          file: pathToUpload,
           type: "action",
-          fileType: lastThreeChars,
+          fileType: fileType,
         );
       }
 
       pickedImagesAddFunction(imagePaths);
       notifyListeners();
 
-      Navigator.of(context, rootNavigator: true).pop();
+      Navigator.of(context, rootNavigator: true).pop(); // Dismiss loading
     }
   }
+
 
 
 

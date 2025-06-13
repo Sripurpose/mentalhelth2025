@@ -290,20 +290,20 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                                                         context: context,
                                                         builder: (BuildContext context) {
                                                           return AlertDialog(
-                                                            backgroundColor: ColorsContent.goalNotCompletedColor, // Adjust the opacity as needed
+                                                            backgroundColor: ColorsContent.whiteText, // Adjust the opacity as needed
                                                             title: const Text("Select Interests",
                                                               style: TextStyle(
                                                                 fontSize: 16,
                                                                 fontWeight: FontWeight.w700,
                                                                 fontFamily: 'Open Sans',
-                                                                color:  Colors.white,
+                                                                color:  Colors.black,
                                                               ),),
                                                             content: StatefulBuilder(
                                                               builder: (context, setState) {
                                                                 final categories = editProfileProvider.getCategoryModel?.category ?? [];
                                                                 return Container(
                                                                   decoration: BoxDecoration(
-                                                                    border: Border.all(color: Colors.white, width: 0.5), // Border color and width
+                                                                    border: Border.all(color: ColorsContent.newThemeColor, width: 1.5), // Border color and width
                                                                     borderRadius: BorderRadius.circular(5), // Optional: rounded corners
                                                                   ),
                                                                   height: size.height * 0.2,
@@ -319,9 +319,9 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                                                                           fontSize: 18,
                                                                           fontWeight: FontWeight.w500,
                                                                           fontFamily: 'Open Sans',
-                                                                          color: Colors.white,
+                                                                          color: Colors.black,
                                                                         ),),
-                                                                        tileColor: isSelected ? Colors.white.withOpacity(0.2) : Colors.transparent,
+                                                                        tileColor: isSelected ? ColorsContent.goalCompletedColor : Colors.transparent,
                                                                         onTap: () {
                                                                           setState(() {
                                                                             if (isSelected) {
@@ -339,7 +339,9 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                                                             ),
                                                             actions: [
                                                               Container(
+                                                                width:400,
                                                                 decoration: BoxDecoration(
+                                                                  color:ColorsContent.newThemeColor,
                                                                   border: Border.all(color: Colors.white, width: 0.5), // Border color and width
                                                                   borderRadius: BorderRadius.circular(5), // Optional: rounded corners
                                                                 ),

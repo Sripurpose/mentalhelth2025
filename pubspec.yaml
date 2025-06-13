@@ -104,6 +104,7 @@ dependencies:
   device_info_plus: ^10.0.1
   flutter_inappwebview: ^6.1.5
   webview_flutter_android: ^3.13.0
+  flutter_image_compress: ^2.1.0
 
   ##chewie: ^1.10.0
 

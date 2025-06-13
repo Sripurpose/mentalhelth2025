@@ -82,6 +82,7 @@ class SignInProvider extends ChangeNotifier {
         },
         body: body,
       );
+      logger.i("responsePharse${response.body}");
       if (response.statusCode == 200) {
         loginStatus = response.statusCode;
         TokenManager.setTokenStatus(false);
@@ -132,13 +133,27 @@ class SignInProvider extends ChangeNotifier {
             );
           }
         }
-      } else if(response.statusCode == 400){
+      } else if (response.statusCode == 400) {
         loginStatus = response.statusCode;
-        showCustomSnackBar(
-          context: context,
-          message: 'This account does not exists !',
-        );
-      } else if(response.statusCode == 503){
+
+        try {
+          final Map<String, dynamic> responseData = jsonDecode(response.body);
+          String errorMessage = responseData['text'] ?? "Something went wrong";
+
+          showCustomSnackBar(
+            context: context,
+            message: errorMessage,
+          );
+        } catch (e) {
+          // fallback if body is not valid JSON
+          showCustomSnackBar(
+            context: context,
+            message: "An unexpected error occurred",
+          );
+        }
+      }
+
+      else if(response.statusCode == 503){
         logger.w("response.statusCode == 503${response.statusCode == 503}");
         Future.delayed(Duration.zero, () {
           Navigator.of(context).push(
@@ -152,17 +167,39 @@ class SignInProvider extends ChangeNotifier {
         });
       } else if(response.statusCode == 201){
         loginStatus = response.statusCode;
-        showCustomSnackBar(
-          context: context,
-          message: 'Your account is already registered but not activated. Please check your email for the activation link!!',
-        );
+        try {
+          final Map<String, dynamic> responseData = jsonDecode(response.body);
+          String errorMessage = responseData['text'] ?? "Something went wrong";
+
+          showCustomSnackBar(
+            context: context,
+            message: errorMessage,
+          );
+        } catch (e) {
+          // fallback if body is not valid JSON
+          showCustomSnackBar(
+            context: context,
+            message: "An unexpected error occurred",
+          );
+        }
       }
       else{
         loginStatus = response.statusCode;
-        showCustomSnackBar(
-          context: context,
-          message: 'Incorrect Email or password !',
-        );
+        try {
+          final Map<String, dynamic> responseData = jsonDecode(response.body);
+          String errorMessage = responseData['text'] ?? "Something went wrong";
+
+          showCustomSnackBar(
+            context: context,
+            message: errorMessage,
+          );
+        } catch (e) {
+          // fallback if body is not valid JSON
+          showCustomSnackBar(
+            context: context,
+            message: "An unexpected error occurred",
+          );
+        }
       }
       if(response.statusCode == 401){
         loginStatus = response.statusCode;

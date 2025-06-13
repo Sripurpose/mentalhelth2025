@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -185,9 +186,7 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
         builder: (_) => AlertDialog(
           content: Row(
             children: [
-              CupertinoActivityIndicator(
-                color: ColorsContent.newThemeColor,
-              ),
+              CupertinoActivityIndicator(color: ColorsContent.newThemeColor),
               const SizedBox(width: 16),
               const Text("Uploading images..."),
             ],
@@ -198,15 +197,36 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
       List<String> imagePaths = [];
 
       for (var pickedImage in validImages) {
-        String fileExtension = pickedImage.path.split('.').last;
-        String lastThreeChars = fileExtension.substring(fileExtension.length - 3);
+        final originalFile = File(pickedImage.path);
+        final fileSizeInBytes = await originalFile.length();
+        final fileSizeInMB = fileSizeInBytes / (1024 * 1024);
 
-        imagePaths.add(pickedImage.path);
+        String pathToUpload = pickedImage.path;
+        String fileType = pickedImage.path.split('.').last.toLowerCase();
+
+        // Compress if size > 5 MB
+        if (fileSizeInMB > 5) {
+          final targetPath =
+              "${originalFile.parent.path}/compressed_${DateTime.now().millisecondsSinceEpoch}.jpg";
+
+          final compressedFile = await FlutterImageCompress.compressAndGetFile(
+            originalFile.absolute.path,
+            targetPath,
+            quality: 70,
+          );
+
+          if (compressedFile != null) {
+            pathToUpload = compressedFile.path;
+            fileType = 'jpg'; // Compressed output is jpg
+          }
+        }
+
+        imagePaths.add(pathToUpload);
 
         await saveMediaUploadMental(
-          file: pickedImage.path,
+          file: pathToUpload,
           type: "goal",
-          fileType: lastThreeChars,
+          fileType: fileType,
           context: context,
         );
       }
@@ -217,6 +237,7 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
       Navigator.of(context, rootNavigator: true).pop();
     }
   }
+
 
 
   Future<void> pickVideoFunction(BuildContext context) async {

@@ -2,6 +2,12 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+
+import 'dart:io';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -287,13 +293,13 @@ class MentalStrengthEditProvider extends ChangeNotifier {
     // }
   }
 
+
   Future<void> pickImageFunction(BuildContext context) async {
     final pickedImages = await ImagePicker().pickMultiImage(
       imageQuality: 100,
     );
 
     if (pickedImages != null && pickedImages.isNotEmpty) {
-      // Filter out GIF files
       final validImages = pickedImages.where((image) {
         final extension = image.path.toLowerCase().split('.').last;
         return extension != 'gif';
@@ -306,16 +312,13 @@ class MentalStrengthEditProvider extends ChangeNotifier {
         return;
       }
 
-      // Show loading dialog
       showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) => AlertDialog(
           content: Row(
             children: [
-              CupertinoActivityIndicator(
-                color: ColorsContent.newThemeColor,
-              ),
+              CupertinoActivityIndicator(color: ColorsContent.newThemeColor),
               const SizedBox(width: 16),
               const Text("Uploading images..."),
             ],
@@ -326,25 +329,51 @@ class MentalStrengthEditProvider extends ChangeNotifier {
       List<String> imagePaths = [];
 
       for (var image in validImages) {
-        String fileExtension = image.path.split('.').last;
-        String lastThreeChars = fileExtension.substring(fileExtension.length - 3);
+        final originalFile = File(image.path);
+        final fileSizeInBytes = await originalFile.length();
+        final fileSizeInMB = fileSizeInBytes / (1024 * 1024);
 
-        imagePaths.add(image.path);
+        final fileExtension = image.path.split('.').last.toLowerCase();
+        final lastThreeChars = fileExtension.length >= 3
+            ? fileExtension.substring(fileExtension.length - 3)
+            : fileExtension;
+
+        String pathToUpload = originalFile.path;
+
+        if (fileSizeInMB > 5) {
+          // Save compressed image as .jpg
+          final targetPath =
+              "${originalFile.parent.path}/compressed_${DateTime.now().millisecondsSinceEpoch}.jpg";
+
+          final compressedFile = await FlutterImageCompress.compressAndGetFile(
+            originalFile.absolute.path,
+            targetPath,
+            quality: 70,
+          );
+
+          if (compressedFile != null) {
+            pathToUpload = compressedFile.path;
+          }
+        }
+
+        imagePaths.add(pathToUpload);
 
         await saveMediaUploadMental(
-          file: image.path,
+          file: pathToUpload,
           type: "journal",
-          fileType: lastThreeChars,
+          fileType: 'jpg', // Use jpg because output is forced to .jpg if compressed
         );
       }
 
       pickedImagesAddFunction(imagePaths);
       notifyListeners();
 
-      // Hide loading dialog
       Navigator.of(context, rootNavigator: true).pop();
     }
   }
+
+
+
 
 
 
