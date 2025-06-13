@@ -491,47 +491,74 @@ class MentalStrengthEditProvider extends ChangeNotifier {
       final file = File(pickedVideoPath.path);
       final fileSizeInBytes = await file.length();
       final fileSizeInMB = fileSizeInBytes / (1024 * 1024);
-
       print("📦 Video file size: $fileSizeInBytes bytes");
       print("📦 Video file size: ${fileSizeInMB.toStringAsFixed(2)} MB");
 
+      // Get original video duration
+      final MediaInfo? info = await VideoCompress.getMediaInfo(pickedVideoPath.path);
+      final double durationInSeconds = (info?.duration ?? 0) / 1000;
+      print("⏱ Duration: ${durationInSeconds.toStringAsFixed(2)} seconds");
+
+      // Reject if too large or too long
+      if (fileSizeInMB > 100 || durationInSeconds > 30) {
+        showCustomSnackBar(
+          context: context,
+          message: "Video must be ≤ 100MB and ≤ 30 seconds.",
+        );
+        return;
+      }
+
       File videoToUpload = file;
 
-      if (fileSizeInMB > 100) {
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) => AlertDialog(
-            content: Row(
-              children: [
-                CupertinoActivityIndicator(color: ColorsContent.newThemeColor),
-                const SizedBox(width: 16),
-                const Text("Compressing video..."),
-              ],
-            ),
-          ),
-        );
-
-        final compressedVideoInfo = await VideoCompress.compressVideo(
-          pickedVideoPath.path,
-          quality: VideoQuality.LowQuality, // Minimum clarity
-          deleteOrigin: false, // Set to true if you want to remove original
-        );
-
-        Navigator.pop(context); // Dismiss compression dialog
-
-        if (compressedVideoInfo == null || compressedVideoInfo.file == null) {
-          showCustomSnackBar(
-            context: context,
-            message: "Video compression failed.",
-          );
-          return;
-        }
-
-        videoToUpload = compressedVideoInfo.file!;
-        final compressedSize = await videoToUpload.length();
-        print("📉 Compressed video size: ${(compressedSize / (1024 * 1024)).toStringAsFixed(2)} MB");
+      // Determine Compression Quality
+      VideoQuality compressionQuality;
+      if (fileSizeInMB <= 20) {
+        compressionQuality = VideoQuality.HighestQuality;
+        print('⚙️ Using HighestQuality for ≤ 20MB');
+      } else if (fileSizeInMB > 20 && fileSizeInMB <= 50) {
+        compressionQuality = VideoQuality.MediumQuality;
+        print('⚙️ Using MediumQuality for 21MB - 50MB');
+      } else {
+        compressionQuality = VideoQuality.LowQuality;
+        print('⚙️ Using LowQuality for > 50MB');
       }
+
+      // Show compressing dialog
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => AlertDialog(
+          content: Row(
+            children: [
+              CupertinoActivityIndicator(color: ColorsContent.newThemeColor),
+              const SizedBox(width: 16),
+              const Text("Compressing video..."),
+            ],
+          ),
+        ),
+      );
+
+      final MediaInfo? compressedInfo = await VideoCompress.compressVideo(
+        file.path,
+        quality: compressionQuality,
+        deleteOrigin: false,
+        includeAudio: true,
+        frameRate: 30,
+      );
+
+      if (Navigator.canPop(context)) Navigator.pop(context); // close dialog
+
+      if (compressedInfo == null || compressedInfo.file == null) {
+        showCustomSnackBar(
+          context: context,
+          message: "Video compression failed.",
+        );
+        return;
+      }
+
+      videoToUpload = compressedInfo.file!;
+      final compressedSize = await videoToUpload.length();
+      print("📉 Compressed video size: ${(compressedSize / (1024 * 1024)).toStringAsFixed(2)} MB");
 
       if (!isVideoUploading) {
         isVideoUploading = true;
@@ -566,15 +593,15 @@ class MentalStrengthEditProvider extends ChangeNotifier {
           thumbNail: thumbNailFile.path,
         );
 
-        Navigator.pop(context); // Dismiss upload dialog
+        if (Navigator.canPop(context)) Navigator.pop(context); // close upload dialog
       } else {
         showCustomSnackBar(
           context: context,
-          message: "Please Wait, Video is Uploading",
+          message: "Please wait, video is uploading.",
         );
       }
     } catch (e) {
-      Navigator.pop(context);
+      if (Navigator.canPop(context)) Navigator.pop(context);
       showCustomSnackBar(
         context: context,
         message: "An error occurred: $e",
@@ -582,8 +609,10 @@ class MentalStrengthEditProvider extends ChangeNotifier {
     } finally {
       isVideoUploading = false;
       notifyListeners();
+      VideoCompress.deleteAllCache(); // Clean up
     }
   }
+
 
 
 

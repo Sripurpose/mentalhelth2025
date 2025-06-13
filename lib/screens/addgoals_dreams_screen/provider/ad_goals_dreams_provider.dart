@@ -259,48 +259,76 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
 
         print("📦 Original video size: ${fileSizeInMB.toStringAsFixed(2)} MB");
 
-        File videoToUpload = originalFile;
+        final MediaInfo? info = await VideoCompress.getMediaInfo(pickedVideoPath.path);
+        final double durationInSeconds = (info?.duration ?? 0) / 1000;
+        print("⏱ Video duration: ${durationInSeconds.toStringAsFixed(2)} seconds");
 
-        // Compress if size > 100 MB
-        if (fileSizeInMB > 100) {
-          showDialog(
+        // Reject if too large or too long
+        if (fileSizeInMB > 100 || durationInSeconds > 30) {
+          showCustomSnackBar(
             context: context,
-            barrierDismissible: false,
-            builder: (_) => AlertDialog(
-              content: Row(
-                children: [
-                  CupertinoActivityIndicator(color: ColorsContent.newThemeColor),
-                  const SizedBox(width: 16),
-                  const Text("Compressing video..."),
-                ],
-              ),
-            ),
+            message: "Video must be ≤ 100MB and ≤ 30 seconds.",
           );
-
-          final compressedVideoInfo = await VideoCompress.compressVideo(
-            pickedVideoPath.path,
-            quality: VideoQuality.LowQuality,
-            deleteOrigin: false,
-          );
-
-          Navigator.pop(context); // dismiss compression dialog
-
-          if (compressedVideoInfo == null || compressedVideoInfo.file == null) {
-            showCustomSnackBar(
-              context: context,
-              message: "Video compression failed.",
-            );
-            isVideoUploading = false;
-            notifyListeners();
-            return;
-          }
-
-          videoToUpload = compressedVideoInfo.file!;
-          final compressedSize = await videoToUpload.length();
-          print("📉 Compressed video size: ${(compressedSize / (1024 * 1024)).toStringAsFixed(2)} MB");
+          isVideoUploading = false;
+          notifyListeners();
+          return;
         }
 
-        // Show loading dialog for upload
+        File videoToUpload = originalFile;
+
+        // Determine compression quality
+        VideoQuality compressionQuality;
+        if (fileSizeInMB <= 20) {
+          compressionQuality = VideoQuality.HighestQuality;
+          print('⚙️ Using HighestQuality for ≤ 20MB');
+        } else if (fileSizeInMB > 20 && fileSizeInMB <= 50) {
+          compressionQuality = VideoQuality.MediumQuality;
+          print('⚙️ Using MediumQuality for 21MB - 50MB');
+        } else {
+          compressionQuality = VideoQuality.LowQuality;
+          print('⚙️ Using LowQuality for > 50MB');
+        }
+
+        // Show compressing dialog
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => AlertDialog(
+            content: Row(
+              children: [
+                CupertinoActivityIndicator(color: ColorsContent.newThemeColor),
+                const SizedBox(width: 16),
+                const Text("Compressing video..."),
+              ],
+            ),
+          ),
+        );
+
+        final MediaInfo? compressedVideoInfo = await VideoCompress.compressVideo(
+          originalFile.path,
+          quality: compressionQuality,
+          deleteOrigin: false,
+          includeAudio: true,
+          frameRate: 30,
+        );
+
+        if (Navigator.canPop(context)) Navigator.pop(context); // Dismiss compression dialog
+
+        if (compressedVideoInfo == null || compressedVideoInfo.file == null) {
+          showCustomSnackBar(
+            context: context,
+            message: "Video compression failed.",
+          );
+          isVideoUploading = false;
+          notifyListeners();
+          return;
+        }
+
+        videoToUpload = compressedVideoInfo.file!;
+        final compressedSize = await videoToUpload.length();
+        print("📉 Compressed video size: ${(compressedSize / (1024 * 1024)).toStringAsFixed(2)} MB");
+
+        // Show uploading dialog
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -315,9 +343,6 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
           ),
         );
 
-        String fileExtension = videoToUpload.path.split('.').last;
-        String lastThreeChars = fileExtension.substring(fileExtension.length - 3);
-
         List<String> videoPaths = [videoToUpload.path];
         pickedImagesAddFunction(videoPaths);
 
@@ -331,9 +356,9 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
           context: context,
         );
 
-        Navigator.pop(context); // Dismiss upload dialog
+        if (Navigator.canPop(context)) Navigator.pop(context); // Dismiss upload dialog
       } catch (e) {
-        Navigator.pop(context); // Ensure dialog is dismissed
+        if (Navigator.canPop(context)) Navigator.pop(context); // Ensure dialog is dismissed
         showCustomSnackBar(
           context: context,
           message: "An error occurred: $e",
@@ -341,14 +366,16 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
       } finally {
         isVideoUploading = false;
         notifyListeners();
+        VideoCompress.deleteAllCache(); // Optional cleanup
       }
     } else if (isVideoUploading) {
       showCustomSnackBar(
         context: context,
-        message: "Please Wait, Video is Uploading",
+        message: "Please wait, video is uploading.",
       );
     }
   }
+
 
 
 
