@@ -321,13 +321,15 @@ class MentalStrengthEditProvider extends ChangeNotifier {
             children: [
               CupertinoActivityIndicator(color: ColorsContent.whiteText),
               const SizedBox(width: 16),
-              const Text("Uploading images...",
-              style:const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                fontFamily: 'Open Sans',
-                color: Colors.white,
-              ),),
+              const Text(
+                "Uploading images...",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Open Sans',
+                  color: Colors.white,
+                ),
+              ),
             ],
           ),
         ),
@@ -336,47 +338,80 @@ class MentalStrengthEditProvider extends ChangeNotifier {
       List<String> imagePaths = [];
 
       for (var image in validImages) {
-        final originalFile = File(image.path);
+        try {
+          final originalFile = File(image.path);
+          final bytes = await originalFile.readAsBytes();
+          final decodedImage = await decodeImageFromList(bytes);
+          final int width = decodedImage.width;
+          final int height = decodedImage.height;
 
-        // Get image dimensions
-        final decodedImage = await decodeImageFromList(originalFile.readAsBytesSync());
-        final int width = decodedImage.width;
-        final int height = decodedImage.height;
-        final int totalPixels = width * height;
+          int minWidth;
+          int minHeight;
+          int quality;
 
-        String pathToUpload = originalFile.path;
+          // --- Apply Compression Rules ---
+          if (width >= 6000 || height >= 4000) {
+            minWidth = 6000;
+            minHeight = 4000;
+            quality = 18;
+          } else if (width >= 4600 || height >= 3000) {
+            minWidth = 4600;
+            minHeight = 3000;
+            quality = 22;
+          } else if (width >= 3500 || height >= 2500) {
+            minWidth = 3500;
+            minHeight = 2500;
+            quality = 50;
+          } else if (width >= 2500 || height >= 1800) {
+            minWidth = 2500;
+            minHeight = 1800;
+            quality = 75;
+          } else {
+            minWidth = 2300;
+            minHeight = 1500;
+            quality = 94;
+          }
 
-        // Compress only if pixel count is high (e.g., > 2MP)
-        if (totalPixels > 2000000) {
-          final targetPath =
-              "${originalFile.parent.path}/compressed_${DateTime.now().millisecondsSinceEpoch}.jpg";
+          final targetPath = "${originalFile.parent.path}/compressed_${DateTime.now().millisecondsSinceEpoch}.jpg";
 
           final compressedFile = await FlutterImageCompress.compressAndGetFile(
             originalFile.absolute.path,
             targetPath,
-            quality: 70,
+            minWidth: minWidth,
+            minHeight: minHeight,
+            quality: quality,
           );
 
+          String pathToUpload = compressedFile?.path ?? originalFile.path;
+
+          // Debug logs
+          debugPrint("Original Size: ${await originalFile.length()} bytes");
           if (compressedFile != null) {
-            pathToUpload = compressedFile.path;
+            debugPrint("Compressed Size: ${await compressedFile.length()} bytes");
           }
+
+          imagePaths.add(pathToUpload);
+
+          await saveMediaUploadMental(
+            file: pathToUpload,
+            type: "journal",
+            fileType: 'jpg',
+          );
+        } catch (e) {
+          debugPrint("Error processing image: $e");
+          continue;
         }
-
-        imagePaths.add(pathToUpload);
-
-        await saveMediaUploadMental(
-          file: pathToUpload,
-          type: "journal",
-          fileType: 'jpg', // compressed output is always .jpg
-        );
       }
 
       pickedImagesAddFunction(imagePaths);
       notifyListeners();
 
-      Navigator.of(context, rootNavigator: true).pop();
+      if (context.mounted) {
+        Navigator.of(context, rootNavigator: true).pop(); // Close loading dialog
+      }
     }
   }
+
 
 
   // Future<void> pickImageFunctionDiscuss(BuildContext context) async {

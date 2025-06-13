@@ -713,7 +713,7 @@ var logger = Logger();
 
   Future<void> pickImageFunction(BuildContext context) async {
     final pickedImages = await ImagePicker().pickMultiImage(
-      imageQuality: 50, // Initial quality, may be ignored
+      imageQuality: 50, // This is overridden by custom compression logic
     );
 
     if (pickedImages != null && pickedImages.isNotEmpty) {
@@ -738,65 +738,102 @@ var logger = Logger();
             children: [
               CupertinoActivityIndicator(color: ColorsContent.whiteText),
               const SizedBox(width: 16),
-              const Text("Uploading images...",
-                style:const TextStyle(
+              const Text(
+                "Uploading images...",
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                   fontFamily: 'Open Sans',
                   color: Colors.white,
-                ),),
+                ),
+              ),
             ],
           ),
         ),
       );
 
-
       List<String> imagePaths = [];
 
       for (var pickedImage in validImages) {
-        final originalFile = File(pickedImage.path);
+        try {
+          final originalFile = File(pickedImage.path);
+          final bytes = await originalFile.readAsBytes();
+          final decodedImage = await decodeImageFromList(bytes);
+          final int width = decodedImage.width;
+          final int height = decodedImage.height;
 
-        // Read image resolution
-        final decodedImage = await decodeImageFromList(originalFile.readAsBytesSync());
-        final int width = decodedImage.width;
-        final int height = decodedImage.height;
-        final int totalPixels = width * height;
+          int minWidth;
+          int minHeight;
+          int quality;
 
-        String pathToUpload = originalFile.path;
-        String fileType = pickedImage.path.split('.').last.toLowerCase();
+          // --- Apply Compression Rules ---
+          if (width >= 6000 || height >= 4000) {
+            minWidth = 6000;
+            minHeight = 4000;
+            quality = 18;
+          } else if (width >= 4600 || height >= 3000) {
+            minWidth = 4600;
+            minHeight = 3000;
+            quality = 22;
+          } else if (width >= 3500 || height >= 2500) {
+            minWidth = 3500;
+            minHeight = 2500;
+            quality = 50;
+          } else if (width >= 2500 || height >= 1800) {
+            minWidth = 2500;
+            minHeight = 1800;
+            quality = 75;
+          } else {
+            minWidth = 2300;
+            minHeight = 1500;
+            quality = 94;
+          }
 
-        // Compress only if pixel count is more than 2 million
-        if (totalPixels > 2000000) {
-          final targetPath =
-              "${originalFile.parent.path}/compressed_${DateTime.now().millisecondsSinceEpoch}.jpg";
+          String pathToUpload = originalFile.path;
+          String fileType = pickedImage.path.split('.').last.toLowerCase();
+
+          final targetPath = "${originalFile.parent.path}/compressed_${DateTime.now().millisecondsSinceEpoch}.jpg";
 
           final compressedFile = await FlutterImageCompress.compressAndGetFile(
             originalFile.absolute.path,
             targetPath,
-            quality: 70,
+            minWidth: minWidth,
+            minHeight: minHeight,
+            quality: quality,
           );
 
           if (compressedFile != null) {
             pathToUpload = compressedFile.path;
-            fileType = 'jpg';
+            fileType = 'jpg'; // output is always jpg
           }
+
+          debugPrint("Original Size: ${await originalFile.length()} bytes");
+          if (compressedFile != null) {
+            debugPrint("Compressed Size: ${await compressedFile.length()} bytes");
+          }
+
+          imagePaths.add(pathToUpload);
+
+          await saveMediaUploadAction(
+            file: pathToUpload,
+            type: "action",
+            fileType: fileType,
+          );
+        } catch (e) {
+          debugPrint("Error processing image: $e");
+          continue;
         }
-
-        imagePaths.add(pathToUpload);
-
-        await saveMediaUploadAction(
-          file: pathToUpload,
-          type: "action",
-          fileType: fileType,
-        );
       }
 
       pickedImagesAddFunction(imagePaths);
       notifyListeners();
 
-      Navigator.of(context, rootNavigator: true).pop(); // Dismiss loading
+      if (context.mounted) {
+        Navigator.of(context, rootNavigator: true).pop(); // Dismiss loading
+      }
     }
   }
+
 
 
 

@@ -163,7 +163,7 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
 
   Future<void> pickImageFunction(BuildContext context) async {
     final pickedImages = await ImagePicker().pickMultiImage(
-      imageQuality: 100,
+      imageQuality: 100, // Will be overridden by manual compression logic
     );
 
     if (pickedImages != null && pickedImages.isNotEmpty) {
@@ -188,65 +188,105 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
             children: [
               CupertinoActivityIndicator(color: ColorsContent.whiteText),
               const SizedBox(width: 16),
-              const Text("Uploading images...",
-                style:const TextStyle(
+              const Text(
+                "Uploading images...",
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                   fontFamily: 'Open Sans',
                   color: Colors.white,
-                ),),
+                ),
+              ),
             ],
           ),
         ),
       );
 
-
       List<String> imagePaths = [];
 
       for (var pickedImage in validImages) {
-        final originalFile = File(pickedImage.path);
-        final decodedImage = await decodeImageFromList(originalFile.readAsBytesSync());
+        try {
+          final originalFile = File(pickedImage.path);
+          final bytes = await originalFile.readAsBytes();
+          final decodedImage = await decodeImageFromList(bytes);
 
-        final int width = decodedImage.width;
-        final int height = decodedImage.height;
-        final int totalPixels = width * height;
+          final int width = decodedImage.width;
+          final int height = decodedImage.height;
 
-        String pathToUpload = pickedImage.path;
-        String fileType = pickedImage.path.split('.').last.toLowerCase();
+          int minWidth;
+          int minHeight;
+          int quality;
 
-        // Compress if image resolution is high (e.g., over 2 million pixels)
-        if (totalPixels > 2000000) {
+          // --- Compression Settings ---
+          if (width >= 6000 || height >= 4000) {
+            minWidth = 6000;
+            minHeight = 4000;
+            quality = 18;
+          } else if (width >= 4600 || height >= 3000) {
+            minWidth = 4600;
+            minHeight = 3000;
+            quality = 22;
+          } else if (width >= 3500 || height >= 2500) {
+            minWidth = 3500;
+            minHeight = 2500;
+            quality = 50;
+          } else if (width >= 2500 || height >= 1800) {
+            minWidth = 2500;
+            minHeight = 1800;
+            quality = 75;
+          } else {
+            minWidth = 2300;
+            minHeight = 1500;
+            quality = 94;
+          }
+
+          String pathToUpload = pickedImage.path;
+          String fileType = pickedImage.path.split('.').last.toLowerCase();
+
           final targetPath =
               "${originalFile.parent.path}/compressed_${DateTime.now().millisecondsSinceEpoch}.jpg";
 
           final compressedFile = await FlutterImageCompress.compressAndGetFile(
             originalFile.absolute.path,
             targetPath,
-            quality: 70,
+            minWidth: minWidth,
+            minHeight: minHeight,
+            quality: quality,
           );
 
           if (compressedFile != null) {
             pathToUpload = compressedFile.path;
-            fileType = 'jpg'; // override since output is .jpg
+            fileType = 'jpg'; // Override since output is .jpg
           }
+
+          debugPrint("Original Size: ${await originalFile.length()} bytes");
+          if (compressedFile != null) {
+            debugPrint("Compressed Size: ${await compressedFile.length()} bytes");
+          }
+
+          imagePaths.add(pathToUpload);
+
+          await saveMediaUploadMental(
+            file: pathToUpload,
+            type: "goal",
+            fileType: fileType,
+            context: context,
+          );
+        } catch (e) {
+          debugPrint("Error processing image: $e");
+          continue;
         }
-
-        imagePaths.add(pathToUpload);
-
-        await saveMediaUploadMental(
-          file: pathToUpload,
-          type: "goal",
-          fileType: fileType,
-          context: context,
-        );
       }
 
       pickedImagesAddFunction(imagePaths);
       notifyListeners();
 
-      Navigator.of(context, rootNavigator: true).pop();
+      if (context.mounted) {
+        Navigator.of(context, rootNavigator: true).pop(); // Close dialog
+      }
     }
   }
+
 
 
 
