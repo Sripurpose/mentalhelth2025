@@ -158,16 +158,11 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                 ),
                                               ),
                                               SizedBox(height: size.height * 0.002),
-                                              Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Padding(
-                                                  padding: const EdgeInsets.only(left: 53),
-                                                  child: Text(
-                                                    "Member since ${editProfileProvider.getProfileModel?.createdAt == null ? "" : formatTimestampToDate(editProfileProvider.getProfileModel!.createdAt.toString())}",
-                                                    style: CustomTextStyles.bodyMediumGray700,
-                                                //    textAlign: TextAlign.center,
-                                                  ),
-                                                ),
+                                              Text(
+                                                textAlign: TextAlign.center, // <-- Center alignment
+                                                "Member since ${editProfileProvider.getProfileModel?.createdAt == null ? "" : formatTimestampToDate(editProfileProvider.getProfileModel!.createdAt.toString())}",
+                                                style: CustomTextStyles.bodyMediumGray700,
+                                                                                            //    textAlign: TextAlign.center,
                                               ),
                                               const SizedBox(height: 27),
                                               Container(
@@ -190,7 +185,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                           ? const TextSpan(text: "\n")
                                                           : TextSpan(
                                                         text: "Verify Phone\n\n",
-                                                        style: CustomTextStyles.labelLargeff59a9f2.copyWith(
+                                                        style: CustomTextStyles.labelLargeNewThemecolor.copyWith(
                                                           decoration: TextDecoration.underline,
                                                         ),
                                                         recognizer: TapGestureRecognizer()
@@ -224,7 +219,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                           editProfileProvider.getProfileModel!.email!.isNotEmpty)
                                                         TextSpan(
                                                           text: "Verify Email\n\n",
-                                                          style: CustomTextStyles.labelLargeff59a9f2.copyWith(
+                                                          style: CustomTextStyles.labelLargeNewThemecolor.copyWith(
                                                             decoration: TextDecoration.underline,
                                                           ),
                                                           recognizer: TapGestureRecognizer()
