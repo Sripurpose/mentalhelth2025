@@ -69,6 +69,12 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
   late FocusNode _descriptionFocusNode;
   late FocusNode _titleFocusNode;
 
+  Emotion? _lowRangeEmotion;
+  Emotion? _highRangeEmotion;
+
+  bool isLowRange(double value) => value >= 1 && value <= 3;
+  bool isHighRange(double value) => value >= 4 && value <= 5;
+
   @override
   void initState() {
     _descriptionFocusNode = FocusNode();
@@ -1665,24 +1671,51 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
             color: ColorsContent.newThemeColor,
             unselectedColor: Colors.grey,
             onRatingUpdate: (value) {
-              logger.w("Updated emotional value star: $value");
+              final previousRating =
+                  mentalStrengthEditProvider.emotionalValueStar ?? 0;
+              final wasLow = isLowRange(previousRating);
+              final isNowLow = isLowRange(value);
 
-              // Map the value from 1-5 to -2 to 2 as an integer
+              // Switch between low <-> high range
+              if (wasLow != isNowLow) {
+                final currentDropdown =
+                    mentalStrengthEditProvider.emotionValue;
+
+                // Store current value before clearing
+                if (wasLow && currentDropdown != null) {
+                  _lowRangeEmotion = currentDropdown;
+                } else if (!wasLow && currentDropdown != null) {
+                  _highRangeEmotion = currentDropdown;
+                }
+
+                // Clear dropdown
+                mentalStrengthEditProvider.addEmotionValue(null);
+              }
+
+              // Restore previous emotion if returning to same range
+              if (wasLow != isNowLow) {
+                if (isNowLow && _lowRangeEmotion != null) {
+                  Future.delayed(Duration(milliseconds: 100), () {
+                    mentalStrengthEditProvider
+                        .addEmotionValue(_lowRangeEmotion!);
+                  });
+                } else if (!isNowLow && _highRangeEmotion != null) {
+                  Future.delayed(Duration(milliseconds: 100), () {
+                    mentalStrengthEditProvider
+                        .addEmotionValue(_highRangeEmotion!);
+                  });
+                }
+              }
+
+              // Existing logic (keep as-is)
               int mappedValue = ((value - 1) * 4 / (5 - 1) - 2).round();
-
-              // mentalStrengthEditProvider
-              //     .fetchEmotions(
-              //     emotion: "$mappedValue",context: context);
-
               mentalStrengthEditProvider.fetchEmotionsEdit(
                 emotion: "$mappedValue",
-                emotionId:
-                    mentalStrengthEditProvider.emotionValue?.id?.toString(),
+                emotionId: mentalStrengthEditProvider.emotionValue?.id?.toString(),
                 context: context,
               );
-
               mentalStrengthEditProvider.changeEmotionalValueStar(value);
-              _isTokenExpired(); // Call your method after rating update.
+              _isTokenExpired();
             },
           ),
         ],

@@ -1245,7 +1245,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
 
 
 
-  void addEmotionValue(Emotion emotion) {
+  void addEmotionValue(Emotion? emotion) {
     emotionValue = emotion;
     notifyListeners();
   }
