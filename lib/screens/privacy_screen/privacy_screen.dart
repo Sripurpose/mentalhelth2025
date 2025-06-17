@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mentalhelth/screens/privacy_screen/provider/privacy_policy_provider.dart';
@@ -64,7 +66,7 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
                           : policyProvider.policyModelLoading
                               ? const Center(child: CupertinoActivityIndicator())
                               : SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.72, // Give a moderate height (or use MediaQuery)
+                        height: Platform.isIOS ? MediaQuery.of(context).size.height * 0.72 : MediaQuery.of(context).size.height * 0.76,
                                 child: WebViewWidget(
                                     controller: WebViewController()
                                       ..setJavaScriptMode(
