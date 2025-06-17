@@ -35,8 +35,8 @@ class UserProfileList1ItemWidget extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Container(
       padding: const EdgeInsets.symmetric(
-        horizontal: 7,
-        vertical: 8,
+        horizontal: 9.5,
+        vertical: 9.5,
       ),
       decoration: AppDecoration.outlineGray.copyWith(
         borderRadius: BorderRadiusStyle.roundedBorder10,
@@ -60,7 +60,7 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                     image: NetworkImage(journalsModelList.displayImage.toString()),
                     fit: BoxFit.cover, // Adjust image to fit container
                   ),
-                  borderRadius: BorderRadius.circular(10), // Set curved edges
+                  borderRadius: BorderRadius.circular(8), // Set curved edges
                 ),
               ),
               Padding(
@@ -266,14 +266,14 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                           );
                         },
                         value: 'Edit',
-                        height: 30, // 👈 Reduce height here
+                        height: 20, // 👈 Reduce height here
                         child:
                         Center(
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Icon(Icons.mode_edit_outline_outlined, color: ColorsContent.newThemeColor),
-                              const SizedBox(width: 8),
+                              const SizedBox(width: 5),
                               const Padding(
                                 padding: EdgeInsets.only(right: 12.0),
                                 child: Text('Edit', style: TextStyle(
@@ -335,14 +335,14 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                             content: 'Are you sure You want to Delete this Journal?',
                           );
                         },
-                        height: 30,
+                        height: 20,
                         value: 'Delete',
                         child: Center(
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Icon(Icons.delete_outline, color: ColorsContent.newThemeColor),
-                              const SizedBox(width: 8),
+                              const SizedBox(width: 5),
                               const Text(
                                 'Delete',
                                 style: TextStyle(

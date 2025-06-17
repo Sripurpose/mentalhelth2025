@@ -24,8 +24,8 @@ class UserProfileListItemWidget extends StatelessWidget {
     //logger.w("title ${title}");
     return Container(
       padding: const EdgeInsets.symmetric(
-        horizontal: 10,
-        vertical: 15,
+        horizontal: 9.5,
+        vertical: 9.5,
       ),
       decoration: AppDecoration.outlineGray.copyWith(
         borderRadius: BorderRadiusStyle.roundedBorder10,
@@ -39,8 +39,8 @@ class UserProfileListItemWidget extends StatelessWidget {
         children: [
           image!=null?
           Container(
-            width: size.width * 0.12, // Set the desired width
-            height: size.width * 0.12, // Set the desired height
+            width: size.width * 0.135, // Set the desired width
+            height: size.width * 0.135, // Set the desired height
             decoration: BoxDecoration(
               color: Colors.grey[100], // Background color
               image: DecorationImage(

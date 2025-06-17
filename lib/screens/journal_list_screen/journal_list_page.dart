@@ -397,8 +397,8 @@ class _JournalListPageState extends State<JournalListPage> {
                         child: Padding(
                           padding: const EdgeInsets.only(bottom: 10), // Adjust the position
                           child: SizedBox(
-                            width: 70, // Increase width
-                            height: 70, // Increase height
+                            width: 80, // Increase width
+                            height: 80, // Increase height
                             child: FloatingActionButton(
                               backgroundColor: Colors.transparent,
                               elevation: 0, // removes shadow
@@ -414,8 +414,8 @@ class _JournalListPageState extends State<JournalListPage> {
                               },
                               child: Image.asset(
                                 ImageConstant.createGoalsPng, // Make sure this points to your PNG file
-                                width: 70,
-                                height: 70,
+                                width: 80,
+                                height: 80,
                                 fit: BoxFit.cover,
                               ),
                             ),

@@ -31,8 +31,8 @@ class WeightLossComponentListItemWidget extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Container(
       padding: const EdgeInsets.symmetric(
-        horizontal: 14,
-        vertical: 10,
+        horizontal: 9.5,
+        vertical: 9.5,
       ),
       margin: const EdgeInsets.only(
         bottom: 10,

@@ -1225,14 +1225,14 @@ class _GoalAndDreamFullViewScreenState
                         );
                       },
                       value: 'Edit',
-                      height: 30, // 👈 Reduce height here
+                      height: 20, // 👈 Reduce height here
                       child:
                       Center(
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Icon(Icons.mode_edit_outline_outlined, color: ColorsContent.newThemeColor),
-                            const SizedBox(width: 8),
+                            const SizedBox(width: 5),
                             const Padding(
                               padding: EdgeInsets.only(right: 12.0),
                               child: Text('Edit', style: TextStyle(
@@ -1265,7 +1265,7 @@ class _GoalAndDreamFullViewScreenState
                         content: 'Are you sure You want to Delete this Goal?',
                       );
                     },
-                    height: 30, // 👈 Reduce height here
+                    height: 20, // 👈 Reduce height here
                     value: 'Delete',
                     child:
                     Center(
@@ -1273,7 +1273,7 @@ class _GoalAndDreamFullViewScreenState
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(Icons.delete_outline, color: ColorsContent.newThemeColor),
-                          const SizedBox(width: 8),
+                          const SizedBox(width: 5),
                           const Text('Delete',
                               style: TextStyle(
                                 fontSize: 16,

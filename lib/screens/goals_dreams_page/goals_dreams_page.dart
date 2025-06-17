@@ -272,7 +272,7 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
                                 1)
                               Padding(
                                 padding:
-                                const EdgeInsets.only(bottom: 83),
+                                const EdgeInsets.only(bottom: 85),
                                 child: GestureDetector(
                                   child: Row(
                                     mainAxisAlignment:
@@ -374,8 +374,8 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 10), // Adjust the position
                             child: SizedBox(
-                              width: 70, // Increase width
-                              height: 70, // Increase height
+                              width: 80, // Increase width
+                              height: 80, // Increase height
                               child: FloatingActionButton(
                                 backgroundColor: Colors.transparent,
                                 elevation: 0, // removes shadow
@@ -396,8 +396,8 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
                                 },
                                 child:Image.asset(
                                   ImageConstant.createGoalsPng, // Make sure this points to your PNG file
-                                  width: 70,
-                                  height: 70,
+                                  width: 80,
+                                  height: 80,
                                   fit: BoxFit.cover,
                                 ),
                               ),

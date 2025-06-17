@@ -371,8 +371,8 @@ class _NumuMentalStrengthAddEditPageState
                                         padding: const EdgeInsets.symmetric(vertical: 8),
                                         child: Center(
                                           child: SizedBox(
-                                            width: 90,
-                                            height: 90,
+                                            width: 85,
+                                            height: 85,
                                             child: FloatingActionButton(
                                               backgroundColor: Colors.transparent,
                                               elevation: 0,
@@ -440,8 +440,8 @@ class _NumuMentalStrengthAddEditPageState
                                               },
                                               child: Image.asset(
                                                 ImageConstant.numuNextIcon,
-                                                width: 90,
-                                                height: 90,
+                                                width: 83,
+                                                height: 83,
                                               ),
                                               shape: const CircleBorder(),
                                               heroTag: "next_button",
