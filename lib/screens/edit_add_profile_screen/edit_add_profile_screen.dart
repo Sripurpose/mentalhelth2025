@@ -319,7 +319,7 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
 
                                                                       return ListTile(
                                                                         title: Text(category.categoryName ?? "",style: TextStyle(
-                                                                          fontSize: 18,
+                                                                          fontSize: 16,
                                                                           fontWeight: FontWeight.w500,
                                                                           fontFamily: 'Open Sans',
                                                                           color: isSelected ? ColorsContent.newThemeColor : Colors.black,
