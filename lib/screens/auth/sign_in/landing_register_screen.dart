@@ -243,7 +243,7 @@ class _LandingRegisterScreenScreenState
                                     ),
                                   ),
                                 ),
-                              SizedBox(height: size.height * 0.03),
+                              SizedBox(height: size.height * 0.02),
                               GestureDetector(
                                 onTap: () {
                                   Navigator.push(

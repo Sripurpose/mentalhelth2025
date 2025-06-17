@@ -57,19 +57,18 @@ class _TermsOfServicesScreenState extends State<TermsOfServicesScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: Consumer<PrivacyPolicyProvider>(
                     builder: (context, policyProvider, _) {
-                      return SizedBox(
-                        height: size.height * 2.65, // Adjust height as needed
-                        child: policyProvider.policyModel == null
-                            ? const Center(child: Text(""))
-                            : policyProvider.policyModelLoading
-                                ? const Center(child: CupertinoActivityIndicator())
-                                : WebViewWidget(
-                                    controller: WebViewController()
-                                      ..setJavaScriptMode(
-                                          JavaScriptMode.unrestricted)
-                                      ..setBackgroundColor(Colors.transparent)
-                                      ..loadHtmlString(
-                                        '''
+                      return policyProvider.policyModel == null
+                          ? const Center(child: Text(""))
+                          : policyProvider.policyModelLoading
+                          ? const Center(child: CupertinoActivityIndicator())
+                          : SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.72, // Give a moderate height (or use MediaQuery)
+                        child: WebViewWidget(
+                          controller: WebViewController()
+                            ..setJavaScriptMode(JavaScriptMode.unrestricted)
+                            ..setBackgroundColor(Colors.transparent)
+                            ..loadHtmlString(
+                              '''
                   <!DOCTYPE html>
                   <html>
                   <head>
@@ -87,9 +86,10 @@ class _TermsOfServicesScreenState extends State<TermsOfServicesScreen> {
                   </body>
                   </html>
                   ''',
-                                      ),
-                                  ),
+                            ),
+                        ),
                       );
+
                     },
                   ),
                 ),

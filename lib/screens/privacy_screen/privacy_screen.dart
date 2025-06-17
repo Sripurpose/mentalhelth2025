@@ -57,41 +57,41 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: Consumer<PrivacyPolicyProvider>(
                     builder: (context, policyProvider, _) {
-                      return SizedBox(
-                        height: size.height * 1.23, // Adjust height as needed
-                        child: policyProvider.policyModel == null
-                            ? const Center(
-                                child: Text(""),
-                              )
-                            : policyProvider.policyModelLoading
-                                ? const Center(child: CupertinoActivityIndicator())
-                                : WebViewWidget(
+                      return policyProvider.policyModel == null
+                          ? const Center(
+                              child: Text(""),
+                            )
+                          : policyProvider.policyModelLoading
+                              ? const Center(child: CupertinoActivityIndicator())
+                              : SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.72, // Give a moderate height (or use MediaQuery)
+                                child: WebViewWidget(
                                     controller: WebViewController()
                                       ..setJavaScriptMode(
                                           JavaScriptMode.unrestricted)
                                       ..setBackgroundColor(Colors.transparent)
                                       ..loadHtmlString(
                                         '''
-                  <!DOCTYPE html>
-                  <html>
-                  <head>
-                    <style>
-                      body {
-                        background-color: ${ColorsContent.homeBackGroundColor};
-                        text-align: justify;
-                        padding: 10px;
-                        color: white;
-                      }
-                    </style>
-                  </head>
-                  <body>
-                    ${policyProvider.policyModel?.description.toString()}
-                  </body>
-                  </html>
-                  ''',
+                                        <!DOCTYPE html>
+                                        <html>
+                                        <head>
+                                          <style>
+                                            body {
+                      background-color: ${ColorsContent.homeBackGroundColor};
+                                                      text-align: justify;
+                                                      padding: 10px;
+                                                      color: white;
+                                              }
+                                            </style>
+                                          </head>
+                                          <body>
+                                            ${policyProvider.policyModel?.description.toString()}
+                                          </body>
+                                          </html>
+                                          ''',
                                       ),
                                   ),
-                      );
+                              );
                     },
                   ),
                 ),
