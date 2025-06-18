@@ -368,7 +368,7 @@ class _NumuMentalStrengthAddEditPageState
                                           color: ColorsContent.homeBackGroundColor,
                                           borderRadius: const BorderRadius.all(Radius.circular(10)),
                                         ),
-                                        padding: const EdgeInsets.symmetric(vertical: 8),
+                                        padding: const EdgeInsets.symmetric(vertical: 3),
                                         child: Center(
                                           child: SizedBox(
                                             width: 85,
@@ -440,8 +440,8 @@ class _NumuMentalStrengthAddEditPageState
                                               },
                                               child: Image.asset(
                                                 ImageConstant.numuNextIcon,
-                                                width: 83,
-                                                height: 83,
+                                                width: 85,
+                                                height: 85,
                                               ),
                                               shape: const CircleBorder(),
                                               heroTag: "next_button",
