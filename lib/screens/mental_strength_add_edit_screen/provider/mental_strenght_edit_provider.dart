@@ -29,10 +29,12 @@ import 'package:mentalhelth/utils/logic/shared_prefrence.dart';
 import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/widgets/functions/snack_bar.dart';
 import 'package:mentalhelth/widgets/widget/video_compessor.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:video_compress/video_compress.dart';
 
 import '../../../utils/core/constent.dart';
+import '../../../widgets/video_player.dart';
 import '../../goals_dreams_page/model/actions_details_model.dart';
 import '../../maintenence_screen/maintenence_screen.dart';
 import '../../token_expiry/token_expiry.dart';
@@ -533,15 +535,10 @@ class MentalStrengthEditProvider extends ChangeNotifier {
       final file = File(pickedVideoPath.path);
       final fileSizeInBytes = await file.length();
       final fileSizeInMB = fileSizeInBytes / (1024 * 1024);
-      print("📦 Video file size: $fileSizeInBytes bytes");
-      print("📦 Video file size: ${fileSizeInMB.toStringAsFixed(2)} MB");
 
-      // Get original video duration
       final MediaInfo? info = await VideoCompress.getMediaInfo(pickedVideoPath.path);
       final double durationInSeconds = (info?.duration ?? 0) / 1000;
-      print("⏱ Duration: ${durationInSeconds.toStringAsFixed(2)} seconds");
 
-      // Reject if too large or too long
       if (fileSizeInMB > 100 || durationInSeconds > 30) {
         showCustomSnackBar(
           context: context,
@@ -552,36 +549,25 @@ class MentalStrengthEditProvider extends ChangeNotifier {
 
       File videoToUpload = file;
 
-      // Determine Compression Quality
       VideoQuality compressionQuality;
       if (fileSizeInMB <= 20) {
         compressionQuality = VideoQuality.HighestQuality;
-        print('⚙️ Using HighestQuality for ≤ 20MB');
       } else if (fileSizeInMB > 20 && fileSizeInMB <= 50) {
         compressionQuality = VideoQuality.MediumQuality;
-        print('⚙️ Using MediumQuality for 21MB - 50MB');
       } else {
         compressionQuality = VideoQuality.LowQuality;
-        print('⚙️ Using LowQuality for > 50MB');
       }
 
-      // Show compressing dialog
       showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) => AlertDialog(
-          backgroundColor: ColorsContent.newThemeColor,
+          backgroundColor: Colors.black87,
           content: Row(
-            children: [
-              CupertinoActivityIndicator(color: ColorsContent.whiteText),
-              const SizedBox(width: 16),
-              const Text("Compressing video...",
-                style:const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: 'Open Sans',
-                  color: Colors.white,
-                ),),
+            children: const [
+              CupertinoActivityIndicator(),
+              SizedBox(width: 16),
+              Text("Compressing video...", style: TextStyle(color: Colors.white)),
             ],
           ),
         ),
@@ -595,7 +581,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
         frameRate: 30,
       );
 
-      if (Navigator.canPop(context)) Navigator.pop(context); // close dialog
+      if (Navigator.canPop(context)) Navigator.pop(context);
 
       if (compressedInfo == null || compressedInfo.file == null) {
         showCustomSnackBar(
@@ -606,51 +592,50 @@ class MentalStrengthEditProvider extends ChangeNotifier {
       }
 
       videoToUpload = compressedInfo.file!;
-      final compressedSize = await videoToUpload.length();
-      print("📉 Compressed video size: ${(compressedSize / (1024 * 1024)).toStringAsFixed(2)} MB");
 
+      // ✅ Save to safe temporary location
+      final safePath = await saveVideoToTemp(videoToUpload.path);
+
+      // ✅ Open player to test path works
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => VideoPlayerWidget(videoUrl: safePath),
+        ),
+      );
+
+      // ✅ Now upload
       if (!isVideoUploading) {
         isVideoUploading = true;
         notifyListeners();
-
-        // Show uploading dialog
 
         showDialog(
           context: context,
           barrierDismissible: false,
           builder: (_) => AlertDialog(
-            backgroundColor: ColorsContent.newThemeColor,
+            backgroundColor: Colors.black87,
             content: Row(
-              children: [
-                CupertinoActivityIndicator(color: ColorsContent.whiteText),
-                const SizedBox(width: 16),
-                const Text("Uploading video...",
-                  style:const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: 'Open Sans',
-                    color: Colors.white,
-                  ),),
+              children: const [
+                CupertinoActivityIndicator(),
+                SizedBox(width: 16),
+                Text("Uploading video...", style: TextStyle(color: Colors.white)),
               ],
             ),
           ),
         );
 
-        List<String> videoPaths = [videoToUpload.path];
-        pickedImagesAddFunction(videoPaths);
+        pickedImagesAddFunction([safePath]);
 
-        // Generate thumbnail
-        File thumbNailFile = await generateThumbnail(videoToUpload);
+        File thumbNailFile = await generateThumbnail(File(safePath));
 
-        // Upload video
         await saveMediaUploadMental(
-          file: videoToUpload.path,
+          file: safePath,
           type: "journal",
           fileType: "mp4",
           thumbNail: thumbNailFile.path,
         );
 
-        if (Navigator.canPop(context)) Navigator.pop(context); // close upload dialog
+        if (Navigator.canPop(context)) Navigator.pop(context);
       } else {
         showCustomSnackBar(
           context: context,
@@ -666,9 +651,20 @@ class MentalStrengthEditProvider extends ChangeNotifier {
     } finally {
       isVideoUploading = false;
       notifyListeners();
-      VideoCompress.deleteAllCache(); // Clean up
+      VideoCompress.deleteAllCache();
     }
   }
+
+// ✅ Save video to a stable temporary file
+  Future<String> saveVideoToTemp(String originalPath) async {
+    final tempDir = await getTemporaryDirectory();
+    final fileName = 'video_${DateTime.now().millisecondsSinceEpoch}.mp4';
+    final newPath = '${tempDir.path}/$fileName';
+
+    final copiedFile = await File(originalPath).copy(newPath);
+    return copiedFile.path;
+  }
+
 
 
 
