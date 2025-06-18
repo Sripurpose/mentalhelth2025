@@ -407,28 +407,53 @@ class HomeProvider extends ChangeNotifier {
   void reminderEndDateFunction(BuildContext context) async {
     reminderEndDate = await selectReminder(
       context,
-      reminderStartDates: DateFormat('d MMM y').parse(reminderStartDate),
+      reminderStartDates: DateFormat('yyyy-MM-dd').parse(reminderStartDate),
     );
     notifyListeners();
   }
 
 
+  // Future<String> selectReminder(BuildContext context,
+  //     {DateTime? reminderStartDates}) async {
+  //   final DateTime? picked = await showDatePicker(
+  //     context: context,
+  //     initialDate: reminderStartDates ?? DateTime.now(),
+  //     firstDate: reminderStartDates ?? DateTime.now(),
+  //     lastDate: DateTime(2100),
+  //   );
+  //
+  //   if (picked != null && picked != date) {
+  //     // reminderStartDate = ;
+  //     // selectedDate = dateFormatter(date: picked.toString());
+  //     // log(formattedDate.toString(), name: "formattedDate");
+  //     notifyListeners();
+  //   }
+  //   return formatPickedDateFor2(picked!);
+  // }
+
   Future<String> selectReminder(BuildContext context,
       {DateTime? reminderStartDates}) async {
+    final DateTime nowUtc = DateTime.now().toUtc();
+    final DateTime nowLocal = nowUtc.toLocal();
+
+    final DateTime initial = reminderStartDates?.toLocal() ?? nowLocal;
+
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: reminderStartDates ?? DateTime.now(),
-      firstDate: reminderStartDates ?? DateTime.now(),
+      initialDate: initial,
+      firstDate: initial,
       lastDate: DateTime(2100),
     );
 
-    if (picked != null && picked != date) {
-      // reminderStartDate = ;
-      // selectedDate = dateFormatter(date: picked.toString());
-      // log(formattedDate.toString(), name: "formattedDate");
+    if (picked != null) {
+      final DateTime localPicked = picked.toLocal(); // ⬅️ Ensure it's local
+      // Do any logic here using `localPicked`
       notifyListeners();
+
+      return formatPickedDateFor1(localPicked);
     }
-    return formatPickedDateFor2(picked!);
+
+    return formatPickedDateFor1(initial); // fallback
   }
 
   Future<TimeOfDay?> selectReminderTime(BuildContext context,
