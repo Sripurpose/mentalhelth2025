@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tzData;
 import 'package:flutter/material.dart';
@@ -859,7 +860,6 @@ var logger = Logger();
         final double durationInSeconds = (info?.duration ?? 0) / 1000;
         print("⏱ Duration: ${durationInSeconds.toStringAsFixed(2)} seconds");
 
-        // Reject if too large or too long
         if (fileSizeInMB > 100 || durationInSeconds > 30) {
           showCustomSnackBar(
             context: context,
@@ -872,12 +872,11 @@ var logger = Logger();
 
         File videoToUpload = originalFile;
 
-        // Determine compression quality
         VideoQuality compressionQuality;
         if (fileSizeInMB <= 20) {
           compressionQuality = VideoQuality.HighestQuality;
           print('⚙️ Using HighestQuality for ≤ 20MB');
-        } else if (fileSizeInMB > 20 && fileSizeInMB <= 50) {
+        } else if (fileSizeInMB <= 50) {
           compressionQuality = VideoQuality.MediumQuality;
           print('⚙️ Using MediumQuality for 21MB - 50MB');
         } else {
@@ -885,7 +884,6 @@ var logger = Logger();
           print('⚙️ Using LowQuality for > 50MB');
         }
 
-        // Show compressing dialog
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -895,18 +893,19 @@ var logger = Logger();
               children: [
                 CupertinoActivityIndicator(color: ColorsContent.whiteText),
                 const SizedBox(width: 16),
-                const Text("Compressing video...",
-                  style:const TextStyle(
+                const Text(
+                  "Compressing video...",
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     fontFamily: 'Open Sans',
                     color: Colors.white,
-                  ),),
+                  ),
+                ),
               ],
             ),
           ),
         );
-
 
         final MediaInfo? compressedVideoInfo = await VideoCompress.compressVideo(
           originalFile.path,
@@ -916,7 +915,7 @@ var logger = Logger();
           frameRate: 30,
         );
 
-        if (Navigator.canPop(context)) Navigator.pop(context); // Dismiss compress dialog
+        if (Navigator.canPop(context)) Navigator.pop(context);
 
         if (compressedVideoInfo == null || compressedVideoInfo.file == null) {
           showCustomSnackBar(
@@ -932,7 +931,9 @@ var logger = Logger();
         final compressedSize = await videoToUpload.length();
         print("📉 Compressed video size: ${(compressedSize / (1024 * 1024)).toStringAsFixed(2)} MB");
 
-        // Show uploading dialog
+        // ✅ Copy to safe temp file path
+        final safePath = await saveVideoToTemp(videoToUpload.path);
+
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -942,38 +943,33 @@ var logger = Logger();
               children: [
                 CupertinoActivityIndicator(color: ColorsContent.whiteText),
                 const SizedBox(width: 16),
-                const Text("Uploading video...",
-                  style:const TextStyle(
+                const Text(
+                  "Uploading video...",
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     fontFamily: 'Open Sans',
                     color: Colors.white,
-                  ),),
+                  ),
+                ),
               ],
             ),
           ),
         );
 
+        pickedImagesAddFunction([safePath]);
 
-        // Get file extension if needed
-        String fileExtension = videoToUpload.path.split('.').last;
-        String lastThreeChars = fileExtension.substring(fileExtension.length - 3);
-        print("📄 File extension: $lastThreeChars");
-
-        List<String> videoPaths = [videoToUpload.path];
-        pickedImagesAddFunction(videoPaths);
-
-        // Generate thumbnail
-        File thumbNailFile = await generateThumbnail(videoToUpload);
+        File thumbNailFile = await generateThumbnail(File(safePath));
 
         await saveMediaUploadAction(
-          file: videoToUpload.path,
+          file: safePath,
           type: "action",
           fileType: "mp4",
           thumbNail: thumbNailFile.path,
         );
 
-        if (Navigator.canPop(context)) Navigator.pop(context); // Dismiss upload dialog
+        if (Navigator.canPop(context)) Navigator.pop(context);
+
       } catch (e) {
         if (Navigator.canPop(context)) Navigator.pop(context);
         showCustomSnackBar(
@@ -983,7 +979,7 @@ var logger = Logger();
       } finally {
         isVideoUploading = false;
         notifyListeners();
-        VideoCompress.deleteAllCache(); // Clean up
+        VideoCompress.deleteAllCache();
       }
     } else if (isVideoUploading) {
       showCustomSnackBar(
@@ -992,6 +988,14 @@ var logger = Logger();
       );
     }
   }
+  Future<String> saveVideoToTemp(String originalPath) async {
+    final tempDir = await getTemporaryDirectory();
+    final fileName = 'video_${DateTime.now().millisecondsSinceEpoch}.mp4';
+    final newPath = '${tempDir.path}/$fileName';
+    final copiedFile = await File(originalPath).copy(newPath);
+    return copiedFile.path;
+  }
+
 
 
 

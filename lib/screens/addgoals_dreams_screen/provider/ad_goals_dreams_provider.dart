@@ -15,6 +15,7 @@ import 'package:mentalhelth/utils/logic/date_format.dart';
 import 'package:mentalhelth/utils/logic/shared_prefrence.dart';
 import 'package:mentalhelth/widgets/functions/snack_bar.dart';
 import 'package:mentalhelth/widgets/widget/video_compessor.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:video_compress/video_compress.dart';
 
 import '../../../utils/core/constent.dart';
@@ -311,7 +312,6 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
         final double durationInSeconds = (info?.duration ?? 0) / 1000;
         print("⏱ Video duration: ${durationInSeconds.toStringAsFixed(2)} seconds");
 
-        // Reject if too large or too long
         if (fileSizeInMB > 100 || durationInSeconds > 30) {
           showCustomSnackBar(
             context: context,
@@ -324,20 +324,17 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
 
         File videoToUpload = originalFile;
 
-        // Determine compression quality
         VideoQuality compressionQuality;
         if (fileSizeInMB <= 20) {
           compressionQuality = VideoQuality.HighestQuality;
           print('⚙️ Using HighestQuality for ≤ 20MB');
-        } else if (fileSizeInMB > 20 && fileSizeInMB <= 50) {
+        } else if (fileSizeInMB <= 50) {
           compressionQuality = VideoQuality.MediumQuality;
           print('⚙️ Using MediumQuality for 21MB - 50MB');
         } else {
           compressionQuality = VideoQuality.LowQuality;
           print('⚙️ Using LowQuality for > 50MB');
         }
-
-        // Show compressing dialog
 
         showDialog(
           context: context,
@@ -348,18 +345,19 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
               children: [
                 CupertinoActivityIndicator(color: ColorsContent.whiteText),
                 const SizedBox(width: 16),
-                const Text("Compressing video...",
+                const Text(
+                  "Compressing video...",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     fontFamily: 'Open Sans',
                     color: Colors.white,
-                  ),),
+                  ),
+                ),
               ],
             ),
           ),
         );
-
 
         final MediaInfo? compressedVideoInfo = await VideoCompress.compressVideo(
           originalFile.path,
@@ -385,7 +383,9 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
         final compressedSize = await videoToUpload.length();
         print("📉 Compressed video size: ${(compressedSize / (1024 * 1024)).toStringAsFixed(2)} MB");
 
-        // Show uploading dialog
+        // ✅ Copy to safe temporary path
+        final safePath = await saveVideoToTemp(videoToUpload.path);
+
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -395,25 +395,26 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
               children: [
                 CupertinoActivityIndicator(color: ColorsContent.whiteText),
                 const SizedBox(width: 16),
-                const Text("Uploading video...",
+                const Text(
+                  "Uploading video...",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     fontFamily: 'Open Sans',
                     color: Colors.white,
-                  ),),
+                  ),
+                ),
               ],
             ),
           ),
         );
 
-        List<String> videoPaths = [videoToUpload.path];
-        pickedImagesAddFunction(videoPaths);
+        pickedImagesAddFunction([safePath]);
 
-        File thumbNailFile = await generateThumbnail(videoToUpload);
+        File thumbNailFile = await generateThumbnail(File(safePath));
 
         await saveMediaUploadMental(
-          file: videoToUpload.path,
+          file: safePath,
           type: "goal",
           fileType: "mp4",
           thumbNail: thumbNailFile.path,
@@ -421,8 +422,9 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
         );
 
         if (Navigator.canPop(context)) Navigator.pop(context); // Dismiss upload dialog
+
       } catch (e) {
-        if (Navigator.canPop(context)) Navigator.pop(context); // Ensure dialog is dismissed
+        if (Navigator.canPop(context)) Navigator.pop(context);
         showCustomSnackBar(
           context: context,
           message: "An error occurred: $e",
@@ -430,7 +432,7 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
       } finally {
         isVideoUploading = false;
         notifyListeners();
-        VideoCompress.deleteAllCache(); // Optional cleanup
+        VideoCompress.deleteAllCache();
       }
     } else if (isVideoUploading) {
       showCustomSnackBar(
@@ -439,6 +441,14 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
       );
     }
   }
+  Future<String> saveVideoToTemp(String originalPath) async {
+    final tempDir = await getTemporaryDirectory();
+    final fileName = 'video_${DateTime.now().millisecondsSinceEpoch}.mp4';
+    final newPath = '${tempDir.path}/$fileName';
+    final copiedFile = await File(originalPath).copy(newPath);
+    return copiedFile.path;
+  }
+
 
 
 
