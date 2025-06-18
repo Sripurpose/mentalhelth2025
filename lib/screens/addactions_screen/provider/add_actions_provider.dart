@@ -893,15 +893,13 @@ var logger = Logger();
               children: [
                 CupertinoActivityIndicator(color: ColorsContent.whiteText),
                 const SizedBox(width: 16),
-                const Text(
-                  "Compressing video...",
-                  style: TextStyle(
+                const Text("Compressing video...",
+                  style:TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     fontFamily: 'Open Sans',
                     color: Colors.white,
-                  ),
-                ),
+                  ),),
               ],
             ),
           ),
@@ -934,6 +932,8 @@ var logger = Logger();
         // ✅ Copy to safe temp file path
         final safePath = await saveVideoToTemp(videoToUpload.path);
 
+
+
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -943,15 +943,13 @@ var logger = Logger();
               children: [
                 CupertinoActivityIndicator(color: ColorsContent.whiteText),
                 const SizedBox(width: 16),
-                const Text(
-                  "Uploading video...",
-                  style: TextStyle(
+                const Text("Uploading video...",
+                  style:TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     fontFamily: 'Open Sans',
                     color: Colors.white,
-                  ),
-                ),
+                  ),),
               ],
             ),
           ),

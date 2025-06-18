@@ -414,7 +414,7 @@ class _GoalAndDreamFullViewScreenState
                                                         Center(
                                                           child: AspectRatio(
                                                             aspectRatio: 16 / 9,
-                                                            child: VideoPlayerWidget(
+                                                            child: VideoPlayerWidgetViewAndAlready(
                                                               videoUrl: videoList[index],
                                                             ),
                                                           ),
@@ -434,7 +434,7 @@ class _GoalAndDreamFullViewScreenState
                                               },
                                               child: ClipRRect(
                                                 borderRadius: BorderRadius.circular(5),
-                                                child: VideoPlayerWidget(
+                                                child: VideoPlayerWidgetViewAndAlready(
                                                   videoUrl: videoList[index],
                                                 ),
                                               ),

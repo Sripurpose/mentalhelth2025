@@ -568,7 +568,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
               CupertinoActivityIndicator(color: ColorsContent.whiteText),
               const SizedBox(width: 16),
               const Text("Compressing video...",
-                style:const TextStyle(
+                style:TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                   fontFamily: 'Open Sans',

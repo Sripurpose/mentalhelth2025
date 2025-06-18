@@ -101,9 +101,6 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
 }
 
 
-
-//////////////////////// /////////////////////// ///////////////
-
 class VideoPlayerWidgetViewAndAlready extends StatefulWidget {
   const VideoPlayerWidgetViewAndAlready({super.key, required this.videoUrl});
 

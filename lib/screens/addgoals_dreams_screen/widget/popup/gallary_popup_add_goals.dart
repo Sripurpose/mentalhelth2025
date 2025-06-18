@@ -146,7 +146,7 @@ Future galleryBottomSheetAddGoals({
                                                     child: SizedBox(
                                                       height: 200,
                                                       width: double.infinity,
-                                                      child: VideoPlayerWidget(
+                                                      child: VideoPlayerWidgetViewAndAlready(
                                                         videoUrl:
                                                             adDreamsGoalsProvider
                                                                 .alreadyPickedImages[

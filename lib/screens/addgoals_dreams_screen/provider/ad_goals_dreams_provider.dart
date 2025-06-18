@@ -336,6 +336,7 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
           print('⚙️ Using LowQuality for > 50MB');
         }
 
+
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -345,19 +346,18 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
               children: [
                 CupertinoActivityIndicator(color: ColorsContent.whiteText),
                 const SizedBox(width: 16),
-                const Text(
-                  "Compressing video...",
-                  style: TextStyle(
+                const Text("Compressing video...",
+                  style:TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     fontFamily: 'Open Sans',
                     color: Colors.white,
-                  ),
-                ),
+                  ),),
               ],
             ),
           ),
         );
+
 
         final MediaInfo? compressedVideoInfo = await VideoCompress.compressVideo(
           originalFile.path,
@@ -385,7 +385,6 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
 
         // ✅ Copy to safe temporary path
         final safePath = await saveVideoToTemp(videoToUpload.path);
-
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -395,15 +394,13 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
               children: [
                 CupertinoActivityIndicator(color: ColorsContent.whiteText),
                 const SizedBox(width: 16),
-                const Text(
-                  "Uploading video...",
-                  style: TextStyle(
+                const Text("Uploading video...",
+                  style:TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     fontFamily: 'Open Sans',
                     color: Colors.white,
-                  ),
-                ),
+                  ),),
               ],
             ),
           ),

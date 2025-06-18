@@ -143,7 +143,7 @@ Future galleryBottomSheetAction({
                                                   child: SizedBox(
                                                     height: 200,
                                                     width: double.infinity,
-                                                    child: VideoPlayerWidget(
+                                                    child: VideoPlayerWidgetViewAndAlready(
                                                         videoUrl: addActionsProvider
                                                             .alreadyPickedImages[
                                                                 index]
