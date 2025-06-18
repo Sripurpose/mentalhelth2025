@@ -47,58 +47,57 @@ class _TermsOfServicesScreenState extends State<TermsOfServicesScreen> {
               fit: BoxFit.cover,
             ),
           ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                buildAppBar(
-                  context,
-                  size,
-                  heading: "Terms of Service",
-                ),
-                Padding(
+          child: Column(
+            children: [
+              buildAppBar(
+                context,
+                size,
+                heading: "Terms of Service",
+              ),
+              Expanded(
+                child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: Consumer<PrivacyPolicyProvider>(
                     builder: (context, policyProvider, _) {
-                      return policyProvider.policyModel == null
-                          ? const Center(child: Text(""))
-                          : policyProvider.policyModelLoading
-                          ? const Center(child: CupertinoActivityIndicator())
-                          : SizedBox(
-                        height: Platform.isIOS ? MediaQuery.of(context).size.height * 0.72 : MediaQuery.of(context).size.height * 0.76, // Give a moderate height (or use MediaQuery)
-                        child: WebViewWidget(
+                      if (policyProvider.policyModel == null) {
+                        return const Center(child: Text(""));
+                      } else if (policyProvider.policyModelLoading) {
+                        return const Center(child: CupertinoActivityIndicator());
+                      } else {
+                        return WebViewWidget(
                           controller: WebViewController()
                             ..setJavaScriptMode(JavaScriptMode.unrestricted)
                             ..setBackgroundColor(Colors.transparent)
                             ..loadHtmlString(
                               '''
-                  <!DOCTYPE html>
-                  <html>
-                  <head>
-                    <style>
-                      body {
-                        background-color: ${ColorsContent.homeBackGroundColor};
-                        text-align: justify;
-                        padding: 10px;
-                        color: white;
-                      }
-                    </style>
-                  </head>
-                  <body>
-                    ${policyProvider.policyModel?.description.toString()}
-                  </body>
-                  </html>
-                  ''',
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                      <style>
+                        body {
+                          background-color: ${ColorsContent.homeBackGroundColor};
+                          text-align: justify;
+                          padding: 10px;
+                          color: white;
+                        }
+                      </style>
+                    </head>
+                    <body>
+                      ${policyProvider.policyModel?.description.toString()}
+                    </body>
+                    </html>
+                    ''',
                             ),
-                        ),
-                      );
-
+                        );
+                      }
                     },
                   ),
                 ),
-                const SizedBox(height: 20),
-              ],
-            ),
+              ),
+              const SizedBox(height: 20),
+            ],
           ),
+
         ),
       ),
     );
