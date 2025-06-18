@@ -597,12 +597,12 @@ class MentalStrengthEditProvider extends ChangeNotifier {
       final safePath = await saveVideoToTemp(videoToUpload.path);
 
       // ✅ Open player to test path works
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => VideoPlayerWidget(videoUrl: safePath),
-        ),
-      );
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (_) => VideoPlayerWidget(videoUrl: safePath),
+      //   ),
+      // );
 
       // ✅ Now upload
       if (!isVideoUploading) {
