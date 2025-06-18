@@ -287,7 +287,7 @@ Future galleryBottomSheet({
                                               child: SizedBox(
                                                 height: 200,
                                                 width: double.infinity,
-                                                child: VideoPlayerWidget(
+                                                child: VideoPlayerWidgetViewAndAlready(
                                                   videoUrl: mentalStrengthEditProvider.alreadyPickedImages[index].value,
                                                 ),
                                               ),

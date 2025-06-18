@@ -562,16 +562,23 @@ class MentalStrengthEditProvider extends ChangeNotifier {
         context: context,
         barrierDismissible: false,
         builder: (_) => AlertDialog(
-          backgroundColor: Colors.black87,
+          backgroundColor: ColorsContent.newThemeColor,
           content: Row(
-            children: const [
-              CupertinoActivityIndicator(),
-              SizedBox(width: 16),
-              Text("Compressing video...", style: TextStyle(color: Colors.white)),
+            children: [
+              CupertinoActivityIndicator(color: ColorsContent.whiteText),
+              const SizedBox(width: 16),
+              const Text("Compressing video...",
+                style:const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Open Sans',
+                  color: Colors.white,
+                ),),
             ],
           ),
         ),
       );
+
 
       final MediaInfo? compressedInfo = await VideoCompress.compressVideo(
         file.path,
@@ -609,20 +616,28 @@ class MentalStrengthEditProvider extends ChangeNotifier {
         isVideoUploading = true;
         notifyListeners();
 
+
         showDialog(
           context: context,
           barrierDismissible: false,
           builder: (_) => AlertDialog(
-            backgroundColor: Colors.black87,
+            backgroundColor: ColorsContent.newThemeColor,
             content: Row(
-              children: const [
-                CupertinoActivityIndicator(),
-                SizedBox(width: 16),
-                Text("Uploading video...", style: TextStyle(color: Colors.white)),
+              children: [
+                CupertinoActivityIndicator(color: ColorsContent.whiteText),
+                const SizedBox(width: 16),
+                const Text("Uploading video...",
+                  style:TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Open Sans',
+                    color: Colors.white,
+                  ),),
               ],
             ),
           ),
         );
+
 
         pickedImagesAddFunction([safePath]);
 
