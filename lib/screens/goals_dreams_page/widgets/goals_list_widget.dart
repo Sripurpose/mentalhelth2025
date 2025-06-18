@@ -4,6 +4,7 @@ import 'package:mentalhelth/screens/goals_dreams_page/screens/actions_full_view/
 import 'package:mentalhelth/screens/mental_strength_add_edit_screen/provider/mental_strenght_edit_provider.dart';
 import 'package:mentalhelth/utils/logic/date_format.dart';
 import 'package:mentalhelth/utils/theme/app_decoration.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/utils/theme/custom_text_style.dart';
 import 'package:mentalhelth/widgets/custom_checkbox_button.dart';
 import 'package:mentalhelth/widgets/custom_image_view.dart';
@@ -340,7 +341,7 @@ class _GoalsListWidgetState extends State<GoalsListWidget> {
                                       ),
                                       CircleAvatar(
                                         radius: size.width * 0.04,
-                                        backgroundColor: Colors.blue,
+                                        backgroundColor: ColorsContent.newThemeColor,
                                         child: Icon(
                                           Icons.arrow_forward_ios_outlined,
                                           color: Colors.white,
@@ -424,7 +425,7 @@ class _GoalsListWidgetState extends State<GoalsListWidget> {
             margin: const EdgeInsets.symmetric(horizontal: 4),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: index == currentIndex ? Colors.blue : Colors.grey,
+              color: index == currentIndex ? ColorsContent.newThemeColor : Colors.grey,
             ),
           );
         },

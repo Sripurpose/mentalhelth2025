@@ -272,8 +272,8 @@ void customPopupLogout({
             },
             child: Text(
               cancel ?? 'Cancel',
-              style: const TextStyle(
-                color: Colors.blue,
+              style:  TextStyle(
+                color: ColorsContent.newThemeColor,
               ),
             ),
           ),
@@ -282,8 +282,8 @@ void customPopupLogout({
             onPressed: onPressedDelete,
             child: Text(
               yes ?? 'Delete',
-              style: const TextStyle(
-                color: Colors.blue,
+              style:  TextStyle(
+                color: ColorsContent.newThemeColor,
               ),
             ),
           ),
@@ -355,8 +355,8 @@ void settingsPopup({
                     },
                     child: Text(
                       cancel ?? 'Cancel',
-                      style: const TextStyle(
-                        color: Colors.blue,
+                      style:  TextStyle(
+                        color: ColorsContent.newThemeColor,
                       ),
                     ),
                   ),
@@ -369,8 +369,8 @@ void settingsPopup({
                     },
                     child: Text(
                       yes ?? 'Delete',
-                      style: const TextStyle(
-                        color: Colors.blue,
+                      style:  TextStyle(
+                        color: ColorsContent.newThemeColor,
                       ),
                     ),
                   ),

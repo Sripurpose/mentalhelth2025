@@ -365,7 +365,7 @@ Future cameraBottomSheet({
                     ? LinearProgressIndicator(
                         backgroundColor: Colors.grey[300],
                         valueColor:
-                            const AlwaysStoppedAnimation<Color>(Colors.blue),
+                             AlwaysStoppedAnimation<Color>(ColorsContent.newThemeColor),
                       )
                     : const SizedBox();
               }),

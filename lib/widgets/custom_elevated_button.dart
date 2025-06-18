@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/utils/theme/custom_text_style.dart';
 import 'package:mentalhelth/widgets/base_button.dart';
 
@@ -64,7 +65,7 @@ class CustomElevatedButton extends BaseButton {
         child: ElevatedButton(
           style: buttonStyle ??
               ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
+                backgroundColor: ColorsContent.newThemeColor,
               ),
           onPressed: isDisabled ?? false ? null : onPressed ?? () {},
           child: Row(

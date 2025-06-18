@@ -68,17 +68,22 @@ class UserProfileListItemWidget extends StatelessWidget {
                   child: Text(
                     HtmlUnescape().convert(title.toString()), // Decoding HTML entities
                     style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: 16.5,
                       fontWeight: FontWeight.w500,
                       fontFamily: 'Open Sans',
                       color: Colors.black,
                     ),
                   ),
                 ),
-                const SizedBox(height: 5,),
+                const SizedBox(height: 0,),
                 Text(
                   formatMilliseconds(int.parse(date)),
-                  style: theme.textTheme.bodySmall,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Open Sans',
+                    color:  ColorsContent.goalCompletedTextColor,
+                  ),
                 ),
               ],
             ),

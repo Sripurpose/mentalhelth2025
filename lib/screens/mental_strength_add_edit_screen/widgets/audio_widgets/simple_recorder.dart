@@ -23,6 +23,8 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:flutter_sound_platform_interface/flutter_sound_recorder_platform_interface.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
+import 'package:mentalhelth/utils/theme/theme_helper.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 /*
@@ -330,7 +332,7 @@ class _SimpleRecorderState extends State<SimpleRecorder> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.blue,
+      backgroundColor: ColorsContent.newThemeColor,
       appBar: AppBar(
         title: const Text('Simple Recorder'),
       ),

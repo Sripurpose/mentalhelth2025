@@ -98,7 +98,7 @@ class WeightLossComponentListItemWidget extends StatelessWidget {
                   child: Text(
                     headding,
                     style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: 16.5,
                       fontWeight: FontWeight.w500,
                       fontFamily: 'Open Sans',
                       color: Colors.black,
@@ -111,7 +111,7 @@ class WeightLossComponentListItemWidget extends StatelessWidget {
                     ? Text(
                         "Completed",
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 16,
                     fontWeight: FontWeight.w400,
                     fontFamily: 'Open Sans',
                     color:  ColorsContent.goalCompletedTextColor,
@@ -124,7 +124,7 @@ class WeightLossComponentListItemWidget extends StatelessWidget {
                               int.parse(startDate),
                             ),
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 16,
                               fontWeight: FontWeight.w400,
                               fontFamily: 'Open Sans',
                               color:  ColorsContent.goalCompletedTextColor,
@@ -133,7 +133,7 @@ class WeightLossComponentListItemWidget extends StatelessWidget {
                           Text(
                             " to ",
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 16,
                               fontWeight: FontWeight.w400,
                               fontFamily: 'Open Sans',
                               color:  ColorsContent.goalCompletedTextColor,
@@ -144,7 +144,7 @@ class WeightLossComponentListItemWidget extends StatelessWidget {
                                 ? ""
                                 : formatDate2(int.parse(endDate)),
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 16,
                               fontWeight: FontWeight.w400,
                               fontFamily: 'Open Sans',
                               color:  ColorsContent.goalCompletedTextColor,

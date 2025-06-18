@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 
 import '../model/get_category.dart';
 
@@ -73,7 +74,7 @@ class _MultiSelectCategoryWidgetState extends State<MultiSelectCategoryWidget> {
                   });
                 },
                 controlAffinity: ListTileControlAffinity.leading,
-                activeColor: Colors.blue,
+                activeColor: ColorsContent.newThemeColor,
                 checkColor: Colors.white,
               );
             },

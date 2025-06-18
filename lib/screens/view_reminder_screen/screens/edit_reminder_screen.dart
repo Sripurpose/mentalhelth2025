@@ -776,10 +776,10 @@ class _EditReminderScreenScreenScreenState
                                                 ),
                                               ),
                                               const Spacer(),
-                                              const Icon(
+                                               Icon(
                                                 Icons
                                                     .keyboard_arrow_down_sharp,
-                                                color: Colors.blue,
+                                                color: ColorsContent.newThemeColor,
                                               )
                                             ],
                                           ),
@@ -864,7 +864,7 @@ class _EditReminderScreenScreenScreenState
                       msg: "Updated",
                       toastLength: Toast.LENGTH_SHORT,
                       gravity: ToastGravity.BOTTOM, // You can change the position
-                      backgroundColor: Colors.blue,
+                      backgroundColor: ColorsContent.newThemeColor,
                       textColor: Colors.white,
                       fontSize: 16.0,
                     );
@@ -972,14 +972,14 @@ class _EditReminderScreenScreenScreenState
                         content: 'Are you sure You want to Delete this Reminder ?',
                       );
                     },
-                    height: 30, // 👈 Reduce height here
+                    height: 20, // 👈 Reduce height here
                     value: 'Delete',
                     child:  Center(
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(Icons.delete_outline, color: ColorsContent.newThemeColor),
-                          const SizedBox(width: 8),
+                          const SizedBox(width: 3),
                           const Text('Delete',
                               style: TextStyle(
                                 fontSize: 16,

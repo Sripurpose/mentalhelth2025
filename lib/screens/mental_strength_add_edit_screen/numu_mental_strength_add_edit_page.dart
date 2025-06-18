@@ -621,7 +621,7 @@ class _NumuMentalStrengthAddEditPageState
         Container(
           padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
           color: mentalStrengthEditProvider.openChooseGoal
-              ? Colors.blue[50]
+              ? ColorsContent.newThemeColor
               : null,
           child: SingleChildScrollView(
             child: Column(
@@ -1649,7 +1649,7 @@ Widget buildAvatarImage(
     height: size.height * 0.08,
     width: size.height * 0.08,
     decoration: BoxDecoration(
-      color: isSelected ? Colors.blue : Colors.transparent,
+      color: isSelected ? ColorsContent.newThemeColor : Colors.transparent,
       image: DecorationImage(
         image: AssetImage(
           imagePath,
@@ -1673,7 +1673,7 @@ Widget buildAvatarImage(
           padding: const EdgeInsets.all(18),
           child: CustomImageView(
             imagePath: imagePath,
-            color: isSelected ? Colors.white : Colors.blue,
+            color: isSelected ? Colors.white : ColorsContent.newThemeColor,
           ),
         ),
   );

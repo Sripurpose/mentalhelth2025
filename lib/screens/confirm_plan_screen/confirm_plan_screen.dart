@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mentalhelth/screens/auth/subscribe_plan_page/subscribe_plan_page.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/utils/theme/custom_button_style.dart';
 import 'package:mentalhelth/widgets/custom_elevated_button.dart';
 import 'package:mentalhelth/widgets/custom_text_form_field.dart';
@@ -148,7 +149,7 @@ class ConfirmPlanScreen extends StatelessWidget {
         builder: (context, confirmPlanProvider, _) {
       return CustomElevatedButton(
         buttonStyle: ElevatedButton.styleFrom(
-          backgroundColor: Colors.blue,
+          backgroundColor: ColorsContent.newThemeColor,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(
@@ -185,7 +186,7 @@ class ConfirmPlanScreen extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.0), // Small curve
             ),
-            backgroundColor: Colors.blue,
+            backgroundColor: ColorsContent.newThemeColor,
           ),
           width: size.width * 0.3,
           text: "Pay Now",

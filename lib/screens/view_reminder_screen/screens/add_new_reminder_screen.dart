@@ -3,6 +3,7 @@ import 'package:mentalhelth/screens/goals_dreams_page/model/goals_and_dreams_mod
 import 'package:mentalhelth/screens/goals_dreams_page/provider/goals_dreams_provider.dart';
 import 'package:mentalhelth/screens/home_screen/provider/home_provider.dart';
 import 'package:mentalhelth/utils/core/image_constant.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/utils/theme/custom_text_style.dart';
 import 'package:mentalhelth/widgets/app_bar/appbar_leading_image.dart';
 import 'package:provider/provider.dart';
@@ -433,9 +434,9 @@ class _AddNewReminderScreenScreenState
                                               ),
                                             ),
                                             const Spacer(),
-                                            const Icon(
+                                             Icon(
                                               Icons.keyboard_arrow_down_sharp,
-                                              color: Colors.blue,
+                                              color: ColorsContent.newThemeColor,
                                             )
                                           ],
                                         ),
@@ -582,9 +583,9 @@ class _AddNewReminderScreenScreenState
                                               ),
                                             ),
                                             const Spacer(),
-                                            const Icon(
+                                             Icon(
                                               Icons.keyboard_arrow_down_sharp,
-                                              color: Colors.blue,
+                                              color: ColorsContent.newThemeColor,
                                             )
                                           ],
                                         ),

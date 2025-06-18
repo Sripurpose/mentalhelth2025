@@ -519,7 +519,7 @@ class _ReminderPushViewScreenState
             margin: const EdgeInsets.symmetric(horizontal: 4),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: index == currentIndex ? Colors.blue : Colors.grey,
+              color: index == currentIndex ? ColorsContent.newThemeColor : Colors.grey,
             ),
           );
         },

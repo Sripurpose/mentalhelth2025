@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:mentalhelth/screens/myprofile_screen/verifyPhone/verifyOtpScreenPhone.dart';
 import 'package:mentalhelth/screens/phone_singin_screen/provider/phone_sign_in_provider.dart';
 import 'package:mentalhelth/utils/core/image_constant.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/utils/theme/theme_helper.dart';
 import 'package:mentalhelth/widgets/custom_elevated_button.dart';
 import 'package:mentalhelth/widgets/custom_text_form_field.dart';
@@ -103,8 +104,8 @@ class _SendOtpPhoneScreenState extends State<SendOtpPhoneScreen> {
                                                 ),
                                               ),
                                             ),
-                                            searchTextStyle: const TextStyle(
-                                              color: Colors.blue,
+                                            searchTextStyle:  TextStyle(
+                                              color: ColorsContent.newThemeColor,
                                               fontSize: 18,
                                             ),
                                           ),

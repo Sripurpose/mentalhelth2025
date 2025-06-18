@@ -31,8 +31,8 @@ class ReminderListItemWidget extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Container(
       padding: const EdgeInsets.symmetric(
-        horizontal: 14,
-        vertical: 4,
+        horizontal: 9.5,
+        vertical: 9.5,
       ),
       margin: const EdgeInsets.only(
         bottom: 10,
@@ -60,10 +60,10 @@ class ReminderListItemWidget extends StatelessWidget {
                 image: NetworkImage(imagePath),
                 fit: BoxFit.cover,
               ),
-              border: Border.all(
-                color: ColorsContent.goalNotCompletedColor, // Change to desired border color
-                width: 0.5,         // 🔁 Change thickness if required
-              ),
+              // border: Border.all(
+              //   color: ColorsContent.goalNotCompletedColor, // Change to desired border color
+              //   width: 0.5,         // 🔁 Change thickness if required
+              // ),
             ),
           ) :
           Container(
@@ -76,30 +76,36 @@ class ReminderListItemWidget extends StatelessWidget {
                 image: NetworkImage(imagePath),
                 fit: BoxFit.cover,
               ),
-              border: Border.all(
-                color: ColorsContent.goalNotCompletedColor, // Change to desired border color
-                width: 0.5,         // 🔁 Change thickness if required
-              ),
+              // border: Border.all(
+              //   color: ColorsContent.goalNotCompletedColor, // Change to desired border color
+              //   width: 0.5,         // 🔁 Change thickness if required
+              // ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(
               left: 15,
-              bottom: 13,
+              bottom: 12,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
                   width: size.width * 0.5,
                   child: Text(
                     "$headding - $content",
-                    style: CustomTextStyles.titleMedium16,
+                    style: const TextStyle(
+                      fontSize: 16.5,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Open Sans',
+                      color: Colors.black,
+                    ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 SizedBox(
-                  height: size.height * 0.01,
+                  height: size.height * 0.00,
                 ),
                 Row(
                   children: [

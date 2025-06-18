@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/widgets/functions/snack_bar.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -96,11 +97,11 @@ class _JournalGoogleMapWidgetsState extends State<JournalGoogleMapWidgets> {
     Size size = MediaQuery.of(context).size;
 
     return _currentLocation == null && widget.latitude == 0
-        ? const SizedBox(
+        ?  SizedBox(
         height: 40,
         width: 40,
         child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.blue), // Set the desired color here
+          valueColor: AlwaysStoppedAnimation<Color>(ColorsContent.newThemeColor), // Set the desired color here
         ))
         :
       SizedBox(
