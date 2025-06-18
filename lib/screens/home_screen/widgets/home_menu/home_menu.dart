@@ -41,8 +41,9 @@ Widget buildPopupDialog(BuildContext context, Size size) {
       ),
       width: double.maxFinite,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0,vertical: 20),
-        child: Consumer2<EditProfileProvider,DashBoardProvider>(builder: (context, editProvider,dashBoardProvider, _) {
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
+        child: Consumer2<EditProfileProvider, DashBoardProvider>(
+            builder: (context, editProvider, dashBoardProvider, _) {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -62,9 +63,8 @@ Widget buildPopupDialog(BuildContext context, Size size) {
               Row(
                 children: [
                   GestureDetector(
-                    onTap: (){
-                      dashBoardProvider
-                          .changeCommentPage(
+                    onTap: () {
+                      dashBoardProvider.changeCommentPage(
                         index: 8,
                       );
                       Navigator.of(context).pop();
@@ -109,7 +109,7 @@ Widget buildPopupDialog(BuildContext context, Size size) {
               SizedBox(
                 height: size.height * 0.01,
               ),
-        //hided on purpose//
+              //hided on purpose//
               // Row(
               //   children: [
               //     Text(
@@ -144,7 +144,7 @@ Widget buildPopupDialog(BuildContext context, Size size) {
               //     ),
               //   ),
               // ),
-        //hided on purpose//
+              //hided on purpose//
               Consumer<DashBoardProvider>(
                   builder: (context, dashBoardProvider, _) {
                 return GestureDetector(
@@ -231,8 +231,8 @@ Widget buildPopupDialog(BuildContext context, Size size) {
                     //     builder: (context) => const ViewReminderScreen(),
                     //   ),
                     // );
-                   //  dashBoardProvider.changeCommentPage(index: 10);
-                   //Navigator.of(context).pop();
+                    //  dashBoardProvider.changeCommentPage(index: 10);
+                    //Navigator.of(context).pop();
                   },
                   child: Align(
                     alignment: Alignment.topLeft,
@@ -362,7 +362,8 @@ Widget buildPopupDialog(BuildContext context, Size size) {
                     "Help",
                     maxLines: 13,
                     overflow: TextOverflow.ellipsis,
-                    style: CustomTextStyles.titleMediumOnSecondaryContainerMedium
+                    style: CustomTextStyles
+                        .titleMediumOnSecondaryContainerMedium
                         .copyWith(
                       height: 2.19,
                     ),
@@ -398,10 +399,10 @@ Widget buildPopupDialog(BuildContext context, Size size) {
               //     ),
               //   ),
               // ),
-          GestureDetector(
-          onTap: () async {
-          //  shareImageWithText();
-          const shareMessage = '''
+              GestureDetector(
+                onTap: () async {
+                  //  shareImageWithText();
+                  const shareMessage = '''
 Check out the Numu app! 🌿
 
 Build mental strength,reduce anxiety,and stay focused on your goals with Numu.
@@ -409,24 +410,24 @@ Build mental strength,reduce anxiety,and stay focused on your goals with Numu.
 Download now: https://mh.featureme.live/downloads
 ''';
 
-          await Share.share(shareMessage);
-          },
-          child: Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-          "App share",
-          maxLines: 13,
-          overflow: TextOverflow.ellipsis,
-          style: CustomTextStyles.titleMediumOnSecondaryContainerMedium.copyWith(
-          height: 2.19,
-          ),
-          ),
-          ),
-          ),
+                  await Share.share(shareMessage);
+                },
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "App share",
+                    maxLines: 13,
+                    overflow: TextOverflow.ellipsis,
+                    style: CustomTextStyles
+                        .titleMediumOnSecondaryContainerMedium
+                        .copyWith(
+                      height: 2.19,
+                    ),
+                  ),
+                ),
+              ),
 
-
-
-          SizedBox(
+              SizedBox(
                 height: size.height * 0.005,
               ),
               GestureDetector(
@@ -445,7 +446,8 @@ Download now: https://mh.featureme.live/downloads
                     "Feedback",
                     maxLines: 13,
                     overflow: TextOverflow.ellipsis,
-                    style: CustomTextStyles.titleMediumOnSecondaryContainerMedium
+                    style: CustomTextStyles
+                        .titleMediumOnSecondaryContainerMedium
                         .copyWith(
                       height: 2.19,
                     ),
@@ -455,27 +457,30 @@ Download now: https://mh.featureme.live/downloads
               SizedBox(
                 height: size.height * 0.03,
               ),
-              Consumer2<EditProfileProvider,SignInProvider>(
-                builder: (context, editProfileProvider,signInProvider, _) {
+              Consumer2<EditProfileProvider, SignInProvider>(
+                builder: (context, editProfileProvider, signInProvider, _) {
                   return GestureDetector(
                     onTap: () async {
                       customPopupNew(
                         context: context,
                         onPressedDelete: () async {
                           editProfileProvider.profileUrl = "";
-                          if(Platform.isAndroid){
-                            await PushNotifications.subscribeToTopic("live_doLogin");
-                            await PushNotifications.unsubscribeFromTopic("message");
-                          }else{
+                          if (Platform.isAndroid) {
+                            await PushNotifications.subscribeToTopic(
+                                "live_doLogin");
+                            await PushNotifications.unsubscribeFromTopic(
+                                "message");
+                          } else {
                             OneSignal.logout();
-                            OneSignal.User.addTagWithKey("topic","live_doLogin");
+                            OneSignal.User.addTagWithKey(
+                                "topic", "live_doLogin");
                             OneSignal.User.removeTag("message");
                           }
                           final prefs = await SharedPreferences.getInstance();
                           await prefs.remove('lastSkippedTimestamp');
                           addFCMTokenToSharePref(token: "");
-                          addVersionSharePref(version:"");
-                         // GoogleSignInService.logout();
+                          addVersionSharePref(version: "");
+                          // GoogleSignInService.logout();
                           await signInProvider.logOutUser(context);
                           await removeUserDetailsSharePref(context: context);
                           removeAllValuesLogout(context: context);
@@ -532,7 +537,7 @@ Download now: https://mh.featureme.live/downloads
               Align(
                 alignment: Alignment.center,
                 child: Text(
-                  "App Version ${Platform.isAndroid ? Constent.versionCodeAndroid: Constent.versionCodeIOS} ",
+                  "App Version ${Platform.isAndroid ? Constent.versionCodeAndroid : Constent.versionCodeIOS} ",
                   maxLines: 13,
                   overflow: TextOverflow.ellipsis,
                   style: CustomTextStyles.titleMediumOnSecondaryContainerMedium
@@ -548,7 +553,6 @@ Download now: https://mh.featureme.live/downloads
     ),
   );
 }
-
 
 Future<void> shareImageWithText() async {
   // Load image from assets
@@ -576,5 +580,3 @@ Download now: https://mh.featureme.live/downloads
 ''',
   );
 }
-
-
