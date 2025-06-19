@@ -6,6 +6,7 @@ import 'package:video_player/video_player.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 
+///build mental///
 class VideoPlayerWidgetBuildMental extends StatefulWidget {
   const VideoPlayerWidgetBuildMental({super.key, required this.videoUrl});
 
@@ -14,7 +15,6 @@ class VideoPlayerWidgetBuildMental extends StatefulWidget {
   @override
   _VideoPlayerWidgetBuildMentalState createState() => _VideoPlayerWidgetBuildMentalState();
 }
-
 class _VideoPlayerWidgetBuildMentalState extends State<VideoPlayerWidgetBuildMental> {
   VideoPlayerController? _controller;
   bool _isLoading = true;
@@ -100,7 +100,6 @@ class _VideoPlayerWidgetBuildMentalState extends State<VideoPlayerWidgetBuildMen
   }
 }
 
-
 class VideoPlayerWidgetViewAndAlreadyBuildMental extends StatefulWidget {
   const VideoPlayerWidgetViewAndAlreadyBuildMental({super.key, required this.videoUrl});
 
@@ -109,7 +108,6 @@ class VideoPlayerWidgetViewAndAlreadyBuildMental extends StatefulWidget {
   @override
   _VideoPlayerWidgetViewAndAlreadyBuildMentalState createState() => _VideoPlayerWidgetViewAndAlreadyBuildMentalState();
 }
-
 class _VideoPlayerWidgetViewAndAlreadyBuildMentalState extends State<VideoPlayerWidgetViewAndAlreadyBuildMental> {
   late VideoPlayerController _controller;
   bool _isLoading = true;
@@ -210,11 +208,10 @@ class _VideoPlayerWidgetViewAndAlreadyBuildMentalState extends State<VideoPlayer
     super.dispose();
   }
 }
+///-///
 
 
-
-
-
+///Goals///
 class VideoPlayerWidgetGoal extends StatefulWidget {
   const VideoPlayerWidgetGoal({super.key, required this.videoUrl});
 
@@ -223,7 +220,6 @@ class VideoPlayerWidgetGoal extends StatefulWidget {
   @override
   _VideoPlayerWidgetGoalState createState() => _VideoPlayerWidgetGoalState();
 }
-
 class _VideoPlayerWidgetGoalState extends State<VideoPlayerWidgetGoal> {
   VideoPlayerController? _controller;
   bool _isLoading = true;
@@ -309,7 +305,6 @@ class _VideoPlayerWidgetGoalState extends State<VideoPlayerWidgetGoal> {
   }
 }
 
-
 class VideoPlayerWidgetViewAndAlreadyGoal extends StatefulWidget {
   const VideoPlayerWidgetViewAndAlreadyGoal({super.key, required this.videoUrl});
 
@@ -318,7 +313,6 @@ class VideoPlayerWidgetViewAndAlreadyGoal extends StatefulWidget {
   @override
   _VideoPlayerWidgetViewAndAlreadyGoalState createState() => _VideoPlayerWidgetViewAndAlreadyGoalState();
 }
-
 class _VideoPlayerWidgetViewAndAlreadyGoalState extends State<VideoPlayerWidgetViewAndAlreadyGoal> {
   late VideoPlayerController _controller;
   bool _isLoading = true;
@@ -419,12 +413,10 @@ class _VideoPlayerWidgetViewAndAlreadyGoalState extends State<VideoPlayerWidgetV
     super.dispose();
   }
 }
+///-///
 
 
-
-
-
-
+///Action///
 class VideoPlayerWidgetAction extends StatefulWidget {
   const VideoPlayerWidgetAction({super.key, required this.videoUrl});
 
@@ -433,7 +425,6 @@ class VideoPlayerWidgetAction extends StatefulWidget {
   @override
   _VideoPlayerWidgetActionState createState() => _VideoPlayerWidgetActionState();
 }
-
 class _VideoPlayerWidgetActionState extends State<VideoPlayerWidgetAction> {
   VideoPlayerController? _controller;
   bool _isLoading = true;
@@ -519,7 +510,6 @@ class _VideoPlayerWidgetActionState extends State<VideoPlayerWidgetAction> {
   }
 }
 
-
 class VideoPlayerWidgetViewAndAlreadyAction extends StatefulWidget {
   const VideoPlayerWidgetViewAndAlreadyAction({super.key, required this.videoUrl});
 
@@ -528,7 +518,6 @@ class VideoPlayerWidgetViewAndAlreadyAction extends StatefulWidget {
   @override
   _VideoPlayerWidgetViewAndAlreadyActionState createState() => _VideoPlayerWidgetViewAndAlreadyActionState();
 }
-
 class _VideoPlayerWidgetViewAndAlreadyActionState extends State<VideoPlayerWidgetViewAndAlreadyAction> {
   late VideoPlayerController _controller;
   bool _isLoading = true;
@@ -629,5 +618,5 @@ class _VideoPlayerWidgetViewAndAlreadyActionState extends State<VideoPlayerWidge
     super.dispose();
   }
 }
-
+///-///
 
