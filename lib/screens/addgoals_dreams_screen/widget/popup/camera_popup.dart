@@ -67,7 +67,7 @@ Future cameraBottomSheetAdGoals({
                       child: buildAvatarImage(
                         widget:  Icon(
                           Icons.camera_alt,
-                          color: ColorsContent.newThemeColor,
+                          color: ColorsContent.whiteText,
                         ),
                         imagePath: ImageConstant.imgCamera,
                         size: size,
@@ -82,7 +82,7 @@ Future cameraBottomSheetAdGoals({
                       child: buildAvatarImage(
                         widget:  Icon(
                           Icons.video_collection_rounded,
-                          color: ColorsContent.newThemeColor,
+                          color: ColorsContent.whiteText,
                         ),
                         imagePath: ImageConstant.imgCamera,
                         size: size,
@@ -132,7 +132,7 @@ Future cameraBottomSheetAdGoals({
                                               ? ClipRRect(
                                             borderRadius:
                                             BorderRadius.circular(4),
-                                                child: VideoPlayerWidget(
+                                                child: VideoPlayerWidgetGoal(
                                                   videoUrl:
                                                       adDreamsGoalsProvider
                                                               .takedImages[

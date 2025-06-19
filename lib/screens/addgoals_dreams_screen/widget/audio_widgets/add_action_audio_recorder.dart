@@ -402,7 +402,7 @@ class _AudioRecorderAddGoalsState extends State<AudioRecorderAddGoals> {
               : buildAvatarImage(
             widget:  Icon(
               Icons.mic,
-              color: ColorsContent.newThemeColor,
+              color: ColorsContent.whiteText,
             ),
             imagePath: ImageConstant.imgMenu,
             size: size,

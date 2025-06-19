@@ -404,7 +404,7 @@ class _GoalAndDreamFullViewBottomParellelSheetState
                                   controller: videoController,
                                   itemCount: videoList.length,
                                   itemBuilder: (context, index) {
-                                    return VideoPlayerWidgetViewAndAlready(
+                                    return VideoPlayerWidgetViewAndAlreadyGoal(
                                       videoUrl: videoList[index],
                                     );
                                   },

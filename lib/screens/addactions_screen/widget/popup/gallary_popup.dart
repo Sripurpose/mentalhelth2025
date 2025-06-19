@@ -66,8 +66,8 @@ Future galleryBottomSheetAction({
                       },
                       child: buildAvatarImage(
                         widget: Icon(
-                          Icons.image,
-                          color: ColorsContent.newThemeColor,
+                          Icons.photo_library,
+                          color: ColorsContent.whiteText,
                         ),
                         imagePath: ImageConstant.imgThumbsUp,
                         size: size,
@@ -82,7 +82,7 @@ Future galleryBottomSheetAction({
                       child: buildAvatarImage(
                         widget: Icon(
                           Icons.video_collection_rounded,
-                          color: ColorsContent.newThemeColor,
+                          color: ColorsContent.whiteText,
                         ),
                         imagePath: ImageConstant.imgThumbsUp,
                         size: size,
@@ -143,7 +143,7 @@ Future galleryBottomSheetAction({
                                                   child: SizedBox(
                                                     height: 200,
                                                     width: double.infinity,
-                                                    child: VideoPlayerWidgetViewAndAlready(
+                                                    child: VideoPlayerWidgetViewAndAlreadyAction(
                                                         videoUrl: addActionsProvider
                                                             .alreadyPickedImages[
                                                                 index]
@@ -281,7 +281,7 @@ Future galleryBottomSheetAction({
                                                   child: SizedBox(
                                                     height: 200,
                                                     width: double.infinity,
-                                                    child: VideoPlayerWidget(
+                                                    child: VideoPlayerWidgetAction(
                                                         videoUrl: addActionsProvider
                                                             .pickedImages[index],
                                                       ),

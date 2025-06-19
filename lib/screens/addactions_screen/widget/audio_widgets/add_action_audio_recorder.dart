@@ -393,7 +393,7 @@ class _AudioRecorderAddActionState extends State<AudioRecorderAddAction> {
               : buildAvatarImage(
             widget:  Icon(
               Icons.mic,
-              color: ColorsContent.newThemeColor,
+              color: ColorsContent.whiteText,
             ),
             imagePath: ImageConstant.imgMenu,
             size: size,

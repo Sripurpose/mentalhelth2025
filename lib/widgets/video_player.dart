@@ -6,16 +6,16 @@ import 'package:video_player/video_player.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 
-class VideoPlayerWidget extends StatefulWidget {
-  const VideoPlayerWidget({super.key, required this.videoUrl});
+class VideoPlayerWidgetBuildMental extends StatefulWidget {
+  const VideoPlayerWidgetBuildMental({super.key, required this.videoUrl});
 
   final String videoUrl;
 
   @override
-  _VideoPlayerWidgetState createState() => _VideoPlayerWidgetState();
+  _VideoPlayerWidgetBuildMentalState createState() => _VideoPlayerWidgetBuildMentalState();
 }
 
-class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
+class _VideoPlayerWidgetBuildMentalState extends State<VideoPlayerWidgetBuildMental> {
   VideoPlayerController? _controller;
   bool _isLoading = true;
   bool _hasError = false;
@@ -101,16 +101,435 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
 }
 
 
-class VideoPlayerWidgetViewAndAlready extends StatefulWidget {
-  const VideoPlayerWidgetViewAndAlready({super.key, required this.videoUrl});
+class VideoPlayerWidgetViewAndAlreadyBuildMental extends StatefulWidget {
+  const VideoPlayerWidgetViewAndAlreadyBuildMental({super.key, required this.videoUrl});
 
   final String videoUrl;
 
   @override
-  _VideoPlayerWidgetViewAndAlreadyState createState() => _VideoPlayerWidgetViewAndAlreadyState();
+  _VideoPlayerWidgetViewAndAlreadyBuildMentalState createState() => _VideoPlayerWidgetViewAndAlreadyBuildMentalState();
 }
 
-class _VideoPlayerWidgetViewAndAlreadyState extends State<VideoPlayerWidgetViewAndAlready> {
+class _VideoPlayerWidgetViewAndAlreadyBuildMentalState extends State<VideoPlayerWidgetViewAndAlreadyBuildMental> {
+  late VideoPlayerController _controller;
+  bool _isLoading = true;
+  bool _hasError = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initVideo();
+  }
+
+  Future<void> _initVideo() async {
+    try {
+      File videoFile;
+
+      if (widget.videoUrl.startsWith('http')) {
+        // Download video to local file
+        final response = await http.get(Uri.parse(widget.videoUrl));
+        if (response.statusCode == 200) {
+          final tempDir = await getTemporaryDirectory();
+          final filePath = '${tempDir.path}/${DateTime.now().millisecondsSinceEpoch}.mp4';
+          videoFile = File(filePath);
+          await videoFile.writeAsBytes(response.bodyBytes);
+        } else {
+          throw Exception('Failed to download video');
+        }
+      } else {
+        // Use directly if local path
+        videoFile = File(widget.videoUrl);
+      }
+
+      _controller = VideoPlayerController.file(videoFile);
+      await _controller.initialize();
+      setState(() => _isLoading = false);
+    } catch (e) {
+      print('Error initializing video: $e');
+      setState(() {
+        _hasError = true;
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isLoading) {
+      return  Center(
+          child:  CupertinoActivityIndicator(
+            color: ColorsContent.newThemeColor,
+            radius: 15,
+          )
+      );
+    }
+
+    if (_hasError) {
+      return const Center(
+        child: Text(
+          'Failed to load video',
+          style: TextStyle(color: Colors.red),
+        ),
+      );
+    }
+
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        FittedBox(
+          fit: BoxFit.cover,
+          child: SizedBox(
+            width: _controller.value.size.width,
+            height: _controller.value.size.height,
+            child: VideoPlayer(_controller),
+          ),
+        ),
+        Center(
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                _controller.value.isPlaying
+                    ? _controller.pause()
+                    : _controller.play();
+              });
+            },
+            child: Icon(
+              _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+              color: Colors.white,
+              size: 40,
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+}
+
+
+
+
+
+class VideoPlayerWidgetGoal extends StatefulWidget {
+  const VideoPlayerWidgetGoal({super.key, required this.videoUrl});
+
+  final String videoUrl;
+
+  @override
+  _VideoPlayerWidgetGoalState createState() => _VideoPlayerWidgetGoalState();
+}
+
+class _VideoPlayerWidgetGoalState extends State<VideoPlayerWidgetGoal> {
+  VideoPlayerController? _controller;
+  bool _isLoading = true;
+  bool _hasError = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeVideo();
+  }
+
+  Future<void> _initializeVideo() async {
+    setState(() {
+      _isLoading = true;
+      _hasError = false;
+    });
+
+    try {
+      final file = File(widget.videoUrl);
+      final exists = await file.exists();
+      if (!exists) throw Exception('Local video file not found');
+
+      _controller = VideoPlayerController.file(file);
+      await _controller!.initialize();
+
+      setState(() {
+        _isLoading = false;
+      });
+    } catch (e) {
+      print('❌ Video initialization failed: $e');
+      setState(() {
+        _hasError = true;
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Center(child: CupertinoActivityIndicator());
+    }
+
+    if (_hasError || _controller == null) {
+      return const Center(
+        child: Text('Failed to load video', style: TextStyle(color: Colors.red)),
+      );
+    }
+
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        FittedBox(
+          fit: BoxFit.cover,
+          child: SizedBox(
+            width: _controller!.value.size.width,
+            height: _controller!.value.size.height,
+            child: VideoPlayer(_controller!),
+          ),
+        ),
+        Center(
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                _controller!.value.isPlaying ? _controller!.pause() : _controller!.play();
+              });
+            },
+            child: Icon(
+              _controller!.value.isPlaying ? Icons.pause : Icons.play_arrow,
+              color: Colors.white,
+              size: 40,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+
+class VideoPlayerWidgetViewAndAlreadyGoal extends StatefulWidget {
+  const VideoPlayerWidgetViewAndAlreadyGoal({super.key, required this.videoUrl});
+
+  final String videoUrl;
+
+  @override
+  _VideoPlayerWidgetViewAndAlreadyGoalState createState() => _VideoPlayerWidgetViewAndAlreadyGoalState();
+}
+
+class _VideoPlayerWidgetViewAndAlreadyGoalState extends State<VideoPlayerWidgetViewAndAlreadyGoal> {
+  late VideoPlayerController _controller;
+  bool _isLoading = true;
+  bool _hasError = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initVideo();
+  }
+
+  Future<void> _initVideo() async {
+    try {
+      File videoFile;
+
+      if (widget.videoUrl.startsWith('http')) {
+        // Download video to local file
+        final response = await http.get(Uri.parse(widget.videoUrl));
+        if (response.statusCode == 200) {
+          final tempDir = await getTemporaryDirectory();
+          final filePath = '${tempDir.path}/${DateTime.now().millisecondsSinceEpoch}.mp4';
+          videoFile = File(filePath);
+          await videoFile.writeAsBytes(response.bodyBytes);
+        } else {
+          throw Exception('Failed to download video');
+        }
+      } else {
+        // Use directly if local path
+        videoFile = File(widget.videoUrl);
+      }
+
+      _controller = VideoPlayerController.file(videoFile);
+      await _controller.initialize();
+      setState(() => _isLoading = false);
+    } catch (e) {
+      print('Error initializing video: $e');
+      setState(() {
+        _hasError = true;
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isLoading) {
+      return  Center(
+          child:  CupertinoActivityIndicator(
+            color: ColorsContent.newThemeColor,
+            radius: 15,
+          )
+      );
+    }
+
+    if (_hasError) {
+      return const Center(
+        child: Text(
+          'Failed to load video',
+          style: TextStyle(color: Colors.red),
+        ),
+      );
+    }
+
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        FittedBox(
+          fit: BoxFit.cover,
+          child: SizedBox(
+            width: _controller.value.size.width,
+            height: _controller.value.size.height,
+            child: VideoPlayer(_controller),
+          ),
+        ),
+        Center(
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                _controller.value.isPlaying
+                    ? _controller.pause()
+                    : _controller.play();
+              });
+            },
+            child: Icon(
+              _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+              color: Colors.white,
+              size: 40,
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+}
+
+
+
+
+
+
+class VideoPlayerWidgetAction extends StatefulWidget {
+  const VideoPlayerWidgetAction({super.key, required this.videoUrl});
+
+  final String videoUrl;
+
+  @override
+  _VideoPlayerWidgetActionState createState() => _VideoPlayerWidgetActionState();
+}
+
+class _VideoPlayerWidgetActionState extends State<VideoPlayerWidgetAction> {
+  VideoPlayerController? _controller;
+  bool _isLoading = true;
+  bool _hasError = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeVideo();
+  }
+
+  Future<void> _initializeVideo() async {
+    setState(() {
+      _isLoading = true;
+      _hasError = false;
+    });
+
+    try {
+      final file = File(widget.videoUrl);
+      final exists = await file.exists();
+      if (!exists) throw Exception('Local video file not found');
+
+      _controller = VideoPlayerController.file(file);
+      await _controller!.initialize();
+
+      setState(() {
+        _isLoading = false;
+      });
+    } catch (e) {
+      print('❌ Video initialization failed: $e');
+      setState(() {
+        _hasError = true;
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Center(child: CupertinoActivityIndicator());
+    }
+
+    if (_hasError || _controller == null) {
+      return const Center(
+        child: Text('Failed to load video', style: TextStyle(color: Colors.red)),
+      );
+    }
+
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        FittedBox(
+          fit: BoxFit.cover,
+          child: SizedBox(
+            width: _controller!.value.size.width,
+            height: _controller!.value.size.height,
+            child: VideoPlayer(_controller!),
+          ),
+        ),
+        Center(
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                _controller!.value.isPlaying ? _controller!.pause() : _controller!.play();
+              });
+            },
+            child: Icon(
+              _controller!.value.isPlaying ? Icons.pause : Icons.play_arrow,
+              color: Colors.white,
+              size: 40,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+
+class VideoPlayerWidgetViewAndAlreadyAction extends StatefulWidget {
+  const VideoPlayerWidgetViewAndAlreadyAction({super.key, required this.videoUrl});
+
+  final String videoUrl;
+
+  @override
+  _VideoPlayerWidgetViewAndAlreadyActionState createState() => _VideoPlayerWidgetViewAndAlreadyActionState();
+}
+
+class _VideoPlayerWidgetViewAndAlreadyActionState extends State<VideoPlayerWidgetViewAndAlreadyAction> {
   late VideoPlayerController _controller;
   bool _isLoading = true;
   bool _hasError = false;

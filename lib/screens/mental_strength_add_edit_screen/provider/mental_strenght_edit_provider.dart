@@ -1584,7 +1584,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
 
   bool saveJournalLoading = false;
 
-  Future<bool> saveJournalsFunction(
+  Future<bool> saveJournalsFunctionOld(
     BuildContext context, {
     required String journalTitle,
     required String emotionId,
@@ -1598,7 +1598,8 @@ class MentalStrengthEditProvider extends ChangeNotifier {
     required List<String> mediaName,
     required locationAddress,
     required List<String> actionIdList,
-  }) async {
+  }) async
+  {
     try {
       saveJournalLoading = true;
       String deviceType = Platform.isAndroid ? 'android' : 'ios';
@@ -1692,6 +1693,121 @@ class MentalStrengthEditProvider extends ChangeNotifier {
       return false;
     }
   }
+
+  Future<bool> saveJournalsFunction(
+      BuildContext context, {
+        required String journalTitle,
+        required String emotionId,
+        required String emotionValue,
+        required String journalDesc,
+        required String driveValue,
+        required String goalId,
+        required locationName,
+        required locationLatitude,
+        required locationLongitude,
+        required List<String> mediaName,
+        required locationAddress,
+        required List<String> actionIdList,
+      }) async {
+    try {
+      // ✅ Keep only the last .mp3 file, keep all other files untouched
+      int lastMp3Index = mediaName.lastIndexWhere((file) => file.toLowerCase().endsWith('.mp3'));
+      if (lastMp3Index != -1) {
+        String lastMp3File = mediaName[lastMp3Index];
+        mediaName.removeWhere((file) => file.toLowerCase().endsWith('.mp3'));
+        mediaName.add(lastMp3File);
+      }
+
+      saveJournalLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref();
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref();
+      }
+      notifyListeners();
+
+      String? token = await getUserTokenSharePref();
+      var body = {
+        'emotion_id': emotionId,
+        'emotion_value': emotionValue,
+        'journal_desc': journalDesc,
+        'drive_value': driveValue,
+        'goal_id': goalId,
+        'location_name': locationName,
+        'location_address': locationAddress,
+        'location_latitude': locationLatitude,
+        'location_longitude': locationLongitude,
+        'journal_title': journalTitle,
+      };
+
+      // ✅ Add filtered media files
+      for (int i = 0; i < mediaName.length; i++) {
+        body['media_name[$i]'] = mediaName[i];
+      }
+
+      // ✅ Add action ID list
+      for (int i = 0; i < actionIdList.length; i++) {
+        body['action_id[$i]'] = actionIdList[i];
+      }
+
+      final response = await http.post(
+        Uri.parse(UrlConstant.journalUrl),
+        headers: <String, String>{
+          'device-type': deviceType,
+          'version': versionCode.toString(),
+          "authorization": "$token",
+        },
+        body: body,
+      );
+
+      if (response.statusCode == 401 || response.statusCode == 403) {
+        TokenManager.setTokenStatus(true);
+      }
+
+      if (response.statusCode == 503) {
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        clearAllValuesInSaveTime();
+        showCustomSnackBar(
+          context: context,
+          message: json.decode(response.body)["text"],
+        );
+        saveJournalLoading = false;
+        notifyListeners();
+        return true;
+      } else {
+        showCustomSnackBar(
+          context: context,
+          message: json.decode(response.body)["text"],
+        );
+        saveJournalLoading = false;
+        notifyListeners();
+        return false;
+      }
+    } catch (error) {
+      saveJournalLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
 
 //update journal
 //   bool saveJournalLoading = false;
@@ -2062,6 +2178,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
           locationAddress: selectedLocationAddress,
           actionIdList: actionList.map((e) => e.id ?? "").toList(),
         );
+        logger.i("addMediaUploadResponseList${addMediaUploadResponseList}");
         if (isSuccess || !isSuccess ) {
           DashBoardProvider dashBoardProvider =
               Provider.of<DashBoardProvider>(context, listen: false);

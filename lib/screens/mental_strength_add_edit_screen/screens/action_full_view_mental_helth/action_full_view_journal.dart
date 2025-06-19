@@ -483,7 +483,7 @@ class _ActionFullViewJournalCreateBottomSheetState
                                                 Center(
                                                   child: AspectRatio(
                                                     aspectRatio: 16 / 9,
-                                                    child: VideoPlayerWidgetViewAndAlready(
+                                                    child: VideoPlayerWidgetViewAndAlreadyAction(
                                                       videoUrl: videoList[index],
                                                     ),
                                                   ),
@@ -503,7 +503,7 @@ class _ActionFullViewJournalCreateBottomSheetState
                                       },
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(5),
-                                        child: VideoPlayerWidgetViewAndAlready(
+                                        child: VideoPlayerWidgetViewAndAlreadyAction(
                                           videoUrl: videoList[index],
                                         ),
                                       ),

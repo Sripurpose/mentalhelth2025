@@ -1649,7 +1649,7 @@ Widget buildAvatarImage(
     height: size.height * 0.08,
     width: size.height * 0.08,
     decoration: BoxDecoration(
-      color: isSelected ? ColorsContent.newThemeColor : Colors.transparent,
+      color: isSelected ? ColorsContent.newThemeColor : ColorsContent.newThemeColor,
       image: DecorationImage(
         image: AssetImage(
           imagePath,
@@ -1662,8 +1662,8 @@ Widget buildAvatarImage(
         ),
       ),
       border: Border.all(
-        color: appTheme.blue300,
-        width: 1.0,
+        color:ColorsContent.newThemeColor,
+        width: 1.8,
       ),
     ),
     child: widget ??

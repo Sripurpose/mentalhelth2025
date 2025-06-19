@@ -357,7 +357,7 @@ class _ActionViewInParallelScreenState
                                                     controller: videoController,
                                                     itemCount: videoList.length,
                                                     itemBuilder: (context, index) {
-                                                      return VideoPlayerWidgetViewAndAlready(
+                                                      return VideoPlayerWidgetViewAndAlreadyAction(
                                                         videoUrl: videoList[index],
                                                       );
                                                     },

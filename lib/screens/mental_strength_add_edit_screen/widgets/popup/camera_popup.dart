@@ -213,7 +213,7 @@ Future cameraBottomSheet({
                       child: buildAvatarImage(
                         widget:  Icon(
                           Icons.camera_alt,
-                          color: ColorsContent.newThemeColor,
+                          color: ColorsContent.whiteText,
                         ),
                         imagePath: ImageConstant.imgCamera,
                         size: size,
@@ -228,7 +228,7 @@ Future cameraBottomSheet({
                       child: buildAvatarImage(
                         widget:  Icon(
                           Icons.video_collection_rounded,
-                          color: ColorsContent.newThemeColor,
+                          color: ColorsContent.whiteText,
                         ),
                         imagePath: ImageConstant.imgCamera,
                         size: size,
@@ -280,7 +280,7 @@ Future cameraBottomSheet({
                                               ? ClipRRect(
                                             borderRadius:
                                             BorderRadius.circular(4),
-                                                child: VideoPlayerWidget(
+                                                child: VideoPlayerWidgetBuildMental(
                                                     videoUrl:
                                                         mentalStrengthEditProvider
                                                             .takedImages[index],

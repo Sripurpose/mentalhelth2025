@@ -494,7 +494,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                                       Center(
                                                         child: AspectRatio(
                                                           aspectRatio: 16 / 9,
-                                                          child: VideoPlayerWidgetViewAndAlready(
+                                                          child: VideoPlayerWidgetViewAndAlreadyBuildMental(
                                                             videoUrl: videoList[index],
                                                           ),
                                                         ),
@@ -514,7 +514,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                             },
                                             child: ClipRRect(
                                               borderRadius: BorderRadius.circular(5),
-                                              child: VideoPlayerWidgetViewAndAlready(
+                                              child: VideoPlayerWidgetViewAndAlreadyBuildMental(
                                                 videoUrl: videoList[index],
                                               ),
                                             ),

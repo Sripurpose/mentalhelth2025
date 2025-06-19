@@ -590,10 +590,10 @@ class _MentalStrengthAudioPlayerState extends State<MentalStrengthAudioPlayer> {
                                       onPressedDelete: () async {
                                         mentalStrengthEditProvider
                                             .recorderValuesRemove(widget.index);
+                                        // mentalStrengthEditProvider
+                                        //     .removeMediaUploadResponseListFunction(
+                                        //     widget.index);
                                         Navigator.of(context).pop();
-                                        mentalStrengthEditProvider
-                                            .removeMediaUploadResponseListFunction(
-                                            widget.index);
                                         Navigator.of(context).pop();
                                       },
                                       yes: "Yes",
@@ -630,9 +630,9 @@ class _MentalStrengthAudioPlayerState extends State<MentalStrengthAudioPlayer> {
                                         adDreamsGoalsProvider
                                             .recorderValuesRemove(widget.index);
                                         Navigator.of(context).pop();
-                                        adDreamsGoalsProvider
-                                            .removeMediaUploadResponseListFunction(
-                                            widget.index);
+                                        // adDreamsGoalsProvider
+                                        //     .removeMediaUploadResponseListFunction(
+                                        //     widget.index);
                                         Navigator.of(context).pop();
                                       },
                                       yes: "Yes",
@@ -669,9 +669,9 @@ class _MentalStrengthAudioPlayerState extends State<MentalStrengthAudioPlayer> {
                                         addActionsProvider
                                             .recorderValuesRemove(widget.index);
                                         Navigator.of(context).pop();
-                                        addActionsProvider
-                                            .removeMediaUploadResponseListFunction(
-                                            widget.index);
+                                        // addActionsProvider
+                                        //     .removeMediaUploadResponseListFunction(
+                                        //     widget.index);
                                         Navigator.of(context).pop();
                                       },
                                       yes: "Yes",

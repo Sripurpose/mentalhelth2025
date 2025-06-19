@@ -20,6 +20,7 @@ import 'package:mentalhelth/screens/mental_strength_add_edit_screen/widgets/popu
 import 'package:mentalhelth/screens/mental_strength_add_edit_screen/widgets/popup/gallary_popup.dart';
 import 'package:mentalhelth/utils/core/image_constant.dart';
 import 'package:mentalhelth/utils/logic/date_format.dart';
+import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/utils/theme/custom_button_style.dart';
 import 'package:mentalhelth/widgets/custom_elevated_button.dart';
 import 'package:mentalhelth/widgets/custom_icon_button.dart';
@@ -1544,7 +1545,7 @@ Widget buildAvatarImage(
     height: size.height * 0.08,
     width: size.height * 0.08,
     decoration: BoxDecoration(
-      color: isSelected ? Colors.blue : Colors.transparent,
+      color: isSelected ? Colors.blue : ColorsContent.newThemeColor,
       image: DecorationImage(
         image: AssetImage(
           imagePath,
@@ -1557,7 +1558,7 @@ Widget buildAvatarImage(
         ),
       ),
       border: Border.all(
-        color: appTheme.blue300,
+        color: ColorsContent.newThemeColor,
         width: 1.0,
       ),
     ),
