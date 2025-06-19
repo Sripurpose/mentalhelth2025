@@ -312,10 +312,10 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
         final double durationInSeconds = (info?.duration ?? 0) / 1000;
         print("⏱ Video duration: ${durationInSeconds.toStringAsFixed(2)} seconds");
 
-        if (fileSizeInMB > 100 || durationInSeconds > 30) {
+        if (fileSizeInMB > 300 || durationInSeconds > 300) {
           showCustomSnackBar(
             context: context,
-            message: "Video must be ≤ 100MB and ≤ 30 seconds.",
+            message: "Video must be ≤ 300MB and ≤ 5 minutes.",
           );
           isVideoUploading = false;
           notifyListeners();
