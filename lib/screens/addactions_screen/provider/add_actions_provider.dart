@@ -1909,7 +1909,7 @@ var logger = Logger();
 
   bool editActionLoading = false;
 
-  Future<void> editActionFunction(
+  Future<void> editActionFunctionOld(
     BuildContext context, {
     required String title,
     required String details,
@@ -1921,7 +1921,8 @@ var logger = Logger();
     required String actionId,
         required String goalId,
         String? isReminder,
-  }) async {
+  }) async
+  {
     try {
       String deviceType = Platform.isAndroid ? 'android' : 'ios';
       String? versionCode = '';
@@ -1953,7 +1954,6 @@ var logger = Logger();
           'is_reminder': isReminder ?? '',
           'reminder_startdate': reminderStartDate,  // Convert to string
           'reminder_enddate': reminderEndDate,      // Convert to string
-          //'reminder_before': '${remindTime?.hour.toString().padLeft(2, '0')}:${remindTime?.minute.toString().padLeft(2, '0')}',
           'reminder_before': '',
           'reminder_repeat': repeat.toString(),  // Ensure repeat is a string
           'from_time': convertTimeOfDayTo12Hour(reminderStartTime!).toString(),        // Convert to string
@@ -1974,24 +1974,6 @@ var logger = Logger();
           'is_reminder': isReminder ?? '',         // Convert to string
         };
       }
-      // var body = {
-      //   'title': title,
-      //   'gem_type': 'action',
-      //   'details': details,
-      //   'location_name': locationName,
-      //   'location_latitude': locationLatitude,
-      //   'location_longitude': locationLongitude,
-      //   'location_address': locationAddress,
-      //   'gem_id': actionId,
-      //   'goal_id': goalId,
-      //   'is_reminder': isReminder ?? '',
-      //   'reminder_startdate': convertToUnixTimestamp(reminderStartDate).toString(),  // Convert to string
-      //   'reminder_enddate': convertToUnixTimestamp(reminderEndDate).toString(),      // Convert to string
-      //   'reminder_before': '${remindTime?.hour.toString().padLeft(2, '0')}:${remindTime?.minute.toString().padLeft(2, '0')}',
-      //   'reminder_repeat': repeat.toString(),  // Ensure repeat is a string
-      //   'from_time': convertTimeOfDayTo12Hour(reminderStartTime!).toString(),        // Convert to string
-      //   'to_time': convertTimeOfDayTo12Hour(reminderEndTime!).toString(),            // Convert to string
-      // };
       for (int i = 0; i < mediaName.length; i++) {
         body['media_name[$i]'] = mediaName[i];
       }
@@ -2077,6 +2059,165 @@ var logger = Logger();
       notifyListeners();
     }
   }
+
+  Future<void> editActionFunction(
+      BuildContext context, {
+        required String title,
+        required String details,
+        required List<String> mediaName,
+        required String locationName,
+        required String locationLatitude,
+        required String locationLongitude,
+        required String locationAddress,
+        required String actionId,
+        required String goalId,
+        String? isReminder,
+      }) async {
+    try {
+      // ✅ Keep only the last .mp3 file, keep all other files untouched
+      int lastMp3Index = mediaName.lastIndexWhere((file) => file.toLowerCase().endsWith('.mp3'));
+      if (lastMp3Index != -1) {
+        String lastMp3File = mediaName[lastMp3Index];
+        mediaName.removeWhere((file) => file.toLowerCase().endsWith('.mp3'));
+        mediaName.add(lastMp3File);
+      }
+
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref();
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref();
+      }
+
+      updateSaveActionLoadingFunction(true);
+      notifyListeners();
+
+      String? token = await getUserTokenSharePref();
+
+      // Prepare request body
+      var body;
+      if (isReminder == '1') {
+        body = {
+          'title': title,
+          'gem_type': 'action',
+          'details': details,
+          'location_name': locationName,
+          'location_latitude': locationLatitude,
+          'location_longitude': locationLongitude,
+          'location_address': locationAddress,
+          'goal_id': goalId,
+          'gem_id': actionId,
+          'is_reminder': isReminder ?? '',
+          'reminder_startdate': reminderStartDate,
+          'reminder_enddate': reminderEndDate,
+          'reminder_before': '',
+          'reminder_repeat': repeat.toString(),
+          'from_time': convertTimeOfDayTo12Hour(reminderStartTime!).toString(),
+          'to_time': convertTimeOfDayTo12Hour(reminderEndTime!).toString(),
+          'timezone_offset': timeZone,
+        };
+      } else {
+        body = {
+          'title': title,
+          'gem_type': 'action',
+          'details': details,
+          'location_name': locationName,
+          'location_latitude': locationLatitude,
+          'location_longitude': locationLongitude,
+          'location_address': locationAddress,
+          'goal_id': goalId,
+          'gem_id': actionId,
+          'is_reminder': isReminder ?? '',
+        };
+      }
+
+      // ✅ Add media
+      for (int i = 0; i < mediaName.length; i++) {
+        body['media_name[$i]'] = mediaName[i];
+      }
+
+      final response = await http.post(
+        Uri.parse(UrlConstant.savegemUrl),
+        headers: {
+          'device-type': deviceType,
+          'version': versionCode.toString(),
+          "authorization": "$token"
+        },
+        body: body,
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Map<String, dynamic> responseData = json.decode(response.body);
+        goalModelIdName = GoalModelIdName(
+          id: responseData["id"].toString(),
+          name: responseData["title"].toString(),
+        );
+        Navigator.of(context).pop();
+
+        if (setRemainder) {
+          scheduleAlarm(
+            reminderStartTime!.format(context).toString(),
+            reminderEndTime!.format(context).toString(),
+            DateFormat('d MMM y').parse(reminderStartDate),
+            DateFormat('d MMM y').parse(reminderEndDate),
+            responseData["id"].toString(),
+            repeat == "Never"
+                ? RepeatInterval.never
+                : repeat == "Daily"
+                ? RepeatInterval.daily
+                : repeat == "Weekly"
+                ? RepeatInterval.weekly
+                : repeat == "Monthly"
+                ? RepeatInterval.monthly
+                : RepeatInterval.yearly,
+            title: title,
+            body: details,
+          );
+        }
+
+        clearFunction();
+
+        showCustomSnackBar(
+          context: context,
+          message: json.decode(response.body)["text"],
+        );
+
+        Navigator.of(context).pop();
+      } else if (response.statusCode == 503) {
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      } else {
+        showCustomSnackBar(
+          context: context,
+          message: json.decode(response.body)["text"],
+        );
+      }
+
+      if (response.statusCode == 401 || response.statusCode == 403) {
+        TokenManager.setTokenStatus(true);
+      }
+
+      updateSaveActionLoadingFunction(false);
+      notifyListeners();
+    } catch (error) {
+      updateSaveActionLoadingFunction(false);
+      notifyListeners();
+    }
+  }
+
 
   //save media upload action
   bool saveMediaUploadLoading = false;
