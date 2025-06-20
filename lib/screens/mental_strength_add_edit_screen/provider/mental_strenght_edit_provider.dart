@@ -4,6 +4,7 @@ import 'dart:io';
 
 
 import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -518,7 +519,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
 
 
 
-  Future<void> pickVideoFunction(BuildContext context) async {
+  Future<void> pickVideoFunctionWithoutMulti(BuildContext context) async {
     try {
       final pickedVideoPath = await ImagePicker().pickVideo(
         source: ImageSource.gallery,
@@ -669,6 +670,126 @@ class MentalStrengthEditProvider extends ChangeNotifier {
       VideoCompress.deleteAllCache();
     }
   }
+
+
+  Future<void> pickVideoFunction(BuildContext context) async {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        allowMultiple: true,
+        type: FileType.video,
+      );
+
+      if (result == null || result.files.isEmpty) {
+        showCustomSnackBar(context: context, message: "No videos selected.");
+        return;
+      }
+
+      for (final picked in result.files) {
+        final file = File(picked.path!);
+        final fileSizeInMB = await file.length() / (1024 * 1024);
+
+        final MediaInfo? info = await VideoCompress.getMediaInfo(file.path);
+        final double durationInSeconds = (info?.duration ?? 0) / 1000;
+
+        if (fileSizeInMB > 300 || durationInSeconds > 300) {
+          showCustomSnackBar(
+            context: context,
+            message: "One or more videos exceed 300MB or 5 minutes.",
+          );
+          continue;
+        }
+
+        // Compression quality logic
+        VideoQuality compressionQuality;
+        if (fileSizeInMB <= 20) {
+          compressionQuality = VideoQuality.LowQuality;
+        } else if (fileSizeInMB <= 50) {
+          compressionQuality = VideoQuality.MediumQuality;
+        } else {
+          compressionQuality = VideoQuality.LowQuality;
+        }
+
+        // Show compression dialog
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => AlertDialog(
+            backgroundColor: ColorsContent.newThemeColor,
+            content: Row(
+              children: [
+                CupertinoActivityIndicator(color: ColorsContent.whiteText),
+                const SizedBox(width: 16),
+                const Text("Compressing video...",
+                  style:TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Open Sans',
+                    color: Colors.white,
+                  ),),
+              ],
+            ),
+          ),
+        );
+
+        final MediaInfo? compressedInfo = await VideoCompress.compressVideo(
+          file.path,
+          quality: compressionQuality,
+          deleteOrigin: false,
+          includeAudio: true,
+          frameRate: 30,
+        );
+
+        if (Navigator.canPop(context)) Navigator.pop(context);
+
+        if (compressedInfo == null || compressedInfo.file == null) {
+          showCustomSnackBar(context: context, message: "Video compression failed.");
+          continue;
+        }
+
+        final safePath = await saveVideoToTemp(compressedInfo.file!.path);
+        pickedImagesAddFunction([safePath]);
+
+        File thumbNailFile = await generateThumbnail(File(safePath));
+
+        // Optional: Show upload dialog
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => AlertDialog(
+            backgroundColor: ColorsContent.newThemeColor,
+            content: Row(
+              children: [
+                CupertinoActivityIndicator(color: ColorsContent.whiteText),
+                const SizedBox(width: 16),
+                const Text("Uploading video...",
+                  style:TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Open Sans',
+                    color: Colors.white,
+                  ),),
+              ],
+            ),
+          ),
+        );
+
+        await saveMediaUploadMental(
+          file: safePath,
+          type: "journal",
+          fileType: "mp4",
+          thumbNail: thumbNailFile.path,
+        );
+
+        if (Navigator.canPop(context)) Navigator.pop(context);
+      }
+    } catch (e) {
+      if (Navigator.canPop(context)) Navigator.pop(context);
+      showCustomSnackBar(context: context, message: "Error: $e");
+    } finally {
+      VideoCompress.deleteAllCache();
+    }
+  }
+
 
 // ✅ Save video to a stable temporary file
   Future<String> saveVideoToTemp(String originalPath) async {

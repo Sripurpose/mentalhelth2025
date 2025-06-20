@@ -3,6 +3,7 @@ import 'dart:io';
 
 
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path_provider/path_provider.dart';
@@ -841,7 +842,7 @@ var logger = Logger();
 
 
 
-  Future<void> pickVideoFunction(BuildContext context) async {
+  Future<void> pickVideoFunctionWithoutMulti(BuildContext context) async {
     final pickedVideoPath = await ImagePicker().pickVideo(
       source: ImageSource.gallery,
     );
@@ -989,6 +990,160 @@ var logger = Logger();
       );
     }
   }
+
+
+
+  Future<void> pickVideoFunction(BuildContext context) async {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.video,
+        allowMultiple: true,
+      );
+
+      if (result == null || result.files.isEmpty) {
+        showCustomSnackBar(context: context, message: "No video selected.");
+        return;
+      }
+
+      for (final picked in result.files) {
+        if (isVideoUploading) {
+          showCustomSnackBar(
+            context: context,
+            message: "Please wait, video is uploading.",
+          );
+          break;
+        }
+
+        isVideoUploading = true;
+        notifyListeners();
+
+        final originalFile = File(picked.path!);
+        final fileSizeInMB = await originalFile.length() / (1024 * 1024);
+        print("📦 Original video size: ${fileSizeInMB.toStringAsFixed(2)} MB");
+
+        final MediaInfo? info = await VideoCompress.getMediaInfo(originalFile.path);
+        final double durationInSeconds = (info?.duration ?? 0) / 1000;
+        print("⏱ Duration: ${durationInSeconds.toStringAsFixed(2)} seconds");
+
+        if (fileSizeInMB > 300 || durationInSeconds > 300) {
+          showCustomSnackBar(
+            context: context,
+            message: "Video must be ≤ 300MB and ≤ 5 minutes.",
+          );
+          isVideoUploading = false;
+          notifyListeners();
+          continue;
+        }
+
+        VideoQuality compressionQuality;
+        if (fileSizeInMB <= 20) {
+          compressionQuality = VideoQuality.LowQuality;
+          print('⚙️ Using HighestQuality for ≤ 20MB');
+        } else if (fileSizeInMB <= 50) {
+          compressionQuality = VideoQuality.MediumQuality;
+          print('⚙️ Using MediumQuality for 21MB - 50MB');
+        } else {
+          compressionQuality = VideoQuality.LowQuality;
+          print('⚙️ Using LowQuality for > 50MB');
+        }
+
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => AlertDialog(
+            backgroundColor: ColorsContent.newThemeColor,
+            content: Row(
+              children: [
+                CupertinoActivityIndicator(color: ColorsContent.whiteText),
+                const SizedBox(width: 16),
+                const Text("Compressing video...",
+                  style:TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Open Sans',
+                    color: Colors.white,
+                  ),),
+              ],
+            ),
+          ),
+        );
+
+        final MediaInfo? compressedVideoInfo = await VideoCompress.compressVideo(
+          originalFile.path,
+          quality: compressionQuality,
+          deleteOrigin: false,
+          includeAudio: true,
+          frameRate: 30,
+        );
+
+        if (Navigator.canPop(context)) Navigator.pop(context);
+
+        if (compressedVideoInfo == null || compressedVideoInfo.file == null) {
+          showCustomSnackBar(
+            context: context,
+            message: "Video compression failed.",
+          );
+          isVideoUploading = false;
+          notifyListeners();
+          continue;
+        }
+
+        final videoToUpload = compressedVideoInfo.file!;
+        final compressedSize = await videoToUpload.length();
+        print("📉 Compressed video size: ${(compressedSize / (1024 * 1024)).toStringAsFixed(2)} MB");
+
+        final safePath = await saveVideoToTemp(videoToUpload.path);
+
+
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => AlertDialog(
+            backgroundColor: ColorsContent.newThemeColor,
+            content: Row(
+              children: [
+                CupertinoActivityIndicator(color: ColorsContent.whiteText),
+                const SizedBox(width: 16),
+                const Text("Uploading video...",
+                  style:TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Open Sans',
+                    color: Colors.white,
+                  ),),
+              ],
+            ),
+          ),
+        );
+
+        pickedImagesAddFunction([safePath]);
+
+        final thumbNailFile = await generateThumbnail(File(safePath));
+
+        await saveMediaUploadAction(
+          file: safePath,
+          type: "action",
+          fileType: "mp4",
+          thumbNail: thumbNailFile.path,
+        );
+
+        if (Navigator.canPop(context)) Navigator.pop(context);
+
+        isVideoUploading = false;
+        notifyListeners();
+        VideoCompress.deleteAllCache();
+      }
+    } catch (e) {
+      if (Navigator.canPop(context)) Navigator.pop(context);
+      showCustomSnackBar(
+        context: context,
+        message: "An error occurred: $e",
+      );
+      isVideoUploading = false;
+      notifyListeners();
+    }
+  }
+
   Future<String> saveVideoToTemp(String originalPath) async {
     final tempDir = await getTemporaryDirectory();
     final fileName = 'video_${DateTime.now().millisecondsSinceEpoch}.mp4';
