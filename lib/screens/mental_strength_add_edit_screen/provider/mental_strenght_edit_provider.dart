@@ -691,25 +691,27 @@ class MentalStrengthEditProvider extends ChangeNotifier {
         final MediaInfo? info = await VideoCompress.getMediaInfo(file.path);
         final double durationInSeconds = (info?.duration ?? 0) / 1000;
 
+        // ✅ Check this file individually — no summing!
         if (fileSizeInMB > 300 || durationInSeconds > 300) {
           showCustomSnackBar(
             context: context,
-            message: "One or more videos exceed 300MB or 5 minutes.",
+            message: "${picked.name} exceeds 300MB or 5 minutes.",
           );
           continue;
         }
 
+        // Compression quality
         // Compression quality logic
         VideoQuality compressionQuality;
         if (fileSizeInMB <= 20) {
-          compressionQuality = VideoQuality.LowQuality;
+          compressionQuality = VideoQuality.MediumQuality;
         } else if (fileSizeInMB <= 50) {
           compressionQuality = VideoQuality.MediumQuality;
         } else {
-          compressionQuality = VideoQuality.LowQuality;
+          compressionQuality = VideoQuality.MediumQuality;
         }
 
-        // Show compression dialog
+        // Show compressing dialog
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -719,13 +721,15 @@ class MentalStrengthEditProvider extends ChangeNotifier {
               children: [
                 CupertinoActivityIndicator(color: ColorsContent.whiteText),
                 const SizedBox(width: 16),
-                const Text("Compressing video...",
-                  style:TextStyle(
+                const Text(
+                  "Compressing video...",
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     fontFamily: 'Open Sans',
                     color: Colors.white,
-                  ),),
+                  ),
+                ),
               ],
             ),
           ),
@@ -751,7 +755,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
 
         File thumbNailFile = await generateThumbnail(File(safePath));
 
-        // Optional: Show upload dialog
+        // Show uploading dialog
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -761,13 +765,15 @@ class MentalStrengthEditProvider extends ChangeNotifier {
               children: [
                 CupertinoActivityIndicator(color: ColorsContent.whiteText),
                 const SizedBox(width: 16),
-                const Text("Uploading video...",
-                  style:TextStyle(
+                const Text(
+                  "Uploading video...",
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     fontFamily: 'Open Sans',
                     color: Colors.white,
-                  ),),
+                  ),
+                ),
               ],
             ),
           ),
@@ -789,6 +795,9 @@ class MentalStrengthEditProvider extends ChangeNotifier {
       VideoCompress.deleteAllCache();
     }
   }
+
+
+
 
 
 // ✅ Save video to a stable temporary file

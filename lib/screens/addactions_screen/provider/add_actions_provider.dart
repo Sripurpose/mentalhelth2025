@@ -1006,6 +1006,24 @@ var logger = Logger();
       }
 
       for (final picked in result.files) {
+        final originalFile = File(picked.path!);
+        final fileSizeInMB = await originalFile.length() / (1024 * 1024);
+        print("📦 Original video size: ${fileSizeInMB.toStringAsFixed(2)} MB");
+
+        final MediaInfo? info = await VideoCompress.getMediaInfo(originalFile.path);
+        final double durationInSeconds = (info?.duration ?? 0) / 1000;
+        print("⏱ Duration: ${durationInSeconds.toStringAsFixed(2)} seconds");
+
+        // ✅ Validate video size and duration before proceeding
+        if (fileSizeInMB > 300 || durationInSeconds > 300) {
+          showCustomSnackBar(
+            context: context,
+            message: "${picked.name} must be ≤ 300MB and ≤ 5 minutes.",
+          );
+          continue;
+        }
+
+        // ✅ Skip if currently uploading
         if (isVideoUploading) {
           showCustomSnackBar(
             context: context,
@@ -1017,36 +1035,20 @@ var logger = Logger();
         isVideoUploading = true;
         notifyListeners();
 
-        final originalFile = File(picked.path!);
-        final fileSizeInMB = await originalFile.length() / (1024 * 1024);
-        print("📦 Original video size: ${fileSizeInMB.toStringAsFixed(2)} MB");
-
-        final MediaInfo? info = await VideoCompress.getMediaInfo(originalFile.path);
-        final double durationInSeconds = (info?.duration ?? 0) / 1000;
-        print("⏱ Duration: ${durationInSeconds.toStringAsFixed(2)} seconds");
-
-        if (fileSizeInMB > 300 || durationInSeconds > 300) {
-          showCustomSnackBar(
-            context: context,
-            message: "Video must be ≤ 300MB and ≤ 5 minutes.",
-          );
-          isVideoUploading = false;
-          notifyListeners();
-          continue;
-        }
-
+        // Determine compression quality
         VideoQuality compressionQuality;
         if (fileSizeInMB <= 20) {
-          compressionQuality = VideoQuality.LowQuality;
+          compressionQuality = VideoQuality.MediumQuality;
           print('⚙️ Using HighestQuality for ≤ 20MB');
         } else if (fileSizeInMB <= 50) {
           compressionQuality = VideoQuality.MediumQuality;
           print('⚙️ Using MediumQuality for 21MB - 50MB');
         } else {
-          compressionQuality = VideoQuality.LowQuality;
+          compressionQuality = VideoQuality.MediumQuality;
           print('⚙️ Using LowQuality for > 50MB');
         }
 
+        // Show compression dialog
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -1056,13 +1058,15 @@ var logger = Logger();
               children: [
                 CupertinoActivityIndicator(color: ColorsContent.whiteText),
                 const SizedBox(width: 16),
-                const Text("Compressing video...",
-                  style:TextStyle(
+                const Text(
+                  "Compressing video...",
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     fontFamily: 'Open Sans',
                     color: Colors.white,
-                  ),),
+                  ),
+                ),
               ],
             ),
           ),
@@ -1094,7 +1098,7 @@ var logger = Logger();
 
         final safePath = await saveVideoToTemp(videoToUpload.path);
 
-
+        // Show uploading dialog
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -1104,13 +1108,15 @@ var logger = Logger();
               children: [
                 CupertinoActivityIndicator(color: ColorsContent.whiteText),
                 const SizedBox(width: 16),
-                const Text("Uploading video...",
-                  style:TextStyle(
+                const Text(
+                  "Uploading video...",
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     fontFamily: 'Open Sans',
                     color: Colors.white,
-                  ),),
+                  ),
+                ),
               ],
             ),
           ),
@@ -1143,6 +1149,7 @@ var logger = Logger();
       notifyListeners();
     }
   }
+
 
   Future<String> saveVideoToTemp(String originalPath) async {
     final tempDir = await getTemporaryDirectory();

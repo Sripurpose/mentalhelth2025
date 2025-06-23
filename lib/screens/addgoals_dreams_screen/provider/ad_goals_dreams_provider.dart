@@ -455,17 +455,6 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
       }
 
       for (final picked in result.files) {
-        if (isVideoUploading) {
-          showCustomSnackBar(
-            context: context,
-            message: "Please wait, video is uploading.",
-          );
-          break;
-        }
-
-        isVideoUploading = true;
-        notifyListeners();
-
         final originalFile = File(picked.path!);
         final fileSizeInMB = await originalFile.length() / (1024 * 1024);
         print("📦 Original video size: ${fileSizeInMB.toStringAsFixed(2)} MB");
@@ -474,29 +463,41 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
         final double durationInSeconds = (info?.duration ?? 0) / 1000;
         print("⏱ Video duration: ${durationInSeconds.toStringAsFixed(2)} seconds");
 
+        // ✅ Validate size & duration before starting upload
         if (fileSizeInMB > 300 || durationInSeconds > 300) {
           showCustomSnackBar(
             context: context,
-            message: "Video must be ≤ 300MB and ≤ 5 minutes.",
+            message: "${picked.name} must be ≤ 300MB and ≤ 5 minutes.",
           );
-          isVideoUploading = false;
-          notifyListeners();
-          continue;
+          continue; // Skip to next file
         }
 
+        // ✅ Block if already uploading a video
+        if (isVideoUploading) {
+          showCustomSnackBar(
+            context: context,
+            message: "Please wait, a video is already uploading.",
+          );
+          break; // Wait for current upload to finish before proceeding
+        }
+
+        isVideoUploading = true;
+        notifyListeners();
+
+        // Determine compression quality
         VideoQuality compressionQuality;
         if (fileSizeInMB <= 20) {
-          compressionQuality = VideoQuality.LowQuality;
+          compressionQuality = VideoQuality.MediumQuality;
           print('⚙️ Using HighestQuality for ≤ 20MB');
         } else if (fileSizeInMB <= 50) {
           compressionQuality = VideoQuality.MediumQuality;
           print('⚙️ Using MediumQuality for 21MB - 50MB');
         } else {
-          compressionQuality = VideoQuality.LowQuality;
+          compressionQuality = VideoQuality.MediumQuality;
           print('⚙️ Using LowQuality for > 50MB');
         }
 
-        // Show compression dialog
+        // Show compressing dialog
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -506,18 +507,19 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
               children: [
                 CupertinoActivityIndicator(color: ColorsContent.whiteText),
                 const SizedBox(width: 16),
-                const Text("Compressing video...",
-                  style:TextStyle(
+                const Text(
+                  "Compressing video...",
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     fontFamily: 'Open Sans',
                     color: Colors.white,
-                  ),),
+                  ),
+                ),
               ],
             ),
           ),
         );
-
 
         final MediaInfo? compressedVideoInfo = await VideoCompress.compressVideo(
           originalFile.path,
@@ -527,7 +529,7 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
           frameRate: 30,
         );
 
-        if (Navigator.canPop(context)) Navigator.pop(context); // Close compression dialog
+        if (Navigator.canPop(context)) Navigator.pop(context); // Dismiss compress dialog
 
         if (compressedVideoInfo == null || compressedVideoInfo.file == null) {
           showCustomSnackBar(
@@ -545,7 +547,7 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
 
         final safePath = await saveVideoToTemp(videoToUpload.path);
 
-        // Show upload dialog
+        // Show uploading dialog
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -555,13 +557,15 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
               children: [
                 CupertinoActivityIndicator(color: ColorsContent.whiteText),
                 const SizedBox(width: 16),
-                const Text("Uploading video...",
-                  style:TextStyle(
+                const Text(
+                  "Uploading video...",
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     fontFamily: 'Open Sans',
                     color: Colors.white,
-                  ),),
+                  ),
+                ),
               ],
             ),
           ),
@@ -592,6 +596,7 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
 
   Future<String> saveVideoToTemp(String originalPath) async {
     final tempDir = await getTemporaryDirectory();
