@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -841,7 +842,7 @@ var logger = Logger();
 
 
 
-
+  ///not used function for video pick and compression///
   Future<void> pickVideoFunctionWithoutMulti(BuildContext context) async {
     final pickedVideoPath = await ImagePicker().pickVideo(
       source: ImageSource.gallery,
@@ -990,10 +991,10 @@ var logger = Logger();
       );
     }
   }
+///   ///
 
-
-
-  Future<void> pickVideoFunction(BuildContext context) async {
+  ///not used function for video pick and compression///
+  Future<void> pickVideoFunctionSecondsCondition(BuildContext context) async {
     try {
       final result = await FilePicker.platform.pickFiles(
         type: FileType.video,
@@ -1149,7 +1150,199 @@ var logger = Logger();
       notifyListeners();
     }
   }
+  ///   ///
 
+  ///used function for video pick and compression///
+  Future<void> pickVideoFunction(BuildContext context) async {
+    BuildContext? pleaseWaitContext;
+
+    try {
+      // ✅ Show "Please wait..." dialog
+      pleaseWaitContext = await showPleaseWaitDialog(context);
+
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.video,
+        allowMultiple: true,
+      );
+
+      if (result == null || result.files.isEmpty) {
+        if (pleaseWaitContext != null && Navigator.canPop(pleaseWaitContext)) {
+          Navigator.pop(pleaseWaitContext);
+        }
+        showCustomSnackBar(context: context, message: "No video selected.");
+        return;
+      }
+
+      for (final picked in result.files) {
+        final originalFile = File(picked.path!);
+        final fileSizeInMB = await originalFile.length() / (1024 * 1024);
+        print("📦 Original video size: ${fileSizeInMB.toStringAsFixed(2)} MB");
+
+        final MediaInfo? info = await VideoCompress.getMediaInfo(originalFile.path);
+        final double durationInSeconds = (info?.duration ?? 0) / 1000;
+        print("⏱ Duration: ${durationInSeconds.toStringAsFixed(2)} seconds");
+
+        // ❌ Too big or too long? Show error and close dialog if open
+        if (fileSizeInMB > 300 || durationInSeconds > 300) {
+          if (pleaseWaitContext != null && Navigator.canPop(pleaseWaitContext)) {
+            Navigator.pop(pleaseWaitContext);
+            pleaseWaitContext = null;
+          }
+          showCustomSnackBar(
+            context: context,
+            message: "${picked.name} must be ≤ 300MB and ≤ 5 minutes.",
+          );
+          continue;
+        }
+
+        // ✅ Close "Please wait..." before compression
+        if (pleaseWaitContext != null && Navigator.canPop(pleaseWaitContext)) {
+          Navigator.pop(pleaseWaitContext);
+          pleaseWaitContext = null;
+        }
+
+        if (isVideoUploading) {
+          showCustomSnackBar(context: context, message: "Please wait, video is uploading.");
+          break;
+        }
+
+        isVideoUploading = true;
+        notifyListeners();
+
+        // Determine compression quality
+        VideoQuality compressionQuality;
+        if (fileSizeInMB <= 20) {
+          compressionQuality = VideoQuality.MediumQuality;
+          print('⚙️ Using HighestQuality for ≤ 20MB');
+        } else if (fileSizeInMB <= 50) {
+          compressionQuality = VideoQuality.MediumQuality;
+          print('⚙️ Using MediumQuality for 21MB - 50MB');
+        } else {
+          compressionQuality = VideoQuality.MediumQuality;
+          print('⚙️ Using LowQuality for > 50MB');
+        }
+
+        // ✅ Show "Compressing..." dialog
+        final compressContext = await showProgressDialog(context, "Compressing video...");
+
+        final MediaInfo? compressedVideoInfo = await VideoCompress.compressVideo(
+          originalFile.path,
+          quality: compressionQuality,
+          deleteOrigin: false,
+          includeAudio: true,
+          frameRate: 30,
+        );
+
+        if (Navigator.canPop(compressContext)) Navigator.pop(compressContext);
+
+        if (compressedVideoInfo == null || compressedVideoInfo.file == null) {
+          showCustomSnackBar(
+            context: context,
+            message: "Video compression failed.",
+          );
+          isVideoUploading = false;
+          notifyListeners();
+          continue;
+        }
+
+        final videoToUpload = compressedVideoInfo.file!;
+        final compressedSize = await videoToUpload.length();
+        print("📉 Compressed size: ${(compressedSize / (1024 * 1024)).toStringAsFixed(2)} MB");
+
+        final safePath = await saveVideoToTemp(videoToUpload.path);
+
+        // ✅ Show "Uploading..." dialog
+        final uploadContext = await showProgressDialog(context, "Uploading video...");
+
+        pickedImagesAddFunction([safePath]);
+
+        final thumbNailFile = await generateThumbnail(File(safePath));
+
+        await saveMediaUploadAction(
+          file: safePath,
+          type: "action",
+          fileType: "mp4",
+          thumbNail: thumbNailFile.path,
+        );
+
+        if (Navigator.canPop(uploadContext)) Navigator.pop(uploadContext);
+
+        isVideoUploading = false;
+        notifyListeners();
+        VideoCompress.deleteAllCache();
+      }
+    } catch (e) {
+      if (pleaseWaitContext != null && Navigator.canPop(pleaseWaitContext)) {
+        Navigator.pop(pleaseWaitContext);
+      }
+      showCustomSnackBar(
+        context: context,
+        message: "An error occurred: $e",
+      );
+      isVideoUploading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<BuildContext> showPleaseWaitDialog(BuildContext context) async {
+    final completer = Completer<BuildContext>();
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) {
+        completer.complete(ctx);
+        return AlertDialog(
+          backgroundColor: ColorsContent.newThemeColor,
+          content: Row(
+            children: [
+              CupertinoActivityIndicator(color: ColorsContent.whiteText),
+              const SizedBox(width: 16),
+              const Text(
+                "Please wait...",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Open Sans',
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+    return completer.future;
+  }
+
+  Future<BuildContext> showProgressDialog(BuildContext context, String message) async {
+    final completer = Completer<BuildContext>();
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) {
+        completer.complete(ctx);
+        return AlertDialog(
+          backgroundColor: ColorsContent.newThemeColor,
+          content: Row(
+            children: [
+              CupertinoActivityIndicator(color: ColorsContent.whiteText),
+              const SizedBox(width: 16),
+              Text(
+                message,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Open Sans',
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+    return completer.future;
+  }
 
   Future<String> saveVideoToTemp(String originalPath) async {
     final tempDir = await getTemporaryDirectory();
@@ -1158,6 +1351,7 @@ var logger = Logger();
     final copiedFile = await File(originalPath).copy(newPath);
     return copiedFile.path;
   }
+  /// end of function for video pick and compression///
 
 
 

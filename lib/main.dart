@@ -373,6 +373,7 @@ class _MyAppState extends State<MyApp> {
 
   late DatabaseReference ref;
   String? baseUrlLiveIos;
+  String? baseUrlLiveAndroid;
   String? baseUrlLive;
   String? baseUrlQA;
   bool isBaseUrlReady = false;
@@ -481,6 +482,7 @@ class _MyAppState extends State<MyApp> {
           oneSignalLive = value["onesignal_live"] as String?;
           oneSignalStaging = value["onesignal_qa"] as String?;
           baseUrlLiveIos = value["base_url_live_ios"] as String?;
+          baseUrlLiveAndroid = value["base_url_live_android"] as String?;
         });
 
         setupRemoteConfig();
@@ -515,10 +517,11 @@ class _MyAppState extends State<MyApp> {
           print("Live Base URL set to1: $baseUrlLiveIos");
         }
         else{
-          UrlConstant.baseUrl = baseUrlLive ?? "";
+         // UrlConstant.baseUrl = baseUrlLive ?? "";
+          UrlConstant.baseUrl = baseUrlLiveAndroid ?? "";
           UrlConstant.oneSignalRemote = oneSignalLive ?? "";
           isBaseUrlReady = true;
-          print("Live Base URL set to1: $baseUrlLive");
+          print("Live Base URL set to1: $baseUrlLiveAndroid");
         }
 
       }
