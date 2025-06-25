@@ -1152,6 +1152,158 @@ var logger = Logger();
   }
   ///   ///
 
+  ///not used function for video pick and compression///
+  Future<void> pickVideoFunction4kCondition(BuildContext context) async {
+    BuildContext? pleaseWaitContext;
+
+    try {
+      pleaseWaitContext = await showPleaseWaitDialog(context);
+
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.video,
+        allowMultiple: true,
+      );
+
+      if (result == null || result.files.isEmpty) {
+        if (pleaseWaitContext != null && Navigator.canPop(pleaseWaitContext)) {
+          Navigator.pop(pleaseWaitContext);
+        }
+        showCustomSnackBar(context: context, message: "No video selected.");
+        return;
+      }
+
+      for (final picked in result.files) {
+        final originalFile = File(picked.path!);
+
+        final MediaInfo? info = await VideoCompress.getMediaInfo(originalFile.path);
+        final double durationInSeconds = (info?.duration ?? 0) / 1000;
+        final double fileSizeInMB = (info?.filesize ?? 0) / (1024 * 1024);
+        final int? width = info?.width;
+        final int? height = info?.height;
+
+        print("📦 Actual video size: ${fileSizeInMB.toStringAsFixed(2)} MB");
+        print("⏱ Duration: ${durationInSeconds.toStringAsFixed(2)} seconds");
+        print("📐 Resolution: ${width}x${height}");
+
+        final is4K = (width != null && width >= 3840) || (height != null && height >= 2160);
+        final isLargeOrLong = fileSizeInMB > 300 || durationInSeconds > 300;
+
+        // ❌ If too large or too long
+        if (isLargeOrLong) {
+          if (pleaseWaitContext != null && Navigator.canPop(pleaseWaitContext)) {
+            Navigator.pop(pleaseWaitContext);
+            pleaseWaitContext = null;
+          }
+          showCustomSnackBar(
+            context: context,
+            message: "${picked.name} must be ≤ 300MB and ≤ 5 minutes.",
+          );
+          continue;
+        }
+
+        // ❌ If 4K resolution
+        if (is4K) {
+          if (pleaseWaitContext != null && Navigator.canPop(pleaseWaitContext)) {
+            Navigator.pop(pleaseWaitContext);
+            pleaseWaitContext = null;
+          }
+          showCustomSnackBar(
+            context: context,
+            message: "${picked.name} is a 4K video and is not allowed.",
+          );
+          continue;
+        }
+
+        // ✅ Close "Please wait..." before compression
+        if (pleaseWaitContext != null && Navigator.canPop(pleaseWaitContext)) {
+          Navigator.pop(pleaseWaitContext);
+          pleaseWaitContext = null;
+        }
+
+        if (isVideoUploading) {
+          showCustomSnackBar(context: context, message: "Please wait, video is uploading.");
+          break;
+        }
+
+        isVideoUploading = true;
+        notifyListeners();
+
+        // Determine compression quality
+        VideoQuality compressionQuality;
+        if (fileSizeInMB <= 20) {
+          compressionQuality = VideoQuality.MediumQuality;
+          print('⚙️ Using HighestQuality for ≤ 20MB');
+        } else if (fileSizeInMB <= 50) {
+          compressionQuality = VideoQuality.MediumQuality;
+          print('⚙️ Using MediumQuality for 21MB - 50MB');
+        } else {
+          compressionQuality = VideoQuality.MediumQuality;
+          print('⚙️ Using LowQuality for > 50MB');
+        }
+
+        // ✅ Show "Compressing..." dialog
+        final compressContext = await showProgressDialog(context, "Compressing video...");
+
+        final MediaInfo? compressedVideoInfo = await VideoCompress.compressVideo(
+          originalFile.path,
+          quality: compressionQuality,
+          deleteOrigin: false,
+          includeAudio: true,
+          frameRate: 30,
+        );
+
+        if (Navigator.canPop(compressContext)) Navigator.pop(compressContext);
+
+        if (compressedVideoInfo == null || compressedVideoInfo.file == null) {
+          showCustomSnackBar(
+            context: context,
+            message: "Video compression failed.",
+          );
+          isVideoUploading = false;
+          notifyListeners();
+          continue;
+        }
+
+        final videoToUpload = compressedVideoInfo.file!;
+        final compressedSize = await videoToUpload.length();
+        print("📉 Compressed size: ${(compressedSize / (1024 * 1024)).toStringAsFixed(2)} MB");
+
+        final safePath = await saveVideoToTemp(videoToUpload.path);
+
+        // ✅ Show "Uploading..." dialog
+        final uploadContext = await showProgressDialog(context, "Uploading video...");
+
+        pickedImagesAddFunction([safePath]);
+
+        final thumbNailFile = await generateThumbnail(File(safePath));
+
+        await saveMediaUploadAction(
+          file: safePath,
+          type: "action",
+          fileType: "mp4",
+          thumbNail: thumbNailFile.path,
+        );
+
+        if (Navigator.canPop(uploadContext)) Navigator.pop(uploadContext);
+
+        isVideoUploading = false;
+        notifyListeners();
+        VideoCompress.deleteAllCache();
+      }
+    } catch (e) {
+      if (pleaseWaitContext != null && Navigator.canPop(pleaseWaitContext)) {
+        Navigator.pop(pleaseWaitContext);
+      }
+      showCustomSnackBar(
+        context: context,
+        message: "An error occurred: $e",
+      );
+      isVideoUploading = false;
+      notifyListeners();
+    }
+  }
+  ///   ///
+
   ///used function for video pick and compression///
   Future<void> pickVideoFunction(BuildContext context) async {
     BuildContext? pleaseWaitContext;
