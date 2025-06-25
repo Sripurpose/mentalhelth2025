@@ -432,7 +432,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                                                 Center(
                                                                   child: AspectRatio(
                                                                     aspectRatio: 16 / 9,
-                                                                    child: VideoPlayerWidgetViewAndAlreadyAction(
+                                                                    child: VideoPlayerWidgetViewAndAlreadyActionProgressBar(
                                                                       videoUrl: videoList[index],
                                                                     ),
                                                                   ),

@@ -464,7 +464,7 @@ class _GoalAndDreamFullViewBottomSheetState
                                               Center(
                                                 child: AspectRatio(
                                                   aspectRatio: 16 / 9,
-                                                  child: VideoPlayerWidgetViewAndAlreadyGoal(
+                                                  child: VideoPlayerWidgetViewAndAlreadyGoalProgressBar(
                                                     videoUrl: videoList[index],
                                                   ),
                                                 ),

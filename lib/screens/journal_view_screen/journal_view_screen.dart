@@ -494,7 +494,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                                       Center(
                                                         child: AspectRatio(
                                                           aspectRatio: 16 / 9,
-                                                          child: VideoPlayerWidgetViewAndAlreadyBuildMental(
+                                                          child: VideoPlayerWidgetViewAndAlreadyBuildMentalProgressBar(
                                                             videoUrl: videoList[index],
                                                           ),
                                                         ),
