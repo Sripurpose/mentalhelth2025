@@ -19,6 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../utils/core/firebase_api.dart';
 import '../../../../utils/core/image_constant.dart';
+import '../../../../utils/core/url_constant.dart';
 import '../../../../utils/theme/custom_text_style.dart';
 import '../../../../widgets/custom_image_view.dart';
 
@@ -401,13 +402,12 @@ Widget buildPopupDialog(BuildContext context, Size size) {
               // ),
               GestureDetector(
                 onTap: () async {
-                  //  shareImageWithText();
-                  const shareMessage = '''
+                  final shareMessage = '''
 Check out the Numu app! 🌿
 
-Build mental strength,reduce anxiety,and stay focused on your goals with Numu.
+Build mental strength, reduce anxiety, and stay focused on your goals with Numu.
 
-Download now: https://mh.featureme.live/downloads
+Download now: ${UrlConstant.baseUrl}/downloads
 ''';
 
                   await Share.share(shareMessage);
@@ -426,6 +426,7 @@ Download now: https://mh.featureme.live/downloads
                   ),
                 ),
               ),
+
 
               SizedBox(
                 height: size.height * 0.005,
