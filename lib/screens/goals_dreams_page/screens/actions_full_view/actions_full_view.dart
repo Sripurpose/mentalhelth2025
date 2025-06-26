@@ -89,7 +89,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
       );
     }
 
-    logger.w("widget.action.actionStatus${mentalStrengthEditProvider.actionsDetailsModel!.actions!.actionStatus!}");
+    logger.w("widget.action.actionStatus${mentalStrengthEditProvider.actionsDetailsModel?.actions!.actionStatus!}");
 
     setState(() {});
   }

@@ -73,10 +73,14 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      //color:Colors.red,
                       width: size.width * 0.50,
                       child: Text(
-                        HtmlUnescape().convert(journalsModelList.journalTitle!),
+                            () {
+                          final unescapedTitle = HtmlUnescape().convert(journalsModelList.journalTitle ?? '');
+                          return unescapedTitle.length > 38
+                              ? '${unescapedTitle.substring(0, 38)}...'
+                              : unescapedTitle;
+                        }(),
                         style: const TextStyle(
                           fontSize: 16.5,
                           fontWeight: FontWeight.w500,
@@ -85,6 +89,7 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                         ),
                       ),
                     ),
+
                     Text(
                       formatMilliseconds(
                           int.parse(journalsModelList.journalDatetime!)),

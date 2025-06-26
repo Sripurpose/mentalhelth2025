@@ -2245,9 +2245,11 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
             _titleFocusNode.unfocus(); // Ensure focus is removed when done
             setState(() {});
           },
-          inputFormatters: [
-            FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9\s]')),
-          ],
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(
+                RegExp(r'[\u0000-\uFFFF]'), // allows nearly all Unicode characters, including emojis
+              ),
+            ],
           onChanged: (text) {
             // Ensure space is allowed only if at least one letter is typed
             if (text.isNotEmpty &&
@@ -2296,9 +2298,11 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                 .unfocus(); // Ensure focus is removed when done
             setState(() {});
           },
-          inputFormatters: [
-            FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9\s]')),
-          ],
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(
+                RegExp(r'[\u0000-\uFFFF]'), // allows nearly all Unicode characters, including emojis
+              ),
+            ],
           onChanged: (text) {
             // Ensure space is allowed only if at least one letter is typed
             if (text.isNotEmpty &&

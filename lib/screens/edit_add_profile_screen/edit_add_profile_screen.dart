@@ -604,11 +604,11 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
             hintStyle: const TextStyle(
               color: Colors.black,
             ),
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(
-                RegExp(r'[a-zA-Z0-9,. ]'),
-              ),
-            ],
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                  RegExp(r'[\u0000-\uFFFF]'), // allows nearly all Unicode characters, including emojis
+                ),
+              ]
           ),
         );
       },
@@ -769,11 +769,13 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
               hintStyle: CustomTextStyles.bodyMediumGray70013,
               textInputAction: TextInputAction.done,
               maxLines: 4,
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(
-                RegExp(r"[a-zA-Z0-9,. ]"), // Allow only letters, numbers, space, comma, and period
-              ),
-            ],));
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                  RegExp(r'[\u0000-\uFFFF]'), // allows nearly all Unicode characters, including emojis
+                ),
+              ]
+
+              ,));
     });
   }
 

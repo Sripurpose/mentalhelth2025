@@ -64,9 +64,12 @@ class UserProfileListItemWidget extends StatelessWidget {
               children: [
                 SizedBox(
                   width: 230,
-                  //color: Colors.red,
                   child: Text(
-                    HtmlUnescape().convert(title.toString()), // Decoding HTML entities
+                    HtmlUnescape().convert(
+                      title.toString().length > 38
+                          ? '${title.toString().substring(0, 38)}.....'
+                          : title.toString(),
+                    ),
                     style: const TextStyle(
                       fontSize: 16.5,
                       fontWeight: FontWeight.w500,
@@ -75,6 +78,7 @@ class UserProfileListItemWidget extends StatelessWidget {
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 0,),
                 Text(
                   formatMilliseconds(int.parse(date)),

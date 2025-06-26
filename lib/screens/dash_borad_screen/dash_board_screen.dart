@@ -97,8 +97,8 @@ class DashBoardScreen extends StatelessWidget {
                       icon:
                       CustomImageView(
                         imagePath: ImageConstant.imgHome,
-                        height: 25,
-                        width: 25,
+                        height: 28,
+                        width: 28,
                         color: theme.colorScheme.primary.withOpacity(1),
                       ),
                       activeIcon: Padding(
@@ -121,8 +121,8 @@ class DashBoardScreen extends StatelessWidget {
                     BottomNavigationBarItem(
                       icon: CustomImageView(
                         imagePath: ImageConstant.imgSettings,
-                        height: 25,
-                        width: 25,
+                        height: 28,
+                        width: 28,
                         color: theme.colorScheme.primary.withOpacity(1),
                       ),
                       activeIcon: Padding(
@@ -139,8 +139,8 @@ class DashBoardScreen extends StatelessWidget {
                     BottomNavigationBarItem(
                       icon: CustomImageView(
                         imagePath: ImageConstant.imgMegaphone,
-                        height: 25,
-                        width: 25,
+                        height: 28,
+                        width: 28,
                         color: theme.colorScheme.primary.withOpacity(1),
                       ),
                       activeIcon: Padding(
@@ -157,8 +157,8 @@ class DashBoardScreen extends StatelessWidget {
                     BottomNavigationBarItem(
                       icon: CustomImageView(
                         imagePath: ImageConstant.imgArrowDown,
-                        height: 25,
-                        width: 25,
+                        height: 28,
+                        width: 28,
                         color: theme.colorScheme.primary.withOpacity(1),
                       ),
                       activeIcon: Padding(
