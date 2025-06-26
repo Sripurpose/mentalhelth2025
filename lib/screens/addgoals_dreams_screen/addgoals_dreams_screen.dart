@@ -227,6 +227,8 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
                                           borderRadius: BorderRadius.circular(10),
                                           underline: const SizedBox(),
                                           isExpanded: true,
+                                          iconEnabledColor: ColorsContent.newThemeColor, // 👈 Dropdown icon color
+                                          iconDisabledColor: ColorsContent.newThemeColor,  // 👈 Optional: icon color when disabled
                                           onChanged: (value) {
                                             if (value != null) {
                                               editProfileProvider.selectCategory(
@@ -490,7 +492,7 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
             child: Row(
               children: [
                 CustomImageView(
-                  imagePath: ImageConstant.imgThumbsUpGray700,
+                  imagePath: ImageConstant.actionDatePickerNumu,
                   height: 20,
                   width: 20,
                   margin: const EdgeInsets.only(bottom: 2),

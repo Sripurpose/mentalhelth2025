@@ -1950,7 +1950,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
             ),
           ),
           SizedBox(
-            height: size.height * 0.04,
+            height: size.height * 0.015,
           ),
           mentalStrengthEditProvider.goalsValue.id == null
               ? const SizedBox()
@@ -2107,7 +2107,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
             ),
           ),
           SizedBox(
-            height: size.height * 0.04,
+            height: size.height * 0.015,
           ),
           SizedBox(
             height: mentalStrengthEditProvider.actionList.length *
