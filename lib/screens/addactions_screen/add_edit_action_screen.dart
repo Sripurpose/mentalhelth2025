@@ -805,7 +805,7 @@ class _AddEditActionScreenState extends State<AddEditActionScreen> {
                                                       const Spacer(),
                                                       Icon(
                                                         Icons
-                                                            .keyboard_arrow_down_sharp,
+                                                            .arrow_drop_down_sharp,
                                                         color: ColorsContent.newThemeColor,
                                                       )
                                                     ],

@@ -777,8 +777,7 @@ class _EditReminderScreenScreenScreenState
                                               ),
                                               const Spacer(),
                                                Icon(
-                                                Icons
-                                                    .keyboard_arrow_down_sharp,
+                                                Icons.arrow_drop_down_sharp,
                                                 color: ColorsContent.newThemeColor,
                                               )
                                             ],
@@ -896,7 +895,7 @@ class _EditReminderScreenScreenScreenState
             },
             height: 45,
             text: "Update Reminder",
-            buttonStyle: CustomButtonStyles.outlinePrimaryTL5,
+            buttonStyle: CustomButtonStyles.outlinePrimaryReminder,
             buttonTextStyle:
             CustomTextStyles.titleSmallHelveticaOnSecondaryContainer,
           );

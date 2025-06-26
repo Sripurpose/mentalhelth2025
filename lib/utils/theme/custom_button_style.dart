@@ -156,6 +156,15 @@ class CustomButtonStyles {
         shadowColor: theme.colorScheme.primary,
         elevation: 38,
       );
+
+  static ButtonStyle get outlinePrimaryReminder => ElevatedButton.styleFrom(
+    backgroundColor: ColorsContent.newThemeColor,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(5),
+    ),
+    shadowColor: theme.colorScheme.primary,
+    elevation: 38,
+  );
   static ButtonStyle get outlinePrimaryBlue => ElevatedButton.styleFrom(
     backgroundColor: Colors.blue,  // Use blue from Material design palette
     shape: RoundedRectangleBorder(
