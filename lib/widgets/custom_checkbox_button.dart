@@ -108,7 +108,7 @@ class CustomCheckboxButton extends StatelessWidget {
           ),
           fillColor: MaterialStateProperty.resolveWith((states) {
             if (states.contains(MaterialState.selected)) {
-              return Colors.purple; // Fill color when checked
+              return ColorsContent.newThemeColor; // Fill color when checked
             }
             return Colors.transparent; // Transparent when unchecked
           }),
