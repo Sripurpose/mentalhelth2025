@@ -407,7 +407,7 @@ Check out the Numu app! 🌿
 
 Build mental strength, reduce anxiety, and stay focused on your goals with Numu.
 
-Download now: ${UrlConstant.baseUrl}/downloads
+Download now: ${UrlConstant.appShareDownloads}/downloads
 ''';
 
                   await Share.share(shareMessage);

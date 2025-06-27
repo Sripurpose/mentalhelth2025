@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:mentalhelth/screens/privacy_screen/provider/privacy_policy_provider.dart';
 import 'package:mentalhelth/utils/core/image_constant.dart';
 import 'package:mentalhelth/utils/theme/colors.dart';
-import 'package:mentalhelth/utils/theme/theme_helper.dart';
 import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -56,7 +55,7 @@ class _TermsOfServicesScreenState extends State<TermsOfServicesScreen> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 0.0),
                   child: Consumer<PrivacyPolicyProvider>(
                     builder: (context, policyProvider, _) {
                       if (policyProvider.policyModel == null) {
@@ -94,7 +93,7 @@ class _TermsOfServicesScreenState extends State<TermsOfServicesScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 0),
             ],
           ),
 

@@ -376,6 +376,7 @@ class _MyAppState extends State<MyApp> {
   String? baseUrlLiveAndroid;
   String? baseUrlLive;
   String? baseUrlQA;
+  String? baseUrlAppShareDownloads;
   bool isBaseUrlReady = false;
 
   String? oneSignalLive;
@@ -483,6 +484,7 @@ class _MyAppState extends State<MyApp> {
           oneSignalStaging = value["onesignal_qa"] as String?;
           baseUrlLiveIos = value["base_url_live_ios"] as String?;
           baseUrlLiveAndroid = value["base_url_live_android"] as String?;
+          baseUrlAppShareDownloads = value["app_share_url"] as String?;
         });
 
         setupRemoteConfig();
@@ -502,6 +504,7 @@ class _MyAppState extends State<MyApp> {
       if(baseUrlQA!.isNotEmpty){
         UrlConstant.baseUrl = baseUrlQA ?? "";
         UrlConstant.oneSignalRemote = oneSignalStaging ?? "";
+        UrlConstant.appShareDownloads = baseUrlAppShareDownloads ?? "";
         isBaseUrlReady = true;
         print("QA Base URL set to1: $baseUrlQA");
       }
@@ -513,6 +516,7 @@ class _MyAppState extends State<MyApp> {
           UrlConstant.baseUrl = baseUrlLiveIos ?? "";
          // UrlConstant.baseUrl = baseUrlLive ?? "";
           UrlConstant.oneSignalRemote = oneSignalLive ?? "";
+          UrlConstant.appShareDownloads = baseUrlAppShareDownloads ?? "";
           isBaseUrlReady = true;
           print("Live Base URL set to1: $baseUrlLiveIos");
         }
@@ -520,6 +524,7 @@ class _MyAppState extends State<MyApp> {
          // UrlConstant.baseUrl = baseUrlLive ?? "";
           UrlConstant.baseUrl = baseUrlLiveAndroid ?? "";
           UrlConstant.oneSignalRemote = oneSignalLive ?? "";
+          UrlConstant.appShareDownloads = baseUrlAppShareDownloads ?? "";
           isBaseUrlReady = true;
           print("Live Base URL set to1: $baseUrlLiveAndroid");
         }
@@ -537,6 +542,7 @@ class _MyAppState extends State<MyApp> {
     print("QA Base URL set to: $baseUrlQA");
     print("Live onesignalset to: $oneSignalLive");
     print("staging onesiganl set to: $oneSignalStaging");
+    print("staging baseUrlAppShareDownloads set to: $baseUrlAppShareDownloads");
   }
 
   void hideLoader() {

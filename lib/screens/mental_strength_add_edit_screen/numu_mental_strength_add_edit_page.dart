@@ -1013,7 +1013,7 @@ class _NumuMentalStrengthAddEditPageState
                             radius: size.width * 0.04,
                             backgroundColor: Colors.deepPurple,
                             child: Icon(
-                              Icons.play_arrow,
+                              Icons.arrow_forward_ios,
                               color: Colors.white,
                               size: size.width * 0.05,
                             ),
@@ -1175,9 +1175,9 @@ class _NumuMentalStrengthAddEditPageState
                             radius: size.width * 0.04,
                             backgroundColor: Colors.deepPurple,
                             child: Icon(
-                              Icons.play_arrow,
+                              Icons.arrow_forward_ios,
                               color: Colors.white,
-                              size: size.width * 0.04,
+                              size: size.width * 0.05,
                             ),
                           ),
                         ),

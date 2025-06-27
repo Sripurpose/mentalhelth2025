@@ -269,7 +269,7 @@ class _ScreenSignInState extends State<ScreenSignIn> {
                       height: 11,
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 9.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -303,10 +303,10 @@ class _ScreenSignInState extends State<ScreenSignIn> {
                               : Text(
                                   "|",
                             style: TextStyle(
-                              fontSize: 12.50,
-                              fontWeight: FontWeight.w400,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
                               fontFamily: 'Open Sans',
-                              color: ColorsContent.forgotPasswordColor,
+                              color: ColorsContent.whatsOnYourMindBoxColor,
                             ),
                                 ),
                           _isLoading
@@ -329,10 +329,10 @@ class _ScreenSignInState extends State<ScreenSignIn> {
                                       child: Text(
                                         "Sign up",
                                         style: TextStyle(
-                                          fontSize: 12.50,
-                                          fontWeight: FontWeight.w400,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
                                           fontFamily: 'Open Sans',
-                                          color: ColorsContent.forgotPasswordColor,
+                                          color: ColorsContent.whatsOnYourMindBoxColor,
                                         ),
                                       ),
                                     ),

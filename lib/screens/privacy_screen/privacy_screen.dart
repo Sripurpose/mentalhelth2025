@@ -1,11 +1,8 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mentalhelth/screens/privacy_screen/provider/privacy_policy_provider.dart';
 import 'package:mentalhelth/utils/core/image_constant.dart';
 import 'package:mentalhelth/utils/theme/colors.dart';
-import 'package:mentalhelth/utils/theme/theme_helper.dart';
 import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -55,43 +52,46 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
                 heading: "Privacy Policy",
               ),
               Expanded(
-                child: Consumer<PrivacyPolicyProvider>(
-                  builder: (context, policyProvider, _) {
-                    if (policyProvider.policyModel == null) {
-                      return const Center(child: Text(""));
-                    } else if (policyProvider.policyModelLoading) {
-                      return const Center(child: CupertinoActivityIndicator());
-                    } else {
-                      return WebViewWidget(
-                        controller: WebViewController()
-                          ..setJavaScriptMode(JavaScriptMode.unrestricted)
-                          ..setBackgroundColor(Colors.transparent)
-                          ..loadHtmlString(
-                            '''
-                  <!DOCTYPE html>
-                  <html>
-                  <head>
-                    <style>
-                      body {
-                        background-color: ${ColorsContent.homeBackGroundColor};
-                        text-align: justify;
-                        padding: 10px;
-                        color: white;
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                  child: Consumer<PrivacyPolicyProvider>(
+                    builder: (context, policyProvider, _) {
+                      if (policyProvider.policyModel == null) {
+                        return const Center(child: Text(""));
+                      } else if (policyProvider.policyModelLoading) {
+                        return const Center(child: CupertinoActivityIndicator());
+                      } else {
+                        return WebViewWidget(
+                          controller: WebViewController()
+                            ..setJavaScriptMode(JavaScriptMode.unrestricted)
+                            ..setBackgroundColor(Colors.transparent)
+                            ..loadHtmlString(
+                              '''
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                      <style>
+                        body {
+                          background-color: ${ColorsContent.homeBackGroundColor};
+                          text-align: justify;
+                          padding: 10px;
+                          color: white;
+                        }
+                      </style>
+                    </head>
+                    <body>
+                      ${policyProvider.policyModel?.description.toString()}
+                    </body>
+                    </html>
+                    ''',
+                            ),
+                        );
                       }
-                    </style>
-                  </head>
-                  <body>
-                    ${policyProvider.policyModel?.description.toString()}
-                  </body>
-                  </html>
-                  ''',
-                          ),
-                      );
-                    }
-                  },
+                    },
+                  ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 0),
             ],
           ),
 

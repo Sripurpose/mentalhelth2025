@@ -132,6 +132,64 @@ class _JournalAudioPlayerState extends State<JournalAudioPlayer> {
                 ],
               ),
             ),
+            // Expanded(
+            //   child: Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: [
+            //       GestureDetector(
+            //         onHorizontalDragUpdate: (details) async {
+            //           final box = context.findRenderObject() as RenderBox;
+            //           final localPosition = box.globalToLocal(details.globalPosition);
+            //           final newPercent = localPosition.dx / box.size.width;
+            //           final newDuration = duration * newPercent.clamp(0.0, 1.0);
+            //           await globalAudioPlayer.seek(newDuration);
+            //           await globalAudioPlayer.resume();
+            //         },
+            //         child: Container(
+            //           height: 40,
+            //           padding: const EdgeInsets.symmetric(vertical: 6),
+            //           child: Row(
+            //             crossAxisAlignment: CrossAxisAlignment.end,
+            //             children: List.generate(50, (index) {
+            //               final progress = position.inMilliseconds / (duration.inMilliseconds == 0 ? 1 : duration.inMilliseconds);
+            //               final isFilled = index / 50 <= progress;
+            //
+            //               final barHeight = [
+            //                 10.0, 14.0, 12.0, 18.0, 16.0, 20.0, 16.0, 14.0, 18.0, 12.0
+            //               ][index % 10]; // repeating height pattern
+            //
+            //               return Padding(
+            //                 padding: const EdgeInsets.symmetric(horizontal: 1.2),
+            //                 child: AnimatedContainer(
+            //                   duration: const Duration(milliseconds: 300),
+            //                   height: barHeight,
+            //                   width: 3,
+            //                   decoration: BoxDecoration(
+            //                     color: isFilled ? Colors.white : Colors.white.withOpacity(0.3),
+            //                     borderRadius: BorderRadius.circular(4),
+            //                   ),
+            //                 ),
+            //               );
+            //             }),
+            //           ),
+            //         ),
+            //       ),
+            //       Row(
+            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //         children: [
+            //           Text(
+            //             _formatDuration(position),
+            //             style: const TextStyle(color: Colors.white, fontSize: 12),
+            //           ),
+            //           Text(
+            //             _formatDuration(duration),
+            //             style: const TextStyle(color: Colors.white, fontSize: 12),
+            //           ),
+            //         ],
+            //       ),
+            //     ],
+            //   ),
+            // ),
           ],
         );
       }),
