@@ -546,7 +546,7 @@ class _NumuMentalStrengthAddEditPageState
                                           child: Stack(
                                             alignment: Alignment.center,
                                             children: [
-                                              SvgPicture.asset(ImageConstant.submitButtonNumuBuild),
+                                              SvgPicture.asset(ImageConstant.numuSubmitEditAdd),
                                               if (mentalStrengthEditProvider.saveJournalLoading)
                                                 const Padding(
                                                   padding: EdgeInsets.only(top: 5, bottom: 5),

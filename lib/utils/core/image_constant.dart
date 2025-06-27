@@ -67,6 +67,7 @@ class ImageConstant {
   static String imgNumuLogo = '$imagePath/numu_new_logo.svg';
   static String newLogoNumu = '$imagePath/new_logo_numu.svg';
   static String allBackIcon = '$imagePath/all_back_icon.svg';
+  static String numuSubmitEditAdd = '$imagePath/numu_submit_edit_add.svg';
 
   static String imgGroup193 = '$imagePath/img_group_193.png';
 
