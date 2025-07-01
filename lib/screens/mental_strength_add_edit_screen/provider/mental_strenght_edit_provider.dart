@@ -1124,54 +1124,72 @@ class MentalStrengthEditProvider extends ChangeNotifier {
     final ImagePicker picker = ImagePicker();
     final XFile? pickedFile = await picker.pickImage(source: ImageSource.camera);
 
-    if (pickedFile != null) {
-      try {
-        // Show loading dialog
+    if (pickedFile == null) return;
 
+    isVideoUploading = true;
+    notifyListeners();
+
+    BuildContext? dialogContext;
+
+    try {
+      // Show loading dialog and capture its context
+      if (context.mounted) {
         showDialog(
           context: context,
           barrierDismissible: false,
-          builder: (_) => AlertDialog(
-            backgroundColor: ColorsContent.newThemeColor,
-            content: Row(
-              children: [
-                CupertinoActivityIndicator(color: ColorsContent.whiteText),
-                const SizedBox(width: 16),
-                const Text("Capturing images...",
-                  style:const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: 'Open Sans',
-                    color: Colors.white,
-                  ),),
-              ],
-            ),
-          ),
+          builder: (BuildContext dContext) {
+            dialogContext = dContext;
+            return AlertDialog(
+              backgroundColor: ColorsContent.newThemeColor,
+              content: Row(
+                children: [
+                  CupertinoActivityIndicator(color: ColorsContent.whiteText),
+                  const SizedBox(width: 16),
+                  const Text(
+                    "Capturing image...",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Open Sans',
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
         );
+      }
 
+      String fileExtension = pickedFile.path.split('.').last.toLowerCase();
+      List<String> imagePaths = [pickedFile.path];
+      takedImagesAddFunction(imagePaths);
 
-        String fileExtension = pickedFile.path.split('.').last.toLowerCase();
-
-        List<String> imagePaths = [pickedFile.path];
-        takedImagesAddFunction(imagePaths);
-
-        // Directly save the picked file without compression
-        await saveMediaUploadMental(
-          file: pickedFile.path,
-          type: "journal",
-          fileType: fileExtension,
-        );
-      } catch (e) {
+      await saveMediaUploadMental(
+        file: pickedFile.path,
+        type: "journal",
+        fileType: fileExtension,
+      );
+    } catch (e, stackTrace) {
+      logger.e("Error in takeFileFunction: $e\n$stackTrace");
+      if (context.mounted) {
         showCustomSnackBar(
           context: context,
           message: "An error occurred: $e",
         );
-      } finally {
-        Navigator.of(context, rootNavigator: true).pop(); // Dismiss loading dialog
-        notifyListeners();
       }
+    } finally {
+      isVideoUploading = false;
+
+      if (dialogContext != null &&
+          Navigator.of(dialogContext!, rootNavigator: true).canPop()) {
+        Navigator.of(dialogContext!, rootNavigator: true).pop();
+      }
+
+      notifyListeners();
     }
   }
+
 
 
 
@@ -1244,63 +1262,85 @@ class MentalStrengthEditProvider extends ChangeNotifier {
       source: ImageSource.camera,
     );
 
-    if (!isVideoUploading) {
-      if (pickedVideo != null) {
-        try {
-          isVideoUploading = true;
-          notifyListeners();
-
-          // Show loading dialog
-
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (_) => AlertDialog(
-              backgroundColor: ColorsContent.newThemeColor,
-              content: Row(
-                children: [
-                  CupertinoActivityIndicator(color: ColorsContent.whiteText),
-                  const SizedBox(width: 16),
-                  const Text("Capturing video...",
-                    style:const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'Open Sans',
-                      color: Colors.white,
-                    ),),
-                ],
-              ),
-            ),
-          );
-
-          List<String> videoPaths = [pickedVideo.path];
-          takedImagesAddFunction(videoPaths);
-
-          // Directly save the picked video without compression
-          await saveMediaUploadMental(
-            file: pickedVideo.path,
-            type: "journal",
-            fileType: "mp4",
-          );
-          logger.i("pickedVideo.path.split('.').last.toLowerCase()${pickedVideo.path.split('.').last.toLowerCase()}");
-        } catch (e) {
-          showCustomSnackBar(
-            context: context,
-            message: "An error occurred: $e",
-          );
-        } finally {
-          isVideoUploading = false;
-          Navigator.of(context, rootNavigator: true).pop(); // Dismiss loading dialog
-          notifyListeners();
-        }
+    if (isVideoUploading || pickedVideo == null) {
+      if (context.mounted) {
+        showCustomSnackBar(
+          context: context,
+          message: "Please wait, video is uploading.",
+        );
       }
-    } else {
-      showCustomSnackBar(
-        context: context,
-        message: "Please wait, video is uploading.",
+      return;
+    }
+
+    isVideoUploading = true;
+    notifyListeners();
+
+    bool dialogShown = false;
+
+    try {
+      // Show loading dialog before processing begins
+      if (context.mounted) {
+        dialogShown = true;
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => AlertDialog(
+            backgroundColor: ColorsContent.newThemeColor,
+            content: Row(
+              children: [
+                CupertinoActivityIndicator(color: ColorsContent.whiteText),
+                const SizedBox(width: 16),
+                const Text(
+                  "Capturing video...",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Open Sans',
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+
+      // Add video path to UI preview list
+      List<String> videoPaths = [pickedVideo.path];
+      takedImagesAddFunction(videoPaths);
+
+      // Save the picked video (upload or save locally)
+      await saveMediaUploadMental(
+        file: pickedVideo.path,
+        type: "journal",
+        fileType: "mp4",
       );
+
+      logger.i("pickedVideo.path extension: ${pickedVideo.path.split('.').last.toLowerCase()}");
+
+    } catch (e, stackTrace) {
+      logger.e("Error in takeVideoFunction: $e\n$stackTrace");
+
+      if (context.mounted) {
+        showCustomSnackBar(
+          context: context,
+          message: "An error occurred: $e",
+        );
+      }
+    } finally {
+      isVideoUploading = false;
+
+      // Dismiss the dialog only if it was shown and navigator can pop
+      if (dialogShown &&
+          context.mounted &&
+          Navigator.of(context, rootNavigator: true).canPop()) {
+        Navigator.of(context, rootNavigator: true).pop();
+      }
+
+      notifyListeners();
     }
   }
+
 
 
 

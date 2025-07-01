@@ -50,8 +50,8 @@ void showToastTop({required BuildContext context, required String message}) {
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.CENTER,
       timeInSecForIosWeb: 1,
-      backgroundColor: Colors.grey,
-      textColor: ColorsContent.newThemeColor,
+      backgroundColor: ColorsContent.newThemeColor,
+      textColor: ColorsContent.whiteText,
       fontSize: 16.0);
 }
 

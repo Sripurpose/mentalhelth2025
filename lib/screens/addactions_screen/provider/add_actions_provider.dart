@@ -1607,58 +1607,79 @@ var logger = Logger();
     final ImagePicker picker = ImagePicker();
     final XFile? pickedFile = await picker.pickImage(source: ImageSource.camera);
 
-    if (pickedFile != null) {
-      try {
-        // Show loading dialog
+    if (pickedFile == null) return;
+
+    isVideoUploading = true;
+    notifyListeners();
+
+    BuildContext? dialogContext;
+
+    try {
+      // Show loading dialog and capture its context
+      if (context.mounted) {
         showDialog(
           context: context,
           barrierDismissible: false,
-          builder: (_) => AlertDialog(
-            backgroundColor: ColorsContent.newThemeColor,
-            content: Row(
-              children: [
-                CupertinoActivityIndicator(color: ColorsContent.whiteText),
-                const SizedBox(width: 16),
-                const Text("Capturing images...",
-                  style:const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: 'Open Sans',
-                    color: Colors.white,
-                  ),),
-              ],
-            ),
-          ),
+          builder: (BuildContext dContext) {
+            dialogContext = dContext;
+            return AlertDialog(
+              backgroundColor: ColorsContent.newThemeColor,
+              content: Row(
+                children: [
+                  CupertinoActivityIndicator(color: ColorsContent.whiteText),
+                  const SizedBox(width: 16),
+                  const Text(
+                    "Capturing image...",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Open Sans',
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
         );
+      }
 
-        // Extract file extension
-        String fileExtension = pickedFile.path.split('.').last;
-        String lastThreeChars = fileExtension.substring(fileExtension.length - 3);
+      // Extract file extension
+      String fileExtension = pickedFile.path.split('.').last.toLowerCase();
+      String lastThreeChars = fileExtension.length >= 3
+          ? fileExtension.substring(fileExtension.length - 3)
+          : fileExtension;
 
-        List<String> imagePaths = [];
-        imagePaths.add(pickedFile.path);
-        takedImagesAddFunction(imagePaths);
+      List<String> imagePaths = [pickedFile.path];
+      takedImagesAddFunction(imagePaths);
 
-        // Save the media (image or video) without compression
-        await saveMediaUploadAction(
-          file: pickedFile.path,
-          type: "action",
-          fileType: lastThreeChars,
-        );
-      } catch (e) {
-        // Handle errors during the process
+      // Save the picked file (no compression)
+      await saveMediaUploadAction(
+        file: pickedFile.path,
+        type: "action",
+        fileType: lastThreeChars,
+      );
+    } catch (e, stackTrace) {
+      logger.e("Error in takeFileFunctionAction: $e\n$stackTrace");
+
+      if (context.mounted) {
         showCustomSnackBar(
           context: context,
           message: "An error occurred: $e",
         );
-      } finally {
-        // Dismiss loading dialog
-        Navigator.of(context, rootNavigator: true).pop();
-        // Notify listeners to update UI
-        notifyListeners();
       }
+    } finally {
+      isVideoUploading = false;
+
+      if (dialogContext != null &&
+          Navigator.of(dialogContext!, rootNavigator: true).canPop()) {
+        Navigator.of(dialogContext!, rootNavigator: true).pop();
+      }
+
+      notifyListeners();
     }
   }
+
 
 
 
@@ -1733,68 +1754,89 @@ var logger = Logger();
       source: ImageSource.camera,
     );
 
-    if (!isVideoUploading) {
-      if (pickeVideo != null) {
-        try {
-          isVideoUploading = true;
-          notifyListeners();
+    if (pickeVideo == null) return;
 
-          // Show loading dialog
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (_) => AlertDialog(
+    if (isVideoUploading) {
+      if (context.mounted) {
+        showCustomSnackBar(
+          context: context,
+          message: "Please wait, video is uploading.",
+        );
+      }
+      return;
+    }
+
+    isVideoUploading = true;
+    notifyListeners();
+
+    BuildContext? dialogContext;
+
+    try {
+      // Show loading dialog and track its context
+      if (context.mounted) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext dContext) {
+            dialogContext = dContext;
+            return AlertDialog(
               backgroundColor: ColorsContent.newThemeColor,
               content: Row(
                 children: [
                   CupertinoActivityIndicator(color: ColorsContent.whiteText),
                   const SizedBox(width: 16),
-                  const Text("Capturing video...",
-                    style:TextStyle(
+                  const Text(
+                    "Capturing video...",
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                       fontFamily: 'Open Sans',
                       color: Colors.white,
-                    ),),
+                    ),
+                  ),
                 ],
               ),
-            ),
-          );
-
-          // Extract the file extension
-          String fileExtension = pickeVideo.path.split('.').last;
-          String lastThreeChars = fileExtension.substring(fileExtension.length - 3);
-
-          List<String> imagePaths = [pickeVideo.path];
-          takedImagesAddFunction(imagePaths);
-
-          // Generate thumbnail from the original video
-          File thumbNailFile = await generateThumbnail(File(pickeVideo.path));
-
-          await saveMediaUploadAction(
-            file: pickeVideo.path,
-            type: "action",
-            fileType: "mp4",
-            thumbNail: thumbNailFile.path,
-          );
-        } catch (e) {
-          showCustomSnackBar(
-            context: context,
-            message: "An error occurred: $e",
-          );
-        } finally {
-          isVideoUploading = false;
-          Navigator.of(context, rootNavigator: true).pop(); // Dismiss loading dialog
-          notifyListeners();
-        }
+            );
+          },
+        );
       }
-    } else {
-      showCustomSnackBar(
-        context: context,
-        message: "Please wait, video is uploading.",
+
+      // Extract the file extension (last 3 chars, lowercase)
+      String fileExtension = pickeVideo.path.split('.').last;
+      String lastThreeChars = fileExtension.substring(fileExtension.length - 3).toLowerCase();
+
+      List<String> imagePaths = [pickeVideo.path];
+      takedImagesAddFunction(imagePaths);
+
+      // Generate thumbnail from video
+      File thumbNailFile = await generateThumbnail(File(pickeVideo.path));
+
+      await saveMediaUploadAction(
+        file: pickeVideo.path,
+        type: "action",
+        fileType: "mp4",
+        thumbNail: thumbNailFile.path,
       );
+    } catch (e, stackTrace) {
+      logger.e("Error in takeVideoFunctionAction: $e\n$stackTrace");
+      if (context.mounted) {
+        showCustomSnackBar(
+          context: context,
+          message: "An error occurred: $e",
+        );
+      }
+    } finally {
+      isVideoUploading = false;
+
+      if (dialogContext != null &&
+          Navigator.of(dialogContext!, rootNavigator: true).canPop()) {
+        Navigator.of(dialogContext!, rootNavigator: true).pop();
+      }
+
+      notifyListeners();
     }
   }
+
 
 
 

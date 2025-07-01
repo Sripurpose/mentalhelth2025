@@ -12,6 +12,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:logger/logger.dart';
 import 'package:mentalhelth/utils/core/url_constant.dart';
 import 'package:mentalhelth/utils/logic/date_format.dart';
 import 'package:mentalhelth/utils/logic/shared_prefrence.dart';
@@ -66,6 +67,7 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
   String selectedLongitude = '';
   bool isVideoUploading = false;
   List<String> addMediaUploadResponseList = [];
+  var logger = Logger();
 
   LatLng? _selectedLocation;
   String _selectedAddress = '';
@@ -903,50 +905,73 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
     final ImagePicker picker = ImagePicker();
     final XFile? pickedFile = await picker.pickImage(source: ImageSource.camera);
 
-    if (pickedFile != null) {
-      try {
-        // Show loading dialog
+    if (pickedFile == null) return;
+
+    isVideoUploading = true;
+    notifyListeners();
+
+    BuildContext? dialogContext;
+
+    try {
+      // Show loading dialog and capture its context
+      if (context.mounted) {
         showDialog(
           context: context,
           barrierDismissible: false,
-          builder: (_) => AlertDialog(
-            content: Row(
-              children: [
-                CupertinoActivityIndicator(
-                  color: ColorsContent.newThemeColor,
-                ),
-                const SizedBox(width: 16),
-                const Text("Capturing images..."),
-              ],
-            ),
-          ),
+          builder: (BuildContext dContext) {
+            dialogContext = dContext;
+            return AlertDialog(
+              content: Row(
+                children: [
+                  CupertinoActivityIndicator(
+                    color: ColorsContent.newThemeColor,
+                  ),
+                  const SizedBox(width: 16),
+                  const Text("Capturing image..."),
+                ],
+              ),
+            );
+          },
         );
+      }
 
-        String fileExtension = pickedFile.path.split('.').last;
-        String lastThreeChars = fileExtension.substring(fileExtension.length - 3);
+      // Extract file extension safely
+      String fileExtension = pickedFile.path.split('.').last.toLowerCase();
+      String lastThreeChars = fileExtension.length >= 3
+          ? fileExtension.substring(fileExtension.length - 3)
+          : fileExtension;
 
-        List<String> imagePaths = [];
-        imagePaths.add(pickedFile.path);
-        takedImagesAddFunction(imagePaths);
+      List<String> imagePaths = [pickedFile.path];
+      takedImagesAddFunction(imagePaths);
 
-        // Directly save image or video without compression
-        await saveMediaUploadMental(
-          file: pickedFile.path,
-          type: "goal",
-          fileType: lastThreeChars,
-          context: context,
-        );
-      } catch (e) {
+      // Save picked image (no compression)
+      await saveMediaUploadMental(
+        file: pickedFile.path,
+        type: "goal",
+        fileType: lastThreeChars,
+        context: context,
+      );
+    } catch (e, stackTrace) {
+      logger.e("Error in takeFileFunctionGoal: $e\n$stackTrace");
+
+      if (context.mounted) {
         showCustomSnackBar(
           context: context,
           message: "An error occurred: $e",
         );
-      } finally {
-        Navigator.of(context, rootNavigator: true).pop(); // Dismiss loading dialog
-        notifyListeners();
       }
+    } finally {
+      isVideoUploading = false;
+
+      if (dialogContext != null &&
+          Navigator.of(dialogContext!, rootNavigator: true).canPop()) {
+        Navigator.of(dialogContext!, rootNavigator: true).pop();
+      }
+
+      notifyListeners();
     }
   }
+
 
 
 
@@ -1020,17 +1045,32 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
       source: ImageSource.camera,
     );
 
-    if (!isVideoUploading) {
-      if (pickeVideo != null) {
-        try {
-          isVideoUploading = true;
-          notifyListeners();
+    if (pickeVideo == null) return;
 
-          // Show loading dialog
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (_) => AlertDialog(
+    if (isVideoUploading) {
+      if (context.mounted) {
+        showCustomSnackBar(
+          context: context,
+          message: "Please wait, video is uploading.",
+        );
+      }
+      return;
+    }
+
+    isVideoUploading = true;
+    notifyListeners();
+
+    BuildContext? dialogContext;
+
+    try {
+      // Show loading dialog and capture its context
+      if (context.mounted) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext dContext) {
+            dialogContext = dContext;
+            return AlertDialog(
               content: Row(
                 children: [
                   CupertinoActivityIndicator(
@@ -1040,44 +1080,52 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
                   const Text("Uploading video..."),
                 ],
               ),
-            ),
-          );
-
-          String fileExtension = pickeVideo.path.split('.').last;
-          String lastThreeChars = fileExtension.substring(fileExtension.length - 3);
-
-          List<String> imagePaths = [pickeVideo.path];
-          takedImagesAddFunction(imagePaths);
-
-          // Generate thumbnail
-          File thumbNailFile = await generateThumbnail(File(pickeVideo.path));
-
-          // Save original video without compression
-          await saveMediaUploadMental(
-            file: pickeVideo.path,
-            type: "goal",
-            fileType: "mp4", // or use lastThreeChars if needed
-            thumbNail: thumbNailFile.path,
-            context: context,
-          );
-        } catch (e) {
-          showCustomSnackBar(
-            context: context,
-            message: "An error occurred: $e",
-          );
-        } finally {
-          isVideoUploading = false;
-          Navigator.of(context, rootNavigator: true).pop(); // Dismiss loading dialog
-          notifyListeners();
-        }
+            );
+          },
+        );
       }
-    } else {
-      showCustomSnackBar(
+
+      // Extract file extension
+      String fileExtension = pickeVideo.path.split('.').last;
+      String lastThreeChars = fileExtension.length >= 3
+          ? fileExtension.substring(fileExtension.length - 3).toLowerCase()
+          : fileExtension.toLowerCase();
+
+      List<String> imagePaths = [pickeVideo.path];
+      takedImagesAddFunction(imagePaths);
+
+      // Generate video thumbnail
+      File thumbNailFile = await generateThumbnail(File(pickeVideo.path));
+
+      // Save the video
+      await saveMediaUploadMental(
+        file: pickeVideo.path,
+        type: "goal",
+        fileType: "mp4", // or use lastThreeChars
+        thumbNail: thumbNailFile.path,
         context: context,
-        message: "Please wait, video is uploading.",
       );
+    } catch (e, stackTrace) {
+      logger.e("Error in takeVideoFunctionGoal: $e\n$stackTrace");
+
+      if (context.mounted) {
+        showCustomSnackBar(
+          context: context,
+          message: "An error occurred: $e",
+        );
+      }
+    } finally {
+      isVideoUploading = false;
+
+      if (dialogContext != null &&
+          Navigator.of(dialogContext!, rootNavigator: true).canPop()) {
+        Navigator.of(dialogContext!, rootNavigator: true).pop();
+      }
+
+      notifyListeners();
     }
   }
+
 
 
 
