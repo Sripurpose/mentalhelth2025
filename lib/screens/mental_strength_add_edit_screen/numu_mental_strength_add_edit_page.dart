@@ -968,12 +968,12 @@ class _NumuMentalStrengthAddEditPageState
                             );
                           },
                           child: CircleAvatar(
-                            radius: size.width * 0.04,
+                            radius: size.width * 0.035,
                             backgroundColor: Colors.deepPurple,
                             child: Icon(
                               Icons.close,
                               color: Colors.white,
-                              size: size.width * 0.05,
+                              size: size.width * 0.04,
                             ),
                           ),
                         ),
@@ -1010,12 +1010,12 @@ class _NumuMentalStrengthAddEditPageState
                             );
                           },
                           child: CircleAvatar(
-                            radius: size.width * 0.04,
+                            radius: size.width * 0.035,
                             backgroundColor: Colors.deepPurple,
                             child: Icon(
                               Icons.arrow_forward_ios,
                               color: Colors.white,
-                              size: size.width * 0.05,
+                              size: size.width * 0.04,
                             ),
                           ),
                         ),
@@ -1134,7 +1134,7 @@ class _NumuMentalStrengthAddEditPageState
                             );
                           },
                           child: CircleAvatar(
-                            radius: size.width * 0.04,
+                            radius: size.width * 0.035,
                             backgroundColor: Colors.deepPurple,
                             child: Icon(
                               Icons.close,
@@ -1172,12 +1172,12 @@ class _NumuMentalStrengthAddEditPageState
                             mentalStrengthEditProvider.openActionFullViewFunction();
                           },
                           child: CircleAvatar(
-                            radius: size.width * 0.04,
+                            radius: size.width * 0.035,
                             backgroundColor: Colors.deepPurple,
                             child: Icon(
                               Icons.arrow_forward_ios,
                               color: Colors.white,
-                              size: size.width * 0.05,
+                              size: size.width * 0.04,
                             ),
                           ),
                         ),
