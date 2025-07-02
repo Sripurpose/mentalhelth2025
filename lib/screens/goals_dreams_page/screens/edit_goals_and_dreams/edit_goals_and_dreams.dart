@@ -781,7 +781,8 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
           hintText: _descriptionFocusNode.hasFocus ? '' : "Goal Description",
           hintStyle: CustomTextStyles.bodySmallGray700,
           maxLines: 4,
-          textInputAction: TextInputAction.done,
+          textInputAction: TextInputAction.newline, // ✅ allow newline
+          textInputType: TextInputType.multiline, // ✅ multiline keyboard
           focusNode: _descriptionFocusNode,
           onTap: () => setState(() {}),
           // Rebuild when tapped

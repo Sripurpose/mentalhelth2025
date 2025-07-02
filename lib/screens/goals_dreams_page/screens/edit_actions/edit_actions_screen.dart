@@ -1713,7 +1713,8 @@ class _EditActionScreenState extends State<EditActionScreen> {
         controller: addActionsProvider.descriptionEditTextController,
         hintText: _descriptionFocusNode.hasFocus ? '' : "Description",
         hintStyle: CustomTextStyles.bodySmallGray700,
-        textInputAction: TextInputAction.done,
+        textInputAction: TextInputAction.newline, // ✅ allow newline
+        textInputType: TextInputType.multiline, // ✅ multiline keyboard
         maxLines: 4,
         focusNode: _descriptionFocusNode,
         onTap: () => setState(() {}),

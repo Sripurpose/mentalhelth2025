@@ -526,6 +526,8 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
           hintStyle: CustomTextStyles.bodySmallGray700,
           maxLines: 4,
           focusNode: _goalDescFocusNode,
+          textInputAction: TextInputAction.newline, // ✅ allow newline
+          textInputType: TextInputType.multiline, // ✅ multiline keyboard
           onTap: () => setState(() {}),
           // Rebuild when tapped
           onEditingComplete: () {

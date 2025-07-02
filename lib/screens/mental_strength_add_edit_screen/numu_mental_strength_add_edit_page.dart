@@ -1324,7 +1324,8 @@ class _NumuMentalStrengthAddEditPageState
             fontWeight: FontWeight.w400, // Font weight 600
             fontFamily: 'OpenSans', // Font family Open Sans
           ),
-          textInputAction: TextInputAction.done,
+          textInputAction: TextInputAction.newline, // ✅ allow newline
+          textInputType: TextInputType.multiline, // ✅ multiline keyboard
           maxLines: 4,
           focusNode: _descriptionFocusNode,
           onTap: () => setState(() {}),

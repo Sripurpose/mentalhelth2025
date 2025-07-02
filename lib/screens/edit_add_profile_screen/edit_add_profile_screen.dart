@@ -767,7 +767,8 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
               hintText:
                   "",
               hintStyle: CustomTextStyles.bodyMediumGray70013,
-              textInputAction: TextInputAction.done,
+            textInputAction: TextInputAction.newline, // ✅ allow newline
+            textInputType: TextInputType.multiline, // ✅ multiline keyboard
               maxLines: 4,
               inputFormatters: [
                 FilteringTextInputFormatter.allow(
