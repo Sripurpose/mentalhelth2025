@@ -536,6 +536,7 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
                 locationAddress: adDreamsGoalsProvider.selectedLocationAddress,
                 categoryId: editProfileProvider.categorys!.id.toString(),
                 gemEndDate: adDreamsGoalsProvider.formattedDate,
+                mediaThumbs: adDreamsGoalsProvider.mediaThumbList, // ✅ pass here
                 actionId: adDreamsGoalsProvider.goalModelIdName,
               );
 

@@ -798,6 +798,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
     }
   }
   /// ///
+  List<String> uploadedThumbPaths = [];
 
   ///used function for video pick and compression///
   Future<void> pickVideoFunction(BuildContext context) async {
@@ -881,9 +882,12 @@ class MentalStrengthEditProvider extends ChangeNotifier {
         pickedImagesAddFunction([safePath]);
 
         File thumbNailFile = await generateThumbnail(File(safePath));
+        uploadedThumbPaths.add(thumbNailFile.path);
+
 
         // ✅ Show uploading dialog
         final uploadContext = await showProgressDialog(context, "Uploading video...");
+        logger.i("thumbNailFile.path${thumbNailFile.path}");
 
         await saveMediaUploadMental(
           file: safePath,
@@ -1165,10 +1169,15 @@ class MentalStrengthEditProvider extends ChangeNotifier {
       List<String> imagePaths = [pickedFile.path];
       takedImagesAddFunction(imagePaths);
 
+      // ✅ Generate thumbnail for image (optional but added for consistency)
+      File thumbNailFile = File(pickedFile.path); // Can skip actual thumbnail creation for images
+      uploadedThumbPaths.add(thumbNailFile.path);
+
       await saveMediaUploadMental(
         file: pickedFile.path,
         type: "journal",
         fileType: fileExtension,
+        thumbNail: thumbNailFile.path,
       );
     } catch (e, stackTrace) {
       logger.e("Error in takeFileFunction: $e\n$stackTrace");
@@ -1306,14 +1315,22 @@ class MentalStrengthEditProvider extends ChangeNotifier {
       }
 
       // Add video path to UI preview list
+      // ✅ Add video to preview list
       List<String> videoPaths = [pickedVideo.path];
       takedImagesAddFunction(videoPaths);
+      logger.i("videoPaths: $videoPaths");
+
+      // ✅ Generate thumbnail
+      File thumbNailFile = await generateThumbnail(File(pickedVideo.path));
+      uploadedThumbPaths.add(thumbNailFile.path);
+      logger.i("thumbNailFile.path: ${thumbNailFile.path}");
 
       // Save the picked video (upload or save locally)
       await saveMediaUploadMental(
         file: pickedVideo.path,
         type: "journal",
         fileType: "mp4",
+        thumbNail: thumbNailFile.path,
       );
 
       logger.i("pickedVideo.path extension: ${pickedVideo.path.split('.').last.toLowerCase()}");
@@ -2043,6 +2060,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
         required locationLatitude,
         required locationLongitude,
         required List<String> mediaName,
+        List<String>? mediaThumbs, // ✅ optional param
         required locationAddress,
         required List<String> actionIdList,
       })
@@ -2088,6 +2106,13 @@ class MentalStrengthEditProvider extends ChangeNotifier {
       for (int i = 0; i < mediaName.length; i++) {
         body['media_name[$i]'] = mediaName[i];
       }
+
+      if (mediaThumbs != null && mediaThumbs.isNotEmpty) {
+        for (int i = 0; i < mediaThumbs.length; i++) {
+          body['media_thumb[$i]'] = mediaThumbs[i];
+        }
+      }
+logger.i("body$body");
 
       // ✅ Add action ID list
       for (int i = 0; i < actionIdList.length; i++) {
@@ -2162,6 +2187,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
     required locationLatitude,
     required locationLongitude,
     required List<String> mediaName,
+        List<String>? mediaThumbs, // ✅ optional param
     required locationAddress,
     required List<String> actionIdList,
   }) async {
@@ -2199,6 +2225,14 @@ class MentalStrengthEditProvider extends ChangeNotifier {
       for (int i = 0; i < mediaName.length; i++) {
         body['media_name[$i]'] = mediaName[i];
       }
+
+      if (mediaThumbs != null && mediaThumbs.isNotEmpty) {
+        for (int i = 0; i < mediaThumbs.length; i++) {
+          body['media_thumb[$i]'] = mediaThumbs[i];
+        }
+      }
+      logger.i("body$body");
+
       for (int i = 0; i < actionIdList.length; i++) {
         body['action_id[$i]'] = actionIdList[i];
       }
@@ -2275,85 +2309,57 @@ class MentalStrengthEditProvider extends ChangeNotifier {
       String? token = await getUserTokenSharePref();
       saveMediaUploadLoading = true;
       String deviceType = Platform.isAndroid ? 'android' : 'ios';
-      String? versionCode = '';
-      if (Platform.isAndroid) {
-        versionCode = Constent.versionCodeAndroid.isNotEmpty
-            ? Constent.versionCodeAndroid
-            : await getVersionSharePref(); // Fetch user ID if version code is empty
-      } else if (Platform.isIOS) {
-        versionCode = Constent.versionCodeIOS.isNotEmpty
-            ? Constent.versionCodeIOS
-            : await getVersionSharePref(); // Fetch user ID if version code is empty
-      }
+      String? versionCode = Platform.isAndroid
+          ? (Constent.versionCodeAndroid.isNotEmpty
+          ? Constent.versionCodeAndroid
+          : await getVersionSharePref())
+          : (Constent.versionCodeIOS.isNotEmpty
+          ? Constent.versionCodeIOS
+          : await getVersionSharePref());
+
       notifyListeners();
+
       var headers = {
         'device-type': deviceType,
         'version': versionCode.toString(),
         "authorization": "$token",
       };
-      var request = http.MultipartRequest(
-        'POST',
-        Uri.parse(
-          UrlConstant.mediauploadUrl,
-        ),
-      );
 
-      request.fields.addAll(
-        {
-          'type': type,
-          'file_type': fileType,
-        },
-      );
+      var request = http.MultipartRequest('POST', Uri.parse(UrlConstant.mediauploadUrl));
+      request.fields.addAll({
+        'type': type,
+        'file_type': fileType,
+      });
 
-      logger.w("fileType${fileType}");
+      logger.w("fileType: $fileType");
 
-      // request.fields.addAll(
-      //   {
-      //     'file_type': fileType,
-      //   },
-      // );
-      request.files.add(
-        await http.MultipartFile.fromPath(
-          'media_name',
-          file,
-        ),
-      );
+      request.files.add(await http.MultipartFile.fromPath('media_name', file));
       if (thumbNail != null) {
-        request.files.add(
-          await http.MultipartFile.fromPath(
-            'media_thumb',
-            thumbNail,
-          ),
-        );
+        request.files.add(await http.MultipartFile.fromPath('media_thumb', thumbNail));
       }
 
       request.headers.addAll(headers);
 
       http.StreamedResponse response = await request.send();
-      // print(await response.stream.bytesToString());
       String responseBody = await response.stream.bytesToString();
+      logger.i("responseBody: $responseBody");
 
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonResponse = jsonDecode(responseBody);
         String? mediaName = jsonResponse['media_name'];
-        List<String> mediaNameList = [];
-        mediaNameList.add(mediaName!);
-        addMediaUploadResponseListFunction(
-          mediaNameList,
-        );
-        notifyListeners();
-        // if (mediaName != null) {
-        // } else {
-        // }
-      } else {}
-      if(response.statusCode == 401){
-        TokenManager.setTokenStatus(true);
-        //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
+        String? mediaThumb = jsonResponse['media_thumb']; // ✅ extract thumb
+
+        if (mediaName != null) {
+          addMediaUploadResponseListFunction([mediaName]); // Keep if needed
+          addMediaThumbResponseListFunction([mediaThumb ?? ""]); // ✅ Store thumb
+          notifyListeners();
+        }
       }
-      if(response.statusCode == 403){
+
+      if (response.statusCode == 401 || response.statusCode == 403) {
         TokenManager.setTokenStatus(true);
-        //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
+
       saveMediaUploadLoading = false;
       notifyListeners();
     } catch (error) {
@@ -2361,6 +2367,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
 
   void clearAllValuesInSaveTime() {
     descriptionEditTextController.clear();
@@ -2513,6 +2520,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
           locationLatitude: selectedLatitude,
           locationLongitude: selectedLongitude,
           mediaName: addMediaUploadResponseList,
+          mediaThumbs: mediaThumbList, // ✅ pass here
           locationAddress: selectedLocationAddress,
           actionIdList: actionList.map((e) => e.id ?? "").toList(),
         );
@@ -2539,4 +2547,12 @@ class MentalStrengthEditProvider extends ChangeNotifier {
       );
     }
   }
+
+  List<String> mediaThumbList = [];
+
+  void addMediaThumbResponseListFunction(List<String> list) {
+    mediaThumbList.addAll(list);
+    notifyListeners();
+  }
+
 }

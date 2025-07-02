@@ -1149,6 +1149,7 @@ class _AddEditActionScreenState extends State<AddEditActionScreen> {
                     locationLongitude: addActionsProvider.selectedLongitude,
                     locationAddress: addActionsProvider.selectedLocationAddress,
                     goalId: widget.goalId,
+                    mediaThumbs: addActionsProvider.mediaThumbList, // ✅ pass here
                     isReminder: "1",
                   );
                   adDreamsGoalsProvider.getAddActionIdAndName(
@@ -1180,6 +1181,7 @@ class _AddEditActionScreenState extends State<AddEditActionScreen> {
                   locationLongitude: addActionsProvider.selectedLongitude,
                   locationAddress: addActionsProvider.selectedLocationAddress,
                   goalId: widget.goalId,
+                  mediaThumbs: addActionsProvider.mediaThumbList, // ✅ pass here
                   isReminder: "0",
                 );
                 adDreamsGoalsProvider.getAddActionIdAndName(

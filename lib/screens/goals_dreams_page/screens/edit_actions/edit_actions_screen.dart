@@ -1757,6 +1757,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
                     actionId: widget.actionsDetailsModel!.actions!.actionId
                         .toString(),
                     goalId: widget.actionsDetailsModel!.actions?.goalId ?? "",
+                    mediaThumbs: addActionsProvider.mediaThumbList, // ✅ pass here
                     isReminder: "1");
               } else {
                 await addActionsProvider.editActionFunction(context,
@@ -1771,6 +1772,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
                     actionId: widget.actionsDetailsModel!.actions!.actionId
                         .toString(),
                     goalId: widget.actionsDetailsModel!.actions?.goalId ?? "",
+                    mediaThumbs: addActionsProvider.mediaThumbList, // ✅ pass here
                     isReminder: "0");
               }
 

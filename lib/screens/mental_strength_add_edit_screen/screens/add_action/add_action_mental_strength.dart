@@ -774,6 +774,7 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                   locationLongitude: addActionsProvider.selectedLongitude,
                   locationAddress: addActionsProvider.selectedLocationAddress,
                   goalId: goalId,
+                  mediaThumbs: addActionsProvider.mediaThumbList, // ✅ pass here
                     isReminder: "1"
                 );
                 // if (getGemStatus) {
@@ -804,6 +805,7 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                 locationLongitude: addActionsProvider.selectedLongitude,
                 locationAddress: addActionsProvider.selectedLocationAddress,
                 goalId: goalId,
+                  mediaThumbs: addActionsProvider.mediaThumbList, // ✅ pass here
                   isReminder: "0"
               );
               adDreamsGoalsProvider.getAddActionIdAndName(

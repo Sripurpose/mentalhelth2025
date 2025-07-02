@@ -256,6 +256,7 @@ class _VideoPlayerWidgetViewAndAlreadyBuildMentalProgressBarState
       _controller.addListener(() {
         if (mounted) setState(() {});
       });
+      _controller.play(); // Auto play
       setState(() => _isLoading = false);
     } catch (e) {
       print('Error initializing video: $e');
@@ -277,10 +278,7 @@ class _VideoPlayerWidgetViewAndAlreadyBuildMentalProgressBarState
   Widget build(BuildContext context) {
     if (_isLoading) {
       return  Center(
-        child: CupertinoActivityIndicator(
-          radius: 15,
-          color: ColorsContent.newThemeColor,
-        ),
+        child: CupertinoActivityIndicator(radius: 15, color: ColorsContent.newThemeColor),
       );
     }
 
@@ -293,70 +291,77 @@ class _VideoPlayerWidgetViewAndAlreadyBuildMentalProgressBarState
       );
     }
 
-    return AspectRatio(
-      aspectRatio: _controller.value.aspectRatio,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          VideoPlayer(_controller),
-          Positioned.fill(
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  _controller.value.isPlaying
-                      ? _controller.pause()
-                      : _controller.play();
-                });
-              },
-              child: Center(
-                child: Icon(
-                  _controller.value.isPlaying
-                      ? Icons.pause
-                      : Icons.play_arrow,
-                  color: Colors.white,
-                  size: 40,
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              color: Colors.black.withOpacity(0.6),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 1),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  VideoProgressIndicator(
-                    _controller,
-                    allowScrubbing: true,
-                    colors: VideoProgressColors(
-                      playedColor: ColorsContent.newThemeColor,
-                      bufferedColor: Colors.grey.shade400,
-                      backgroundColor: Colors.grey.shade300,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return FittedBox(
+          fit: BoxFit.contain,
+          alignment: Alignment.center,
+          child: SizedBox(
+            width: _controller.value.size.width,
+            height: _controller.value.size.height,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                VideoPlayer(_controller),
+                Positioned.fill(
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _controller.value.isPlaying
+                            ? _controller.pause()
+                            : _controller.play();
+                      });
+                    },
+                    child: Center(
+                      child: Icon(
+                        _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                        color: Colors.white,
+                        size: 40,
+                      ),
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        _formatDuration(_controller.value.position),
-                        style: const TextStyle(color: Colors.white, fontSize: 12),
-                      ),
-                      Text(
-                        _formatDuration(_controller.value.duration),
-                        style: const TextStyle(color: Colors.white, fontSize: 12),
-                      ),
-                    ],
+                ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    color: Colors.black.withOpacity(0.6),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        VideoProgressIndicator(
+                          _controller,
+                          allowScrubbing: true,
+                          colors: VideoProgressColors(
+                            playedColor: ColorsContent.newThemeColor,
+                            bufferedColor: Colors.grey.shade400,
+                            backgroundColor: Colors.grey.shade300,
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              _formatDuration(_controller.value.position),
+                              style: const TextStyle(color: Colors.white, fontSize: 12),
+                            ),
+                            Text(
+                              _formatDuration(_controller.value.duration),
+                              style: const TextStyle(color: Colors.white, fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -368,6 +373,8 @@ class _VideoPlayerWidgetViewAndAlreadyBuildMentalProgressBarState
 }
 
 ///-///
+
+
 
 
 ///Goals///
@@ -575,8 +582,6 @@ class _VideoPlayerWidgetViewAndAlreadyGoalState extends State<VideoPlayerWidgetV
 
 
 
-
-
 class VideoPlayerWidgetViewAndAlreadyGoalProgressBar extends StatefulWidget {
   const VideoPlayerWidgetViewAndAlreadyGoalProgressBar({super.key, required this.videoUrl});
 
@@ -607,8 +612,7 @@ class _VideoPlayerWidgetViewAndAlreadyGoalProgressBarState
         final response = await http.get(Uri.parse(widget.videoUrl));
         if (response.statusCode == 200) {
           final tempDir = await getTemporaryDirectory();
-          final filePath =
-              '${tempDir.path}/${DateTime.now().millisecondsSinceEpoch}.mp4';
+          final filePath = '${tempDir.path}/${DateTime.now().millisecondsSinceEpoch}.mp4';
           videoFile = File(filePath);
           await videoFile.writeAsBytes(response.bodyBytes);
         } else {
@@ -620,9 +624,11 @@ class _VideoPlayerWidgetViewAndAlreadyGoalProgressBarState
 
       _controller = VideoPlayerController.file(videoFile);
       await _controller.initialize();
+      _controller.play(); // Auto-play video
       _controller.addListener(() {
         if (mounted) setState(() {});
       });
+
       setState(() => _isLoading = false);
     } catch (e) {
       print('Error initializing video: $e');
@@ -660,71 +666,75 @@ class _VideoPlayerWidgetViewAndAlreadyGoalProgressBarState
       );
     }
 
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        FittedBox(
-          fit: BoxFit.cover,
-          child: SizedBox(
-            width: _controller.value.size.width,
-            height: _controller.value.size.height,
-            child: VideoPlayer(_controller),
-          ),
-        ),
-        Center(
-          child: GestureDetector(
-            onTap: () {
-              setState(() {
-                _controller.value.isPlaying
-                    ? _controller.pause()
-                    : _controller.play();
-              });
-            },
-            child: Icon(
-              _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-              color: Colors.white,
-              size: 40,
-            ),
-          ),
-        ),
-        // 🎯 Progress bar OVERLAY
-        Positioned(
-          bottom: 0,
-          left: 0,
-          right: 0,
-          child: Container(
-            color: Colors.black.withOpacity(0.6),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                VideoProgressIndicator(
-                  _controller,
-                  allowScrubbing: true,
-                  colors: VideoProgressColors(
-                    playedColor: ColorsContent.newThemeColor,
-                    bufferedColor: Colors.grey.shade400,
-                    backgroundColor: Colors.grey.shade300,
+    return FittedBox(
+      fit: BoxFit.contain,
+      alignment: Alignment.center,
+      child: SizedBox(
+        width: _controller.value.size.width,
+        height: _controller.value.size.height,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            VideoPlayer(_controller),
+
+            // Tap-to-play/pause
+            Positioned.fill(
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _controller.value.isPlaying ? _controller.pause() : _controller.play();
+                  });
+                },
+                child: Center(
+                  child: Icon(
+                    _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                    color: Colors.white,
+                    size: 40,
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              ),
+            ),
+
+            // Progress bar
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                color: Colors.black.withOpacity(0.6),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      _formatDuration(_controller.value.position),
-                      style: const TextStyle(color: Colors.white, fontSize: 12),
+                    VideoProgressIndicator(
+                      _controller,
+                      allowScrubbing: true,
+                      colors: VideoProgressColors(
+                        playedColor: ColorsContent.newThemeColor,
+                        bufferedColor: Colors.grey.shade400,
+                        backgroundColor: Colors.grey.shade300,
+                      ),
                     ),
-                    Text(
-                      _formatDuration(_controller.value.duration),
-                      style: const TextStyle(color: Colors.white, fontSize: 12),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          _formatDuration(_controller.value.position),
+                          style: const TextStyle(color: Colors.white, fontSize: 12),
+                        ),
+                        Text(
+                          _formatDuration(_controller.value.duration),
+                          style: const TextStyle(color: Colors.white, fontSize: 12),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
@@ -734,9 +744,6 @@ class _VideoPlayerWidgetViewAndAlreadyGoalProgressBarState
     super.dispose();
   }
 }
-
-
-
 
 ///-///
 
@@ -947,7 +954,10 @@ class _VideoPlayerWidgetViewAndAlreadyActionState extends State<VideoPlayerWidge
 
 
 class VideoPlayerWidgetViewAndAlreadyActionProgressBar extends StatefulWidget {
-  const VideoPlayerWidgetViewAndAlreadyActionProgressBar({super.key, required this.videoUrl});
+  const VideoPlayerWidgetViewAndAlreadyActionProgressBar({
+    super.key,
+    required this.videoUrl,
+  });
 
   final String videoUrl;
 
@@ -976,8 +986,7 @@ class _VideoPlayerWidgetViewAndAlreadyActionProgressBarState
         final response = await http.get(Uri.parse(widget.videoUrl));
         if (response.statusCode == 200) {
           final tempDir = await getTemporaryDirectory();
-          final filePath =
-              '${tempDir.path}/${DateTime.now().millisecondsSinceEpoch}.mp4';
+          final filePath = '${tempDir.path}/${DateTime.now().millisecondsSinceEpoch}.mp4';
           videoFile = File(filePath);
           await videoFile.writeAsBytes(response.bodyBytes);
         } else {
@@ -989,9 +998,11 @@ class _VideoPlayerWidgetViewAndAlreadyActionProgressBarState
 
       _controller = VideoPlayerController.file(videoFile);
       await _controller.initialize();
+      _controller.play(); // Auto play
       _controller.addListener(() {
         if (mounted) setState(() {});
       });
+
       setState(() => _isLoading = false);
     } catch (e) {
       print('Error initializing video: $e');
@@ -1029,70 +1040,77 @@ class _VideoPlayerWidgetViewAndAlreadyActionProgressBarState
       );
     }
 
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        FittedBox(
-          fit: BoxFit.cover,
-          child: SizedBox(
-            width: _controller.value.size.width,
-            height: _controller.value.size.height,
-            child: VideoPlayer(_controller),
-          ),
-        ),
-        Center(
-          child: GestureDetector(
-            onTap: () {
-              setState(() {
-                _controller.value.isPlaying
-                    ? _controller.pause()
-                    : _controller.play();
-              });
-            },
-            child: Icon(
-              _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-              color: Colors.white,
-              size: 40,
-            ),
-          ),
-        ),
-        Positioned(
-          bottom: 0,
-          left: 0,
-          right: 0,
-          child: Container(
-            color: Colors.black.withOpacity(0.6),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                VideoProgressIndicator(
-                  _controller,
-                  allowScrubbing: true,
-                  colors: VideoProgressColors(
-                    playedColor: ColorsContent.newThemeColor,
-                    bufferedColor: Colors.grey.shade400,
-                    backgroundColor: Colors.grey.shade300,
+    return FittedBox(
+      fit: BoxFit.contain,
+      alignment: Alignment.center,
+      child: SizedBox(
+        width: _controller.value.size.width,
+        height: _controller.value.size.height,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            VideoPlayer(_controller),
+
+            // Tap to Play/Pause
+            Positioned.fill(
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _controller.value.isPlaying
+                        ? _controller.pause()
+                        : _controller.play();
+                  });
+                },
+                child: Center(
+                  child: Icon(
+                    _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                    color: Colors.white,
+                    size: 40,
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              ),
+            ),
+
+            // Progress Bar
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                color: Colors.black.withOpacity(0.6),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      _formatDuration(_controller.value.position),
-                      style: const TextStyle(color: Colors.white, fontSize: 12),
+                    VideoProgressIndicator(
+                      _controller,
+                      allowScrubbing: true,
+                      colors: VideoProgressColors(
+                        playedColor: ColorsContent.newThemeColor,
+                        bufferedColor: Colors.grey.shade400,
+                        backgroundColor: Colors.grey.shade300,
+                      ),
                     ),
-                    Text(
-                      _formatDuration(_controller.value.duration),
-                      style: const TextStyle(color: Colors.white, fontSize: 12),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          _formatDuration(_controller.value.position),
+                          style: const TextStyle(color: Colors.white, fontSize: 12),
+                        ),
+                        Text(
+                          _formatDuration(_controller.value.duration),
+                          style: const TextStyle(color: Colors.white, fontSize: 12),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
-      ],
+      ),
     );
   }
 

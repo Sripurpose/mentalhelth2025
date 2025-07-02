@@ -429,14 +429,14 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                                             ),
                                                             child: Stack(
                                                               children: [
+                                                                // ✅ Removed fixed AspectRatio — let the widget calculate and adjust
                                                                 Center(
-                                                                  child: AspectRatio(
-                                                                    aspectRatio: 16 / 9,
-                                                                    child: VideoPlayerWidgetViewAndAlreadyActionProgressBar(
-                                                                      videoUrl: videoList[index],
-                                                                    ),
+                                                                  child: VideoPlayerWidgetViewAndAlreadyActionProgressBar(
+                                                                    videoUrl: videoList[index],
                                                                   ),
                                                                 ),
+
+                                                                // ❌ Close button remains fixed at the top-right
                                                                 Positioned(
                                                                   top: 40,
                                                                   right: 20,
@@ -449,6 +449,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                                             ),
                                                           ),
                                                         );
+
                                                       },
                                                       child: ClipRRect(
                                                         borderRadius: BorderRadius.circular(5),

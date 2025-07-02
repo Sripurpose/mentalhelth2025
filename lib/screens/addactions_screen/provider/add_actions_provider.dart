@@ -1304,6 +1304,7 @@ var logger = Logger();
   }
   ///   ///
 
+  List<String> uploadedThumbPaths = [];
   ///used function for video pick and compression///
   Future<void> pickVideoFunction(BuildContext context) async {
     BuildContext? pleaseWaitContext;
@@ -1409,6 +1410,7 @@ var logger = Logger();
         pickedImagesAddFunction([safePath]);
 
         final thumbNailFile = await generateThumbnail(File(safePath));
+        uploadedThumbPaths.add(thumbNailFile.path);
 
         await saveMediaUploadAction(
           file: safePath,
@@ -1653,11 +1655,16 @@ var logger = Logger();
       List<String> imagePaths = [pickedFile.path];
       takedImagesAddFunction(imagePaths);
 
+      // ✅ Generate thumbnail for image (optional but added for consistency)
+      File thumbNailFile = File(pickedFile.path); // Can skip actual thumbnail creation for images
+      uploadedThumbPaths.add(thumbNailFile.path);
+
       // Save the picked file (no compression)
       await saveMediaUploadAction(
         file: pickedFile.path,
         type: "action",
         fileType: lastThreeChars,
+        thumbNail: thumbNailFile.path,
       );
     } catch (e, stackTrace) {
       logger.e("Error in takeFileFunctionAction: $e\n$stackTrace");
@@ -1808,8 +1815,12 @@ var logger = Logger();
       List<String> imagePaths = [pickeVideo.path];
       takedImagesAddFunction(imagePaths);
 
+
+
       // Generate thumbnail from video
       File thumbNailFile = await generateThumbnail(File(pickeVideo.path));
+      uploadedThumbPaths.add(thumbNailFile.path);
+      logger.i("thumbNailFile.path: ${thumbNailFile.path}");
 
       await saveMediaUploadAction(
         file: pickeVideo.path,
@@ -2144,6 +2155,7 @@ var logger = Logger();
         required String locationLongitude,
         required String locationAddress,
         required String goalId,
+        List<String>? mediaThumbs, // ✅ optional param
         String? isReminder,
       }) async {
     try {
@@ -2210,6 +2222,12 @@ var logger = Logger();
       for (int i = 0; i < mediaName.length; i++) {
         body['media_name[$i]'] = mediaName[i];
       }
+      if (mediaThumbs != null && mediaThumbs.isNotEmpty) {
+        for (int i = 0; i < mediaThumbs.length; i++) {
+          body['media_thumb[$i]'] = mediaThumbs[i];
+        }
+      }
+      logger.i("body$body");
 
       logger.w("body $body");
       print(UrlConstant.savegemUrl + " saveGemFunction");
@@ -2466,6 +2484,7 @@ var logger = Logger();
         required String locationAddress,
         required String actionId,
         required String goalId,
+        List<String>? mediaThumbs, // ✅ optional param
         String? isReminder,
       }) async {
     try {
@@ -2535,6 +2554,13 @@ var logger = Logger();
       for (int i = 0; i < mediaName.length; i++) {
         body['media_name[$i]'] = mediaName[i];
       }
+
+      if (mediaThumbs != null && mediaThumbs.isNotEmpty) {
+        for (int i = 0; i < mediaThumbs.length; i++) {
+          body['media_thumb[$i]'] = mediaThumbs[i];
+        }
+      }
+      logger.i("body$body");
 
       final response = await http.post(
         Uri.parse(UrlConstant.savegemUrl),
@@ -2627,79 +2653,66 @@ var logger = Logger();
       String? token = await getUserTokenSharePref();
       saveMediaUploadLoading = true;
       String deviceType = Platform.isAndroid ? 'android' : 'ios';
-      String? versionCode = '';
-      if (Platform.isAndroid) {
-        versionCode = Constent.versionCodeAndroid.isNotEmpty
-            ? Constent.versionCodeAndroid
-            : await getVersionSharePref(); // Fetch user ID if version code is empty
-      } else if (Platform.isIOS) {
-        versionCode = Constent.versionCodeIOS.isNotEmpty
-            ? Constent.versionCodeIOS
-            : await getVersionSharePref(); // Fetch user ID if version code is empty
-      }
+
+      String? versionCode = Platform.isAndroid
+          ? (Constent.versionCodeAndroid.isNotEmpty
+          ? Constent.versionCodeAndroid
+          : await getVersionSharePref())
+          : (Constent.versionCodeIOS.isNotEmpty
+          ? Constent.versionCodeIOS
+          : await getVersionSharePref());
+
       notifyListeners();
+
       var headers = {
         'device-type': deviceType,
         'version': versionCode.toString(),
         "authorization": "$token",
       };
+
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse(
-          UrlConstant.mediauploadUrl,
-        ),
+        Uri.parse(UrlConstant.mediauploadUrl),
       );
 
-      request.fields.addAll(
-        {
-          'type': type,
-          'file_type': fileType,
-        },
-      );
+      request.fields.addAll({
+        'type': type,
+        'file_type': fileType,
+      });
 
-      // request.fields.addAll(
-      //   {
-      //     'file_type': fileType,
-      //   },
-      // );
-      request.files.add(
-        await http.MultipartFile.fromPath(
-          'media_name',
-          file,
-        ),
-      );
+      request.files.add(await http.MultipartFile.fromPath('media_name', file));
+
       if (thumbNail != null) {
-        request.files.add(
-          await http.MultipartFile.fromPath(
-            'media_thumb',
-            thumbNail,
-          ),
-        );
+        request.files.add(await http.MultipartFile.fromPath('media_thumb', thumbNail));
       }
 
       request.headers.addAll(headers);
 
       http.StreamedResponse response = await request.send();
-      // print(await response.stream.bytesToString());
       String responseBody = await response.stream.bytesToString();
+
+      logger.i("mediaUploadActionResponse: $responseBody");
+
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonResponse = jsonDecode(responseBody);
         String? mediaName = jsonResponse['media_name'];
-        List<String> mediaNameList = [];
-        mediaNameList.add(mediaName!);
-        addMediaUploadResponseListFunction(
-          mediaNameList,
-        );
+        String? mediaThumb = jsonResponse['media_thumb'];
+
+        if (mediaName != null) {
+          addMediaUploadResponseListFunction([mediaName]);
+        }
+
+        if (mediaThumb != null) {
+          addMediaThumbResponseListFunction([mediaThumb]);
+        }
+
         notifyListeners();
-      } else {}
-      if(response.statusCode == 401){
-        TokenManager.setTokenStatus(true);
-        //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
-      if(response.statusCode == 403){
+
+      if (response.statusCode == 401 || response.statusCode == 403) {
         TokenManager.setTokenStatus(true);
-        //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
+
       saveMediaUploadLoading = false;
       notifyListeners();
     } catch (error) {
@@ -2707,6 +2720,7 @@ var logger = Logger();
       notifyListeners();
     }
   }
+
 
   void clearFunction() {
     titleEditTextController.clear();
@@ -2893,6 +2907,14 @@ var logger = Logger();
     //  alarmPrint('Schedule exact alarm permission ${res.isGranted ? '' : 'not'} granted',);
     }
   }
+
+  List<String> mediaThumbList = [];
+
+  void addMediaThumbResponseListFunction(List<String> thumbs) {
+    mediaThumbList.addAll(thumbs);
+    notifyListeners();
+  }
+
 
 }
 

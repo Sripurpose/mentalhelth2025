@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:logger/logger.dart';
@@ -15,10 +15,7 @@ import 'package:mentalhelth/screens/mental_strength_add_edit_screen/widgets/goog
 import 'package:mentalhelth/screens/mental_strength_add_edit_screen/widgets/popup/audio_popup.dart';
 import 'package:mentalhelth/screens/mental_strength_add_edit_screen/widgets/popup/camera_popup.dart';
 import 'package:mentalhelth/screens/mental_strength_add_edit_screen/widgets/popup/gallary_popup.dart';
-import 'package:mentalhelth/utils/logic/logic.dart';
-import 'package:mentalhelth/utils/theme/custom_button_style.dart';
 import 'package:mentalhelth/widgets/background_image/background_imager.dart';
-import 'package:mentalhelth/widgets/custom_elevated_button.dart';
 import 'package:mentalhelth/widgets/custom_icon_button.dart';
 import 'package:mentalhelth/widgets/custom_text_form_field.dart';
 import 'package:mentalhelth/widgets/functions/snack_bar.dart';
@@ -27,21 +24,15 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import '../../utils/core/image_constant.dart';
-import '../../utils/logic/date_format.dart';
 import '../../utils/logic/permissions.dart';
 import '../../utils/theme/colors.dart';
-import '../../utils/theme/custom_text_style.dart';
 import '../../utils/theme/theme_helper.dart';
-import '../../widgets/app_bar/appbar_leading_image.dart';
 import '../../widgets/custom_image_view.dart';
 import '../../widgets/custom_rating_bar.dart';
 import '../../widgets/functions/popup.dart';
 import '../addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
-import '../auth/sign_in/provider/sign_in_provider.dart';
-import '../dash_borad_screen/dash_board_screen.dart';
 import '../home_screen/provider/home_provider.dart';
 import '../home_screen/widgets/home_menu/home_menu.dart';
-import '../no_internet/duplicate_screen.dart';
 import '../token_expiry/tocken_expiry_warning_screen.dart';
 import '../token_expiry/token_expiry.dart';
 import 'model/emotions_model.dart';
@@ -78,7 +69,7 @@ class _NumuMentalStrengthAddEditPageState
   late FocusNode _titleFocusNode;
 
   Future<void> _isTokenExpired() async {
-    await homeProvider.fetchJournals(initial: true,context: context);
+    await homeProvider.fetchJournals(initial: true, context: context);
     //  await editProfileProvider.fetchUserProfile();
     tokenStatus = TokenManager.checkTokenExpiry();
     if (tokenStatus) {
@@ -128,7 +119,7 @@ class _NumuMentalStrengthAddEditPageState
     // Ensure the focus is not automatically set when returning
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _descriptionFocusNode.unfocus();
-      _titleFocusNode.unfocus();// Ensure it does not get focus automatically
+      _titleFocusNode.unfocus(); // Ensure it does not get focus automatically
     });
     _tabController = TabController(length: 6, vsync: this);
     _tabController.addListener(() {
@@ -167,9 +158,8 @@ class _NumuMentalStrengthAddEditPageState
       mentalStrengthEditProvider.selectedLocationName = "";
       mentalStrengthEditProvider.goalsValue.title = "";
       mentalStrengthEditProvider.goalsValue.id = null;
-      logger.i("mentalStrengthEditProvider.goalsValue.id${mentalStrengthEditProvider.goalsValue.id}");
-
-
+      logger.i(
+          "mentalStrengthEditProvider.goalsValue.id${mentalStrengthEditProvider.goalsValue.id}");
 
       _isTokenExpired();
     });
@@ -190,16 +180,16 @@ class _NumuMentalStrengthAddEditPageState
     final bool isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom != 0;
 
     return tokenStatus == false
-          ? WillPopScope(
-        onWillPop: (){
-          return Future.value(false); // Prevents back navigation
-        },
-          child: SafeArea(
+        ? WillPopScope(
+            onWillPop: () {
+              return Future.value(false); // Prevents back navigation
+            },
+            child: SafeArea(
               child: backGroundImagerOtherScreens(
                 size: size,
                 padding: EdgeInsets.zero,
-                child: Consumer3<EditProfileProvider, MentalStrengthEditProvider,
-                    DashBoardProvider>(
+                child: Consumer3<EditProfileProvider,
+                    MentalStrengthEditProvider, DashBoardProvider>(
                   builder: (contexts, editProfileProvider,
                       mentalStrengthEditProvider, dashBoardProvider, _) {
                     return GestureDetector(
@@ -209,31 +199,32 @@ class _NumuMentalStrengthAddEditPageState
                       },
                       child: Column(
                         children: [
-                          const SizedBox(height: 5,),
+                          const SizedBox(
+                            height: 5,
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          buildPopupDialog(context, size),
-                                    );
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        buildPopupDialog(context, size),
+                                  );
                                 },
                                 child: Padding(
                                   padding: EdgeInsets.only(
                                     right: size.width * 0.05,
                                   ),
-                                  child:
-                                  SvgPicture.asset(
+                                  child: SvgPicture.asset(
                                     ImageConstant.menuBarSvg,
                                   ),
                                 ),
                               ),
                             ],
                           ),
-                         // const SizedBox(height: 10,),
+                          // const SizedBox(height: 10,),
                           Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: size.width * 0.05, vertical: 8),
@@ -253,15 +244,18 @@ class _NumuMentalStrengthAddEditPageState
                                               currentTabIndex -
                                                   1); // Go to previous tab
 
-                                          mentalStrengthEditProvider.openAllCloser();
-                                         // FocusScope.of(context).unfocus();
+                                          mentalStrengthEditProvider
+                                              .openAllCloser();
+                                          // FocusScope.of(context).unfocus();
                                         },
                                         child: Row(
                                           children: [
                                             SvgPicture.asset(
-                                              ImageConstant.numuMentalBackButton,
+                                              ImageConstant
+                                                  .numuMentalBackButton,
                                               // Replace with your SVG file path
-                                              width: 30, // Adjust size if needed
+                                              width:
+                                                  30, // Adjust size if needed
                                               height: 30,
                                             ),
                                             const SizedBox(width: 10),
@@ -281,17 +275,21 @@ class _NumuMentalStrengthAddEditPageState
                                     else
                                       GestureDetector(
                                         onTap: () {
-                                      dashBoardProvider.changePage(index: 0);
+                                          dashBoardProvider.changePage(
+                                              index: 0);
 
-                                          mentalStrengthEditProvider.openAllCloser();
+                                          mentalStrengthEditProvider
+                                              .openAllCloser();
                                           // FocusScope.of(context).unfocus();
                                         },
                                         child: Row(
                                           children: [
                                             SvgPicture.asset(
-                                              ImageConstant.numuMentalBackButton,
+                                              ImageConstant
+                                                  .numuMentalBackButton,
                                               // Replace with your SVG file path
-                                              width: 30, // Adjust size if needed
+                                              width:
+                                                  30, // Adjust size if needed
                                               height: 30,
                                             ),
                                             const SizedBox(width: 10),
@@ -331,8 +329,8 @@ class _NumuMentalStrengthAddEditPageState
                                   value: (currentTabIndex + 1) / 6,
                                   // Dynamic progress
                                   backgroundColor: Colors.grey,
-                                  valueColor:  AlwaysStoppedAnimation<Color>(
-                                      ColorsContent.newThemeColor ),
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      ColorsContent.newThemeColor),
                                   minHeight: 4,
                                   borderRadius: BorderRadius.circular(4),
                                 ),
@@ -344,9 +342,11 @@ class _NumuMentalStrengthAddEditPageState
                               children: [
                                 TabBarView(
                                   controller: _tabController,
-                                  physics: const NeverScrollableScrollPhysics(), // Prevents swipe gestures
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  // Prevents swipe gestures
                                   children: [
-                                    _buildFirstTab(context, mentalStrengthEditProvider, size),
+                                    _buildFirstTab(context,
+                                        mentalStrengthEditProvider, size),
                                     _buildSecondTab(context, size),
                                     _buildThirdTab(context, size),
                                     _buildFourthTab(context, size),
@@ -355,87 +355,144 @@ class _NumuMentalStrengthAddEditPageState
                                   ],
                                 ),
                                 // Floating Button for navigation and submission
-                                if (currentTabIndex < 5 && !(currentTabIndex == 4 && mentalStrengthEditProvider.goalsValue.id == null)) ...[
+                                if (currentTabIndex < 5 &&
+                                    !(currentTabIndex == 4 &&
+                                        mentalStrengthEditProvider
+                                                .goalsValue.id ==
+                                            null)) ...[
                                   Positioned(
                                     bottom: size.height * 0.002,
                                     left: 0,
                                     right: 0,
                                     child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
                                       child: Container(
                                         width: double.infinity,
                                         decoration: BoxDecoration(
-                                          color: ColorsContent.homeBackGroundColor,
-                                          borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                          color:
+                                              ColorsContent.homeBackGroundColor,
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(10)),
                                         ),
-                                        padding: const EdgeInsets.symmetric(vertical: 3),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 3),
                                         child: Center(
                                           child: SizedBox(
                                             width: 85,
                                             height: 85,
                                             child: FloatingActionButton(
-                                              backgroundColor: Colors.transparent,
+                                              backgroundColor:
+                                                  Colors.transparent,
                                               elevation: 0,
                                               splashColor: Colors.transparent,
-                                              foregroundColor: Colors.transparent,
+                                              foregroundColor:
+                                                  Colors.transparent,
                                               onPressed: () {
                                                 if (currentTabIndex == 0) {
-                                                  final title = mentalStrengthEditProvider.titleEditTextController.text.trim();
-                                                  final description = mentalStrengthEditProvider.descriptionEditTextController.text.trim();
+                                                  final title =
+                                                      mentalStrengthEditProvider
+                                                          .titleEditTextController
+                                                          .text
+                                                          .trim();
+                                                  final description =
+                                                      mentalStrengthEditProvider
+                                                          .descriptionEditTextController
+                                                          .text
+                                                          .trim();
 
                                                   if (title.isEmpty) {
-                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
                                                       SnackBar(
-                                                        content: const Text("Title is required."),
-                                                        backgroundColor: ColorsContent.newThemeColor,
+                                                        content: const Text(
+                                                            "Title is required."),
+                                                        backgroundColor:
+                                                            ColorsContent
+                                                                .newThemeColor,
                                                       ),
                                                     );
-                                                  } else if (description.isEmpty) {
-                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                  } else if (description
+                                                      .isEmpty) {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
                                                       SnackBar(
-                                                        content: const Text("Description is required."),
-                                                        backgroundColor: ColorsContent.newThemeColor,
+                                                        content: const Text(
+                                                            "Description is required."),
+                                                        backgroundColor:
+                                                            ColorsContent
+                                                                .newThemeColor,
                                                       ),
                                                     );
                                                   } else {
-                                                    _tabController.animateTo(currentTabIndex + 1);
+                                                    _tabController.animateTo(
+                                                        currentTabIndex + 1);
                                                   }
-
-                                                } else if (currentTabIndex == 1) {
-                                                  if (mentalStrengthEditProvider.emotionalValueStar != null) {
-                                                    _tabController.animateTo(currentTabIndex + 1);
+                                                } else if (currentTabIndex ==
+                                                    1) {
+                                                  if (mentalStrengthEditProvider
+                                                          .emotionalValueStar !=
+                                                      null) {
+                                                    _tabController.animateTo(
+                                                        currentTabIndex + 1);
                                                   } else {
-                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
                                                       SnackBar(
-                                                        content: const Text("This field is mandatory."),
-                                                        backgroundColor: ColorsContent.newThemeColor,
+                                                        content: const Text(
+                                                            "This field is mandatory."),
+                                                        backgroundColor:
+                                                            ColorsContent
+                                                                .newThemeColor,
                                                       ),
                                                     );
                                                   }
-                                                } else if (currentTabIndex == 2) {
-                                                  if (mentalStrengthEditProvider.emotionValue != null) {
-                                                    _tabController.animateTo(currentTabIndex + 1);
+                                                } else if (currentTabIndex ==
+                                                    2) {
+                                                  if (mentalStrengthEditProvider
+                                                          .emotionValue !=
+                                                      null) {
+                                                    _tabController.animateTo(
+                                                        currentTabIndex + 1);
                                                   } else {
-                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
                                                       SnackBar(
-                                                        content: const Text("Emotion selection is required."),
-                                                        backgroundColor: ColorsContent.newThemeColor,
+                                                        content: const Text(
+                                                            "Emotion selection is required."),
+                                                        backgroundColor:
+                                                            ColorsContent
+                                                                .newThemeColor,
                                                       ),
                                                     );
                                                   }
-                                                } else if (currentTabIndex == 3) {
-                                                  if (mentalStrengthEditProvider.driveValueStar != null) {
-                                                    _tabController.animateTo(currentTabIndex + 1);
+                                                } else if (currentTabIndex ==
+                                                    3) {
+                                                  if (mentalStrengthEditProvider
+                                                          .driveValueStar !=
+                                                      null) {
+                                                    _tabController.animateTo(
+                                                        currentTabIndex + 1);
                                                   } else {
-                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
                                                       SnackBar(
-                                                        content: const Text("This field is mandatory."),
-                                                        backgroundColor: ColorsContent.newThemeColor,
+                                                        content: const Text(
+                                                            "This field is mandatory."),
+                                                        backgroundColor:
+                                                            ColorsContent
+                                                                .newThemeColor,
                                                       ),
                                                     );
                                                   }
                                                 } else {
-                                                  _tabController.animateTo(currentTabIndex + 1);
+                                                  _tabController.animateTo(
+                                                      currentTabIndex + 1);
                                                 }
                                               },
                                               child: Image.asset(
@@ -451,7 +508,9 @@ class _NumuMentalStrengthAddEditPageState
                                       ),
                                     ),
                                   ),
-                                ] else if (currentTabIndex == 4 && mentalStrengthEditProvider.goalsValue.id == null) ...[
+                                ] else if (currentTabIndex == 4 &&
+                                    mentalStrengthEditProvider.goalsValue.id ==
+                                        null) ...[
                                   // Submit button on 4th tab when goal is not selected
                                   Positioned(
                                     bottom: size.height * 0.002,
@@ -460,41 +519,63 @@ class _NumuMentalStrengthAddEditPageState
                                     child: Container(
                                       width: double.infinity,
                                       color: ColorsContent.homeBackGroundColor,
-                                      padding: const EdgeInsets.symmetric(vertical: 10),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 10),
                                       child: Center(
                                         child: GestureDetector(
                                           onTap: () async {
                                             String? validationMessage;
 
-                                            if (mentalStrengthEditProvider.descriptionEditTextController.text.isEmpty) {
-                                              validationMessage = "Description missing";
-                                            } else if (mentalStrengthEditProvider.emotionValue!.id.toString().isEmpty) {
-                                              validationMessage = "Please select an emotion";
-                                            } else if (mentalStrengthEditProvider.emotionalValueStar == null) {
-                                              validationMessage = "Please select Feeling Now emotional Rate";
-                                            } else if (mentalStrengthEditProvider.driveValueStar == null) {
-                                              validationMessage = "Please select Situation Rate";
+                                            if (mentalStrengthEditProvider
+                                                .descriptionEditTextController
+                                                .text
+                                                .isEmpty) {
+                                              validationMessage =
+                                                  "Description missing";
+                                            } else if (mentalStrengthEditProvider
+                                                .emotionValue!.id
+                                                .toString()
+                                                .isEmpty) {
+                                              validationMessage =
+                                                  "Please select an emotion";
+                                            } else if (mentalStrengthEditProvider
+                                                    .emotionalValueStar ==
+                                                null) {
+                                              validationMessage =
+                                                  "Please select Feeling Now emotional Rate";
+                                            } else if (mentalStrengthEditProvider
+                                                    .driveValueStar ==
+                                                null) {
+                                              validationMessage =
+                                                  "Please select Situation Rate";
                                             }
 
                                             if (validationMessage != null) {
-                                              ScaffoldMessenger.of(context).showSnackBar(
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
                                                 SnackBar(
-                                                  content: Text(validationMessage),
-                                                  backgroundColor: ColorsContent.newThemeColor,
+                                                  content:
+                                                      Text(validationMessage),
+                                                  backgroundColor: ColorsContent
+                                                      .newThemeColor,
                                                 ),
                                               );
                                             } else {
-                                              await mentalStrengthEditProvider.saveButtonFunction(context);
+                                              await mentalStrengthEditProvider
+                                                  .saveButtonFunction(context);
                                               _isTokenExpired();
                                             }
                                           },
                                           child: Stack(
                                             alignment: Alignment.center,
                                             children: [
-                                              SvgPicture.asset(ImageConstant.submitButtonNumuBuild),
-                                              if (mentalStrengthEditProvider.saveJournalLoading)
+                                              SvgPicture.asset(ImageConstant
+                                                  .submitButtonNumuBuild),
+                                              if (mentalStrengthEditProvider
+                                                  .saveJournalLoading)
                                                 const Padding(
-                                                  padding: EdgeInsets.only(top: 5, bottom: 5),
+                                                  padding: EdgeInsets.only(
+                                                      top: 5, bottom: 5),
                                                   child: SpinKitWave(
                                                     color: Colors.white,
                                                     size: 25,
@@ -515,41 +596,63 @@ class _NumuMentalStrengthAddEditPageState
                                     child: Container(
                                       width: double.infinity,
                                       color: ColorsContent.homeBackGroundColor,
-                                      padding: const EdgeInsets.symmetric(vertical: 10),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 10),
                                       child: Center(
                                         child: GestureDetector(
                                           onTap: () async {
                                             String? validationMessage;
 
-                                            if (mentalStrengthEditProvider.descriptionEditTextController.text.isEmpty) {
-                                              validationMessage = "Description missing";
-                                            } else if (mentalStrengthEditProvider.emotionValue!.id.toString().isEmpty) {
-                                              validationMessage = "Please select an emotion";
-                                            } else if (mentalStrengthEditProvider.emotionalValueStar == null) {
-                                              validationMessage = "Please select Feeling Now emotional Rate";
-                                            } else if (mentalStrengthEditProvider.driveValueStar == null) {
-                                              validationMessage = "Please select Situation Rate";
+                                            if (mentalStrengthEditProvider
+                                                .descriptionEditTextController
+                                                .text
+                                                .isEmpty) {
+                                              validationMessage =
+                                                  "Description missing";
+                                            } else if (mentalStrengthEditProvider
+                                                .emotionValue!.id
+                                                .toString()
+                                                .isEmpty) {
+                                              validationMessage =
+                                                  "Please select an emotion";
+                                            } else if (mentalStrengthEditProvider
+                                                    .emotionalValueStar ==
+                                                null) {
+                                              validationMessage =
+                                                  "Please select Feeling Now emotional Rate";
+                                            } else if (mentalStrengthEditProvider
+                                                    .driveValueStar ==
+                                                null) {
+                                              validationMessage =
+                                                  "Please select Situation Rate";
                                             }
 
                                             if (validationMessage != null) {
-                                              ScaffoldMessenger.of(context).showSnackBar(
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
                                                 SnackBar(
-                                                  content: Text(validationMessage),
-                                                  backgroundColor: ColorsContent.newThemeColor,
+                                                  content:
+                                                      Text(validationMessage),
+                                                  backgroundColor: ColorsContent
+                                                      .newThemeColor,
                                                 ),
                                               );
                                             } else {
-                                              await mentalStrengthEditProvider.saveButtonFunction(context);
+                                              await mentalStrengthEditProvider
+                                                  .saveButtonFunction(context);
                                               _isTokenExpired();
                                             }
                                           },
                                           child: Stack(
                                             alignment: Alignment.center,
                                             children: [
-                                              SvgPicture.asset(ImageConstant.numuSubmitEditAdd),
-                                              if (mentalStrengthEditProvider.saveJournalLoading)
+                                              SvgPicture.asset(ImageConstant
+                                                  .numuSubmitEditAdd),
+                                              if (mentalStrengthEditProvider
+                                                  .saveJournalLoading)
                                                 const Padding(
-                                                  padding: EdgeInsets.only(top: 5, bottom: 5),
+                                                  padding: EdgeInsets.only(
+                                                      top: 5, bottom: 5),
                                                   child: SpinKitWave(
                                                     color: Colors.white,
                                                     size: 25,
@@ -563,8 +666,6 @@ class _NumuMentalStrengthAddEditPageState
                                   ),
                                 ],
 
-
-
                                 // Newly Added Widgets
                                 if (mentalStrengthEditProvider.openChooseGoal)
                                   const ScreenChooseGoalMentalStrength(),
@@ -572,32 +673,45 @@ class _NumuMentalStrengthAddEditPageState
                                 if (mentalStrengthEditProvider.openAddGoal)
                                   const AddGoalsDreamsBottomSheet(),
 
-                                if (mentalStrengthEditProvider.openGoalViewSheet)
-                                  mentalStrengthEditProvider.goalDetailModel == null
+                                if (mentalStrengthEditProvider
+                                    .openGoalViewSheet)
+                                  mentalStrengthEditProvider.goalDetailModel ==
+                                          null
                                       ? Container(
-                                    decoration: BoxDecoration(
-                                      color: appTheme.gray50,
-                                      borderRadius: const BorderRadius.only(
-                                        topRight: Radius.circular(25),
-                                        topLeft: Radius.circular(25),
-                                      ),
-                                    ),
-                                    margin: EdgeInsets.only(top: size.height * 0.15),
-                                    child: shimmerList(height: size.height * 0.8, list: 10),
-                                  )
+                                          decoration: BoxDecoration(
+                                            color: appTheme.gray50,
+                                            borderRadius:
+                                                const BorderRadius.only(
+                                              topRight: Radius.circular(25),
+                                              topLeft: Radius.circular(25),
+                                            ),
+                                          ),
+                                          margin: EdgeInsets.only(
+                                              top: size.height * 0.15),
+                                          child: shimmerList(
+                                              height: size.height * 0.8,
+                                              list: 10),
+                                        )
                                       : GoalAndDreamFullViewBottomSheet(
-                                    goalDetailModel: mentalStrengthEditProvider.goalDetailModel!,
-                                  ),
+                                          goalDetailModel:
+                                              mentalStrengthEditProvider
+                                                  .goalDetailModel!,
+                                        ),
 
                                 if (mentalStrengthEditProvider.openChooseAction)
-                                  ChooseActionMentalHelth(goal: mentalStrengthEditProvider.goalsValue),
+                                  ChooseActionMentalHelth(
+                                      goal: mentalStrengthEditProvider
+                                          .goalsValue),
 
                                 if (mentalStrengthEditProvider.openAddAction)
                                   AddActionMentalStrengthBottomSheet(
-                                    goalId: mentalStrengthEditProvider.goalsValue.id.toString(),
+                                    goalId: mentalStrengthEditProvider
+                                        .goalsValue.id
+                                        .toString(),
                                   ),
 
-                                if (mentalStrengthEditProvider.openActionFullView)
+                                if (mentalStrengthEditProvider
+                                    .openActionFullView)
                                   const ActionFullViewJournalCreateBottomSheet(),
                               ],
                             ),
@@ -609,7 +723,7 @@ class _NumuMentalStrengthAddEditPageState
                 ),
               ),
             ),
-        )
+          )
         : const TokenExpireScreen();
   }
 
@@ -651,8 +765,6 @@ class _NumuMentalStrengthAddEditPageState
                 //     ),
                 //   ),
                 // )
-
-
               ],
             ),
           ),
@@ -660,7 +772,6 @@ class _NumuMentalStrengthAddEditPageState
       ],
     );
   }
-
 
   Widget _buildSecondTab(BuildContext context, Size size) {
     Size size = MediaQuery.of(context).size;
@@ -699,9 +810,8 @@ class _NumuMentalStrengthAddEditPageState
               // Map the value from 1-5 to -2 to 2 as an integer
               int mappedValue = ((value - 1) * 4 / (5 - 1) - 2).round();
 
-              mentalStrengthEditProvider
-                  .fetchEmotions(
-                  emotion: "$mappedValue",context: context);
+              mentalStrengthEditProvider.fetchEmotions(
+                  emotion: "$mappedValue", context: context);
 
               mentalStrengthEditProvider.changeEmotionalValueStar(value);
               _isTokenExpired(); // Call your method after rating update.
@@ -733,87 +843,91 @@ class _NumuMentalStrengthAddEditPageState
           (mentalStrengthEditProvider.getEmotionsModel == null)
               ? const SizedBox()
               : Container(
-            width: size.width * 0.80,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.0),
-              color: Colors.white,
-            ),
-            child: Center(
-              child: DropdownButtonHideUnderline(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: DropdownButton2<Emotion>(
-                    isExpanded: true,
-                    value: mentalStrengthEditProvider.emotionValue,
-                    hint: const Text("Select Emotion"),
-                    items: mentalStrengthEditProvider.getEmotionsModel?.emotions?.map((Emotion items) {
-                      return DropdownMenuItem<Emotion>(
-                        value: items,
+                  width: size.width * 0.80,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    color: Colors.white,
+                  ),
+                  child: Center(
+                    child: DropdownButtonHideUnderline(
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Text(
-                            items.title.toString(),
-                            style: TextStyle(
-                              color: ColorsContent.newThemeColor,
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: DropdownButton2<Emotion>(
+                        isExpanded: true,
+                        value: mentalStrengthEditProvider.emotionValue,
+                        hint: const Text("Select Emotion"),
+                        items: mentalStrengthEditProvider
+                            .getEmotionsModel?.emotions
+                            ?.map((Emotion items) {
+                          return DropdownMenuItem<Emotion>(
+                            value: items,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Text(
+                                items.title.toString(),
+                                style: TextStyle(
+                                  color: ColorsContent.newThemeColor,
+                                ),
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (Emotion? newValue) {
+                          final matched = mentalStrengthEditProvider
+                              .getEmotionsModel?.emotions
+                              ?.firstWhere((e) => e.id == newValue?.id,
+                                  orElse: () => newValue!);
+                          mentalStrengthEditProvider.addEmotionValue(matched!);
+                          _isTokenExpired();
+                        },
+                        dropdownStyleData: DropdownStyleData(
+                          maxHeight: 350,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.white,
+                          ),
+                        ),
+                        menuItemStyleData: const MenuItemStyleData(
+                          padding: EdgeInsets.all(8),
+                        ),
+                        dropdownSearchData: DropdownSearchData(
+                          searchController: searchController,
+                          searchInnerWidgetHeight: 60, // <- Required
+                          searchInnerWidget: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: TextFormField(
+                              controller: searchController,
+                              decoration: const InputDecoration(
+                                hintText: 'Search Emotion...',
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 8),
+                                border: OutlineInputBorder(),
+                              ),
                             ),
                           ),
+                          searchMatchFn: (item, searchValue) {
+                            return (item.value?.title ?? '')
+                                .toLowerCase()
+                                .startsWith(searchValue.toLowerCase());
+                          },
                         ),
-                      );
-                    }).toList(),
-                    onChanged: (Emotion? newValue) {
-                      final matched = mentalStrengthEditProvider.getEmotionsModel?.emotions
-                          ?.firstWhere((e) => e.id == newValue?.id, orElse: () => newValue!);
-                      mentalStrengthEditProvider.addEmotionValue(matched!);
-                      _isTokenExpired();
-                    },
-                    dropdownStyleData: DropdownStyleData(
-                      maxHeight: 350,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Colors.white,
-                      ),
-                    ),
-                    menuItemStyleData: const MenuItemStyleData(
-                      padding: EdgeInsets.all(8),
-                    ),
-                    dropdownSearchData: DropdownSearchData(
-                      searchController: searchController,
-                      searchInnerWidgetHeight: 60, // <- Required
-                      searchInnerWidget: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: TextFormField(
-                          controller: searchController,
-                          decoration: const InputDecoration(
-                            hintText: 'Search Emotion...',
-                            contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                            border: OutlineInputBorder(),
+                        iconStyleData: IconStyleData(
+                          icon: Icon(
+                            Icons.arrow_drop_down,
+                            size: 30,
+                            color: ColorsContent
+                                .newThemeColor, // Change the color of the dropdown icon here
                           ),
                         ),
                       ),
-                      searchMatchFn: (item, searchValue) {
-                        return (item.value?.title ?? '')
-                            .toLowerCase()
-                            .startsWith(searchValue.toLowerCase());
-                      },
-                    ),
-                    iconStyleData: IconStyleData(
-                      icon: Icon(
-                        Icons.arrow_drop_down,
-                        size: 30,
-                        color: ColorsContent.newThemeColor, // Change the color of the dropdown icon here
-                      ),
-                    ),
+                    )),
                   ),
-                )
-
-              ),
-            ),
-          ),
+                ),
         ],
       ),
     );
   }
-
 
   Widget _buildFourthTab(BuildContext context, Size size) {
     Size size = MediaQuery.of(context).size;
@@ -909,7 +1023,7 @@ class _NumuMentalStrengthAddEditPageState
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 16),
               ),
-              child:Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
@@ -928,9 +1042,6 @@ class _NumuMentalStrengthAddEditPageState
               ),
             ),
           ),
-
-
-
           SizedBox(
             height: size.height * 0.02,
           ),
@@ -1004,10 +1115,9 @@ class _NumuMentalStrengthAddEditPageState
                             mentalStrengthEditProvider
                                 .openGoalViewSheetFunction();
                             mentalStrengthEditProvider.fetchGoalDetails(
-                              goalId: mentalStrengthEditProvider.goalsValue.id
-                                  .toString(),
-                              context: context
-                            );
+                                goalId: mentalStrengthEditProvider.goalsValue.id
+                                    .toString(),
+                                context: context);
                           },
                           child: CircleAvatar(
                             radius: size.width * 0.035,
@@ -1047,7 +1157,6 @@ class _NumuMentalStrengthAddEditPageState
           const SizedBox(
             height: 20,
           ),
-
           SizedBox(
             width: size.width * 0.80,
             height: 50,
@@ -1068,7 +1177,8 @@ class _NumuMentalStrengthAddEditPageState
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 16), // left padding
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16), // left padding
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1097,7 +1207,8 @@ class _NumuMentalStrengthAddEditPageState
             width: size.width * 0.80,
             child: ListView.builder(
               shrinkWrap: true,
-              physics: const BouncingScrollPhysics(), // Or ScrollPhysics() for default
+              physics: const BouncingScrollPhysics(),
+              // Or ScrollPhysics() for default
               itemCount: mentalStrengthEditProvider.actionList.length,
               itemBuilder: (context, index) {
                 return Container(
@@ -1125,7 +1236,8 @@ class _NumuMentalStrengthAddEditPageState
                             customPopup(
                               context: context,
                               onPressedDelete: () async {
-                                mentalStrengthEditProvider.clearActionListSelected(index: index);
+                                mentalStrengthEditProvider
+                                    .clearActionListSelected(index: index);
                                 Navigator.of(context).pop();
                               },
                               yes: "Yes",
@@ -1149,7 +1261,8 @@ class _NumuMentalStrengthAddEditPageState
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Text(
-                              mentalStrengthEditProvider.actionList[index].title.toString(),
+                              mentalStrengthEditProvider.actionList[index].title
+                                  .toString(),
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                 color: Colors.white,
@@ -1166,10 +1279,12 @@ class _NumuMentalStrengthAddEditPageState
                         GestureDetector(
                           onTap: () async {
                             await mentalStrengthEditProvider.fetchActionDetails(
-                                actionId: mentalStrengthEditProvider.actionList[index].id.toString(),
-                                context: context
-                            );
-                            mentalStrengthEditProvider.openActionFullViewFunction();
+                                actionId: mentalStrengthEditProvider
+                                    .actionList[index].id
+                                    .toString(),
+                                context: context);
+                            mentalStrengthEditProvider
+                                .openActionFullViewFunction();
                           },
                           child: CircleAvatar(
                             radius: size.width * 0.035,
@@ -1188,7 +1303,6 @@ class _NumuMentalStrengthAddEditPageState
               },
             ),
           )
-
         ],
       ),
     );
@@ -1216,7 +1330,8 @@ class _NumuMentalStrengthAddEditPageState
           onTap: () => setState(() {}),
           // Rebuild when tapped
           onEditingComplete: () {
-            _descriptionFocusNode.unfocus(); // Ensure focus is removed when done
+            _descriptionFocusNode
+                .unfocus(); // Ensure focus is removed when done
             setState(() {});
           }, // Rebuild when focus is lost
         );
@@ -1308,8 +1423,10 @@ class _NumuMentalStrengthAddEditPageState
                         ),
                       ),
                       Positioned(
-                        bottom: Platform.isIOS ? 60:50, // Adjust this value as needed
-                        right: 0, // Move to the right
+                        bottom: Platform.isIOS ? 60 : 50,
+                        // Adjust this value as needed
+                        right: 0,
+                        // Move to the right
                         left: 40,
                         child: Consumer<MentalStrengthEditProvider>(
                           builder: (context, mentalStrengthEditProvider, _) {
@@ -1354,7 +1471,6 @@ class _NumuMentalStrengthAddEditPageState
                     ],
                   ),
                 ),
-
                 SizedBox(
                   height: size.height * 0.10,
                   child: Stack(
@@ -1390,8 +1506,10 @@ class _NumuMentalStrengthAddEditPageState
                         ),
                       ),
                       Positioned(
-                        bottom: Platform.isIOS ? 60:50, // Adjust this value as needed
-                        right: 0, // Move to the right
+                        bottom: Platform.isIOS ? 60 : 50,
+                        // Adjust this value as needed
+                        right: 0,
+                        // Move to the right
                         left: 40,
                         child: Consumer<MentalStrengthEditProvider>(
                           builder: (context, mentalStrengthEditProvider, _) {
@@ -1436,7 +1554,6 @@ class _NumuMentalStrengthAddEditPageState
                     ],
                   ),
                 ),
-
                 SizedBox(
                   height: size.height * 0.10,
                   child: Stack(
@@ -1457,8 +1574,10 @@ class _NumuMentalStrengthAddEditPageState
                         ),
                       ),
                       Positioned(
-                        bottom: Platform.isIOS ? 60:50, // Adjust this value as needed
-                        right: 0, // Move to the right
+                        bottom: Platform.isIOS ? 60 : 50,
+                        // Adjust this value as needed
+                        right: 0,
+                        // Move to the right
                         left: 40,
                         child: Consumer<MentalStrengthEditProvider>(
                           builder: (context, mentalStrengthEditProvider, _) {
@@ -1503,7 +1622,6 @@ class _NumuMentalStrengthAddEditPageState
                     ],
                   ),
                 ),
-
                 SizedBox(
                   height: size.height * 0.10,
                   child: Stack(
@@ -1556,20 +1674,25 @@ class _NumuMentalStrengthAddEditPageState
                             if (mounted) {
                               showModalBottomSheet(
                                 context: context,
-                                isScrollControlled: true, // <== Helps with full height layout
-                                backgroundColor: Colors.transparent, // Optional for rounded corners
+                                isScrollControlled: true,
+                                // <== Helps with full height layout
+                                backgroundColor: Colors.transparent,
+                                // Optional for rounded corners
                                 builder: (BuildContext context) {
                                   return SafeArea(
                                     child: Padding(
                                       padding: EdgeInsets.only(
-                                        bottom: MediaQuery.of(context).viewInsets.bottom, // Avoid overlap with keyboard or bottom inset
+                                        bottom: MediaQuery.of(context)
+                                            .viewInsets
+                                            .bottom, // Avoid overlap with keyboard or bottom inset
                                       ),
                                       child: Container(
                                         width: double.infinity,
                                         padding: const EdgeInsets.all(20),
                                         decoration: const BoxDecoration(
                                           color: Colors.white,
-                                          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                                          borderRadius: BorderRadius.vertical(
+                                              top: Radius.circular(20)),
                                         ),
                                         child: const MentalGoogleMap(
                                           edit: false,
@@ -1579,7 +1702,6 @@ class _NumuMentalStrengthAddEditPageState
                                   );
                                 },
                               );
-
                             }
                           }
                         },
@@ -1589,8 +1711,10 @@ class _NumuMentalStrengthAddEditPageState
                         ),
                       ),
                       Positioned(
-                        bottom: Platform.isIOS ? 60:50, // Adjust this value as needed
-                        right: 0, // Move to the right
+                        bottom: Platform.isIOS ? 60 : 50,
+                        // Adjust this value as needed
+                        right: 0,
+                        // Move to the right
                         left: 40,
                         child: Consumer<MentalStrengthEditProvider>(
                           builder: (context, mentalStrengthEditProvider, _) {
@@ -1649,7 +1773,9 @@ Widget buildAvatarImage(
     height: size.height * 0.08,
     width: size.height * 0.08,
     decoration: BoxDecoration(
-      color: isSelected ? ColorsContent.newThemeColor : ColorsContent.newThemeColor,
+      color: isSelected
+          ? ColorsContent.newThemeColor
+          : ColorsContent.newThemeColor,
       image: DecorationImage(
         image: AssetImage(
           imagePath,
@@ -1662,7 +1788,7 @@ Widget buildAvatarImage(
         ),
       ),
       border: Border.all(
-        color:ColorsContent.newThemeColor,
+        color: ColorsContent.newThemeColor,
         width: 1.8,
       ),
     ),

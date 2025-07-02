@@ -486,17 +486,12 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                                 builder: (_) => Dialog(
                                                   insetPadding: EdgeInsets.zero,
                                                   backgroundColor: Colors.black,
-                                                  shape: const RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.zero,
-                                                  ),
+                                                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
                                                   child: Stack(
                                                     children: [
-                                                      Center(
-                                                        child: AspectRatio(
-                                                          aspectRatio: 16 / 9,
-                                                          child: VideoPlayerWidgetViewAndAlreadyBuildMentalProgressBar(
-                                                            videoUrl: videoList[index],
-                                                          ),
+                                                      Positioned.fill(
+                                                        child: VideoPlayerWidgetViewAndAlreadyBuildMentalProgressBar(
+                                                          videoUrl: videoList[index],
                                                         ),
                                                       ),
                                                       Positioned(
@@ -511,6 +506,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                                   ),
                                                 ),
                                               );
+
                                             },
                                             child: ClipRRect(
                                               borderRadius: BorderRadius.circular(5),

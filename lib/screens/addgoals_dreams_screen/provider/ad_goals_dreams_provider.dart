@@ -701,12 +701,14 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
 
         final safePath = await saveVideoToTemp(videoToUpload.path);
 
+
         // ✅ Show uploading dialog
         final uploadContext = await showProgressDialog(context, "Uploading video...");
 
         pickedImagesAddFunction([safePath]);
 
         File thumbNailFile = await generateThumbnail(File(safePath));
+        uploadedThumbPaths.add(thumbNailFile.path);
 
         await saveMediaUploadMental(
           file: safePath,
@@ -900,7 +902,7 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
 
   //image take section
   // File? takeFile;
-
+  List<String> uploadedThumbPaths = [];
   Future<void> takeFileFunction(BuildContext context) async {
     final ImagePicker picker = ImagePicker();
     final XFile? pickedFile = await picker.pickImage(source: ImageSource.camera);
@@ -944,11 +946,18 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
       List<String> imagePaths = [pickedFile.path];
       takedImagesAddFunction(imagePaths);
 
+      // ✅ Generate thumbnail for image (optional but added for consistency)
+      File thumbNailFile = File(pickedFile.path); // Can skip actual thumbnail creation for images
+      uploadedThumbPaths.add(thumbNailFile.path);
+
+
+
       // Save picked image (no compression)
       await saveMediaUploadMental(
         file: pickedFile.path,
         type: "goal",
         fileType: lastThreeChars,
+        thumbNail: thumbNailFile.path,
         context: context,
       );
     } catch (e, stackTrace) {
@@ -1094,8 +1103,10 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
       List<String> imagePaths = [pickeVideo.path];
       takedImagesAddFunction(imagePaths);
 
-      // Generate video thumbnail
+      // ✅ Generate thumbnail
       File thumbNailFile = await generateThumbnail(File(pickeVideo.path));
+      uploadedThumbPaths.add(thumbNailFile.path);
+      logger.i("thumbNailFile.path: ${thumbNailFile.path}");
 
       // Save the video
       await saveMediaUploadMental(
@@ -1331,6 +1342,7 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
         required String locationAddress,
         required String categoryId,
         required String gemEndDate,
+        List<String>? mediaThumbs, // ✅ optional param
         required List<GoalModelIdName> actionId,
       }) async {
     try {
@@ -1374,6 +1386,13 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
       for (int i = 0; i < mediaName.length; i++) {
         body['media_name[$i]'] = mediaName[i];
       }
+
+      if (mediaThumbs != null && mediaThumbs.isNotEmpty) {
+        for (int i = 0; i < mediaThumbs.length; i++) {
+          body['media_thumb[$i]'] = mediaThumbs[i];
+        }
+      }
+      logger.i("body$body");
 
       // ✅ Add action ID list
       for (int i = 0; i < actionId.length; i++) {
@@ -1446,6 +1465,7 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
     required String locationAddress,
     required String categoryId,
     required String gemEndDate,
+        List<String>? mediaThumbs, // ✅ optional param
     required List<GoalModelIdName> actionId,
     required String gemId,
   }) async {
@@ -1479,6 +1499,13 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
       for (int i = 0; i < mediaName.length; i++) {
         body['media_name[$i]'] = mediaName[i];
       }
+
+      if (mediaThumbs != null && mediaThumbs.isNotEmpty) {
+        for (int i = 0; i < mediaThumbs.length; i++) {
+          body['media_thumb[$i]'] = mediaThumbs[i];
+        }
+      }
+      logger.i("body$body");
       //comented sarath on 16-09-2024
       // for (int i = 0; i < actionId.length; i++) {
       //   body['action_id[$i]'] = actionId[i].id;
@@ -1552,77 +1579,70 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
       String? token = await getUserTokenSharePref();
       saveMediaUploadLoading = true;
       String deviceType = Platform.isAndroid ? 'android' : 'ios';
-      String? versionCode = '';
-      if (Platform.isAndroid) {
-        versionCode = Constent.versionCodeAndroid.isNotEmpty
-            ? Constent.versionCodeAndroid
-            : await getVersionSharePref(); // Fetch user ID if version code is empty
-      } else if (Platform.isIOS) {
-        versionCode = Constent.versionCodeIOS.isNotEmpty
-            ? Constent.versionCodeIOS
-            : await getVersionSharePref(); // Fetch user ID if version code is empty
-      }
+      String? versionCode = Platform.isAndroid
+          ? (Constent.versionCodeAndroid.isNotEmpty
+          ? Constent.versionCodeAndroid
+          : await getVersionSharePref())
+          : (Constent.versionCodeIOS.isNotEmpty
+          ? Constent.versionCodeIOS
+          : await getVersionSharePref());
+
       notifyListeners();
+
       var headers = {
         'device-type': deviceType,
         'version': versionCode.toString(),
         "authorization": "$token",
       };
+
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse(
-          UrlConstant.mediauploadUrl,
-        ),
+        Uri.parse(UrlConstant.mediauploadUrl),
       );
 
-      request.fields.addAll(
-        {
-          'type': type,
-          'file_type': fileType,
-        },
-      );
+      request.fields.addAll({
+        'type': type,
+        'file_type': fileType,
+      });
 
-      request.files.add(
-        await http.MultipartFile.fromPath(
-          'media_name',
-          file,
-        ),
-      );
+      request.files.add(await http.MultipartFile.fromPath('media_name', file));
+
       if (thumbNail != null) {
-        request.files.add(
-          await http.MultipartFile.fromPath(
-            'media_thumb',
-            thumbNail,
-          ),
-        );
+        request.files.add(await http.MultipartFile.fromPath('media_thumb', thumbNail));
       }
 
       request.headers.addAll(headers);
 
       http.StreamedResponse response = await request.send();
-      // print(await response.stream.bytesToString());
       String responseBody = await response.stream.bytesToString();
+
+      logger.i("mediaUploadResponse: $responseBody");
+
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonResponse = jsonDecode(responseBody);
         String? mediaName = jsonResponse['media_name'];
-        List<String> mediaNameList = [];
-        mediaNameList.add(mediaName!);
-        addMediaUploadResponseListFunction(
-          mediaNameList,
-        );
+        String? mediaThumb = jsonResponse['media_thumb'];
+
+        if (mediaName != null) {
+          addMediaUploadResponseListFunction([mediaName]);
+        }
+
+        if (mediaThumb != null) {
+          addMediaThumbResponseListFunction([mediaThumb]);
+        }
+
         notifyListeners();
       } else {
         showCustomSnackBar(
-            context: context, message: response.reasonPhrase.toString());
+          context: context,
+          message: response.reasonPhrase.toString(),
+        );
       }
-      if(response.statusCode == 401){
+
+      if (response.statusCode == 401 || response.statusCode == 403) {
         TokenManager.setTokenStatus(true);
-        //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
-      if(response.statusCode == 403){
-        TokenManager.setTokenStatus(true);
-        //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
-      }
+
       saveMediaUploadLoading = false;
       notifyListeners();
     } catch (error) {
@@ -1631,6 +1651,7 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
       showCustomSnackBar(context: context, message: error.toString());
     }
   }
+
 
   Future<void> clearAction() async {
     nameEditTextController.clear();
@@ -1690,4 +1711,12 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
     goalModelIdName.removeAt(index);
     notifyListeners();
   }
+
+  List<String> mediaThumbList = [];
+
+  void addMediaThumbResponseListFunction(List<String> thumbs) {
+    mediaThumbList.addAll(thumbs);
+    notifyListeners();
+  }
+
 }

@@ -411,14 +411,14 @@ class _GoalAndDreamFullViewScreenState
                                                     ),
                                                     child: Stack(
                                                       children: [
+                                                        // ✅ No hardcoded AspectRatio
                                                         Center(
-                                                          child: AspectRatio(
-                                                            aspectRatio: 16 / 9,
-                                                            child: VideoPlayerWidgetViewAndAlreadyGoalProgressBar(
-                                                              videoUrl: videoList[index],
-                                                            ),
+                                                          child: VideoPlayerWidgetViewAndAlreadyGoalProgressBar(
+                                                            videoUrl: videoList[index],
                                                           ),
                                                         ),
+
+                                                        // Close button
                                                         Positioned(
                                                           top: 40,
                                                           right: 20,
@@ -431,6 +431,7 @@ class _GoalAndDreamFullViewScreenState
                                                     ),
                                                   ),
                                                 );
+
                                               },
                                               child: ClipRRect(
                                                 borderRadius: BorderRadius.circular(5),

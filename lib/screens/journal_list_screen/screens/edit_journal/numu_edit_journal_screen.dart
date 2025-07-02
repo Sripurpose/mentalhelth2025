@@ -510,6 +510,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                                   locationLongitude:
                                                       mentalStrengthEditProvider
                                                           .selectedLongitude,
+                                                      mediaThumbs: mentalStrengthEditProvider.mediaThumbList, // ✅ pass here
                                                   mediaName:
                                                       mentalStrengthEditProvider
                                                           .addMediaUploadResponseList,
@@ -663,6 +664,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                                   locationLongitude:
                                                       mentalStrengthEditProvider
                                                           .selectedLongitude,
+                                                      mediaThumbs: mentalStrengthEditProvider.mediaThumbList, // ✅ pass here
                                                   mediaName:
                                                       mentalStrengthEditProvider
                                                           .addMediaUploadResponseList,

@@ -38,7 +38,7 @@ class _LandingRegisterScreenScreenState
    //_handleIncomingDeepLinks();
     signInProvider = Provider.of<SignInProvider>(context, listen: false);
 
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 5), () {
       setState(() => _isLoading = false);
     });
 

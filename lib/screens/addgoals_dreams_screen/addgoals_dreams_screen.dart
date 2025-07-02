@@ -643,6 +643,7 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
                       adDreamsGoalsProvider.selectedLocationAddress,
                   categoryId: editProfileProvider.categorys!.id.toString(),
                   gemEndDate: adDreamsGoalsProvider.formattedDate,
+                  mediaThumbs: adDreamsGoalsProvider.mediaThumbList, // ✅ pass here
                   actionId: adDreamsGoalsProvider.goalModelIdName,
                 );
                 GoalsDreamsProvider goalsDreamsProvider =
