@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
@@ -715,7 +716,7 @@ class _NumuMentalStrengthAddEditPageState
                                   const ActionFullViewJournalCreateBottomSheet(),
                               ],
                             ),
-                          )
+                          ),
                         ],
                       ),
                     );
@@ -976,334 +977,362 @@ class _NumuMentalStrengthAddEditPageState
   }
 
   Widget _buildFifthTab(BuildContext context, Size size) {
+    final isLoading = mentalStrengthEditProvider.saveJournalLoading;
     Size size = MediaQuery.of(context).size;
-    return Center(
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 20,
-          ),
-          const Text(
-            "Which Goal Is Affected By ",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              fontFamily: 'OpenSans',
-            ),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          const Text(
-            " Your Reaction ?",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              fontFamily: 'OpenSans',
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          SizedBox(
-            width: size.width * 0.80,
-            height: 50,
-            child: ElevatedButton(
-              onPressed: () {
-                _isTokenExpired();
-                mentalStrengthEditProvider.openChooseGoalFunction();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
+    return IgnorePointer(
+      ignoring: isLoading, // disables touch events
+      child: Opacity(
+        opacity: isLoading ? 0.5 : 1.0, // fades out UI when loading
+        child: Center(
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 20,
+              ),
+              const Text(
+                "Which Goal Is Affected By ",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'OpenSans',
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 16),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Select Goal",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.normal,
+              const SizedBox(
+                height: 5,
+              ),
+              const Text(
+                " Your Reaction ?",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'OpenSans',
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                width: size.width * 0.80,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: () {
+                    _isTokenExpired();
+                    mentalStrengthEditProvider.openChooseGoalFunction();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
                     ),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                   ),
-                  Icon(
-                    size: 30,
-                    Icons.arrow_drop_down,
-                    color: ColorsContent.newThemeColor,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "Select Goal",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                      Icon(
+                        size: 30,
+                        Icons.arrow_drop_down,
+                        color: ColorsContent.newThemeColor,
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
-          SizedBox(
-            height: size.height * 0.02,
-          ),
-          mentalStrengthEditProvider.goalsValue.id == null
-              ? const SizedBox()
-              : Container(
-                  height: size.height * 0.06,
-                  width: size.width * 0.80,
-                  padding: const EdgeInsets.only(
-                    bottom: 5,
-                    top: 5,
-                    left: 5,
-                    right: 5,
-                  ),
-                  decoration: BoxDecoration(
-                    color: ColorsContent.newThemeColor,
-                    borderRadius: BorderRadius.circular(8), // Makes it circular
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            customPopup(
-                              context: context,
-                              onPressedDelete: () async {
-                                mentalStrengthEditProvider.cleaGoalValue();
-                                Navigator.of(context).pop();
+              SizedBox(
+                height: size.height * 0.02,
+              ),
+              mentalStrengthEditProvider.goalsValue.id == null
+                  ? const SizedBox()
+                  : Container(
+                      height: size.height * 0.06,
+                      width: size.width * 0.80,
+                      padding: const EdgeInsets.only(
+                        bottom: 5,
+                        top: 5,
+                        left: 5,
+                        right: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        color: ColorsContent.newThemeColor,
+                        borderRadius: BorderRadius.circular(8), // Makes it circular
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                customPopup(
+                                  context: context,
+                                  onPressedDelete: () async {
+                                    mentalStrengthEditProvider.cleaGoalValue();
+                                    Navigator.of(context).pop();
+                                  },
+                                  yes: "Yes",
+                                  title: 'Do you Need Delete ?',
+                                  content: 'Are you sure you want to delete ?',
+                                );
                               },
-                              yes: "Yes",
-                              title: 'Do you Need Delete ?',
-                              content: 'Are you sure you want to delete ?',
-                            );
-                          },
-                          child: CircleAvatar(
-                            radius: size.width * 0.035,
-                            backgroundColor: Colors.deepPurple,
-                            child: Icon(
-                              Icons.close,
-                              color: Colors.white,
-                              size: size.width * 0.04,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          // color: Colors.red,
-                          width: size.width * 0.45,
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            // Enable horizontal scrolling
-                            child: Text(
-                              mentalStrengthEditProvider.goalsValue.title
-                                  .toString(),
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w700,
-                                fontFamily: 'OpenSans',
+                              child: CircleAvatar(
+                                radius: size.width * 0.035,
+                                backgroundColor: Colors.deepPurple,
+                                child: Icon(
+                                  Icons.close,
+                                  color: Colors.white,
+                                  size: size.width * 0.04,
+                                ),
                               ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines:
-                                  1, // Set the maximum number of lines to 3
                             ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            mentalStrengthEditProvider
-                                .openGoalViewSheetFunction();
-                            mentalStrengthEditProvider.fetchGoalDetails(
-                                goalId: mentalStrengthEditProvider.goalsValue.id
-                                    .toString(),
-                                context: context);
-                          },
-                          child: CircleAvatar(
-                            radius: size.width * 0.035,
-                            backgroundColor: Colors.deepPurple,
-                            child: Icon(
-                              Icons.arrow_forward_ios,
-                              color: Colors.white,
-                              size: size.width * 0.04,
+                            SizedBox(
+                              // color: Colors.red,
+                              width: size.width * 0.45,
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                // Enable horizontal scrolling
+                                child: Text(
+                                  mentalStrengthEditProvider.goalsValue.title
+                                      .toString(),
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700,
+                                    fontFamily: 'OpenSans',
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines:
+                                      1, // Set the maximum number of lines to 3
+                                ),
+                              ),
                             ),
-                          ),
+                            GestureDetector(
+                              onTap: () {
+                                mentalStrengthEditProvider
+                                    .openGoalViewSheetFunction();
+                                mentalStrengthEditProvider.fetchGoalDetails(
+                                    goalId: mentalStrengthEditProvider.goalsValue.id
+                                        .toString(),
+                                    context: context);
+                              },
+                              child: CircleAvatar(
+                                radius: size.width * 0.035,
+                                backgroundColor: Colors.deepPurple,
+                                child: Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.white,
+                                  size: size.width * 0.04,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-        ],
+
+              // Optional inline loader
+              if (isLoading)
+                Center(child: CupertinoActivityIndicator(
+                  color: ColorsContent.newThemeColor,
+                  radius: 15,
+                ))
+            ],
+          ),
+        ),
       ),
     );
   }
 
   Widget _buildSixthTab(BuildContext context, Size size) {
-    return Center(
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 20,
-          ),
-          const Text(
-            "Select an action",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              fontFamily: 'OpenSans',
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          SizedBox(
-            width: size.width * 0.80,
-            height: 50,
-            child: ElevatedButton(
-              onPressed: () {
-                if (mentalStrengthEditProvider.goalsValue.id == null) {
-                  showCustomSnackBar(
-                    context: context,
-                    message: "Please choose your goal",
-                  );
-                } else {
-                  _isTokenExpired();
-                  mentalStrengthEditProvider.openChooseActionFunction();
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
+    final isLoading = mentalStrengthEditProvider.saveJournalLoading;
+    return IgnorePointer(
+      ignoring: isLoading, // disables touch events
+      child: Opacity(
+        opacity: isLoading ? 0.5 : 1.0, // fades out UI when loading
+        child: Center(
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 20,
+              ),
+              const Text(
+                "Select an action",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'OpenSans',
                 ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16), // left padding
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Select Action",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.normal,
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                width: size.width * 0.80,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (mentalStrengthEditProvider.goalsValue.id == null) {
+                      showCustomSnackBar(
+                        context: context,
+                        message: "Please choose your goal",
+                      );
+                    } else {
+                      _isTokenExpired();
+                      mentalStrengthEditProvider.openChooseActionFunction();
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
                     ),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16), // left padding
                   ),
-                  Icon(
-                    size: 30,
-                    Icons.arrow_drop_down,
-                    color: ColorsContent.newThemeColor,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "Select Action",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                      Icon(
+                        size: 30,
+                        Icons.arrow_drop_down,
+                        color: ColorsContent.newThemeColor,
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
-          SizedBox(
-            height: size.height * 0.02,
-          ),
-          SizedBox(
-            height: size.height * 0.40,
-            width: size.width * 0.80,
-            child: ListView.builder(
-              shrinkWrap: true,
-              physics: const BouncingScrollPhysics(),
-              // Or ScrollPhysics() for default
-              itemCount: mentalStrengthEditProvider.actionList.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  height: size.height * 0.06,
-                  width: size.width * 0.80,
-                  padding: const EdgeInsets.only(
-                    bottom: 5,
-                    top: 5,
-                    left: 5,
-                    right: 5,
-                  ),
-                  margin: const EdgeInsets.only(bottom: 4),
-                  decoration: BoxDecoration(
-                    color: ColorsContent.newThemeColor,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // Delete Button
-                        GestureDetector(
-                          onTap: () {
-                            customPopup(
-                              context: context,
-                              onPressedDelete: () async {
-                                mentalStrengthEditProvider
-                                    .clearActionListSelected(index: index);
-                                Navigator.of(context).pop();
+              SizedBox(
+                height: size.height * 0.02,
+              ),
+              SizedBox(
+                height: size.height * 0.40,
+                width: size.width * 0.80,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: const BouncingScrollPhysics(),
+                  // Or ScrollPhysics() for default
+                  itemCount: mentalStrengthEditProvider.actionList.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      height: size.height * 0.06,
+                      width: size.width * 0.80,
+                      padding: const EdgeInsets.only(
+                        bottom: 5,
+                        top: 5,
+                        left: 5,
+                        right: 5,
+                      ),
+                      margin: const EdgeInsets.only(bottom: 4),
+                      decoration: BoxDecoration(
+                        color: ColorsContent.newThemeColor,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // Delete Button
+                            GestureDetector(
+                              onTap: () {
+                                customPopup(
+                                  context: context,
+                                  onPressedDelete: () async {
+                                    mentalStrengthEditProvider
+                                        .clearActionListSelected(index: index);
+                                    Navigator.of(context).pop();
+                                  },
+                                  yes: "Yes",
+                                  title: 'Do you Need Delete ?',
+                                  content: 'Are you sure you want to delete ?',
+                                );
                               },
-                              yes: "Yes",
-                              title: 'Do you Need Delete ?',
-                              content: 'Are you sure you want to delete ?',
-                            );
-                          },
-                          child: CircleAvatar(
-                            radius: size.width * 0.035,
-                            backgroundColor: Colors.deepPurple,
-                            child: Icon(
-                              Icons.close,
-                              color: Colors.white,
-                              size: size.width * 0.04,
-                            ),
-                          ),
-                        ),
-                        // Title
-                        SizedBox(
-                          width: size.width * 0.45,
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Text(
-                              mentalStrengthEditProvider.actionList[index].title
-                                  .toString(),
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w700,
-                                fontFamily: 'OpenSans',
+                              child: CircleAvatar(
+                                radius: size.width * 0.035,
+                                backgroundColor: Colors.deepPurple,
+                                child: Icon(
+                                  Icons.close,
+                                  color: Colors.white,
+                                  size: size.width * 0.04,
+                                ),
                               ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
                             ),
-                          ),
-                        ),
-                        // Play Button
-                        GestureDetector(
-                          onTap: () async {
-                            await mentalStrengthEditProvider.fetchActionDetails(
-                                actionId: mentalStrengthEditProvider
-                                    .actionList[index].id
-                                    .toString(),
-                                context: context);
-                            mentalStrengthEditProvider
-                                .openActionFullViewFunction();
-                          },
-                          child: CircleAvatar(
-                            radius: size.width * 0.035,
-                            backgroundColor: Colors.deepPurple,
-                            child: Icon(
-                              Icons.arrow_forward_ios,
-                              color: Colors.white,
-                              size: size.width * 0.04,
+                            // Title
+                            SizedBox(
+                              width: size.width * 0.45,
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Text(
+                                  mentalStrengthEditProvider.actionList[index].title
+                                      .toString(),
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700,
+                                    fontFamily: 'OpenSans',
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                              ),
                             ),
-                          ),
+                            // Play Button
+                            GestureDetector(
+                              onTap: () async {
+                                await mentalStrengthEditProvider.fetchActionDetails(
+                                    actionId: mentalStrengthEditProvider
+                                        .actionList[index].id
+                                        .toString(),
+                                    context: context);
+                                mentalStrengthEditProvider
+                                    .openActionFullViewFunction();
+                              },
+                              child: CircleAvatar(
+                                radius: size.width * 0.035,
+                                backgroundColor: Colors.deepPurple,
+                                child: Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.white,
+                                  size: size.width * 0.04,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          )
-        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+
+              // Optional inline loader
+              if (isLoading)
+                Center(child: CupertinoActivityIndicator(
+                  color: ColorsContent.newThemeColor,
+                  radius: 15,
+                ))
+            ],
+          ),
+        ),
       ),
     );
   }

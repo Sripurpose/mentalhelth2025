@@ -342,6 +342,7 @@ class _ScreenChooseGoalMentalStrengthState
             child: Consumer<MentalStrengthEditProvider>(
                 builder: (context, mentalStrengthEditProvider, _) {
               return Checkbox(
+                activeColor: ColorsContent.newThemeColor,
                 value:
                     mentalStrengthEditProvider.goalsValue.id == goals[index].id
                         ? true
@@ -385,18 +386,18 @@ class _ScreenChooseGoalMentalStrengthState
                     Text(
                       formatDate(
                           int.parse(goals[index].goalStartdate.toString())),
-                      style: theme.textTheme.bodySmall,
+                      style: theme.textTheme.labelMedium,
                     ),
                     Text(
                       "  to  ",
-                      style: theme.textTheme.bodySmall,
+                      style: theme.textTheme.labelMedium,
                     ),
                     Text(
                       goals[index].goalEnddate == ""
                           ? ""
                           : formatDate1(
                               int.parse(goals[index].goalEnddate.toString())),
-                      style: theme.textTheme.bodySmall,
+                      style: theme.textTheme.labelMedium,
                     ),
                   ],
                 ),
@@ -418,7 +419,7 @@ class _ScreenChooseGoalMentalStrengthState
               },
               child: CircleAvatar(
                 radius: size.width * 0.03,
-                backgroundColor: Colors.deepPurple,
+                backgroundColor: ColorsContent.newThemeColor,
                 child: Icon(
                   Icons.play_arrow,
                   color: Colors.white,

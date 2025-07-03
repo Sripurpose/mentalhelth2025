@@ -331,6 +331,7 @@ class _GoalAndDreamFullViewBottomParellelSheetState
                                     });
                                   },
                                 ),
+                                if(imageList.length != 1)
                                 Positioned(
                                   bottom: 10,
                                   left: 0,
@@ -452,7 +453,7 @@ class _GoalAndDreamFullViewBottomParellelSheetState
                                     });
                                   },
                                 ),
-
+                                if(videoList.length != 1)
                                 Positioned(
                                   bottom: 10,
                                   left: 0,

@@ -97,8 +97,8 @@ class DashBoardScreen extends StatelessWidget {
                       icon:
                       CustomImageView(
                         imagePath: ImageConstant.imgHome,
-                        height: 25,
-                        width: 25,
+                        height: 40,
+                        width: 40,
                         color: theme.colorScheme.primary.withOpacity(1),
                       ),
                       activeIcon: Padding(
@@ -106,8 +106,8 @@ class DashBoardScreen extends StatelessWidget {
                         child: Image.asset(
                           ImageConstant.home_active_png, // This should be the path to your PNG image
                          // color: theme.colorScheme.primary.withOpacity(1),
-                          height: 80,
-                          width: 80,
+                          height: 75,
+                          width: 75,
                         ),
                         // CustomImageView(
                         //   imagePath: ImageConstant.check_home_icon,
@@ -121,8 +121,8 @@ class DashBoardScreen extends StatelessWidget {
                     BottomNavigationBarItem(
                       icon: CustomImageView(
                         imagePath: ImageConstant.imgSettings,
-                        height: 28,
-                        width: 28,
+                        height: 40,
+                        width: 40,
                         color: theme.colorScheme.primary.withOpacity(1),
                       ),
                       activeIcon: Padding(
@@ -130,8 +130,8 @@ class DashBoardScreen extends StatelessWidget {
                         child: Image.asset(
                           ImageConstant.mental_active_png, // This should be the path to your PNG image
                           // color: theme.colorScheme.primary.withOpacity(1),
-                          height: 80,
-                          width: 80,
+                          height: 75,
+                          width: 75,
                         ),
                       ),
                       label: '',
@@ -139,8 +139,8 @@ class DashBoardScreen extends StatelessWidget {
                     BottomNavigationBarItem(
                       icon: CustomImageView(
                         imagePath: ImageConstant.imgMegaphone,
-                        height: 28,
-                        width: 28,
+                        height: 40,
+                        width: 40,
                         color: theme.colorScheme.primary.withOpacity(1),
                       ),
                       activeIcon: Padding(
@@ -148,8 +148,8 @@ class DashBoardScreen extends StatelessWidget {
                         child: Image.asset(
                           ImageConstant.listview_active_png, // This should be the path to your PNG image
                           // color: theme.colorScheme.primary.withOpacity(1),
-                          height: 80,
-                          width: 80,
+                          height: 75,
+                          width: 75,
                         ),
                       ),
                       label: '',
@@ -157,8 +157,8 @@ class DashBoardScreen extends StatelessWidget {
                     BottomNavigationBarItem(
                       icon: CustomImageView(
                         imagePath: ImageConstant.imgArrowDown,
-                        height: 28,
-                        width: 28,
+                        height: 40,
+                        width: 40,
                         color: theme.colorScheme.primary.withOpacity(1),
                       ),
                       activeIcon: Padding(
@@ -166,8 +166,8 @@ class DashBoardScreen extends StatelessWidget {
                         child: Image.asset(
                           ImageConstant.goal_active_png, // This should be the path to your PNG image
                           // color: theme.colorScheme.primary.withOpacity(1),
-                          height: 80,
-                          width: 80,
+                          height: 75,
+                          width: 75,
                         ),
                       ),
                       label: '',

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
@@ -20,28 +21,23 @@ import 'package:provider/provider.dart';
 import '../../../../widgets/app_bar/appbar_subtitle.dart';
 import '../../../../widgets/app_bar/custom_app_bar.dart';
 
-
-
 class ReminderPushViewScreen extends StatefulWidget {
   final Map<String, dynamic> reminderData;
 
-  const ReminderPushViewScreen({
-    Key? key,
-    required this.reminderData
-  }) : super(
-    key: key,
-  );
+  const ReminderPushViewScreen({Key? key, required this.reminderData})
+      : super(
+          key: key,
+        );
 
   @override
-  State<ReminderPushViewScreen> createState() =>
-      _ReminderPushViewScreenState();
+  State<ReminderPushViewScreen> createState() => _ReminderPushViewScreenState();
 }
 
-class _ReminderPushViewScreenState
-    extends State<ReminderPushViewScreen> {
+class _ReminderPushViewScreenState extends State<ReminderPushViewScreen> {
   late DashBoardProvider dashBoardProvider;
 
   var logger = Logger();
+
   @override
   void initState() {
     dashBoardProvider = Provider.of<DashBoardProvider>(context, listen: false);
@@ -50,14 +46,18 @@ class _ReminderPushViewScreenState
 
   @override
   Widget build(BuildContext context) {
-    final dashBoardProvider = Provider.of<DashBoardProvider>(context, listen: false);
+    final dashBoardProvider =
+        Provider.of<DashBoardProvider>(context, listen: false);
     Size size = MediaQuery.of(context).size;
     return SafeArea(
-      child:    Scaffold(
+      child: Scaffold(
         appBar: AppBar(
-          backgroundColor: ColorsContent.homeBackGroundColor,  // Set the background color
+          backgroundColor: ColorsContent.homeBackGroundColor,
+          // Set the background color
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios, color: ColorsContent.newThemeColor),  // Default back arrow icon
+            icon:
+                Icon(Icons.arrow_back_ios, color: ColorsContent.newThemeColor),
+            // Default back arrow icon
             onPressed: () {
               print("object");
               Navigator.push(
@@ -70,7 +70,7 @@ class _ReminderPushViewScreenState
             },
           ),
           title: const Text(
-            "Action Details",  // Set the title text
+            "Action Details", // Set the title text
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
@@ -78,10 +78,10 @@ class _ReminderPushViewScreenState
               color: Colors.black,
             ),
           ),
-          elevation: 0,  // Optional: Set elevation to 0 if you want a flat app bar
-          centerTitle: false,  // Align title to the left
+          elevation: 0,
+          // Optional: Set elevation to 0 if you want a flat app bar
+          centerTitle: false, // Align title to the left
         ),
-
         body: Stack(
           children: [
             Positioned.fill(
@@ -106,245 +106,385 @@ class _ReminderPushViewScreenState
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                       //   const SizedBox(height: 15),
+                          //   const SizedBox(height: 15),
                           Consumer<AddActionsProvider>(
                               builder: (context, addActionsProvider, _) {
-                                return Column(
-                                  children: [
-                                    const SizedBox(height: 15),
-                                    Padding(
-                                        padding: EdgeInsets.only(
-                                          left: size.width * 0.04,
-                                          bottom: 10,
-                                        ),
-                                        child:
-                                         SizedBox(
-                                          child: Column(
-                                            mainAxisAlignment:
+                            return Column(
+                              children: [
+                                const SizedBox(height: 15),
+                                Padding(
+                                    padding: EdgeInsets.only(
+                                      left: size.width * 0.01,
+                                      bottom: 10,
+                                    ),
+                                    child: SizedBox(
+                                      child: Column(
+                                        mainAxisAlignment:
                                             MainAxisAlignment.start,
-                                            crossAxisAlignment:
+                                        crossAxisAlignment:
                                             CrossAxisAlignment.start,
-                                            children: [
-
-                                              Row(
+                                        children: [
+                                          Container(
+                                            padding: const EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                            ),
+                                            child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
-                                                  const Text(
-                                                    "Status : ",
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.w600,
-                                                      fontFamily: 'Open Sans',
-                                                      color: Colors.black,
+                                                  const SizedBox(height: 5),
+                                                  Container(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 8), // Optional: adds inner spacing
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white, // White background
+                                                      borderRadius: BorderRadius.circular(5), // Rounded corners
+                                                    ),
+                                                    child: Row(
+                                                      children: [
+                                                        SvgPicture.asset(
+                                                          ImageConstant
+                                                              .actionDetailsMark, // Replace with your actual asset path
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        const Text(
+                                                          "Status             : ",
+                                                          style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontFamily:
+                                                                'Open Sans',
+                                                            color: Colors.black,
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 5,
+                                                        ),
+                                                        Text(
+                                                          widget.reminderData[
+                                                                      'reminder_status'] ==
+                                                                  0
+                                                              ? "Inactive"
+                                                              : "Active",
+                                                          style: const TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            fontFamily:
+                                                                'Open Sans',
+                                                            color: Colors.black,
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
-                                                  const SizedBox(
-                                                    width: 5,
-                                                  ),
-                                                  Text(
-                                                    widget.reminderData['reminder_status'] == 0 ? "Inactive" : "Active",
-                                                    style: const TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.w400,
-                                                      fontFamily: 'Open Sans',
-                                                      color: Colors.black,
+                                                  const SizedBox(height: 5),
+                                                  Container(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 8), // Optional: adds inner spacing
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white, // White background
+                                                      borderRadius: BorderRadius.circular(5), // Rounded corners
+                                                    ),
+                                                    child: Row(
+                                                      children: [
+                                                        SvgPicture.asset(
+                                                          ImageConstant
+                                                              .actionDetailsMark, // Replace with your actual asset path
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        const Text(
+                                                          "Goal Title       : ",
+                                                          style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontFamily:
+                                                                'Open Sans',
+                                                            color: Colors.black,
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 5,
+                                                        ),
+                                                        Text(
+                                                          widget.reminderData[
+                                                                  'goal_title']
+                                                              .toString(),
+                                                          style: const TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            fontFamily:
+                                                                'Open Sans',
+                                                            color: Colors.black,
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
-
-
-                                                ],
-                                              ),
-                                              const SizedBox(
-                                                height: 5,
-                                              ),
-                                              Row(
-                                                children: [
-                                                  const Text(
-                                                    "Goal Title       : ",
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.w600,
-                                                      fontFamily: 'Open Sans',
-                                                      color: Colors.black,
+                                                  const SizedBox(height: 5),
+                                                  Container(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 8), // Optional: adds inner spacing
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white, // White background
+                                                      borderRadius: BorderRadius.circular(5), // Rounded corners
+                                                    ),
+                                                    child: Row(
+                                                      children: [
+                                                        SvgPicture.asset(
+                                                          ImageConstant
+                                                              .actionDetailsMark, // Replace with your actual asset path
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        const Text(
+                                                          "Action Title   : ",
+                                                          style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontFamily:
+                                                                'Open Sans',
+                                                            color: Colors.black,
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 5,
+                                                        ),
+                                                        Text(
+                                                          widget.reminderData[
+                                                                  'reminder_title']
+                                                              .toString(),
+                                                          style: const TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            fontFamily:
+                                                                'Open Sans',
+                                                            color: Colors.black,
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
-                                                  const SizedBox(
-                                                    width: 5,
-                                                  ),
-                                                  Text(
-                                                    widget.reminderData['goal_title'].toString(),
-                                                    style:  const TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.w400,
-                                                      fontFamily: 'Open Sans',
-                                                      color: Colors.black,
+                                                  const SizedBox(height: 5),
+                                                  Container(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 8), // Optional: adds inner spacing
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white, // White background
+                                                      borderRadius: BorderRadius.circular(5), // Rounded corners
+                                                    ),
+                                                    child: Row(
+                                                      children: [
+                                                        SvgPicture.asset(
+                                                          ImageConstant
+                                                              .actionDetailsMark, // Replace with your actual asset path
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        const Text(
+                                                          "Action Desc  : ",
+                                                          style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontFamily:
+                                                                'Open Sans',
+                                                            color: Colors.black,
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 5,
+                                                        ),
+                                                        Text(
+                                                          widget.reminderData[
+                                                                  'reminder_desc']
+                                                              .toString(),
+                                                          style: const TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            fontFamily:
+                                                                'Open Sans',
+                                                            color: Colors.black,
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
-
-                                                ],
-                                              ),
-                                              const SizedBox(
-                                                height: 5,
-                                              ),
-                                              Row(
-                                                children: [
-                                                  const Text(
-                                                    "Action Title   : ",
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.w600,
-                                                      fontFamily: 'Open Sans',
-                                                      color: Colors.black,
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 5,
-                                                  ),
-                                                  Text(
-                                                    widget.reminderData['reminder_title'].toString(),
-                                                    style:  const TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.w400,
-                                                      fontFamily: 'Open Sans',
-                                                      color: Colors.black,
-                                                    ),
-                                                  ),
-
-                                                ],
-                                              ),
-                                              const SizedBox(
-                                                height: 5,
-                                              ),
-                                              Row(
-                                                children: [
-                                                  const Text(
-                                                    "Action Desc  : ",
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.w600,
-                                                      fontFamily: 'Open Sans',
-                                                      color: Colors.black,
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 5,
-                                                  ),
-                                                  Text(
-                                                    widget.reminderData['reminder_desc'].toString(),
-                                                    style:  const TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.w400,
-                                                      fontFamily: 'Open Sans',
-                                                      color: Colors.black,
-                                                    ),
-                                                  ),
-
-                                                ],
-                                              ),
-                                              const SizedBox(
-                                                height: 30,
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    "Reminder",
-                                                    style: CustomTextStyles.blackText16000000W700(),
-                                                  ),
-                                                ],
-                                              ),
-                                              const SizedBox(
-                                                height: 20,
-                                              ),
-                                              Row(
-                                                children: [
-                                                  const Text(
-                                                    "Date      :",
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.w600,
-                                                      fontFamily: 'Open Sans',
-                                                      color: Colors.black,
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 5,
-                                                  ),
-                                                  Text(
-                                                    "${unixTimestampToDate(widget.reminderData['reminder_startdate'].toString())} to ${unixTimestampToDate(widget.reminderData['reminder_enddate'].toString())}",
-                                                    style:  const TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.w400,
-                                                      fontFamily: 'Open Sans',
-                                                      color: Colors.black,
-                                                    ),
-                                                  ),
-
-                                                ],
-                                              ),
-                                              const SizedBox(
-                                                height: 5,
-                                              ),
-                                              Row(
-                                                children: [
-                                                  const Text(
-                                                    "Time     : ",
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.w600,
-                                                      fontFamily: 'Open Sans',
-                                                      color: Colors.black,
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 5,
-                                                  ),
-                                                  Text(
-                                                    "${widget.reminderData['from_time'] ?? TimeOfDay.now()} to ${widget.reminderData['to_time'] ?? TimeOfDay.now()}",
-                                                    style:  const TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.w400,
-                                                      fontFamily: 'Open Sans',
-                                                      color: Colors.black,
-                                                    ),
-                                                  ),
-
-                                                ],
-                                              ),
-                                              const SizedBox(
-                                                height: 5,
-                                              ),
-                                              Row(
-                                                children: [
-                                                  const Text(
-                                                    "Repeat : ",
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.w600,
-                                                      fontFamily: 'Open Sans',
-                                                      color: Colors.black,
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 5,
-                                                  ),
-                                                  Text(
-                                                    widget.reminderData['reminder_repeat'] ?? "None",
-                                                    style: const TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.w400,
-                                                      fontFamily: 'Open Sans',
-                                                      color: Colors.black,
-                                                    ),
-                                                  ),
-
-                                                ],
-                                              ),
-                                            ],
+                                                  const SizedBox(height: 5),
+                                                ]),
                                           ),
-                                        )
-                                    )
-                                  ],
-                                );
-                              }),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          Container(
+                                            padding: const EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                            ),
+                                            child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: [
+                                                      Expanded(
+                                                        child: Row(
+                                                          mainAxisSize: MainAxisSize.min,
+                                                          children: [
+                                                            SvgPicture.asset(
+                                                              ImageConstant.actionDetailsMark,
+                                                            ),
+                                                            const SizedBox(width: 10),
+                                                            Text(
+                                                              "Reminder",
+                                                              style: CustomTextStyles.blackText16000000W700(),
+                                                            ),
+                                                            const Text(
+                                                              " : ",
+                                                              style: TextStyle(
+                                                                fontSize: 16,
+                                                                fontWeight: FontWeight.w600,
+                                                                fontFamily: 'Open Sans',
+                                                                color: Colors.black,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      SvgPicture.asset(
+                                                        ImageConstant.reminderClock,
+
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 15,
+                                                  ),
+                                                  Row(
+                                                    children: [
+
+                                                      const SizedBox(width: 10),
+                                                      const Text(
+                                                        "Date      :",
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          fontFamily:
+                                                              'Open Sans',
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      Text(
+                                                        "${unixTimestampToDate(widget.reminderData['reminder_startdate'].toString())} to ${unixTimestampToDate(widget.reminderData['reminder_enddate'].toString())}",
+                                                        style: const TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          fontFamily:
+                                                              'Open Sans',
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      const SizedBox(width: 10),
+                                                      const Text(
+                                                        "Time     : ",
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          fontFamily:
+                                                              'Open Sans',
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      Text(
+                                                        "${widget.reminderData['from_time'] ?? TimeOfDay.now()} to ${widget.reminderData['to_time'] ?? TimeOfDay.now()}",
+                                                        style: const TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          fontFamily:
+                                                              'Open Sans',
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      const SizedBox(width: 10),
+                                                      const Text(
+                                                        "Repeat : ",
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          fontFamily:
+                                                              'Open Sans',
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      Text(
+                                                        widget.reminderData[
+                                                                'reminder_repeat'] ??
+                                                            "None",
+                                                        style: const TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          fontFamily:
+                                                              'Open Sans',
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ]),
+                                          ),
+                                        ],
+                                      ),
+                                    ))
+                              ],
+                            );
+                          }),
                           const SizedBox(height: 30),
                         ],
                       ),
@@ -362,10 +502,10 @@ class _ReminderPushViewScreenState
   /// Section Widget
   Widget _buildUntitledOne(BuildContext context, Size size,
       {required String category,
-        required String createDate,
-        required String achiveDate,
-        required String status,
-        required String comments}) {
+      required String createDate,
+      required String achiveDate,
+      required String status,
+      required String comments}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -399,7 +539,6 @@ class _ReminderPushViewScreenState
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1, // Set the maximum number of lines to 3
                 ),
-
               ),
             ),
           ],
@@ -421,7 +560,6 @@ class _ReminderPushViewScreenState
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1, // Set the maximum number of lines to 3
                 ),
-
               ),
             ),
           ],
@@ -436,7 +574,8 @@ class _ReminderPushViewScreenState
       int unixTimestamp = int.parse(timestamp);
 
       // Create a DateTime object from the Unix timestamp (assumes timestamp is in seconds)
-      DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(unixTimestamp * 1000);
+      DateTime dateTime =
+          DateTime.fromMillisecondsSinceEpoch(unixTimestamp * 1000);
 
       // Format the DateTime object into the desired string format
       final DateFormat formatter = DateFormat('dd MMM yyyy');
@@ -452,11 +591,14 @@ class _ReminderPushViewScreenState
   String formatTimeOfDay(TimeOfDay time) {
     final hour = time.hourOfPeriod; // Hour within the 12-hour range
     final period = time.period == DayPeriod.am ? "AM" : "PM";
-    final formattedHour = (hour == 0 ? 12 : hour).toString(); // Adjust for midnight and noon
-    final formattedMinute = time.minute.toString().padLeft(2, '0'); // Ensure two-digit minute
+    final formattedHour =
+        (hour == 0 ? 12 : hour).toString(); // Adjust for midnight and noon
+    final formattedMinute =
+        time.minute.toString().padLeft(2, '0'); // Ensure two-digit minute
 
     return "$formattedHour:$formattedMinute $period";
   }
+
   TimeOfDay? stringToTimeOfDay(String time) {
     try {
       // Trim and normalize to uppercase
@@ -505,21 +647,22 @@ class _ReminderPushViewScreenState
     }
   }
 
-
   Widget buildIndicators(int pageCount, int currentIndex) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: List.generate(
         pageCount,
-            (index) {
+        (index) {
           return Container(
             width: 12,
             height: 12,
             margin: const EdgeInsets.symmetric(horizontal: 4),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: index == currentIndex ? ColorsContent.newThemeColor : Colors.grey,
+              color: index == currentIndex
+                  ? ColorsContent.newThemeColor
+                  : Colors.grey,
             ),
           );
         },
@@ -527,9 +670,8 @@ class _ReminderPushViewScreenState
     );
   }
 
-
   PreferredSizeWidget buildAppBarActionView(BuildContext context, Size size,
-      {String? heading, required String id,required actionStatus}) {
+      {String? heading, required String id, required actionStatus}) {
     return CustomAppBarNumu(
       backgroundColor: ColorsContent.homeBackGroundColor,
       leadingWidth: 36,

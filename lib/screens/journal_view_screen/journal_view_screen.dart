@@ -425,6 +425,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                             //     });
                                             //   },
                                             // ),
+                                            if(imageList.length != 1)
                                             Positioned(
                                               bottom: 10,
                                               left: 0,
@@ -522,6 +523,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                           });
                                         },
                                       ),
+                                      if( videoList.length != 1)
                                       Positioned(
                                         bottom: 10,
                                         left: 0,

@@ -325,7 +325,7 @@ class _GoalAndDreamFullViewScreenState
                                           });
                                         },
                                       ),
-
+                                      if(imageList.length != 1)
                                       Positioned(
                                         bottom: 10,
                                         left: 0,
@@ -461,6 +461,7 @@ class _GoalAndDreamFullViewScreenState
                                         //     });
                                         //   },
                                         // ),
+                                        if(videoList.length != 1)
                                         Positioned(
                                           bottom: 10,
                                           left: 0,

@@ -739,7 +739,8 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
         controller: addActionsProvider.descriptionEditTextController,
         hintText: "Action Description",
         hintStyle: CustomTextStyles.bodySmallGray700,
-        textInputAction: TextInputAction.done,
+        textInputAction: TextInputAction.newline, // ✅ allow newline
+        textInputType: TextInputType.multiline, // ✅ multiline keyboard
         maxLines: 4,
       );
     });

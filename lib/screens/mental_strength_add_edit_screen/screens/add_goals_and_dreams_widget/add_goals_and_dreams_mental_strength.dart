@@ -481,6 +481,8 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
           controller: adDreamsGoalsProvider.commentEditTextController,
           hintText: "Goal Description",
           hintStyle: CustomTextStyles.bodySmallGray700,
+          textInputAction: TextInputAction.newline, // ✅ allow newline
+          textInputType: TextInputType.multiline, // ✅ multiline keyboard
           maxLines: 4,
         ),
       );

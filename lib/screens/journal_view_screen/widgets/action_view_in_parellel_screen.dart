@@ -295,6 +295,7 @@ class _ActionViewInParallelScreenState
                                                       });
                                                     },
                                                   ),
+                                                  if(imageList.length != 1)
                                                   Positioned(
                                                     bottom: 10,
                                                     left: 0,
@@ -405,7 +406,7 @@ class _ActionViewInParallelScreenState
                                                       });
                                                     },
                                                   ),
-
+                                                  if(videoList.length != 1)
                                                   Positioned(
                                                     bottom: 10,
                                                     left: 0,

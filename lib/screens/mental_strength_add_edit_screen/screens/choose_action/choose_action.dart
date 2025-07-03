@@ -657,6 +657,7 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
             child: Consumer<MentalStrengthEditProvider>(
               builder: (context, mentalStrengthEditProvider, _) {
                 return Checkbox(
+                  activeColor: ColorsContent.newThemeColor,
                   value: mentalStrengthEditProvider.actionList.contains(action[index]),
                   onChanged: (value) {
                     mentalStrengthEditProvider.addActionFunction(value: action[index]);
@@ -687,7 +688,7 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
                 SizedBox(height: size.height * 0.005),
                 Text(
                   formatDate(int.parse(action[index].actionDate.toString())),
-                  style: theme.textTheme.bodySmall,
+                  style: theme.textTheme.labelMedium,
                 ),
                 SizedBox(height: size.height * 0.01),
               ],
