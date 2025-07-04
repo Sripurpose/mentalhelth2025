@@ -82,10 +82,20 @@ class _EditReminderScreenScreenScreenState
   void init() {
     HomeProvider homeProvider = Provider.of(context, listen: false);
     AddActionsProvider addActionsProvider = Provider.of(context, listen: false);
-    homeProvider
-        .reminderStartDate = unixTimestampToDate(widget.startDate ?? "");
-    homeProvider
-        .reminderEndDate = unixTimestampToDate(widget.endDate?? "");
+
+    homeProvider.reminderStartDate = unixTimestampToDate(
+        widget.startDate ??
+            "");
+    logger.i("addActionsProvider.reminderStartTime${homeProvider.reminderStartTime}");
+    homeProvider.reminderEndDate = unixTimestampToDate(
+        widget.endDate ?? "");
+
+    //
+    // homeProvider
+    //     .reminderStartDate = unixTimestampToDate(widget.startDate ?? "");
+    // homeProvider
+    //     .reminderEndDate = unixTimestampToDate(widget.endDate?? "");
+
     homeProvider
         .reminderStartTime = stringToTimeOfDay(widget.startTime ?? "");
     homeProvider
@@ -179,7 +189,8 @@ class _EditReminderScreenScreenScreenState
       int unixTimestamp = int.parse(timestamp);
 
       // Create a DateTime object from the Unix timestamp (assumes timestamp is in seconds)
-      DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(unixTimestamp * 1000);
+      DateTime dateTime =
+      DateTime.fromMillisecondsSinceEpoch(unixTimestamp * 1000);
 
       // Format the DateTime object into the desired string format
       final DateFormat formatter = DateFormat('dd MMM yyyy');
@@ -290,16 +301,14 @@ class _EditReminderScreenScreenScreenState
                                               top: 2,
                                               bottom: 1,
                                             ),
-                                            child: Text(
-                                              //importent
-                                              homeProvider
-                                                  .reminderStartDate
-                                                  .isNotEmpty
-                                                  ? homeProvider
-                                                  .reminderStartDate
-                                                  : "Choose Date   ",
-                                              style: CustomTextStyles
-                                                  .bodySmallGray700,
+                                            child:
+
+                                            Text(
+                                              (homeProvider.reminderStartDate.isNotEmpty &&
+                                                  homeProvider.reminderStartDate != "Invalid date")
+                                                  ? homeProvider.reminderStartDate
+                                                  : "Choose Date",
+                                              style: CustomTextStyles.bodySmallGray700,
                                             ),
                                           ),
                                         ],
@@ -358,15 +367,13 @@ class _EditReminderScreenScreenScreenState
                                               top: 2,
                                               bottom: 1,
                                             ),
-                                            child: Text(
-                                              homeProvider
-                                                  .reminderEndDate
-                                                  .isNotEmpty
-                                                  ? homeProvider
-                                                  .reminderEndDate
-                                                  : "Choose Date   ",
-                                              style: CustomTextStyles
-                                                  .bodySmallGray700,
+                                            child:
+                                            Text(
+                                              (homeProvider.reminderEndDate.isNotEmpty &&
+                                                  homeProvider.reminderEndDate != "Invalid date")
+                                                  ? homeProvider.reminderEndDate
+                                                  : "Choose Date",
+                                              style: CustomTextStyles.bodySmallGray700,
                                             ),
                                           ),
                                         ],

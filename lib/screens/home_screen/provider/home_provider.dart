@@ -397,10 +397,13 @@ class HomeProvider extends ChangeNotifier {
   DateTime? date;
   TimeOfDay? remindTime;
 
+
+//fix1
   void reminderStartDateFunction(BuildContext context) async {
     reminderStartDate = await selectReminder(
       context,
     );
+    logger.i("reminderStartDate${reminderStartDate}");
     notifyListeners();
   }
 
@@ -409,6 +412,7 @@ class HomeProvider extends ChangeNotifier {
       context,
       reminderStartDates: DateFormat('yyyy-MM-dd').parse(reminderStartDate),
     );
+    logger.i("reminderStartDate${reminderEndDate}");
     notifyListeners();
   }
 
@@ -558,8 +562,8 @@ class HomeProvider extends ChangeNotifier {
         'action_id': actionId,
         'reminder_title': title,
         'reminder_desc': details,
-        'reminder_startdate': convertToUnixTimestamp(reminderStartDate).toString(),
-        'reminder_enddate': convertToUnixTimestamp(reminderEndDate).toString(),
+        'reminder_startdate': reminderStartDate,
+        'reminder_enddate': reminderEndDate,
         'from_time': convertTimeOfDayTo12Hour(reminderStartTime!).toString(),
         'to_time': convertTimeOfDayTo12Hour(reminderEndTime!).toString(),
         'reminder_before': '',
