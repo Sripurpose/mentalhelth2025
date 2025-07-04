@@ -403,7 +403,7 @@ Widget buildPopupDialog(BuildContext context, Size size) {
               GestureDetector(
                 onTap: () async {
                   final shareMessage = '''
-Check out the Numu app! 🌿
+Check out the Numu app!
 
 Build mental strength, reduce anxiety, and stay focused on your goals with Numu.
 
