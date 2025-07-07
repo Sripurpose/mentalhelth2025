@@ -220,7 +220,7 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
                                           }).toList(),
                                           hint: Text(
                                             editProfileProvider.interestsValueController.text.isEmpty
-                                                ? 'Music, Badminton'
+                                                ? 'Select Category'
                                                 : editProfileProvider.interestsValueController.text,
                                             style: CustomTextStyles.bodySmallGray700,
                                           ),
@@ -631,7 +631,14 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
                   context: context,
                   message: "Please select a valid date",
                 );
-              } else {
+              }
+              else if (editProfileProvider.interestsValueController.text.isNotEmpty) {
+                showCustomSnackBar(
+                  context: context,
+                  message: "Please select a category",
+                );
+              }
+              else {
                 // All fields are validated, proceed with saving the data
                 await adDreamsGoalsProvider.saveGemFunction(
                   context,
