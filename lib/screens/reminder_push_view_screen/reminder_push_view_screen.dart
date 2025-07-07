@@ -430,16 +430,15 @@ class _ReminderPushViewScreenState extends State<ReminderPushViewScreen> {
                                                         width: 5,
                                                       ),
                                                       Text(
-                                                        "${widget.reminderData['from_time'] ?? TimeOfDay.now()} to ${widget.reminderData['to_time'] ?? TimeOfDay.now()}",
+                                                        "${_formatTime(widget.reminderData['from_time'])} to ${_formatTime(widget.reminderData['to_time'])}",
                                                         style: const TextStyle(
                                                           fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          fontFamily:
-                                                              'Open Sans',
+                                                          fontWeight: FontWeight.w400,
+                                                          fontFamily: 'Open Sans',
                                                           color: Colors.black,
                                                         ),
                                                       ),
+
                                                     ],
                                                   ),
                                                   const SizedBox(
@@ -693,5 +692,23 @@ class _ReminderPushViewScreenState extends State<ReminderPushViewScreen> {
         ),
       ),
     );
+  }
+}
+
+String _formatTime(dynamic time) {
+  if (time is TimeOfDay) {
+    final now = DateTime.now();
+    final dt = DateTime(now.year, now.month, now.day, time.hour, time.minute);
+    return DateFormat.jm().format(dt); // Example: 12:05 PM
+  } else if (time is String) {
+    try {
+      // Parse from string like "12:05 PM"
+      final parsedTime = DateFormat.jm().parse(time);
+      return DateFormat.jm().format(parsedTime);
+    } catch (e) {
+      return time.toString().replaceAll('?', '').trim();
+    }
+  } else {
+    return time.toString().replaceAll('?', '').trim();
   }
 }
