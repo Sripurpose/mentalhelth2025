@@ -625,8 +625,8 @@ class HomeProvider extends ChangeNotifier {
     final now = DateTime.now();
     final dateTime = DateTime(now.year, now.month, now.day, time.hour, time.minute);
 
-    // Format the time using intl package in 12-hour format with AM/PM
-    return DateFormat.jm().format(dateTime);
+    // Format the time in 12-hour format without spaces
+    return DateFormat('h:mma').format(dateTime);
   }
 
 
