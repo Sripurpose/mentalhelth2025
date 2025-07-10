@@ -632,7 +632,7 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
                   message: "Please select a valid date",
                 );
               }
-              else if (editProfileProvider.interestsValueController.text.isNotEmpty) {
+              else if (editProfileProvider.interestsValueController.text.isEmpty) {
                 showCustomSnackBar(
                   context: context,
                   message: "Please select a category",

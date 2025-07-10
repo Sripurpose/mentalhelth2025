@@ -205,7 +205,7 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
                               hint: Text(
                                 editProfileProvider
                                         .interestsValueController.text.isEmpty
-                                    ? 'Music, Badminton'
+                                    ? 'Select Category'
                                     : editProfileProvider
                                         .interestsValueController.text,
                                 style: CustomTextStyles.bodySmallGray700,
@@ -524,6 +524,9 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
                 adDreamsGoalsProvider
                     .commentEditTextController.text.isNotEmpty &&
                 adDreamsGoalsProvider.selectedDate.isNotEmpty &&
+                editProfileProvider
+                    .interestsValueController.text.isNotEmpty
+                &&
                 editProfileProvider.categorys != null &&
                 adDreamsGoalsProvider.formattedDate != null) {
               await adDreamsGoalsProvider.saveGemFunction(
