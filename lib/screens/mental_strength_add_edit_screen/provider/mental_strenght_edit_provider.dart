@@ -2551,6 +2551,7 @@ logger.i("body$body");
   List<String> mediaThumbList = [];
 
   void addMediaThumbResponseListFunction(List<String> list) {
+    mediaThumbList.clear();
     mediaThumbList.addAll(list);
     notifyListeners();
   }

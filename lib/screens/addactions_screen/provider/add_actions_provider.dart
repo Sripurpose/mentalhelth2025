@@ -2911,6 +2911,7 @@ var logger = Logger();
   List<String> mediaThumbList = [];
 
   void addMediaThumbResponseListFunction(List<String> thumbs) {
+    mediaThumbList.clear();
     mediaThumbList.addAll(thumbs);
     notifyListeners();
   }
