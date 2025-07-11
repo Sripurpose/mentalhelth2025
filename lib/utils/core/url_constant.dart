@@ -85,6 +85,7 @@ class UrlConstant {
   }
 
   static String removemediaUrl = "${baseUrl}removemedia";
+  static String removemediabeforesaveUrl = "${baseUrl}removemediabeforesave";
 
   static String sendOtpEmailPhone = "${baseUrl}send_otp_email_phone";
 

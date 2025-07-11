@@ -2915,7 +2915,76 @@ var logger = Logger();
     mediaThumbList.addAll(thumbs);
     notifyListeners();
   }
+  //remove mediaNotUse
+  bool removeMediaNotUseLoading = false;
+  Future<void> removeMediaFunctionNotSave({
+    required BuildContext context,
+    required String file,
+    required String type,
+  }) async
+  {
+    try {
+      String? token = await getUserTokenSharePref();
+      removeMediaNotUseLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
+      notifyListeners();
+      var body = {
+        'file': file,
+        'type': type,
+      };
+      final response = await http.post(
+        Uri.parse(
+          UrlConstant.removemediabeforesaveUrl,
+        ),
+        headers: <String, String>{
+          'device-type': deviceType,
+          'version': versionCode.toString(),
+          "authorization": "$token"},
+        body: body,
+      );
 
+      if (response.statusCode == 200) {
+      }
+      else if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+      else {
+        showCustomSnackBar(context: context, message: 'media failed.');
+      }
+      if(response.statusCode == 401){
+        TokenManager.setTokenStatus(true);
+        //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
+      }
+      if(response.statusCode == 403){
+        TokenManager.setTokenStatus(true);
+        //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
+      }
+      removeMediaNotUseLoading = false;
+      notifyListeners();
+    } catch (error) {
+      removeMediaNotUseLoading = false;
+      notifyListeners();
+    }
+  }
 
 }
 

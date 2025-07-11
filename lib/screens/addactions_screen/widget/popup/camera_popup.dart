@@ -151,11 +151,10 @@ Future cameraBottomSheetAction({
                                             customPopup(
                                               context: context,
                                               onPressedDelete: () async {
-                                                mentalStrengthEditProvider
-                                                    .removeMediaFunction(
+                                                addActionsProvider
+                                                    .removeMediaFunctionNotSave(
                                                   context: context,
-                                                  id: addActionsProvider
-                                                      .takedImages[index],
+                                                  file: addActionsProvider.addMediaUploadResponseList[index], // ✅ file name here
                                                   type: "action",
                                                 );
                                                 addActionsProvider.takedImagesRemove(index);

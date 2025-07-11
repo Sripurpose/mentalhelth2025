@@ -544,6 +544,12 @@ Future galleryBottomSheet({
                                               customPopup(
                                                 context: context,
                                                 onPressedDelete: () async {
+                                                  mentalStrengthEditProvider
+                                                      .removeMediaFunctionNotSave(
+                                                    context: context,
+                                                    file: mentalStrengthEditProvider.addMediaUploadResponseList[index], // ✅ file name here
+                                                    type: "journal",
+                                                  );
                                                   mentalStrengthEditProvider.pickedImagesRemove(index);
                                                   Navigator.of(context).pop();
                                                   mentalStrengthEditProvider.removeMediaUploadResponseListFunction(index);

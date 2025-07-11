@@ -156,11 +156,10 @@ Future cameraBottomSheetAdGoals({
                                             customPopup(
                                               context: context,
                                               onPressedDelete: () async {
-                                                mentalStrengthEditProvider
-                                                    .removeMediaFunction(
+                                                adDreamsGoalsProvider
+                                                    .removeMediaFunctionNotSave(
                                                   context: context,
-                                                  id: adDreamsGoalsProvider
-                                                      .takedImages[index],
+                                                  file: adDreamsGoalsProvider.addMediaUploadResponseList[index], // ✅ file name here
                                                   type: "goal",
                                                 );
                                                 adDreamsGoalsProvider

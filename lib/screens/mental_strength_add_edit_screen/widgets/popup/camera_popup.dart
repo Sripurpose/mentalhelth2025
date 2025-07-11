@@ -310,6 +310,12 @@ Future cameraBottomSheet({
                                                 //       .takedImages[index],
                                                 //   type: "journal",
                                                 // );
+                                                mentalStrengthEditProvider
+                                                    .removeMediaFunctionNotSave(
+                                                  context: context,
+                                                  file: mentalStrengthEditProvider.addMediaUploadResponseList[index], // ✅ file name here
+                                                  type: "journal",
+                                                );
                                                 mentalStrengthEditProvider.takedImagesRemove(index);
 
                                                 mentalStrengthEditProvider.removeMediaUploadResponseListFunction(index);

@@ -341,13 +341,12 @@ Future galleryBottomSheetAddGoals({
                                               customPopup(
                                                 context: context,
                                                 onPressedDelete: () async {
-                                                  // mentalStrengthEditProvider
-                                                  //     .removeMediaFunction(
-                                                  //   context: context,
-                                                  //   id: adDreamsGoalsProvider
-                                                  //       .pickedImages[index],
-                                                  //   type: "goal",
-                                                  // );
+                                                  adDreamsGoalsProvider
+                                                      .removeMediaFunctionNotSave(
+                                                    context: context,
+                                                    file: adDreamsGoalsProvider.addMediaUploadResponseList[index], // ✅ file name here
+                                                    type: "goal",
+                                                  );
                                                   adDreamsGoalsProvider
                                                       .pickedImagesRemove(
                                                           index);
