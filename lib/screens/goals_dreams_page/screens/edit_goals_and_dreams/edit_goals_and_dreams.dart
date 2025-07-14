@@ -1023,6 +1023,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins',
                                     ),
                                   ),
                                 ),
@@ -1146,6 +1147,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins',
                                     ),
                                   ),
                                 ),
@@ -1253,6 +1255,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins',
                                     ),
                                   ),
                                 ),
@@ -1425,6 +1428,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins',
                                     ),
                                   ),
                                 ),

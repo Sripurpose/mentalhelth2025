@@ -73,7 +73,7 @@ class UserProfileListItemWidget extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 16.5,
                       fontWeight: FontWeight.w500,
-                      fontFamily: 'Open Sans',
+                      fontFamily: 'Poppins',
                       color: Colors.black,
                     ),
                   ),
@@ -85,7 +85,7 @@ class UserProfileListItemWidget extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
-                    fontFamily: 'Open Sans',
+                    fontFamily: 'Poppins',
                     color:  ColorsContent.goalCompletedTextColor,
                   ),
                 ),

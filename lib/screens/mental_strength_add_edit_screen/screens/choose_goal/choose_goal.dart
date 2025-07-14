@@ -151,6 +151,7 @@ class _ScreenChooseGoalMentalStrengthState
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
+                                    fontFamily: 'Poppins',
                                   ),
                                 )
                                     : const SizedBox(),
@@ -171,6 +172,7 @@ class _ScreenChooseGoalMentalStrengthState
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins',
                                     ),
                                   ),
                                 ),
@@ -306,6 +308,7 @@ class _ScreenChooseGoalMentalStrengthState
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
+                      fontFamily: 'Poppins',
                     ),
                   ),
                 );

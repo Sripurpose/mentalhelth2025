@@ -179,7 +179,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
-                                    fontFamily: 'Open Sans',
+                                    fontFamily: 'Poppins',
                                     color: Colors.black,
                                   ),
                                 ),
@@ -197,7 +197,12 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                         .journalDetails!.journals!.journalTitle
                                         .toString(),).length,
                                     overflow: TextOverflow.ellipsis,
-                                    style: CustomTextStyles.bodyMediumGray700_1,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: 'Poppins',
+                                      color:  ColorsContent.goalCompletedTextColor,
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(height: 10),
@@ -206,7 +211,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
-                                    fontFamily: 'Open Sans',
+                                    fontFamily: 'Poppins',
                                     color: Colors.black,
                                   ),
                                 ),
@@ -224,7 +229,12 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                         .journalDetails!.journals!.journalDesc
                                         .toString(),).length,
                                     overflow: TextOverflow.ellipsis,
-                                    style: CustomTextStyles.bodyMediumGray700_1,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: 'Poppins',
+                                      color:  ColorsContent.goalCompletedTextColor,
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(height: 15),
@@ -238,7 +248,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w600,
-                                            fontFamily: 'Open Sans',
+                                            fontFamily: 'Poppins',
                                             color: Colors.black,
                                           ),
                                         ),
@@ -282,7 +292,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w600,
-                                            fontFamily: 'Open Sans',
+                                            fontFamily: 'Poppins',
                                             color: Colors.black,
                                           ),
                                         ),
@@ -461,7 +471,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w600,
-                                            fontFamily: 'Open Sans',
+                                            fontFamily: 'Poppins',
                                             color: Colors.black,
                                           ),
                                         ),
@@ -549,7 +559,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
-                                      fontFamily: 'Open Sans',
+                                      fontFamily: 'Poppins',
                                       color: Colors.black,
                                     ),
                                   ),
@@ -579,7 +589,12 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                               .replaceAll(RegExp(r',\s*,+'), ',') // Replace multiple consecutive commas (with or without spaces) with a single comma
                                               .replaceAll(RegExp(r'^,|,$'), '') // Remove leading and trailing commas
                                               .trim() ?? "",
-                                          style: CustomTextStyles.bodyMediumGray700_1,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: 'Poppins',
+                                            color:  ColorsContent.goalCompletedTextColor,
+                                          ),
                                           overflow: TextOverflow.visible, // Ensures scrolling works
                                         ),
                                       ),
@@ -598,7 +613,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
-                                      fontFamily: 'Open Sans',
+                                      fontFamily: 'Poppins',
                                       color: Colors.black,
                                     ),
                                   ),
@@ -624,7 +639,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
-                                      fontFamily: 'Open Sans',
+                                      fontFamily: 'Poppins',
                                       color: Colors.black,
                                     ),
                                   ),
@@ -643,7 +658,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                             style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.w600,
-                                              fontFamily: 'Open Sans',
+                                              fontFamily: 'Poppins',
                                               color:  ColorsContent.stressFullStateColor,
                                             ),
                                         ),
@@ -656,7 +671,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
-                                      fontFamily: 'Open Sans',
+                                      fontFamily: 'Poppins',
                                       color: Colors.black,
                                     ),
                                   ),
@@ -682,7 +697,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
-                                      fontFamily: 'Open Sans',
+                                      fontFamily: 'Poppins',
                                       color: Colors.black,
                                     ),
                                   ),
@@ -724,7 +739,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                                     style: const TextStyle(
                                                       fontSize: 17,
                                                       fontWeight: FontWeight.w500,
-                                                      fontFamily: 'Open Sans',
+                                                      fontFamily: 'Poppins',
                                                       color: Colors.white,
                                                     ),
                                                   ),
@@ -766,7 +781,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
-                                      fontFamily: 'Open Sans',
+                                      fontFamily: 'Poppins',
                                       color: Colors.black,
                                     ),
                                   ),
@@ -825,7 +840,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                                     style: const TextStyle(
                                                       fontSize: 16,
                                                       fontWeight: FontWeight.w500,
-                                                      fontFamily: 'Open Sans',
+                                                      fontFamily: 'Poppins',
                                                       color: Colors.white,
                                                     ),
                                                     overflow: TextOverflow.ellipsis,
@@ -930,7 +945,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                   style: const TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w500,
-                    fontFamily: 'Open Sans',
+                    fontFamily: 'Poppins',
                     color: Colors.black,
                   ),
                 ),

@@ -175,6 +175,7 @@ class _JournalListViewWidgetState extends State<JournalListViewWidget> {
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
+                                  fontFamily: 'Poppins',
                                 ),
                               ),
                             ),

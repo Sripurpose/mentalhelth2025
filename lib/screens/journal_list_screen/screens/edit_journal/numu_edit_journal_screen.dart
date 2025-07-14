@@ -260,6 +260,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                                 style: TextStyle(
                                                   fontSize: 17,
                                                   fontWeight: FontWeight.w500,
+                                                  fontFamily: 'Poppins',
                                                   color: ColorsContent
                                                       .newThemeColor, // Adjust color as needed
                                                 ),
@@ -277,6 +278,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                         style: TextStyle(
                                           fontSize: 15,
                                           fontWeight: FontWeight.w600,
+                                          fontFamily: 'Poppins',
                                           color: ColorsContent
                                               .newThemeColor, // Adjust color as needed
                                         ),
@@ -1655,7 +1657,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
               color: Colors.black,
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              fontFamily: 'OpenSans',
+              fontFamily: 'Poppins',
             ),
           ),
           SizedBox(height: size.height * 0.05),
@@ -1741,7 +1743,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
               color: Colors.black,
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              fontFamily: 'OpenSans',
+              fontFamily: 'Poppins',
             ),
           ),
           SizedBox(height: size.height * 0.08),
@@ -1852,7 +1854,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
               color: Colors.black,
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              fontFamily: 'OpenSans',
+              fontFamily: 'Poppins',
             ),
           ),
           const SizedBox(
@@ -1864,7 +1866,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
               color: Colors.black,
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              fontFamily: 'OpenSans',
+              fontFamily: 'Poppins',
             ),
           ),
           SizedBox(height: size.height * 0.03),
@@ -1898,7 +1900,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
               color: Colors.black,
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              fontFamily: 'OpenSans',
+              fontFamily: 'Poppins',
             ),
           ),
           const SizedBox(
@@ -1910,7 +1912,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
               color: Colors.black,
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              fontFamily: 'OpenSans',
+              fontFamily: 'Poppins',
             ),
           ),
           const SizedBox(
@@ -1940,6 +1942,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.normal,
+                      fontFamily: 'Poppins',
                     ),
                   ),
                   Icon(
@@ -2011,7 +2014,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                 color: Colors.white,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w700,
-                                fontFamily: 'OpenSans',
+                                fontFamily: 'Poppins',
                               ),
                               overflow: TextOverflow.ellipsis,
                               maxLines:
@@ -2060,7 +2063,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
               color: Colors.black,
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              fontFamily: 'OpenSans',
+              fontFamily: 'Poppins',
             ),
           ),
           const SizedBox(
@@ -2097,6 +2100,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.normal,
+                      fontFamily: 'Poppins',
                     ),
                   ),
                   Icon(
@@ -2183,7 +2187,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                 color: Colors.white,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w700,
-                                fontFamily: 'OpenSans',
+                                fontFamily: 'Poppins',
                               ),
                               overflow: TextOverflow.ellipsis,
                               // Add this line if you want to truncate long text
@@ -2424,6 +2428,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins',
                                     ),
                                   ),
                                 ),
@@ -2547,6 +2552,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins',
                                     ),
                                   ),
                                 ),
@@ -2658,6 +2664,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins',
                                     ),
                                   ),
                                 ),
@@ -2838,6 +2845,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins',
                                     ),
                                   ),
                                 ),

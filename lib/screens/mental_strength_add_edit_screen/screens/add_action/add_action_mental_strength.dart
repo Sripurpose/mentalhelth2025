@@ -129,6 +129,7 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                             "Set a reminder for this action",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
+                              fontFamily: 'Poppins',
                             ),
                           ),
                         ],
@@ -146,6 +147,7 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                                     "Date",
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
+                                        fontFamily: 'Poppins',
                                         fontSize: 15),
                                   ),
                                   const SizedBox(
@@ -292,6 +294,7 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                                     "Time",
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
+                                        fontFamily: 'Poppins',
                                         fontSize: 15),
                                   ),
                                   const SizedBox(
@@ -366,6 +369,7 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                                       const Text(
                                         "To",
                                         style: TextStyle(
+                                            fontFamily: 'Poppins',
                                             fontWeight: FontWeight.bold),
                                       ),
                                       GestureDetector(
@@ -534,6 +538,7 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                                             "Repeat",
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
+                                              fontFamily: 'Poppins',
                                               fontSize: 15,
                                             ),
                                           ),
@@ -561,6 +566,7 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                                                           fontSize: 16,
                                                           fontWeight:
                                                               FontWeight.bold,
+                                                          fontFamily: 'Poppins',
                                                         ),
                                                       ),
                                                     ),
@@ -578,6 +584,7 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                                                           fontSize: 16,
                                                           fontWeight:
                                                               FontWeight.bold,
+                                                          fontFamily: 'Poppins',
                                                         ),
                                                       ),
                                                     ),
@@ -595,6 +602,7 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                                                           fontSize: 16,
                                                           fontWeight:
                                                               FontWeight.bold,
+                                                          fontFamily: 'Poppins',
                                                         ),
                                                       ),
                                                     ),
@@ -612,6 +620,7 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                                                           fontSize: 16,
                                                           fontWeight:
                                                               FontWeight.bold,
+                                                          fontFamily: 'Poppins',
                                                         ),
                                                       ),
                                                     ),
@@ -629,6 +638,7 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                                                           fontSize: 16,
                                                           fontWeight:
                                                               FontWeight.bold,
+                                                          fontFamily: 'Poppins',
                                                         ),
                                                       ),
                                                     ),

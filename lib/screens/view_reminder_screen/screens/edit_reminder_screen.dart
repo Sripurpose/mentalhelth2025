@@ -243,6 +243,7 @@ class _EditReminderScreenScreenScreenState
                               "Date",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
+                                  fontFamily: 'Poppins',
                                   fontSize: 15),
                             ),
                             const SizedBox(
@@ -390,6 +391,7 @@ class _EditReminderScreenScreenScreenState
                               "Time",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
+                                  fontFamily: 'Poppins',
                                   fontSize: 15),
                             ),
                             const SizedBox(
@@ -465,6 +467,7 @@ class _EditReminderScreenScreenScreenState
                                 const Text(
                                   "To",
                                   style: TextStyle(
+                                      fontFamily: 'Poppins',
                                       fontWeight: FontWeight.bold),
                                 ),
                                 GestureDetector(
@@ -630,6 +633,7 @@ class _EditReminderScreenScreenScreenState
                                       "Repeat",
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
+                                        fontFamily: 'Poppins',
                                         fontSize: 15,
                                       ),
                                     ),
@@ -689,6 +693,7 @@ class _EditReminderScreenScreenScreenState
                                                 title: const Text(
                                                   "Weekly",
                                                   style: TextStyle(
+                                                    fontFamily: 'Poppins',
                                                     fontSize: 16,
                                                     fontWeight:
                                                     FontWeight.bold,
@@ -706,6 +711,7 @@ class _EditReminderScreenScreenScreenState
                                                 title: const Text(
                                                   "Monthly",
                                                   style: TextStyle(
+                                                    fontFamily: 'Poppins',
                                                     fontSize: 16,
                                                     fontWeight:
                                                     FontWeight.bold,
@@ -724,6 +730,7 @@ class _EditReminderScreenScreenScreenState
                                                   "Yearly",
                                                   style: TextStyle(
                                                     fontSize: 16,
+                                                    fontFamily: 'Poppins',
                                                     fontWeight:
                                                     FontWeight.bold,
                                                   ),

@@ -190,6 +190,7 @@ class _GoalAndDreamFullViewScreenState
                                     color:ColorsContent.signInGradientColorViolet, // Purple text
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
+                                    fontFamily: 'Poppins',
                                   ),
                                 ),
                               ),
@@ -248,6 +249,7 @@ class _GoalAndDreamFullViewScreenState
                                     color:ColorsContent.signInGradientColorViolet, // Purple text
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
+                                    fontFamily: 'Poppins',
                                   ),
                                 ),
                               ),
@@ -377,6 +379,7 @@ class _GoalAndDreamFullViewScreenState
                                     color:ColorsContent.signInGradientColorViolet, // Purple text
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
+                                    fontFamily: 'Poppins',
                                   ),
                                 ),
                               ),
@@ -516,6 +519,7 @@ class _GoalAndDreamFullViewScreenState
                                     color:ColorsContent.signInGradientColorViolet, // Purple text
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
+                                    fontFamily: 'Poppins',
                                   ),
                                 ),
                               ),
@@ -549,8 +553,12 @@ class _GoalAndDreamFullViewScreenState
                                               '') // Remove leading and trailing commas
                                               .trim() ??
                                               "",
-                                          style: CustomTextStyles
-                                              .bodyMediumGray700_1,
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: 'Poppins',
+                                          ),
                                           overflow: TextOverflow.visible,
                                           maxLines: 4, // Ensures scrolling works
                                         ),
@@ -600,6 +608,7 @@ class _GoalAndDreamFullViewScreenState
                                               color:ColorsContent.signInGradientColorViolet, // Purple text
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
+                                              fontFamily: 'Poppins',
                                             ),
                                           ),
                                         ),
@@ -698,7 +707,7 @@ class _GoalAndDreamFullViewScreenState
                                                                     style: const TextStyle(
                                                                       fontSize: 17,
                                                                       fontWeight: FontWeight.w500,
-                                                                      fontFamily: 'Open Sans',
+                                                                      fontFamily: 'Poppins',
                                                                       color: Colors.white,
                                                                     ),
                                                                   ),
@@ -738,6 +747,7 @@ class _GoalAndDreamFullViewScreenState
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
+                                fontFamily: 'Poppins',
                               ),
                               // style: theme.textTheme.titleSmall,
                             )
@@ -919,6 +929,7 @@ class _GoalAndDreamFullViewScreenState
                     color:ColorsContent.signInGradientColorViolet, // Purple text
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins',
                   ),
                 ),
               ),
@@ -936,6 +947,7 @@ class _GoalAndDreamFullViewScreenState
                     color: Colors.black,
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
+                    fontFamily: 'Poppins',
                   ),
                 ),
               ),
@@ -969,6 +981,7 @@ class _GoalAndDreamFullViewScreenState
                     color:ColorsContent.signInGradientColorViolet, // Purple text
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins',
                   ),
                 ),
               ),
@@ -986,6 +999,7 @@ class _GoalAndDreamFullViewScreenState
                     color: Colors.black,
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
+                    fontFamily: 'Poppins',
                   ),
                 ),
               ),
@@ -1019,6 +1033,7 @@ class _GoalAndDreamFullViewScreenState
                     color:ColorsContent.signInGradientColorViolet, // Purple text
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins',
                   ),
                 ),
               ),
@@ -1036,6 +1051,7 @@ class _GoalAndDreamFullViewScreenState
                     color: Colors.black,
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
+                    fontFamily: 'Poppins',
                   ),
                 ),
               ),
@@ -1069,6 +1085,7 @@ class _GoalAndDreamFullViewScreenState
                     color:ColorsContent.signInGradientColorViolet, // Purple text
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins',
                   ),
                 ),
               ),
@@ -1086,6 +1103,7 @@ class _GoalAndDreamFullViewScreenState
                     color: Colors.black,
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
+                    fontFamily: 'Poppins',
                   ),
                 ),
               ),
@@ -1119,6 +1137,7 @@ class _GoalAndDreamFullViewScreenState
                     color:ColorsContent.signInGradientColorViolet, // Purple text
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins',
                   ),
                 ),
               ),
@@ -1136,6 +1155,7 @@ class _GoalAndDreamFullViewScreenState
                     color: Colors.black,
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
+                    fontFamily: 'Poppins',
                   ),
                 ),
               ),

@@ -458,6 +458,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       "Your Recent Journals",
                                      style:  TextStyle(
                                         fontSize: 20,
+                                        fontFamily: 'Poppins',
                                         fontWeight: FontWeight.w700,
                                         color:  ColorsContent.blackThemeColor,
                                       ),

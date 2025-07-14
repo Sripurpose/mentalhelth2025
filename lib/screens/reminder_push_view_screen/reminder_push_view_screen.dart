@@ -74,7 +74,7 @@ class _ReminderPushViewScreenState extends State<ReminderPushViewScreen> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              fontFamily: 'Open Sans',
+              fontFamily: 'Poppins',
               color: Colors.black,
             ),
           ),
@@ -159,8 +159,7 @@ class _ReminderPushViewScreenState extends State<ReminderPushViewScreen> {
                                                             fontSize: 16,
                                                             fontWeight:
                                                                 FontWeight.w600,
-                                                            fontFamily:
-                                                                'Open Sans',
+                                                            fontFamily: 'Poppins',
                                                             color: Colors.black,
                                                           ),
                                                         ),
@@ -177,8 +176,7 @@ class _ReminderPushViewScreenState extends State<ReminderPushViewScreen> {
                                                             fontSize: 16,
                                                             fontWeight:
                                                                 FontWeight.w400,
-                                                            fontFamily:
-                                                                'Open Sans',
+                                                            fontFamily: 'Poppins',
                                                             color: Colors.black,
                                                           ),
                                                         ),
@@ -207,8 +205,7 @@ class _ReminderPushViewScreenState extends State<ReminderPushViewScreen> {
                                                             fontSize: 16,
                                                             fontWeight:
                                                                 FontWeight.w600,
-                                                            fontFamily:
-                                                                'Open Sans',
+                                                            fontFamily: 'Poppins',
                                                             color: Colors.black,
                                                           ),
                                                         ),
@@ -223,8 +220,7 @@ class _ReminderPushViewScreenState extends State<ReminderPushViewScreen> {
                                                             fontSize: 16,
                                                             fontWeight:
                                                                 FontWeight.w400,
-                                                            fontFamily:
-                                                                'Open Sans',
+                                                            fontFamily: 'Poppins',
                                                             color: Colors.black,
                                                           ),
                                                         ),
@@ -253,8 +249,7 @@ class _ReminderPushViewScreenState extends State<ReminderPushViewScreen> {
                                                             fontSize: 16,
                                                             fontWeight:
                                                                 FontWeight.w600,
-                                                            fontFamily:
-                                                                'Open Sans',
+                                                            fontFamily: 'Poppins',
                                                             color: Colors.black,
                                                           ),
                                                         ),
@@ -269,8 +264,7 @@ class _ReminderPushViewScreenState extends State<ReminderPushViewScreen> {
                                                             fontSize: 16,
                                                             fontWeight:
                                                                 FontWeight.w400,
-                                                            fontFamily:
-                                                                'Open Sans',
+                                                            fontFamily: 'Poppins',
                                                             color: Colors.black,
                                                           ),
                                                         ),
@@ -299,8 +293,7 @@ class _ReminderPushViewScreenState extends State<ReminderPushViewScreen> {
                                                             fontSize: 16,
                                                             fontWeight:
                                                                 FontWeight.w600,
-                                                            fontFamily:
-                                                                'Open Sans',
+                                                            fontFamily: 'Poppins',
                                                             color: Colors.black,
                                                           ),
                                                         ),
@@ -315,8 +308,7 @@ class _ReminderPushViewScreenState extends State<ReminderPushViewScreen> {
                                                             fontSize: 16,
                                                             fontWeight:
                                                                 FontWeight.w400,
-                                                            fontFamily:
-                                                                'Open Sans',
+                                                            fontFamily: 'Poppins',
                                                             color: Colors.black,
                                                           ),
                                                         ),
@@ -362,7 +354,7 @@ class _ReminderPushViewScreenState extends State<ReminderPushViewScreen> {
                                                               style: TextStyle(
                                                                 fontSize: 16,
                                                                 fontWeight: FontWeight.w600,
-                                                                fontFamily: 'Open Sans',
+                                                                fontFamily: 'Poppins',
                                                                 color: Colors.black,
                                                               ),
                                                             ),
@@ -388,8 +380,7 @@ class _ReminderPushViewScreenState extends State<ReminderPushViewScreen> {
                                                           fontSize: 16,
                                                           fontWeight:
                                                               FontWeight.w600,
-                                                          fontFamily:
-                                                              'Open Sans',
+                                                          fontFamily: 'Poppins',
                                                           color: Colors.black,
                                                         ),
                                                       ),
@@ -402,8 +393,7 @@ class _ReminderPushViewScreenState extends State<ReminderPushViewScreen> {
                                                           fontSize: 16,
                                                           fontWeight:
                                                               FontWeight.w400,
-                                                          fontFamily:
-                                                              'Open Sans',
+                                                          fontFamily: 'Poppins',
                                                           color: Colors.black,
                                                         ),
                                                       ),
@@ -453,8 +443,7 @@ class _ReminderPushViewScreenState extends State<ReminderPushViewScreen> {
                                                           fontSize: 16,
                                                           fontWeight:
                                                               FontWeight.w600,
-                                                          fontFamily:
-                                                              'Open Sans',
+                                                          fontFamily: 'Poppins',
                                                           color: Colors.black,
                                                         ),
                                                       ),
@@ -469,8 +458,7 @@ class _ReminderPushViewScreenState extends State<ReminderPushViewScreen> {
                                                           fontSize: 16,
                                                           fontWeight:
                                                               FontWeight.w400,
-                                                          fontFamily:
-                                                              'Open Sans',
+                                                          fontFamily: 'Poppins',
                                                           color: Colors.black,
                                                         ),
                                                       ),

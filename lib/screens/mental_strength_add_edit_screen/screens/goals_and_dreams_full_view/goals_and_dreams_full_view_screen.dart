@@ -236,6 +236,7 @@ class _GoalAndDreamFullViewBottomSheetState
                           color:ColorsContent.signInGradientColorViolet, // Purple text
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
+                          fontFamily: 'Poppins',
                         ),
                       ),
                     ),
@@ -295,6 +296,7 @@ class _GoalAndDreamFullViewBottomSheetState
                           color:ColorsContent.signInGradientColorViolet, // Purple text
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
+                          fontFamily: 'Poppins',
                         ),
                       ),
                     ),
@@ -426,6 +428,7 @@ class _GoalAndDreamFullViewBottomSheetState
                           color:ColorsContent.signInGradientColorViolet, // Purple text
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
+                          fontFamily: 'Poppins',
                         ),
                       ),
                     ),
@@ -565,6 +568,7 @@ class _GoalAndDreamFullViewBottomSheetState
                           color:ColorsContent.signInGradientColorViolet, // Purple text
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
+                          fontFamily: 'Poppins',
                         ),
                       ),
                     ),
@@ -649,6 +653,7 @@ class _GoalAndDreamFullViewBottomSheetState
                               color: ColorsContent.signInGradientColorViolet,
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
+                              fontFamily: 'Poppins',
                             ),
                           ),
                         ),
@@ -693,7 +698,7 @@ class _GoalAndDreamFullViewBottomSheetState
                                               style: const TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.w500,
-                                                fontFamily: 'Open Sans',
+                                                fontFamily: 'Poppins',
                                                 color: Colors.white,
                                               ),
                                               maxLines: 1,
@@ -851,6 +856,7 @@ class _GoalAndDreamFullViewBottomSheetState
                     color:ColorsContent.signInGradientColorViolet, // Purple text
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins',
                   ),
                 ),
               ),
@@ -868,6 +874,7 @@ class _GoalAndDreamFullViewBottomSheetState
                     color: Colors.black,
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
+                    fontFamily: 'Poppins',
                   ),
                 ),
               ),
@@ -918,6 +925,7 @@ class _GoalAndDreamFullViewBottomSheetState
                     color: Colors.black,
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
+                    fontFamily: 'Poppins',
                   ),
                 ),
               ),
@@ -951,6 +959,7 @@ class _GoalAndDreamFullViewBottomSheetState
                     color:ColorsContent.signInGradientColorViolet, // Purple text
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins',
                   ),
                 ),
               ),
@@ -968,6 +977,7 @@ class _GoalAndDreamFullViewBottomSheetState
                     color: Colors.black,
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
+                    fontFamily: 'Poppins',
                   ),
                 ),
               ),
@@ -1001,6 +1011,7 @@ class _GoalAndDreamFullViewBottomSheetState
                     color:ColorsContent.signInGradientColorViolet, // Purple text
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins',
                   ),
                 ),
               ),
@@ -1018,6 +1029,7 @@ class _GoalAndDreamFullViewBottomSheetState
                     color: Colors.black,
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
+                    fontFamily: 'Poppins',
                   ),
                 ),
               ),
@@ -1051,6 +1063,7 @@ class _GoalAndDreamFullViewBottomSheetState
                     color:ColorsContent.signInGradientColorViolet, // Purple text
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins',
                   ),
                 ),
               ),
@@ -1068,6 +1081,7 @@ class _GoalAndDreamFullViewBottomSheetState
                     color: Colors.black,
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
+                    fontFamily: 'Poppins',
                   ),
                 ),
               ),

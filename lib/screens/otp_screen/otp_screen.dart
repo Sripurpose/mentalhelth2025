@@ -94,7 +94,7 @@ class _OtpScreenState extends State<OtpScreen> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w400,
-                      fontFamily: 'Open Sans',
+                      fontFamily: 'Poppins',
                       color: Colors.white,
                     ),
                   ),

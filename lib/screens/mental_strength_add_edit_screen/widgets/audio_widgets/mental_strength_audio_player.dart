@@ -542,12 +542,12 @@ class _MentalStrengthAudioPlayerState extends State<MentalStrengthAudioPlayer> {
                                   Text(
                                     formatDuration(position),
                                     style: const TextStyle(
-                                        color: Colors.white, fontSize: 12),
+                                        color: Colors.white, fontSize: 12,fontFamily: 'Poppins',),
                                   ),
                                   Text(
                                     formatDuration(duration),
                                     style: const TextStyle(
-                                        color: Colors.white, fontSize: 12),
+                                        color: Colors.white, fontSize: 12,fontFamily: 'Poppins',),
                                   ),
                                 ],
                               ),

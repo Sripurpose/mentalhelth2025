@@ -151,7 +151,7 @@ class _LandingRegisterScreenScreenState
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
-                                  fontFamily: 'Open Sans',
+                                  fontFamily: 'Poppins',
                                   color: Colors.white,
                                 ),
                               ),
@@ -163,7 +163,7 @@ class _LandingRegisterScreenScreenState
                                 style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w400,
-                                  fontFamily: 'Open Sans',
+                                  fontFamily: 'Poppins',
                                   color: Colors.white,
                                 ),
                               ),
@@ -221,6 +221,7 @@ class _LandingRegisterScreenScreenState
                                               fontWeight: FontWeight.bold,
                                               color:
                                               ColorsContent.newThemeColor,
+                                              fontFamily: 'Poppins',
                                             ),
                                             overflow: TextOverflow.ellipsis,
                                           ),
@@ -271,6 +272,8 @@ class _LandingRegisterScreenScreenState
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
                                       color: ColorsContent.whiteText,
+                                      fontFamily: 'Poppins',
+
                                     ),
                                   ),
                                 ),

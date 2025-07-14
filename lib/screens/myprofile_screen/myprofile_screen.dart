@@ -147,7 +147,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                       style: const TextStyle(
                                                         fontSize: 20,
                                                         fontWeight: FontWeight.w700,
-                                                        fontFamily: 'Open Sans',
+                                                        fontFamily: 'Poppins',
                                                         color: Colors.black,
                                                       ),
                                                       textAlign: TextAlign.center,
@@ -161,7 +161,12 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                               Text(
                                                 textAlign: TextAlign.center, // <-- Center alignment
                                                 "Member since ${editProfileProvider.getProfileModel?.createdAt == null ? "" : formatTimestampToDate(editProfileProvider.getProfileModel!.createdAt.toString())}",
-                                                style: CustomTextStyles.bodyMediumGray700,
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontFamily: 'Poppins',
+                                                  color:  ColorsContent.goalCompletedTextColor,
+                                                ),
                                                                                             //    textAlign: TextAlign.center,
                                               ),
                                               const SizedBox(height: 27),
@@ -175,7 +180,12 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                           ? TextSpan(
                                                         text:
                                                         "${(editProfileProvider.getProfileModel?.countryCode?.isNotEmpty ?? false) ? "+${editProfileProvider.getProfileModel!.countryCode} " : ""}${editProfileProvider.getProfileModel!.phone}\n",
-                                                        style: CustomTextStyles.bodyLargeff000000,
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight: FontWeight.w400,
+                                                          fontFamily: 'Poppins',
+                                                          color:  ColorsContent.blackText,
+                                                        ),
                                                       )
                                                           : const TextSpan(text: ""),
                                                       editProfileProvider.getProfileModel!.phone == null ||
@@ -242,7 +252,12 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
 
                                                       TextSpan(
                                                         text: "Date Of Birth\n",
-                                                        style: CustomTextStyles.titleMediumff000000,
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight: FontWeight.w600,
+                                                          fontFamily: 'Poppins',
+                                                          color:  ColorsContent.blackText,
+                                                        ),
                                                       ),
                                                       TextSpan(
                                                         text:
@@ -251,7 +266,12 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                       ),
                                                       TextSpan(
                                                         text: "Interests\n",
-                                                        style: CustomTextStyles.titleMediumff000000,
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight: FontWeight.w600,
+                                                          fontFamily: 'Poppins',
+                                                          color:  ColorsContent.blackText,
+                                                        ),
                                                       ),
                                                       TextSpan(
                                                         text: editProfileProvider.getProfileModel!.interests
@@ -320,6 +340,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                         fontSize: 14,
                                                         color: Colors.white,
                                                         fontWeight: FontWeight.bold,
+                                                        fontFamily: 'Poppins',
                                                       ),
                                                     ),
                                                   ),

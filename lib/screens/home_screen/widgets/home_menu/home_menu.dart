@@ -98,7 +98,12 @@ Widget buildPopupDialog(BuildContext context, Size size) {
                           editProvider.getProfileModel?.firstname.toString() ??
                               "",
                         ),
-                        style: CustomTextStyles.blackText24000000W500(),
+                        style: const TextStyle(
+                          fontSize: 16.5,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'Poppins',
+                          color: Colors.black,
+                        ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.center,

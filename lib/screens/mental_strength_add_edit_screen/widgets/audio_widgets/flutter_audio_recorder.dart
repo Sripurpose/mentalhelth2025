@@ -229,7 +229,7 @@ var logger = Logger();
               child:  Text("Settings",style:  TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                fontFamily: 'Open Sans',
+                fontFamily: 'Poppins',
                 color:ColorsContent.newThemeColor,
               ),),
             ),
@@ -239,7 +239,7 @@ var logger = Logger();
             child:  Text("OK",style:  TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w500,
-              fontFamily: 'Open Sans',
+              fontFamily: 'Poppins',
               color:ColorsContent.newThemeColor,
             ),),
           ),

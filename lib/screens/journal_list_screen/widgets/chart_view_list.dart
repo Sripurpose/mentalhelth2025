@@ -259,6 +259,7 @@ class ChartCircularWidgetState extends State<ChartCircularWidget> {
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white,
+                                            fontFamily: 'Poppins',
                                           ),
                                         );
                                       },
@@ -325,6 +326,7 @@ class CustomLegend extends StatelessWidget {
             style: const TextStyle(
               color: Colors.black,
               fontSize: 16,
+              fontFamily: 'Poppins',
             ),
           ),
         ],

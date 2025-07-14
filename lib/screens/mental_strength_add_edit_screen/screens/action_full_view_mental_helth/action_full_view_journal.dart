@@ -222,7 +222,12 @@ class _ActionFullViewJournalCreateBottomSheetState
                             capitalText(mentalStrengthEditProvider.actionsDetailsModel!.actions!.actionTitle.toString(),),
                            // textAlign: TextAlign.center,
                             maxLines: 4, // Set the maximum number of lines to 3
-                            style: CustomTextStyles.blackText18000000W700(),
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'Poppins',
+                              color: Colors.black,
+                            ),
                           ),
                         ),
                     SizedBox(
@@ -278,9 +283,14 @@ class _ActionFullViewJournalCreateBottomSheetState
                                 ImageConstant.actionDetailsMark, // Replace with your actual SVG asset path
                               ),
                               const SizedBox(width: 10),
-                              Text(
+                              const Text(
                                 "Audio",
-                                style: CustomTextStyles.blackText16000000W700(),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'Poppins',
+                                  color: Colors.black,
+                                ),
                               ),
                               Text(
                                 " : ",
@@ -331,9 +341,14 @@ class _ActionFullViewJournalCreateBottomSheetState
                                 ImageConstant.actionDetailsMark, // Replace with your photo SVG path
                               ),
                               const SizedBox(width: 10),
-                              Text(
+                              const Text(
                                 "Photo",
-                                style: CustomTextStyles.blackText16000000W700(),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'Poppins',
+                                  color: Colors.black,
+                                ),
                               ),
                               Text(
                                 " : ",
@@ -448,9 +463,14 @@ class _ActionFullViewJournalCreateBottomSheetState
                                 ImageConstant.actionDetailsMark, // Replace with your SVG icon for video
                               ),
                               const SizedBox(width: 10),
-                              Text(
+                              const Text(
                                 "Video",
-                                style: CustomTextStyles.blackText16000000W700(),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'Poppins',
+                                  color: Colors.black,
+                                ),
                               ),
                               Text(
                                 " : ",
@@ -569,9 +589,14 @@ class _ActionFullViewJournalCreateBottomSheetState
                                 ImageConstant.actionDetailsMark, // Replace with your location SVG asset
                               ),
                               const SizedBox(width: 10),
-                              Text(
+                              const Text(
                                 "Location",
-                                style: CustomTextStyles.blackText16000000W700(),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'Poppins',
+                                  color: Colors.black,
+                                ),
                               ),
                               Text(
                                 " : ",
@@ -602,7 +627,7 @@ class _ActionFullViewJournalCreateBottomSheetState
                                     style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w400,
-                                      fontFamily: 'Open Sans',
+                                      fontFamily: 'Poppins',
                                       color: Colors.black,
                                     ),
                                     overflow: TextOverflow.visible,
@@ -651,16 +676,21 @@ class _ActionFullViewJournalCreateBottomSheetState
                                                 ImageConstant.actionDetailsMark,
                                               ),
                                               const SizedBox(width: 10),
-                                              Text(
+                                              const Text(
                                                 "Reminder",
-                                                style: CustomTextStyles.blackText16000000W700(),
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontFamily: 'Poppins',
+                                                  color: Colors.black,
+                                                ),
                                               ),
                                               const Text(
                                                 " : ",
                                                 style: TextStyle(
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w600,
-                                                  fontFamily: 'Open Sans',
+                                                  fontFamily: 'Poppins',
                                                   color: Colors.black,
                                                 ),
                                               ),
@@ -685,7 +715,7 @@ class _ActionFullViewJournalCreateBottomSheetState
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w600,
-                                            fontFamily: 'Open Sans',
+                                            fontFamily: 'Poppins',
                                             color: Colors.black,
                                           ),
                                         ),
@@ -698,7 +728,7 @@ class _ActionFullViewJournalCreateBottomSheetState
                                             style: const TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.w400,
-                                              fontFamily: 'Open Sans',
+                                              fontFamily: 'Poppins',
                                               color: Colors.black,
                                             ),
                                           ),
@@ -717,7 +747,7 @@ class _ActionFullViewJournalCreateBottomSheetState
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w600,
-                                            fontFamily: 'Open Sans',
+                                            fontFamily: 'Poppins',
                                             color: Colors.black,
                                           ),
                                         ),
@@ -730,7 +760,7 @@ class _ActionFullViewJournalCreateBottomSheetState
                                             style: const TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.w400,
-                                              fontFamily: 'Open Sans',
+                                              fontFamily: 'Poppins',
                                               color: Colors.black,
                                             ),
                                           ),
@@ -749,7 +779,7 @@ class _ActionFullViewJournalCreateBottomSheetState
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w600,
-                                            fontFamily: 'Open Sans',
+                                            fontFamily: 'Poppins',
                                             color: Colors.black,
                                           ),
                                         ),
@@ -759,7 +789,7 @@ class _ActionFullViewJournalCreateBottomSheetState
                                             style: const TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.w400,
-                                              fontFamily: 'Open Sans',
+                                              fontFamily: 'Poppins',
                                               color: Colors.black,
                                             ),
                                           ),
@@ -861,9 +891,14 @@ class _ActionFullViewJournalCreateBottomSheetState
                 ImageConstant.actionDetailsMark,
               ),
               const SizedBox(width: 10),
-              Text(
+              const Text(
                 "Status : ",
-                style: CustomTextStyles.blackText16000000W700(),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Poppins',
+                  color: Colors.black,
+                ),
               ),
               SizedBox(
                 width: size.width * 0.60,
@@ -872,7 +907,7 @@ class _ActionFullViewJournalCreateBottomSheetState
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w400,
-                    fontFamily: 'Open Sans',
+                    fontFamily: 'Poppins',
                     color: Colors.black,
                   ),
                 ),
@@ -904,9 +939,14 @@ class _ActionFullViewJournalCreateBottomSheetState
                     ImageConstant.actionDetailsMark,
                   ),
                   const SizedBox(width: 10),
-                  Text(
+                  const Text(
                     "Goal",
-                    style: CustomTextStyles.blackText16000000W700(),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Poppins',
+                      color: Colors.black,
+                    ),
                   ),
                   Text(
                     " : ",
@@ -919,7 +959,7 @@ class _ActionFullViewJournalCreateBottomSheetState
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w400,
-                          fontFamily: 'Open Sans',
+                          fontFamily: 'Poppins',
                           color: Colors.black,
                         ),
                       ),
@@ -935,7 +975,7 @@ class _ActionFullViewJournalCreateBottomSheetState
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
-                        fontFamily: 'Open Sans',
+                        fontFamily: 'Poppins',
                         color: Colors.black,
                       ),
                     ),
@@ -967,9 +1007,14 @@ class _ActionFullViewJournalCreateBottomSheetState
                     ImageConstant.actionDetailsMark,
                   ),
                   const SizedBox(width: 10),
-                  Text(
+                  const Text(
                     "Title",
-                    style: CustomTextStyles.blackText16000000W700(),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Poppins',
+                      color: Colors.black,
+                    ),
                   ),
                   Text(
                     " : ",
@@ -982,7 +1027,7 @@ class _ActionFullViewJournalCreateBottomSheetState
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w400,
-                          fontFamily: 'Open Sans',
+                          fontFamily: 'Poppins',
                           color: Colors.black,
                         ),
                       ),
@@ -998,7 +1043,7 @@ class _ActionFullViewJournalCreateBottomSheetState
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
-                        fontFamily: 'Open Sans',
+                        fontFamily: 'Poppins',
                         color: Colors.black,
                       ),
                     ),
@@ -1031,9 +1076,14 @@ class _ActionFullViewJournalCreateBottomSheetState
                     ImageConstant.actionDetailsMark,
                   ),
                   const SizedBox(width: 10),
-                  Text(
+                  const Text(
                     "Description",
-                    style: CustomTextStyles.blackText16000000W700(),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Poppins',
+                      color: Colors.black,
+                    ),
                   ),
                   Text(
                     " : ",
@@ -1046,7 +1096,7 @@ class _ActionFullViewJournalCreateBottomSheetState
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w400,
-                          fontFamily: 'Open Sans',
+                          fontFamily: 'Poppins',
                           color: Colors.black,
                         ),
                       ),
@@ -1062,7 +1112,7 @@ class _ActionFullViewJournalCreateBottomSheetState
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
-                        fontFamily: 'Open Sans',
+                        fontFamily: 'Poppins',
                         color: Colors.black,
                       ),
                     ),

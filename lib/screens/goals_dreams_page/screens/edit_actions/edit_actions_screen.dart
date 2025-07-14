@@ -417,6 +417,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
                                           "Set a reminder for this action",
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
+                                            fontFamily: 'Poppins',
                                           ),
                                         ),
                                       ],
@@ -433,6 +434,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
                                                   "Date",
                                                   style: TextStyle(
                                                       fontWeight: FontWeight.bold,
+                                                      fontFamily: 'Poppins',
                                                       fontSize: 15),
                                                 ),
                                                 const SizedBox(
@@ -584,6 +586,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
                                                   "Time",
                                                   style: TextStyle(
                                                       fontWeight: FontWeight.bold,
+                                                      fontFamily: 'Poppins',
                                                       fontSize: 15),
                                                 ),
                                                 const SizedBox(
@@ -663,6 +666,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
                                                     const Text(
                                                       "To",
                                                       style: TextStyle(
+                                                          fontFamily: 'Poppins',
                                                           fontWeight:
                                                               FontWeight.bold),
                                                     ),
@@ -845,6 +849,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
                                                           style: TextStyle(
                                                             fontWeight:
                                                                 FontWeight.bold,
+                                                            fontFamily: 'Poppins',
                                                             fontSize: 15,
                                                           ),
                                                         ),
@@ -1900,6 +1905,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins',
                                     ),
                                   ),
                                 ),
@@ -2023,6 +2029,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins',
                                     ),
                                   ),
                                 ),
@@ -2131,6 +2138,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins',
                                     ),
                                   ),
                                 ),
@@ -2303,6 +2311,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins',
                                     ),
                                   ),
                                 ),

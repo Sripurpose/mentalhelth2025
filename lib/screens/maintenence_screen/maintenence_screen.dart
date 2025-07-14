@@ -110,7 +110,7 @@ class _MaintenenceScreenState extends State<MaintenenceScreen> {
                                   style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w700,
-                                    fontFamily: 'Open Sans',
+                                    fontFamily: 'Poppins',
                                     color: Colors.white,
                                   ),
                                 ),
@@ -156,6 +156,7 @@ class _MaintenenceScreenState extends State<MaintenenceScreen> {
                                     Text(
                                       "Cancel",
                                       style:  TextStyle(
+                                        fontFamily: 'Poppins',
                                         fontSize: 15,
                                         fontWeight: FontWeight.bold, // Set font weight to bold
                                         color:ColorsContent.whiteText,

@@ -300,6 +300,7 @@ class _NumuMentalStrengthAddEditPageState
                                               style: TextStyle(
                                                 fontSize: 17,
                                                 fontWeight: FontWeight.w500,
+                                                fontFamily: 'Poppins',
                                                 color: ColorsContent
                                                     .newThemeColor, // Adjust color as needed
                                               ),
@@ -315,6 +316,7 @@ class _NumuMentalStrengthAddEditPageState
                                       style: TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.w600,
+                                        fontFamily: 'Poppins',
                                         color: ColorsContent
                                             .newThemeColor, // Adjust color as needed
                                       ),
@@ -788,7 +790,7 @@ class _NumuMentalStrengthAddEditPageState
               color: Colors.black,
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              fontFamily: 'OpenSans',
+              fontFamily: 'Poppins',
             ),
           ),
           SizedBox(height: size.height * 0.05),
@@ -837,7 +839,7 @@ class _NumuMentalStrengthAddEditPageState
               color: Colors.black,
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              fontFamily: 'OpenSans',
+              fontFamily: 'Poppins',
             ),
           ),
           SizedBox(height: size.height * 0.06),
@@ -944,7 +946,7 @@ class _NumuMentalStrengthAddEditPageState
               color: Colors.black,
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              fontFamily: 'OpenSans',
+              fontFamily: 'Poppins',
             ),
           ),
           const SizedBox(
@@ -956,7 +958,7 @@ class _NumuMentalStrengthAddEditPageState
               color: Colors.black,
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              fontFamily: 'OpenSans',
+              fontFamily: 'Poppins',
             ),
           ),
           SizedBox(height: size.height * 0.03),
@@ -995,7 +997,7 @@ class _NumuMentalStrengthAddEditPageState
                   color: Colors.black,
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
-                  fontFamily: 'OpenSans',
+                  fontFamily: 'Poppins',
                 ),
               ),
               const SizedBox(
@@ -1007,7 +1009,7 @@ class _NumuMentalStrengthAddEditPageState
                   color: Colors.black,
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
-                  fontFamily: 'OpenSans',
+                  fontFamily: 'Poppins',
                 ),
               ),
               const SizedBox(
@@ -1037,6 +1039,7 @@ class _NumuMentalStrengthAddEditPageState
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.normal,
+                          fontFamily: 'Poppins',
                         ),
                       ),
                       Icon(
@@ -1108,7 +1111,7 @@ class _NumuMentalStrengthAddEditPageState
                                     color: Colors.white,
                                     fontSize: 18,
                                     fontWeight: FontWeight.w700,
-                                    fontFamily: 'OpenSans',
+                                    fontFamily: 'Poppins',
                                   ),
                                   overflow: TextOverflow.ellipsis,
                                   maxLines:
@@ -1171,7 +1174,7 @@ class _NumuMentalStrengthAddEditPageState
                   color: Colors.black,
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
-                  fontFamily: 'OpenSans',
+                  fontFamily: 'Poppins',
                 ),
               ),
               const SizedBox(
@@ -1208,6 +1211,7 @@ class _NumuMentalStrengthAddEditPageState
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.normal,
+                          fontFamily: 'Poppins',
                         ),
                       ),
                       Icon(
@@ -1288,7 +1292,7 @@ class _NumuMentalStrengthAddEditPageState
                                     color: Colors.white,
                                     fontSize: 18,
                                     fontWeight: FontWeight.w700,
-                                    fontFamily: 'OpenSans',
+                                    fontFamily: 'Poppins',
                                   ),
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
@@ -1383,7 +1387,7 @@ class _NumuMentalStrengthAddEditPageState
             color: ColorsContent.hintColor,
             fontSize: 16,
             fontWeight: FontWeight.w400, // Font weight 600
-            fontFamily: 'OpenSans', // Font family Open Sans
+            fontFamily: 'Poppins',
           ),
           textInputAction: TextInputAction.done,
           maxLines: 1,
@@ -1490,6 +1494,7 @@ class _NumuMentalStrengthAddEditPageState
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins',
                                     ),
                                   ),
                                 ),
@@ -1573,6 +1578,7 @@ class _NumuMentalStrengthAddEditPageState
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins',
                                     ),
                                   ),
                                 ),
@@ -1641,6 +1647,7 @@ class _NumuMentalStrengthAddEditPageState
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins',
                                     ),
                                   ),
                                 ),
@@ -1774,6 +1781,7 @@ class _NumuMentalStrengthAddEditPageState
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins',
                                     ),
                                   ),
                                 ),

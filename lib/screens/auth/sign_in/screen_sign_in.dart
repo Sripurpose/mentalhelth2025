@@ -289,7 +289,7 @@ class _ScreenSignInState extends State<ScreenSignIn> {
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
-                                  fontFamily: 'Open Sans',
+                                  fontFamily: 'Poppins',
                                   color: ColorsContent.whatsOnYourMindBoxColor,
                                 ),
                               ),
@@ -305,7 +305,7 @@ class _ScreenSignInState extends State<ScreenSignIn> {
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
-                              fontFamily: 'Open Sans',
+                              fontFamily: 'Poppins',
                               color: ColorsContent.whatsOnYourMindBoxColor,
                             ),
                                 ),
@@ -331,7 +331,7 @@ class _ScreenSignInState extends State<ScreenSignIn> {
                                         style: TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w500,
-                                          fontFamily: 'Open Sans',
+                                          fontFamily: 'Poppins',
                                           color: ColorsContent.whatsOnYourMindBoxColor,
                                         ),
                                       ),

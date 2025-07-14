@@ -64,7 +64,7 @@ class FeedbackScreen extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
-                              fontFamily: 'Open Sans',
+                              fontFamily: 'Poppins',
                               color: Colors.black,
                             ),
                           ),
@@ -82,7 +82,7 @@ class FeedbackScreen extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
-                              fontFamily: 'Open Sans',
+                              fontFamily: 'Poppins',
                               color: Colors.black,
                             ),
                           ),
@@ -100,7 +100,7 @@ class FeedbackScreen extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
-                              fontFamily: 'Open Sans',
+                              fontFamily: 'Poppins',
                               color: Colors.black,
                             ),
                           ),

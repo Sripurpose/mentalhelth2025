@@ -507,7 +507,7 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
       buttonTextStyle: const TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.w700,
-        fontFamily: 'Open Sans',
+        fontFamily: 'Poppins',
         color:  Colors.white,
       ),
     );
@@ -578,7 +578,7 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
         const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w700,
-          fontFamily: 'Open Sans',
+          fontFamily: 'Poppins',
           color: Colors.white,
         ),
       );
@@ -687,6 +687,7 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
+                                    fontFamily: 'Poppins',
                                   ),
                                 ),
                               ),
@@ -878,6 +879,7 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
+                                        fontFamily: 'Poppins',
                                       ),
                                     ),
                                   ),
@@ -947,6 +949,7 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
+                                        fontFamily: 'Poppins',
                                       ),
                                     ),
                                   ),

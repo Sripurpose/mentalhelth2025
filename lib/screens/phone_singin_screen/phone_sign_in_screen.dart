@@ -170,7 +170,7 @@ class _PhoneSignInScreenState extends State<PhoneSignInScreen> {
                               style:  TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w400,
-                                fontFamily: 'Nunito',
+                                fontFamily: 'Poppins',
                                 color: Colors.white,
                               ),
                             ),
