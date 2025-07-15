@@ -1616,32 +1616,36 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
   }
 
   /// ✅ First Tab - Kept as per your design
-  Widget _buildFirstTab(BuildContext context,
-      MentalStrengthEditProvider mentalStrengthEditProvider, Size size) {
-    return Stack(
-      children: [
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
-          color: mentalStrengthEditProvider.openChooseGoal
-              ? ColorsContent.newThemeColor
-              : null,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(height: size.height * 0.02),
-                _buildTitleEditText(context, mentalStrengthEditProvider),
-                SizedBox(height: size.height * 0.02),
-                _buildDescriptionEditText(context, mentalStrengthEditProvider),
-                SizedBox(height: size.height * 0.02),
-                _buildAddMediaColumn(context, size),
-                SizedBox(height: size.height * 0.01),
-              ],
-            ),
-          ),
+  Widget _buildFirstTab(
+      BuildContext context,
+      MentalStrengthEditProvider mentalStrengthEditProvider,
+      Size size,
+      ) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+      color: mentalStrengthEditProvider.openChooseGoal
+          ? ColorsContent.newThemeColor
+          : null,
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        padding: EdgeInsets.only(
+          top: size.height * 0.02,
+          bottom: size.height * 0.12, // ✅ Adds space for floating buttons
         ),
-      ],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildTitleEditText(context, mentalStrengthEditProvider),
+            SizedBox(height: size.height * 0.02),
+            _buildDescriptionEditText(context, mentalStrengthEditProvider),
+            SizedBox(height: size.height * 0.02),
+            _buildAddMediaColumn(context, size),
+          ],
+        ),
+      ),
     );
   }
+
 
   Widget _buildSecondTab(BuildContext context, Size size) {
     Size size = MediaQuery.of(context).size;
