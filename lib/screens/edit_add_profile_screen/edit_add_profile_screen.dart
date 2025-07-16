@@ -659,26 +659,29 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                   );
                 },
               ),
-            Expanded( // Ensure proper layout within the row
+            Expanded(
               child: Padding(
                 padding: EdgeInsets.only(left: isPhoneVerified ? 8 : 1, right: 1),
                 child: CustomTextFormField(
-                  fillColor: editProfileProvider.getProfileModel?.phoneVerify == "1" ? Colors.grey:Colors.white,
+                  fillColor: editProfileProvider.getProfileModel?.phoneVerify == "1"
+                      ? Colors.grey
+                      : Colors.white,
                   filled: true,
                   isValids: editProfileProvider.phoneIsValid,
                   textInputType: TextInputType.phone,
                   controller: editProfileProvider.phoneController,
-                  hintText: "(xxx)xxx-xxxx", // Phone number hint
-                  hintStyle: const TextStyle(
-                    color: Colors.black,
-                  ),
-                  readOnly: isPhoneVerified, // Make field read-only if phone is verified
-                  prefixText: isPhoneVerified ? editProfileProvider.getProfileModel?.countryCode?.isNotEmpty == true
+                  hintText: "(xxx)xxx-xxxx",
+                  hintStyle: const TextStyle(color: Colors.black),
+                  readOnly: isPhoneVerified,
+                  prefixText: isPhoneVerified &&
+                      (editProfileProvider.getProfileModel?.countryCode?.isNotEmpty ?? false)
                       ? "+${editProfileProvider.getProfileModel!.countryCode} "
-                      : "" : "",
-                  prefixStyle: const TextStyle(
-                    color: Colors.black,
-                  ),
+                      : "",
+                  prefixStyle: const TextStyle(color: Colors.black),
+
+                  // 👇 Set height using content padding
+                  contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+
                   onChanged: (value) {
                     editProfileProvider.phoneValidate(
                       editProfileProvider.validatePhoneNumber(value),
@@ -687,6 +690,7 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                 ),
               ),
             ),
+
           ],
         );
       },

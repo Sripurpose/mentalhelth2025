@@ -49,12 +49,11 @@ class FeedbackScreen extends StatelessWidget {
                   width: double.maxFinite,
                   padding: const EdgeInsets.only(
                     left: 28,
-                    top: 103,
+                    top: 80,
                     right: 28,
                   ),
                   child: Column(
                     children: [
-                      const SizedBox(height: 80),
                       const Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
@@ -108,7 +107,7 @@ class FeedbackScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 10),
                       _buildMessageEditText(context),
-                      const SizedBox(height: 28),
+                      const SizedBox(height: 40),
                       _buildSubmitButton(context),
                       const SizedBox(height: 5),
                     ],
