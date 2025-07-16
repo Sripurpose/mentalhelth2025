@@ -621,76 +621,94 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
       builder: (context, editProfileProvider, _) {
         bool isPhoneVerified = editProfileProvider.getProfileModel?.phoneVerify == "1";
 
-        return Row(
+        return Column(
           children: [
-            if (!isPhoneVerified) // Show country picker button only if phone is not verified
-              Consumer<EditProfileProvider>(
-                builder: (context, editProfileProvider, _) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: SizedBox(
-                      height: 40,
-                      child: OutlinedButton(
-                        style: CustomButtonStyles.editProfileCountryCode,
-                        onPressed: () {
-                          showCountryPicker(
-                            context: context,
-                            exclude: <String>['KN', 'MF'],
-                            favorite: <String>['SE'],
-                            showPhoneCode: true,
-                            onSelect: (Country country) {
-                              editProfileProvider.addCountryCode(
-                                value: country.phoneCode.toString(),
+            Row(
+              children: [
+                if (!isPhoneVerified) // Show country picker button only if phone is not verified
+                  Consumer<EditProfileProvider>(
+                    builder: (context, editProfileProvider, _) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: SizedBox(
+                          height: 40,
+                          child: OutlinedButton(
+                            style: CustomButtonStyles.editProfileCountryCode,
+                            onPressed: () {
+                              showCountryPicker(
+                                context: context,
+                                exclude: <String>['KN', 'MF'],
+                                favorite: <String>['SE'],
+                                showPhoneCode: true,
+                                onSelect: (Country country) {
+                                  editProfileProvider.addCountryCode(
+                                    value: country.phoneCode.toString(),
+                                  );
+                                },
                               );
                             },
-                          );
-                        },
-                        child: Center(
-                          child:Text(
-                            "+${editProfileProvider.countryCode}",
-                            style: CustomTextStyles.titleSmallHelveticaOnPrimary,
+                            child: Center(
+                              child:Text(
+                                "+${editProfileProvider.countryCode}",
+                                style: CustomTextStyles.titleSmallHelveticaOnPrimary,
+                              ),
+
+
+
+                            ),
                           ),
-
-
-
                         ),
-                      ),
+                      );
+                    },
+                  ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(left: isPhoneVerified ? 8 : 1, right: 1),
+                    child: CustomTextFormField(
+                      fillColor: editProfileProvider.getProfileModel?.phoneVerify == "1"
+                          ? Colors.grey
+                          : Colors.white,
+                      filled: true,
+                      isValids: editProfileProvider.phoneIsValid,
+                      textInputType: TextInputType.phone,
+                      controller: editProfileProvider.phoneController,
+                      hintText: "(xxx)xxx-xxxx",
+                      hintStyle: const TextStyle(color: Colors.black),
+                      readOnly: isPhoneVerified,
+                      prefixText: isPhoneVerified &&
+                          (editProfileProvider.getProfileModel?.countryCode?.isNotEmpty ?? false)
+                          ? "+${editProfileProvider.getProfileModel!.countryCode} "
+                          : "",
+                      prefixStyle: const TextStyle(color: Colors.black),
+
+                      // 👇 Set height using content padding
+                      contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+
+                      onChanged: (value) {
+                        editProfileProvider.phoneValidate(
+                          editProfileProvider.validatePhoneNumber(value),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(left: isPhoneVerified ? 8 : 1, right: 1),
-                child: CustomTextFormField(
-                  fillColor: editProfileProvider.getProfileModel?.phoneVerify == "1"
-                      ? Colors.grey
-                      : Colors.white,
-                  filled: true,
-                  isValids: editProfileProvider.phoneIsValid,
-                  textInputType: TextInputType.phone,
-                  controller: editProfileProvider.phoneController,
-                  hintText: "(xxx)xxx-xxxx",
-                  hintStyle: const TextStyle(color: Colors.black),
-                  readOnly: isPhoneVerified,
-                  prefixText: isPhoneVerified &&
-                      (editProfileProvider.getProfileModel?.countryCode?.isNotEmpty ?? false)
-                      ? "+${editProfileProvider.getProfileModel!.countryCode} "
-                      : "",
-                  prefixStyle: const TextStyle(color: Colors.black),
-
-                  // 👇 Set height using content padding
-                  contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-
-                  onChanged: (value) {
-                    editProfileProvider.phoneValidate(
-                      editProfileProvider.validatePhoneNumber(value),
-                    );
-                  },
+                  ),
                 ),
+
+              ],
+            ),
+            if(editProfileProvider.phoneIsValid == false)
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              child: (editProfileProvider.phoneIsValid == false)
+                  ? const Text(
+                'Invalid phone number',
+                style: TextStyle(fontSize: 12, color: Colors.red),
+                key: ValueKey("errorText"),
+              )
+                  : const SizedBox(
+                height: 16, // Reserve space even when no error
+                key: ValueKey("noError"),
               ),
             ),
-
           ],
         );
       },

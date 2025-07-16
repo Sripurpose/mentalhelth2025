@@ -114,7 +114,7 @@ class CustomTextFormField extends StatelessWidget {
 
   InputDecoration get decoration => InputDecoration(
     hintText: hintText ?? "",
-    errorText: isValids == null ? null : isValids! ? null : 'Invalid phone number',
+   // errorText: isValids == null ? null : isValids! ? null : 'Invalid phone number',
     hintStyle: hintStyle ?? CustomTextStyles.bodyLargeRobotoOnSecondaryContainer,
     prefixIcon: prefix,
     prefixIconConstraints: prefixConstraints,
