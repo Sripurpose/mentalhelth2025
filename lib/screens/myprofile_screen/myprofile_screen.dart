@@ -312,7 +312,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
                                     child: Row(
                                       mainAxisAlignment: (editProfileProvider.getProfileModel?.isPassword == 1)
-                                          ? MainAxisAlignment.spaceBetween
+                                          ? MainAxisAlignment.center
                                           : MainAxisAlignment.center,
                                       children: [
                                         Align(
@@ -349,6 +349,11 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                             },
                                           ),
                                         ),
+
+                                        // 👇 Add spacing between buttons
+                                        if (editProfileProvider.getProfileModel?.isPassword == 1)
+                                          SizedBox(width: size.width * 0.04), // Adjust width based on screen
+
                                         if (editProfileProvider.getProfileModel?.isPassword == 1)
                                           Align(
                                             alignment: Alignment.bottomCenter,
@@ -386,6 +391,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                       ],
                                     ),
                                   ),
+
 
                                 ],
                               ),
