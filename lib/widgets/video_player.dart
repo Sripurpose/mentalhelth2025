@@ -81,6 +81,20 @@ class _VideoPlayerWidgetBuildMentalState extends State<VideoPlayerWidgetBuildMen
             child: VideoPlayer(_controller!),
           ),
         ),
+        // Center(
+        //   child: GestureDetector(
+        //     onTap: () {
+        //       setState(() {
+        //         _controller!.value.isPlaying ? _controller!.pause() : _controller!.play();
+        //       });
+        //     },
+        //     child: Icon(
+        //       _controller!.value.isPlaying ? Icons.pause : Icons.play_arrow,
+        //       color: Colors.white,
+        //       size: 40,
+        //     ),
+        //   ),
+        // ),
         Center(
           child: GestureDetector(
             onTap: () {
@@ -88,13 +102,21 @@ class _VideoPlayerWidgetBuildMentalState extends State<VideoPlayerWidgetBuildMen
                 _controller!.value.isPlaying ? _controller!.pause() : _controller!.play();
               });
             },
-            child: Icon(
-              _controller!.value.isPlaying ? Icons.pause : Icons.play_arrow,
-              color: Colors.white,
-              size: 40,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.5), // dark background
+                shape: BoxShape.circle,
+              ),
+              padding: const EdgeInsets.all(12),
+              child: Icon(
+                _controller!.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                color: Colors.white,
+                size: 30,
+              ),
             ),
           ),
         ),
+
       ],
     );
   }
@@ -191,10 +213,17 @@ class _VideoPlayerWidgetViewAndAlreadyBuildMentalState extends State<VideoPlayer
                     : _controller.play();
               });
             },
-            child: Icon(
-              _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-              color: Colors.white,
-              size: 40,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.5), // dark background
+                shape: BoxShape.circle,
+              ),
+              padding: const EdgeInsets.all(12),
+              child: Icon(
+                _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                color: Colors.white,
+                size: 30,
+              ),
             ),
           ),
         )
@@ -313,10 +342,17 @@ class _VideoPlayerWidgetViewAndAlreadyBuildMentalProgressBarState
                       });
                     },
                     child: Center(
-                      child: Icon(
-                        _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-                        color: Colors.white,
-                        size: 40,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.5), // dark background
+                          shape: BoxShape.circle,
+                        ),
+                        padding: const EdgeInsets.all(12),
+                        child: Icon(
+                          _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                          color: Colors.white,
+                          size: 30,
+                        ),
                       ),
                     ),
                   ),
@@ -459,10 +495,17 @@ class _VideoPlayerWidgetGoalState extends State<VideoPlayerWidgetGoal> {
                 _controller!.value.isPlaying ? _controller!.pause() : _controller!.play();
               });
             },
-            child: Icon(
-              _controller!.value.isPlaying ? Icons.pause : Icons.play_arrow,
-              color: Colors.white,
-              size: 40,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.5), // dark background
+                shape: BoxShape.circle,
+              ),
+              padding: const EdgeInsets.all(12),
+              child: Icon(
+                _controller!.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                color: Colors.white,
+                size: 30,
+              ),
             ),
           ),
         ),
@@ -562,10 +605,17 @@ class _VideoPlayerWidgetViewAndAlreadyGoalState extends State<VideoPlayerWidgetV
                     : _controller.play();
               });
             },
-            child: Icon(
-              _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-              color: Colors.white,
-              size: 40,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.5), // dark background
+                shape: BoxShape.circle,
+              ),
+              padding: const EdgeInsets.all(12),
+              child: Icon(
+                _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                color: Colors.white,
+                size: 30,
+              ),
             ),
           ),
         )
@@ -686,10 +736,17 @@ class _VideoPlayerWidgetViewAndAlreadyGoalProgressBarState
                   });
                 },
                 child: Center(
-                  child: Icon(
-                    _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-                    color: Colors.white,
-                    size: 40,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.5), // dark background
+                      shape: BoxShape.circle,
+                    ),
+                    padding: const EdgeInsets.all(12),
+                    child: Icon(
+                      _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                      color: Colors.white,
+                      size: 30,
+                    ),
                   ),
                 ),
               ),
@@ -830,10 +887,17 @@ class _VideoPlayerWidgetActionState extends State<VideoPlayerWidgetAction> {
                 _controller!.value.isPlaying ? _controller!.pause() : _controller!.play();
               });
             },
-            child: Icon(
-              _controller!.value.isPlaying ? Icons.pause : Icons.play_arrow,
-              color: Colors.white,
-              size: 40,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.5), // dark background
+                shape: BoxShape.circle,
+              ),
+              padding: const EdgeInsets.all(12),
+              child: Icon(
+                _controller!.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                color: Colors.white,
+                size: 30,
+              ),
             ),
           ),
         ),
@@ -933,10 +997,17 @@ class _VideoPlayerWidgetViewAndAlreadyActionState extends State<VideoPlayerWidge
                     : _controller.play();
               });
             },
-            child: Icon(
-              _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-              color: Colors.white,
-              size: 40,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.5), // dark background
+                shape: BoxShape.circle,
+              ),
+              padding: const EdgeInsets.all(12),
+              child: Icon(
+                _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                color: Colors.white,
+                size: 30,
+              ),
             ),
           ),
         )
@@ -1062,10 +1133,17 @@ class _VideoPlayerWidgetViewAndAlreadyActionProgressBarState
                   });
                 },
                 child: Center(
-                  child: Icon(
-                    _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-                    color: Colors.white,
-                    size: 40,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.5), // dark background
+                      shape: BoxShape.circle,
+                    ),
+                    padding: const EdgeInsets.all(12),
+                    child: Icon(
+                      _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                      color: Colors.white,
+                      size: 30,
+                    ),
                   ),
                 ),
               ),
