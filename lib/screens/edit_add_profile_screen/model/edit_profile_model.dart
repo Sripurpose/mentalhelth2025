@@ -22,6 +22,7 @@ class GetProfileModel {
   String? userToken;
   String? emailVerify;
   String? phoneVerify;
+  String? showPhoneVerify;
   int? loggedStatus;
   String? note;
   String? profileurl;
@@ -46,6 +47,7 @@ class GetProfileModel {
     required this.userToken,
     required this.emailVerify,
     required this.phoneVerify,
+    required this.showPhoneVerify,
     required this.loggedStatus,
     required this.note,
     required this.profileurl,
@@ -74,6 +76,7 @@ class GetProfileModel {
         userToken: json["user_token"],
         emailVerify: json["email_verify"],
         phoneVerify: json["phone_verify"],
+        showPhoneVerify: json["show_verify_phone"],
         loggedStatus: json["logged_status"],
         note: json["note"],
         profileurl: json["profileurl"],
@@ -101,6 +104,7 @@ class GetProfileModel {
         "user_token": userToken,
         "email_verify": emailVerify,
         "phone_verify": phoneVerify,
+        "show_verify_phone":showPhoneVerify,
         "logged_status": loggedStatus,
         "note": note,
         "profileurl": profileurl,

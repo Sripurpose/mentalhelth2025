@@ -189,9 +189,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                       )
                                                           : const TextSpan(text: ""),
                                                       editProfileProvider.getProfileModel!.phone == null ||
-                                                          editProfileProvider.getProfileModel!.phone == ""
-                                                          ? const TextSpan(text: "\n")
-                                                          : editProfileProvider.getProfileModel!.phoneVerify == "1"
+                                                          editProfileProvider.getProfileModel!.phone == "" ||
+                                                          editProfileProvider.getProfileModel!.phoneVerify == "1" ||
+                                                          editProfileProvider.getProfileModel!.showPhoneVerify != "1"
                                                           ? const TextSpan(text: "\n")
                                                           : TextSpan(
                                                         text: "Verify Phone\n\n",
@@ -203,9 +203,11 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                             await editProfileProvider.sendOtpPhoneFunction(context);
                                                             if (editProfileProvider.sendOtpPhoneStatus == 200) {
                                                               Future.delayed(Duration.zero, () {
-                                                                Navigator.of(context).push(MaterialPageRoute(
-                                                                  builder: (context) => const VerifyOtpPhoneScreen(),
-                                                                ));
+                                                                Navigator.of(context).push(
+                                                                  MaterialPageRoute(
+                                                                    builder: (context) => const VerifyOtpPhoneScreen(),
+                                                                  ),
+                                                                );
                                                               });
                                                             } else {
                                                               showToast(
@@ -215,6 +217,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                             }
                                                           },
                                                       ),
+
                                                       editProfileProvider.getProfileModel!.emailVerify != "1" &&
                                                           editProfileProvider.getProfileModel!.email!.isNotEmpty ?
                                                       TextSpan(
