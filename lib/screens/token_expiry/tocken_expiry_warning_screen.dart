@@ -81,7 +81,7 @@ class _TokenExpireScreenState extends State<TokenExpireScreen> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20.0),
                           child: Text(
-                            'Login timed out',
+                            'Your session has expired.',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 18,
@@ -95,7 +95,7 @@ class _TokenExpireScreenState extends State<TokenExpireScreen> {
                          Padding(
                           padding: EdgeInsets.symmetric(horizontal: 20.0),
                           child: Text(
-                            'Please login to continue',
+                            'Please log in again',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 18,

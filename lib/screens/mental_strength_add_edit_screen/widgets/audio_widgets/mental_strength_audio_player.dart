@@ -554,141 +554,144 @@ class _MentalStrengthAudioPlayerState extends State<MentalStrengthAudioPlayer> {
                             ],
                           ),
                         ),
-                        Consumer3<MentalStrengthEditProvider,
-                            AdDreamsGoalsProvider, AddActionsProvider>(
-                          builder: (context,
-                              mentalStrengthEditProvider,
-                              adDreamsGoalsProvider,
-                              addActionsProvider,
-                              _) {
-                            return GestureDetector(
-                              onTap: () {
-                                if (widget.type == "journal") {
-                                  if (widget.already) {
-                                    customPopup(
-                                      context: context,
-                                      onPressedDelete: () async {
-                                        mentalStrengthEditProvider
-                                            .alreadyRecorderValuesRemove(
-                                            widget.index);
-                                        mentalStrengthEditProvider
-                                            .removeMediaFunction(
-                                          context: context,
-                                          id: widget.id.toString(),
-                                          type: widget.type.toString(),
-                                        );
-                                        Navigator.of(context).pop();
-                                      },
-                                      yes: "Yes",
-                                      title: 'Do you Need Delete',
-                                      content:
-                                      'Are you sure do you need delete',
-                                    );
-                                  } else {
-                                    customPopup(
-                                      context: context,
-                                      onPressedDelete: () async {
-                                        mentalStrengthEditProvider
-                                            .recorderValuesRemove(widget.index);
-                                        // mentalStrengthEditProvider
-                                        //     .removeMediaUploadResponseListFunction(
-                                        //     widget.index);
-                                        Navigator.of(context).pop();
-                                        Navigator.of(context).pop();
-                                      },
-                                      yes: "Yes",
-                                      title: 'Do you Need Delete',
-                                      content:
-                                      'Are you sure do you need delete',
-                                    );
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 15.0),
+                          child: Consumer3<MentalStrengthEditProvider,
+                              AdDreamsGoalsProvider, AddActionsProvider>(
+                            builder: (context,
+                                mentalStrengthEditProvider,
+                                adDreamsGoalsProvider,
+                                addActionsProvider,
+                                _) {
+                              return GestureDetector(
+                                onTap: () {
+                                  if (widget.type == "journal") {
+                                    if (widget.already) {
+                                      customPopup(
+                                        context: context,
+                                        onPressedDelete: () async {
+                                          mentalStrengthEditProvider
+                                              .alreadyRecorderValuesRemove(
+                                              widget.index);
+                                          mentalStrengthEditProvider
+                                              .removeMediaFunction(
+                                            context: context,
+                                            id: widget.id.toString(),
+                                            type: widget.type.toString(),
+                                          );
+                                          Navigator.of(context).pop();
+                                        },
+                                        yes: "Yes",
+                                        title: 'Do you Need Delete',
+                                        content:
+                                        'Are you sure do you need delete',
+                                      );
+                                    } else {
+                                      customPopup(
+                                        context: context,
+                                        onPressedDelete: () async {
+                                          mentalStrengthEditProvider
+                                              .recorderValuesRemove(widget.index);
+                                          // mentalStrengthEditProvider
+                                          //     .removeMediaUploadResponseListFunction(
+                                          //     widget.index);
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).pop();
+                                        },
+                                        yes: "Yes",
+                                        title: 'Do you Need Delete',
+                                        content:
+                                        'Are you sure do you need delete',
+                                      );
+                                    }
+                                  } else if (widget.type == "goal") {
+                                    if (widget.already) {
+                                      customPopup(
+                                        context: context,
+                                        onPressedDelete: () async {
+                                          adDreamsGoalsProvider
+                                              .alreadyRecorderValuesRemove(
+                                              widget.index);
+                                          mentalStrengthEditProvider
+                                              .removeMediaFunction(
+                                            context: context,
+                                            id: widget.id.toString(),
+                                            type: widget.type.toString(),
+                                          );
+                                          Navigator.of(context).pop();
+                                        },
+                                        yes: "Yes",
+                                        title: 'Do you Need Delete',
+                                        content:
+                                        'Are you sure do you need delete',
+                                      );
+                                    } else {
+                                      customPopup(
+                                        context: context,
+                                        onPressedDelete: () async {
+                                          adDreamsGoalsProvider
+                                              .recorderValuesRemove(widget.index);
+                                          Navigator.of(context).pop();
+                                          // adDreamsGoalsProvider
+                                          //     .removeMediaUploadResponseListFunction(
+                                          //     widget.index);
+                                          Navigator.of(context).pop();
+                                        },
+                                        yes: "Yes",
+                                        title: 'Do you Need Delete',
+                                        content:
+                                        'Are you sure do you need delete',
+                                      );
+                                    }
+                                  } else if (widget.type == "action") {
+                                    if (widget.already) {
+                                      customPopup(
+                                        context: context,
+                                        onPressedDelete: () async {
+                                          addActionsProvider
+                                              .alreadyRecorderValuesRemove(
+                                              widget.index);
+                                          mentalStrengthEditProvider
+                                              .removeMediaFunction(
+                                            context: context,
+                                            id: widget.id.toString(),
+                                            type: widget.type.toString(),
+                                          );
+                                          Navigator.of(context).pop();
+                                        },
+                                        yes: "Yes",
+                                        title: 'Do you Need Delete',
+                                        content:
+                                        'Are you sure do you need delete',
+                                      );
+                                    } else {
+                                      customPopup(
+                                        context: context,
+                                        onPressedDelete: () async {
+                                          addActionsProvider
+                                              .recorderValuesRemove(widget.index);
+                                          Navigator.of(context).pop();
+                                          // addActionsProvider
+                                          //     .removeMediaUploadResponseListFunction(
+                                          //     widget.index);
+                                          Navigator.of(context).pop();
+                                        },
+                                        yes: "Yes",
+                                        title: 'Do you Need Delete',
+                                        content:
+                                        'Are you sure do you need delete',
+                                      );
+                                    }
                                   }
-                                } else if (widget.type == "goal") {
-                                  if (widget.already) {
-                                    customPopup(
-                                      context: context,
-                                      onPressedDelete: () async {
-                                        adDreamsGoalsProvider
-                                            .alreadyRecorderValuesRemove(
-                                            widget.index);
-                                        mentalStrengthEditProvider
-                                            .removeMediaFunction(
-                                          context: context,
-                                          id: widget.id.toString(),
-                                          type: widget.type.toString(),
-                                        );
-                                        Navigator.of(context).pop();
-                                      },
-                                      yes: "Yes",
-                                      title: 'Do you Need Delete',
-                                      content:
-                                      'Are you sure do you need delete',
-                                    );
-                                  } else {
-                                    customPopup(
-                                      context: context,
-                                      onPressedDelete: () async {
-                                        adDreamsGoalsProvider
-                                            .recorderValuesRemove(widget.index);
-                                        Navigator.of(context).pop();
-                                        // adDreamsGoalsProvider
-                                        //     .removeMediaUploadResponseListFunction(
-                                        //     widget.index);
-                                        Navigator.of(context).pop();
-                                      },
-                                      yes: "Yes",
-                                      title: 'Do you Need Delete',
-                                      content:
-                                      'Are you sure do you need delete',
-                                    );
-                                  }
-                                } else if (widget.type == "action") {
-                                  if (widget.already) {
-                                    customPopup(
-                                      context: context,
-                                      onPressedDelete: () async {
-                                        addActionsProvider
-                                            .alreadyRecorderValuesRemove(
-                                            widget.index);
-                                        mentalStrengthEditProvider
-                                            .removeMediaFunction(
-                                          context: context,
-                                          id: widget.id.toString(),
-                                          type: widget.type.toString(),
-                                        );
-                                        Navigator.of(context).pop();
-                                      },
-                                      yes: "Yes",
-                                      title: 'Do you Need Delete',
-                                      content:
-                                      'Are you sure do you need delete',
-                                    );
-                                  } else {
-                                    customPopup(
-                                      context: context,
-                                      onPressedDelete: () async {
-                                        addActionsProvider
-                                            .recorderValuesRemove(widget.index);
-                                        Navigator.of(context).pop();
-                                        // addActionsProvider
-                                        //     .removeMediaUploadResponseListFunction(
-                                        //     widget.index);
-                                        Navigator.of(context).pop();
-                                      },
-                                      yes: "Yes",
-                                      title: 'Do you Need Delete',
-                                      content:
-                                      'Are you sure do you need delete',
-                                    );
-                                  }
-                                }
-                              },
-                              child: CustomImageView(
-                                imagePath: ImageConstant.imgClosePrimary,
-                                height: 35,
-                                width: 35,
-                              ),
-                            );
-                          },
+                                },
+                                child: CustomImageView(
+                                  imagePath: ImageConstant.imgClosePrimary,
+                                  height: 35,
+                                  width: 35,
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ],
                     ),

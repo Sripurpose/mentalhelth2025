@@ -899,9 +899,9 @@ class _EditReminderScreenScreenScreenState
                   Navigator.of(context).pop();
                 },
                 yes: "Yes",
-                title: 'Remainder Update',
+                title: 'Reminder',
                 content:
-                'Are you sure You want to Update?',
+                'Sure about this update?',
               );
 
 
