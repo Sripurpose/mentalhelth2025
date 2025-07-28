@@ -73,8 +73,8 @@ class _TokenExpireScreenState extends State<TokenExpireScreen> {
                         const Gap(15),
                         Image.asset(
                           ImageConstant.sessionExpiredLogo, // Path to your Lottie file
-                          width: 180,
-                          height: 300,
+                          width: 200,
+                          height: 200,
                           fit: BoxFit.cover,
                         ),
                         const Gap(20),

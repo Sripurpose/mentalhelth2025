@@ -267,7 +267,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
             ? SafeArea(
                 child: ConnectivityWidget(
                   child: Scaffold(
-                    appBar: buildAppBarNumu(context, size,
+                    appBar: buildAppBarNumuEditGoals(context, size,
                         heading: "Edit Goals & Dreams", onTap: () {
                       Navigator.pop(context);
                     }),

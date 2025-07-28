@@ -36,6 +36,7 @@ import '../../utils/theme/custom_text_style.dart';
 import '../../utils/theme/theme_helper.dart';
 import '../../widgets/custom_image_view.dart';
 import '../../widgets/functions/popup.dart';
+import '../../widgets/functions/snack_bar.dart';
 import '../auth/sign_in/provider/sign_in_provider.dart';
 import '../auth/splash/splash.dart';
 import '../goals_dreams_page/provider/goals_dreams_provider.dart';
@@ -311,7 +312,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void checkVersionUpdate() async {
-    final String androidUpdateUrl = "https://play.google.com/store/apps/details?id=com.mentalhelth.mentalhelth";
+    final String androidUpdateUrl = "https://play.google.com/store/apps/details?id=com.numuapp.numuapp";
     final String iosUpdateUrl = "https://apps.apple.com/app/id6736739491"; // Replace with your iOS App Store link
     final prefs = await SharedPreferences.getInstance();
     final lastSkippedTimestamp = prefs.getInt('lastSkippedTimestamp');
@@ -409,6 +410,8 @@ class _HomeScreenState extends State<HomeScreen> {
           if(mounted){
             checkSubscriptionStatus();
             updateFCMTokenIfNeeded(fcmToken);
+            /// ////
+            /// this place
           }
           checkVersionUpdate();
           // The main content if no token issues or settingsPopup
