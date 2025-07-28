@@ -1715,26 +1715,26 @@ PreferredSizeWidget buildAppBarAction(BuildContext context, Size size,
         left: 11,
       ),
     ),
-    actions: [
-      GestureDetector(
-        onTap: () {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) => buildPopupDialog(
-              context,
-              size,
-            ),
-          );
-        },
-        child: Padding(
-          padding: EdgeInsets.only(
-            right: size.width * 0.07,
-          ),
-          child: SvgPicture.asset(
-            ImageConstant.menuBarSvg,
-          ),
-        ),
-      ),
-    ],
+    // actions: [
+    //   GestureDetector(
+    //     onTap: () {
+    //       showDialog(
+    //         context: context,
+    //         builder: (BuildContext context) => buildPopupDialog(
+    //           context,
+    //           size,
+    //         ),
+    //       );
+    //     },
+    //     child: Padding(
+    //       padding: EdgeInsets.only(
+    //         right: size.width * 0.07,
+    //       ),
+    //       child: SvgPicture.asset(
+    //         ImageConstant.menuBarSvg,
+    //       ),
+    //     ),
+    //   ),
+    // ],
   );
 }

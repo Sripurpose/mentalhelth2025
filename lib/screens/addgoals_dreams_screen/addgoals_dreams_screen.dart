@@ -155,7 +155,7 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
         ? ConnectivityWidget(
           child: SafeArea(
               child: Scaffold(
-                appBar: buildAppBarNumu(
+                appBar: buildAppBarNumuEditGoals(
                   context,
                   size,
                   heading: "Add Goals & Dreams",
