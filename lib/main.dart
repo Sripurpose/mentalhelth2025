@@ -513,16 +513,27 @@ class _MyAppState extends State<MyApp> {
     } else if (kReleaseMode) {
       if(baseUrlLive!.isNotEmpty){
         if(deviceType == "ios"){
-          UrlConstant.baseUrl = baseUrlLiveIos ?? "";
-         // UrlConstant.baseUrl = baseUrlLive ?? "";
+          ///appstore///
+         // UrlConstant.baseUrl = baseUrlLiveIos ?? "";
+          /// /// ///
+
+          /// Testing only///
+          UrlConstant.baseUrl = baseUrlLive ?? "";
+          /// /// ///
           UrlConstant.oneSignalRemote = oneSignalLive ?? "";
           UrlConstant.appShareDownloads = baseUrlAppShareDownloads ?? "";
           isBaseUrlReady = true;
           print("Live Base URL set to1: $baseUrlLiveIos");
         }
         else{
-         // UrlConstant.baseUrl = baseUrlLive ?? "";
-          UrlConstant.baseUrl = baseUrlLiveAndroid ?? "";
+          ///playsStore///
+        //  UrlConstant.baseUrl = baseUrlLiveAndroid ?? "";
+          /// /// ///
+
+          /// Testing only///
+           UrlConstant.baseUrl = baseUrlLive ?? "";
+           /// /// ///
+
           UrlConstant.oneSignalRemote = oneSignalLive ?? "";
           UrlConstant.appShareDownloads = baseUrlAppShareDownloads ?? "";
           isBaseUrlReady = true;

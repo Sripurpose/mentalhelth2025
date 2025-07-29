@@ -20,6 +20,7 @@ import '../../../token_expiry/token_expiry.dart';
 import '../../subscribe_plan_page/subscribe_plan_page.dart';
 import '../model/app_settings_model.dart';
 import '../model/app_settings_register_model.dart';
+import '../model/messages_model.dart';
 import '../model/version_update_model.dart';
 
 class SignInProvider extends ChangeNotifier {
@@ -107,7 +108,9 @@ class SignInProvider extends ChangeNotifier {
           password: password,
         );
         if (loginModel!.status!) {
+
           if (loginModel!.isSubscribed == "0") {
+             fetchMessages(context);
             checkAndFetchVersionUpdate(context,);
         //    fetchSettings(context);
             // Navigator.of(context).pushAndRemoveUntil(
@@ -123,6 +126,7 @@ class SignInProvider extends ChangeNotifier {
                   (route) => false,
             );
           } else {
+            fetchMessages(context);
             checkAndFetchVersionUpdate(context,);
           //  fetchSettings(context);
             Navigator.of(context).pushAndRemoveUntil(
@@ -791,6 +795,100 @@ class SignInProvider extends ChangeNotifier {
   //   }
   //   notifyListeners();
   // }
+
+
+  int? statusMessages;
+  bool messagesLoading = false;
+  MessagesModel? messagesModel;
+
+  Future<void> fetchMessages(BuildContext context) async {
+    try {
+      logger.w("fetchMessages() called");
+
+      statusMessages = 0;
+      messagesLoading = true;
+      notifyListeners();
+
+      String? token = await getUserTokenSharePref();
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref();
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref();
+      }
+
+      logger.w("Token: $token");
+      logger.w("Version Code: $versionCode");
+
+      Map<String, String> headers = {
+        'Device-Type': deviceType,
+        'Version': versionCode ?? '',
+        'authorization': token ?? '',
+      };
+
+      logger.w("Headers: $headers");
+
+      Uri url = Uri.parse(UrlConstant.messages);
+      logger.w("Messages URL: $url");
+
+      final response = await http.get(url, headers: headers);
+      logger.w("Raw response: ${response.statusCode} - ${response.body}");
+
+      final body = json.decode(response.body);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        messagesModel = MessagesModel.fromJson(body);
+        statusMessages = response.statusCode;
+
+        logger.w("statusMessages: $statusMessages");
+        logger.w("messagesModel: ${messagesModel?.toJson()}");
+      }
+      else if (response.statusCode == 404 && body['status'] == false) {
+        // Still parse and handle 'no messages found' case
+        messagesModel = MessagesModel.fromJson(body);
+        statusMessages = response.statusCode;
+
+        logger.w("No messages found: ${messagesModel?.text}");
+      }
+      else if (response.statusCode == 503) {
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title:
+                "App is in maintenance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+      else {
+        statusMessages = response.statusCode;
+
+        if (response.statusCode == 401 || response.statusCode == 403) {
+          logger.w("Unauthorized or Forbidden: $statusMessages");
+          TokenManager.setTokenStatus(false);
+        } else {
+          logger.w("Unhandled status code: ${response.statusCode}");
+        }
+      }
+
+    } catch (e, stackTrace) {
+      logger.e("Error in fetchMessages()", error: e, stackTrace: stackTrace);
+    } finally {
+      messagesLoading = false;
+      notifyListeners();
+    }
+  }
+
+
 
 
   Future<void> fetchAppRegister(

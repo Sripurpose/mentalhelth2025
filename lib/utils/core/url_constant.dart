@@ -31,6 +31,7 @@ class UrlConstant {
   static String appSettingsUrl = "${baseUrl}appsettings";
   static String appRegisterUrl= "${baseUrl}setup";
   static String version_update = "${baseUrl}version_update";
+  static String messages = "${baseUrl}messages";
 
 
   static String journalsUrl({required String page}) {

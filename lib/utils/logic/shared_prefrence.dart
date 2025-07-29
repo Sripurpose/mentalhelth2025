@@ -48,6 +48,7 @@ Future<String?> getVersionSharePref() async {
 Future<void> removeUserDetailsSharePref({required BuildContext context}) async {
   DashBoardProvider dashBoardProvider = Provider.of(context, listen: false);
   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.remove('adDialogLastShown');
   prefs.clear();
   dashBoardProvider.changePage(index: 0);
   // ignore: use_build_context_synchronously
@@ -190,6 +191,30 @@ Future<String?> getFCMTokenFromSharePref() async {
   return prefs.getString("fcm_token");
 }
 
+
+Future<int> getAdDialogLastShownTimestamp() async {
+final prefs = await SharedPreferences.getInstance();
+return prefs.getInt('adDialogLastShown') ?? 0;
+}
+
+Future<void> setAdDialogLastShownTimestamp(int timestamp) async {
+final prefs = await SharedPreferences.getInstance();
+await prefs.setInt('adDialogLastShown', timestamp);
+}
+
+Future<void> setPinLastClosedTimestamp() async {
+  final prefs = await SharedPreferences.getInstance();
+  prefs.setInt('pin_last_closed', DateTime.now().millisecondsSinceEpoch);
+}
+
+Future<bool> shouldShowPinnedMessage() async {
+  final prefs = await SharedPreferences.getInstance();
+  final lastClosed = prefs.getInt('pin_last_closed') ?? 0;
+  final now = DateTime.now().millisecondsSinceEpoch;
+
+  // 10 minutes = 600,000 milliseconds
+  return now - lastClosed >= 3600000;
+}
 
 void removeAllValuesLogout({required BuildContext context}) {
   SignInProvider signInProvider =

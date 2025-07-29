@@ -37,6 +37,7 @@ import '../../utils/theme/theme_helper.dart';
 import '../../widgets/custom_image_view.dart';
 import '../../widgets/functions/popup.dart';
 import '../../widgets/functions/snack_bar.dart';
+import '../auth/sign_in/model/messages_model.dart';
 import '../auth/sign_in/provider/sign_in_provider.dart';
 import '../auth/splash/splash.dart';
 import '../goals_dreams_page/provider/goals_dreams_provider.dart';
@@ -137,10 +138,12 @@ class _HomeScreenState extends State<HomeScreen> {
     dashBoardProvider = Provider.of<DashBoardProvider>(context, listen: false);
     goalsDreamsProvider = Provider.of<GoalsDreamsProvider>(context, listen: false);
     scheduleMicrotask(() async {
+      _checkPinnedMessageTiming();
       printTimeZone();
       getAppVersion();
       signInProvider.settingsList.clear();
       await editProfileProvider.fetchUserProfile(context);
+      await signInProvider.fetchMessages(context);
       if(Platform.isIOS){
         final oneSignalId = await OneSignal.User.getOnesignalId();
         if(oneSignalId!= null){
@@ -268,6 +271,14 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+
+  void _checkPinnedMessageTiming() async {
+    bool shouldShow = await shouldShowPinnedMessage();
+    setState(() {
+      showPinnedMessage = shouldShow;
+    });
+  }
+
   Future<void> _launchInAppWithBrowserOptionsVersionUpdate(BuildContext context, Uri url) async {
     // Check if the URL scheme is "mental"
 
@@ -380,7 +391,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     //}
   }
-
+  bool showPinnedMessage = false;
 // Call this method when you know data is loaded
 
   @override
@@ -394,9 +405,12 @@ class _HomeScreenState extends State<HomeScreen> {
       return const TokenExpireScreen();
     }
 
-    // Use FutureBuilder to fetch settings
+    // Use FutureBuilder to fetch messages
     return FutureBuilder(
-      future: signInProvider.fetchSettings(context), // Your method to fetch settings
+      future: Future.wait([
+        signInProvider.fetchSettings(context),
+        signInProvider.fetchMessages(context),
+      ]),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return  Center(child:  SpinKitWave(
@@ -410,6 +424,106 @@ class _HomeScreenState extends State<HomeScreen> {
           if(mounted){
             checkSubscriptionStatus();
             updateFCMTokenIfNeeded(fcmToken);
+
+            final messages = signInProvider.messagesModel?.messages;
+
+            if (messages != null && messages.isNotEmpty) {
+              // Filter messages where type == "1"
+              final filteredMessages = messages.where((msg) => msg.type == "1").toList();
+
+              if (filteredMessages.isNotEmpty) {
+                final messageToShow = filteredMessages.first;
+
+                getAdDialogLastShownTimestamp().then((lastShown) {
+                  final currentTime = DateTime.now().millisecondsSinceEpoch;
+                  const oneHourInMillis = 60 * 60 * 1000;
+
+
+                  if (currentTime - lastShown >= oneHourInMillis) {
+                    setAdDialogLastShownTimestamp(currentTime);
+
+                    Future.delayed(Duration.zero, () {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) {
+                          return AlertDialog(
+                            backgroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            titlePadding: const EdgeInsets.only(top: 16, left: 16, right: 0),
+                            title: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    messageToShow.title ?? "",
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.close),
+                                  onPressed: () => Navigator.of(context).pop(),
+                                ),
+                              ],
+                            ),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                (messageToShow.image_url ?? "").isNotEmpty
+                                    ? Image.network(
+                                  messageToShow.image_url!,
+                                  width: 320,
+                                  height: 200,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) => const Icon(Icons.broken_image),
+                                )
+                                    : const SizedBox(),
+                                const SizedBox(height: 10),
+                                Text(
+                                  messageToShow.description ?? "",
+                                  style: const TextStyle(fontSize: 16),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                            actions: [
+                              if ((messageToShow.url ?? "").isNotEmpty)
+                                Center(
+                                  child: TextButton(
+                                    onPressed: () async {
+                                      final url = messageToShow.url!;
+                                      if (await canLaunchUrl(Uri.parse(url))) {
+                                        await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+                                      }
+                                    },
+                                    child: Text(
+                                      messageToShow.button_text?.isNotEmpty == true
+                                          ? messageToShow.button_text!
+                                          : "Open Link",
+                                      style: const TextStyle(
+                                        color: Colors.blue,
+                                        decoration: TextDecoration.underline,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              const SizedBox(height: 8),
+                            ],
+                          );
+                        },
+                      );
+                    });
+                  }
+                });
+              }
+            }
+
             /// ////
             /// this place
           }
@@ -418,6 +532,7 @@ class _HomeScreenState extends State<HomeScreen> {
           return SafeArea(
             child: Consumer4<MentalStrengthEditProvider, HomeProvider, EditProfileProvider, DashBoardProvider>(
               builder: (context, mentalStrengthEditProvider, homeProvider, editProfileProvider, dashBoardProvider, _) {
+                final messages = signInProvider.messagesModel?.messages;
                 return backGroundImager(
                   size: size,
                   child: RefreshIndicator(
@@ -436,6 +551,69 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: SingleChildScrollView(
                             child: Column(
                               children: [
+
+                                // 🔹 Pinned message UI goes here
+                                if (showPinnedMessage && messages != null && messages.isNotEmpty)
+                                  Builder(
+                                    builder: (context) {
+                                      final pinnedMessage = messages.firstWhere(
+                                            (msg) => msg.type == "2",
+                                        orElse: () => Messages(),
+                                      );
+
+                                      if ((pinnedMessage.title ?? "").isNotEmpty || (pinnedMessage.description ?? "").isNotEmpty) {
+                                        return Container(
+                                          margin: const EdgeInsets.symmetric(horizontal: 21, vertical: 8),
+                                          padding: const EdgeInsets.all(12),
+                                          decoration: BoxDecoration(
+                                            color: Colors.amber.shade100,
+                                            borderRadius: BorderRadius.circular(8),
+                                          ),
+                                          child: Row(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              const Icon(Icons.lightbulb, color: Colors.amber),
+                                              const SizedBox(width: 8),
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    if (pinnedMessage.title?.isNotEmpty ?? false)
+                                                      Text(
+                                                        pinnedMessage.title!,
+                                                        style: const TextStyle(
+                                                          fontWeight: FontWeight.bold,
+                                                          fontSize: 16,
+                                                        ),
+                                                      ),
+                                                    if (pinnedMessage.description?.isNotEmpty ?? false)
+                                                      Text(
+                                                        pinnedMessage.description!,
+                                                        style: const TextStyle(fontSize: 14),
+                                                      ),
+                                                  ],
+                                                ),
+                                              ),
+                                              IconButton(
+                                                icon: const Icon(Icons.close, size: 20),
+                                                onPressed: () async {
+                                                  await setPinLastClosedTimestamp();
+                                                  setState(() {
+                                                    showPinnedMessage = false;
+                                                  });
+                                                },
+
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      } else {
+                                        return const SizedBox.shrink();
+                                      }
+                                    },
+                                  ),
+
+
                                 GestureDetector(
                                   onTap: (){
                                     dashBoardProvider.changePage(index: 1);
