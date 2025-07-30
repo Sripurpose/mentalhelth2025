@@ -274,9 +274,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _checkPinnedMessageTiming() async {
     bool shouldShow = await shouldShowPinnedMessage();
-    setState(() {
+   // setState(() {
       showPinnedMessage = shouldShow;
-    });
+   // });
   }
 
   Future<void> _launchInAppWithBrowserOptionsVersionUpdate(BuildContext context, Uri url) async {
@@ -426,103 +426,149 @@ class _HomeScreenState extends State<HomeScreen> {
             updateFCMTokenIfNeeded(fcmToken);
 
             final messages = signInProvider.messagesModel?.messages;
+            if (signInProvider.settingsModel?.isSubscribed.toString() != "0"){
+              if (messages != null && messages.isNotEmpty) {
+                // Filter messages where type == "1"
+                final filteredMessages = messages.where((msg) => msg.type == "1").toList();
 
-            if (messages != null && messages.isNotEmpty) {
-              // Filter messages where type == "1"
-              final filteredMessages = messages.where((msg) => msg.type == "1").toList();
+                if (filteredMessages.isNotEmpty) {
+                  final messageToShow = filteredMessages.first;
 
-              if (filteredMessages.isNotEmpty) {
-                final messageToShow = filteredMessages.first;
-
-                getAdDialogLastShownTimestamp().then((lastShown) {
-                  final currentTime = DateTime.now().millisecondsSinceEpoch;
-                  const oneHourInMillis = 60 * 60 * 1000;
+                  getAdDialogLastShownTimestamp().then((lastShown) {
+                    final currentTime = DateTime.now().millisecondsSinceEpoch;
+                    const oneHourInMillis = 60 * 60 * 1000;
 
 
-                  if (currentTime - lastShown >= oneHourInMillis) {
-                    setAdDialogLastShownTimestamp(currentTime);
+                    if (currentTime - lastShown >= oneHourInMillis) {
+                      setAdDialogLastShownTimestamp(currentTime);
 
-                    Future.delayed(Duration.zero, () {
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (context) {
-                          return AlertDialog(
-                            backgroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            titlePadding: const EdgeInsets.only(top: 16, left: 16, right: 0),
-                            title: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    messageToShow.title ?? "",
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                ),
-                                IconButton(
-                                  icon: const Icon(Icons.close),
-                                  onPressed: () => Navigator.of(context).pop(),
-                                ),
-                              ],
-                            ),
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                (messageToShow.image_url ?? "").isNotEmpty
-                                    ? Image.network(
-                                  messageToShow.image_url!,
-                                  width: 320,
-                                  height: 200,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) => const Icon(Icons.broken_image),
-                                )
-                                    : const SizedBox(),
-                                const SizedBox(height: 10),
-                                Text(
-                                  messageToShow.description ?? "",
-                                  style: const TextStyle(fontSize: 16),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                            actions: [
-                              if ((messageToShow.url ?? "").isNotEmpty)
-                                Center(
-                                  child: TextButton(
-                                    onPressed: () async {
-                                      final url = messageToShow.url!;
-                                      if (await canLaunchUrl(Uri.parse(url))) {
-                                        await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
-                                      }
-                                    },
-                                    child: Text(
-                                      messageToShow.button_text?.isNotEmpty == true
-                                          ? messageToShow.button_text!
-                                          : "Open Link",
-                                      style: const TextStyle(
-                                        color: Colors.blue,
-                                        decoration: TextDecoration.underline,
-                                        fontSize: 16,
+                      Future.delayed(Duration.zero, () {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) {
+                            return Dialog(
+                              backgroundColor: Colors.white,
+                              insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  // Close button
+                                  Align(
+                                    alignment: Alignment.topRight,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 8, right: 8),
+                                      child: Container(
+                                        width: 30,
+                                        height: 30,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: ColorsContent.newThemeColor,
+                                        ),
+                                        child: IconButton(
+                                          icon: const Icon(Icons.close, color: Colors.white),
+                                          iconSize: 20, // Smaller icon
+                                          padding: EdgeInsets.zero, // Remove default padding
+                                          onPressed: () => Navigator.of(context).pop(),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              const SizedBox(height: 8),
-                            ],
-                          );
-                        },
-                      );
-                    });
-                  }
-                });
+
+                                  // Image Banner
+                                  if ((messageToShow.image_url ?? "").isNotEmpty)
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 5),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(0),
+                                        child: Image.network(
+                                          messageToShow.image_url ?? "",
+                                          width: double.infinity,
+                                        //  height: 180,
+                                          fit: BoxFit.cover,
+                                       //   errorBuilder: (_, __, ___) => const Icon(Icons.broken_image, size: 80),
+                                        ),
+                                      ),
+                                    ),
+
+                                  const SizedBox(height: 10),
+
+                                  // Title
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                                    child: Text(
+                                      messageToShow.title ?? "",
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                  ),
+
+                                  const SizedBox(height: 8),
+
+                                  // Description
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                                    child: Text(
+                                      messageToShow.description ?? "",
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black54,
+                                      ),
+                                    ),
+                                  ),
+
+                                  const SizedBox(height: 15),
+
+                                  // CTA Button
+                                  if ((messageToShow.url ?? "").isNotEmpty)
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          foregroundColor: Colors.white,
+                                          backgroundColor: ColorsContent.newThemeColor,
+                                          minimumSize: const Size.fromHeight(48),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(8),
+                                          ),
+                                        ),
+                                        onPressed: () async {
+                                          final url = messageToShow.url!;
+                                          if (await canLaunchUrl(Uri.parse(url))) {
+                                            await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+                                          }
+                                        },
+                                        child: Text(
+                                          messageToShow.button_text?.isNotEmpty == true
+                                              ? messageToShow.button_text!
+                                              : "",
+                                          style: const TextStyle(fontSize: 16),
+                                        ),
+                                      ),
+                                    ),
+
+                                  const SizedBox(height: 20),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+
+                      });
+                    }
+                  });
+                }
               }
             }
+
 
             /// ////
             /// this place
@@ -598,9 +644,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 icon: const Icon(Icons.close, size: 20),
                                                 onPressed: () async {
                                                   await setPinLastClosedTimestamp();
-                                                  setState(() {
+                                                 // setState(() {
                                                     showPinnedMessage = false;
-                                                  });
+                                                 // });
                                                 },
 
                                               ),

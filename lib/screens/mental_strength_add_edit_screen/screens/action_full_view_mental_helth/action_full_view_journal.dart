@@ -130,10 +130,16 @@ class _ActionFullViewJournalCreateBottomSheetState
           color: appTheme.gray50,
           borderRadius: const BorderRadius.only(
             topRight: Radius.circular(
-              0,
+              20,
             ),
             topLeft: Radius.circular(
-              0,
+              20,
+            ),
+            bottomRight: Radius.circular(
+              20,
+            ),
+            bottomLeft: Radius.circular(
+              20,
             ),
           ),
           boxShadow: [

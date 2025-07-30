@@ -102,10 +102,16 @@ class _GoalAndDreamFullViewBottomSheetState
           color:ColorsContent.homeBackGroundColor,
           borderRadius: const BorderRadius.only(
             topRight: Radius.circular(
-              25,
+              20,
             ),
             topLeft: Radius.circular(
-              25,
+              20,
+            ),
+            bottomRight: Radius.circular(
+              20,
+            ),
+            bottomLeft: Radius.circular(
+              20,
             ),
           ),
           boxShadow: [

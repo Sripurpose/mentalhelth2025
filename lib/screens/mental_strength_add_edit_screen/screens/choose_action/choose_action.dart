@@ -92,8 +92,10 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
           decoration: BoxDecoration(
             color: ColorsContent.homeBackGroundColor,
             borderRadius: const BorderRadius.only(
-              topRight: Radius.circular(25),
-              topLeft: Radius.circular(25),
+              topRight: Radius.circular(20),
+              topLeft: Radius.circular(20),
+              bottomLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20),
             ),
             boxShadow: [
               BoxShadow(
