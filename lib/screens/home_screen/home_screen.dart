@@ -274,9 +274,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _checkPinnedMessageTiming() async {
     bool shouldShow = await shouldShowPinnedMessage();
-   // setState(() {
+    setState(() {
       showPinnedMessage = shouldShow;
-   // });
+    });
   }
 
   Future<void> _launchInAppWithBrowserOptionsVersionUpdate(BuildContext context, Uri url) async {
@@ -644,9 +644,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 icon: const Icon(Icons.close, size: 20),
                                                 onPressed: () async {
                                                   await setPinLastClosedTimestamp();
-                                                 // setState(() {
+                                                  setState(() {
                                                     showPinnedMessage = false;
-                                                 // });
+                                                  });
                                                 },
 
                                               ),
