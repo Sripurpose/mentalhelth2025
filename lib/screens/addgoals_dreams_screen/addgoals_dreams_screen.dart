@@ -627,7 +627,7 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
                                   Icons.close,
                                   color: Colors.white,
                                   size: 16,
-                                  fontWeight: FontWeight.bold,
+                                  //fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),

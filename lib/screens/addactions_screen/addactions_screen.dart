@@ -1178,7 +1178,7 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                                 Icons.close,
                                 color: Colors.white,
                                 size: 16,
-                                fontWeight: FontWeight.bold,
+                                //fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
