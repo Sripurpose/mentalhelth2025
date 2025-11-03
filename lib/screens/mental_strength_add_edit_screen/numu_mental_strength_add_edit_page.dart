@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:link_preview_generator/link_preview_generator.dart';
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/screens/dash_borad_screen/provider/dash_board_provider.dart';
 import 'package:mentalhelth/screens/edit_add_profile_screen/provider/edit_provider.dart';
@@ -159,6 +160,7 @@ class _NumuMentalStrengthAddEditPageState
       mentalStrengthEditProvider.selectedLocationName = "";
       mentalStrengthEditProvider.goalsValue.title = "";
       mentalStrengthEditProvider.goalsValue.id = null;
+      mentalStrengthEditProvider.detectedLinks.clear();
       logger.i(
           "mentalStrengthEditProvider.goalsValue.id${mentalStrengthEditProvider.goalsValue.id}");
 
@@ -573,7 +575,7 @@ class _NumuMentalStrengthAddEditPageState
                                             alignment: Alignment.center,
                                             children: [
                                               SvgPicture.asset(ImageConstant
-                                                  .submitButtonNumuBuild),
+                                                  .saveButtonNumuBuild),
                                               if (mentalStrengthEditProvider
                                                   .saveJournalLoading)
                                                 const Padding(
@@ -646,11 +648,12 @@ class _NumuMentalStrengthAddEditPageState
                                               _isTokenExpired();
                                             }
                                           },
-                                          child: Stack(
+                                          child:
+                                          Stack(
                                             alignment: Alignment.center,
                                             children: [
                                               SvgPicture.asset(ImageConstant
-                                                  .numuSubmitEditAdd),
+                                                  .saveButtonNumuBuild),
                                               if (mentalStrengthEditProvider
                                                   .saveJournalLoading)
                                                 const Padding(
@@ -731,11 +734,13 @@ class _NumuMentalStrengthAddEditPageState
   }
 
   /// ✅ First Tab - Kept as per your design
+  ///
   Widget _buildFirstTab(
       BuildContext context,
       MentalStrengthEditProvider mentalStrengthEditProvider,
       Size size,
-      ) {
+      )
+  {
     return Container(
       color: mentalStrengthEditProvider.openChooseGoal
           ? ColorsContent.newThemeColor
@@ -755,6 +760,37 @@ class _NumuMentalStrengthAddEditPageState
             _buildDescriptionEditText(context, mentalStrengthEditProvider),
             SizedBox(height: size.height * 0.015),
             _buildAddMediaColumn(context, size),
+            //
+            // if (mentalStrengthEditProvider.detectedLinks.isNotEmpty)
+            //   Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: [
+            //       const SizedBox(height: 40),
+            //       ...mentalStrengthEditProvider.detectedLinks.map((link) {
+            //         return Padding(
+            //           padding: const EdgeInsets.only(bottom: 12.0),
+            //           child: LinkPreviewGenerator(
+            //             link: link,
+            //             linkPreviewStyle: LinkPreviewStyle.small, // 👈 smaller layout
+            //             showDomain: true,
+            //             showTitle: true,
+            //             bodyMaxLines: 1, // fewer lines = less height
+            //             boxShadow: const [
+            //               BoxShadow(
+            //                 color: Colors.black12,
+            //                 blurRadius: 6,
+            //                 offset: Offset(0, 2),
+            //               ),
+            //             ],
+            //             borderRadius: 12,
+            //           )
+            //         );
+            //       }).toList(),
+            //     ],
+            //   ),
+
+
+
           ],
         ),
       ),
@@ -1326,38 +1362,144 @@ class _NumuMentalStrengthAddEditPageState
       ),
     );
   }
-
-  Widget _buildDescriptionEditText(BuildContext context,
-      MentalStrengthEditProvider mentalStrengthEditProvider) {
-    //FocusNode focusNode = FocusNode();
-
+  Widget _buildDescriptionEditText(
+      BuildContext context,
+      MentalStrengthEditProvider mentalStrengthEditProvider,
+      ) {
     return StatefulBuilder(
       builder: (context, setState) {
-        return CustomTextFormFieldNumu(
-          textAlign: TextAlign.start,
-          controller: mentalStrengthEditProvider.descriptionEditTextController,
-          hintText: _descriptionFocusNode.hasFocus ? '' : "Start writing...",
-          hintStyle: TextStyle(
-            color: ColorsContent.hintColor,
-            fontSize: 16,
-            fontWeight: FontWeight.w400, // Font weight 600
-            fontFamily: 'OpenSans', // Font family Open Sans
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.grey.shade300),
           ),
-          textInputAction: TextInputAction.newline, // ✅ allow newline
-          textInputType: TextInputType.multiline, // ✅ multiline keyboard
-          maxLines: 4,
-          focusNode: _descriptionFocusNode,
-          onTap: () => setState(() {}),
-          // Rebuild when tapped
-          onEditingComplete: () {
-            _descriptionFocusNode
-                .unfocus(); // Ensure focus is removed when done
-            setState(() {});
-          }, // Rebuild when focus is lost
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 📝 Text field
+              if (mentalStrengthEditProvider.detectedLinks.isEmpty)
+                CustomTextFormFieldNumu(
+                  textAlign: TextAlign.start,
+                  controller: mentalStrengthEditProvider
+                      .descriptionEditTextController,
+                  hintText: _descriptionFocusNode.hasFocus
+                      ? ''
+                      : "Start writing...",
+                  hintStyle: TextStyle(
+                    color: ColorsContent.hintColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'OpenSans',
+                  ),
+                  textInputAction: TextInputAction.newline,
+                  textInputType: TextInputType.multiline,
+                  maxLines: 4,
+                  focusNode: _descriptionFocusNode,
+                  borderDecoration: InputBorder.none,
+                  onChanged: (value) {
+                    // Detect URLs
+                    final matches = mentalStrengthEditProvider.urlRegex
+                        .allMatches(value)
+                        .map((match) => match.group(0)!)
+                        .toList();
+
+                    // ✅ If text contains a link, show preview instead of text
+                    if (matches.isNotEmpty) {
+                      setState(() {
+                        mentalStrengthEditProvider.detectedLinks = matches;
+                        // Clear the text field (hide text)
+                        mentalStrengthEditProvider
+                            .descriptionEditTextController
+                            .clear();
+                      });
+                    }
+                  },
+                  onTap: () => setState(() {}),
+                  onEditingComplete: () {
+                    _descriptionFocusNode.unfocus();
+                    setState(() {});
+                  },
+                ),
+
+              // 🔗 Link preview (only if a link is detected)
+              if (mentalStrengthEditProvider.detectedLinks.isNotEmpty)
+                ...mentalStrengthEditProvider.detectedLinks.map((link) {
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Stack(
+                      alignment: Alignment.topRight,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.grey.shade300, // ✅ Border color
+                              width: 1.5, // ✅ Border width
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: LinkPreviewGenerator(
+                              link: link,
+                              linkPreviewStyle: LinkPreviewStyle.small,
+                              showDomain: true,
+                              showTitle: true,
+                              bodyMaxLines: 1,
+                              borderRadius: 10,
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 4,
+                                  offset: Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        // ❌ Close icon
+                        Positioned(
+                          top: 6,
+                          right: 6,
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                mentalStrengthEditProvider.detectedLinks.clear();
+                                mentalStrengthEditProvider
+                                    .descriptionEditTextController
+                                    .clear();
+                              });
+                            },
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.black54,
+                              ),
+                              padding: const EdgeInsets.all(4),
+                              child: const Icon(
+                                Icons.close,
+                                color: Colors.white,
+                                size: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+            ],
+          ),
         );
       },
     );
   }
+
+
+
 
   Widget _buildTitleEditText(BuildContext context,
       MentalStrengthEditProvider mentalStrengthEditProvider) {

@@ -2627,4 +2627,11 @@ logger.i("body$body");
       notifyListeners();
     }
   }
+
+  List<String> detectedLinks = [];
+  RegExp urlRegex = RegExp(
+    r'(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-&?=%.]+',
+    caseSensitive: false,
+  );
+
 }

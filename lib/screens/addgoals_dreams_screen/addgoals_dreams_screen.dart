@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:link_preview_generator/link_preview_generator.dart';
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/screens/addgoals_dreams_screen/widget/googlemap_widget/google_map_widget.dart';
 import 'package:mentalhelth/screens/addgoals_dreams_screen/widget/popup/audio_popup_goals.dart';
@@ -87,6 +88,7 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
     adDreamsGoalsProvider.takedImages.clear();
     adDreamsGoalsProvider.selectedLocationName = "";
     adDreamsGoalsProvider.mediaSelected = 0;
+    adDreamsGoalsProvider.detectedLinks.clear();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       adDreamsGoalsProvider.clearLocationSelection();
@@ -256,6 +258,8 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
                                   const SizedBox(height: 24),
                                   _buildCommentEditText(context),
                                   const SizedBox(height: 25),
+
+
                                   Padding(
                                     padding: const EdgeInsets.only(
                                       left: 2,
@@ -517,27 +521,129 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
 
   Widget _buildCommentEditText(BuildContext context) {
     return Consumer<AdDreamsGoalsProvider>(
-        builder: (context, adDreamsGoalsProvider, _) {
-      return Padding(
-        padding: const EdgeInsets.only(left: 2),
-        child: CustomTextFormFieldGoalOrActionDesc(
-          controller: adDreamsGoalsProvider.commentEditTextController,
-          hintText: _goalDescFocusNode.hasFocus ? '' : "Goal Description",
-          hintStyle: CustomTextStyles.bodySmallGray700,
-          maxLines: 4,
-          focusNode: _goalDescFocusNode,
-          textInputAction: TextInputAction.newline, // ✅ allow newline
-          textInputType: TextInputType.multiline, // ✅ multiline keyboard
-          onTap: () => setState(() {}),
-          // Rebuild when tapped
-          onEditingComplete: () {
-            _goalDescFocusNode.unfocus(); // Ensure focus is removed when done
-            setState(() {});
-          },
-        ),
-      );
-    });
+      builder: (context, adDreamsGoalsProvider, _) {
+        return Padding(
+          padding: const EdgeInsets.only(left: 2),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.grey.shade300),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 📝 Show text field only when no link is detected
+                if (adDreamsGoalsProvider.detectedLinks.isEmpty)
+                  CustomTextFormFieldGoalOrActionDesc(
+                    controller: adDreamsGoalsProvider.commentEditTextController,
+                    hintText: _goalDescFocusNode.hasFocus
+                        ? ''
+                        : "Goal Description",
+                    hintStyle: CustomTextStyles.bodySmallGray700,
+                    maxLines: 4,
+                    focusNode: _goalDescFocusNode,
+                    textInputAction: TextInputAction.newline,
+                    textInputType: TextInputType.multiline,
+                    borderDecoration: InputBorder.none,
+                    onTap: () => setState(() {}),
+                    onChanged: (value) {
+                      // Detect URLs in text
+                      final matches = adDreamsGoalsProvider.urlRegex
+                          .allMatches(value)
+                          .map((match) => match.group(0)!)
+                          .toList();
+
+                      // ✅ If contains a link, show preview instead of text
+                      if (matches.isNotEmpty) {
+                        setState(() {
+                          adDreamsGoalsProvider.detectedLinks = matches;
+                          adDreamsGoalsProvider.commentEditTextController.clear();
+                        });
+                      }
+                    },
+                    onEditingComplete: () {
+                      _goalDescFocusNode.unfocus();
+                      setState(() {});
+                    },
+                  ),
+
+                // 🔗 Show link preview if a link is detected
+                if (adDreamsGoalsProvider.detectedLinks.isNotEmpty)
+                  ...adDreamsGoalsProvider.detectedLinks.map((link) {
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Stack(
+                        alignment: Alignment.topRight,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.grey.shade300, // ✅ Border color
+                                width: 1.5, // ✅ Border width
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: LinkPreviewGenerator(
+                                link: link,
+                                linkPreviewStyle: LinkPreviewStyle.small,
+                                showDomain: true,
+                                showTitle: true,
+                                bodyMaxLines: 1,
+                                borderRadius: 10,
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    blurRadius: 4,
+                                    offset: Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          // ❌ Close icon to clear preview
+                          Positioned(
+                            top: 6,
+                            right: 6,
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  adDreamsGoalsProvider.detectedLinks.clear();
+                                  adDreamsGoalsProvider
+                                      .commentEditTextController
+                                      .clear();
+                                });
+                              },
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.black54,
+                                ),
+                                padding: const EdgeInsets.all(4),
+                                child: const Icon(
+                                  Icons.close,
+                                  color: Colors.white,
+                                  size: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
+
 
   /// Section Widget
   Widget _buildAddActionsButton(BuildContext context) {

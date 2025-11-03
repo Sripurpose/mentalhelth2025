@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -11,7 +12,8 @@ import 'package:mentalhelth/widgets/custom_image_view.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
-import '../../../goals_dreams_page/model/goals_and_dreams_model.dart';
+import '../../../../utils/theme/colors.dart';
+import '../../../goals_dreams_page/model/goals_and_dreams_model.dart' hide Location;
 
 class AddGoalsGoogleMap extends StatefulWidget {
   const AddGoalsGoogleMap({super.key, this.goalsanddream});
@@ -29,6 +31,11 @@ class _AddGoalsGoogleMapState extends State<AddGoalsGoogleMap> {
   double? savedLongitude = 0.0;
   String? savedLocationAddress = '';
   var logger = Logger();
+
+  // Search functionality variables
+  final TextEditingController _searchController = TextEditingController();
+  List<Map<String, dynamic>> _searchResultsWithNames = [];
+  bool _isSearching = false;
 
   @override
   void initState() {
@@ -71,6 +78,11 @@ class _AddGoalsGoogleMapState extends State<AddGoalsGoogleMap> {
     }
   }
 
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   Future<void> _fetchCurrentLocation() async {
     await _checkPermissionStatus();
@@ -148,14 +160,118 @@ class _AddGoalsGoogleMapState extends State<AddGoalsGoogleMap> {
     });
   }
 
-
   final Set<Marker> markers = {};
+
+  // Search functionality methods
+  Future<void> _searchLocation(String query) async {
+    if (query.isEmpty) {
+      setState(() {
+        _searchResultsWithNames.clear();
+        _isSearching = false;
+      });
+      return;
+    }
+
+    setState(() {
+      _isSearching = true;
+    });
+
+    try {
+      List<Location> locations = await locationFromAddress(query);
+
+      // Get placemark details for each location
+      List<Map<String, dynamic>> resultsWithNames = [];
+      for (var location in locations) {
+        try {
+          List<Placemark> placemarks = await placemarkFromCoordinates(
+              location.latitude,
+              location.longitude
+          );
+          if (placemarks.isNotEmpty) {
+            Placemark placemark = placemarks[0];
+            String displayName = '';
+
+            if (placemark.name != null && placemark.name!.isNotEmpty) {
+              displayName = placemark.name!;
+            }
+            if (placemark.locality != null && placemark.locality!.isNotEmpty) {
+              displayName += displayName.isNotEmpty ? ', ${placemark.locality}' : placemark.locality!;
+            }
+            if (placemark.administrativeArea != null && placemark.administrativeArea!.isNotEmpty) {
+              displayName += displayName.isNotEmpty ? ', ${placemark.administrativeArea}' : placemark.administrativeArea!;
+            }
+            if (placemark.country != null && placemark.country!.isNotEmpty) {
+              displayName += displayName.isNotEmpty ? ', ${placemark.country}' : placemark.country!;
+            }
+
+            resultsWithNames.add({
+              'location': location,
+              'placemark': placemark,
+              'displayName': displayName.isNotEmpty ? displayName : 'Unknown Location',
+            });
+          }
+        } catch (e) {
+          logger.e('Error getting placemark: $e');
+        }
+      }
+
+      setState(() {
+        _searchResultsWithNames = resultsWithNames;
+        _isSearching = false;
+      });
+    } catch (e) {
+      logger.e('Error searching location: $e');
+      setState(() {
+        _searchResultsWithNames.clear();
+        _isSearching = false;
+      });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Location not found. Please try a different search.')),
+        );
+      }
+    }
+  }
+
+  Future<void> _selectSearchResult(Map<String, dynamic> result) async {
+    Location location = result['location'];
+    Placemark placemark = result['placemark'];
+    LatLng selectedLatLng = LatLng(location.latitude, location.longitude);
+
+    String address = '${placemark.name}, ${placemark.locality}, '
+        '${placemark.administrativeArea}, ${placemark.country}';
+
+    setState(() {
+      _selectedLocation = selectedLatLng;
+      _selectedAddress = address;
+      _searchResultsWithNames.clear(); // hide the dropdown
+      _searchController.text = result['displayName']; // ✅ keep searched text
+    });
+
+    // ✅ Hide keyboard after selection
+    FocusScope.of(context).unfocus();
+
+    // Animate to the selected location
+    mapController.animateCamera(
+      CameraUpdate.newLatLngZoom(selectedLatLng, 15.0),
+    );
+
+    // Update provider
+    adDreamsGoalsProvider.addLocationSection(
+      selectedAddress: address,
+      placemark: placemark,
+      location: selectedLatLng,
+    );
+
+    _updateMarkerPosition();
+  }
+
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SizedBox(
-      height: size.height * 0.4,
+      height: size.height * 0.75,
       child: Column(
         children: [
           Row(
@@ -175,6 +291,102 @@ class _AddGoalsGoogleMapState extends State<AddGoalsGoogleMap> {
             ],
           ),
           const SizedBox(height: 10),
+
+          // Search Bar
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 0.0),
+            child: Column(
+              children: [
+                TextField(
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    hintText: 'Search location...',
+                    prefixIcon: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: SvgPicture.asset(
+                        ImageConstant.searchIconMap, // ✅ your search SVG
+                      ),
+                    ),
+                    suffixIcon: _searchController.text.isNotEmpty
+                        ? IconButton(
+                      icon: SvgPicture.asset(
+                        ImageConstant.clearIconMap, // ✅ your clear SVG
+                      ),
+                      onPressed: () {
+                        _searchController.clear();
+                        setState(() {
+                          _searchResultsWithNames.clear();
+                        });
+                      },
+                    )
+                        : null,
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Colors.grey, width: 0.1),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Colors.grey, width: 0.1),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Colors.blue, width: 0.1),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                  ),
+                  onChanged: (value) {
+                    setState(() {});
+                  },
+                  onSubmitted: (value) {
+                    _searchLocation(value);
+                  },
+                ),
+
+                // Search Results Dropdown
+                if (_searchResultsWithNames.isNotEmpty)
+                  Container(
+                    margin: const EdgeInsets.only(top: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    constraints: const BoxConstraints(maxHeight: 150),
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: _searchResultsWithNames.length,
+                      itemBuilder: (context, index) {
+                        final result = _searchResultsWithNames[index];
+                        return ListTile(
+                          leading: const Icon(Icons.location_on, color: Colors.red),
+                          title: Text(
+                            result['displayName'],
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                          dense: true,
+                          onTap: () => _selectSearchResult(result),
+                        );
+                      },
+                    ),
+                  ),
+
+                if (_isSearching)
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: CircularProgressIndicator(),
+                  ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 10),
+
           Expanded(
             child: GoogleMap(
               myLocationButtonEnabled: true,
@@ -208,13 +420,21 @@ class _AddGoalsGoogleMapState extends State<AddGoalsGoogleMap> {
               },
             ),
           ),
-          _selectedAddress.isNotEmpty || savedLocationAddress!.isNotEmpty?
-          Padding(
+
+          _selectedAddress.isNotEmpty || savedLocationAddress!.isNotEmpty
+              ? Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
               'Selected Address: ${_selectedAddress.isNotEmpty ? _selectedAddress : savedLocationAddress}',
+              style:  TextStyle(
+                color: ColorsContent.newThemeColor,
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                fontFamily: 'Poppins',
+              ),
             ),
-          ):const SizedBox(),
+          )
+              : const SizedBox(),
         ],
       ),
     );
@@ -255,5 +475,4 @@ class _AddGoalsGoogleMapState extends State<AddGoalsGoogleMap> {
   void _onMarkerDragEnd(LatLng location) {
     _onMapTapped(location);
   }
-
 }

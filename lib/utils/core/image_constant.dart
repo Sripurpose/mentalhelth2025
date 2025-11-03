@@ -22,6 +22,7 @@ class ImageConstant {
   static String lineNumu = '$imagePath/line_numu.svg';
   static String submitButtonNumu = 'assets/images/submit_button_numu.svg';
   static String submitButtonNumuBuild = 'assets/images/submit_button_mental_strength.svg';
+  static String saveButtonNumuBuild = 'assets/images/save_button_mental_strength.svg';
   static String homeScreenNoData = 'assets/images/home_screen_no_data.svg';
   static String tabBackButton = 'assets/images/tab_back_button.svg';
   static String numuMentalBackButton = 'assets/images/numu_mental_back.svg';
@@ -39,6 +40,8 @@ class ImageConstant {
   static String recordAddMediaNumu = '$imagePath/record_add_media_numu.svg';
   static String locationAddMediaNumu = '$imagePath/location_add_media_numu.svg';
   static String iosBackIcon = '$imagePath/ios_back_icon.svg';
+  static String searchIconMap = '$imagePath/search_map.svg';
+  static String clearIconMap = '$imagePath/clear_map.svg';
 
   static String imgCamera = '$imagePath/img_camera.svg';
 

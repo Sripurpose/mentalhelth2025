@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
@@ -443,21 +442,6 @@ class SignInProvider extends ChangeNotifier {
   }
 
 
-  void signInWithFacebook() async {
-    try {
-      socialMediaModelLoading = true;
-      notifyListeners();
-      final LoginResult loginResult = await FacebookAuth.instance.login();
-      if (loginResult.status == LoginStatus.success) {
-        final AccessToken? accessToken = loginResult.accessToken;
-        final OAuthCredential facebookAuthCredential =
-            FacebookAuthProvider.credential(accessToken!.token);
-        await FirebaseAuth.instance
-            .signInWithCredential(facebookAuthCredential);
-      } else {}
-      // ignore: empty_catches
-    } catch (e) {}
-  }
 
   void googleSignOut() async {
     try {

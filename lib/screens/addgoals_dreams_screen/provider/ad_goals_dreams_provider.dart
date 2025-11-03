@@ -1791,4 +1791,12 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
     }
   }
 
+
+
+  List<String> detectedLinks = [];
+  RegExp urlRegex = RegExp(
+    r'(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-&?=%.]+',
+    caseSensitive: false,
+  );
+
 }

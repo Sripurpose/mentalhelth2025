@@ -3,4 +3,6 @@ class Constent {
    String fcmNewToken = "";
   static  String versionCodeAndroid = "";
   static  String versionCodeIOS = "";
+  static const String googleApiKey = "AIzaSyB_mUl0uBmISnObRAdQEF-Ffaa4mxq1LpQ";
+
 }

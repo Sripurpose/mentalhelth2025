@@ -51,7 +51,6 @@ dependencies:
   firebase_core: ^3.6.0
   firebase_auth: ^5.3.0
   google_sign_in: ^6.2.1
-  flutter_facebook_auth: ^6.0.7
   country_picker: ^2.0.24
   shimmer: ^3.0.0
   webview_flutter: ^4.7.0
@@ -74,7 +73,7 @@ dependencies:
 #  ffmpeg_kit_flutter_full_gpl: ^6.0.3
   video_compress: ^3.1.4
   geolocator: ^11.0.0
-  http: ^1.2.0
+  http: ^0.13.4
   flutter_local_notifications: ^17.2.3
   hive: ^2.2.3
   hive_flutter: ^1.1.0
@@ -106,6 +105,7 @@ dependencies:
   webview_flutter_android: ^3.13.0
   flutter_image_compress: ^2.1.0
   file_picker: ^6.1.1
+  link_preview_generator: ^1.2.0
 
   ##chewie: ^1.10.0
 
