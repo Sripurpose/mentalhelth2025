@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:html_unescape/html_unescape.dart';
+import 'package:link_preview_generator/link_preview_generator.dart';
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/screens/addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
 import 'package:mentalhelth/screens/goals_dreams_page/provider/goals_dreams_provider.dart';
@@ -210,6 +212,7 @@ class _GoalAndDreamFullViewBottomSheetState
                     widget.goalDetailModel.goals!.goalEnddate.toString(),
                 status: widget.goalDetailModel.goals!.goalStatus.toString(),
                 comments: widget.goalDetailModel.goals!.goalDetails.toString(),
+                previeLinkApi: widget.goalDetailModel.goals!.preview_link.toString(),
               ),
 
 
@@ -833,7 +836,8 @@ class _GoalAndDreamFullViewBottomSheetState
         required String createDate,
         required String achiveDate,
         required String status,
-        required String comments}) {
+        required String comments,
+        required String previeLinkApi}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -1077,20 +1081,68 @@ class _GoalAndDreamFullViewBottomSheetState
                 width: double.infinity,
                 padding: const EdgeInsets.all(10),
                 decoration: const BoxDecoration(
-                  color: Colors.white, // Off-white background
-                  borderRadius:
-                  BorderRadius.vertical(bottom: Radius.circular(5)),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(bottom: Radius.circular(5)),
                 ),
-                child: Text(
-                  comments,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Poppins',
-                  ),
+                child: Builder(
+                  builder: (context) {
+                    final commentsText = (comments ?? "").trim();
+                    final previewLink = previeLinkApi.toString().trim();
+
+                    // 🧠 If comments text exists → show text
+                    if (commentsText.isNotEmpty) {
+                      return Text(
+                        HtmlUnescape().convert(commentsText),
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Poppins',
+                        ),
+                      );
+                    }
+
+                    // 🔗 If comments text is empty but previewLink exists → show preview
+                    else if (previewLink.isNotEmpty) {
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.grey.shade300,
+                              width: 1.5,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: LinkPreviewGenerator(
+                              link: previewLink,
+                              linkPreviewStyle: LinkPreviewStyle.small,
+                              showDomain: true,
+                              showTitle: true,
+                              bodyMaxLines: 1,
+                              borderRadius: 10,
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 4,
+                                  offset: Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+
+                    // ❌ If both empty → return nothing
+                    else {
+                      return const SizedBox.shrink();
+                    }
+                  },
                 ),
-              ),
+              )
             ],
           ),
         ),

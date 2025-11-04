@@ -76,6 +76,10 @@ class _AddGoalsGoogleMapState extends State<AddGoalsGoogleMap> {
         _fetchCurrentLocation();
       }
     }
+
+    _searchController.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
@@ -153,7 +157,7 @@ class _AddGoalsGoogleMapState extends State<AddGoalsGoogleMap> {
           draggable: true,
           onDragEnd: _onMarkerDragEnd,
           onTap: () {
-            _onMapTapped(_selectedLocation); // Trigger the same logic as map tap
+            _onMapTapped(_selectedLocation);
           },
         ),
       );
@@ -162,7 +166,33 @@ class _AddGoalsGoogleMapState extends State<AddGoalsGoogleMap> {
 
   final Set<Marker> markers = {};
 
-  // Search functionality methods
+  // Helper method to build display name from placemark
+  String _buildDisplayName(Placemark placemark) {
+    List<String> parts = [];
+
+    if (placemark.name != null && placemark.name!.isNotEmpty) {
+      parts.add(placemark.name!);
+    }
+    if (placemark.locality != null && placemark.locality!.isNotEmpty) {
+      if (!parts.contains(placemark.locality)) {
+        parts.add(placemark.locality!);
+      }
+    }
+    if (placemark.administrativeArea != null && placemark.administrativeArea!.isNotEmpty) {
+      if (!parts.contains(placemark.administrativeArea)) {
+        parts.add(placemark.administrativeArea!);
+      }
+    }
+    if (placemark.country != null && placemark.country!.isNotEmpty) {
+      if (!parts.contains(placemark.country)) {
+        parts.add(placemark.country!);
+      }
+    }
+
+    return parts.join(', ');
+  }
+
+  // Search functionality methods - IMPROVED FOR 10 NEARBY LOCATIONS
   Future<void> _searchLocation(String query) async {
     if (query.isEmpty) {
       setState(() {
@@ -181,42 +211,68 @@ class _AddGoalsGoogleMapState extends State<AddGoalsGoogleMap> {
 
       // Get placemark details for each location
       List<Map<String, dynamic>> resultsWithNames = [];
-      for (var location in locations) {
-        try {
-          List<Placemark> placemarks = await placemarkFromCoordinates(
-              location.latitude,
-              location.longitude
-          );
-          if (placemarks.isNotEmpty) {
-            Placemark placemark = placemarks[0];
-            String displayName = '';
 
-            if (placemark.name != null && placemark.name!.isNotEmpty) {
-              displayName = placemark.name!;
-            }
-            if (placemark.locality != null && placemark.locality!.isNotEmpty) {
-              displayName += displayName.isNotEmpty ? ', ${placemark.locality}' : placemark.locality!;
-            }
-            if (placemark.administrativeArea != null && placemark.administrativeArea!.isNotEmpty) {
-              displayName += displayName.isNotEmpty ? ', ${placemark.administrativeArea}' : placemark.administrativeArea!;
-            }
-            if (placemark.country != null && placemark.country!.isNotEmpty) {
-              displayName += displayName.isNotEmpty ? ', ${placemark.country}' : placemark.country!;
-            }
+      if (locations.isNotEmpty) {
+        Location mainLocation = locations[0];
 
-            resultsWithNames.add({
-              'location': location,
-              'placemark': placemark,
-              'displayName': displayName.isNotEmpty ? displayName : 'Unknown Location',
-            });
+        // Create a larger grid of search points for more results
+        double lat = mainLocation.latitude;
+        double lng = mainLocation.longitude;
+        double offset = 0.03; // ~3km offset for denser grid
+
+        List<LatLng> searchPoints = [
+          LatLng(lat, lng),
+          LatLng(lat + offset, lng),
+          LatLng(lat - offset, lng),
+          LatLng(lat, lng + offset),
+          LatLng(lat, lng - offset),
+          LatLng(lat + offset, lng + offset),
+          LatLng(lat - offset, lng - offset),
+          LatLng(lat + offset, lng - offset),
+          LatLng(lat - offset, lng + offset),
+          LatLng(lat + offset * 2, lng),
+          LatLng(lat - offset * 2, lng),
+          LatLng(lat, lng + offset * 2),
+          LatLng(lat, lng - offset * 2),
+        ];
+
+        // Get placemarks for each search point
+        for (var point in searchPoints) {
+          try {
+            List<Placemark> placemarks = await placemarkFromCoordinates(
+              point.latitude,
+              point.longitude,
+            );
+            if (placemarks.isNotEmpty) {
+              Placemark placemark = placemarks[0];
+              String displayName = _buildDisplayName(placemark);
+
+              // Avoid duplicate entries
+              bool isDuplicate = resultsWithNames.any((r) =>
+              r['displayName'] == displayName
+              );
+
+              if (!isDuplicate && displayName.isNotEmpty) {
+                resultsWithNames.add({
+                  'location': Location(
+                    latitude: point.latitude,
+                    longitude: point.longitude,
+                    timestamp: DateTime.now(),
+                  ),
+                  'placemark': placemark,
+                  'displayName': displayName,
+                });
+              }
+            }
+          } catch (e) {
+            logger.e('Error getting placemark for nearby: $e');
           }
-        } catch (e) {
-          logger.e('Error getting placemark: $e');
         }
       }
 
       setState(() {
-        _searchResultsWithNames = resultsWithNames;
+        // Limit to 10 results
+        _searchResultsWithNames = resultsWithNames.take(10).toList();
         _isSearching = false;
       });
     } catch (e) {
@@ -304,13 +360,13 @@ class _AddGoalsGoogleMapState extends State<AddGoalsGoogleMap> {
                     prefixIcon: Padding(
                       padding: const EdgeInsets.all(12.0),
                       child: SvgPicture.asset(
-                        ImageConstant.searchIconMap, // ✅ your search SVG
+                        ImageConstant.searchIconMap,
                       ),
                     ),
                     suffixIcon: _searchController.text.isNotEmpty
                         ? IconButton(
                       icon: SvgPicture.asset(
-                        ImageConstant.clearIconMap, // ✅ your clear SVG
+                        ImageConstant.clearIconMap,
                       ),
                       onPressed: () {
                         _searchController.clear();
@@ -357,7 +413,7 @@ class _AddGoalsGoogleMapState extends State<AddGoalsGoogleMap> {
                         ),
                       ],
                     ),
-                    constraints: const BoxConstraints(maxHeight: 150),
+                    constraints: const BoxConstraints(maxHeight: 250),
                     child: ListView.builder(
                       shrinkWrap: true,
                       itemCount: _searchResultsWithNames.length,
@@ -368,6 +424,8 @@ class _AddGoalsGoogleMapState extends State<AddGoalsGoogleMap> {
                           title: Text(
                             result['displayName'],
                             style: const TextStyle(fontSize: 14),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           dense: true,
                           onTap: () => _selectSearchResult(result),
@@ -402,10 +460,10 @@ class _AddGoalsGoogleMapState extends State<AddGoalsGoogleMap> {
               onTap: _onMapTapped,
               initialCameraPosition: CameraPosition(
                 target: (savedLatitude != 0.0 && savedLongitude != 0.0)
-                    ? LatLng(savedLatitude!, savedLongitude!) // Use saved location
+                    ? LatLng(savedLatitude!, savedLongitude!)
                     : (_currentLocation != null
-                    ? LatLng(_currentLocation!.latitude, _currentLocation!.longitude) // Use current location
-                    : const LatLng(0.0, 0.0)), // Default fallback
+                    ? LatLng(_currentLocation!.latitude, _currentLocation!.longitude)
+                    : const LatLng(0.0, 0.0)),
                 zoom: 15.0,
               ),
               markers: markers,

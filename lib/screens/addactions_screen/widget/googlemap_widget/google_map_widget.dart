@@ -47,6 +47,10 @@ class _AddActionGoogleMapState extends State<AddActionGoogleMap> {
     mentalStrengthEditProvider = Provider.of<MentalStrengthEditProvider>(context, listen: false);
     addActionsProvider = Provider.of<AddActionsProvider>(context, listen: false);
     _initializeLocation();
+
+    _searchController.addListener(() {
+      setState(() {});
+    });
   }
 
   void _initializeLocation() async {
@@ -159,7 +163,33 @@ class _AddActionGoogleMapState extends State<AddActionGoogleMap> {
     });
   }
 
-  // 🔍 Search methods
+  // Helper method to build display name from placemark
+  String _buildDisplayName(Placemark placemark) {
+    List<String> parts = [];
+
+    if (placemark.name != null && placemark.name!.isNotEmpty) {
+      parts.add(placemark.name!);
+    }
+    if (placemark.locality != null && placemark.locality!.isNotEmpty) {
+      if (!parts.contains(placemark.locality)) {
+        parts.add(placemark.locality!);
+      }
+    }
+    if (placemark.administrativeArea != null && placemark.administrativeArea!.isNotEmpty) {
+      if (!parts.contains(placemark.administrativeArea)) {
+        parts.add(placemark.administrativeArea!);
+      }
+    }
+    if (placemark.country != null && placemark.country!.isNotEmpty) {
+      if (!parts.contains(placemark.country)) {
+        parts.add(placemark.country!);
+      }
+    }
+
+    return parts.join(', ');
+  }
+
+  // 🔍 Search methods - IMPROVED FOR 10 NEARBY LOCATIONS
   Future<void> _searchLocation(String query) async {
     if (query.isEmpty) {
       setState(() {
@@ -175,39 +205,71 @@ class _AddActionGoogleMapState extends State<AddActionGoogleMap> {
 
     try {
       List<Location> locations = await locationFromAddress(query);
+
+      // Get placemark details for each location
       List<Map<String, dynamic>> resultsWithNames = [];
 
-      for (var location in locations) {
-        try {
-          List<Placemark> placemarks = await placemarkFromCoordinates(location.latitude, location.longitude);
-          if (placemarks.isNotEmpty) {
-            Placemark placemark = placemarks[0];
-            String displayName = '';
+      if (locations.isNotEmpty) {
+        Location mainLocation = locations[0];
 
-            if (placemark.name?.isNotEmpty ?? false) displayName = placemark.name!;
-            if (placemark.locality?.isNotEmpty ?? false) {
-              displayName += displayName.isNotEmpty ? ', ${placemark.locality}' : placemark.locality!;
-            }
-            if (placemark.administrativeArea?.isNotEmpty ?? false) {
-              displayName += displayName.isNotEmpty ? ', ${placemark.administrativeArea}' : placemark.administrativeArea!;
-            }
-            if (placemark.country?.isNotEmpty ?? false) {
-              displayName += displayName.isNotEmpty ? ', ${placemark.country}' : placemark.country!;
-            }
+        // Create a larger grid of search points for more results
+        double lat = mainLocation.latitude;
+        double lng = mainLocation.longitude;
+        double offset = 0.03; // ~3km offset for denser grid
 
-            resultsWithNames.add({
-              'location': location,
-              'placemark': placemark,
-              'displayName': displayName.isNotEmpty ? displayName : 'Unknown Location',
-            });
+        List<LatLng> searchPoints = [
+          LatLng(lat, lng),
+          LatLng(lat + offset, lng),
+          LatLng(lat - offset, lng),
+          LatLng(lat, lng + offset),
+          LatLng(lat, lng - offset),
+          LatLng(lat + offset, lng + offset),
+          LatLng(lat - offset, lng - offset),
+          LatLng(lat + offset, lng - offset),
+          LatLng(lat - offset, lng + offset),
+          LatLng(lat + offset * 2, lng),
+          LatLng(lat - offset * 2, lng),
+          LatLng(lat, lng + offset * 2),
+          LatLng(lat, lng - offset * 2),
+        ];
+
+        // Get placemarks for each search point
+        for (var point in searchPoints) {
+          try {
+            List<Placemark> placemarks = await placemarkFromCoordinates(
+              point.latitude,
+              point.longitude,
+            );
+            if (placemarks.isNotEmpty) {
+              Placemark placemark = placemarks[0];
+              String displayName = _buildDisplayName(placemark);
+
+              // Avoid duplicate entries
+              bool isDuplicate = resultsWithNames.any((r) =>
+              r['displayName'] == displayName
+              );
+
+              if (!isDuplicate && displayName.isNotEmpty) {
+                resultsWithNames.add({
+                  'location': Location(
+                    latitude: point.latitude,
+                    longitude: point.longitude,
+                    timestamp: DateTime.now(),
+                  ),
+                  'placemark': placemark,
+                  'displayName': displayName,
+                });
+              }
+            }
+          } catch (e) {
+            logger.e('Error getting placemark for nearby: $e');
           }
-        } catch (e) {
-          logger.e('Error getting placemark: $e');
         }
       }
 
       setState(() {
-        _searchResultsWithNames = resultsWithNames;
+        // Limit to 10 results
+        _searchResultsWithNames = resultsWithNames.take(10).toList();
         _isSearching = false;
       });
     } catch (e) {
@@ -286,7 +348,7 @@ class _AddActionGoogleMapState extends State<AddActionGoogleMap> {
 
           // 🔍 Search Bar + Results
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 0.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
               children: [
                 TextField(
@@ -296,13 +358,13 @@ class _AddActionGoogleMapState extends State<AddActionGoogleMap> {
                     prefixIcon: Padding(
                       padding: const EdgeInsets.all(12.0),
                       child: SvgPicture.asset(
-                        ImageConstant.searchIconMap, // ✅ your search SVG
+                        ImageConstant.searchIconMap,
                       ),
                     ),
                     suffixIcon: _searchController.text.isNotEmpty
                         ? IconButton(
                       icon: SvgPicture.asset(
-                        ImageConstant.clearIconMap, // ✅ your clear SVG
+                        ImageConstant.clearIconMap,
                       ),
                       onPressed: () {
                         _searchController.clear();
@@ -313,6 +375,10 @@ class _AddActionGoogleMapState extends State<AddActionGoogleMap> {
                     )
                         : null,
                     border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: const BorderSide(color: Colors.grey, width: 0.1),
+                    ),
+                    enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
                       borderSide: const BorderSide(color: Colors.grey, width: 0.1),
                     ),
@@ -344,7 +410,7 @@ class _AddActionGoogleMapState extends State<AddActionGoogleMap> {
                         ),
                       ],
                     ),
-                    constraints: const BoxConstraints(maxHeight: 150),
+                    constraints: const BoxConstraints(maxHeight: 250),
                     child: ListView.builder(
                       shrinkWrap: true,
                       itemCount: _searchResultsWithNames.length,
@@ -355,6 +421,8 @@ class _AddActionGoogleMapState extends State<AddActionGoogleMap> {
                           title: Text(
                             result['displayName'],
                             style: const TextStyle(fontSize: 14),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           dense: true,
                           onTap: () => _selectSearchResult(result),

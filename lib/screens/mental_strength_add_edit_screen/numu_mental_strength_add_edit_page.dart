@@ -418,20 +418,23 @@ class _NumuMentalStrengthAddEditPageState
                                                                 .newThemeColor,
                                                       ),
                                                     );
-                                                  } else if (description
-                                                      .isEmpty) {
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(
-                                                      SnackBar(
-                                                        content: const Text(
-                                                            "Description is required."),
-                                                        backgroundColor:
-                                                            ColorsContent
-                                                                .newThemeColor,
-                                                      ),
-                                                    );
-                                                  } else {
+                                                  }
+
+                                                  // else if (description
+                                                  //     .isEmpty) {
+                                                  //   ScaffoldMessenger.of(
+                                                  //           context)
+                                                  //       .showSnackBar(
+                                                  //     SnackBar(
+                                                  //       content: const Text(
+                                                  //           "Description is required."),
+                                                  //       backgroundColor:
+                                                  //           ColorsContent
+                                                  //               .newThemeColor,
+                                                  //     ),
+                                                  //   );
+                                                  // }
+                                                  else {
                                                     _tabController.animateTo(
                                                         currentTabIndex + 1);
                                                   }
@@ -531,13 +534,15 @@ class _NumuMentalStrengthAddEditPageState
                                           onTap: () async {
                                             String? validationMessage;
 
-                                            if (mentalStrengthEditProvider
-                                                .descriptionEditTextController
-                                                .text
-                                                .isEmpty) {
-                                              validationMessage =
-                                                  "Description missing";
-                                            } else if (mentalStrengthEditProvider
+                                            // if (mentalStrengthEditProvider
+                                            //     .descriptionEditTextController
+                                            //     .text
+                                            //     .isEmpty) {
+                                            //   validationMessage =
+                                            //       "Description missing";
+                                            // } else
+
+                                              if (mentalStrengthEditProvider
                                                 .emotionValue!.id
                                                 .toString()
                                                 .isEmpty) {
@@ -608,13 +613,14 @@ class _NumuMentalStrengthAddEditPageState
                                           onTap: () async {
                                             String? validationMessage;
 
-                                            if (mentalStrengthEditProvider
-                                                .descriptionEditTextController
-                                                .text
-                                                .isEmpty) {
-                                              validationMessage =
-                                                  "Description missing";
-                                            } else if (mentalStrengthEditProvider
+                                            // if (mentalStrengthEditProvider
+                                            //     .descriptionEditTextController
+                                            //     .text
+                                            //     .isEmpty) {
+                                            //   validationMessage =
+                                            //       "Description missing";
+                                            // } else
+                                              if (mentalStrengthEditProvider
                                                 .emotionValue!.id
                                                 .toString()
                                                 .isEmpty) {
@@ -1365,7 +1371,8 @@ class _NumuMentalStrengthAddEditPageState
   Widget _buildDescriptionEditText(
       BuildContext context,
       MentalStrengthEditProvider mentalStrengthEditProvider,
-      ) {
+      )
+  {
     return StatefulBuilder(
       builder: (context, setState) {
         return Container(

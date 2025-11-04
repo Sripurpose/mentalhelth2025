@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:link_preview_generator/link_preview_generator.dart';
 import 'package:mentalhelth/screens/addactions_screen/provider/add_actions_provider.dart';
 import 'package:mentalhelth/screens/addactions_screen/widget/googlemap_widget/google_map_widget.dart';
 import 'package:mentalhelth/screens/addactions_screen/widget/popup/audio_popup.dart';
@@ -23,13 +24,42 @@ import 'package:provider/provider.dart';
 import '../../../no_internet/duplicate_screen.dart';
 import '../../mental_strength_add_edit_page.dart';
 
-class AddActionMentalStrengthBottomSheet extends StatelessWidget {
+class AddActionMentalStrengthBottomSheet extends StatefulWidget {
   const AddActionMentalStrengthBottomSheet({Key? key, required this.goalId})
-      : super(
-          key: key,
-        );
+      : super(key: key);
 
   final String goalId;
+
+  @override
+  State<AddActionMentalStrengthBottomSheet> createState() =>
+      _AddActionMentalStrengthBottomSheetState();
+}
+
+class _AddActionMentalStrengthBottomSheetState
+    extends State<AddActionMentalStrengthBottomSheet> {
+  late AddActionsProvider addActionsProvider;
+  late FocusNode _actionDescFocusNode;
+
+  @override
+  void initState() {
+
+    _actionDescFocusNode = FocusNode();
+    addActionsProvider =
+        Provider.of<AddActionsProvider>(context, listen: false);
+    // Ensure the focus is not automatically set when returning
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+
+      _actionDescFocusNode.unfocus(); // Ensure it does not get focus automatically
+    });
+    addActionsProvider.detectedLinks.clear();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _actionDescFocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -750,16 +780,123 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
   /// Section Widget
   Widget _buildDescriptionEditText(BuildContext context) {
     return Consumer<AddActionsProvider>(
-        builder: (context, addActionsProvider, _) {
-      return CustomTextFormFieldNumu(
-        controller: addActionsProvider.descriptionEditTextController,
-        hintText: "Action Description",
-        hintStyle: CustomTextStyles.bodySmallGray700,
-        textInputAction: TextInputAction.newline, // ✅ allow newline
-        textInputType: TextInputType.multiline, // ✅ multiline keyboard
-        maxLines: 4,
-      );
-    });
+      builder: (context, addActionsProvider, _) {
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.grey.shade300),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 📝 Show text field only if no link preview
+              if (addActionsProvider.detectedLinks.isEmpty)
+                CustomTextFormFieldGoalOrActionDesc(
+                  controller: addActionsProvider.descriptionEditTextController,
+                  hintText: _actionDescFocusNode.hasFocus
+                      ? ''
+                      : "Action Description",
+                  hintStyle: CustomTextStyles.bodySmallGray700,
+                  textInputAction: TextInputAction.newline,
+                  textInputType: TextInputType.multiline,
+                  maxLines: 4,
+                  focusNode: _actionDescFocusNode,
+                  borderDecoration: InputBorder.none,
+                  onTap: () => setState(() {}),
+                  onChanged: (value) {
+                    // Extract URLs from text
+                    final matches = addActionsProvider.urlRegex
+                        .allMatches(value)
+                        .map((match) => match.group(0)!)
+                        .toList();
+
+                    // ✅ If a link exists, hide text and show preview
+                    if (matches.isNotEmpty) {
+                      setState(() {
+                        addActionsProvider.detectedLinks = matches;
+                        addActionsProvider.descriptionEditTextController.clear();
+                      });
+                    }
+                  },
+                  onEditingComplete: () {
+                    _actionDescFocusNode.unfocus();
+                    setState(() {});
+                  },
+                ),
+
+              // 🔗 Show link preview if link detected
+              if (addActionsProvider.detectedLinks.isNotEmpty)
+                ...addActionsProvider.detectedLinks.map((link) {
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Stack(
+                      alignment: Alignment.topRight,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.grey.shade300, // ✅ Border color
+                              width: 1.5, // ✅ Border width
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: LinkPreviewGenerator(
+                              link: link,
+                              linkPreviewStyle: LinkPreviewStyle.small,
+                              showDomain: true,
+                              showTitle: true,
+                              bodyMaxLines: 1,
+                              borderRadius: 10,
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 4,
+                                  offset: Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        // ❌ Close (delete) icon
+                        Positioned(
+                          top: 6,
+                          right: 6,
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                addActionsProvider.detectedLinks.clear();
+                                addActionsProvider.descriptionEditTextController
+                                    .clear();
+                              });
+                            },
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.black54,
+                              ),
+                              padding: const EdgeInsets.all(4),
+                              child: const Icon(
+                                Icons.close,
+                                color: Colors.white,
+                                size: 16,
+                                //fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   /// Section Widget
@@ -772,9 +909,10 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
         loading: addActionsProvider.saveAddActionsLoading,
         onPressed: () async {
 
-          if (addActionsProvider.titleEditTextController.text.isNotEmpty &&
-              addActionsProvider
-                  .descriptionEditTextController.text.isNotEmpty) {
+          if (addActionsProvider.titleEditTextController.text.isNotEmpty
+              // addActionsProvider
+              //     .descriptionEditTextController.text.isNotEmpty
+          ) {
             if (addActionsProvider.setRemainder) {
               if (addActionsProvider.reminderStartDate.isNotEmpty &&
                   addActionsProvider.reminderEndDate.isNotEmpty &&
@@ -790,9 +928,10 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                   locationLatitude: addActionsProvider.selectedLatitude,
                   locationLongitude: addActionsProvider.selectedLongitude,
                   locationAddress: addActionsProvider.selectedLocationAddress,
-                  goalId: goalId,
+                  goalId: widget.goalId,
                   mediaThumbs: addActionsProvider.mediaThumbList, // ✅ pass here
-                    isReminder: "1"
+                    isReminder: "1",
+                editDetectedLinks: adDreamsGoalsProvider.detectedLinks,
                 );
                 // if (getGemStatus) {
                 //   Navigator.of(context).pop();
@@ -801,7 +940,7 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                   value: addActionsProvider.goalModelIdName!,
                 );
                 mentalStrengthEditProvider.fetchGoalActions(
-                  goalId: goalId,
+                  goalId: widget.goalId,
                 );
                 mentalStrengthEditProvider.openAddActionFunction();
                //   Navigator.of(context).pop();
@@ -821,15 +960,17 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
                 locationLatitude: addActionsProvider.selectedLatitude,
                 locationLongitude: addActionsProvider.selectedLongitude,
                 locationAddress: addActionsProvider.selectedLocationAddress,
-                goalId: goalId,
+                goalId: widget.goalId,
                   mediaThumbs: addActionsProvider.mediaThumbList, // ✅ pass here
-                  isReminder: "0"
+                  isReminder: "0",
+                editDetectedLinks: adDreamsGoalsProvider.detectedLinks,
+
               );
               adDreamsGoalsProvider.getAddActionIdAndName(
                 value: addActionsProvider.goalModelIdName!,
               );
               mentalStrengthEditProvider.fetchGoalActions(
-                goalId: goalId,
+                goalId: widget.goalId,
               );
               mentalStrengthEditProvider.openAddActionFunction();
               // Navigator.of(context).pop();
@@ -1307,3 +1448,4 @@ class AddActionMentalStrengthBottomSheet extends StatelessWidget {
     });
   }
 }
+

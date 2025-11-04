@@ -107,6 +107,7 @@ class _AddEditActionScreenState extends State<AddEditActionScreen> {
     addActionsProvider.selectedLocationName = "";
     addActionsProvider.mediaSelected = 0;
     addActionsProvider.setRemainder = false;
+    addActionsProvider.detectedLinks.clear();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       addActionsProvider.clearLocationSelection();
       editProfileProvider.fetchCategory();
@@ -1101,13 +1102,15 @@ class _AddEditActionScreenState extends State<AddEditActionScreen> {
                 context: context,
                 message: "Please fill in the title",
               );
-            } else if (addActionsProvider
-                .descriptionEditTextController.text.isEmpty) {
-              showCustomSnackBar(
-                context: context,
-                message: "Please fill in the description",
-              );
-            } else {
+            }
+            // else if (addActionsProvider
+            //     .descriptionEditTextController.text.isEmpty) {
+            //   showCustomSnackBar(
+            //     context: context,
+            //     message: "Please fill in the description",
+            //   );
+            // }
+            else {
               // Check if a reminder is set and validate date/time fields accordingly
               if (addActionsProvider.setRemainder) {
                 if (addActionsProvider.reminderStartDate.isEmpty) {
@@ -1152,6 +1155,8 @@ class _AddEditActionScreenState extends State<AddEditActionScreen> {
                     goalId: widget.goalId,
                     mediaThumbs: addActionsProvider.mediaThumbList, // ✅ pass here
                     isReminder: "1",
+                    editDetectedLinks: adDreamsGoalsProvider.detectedLinks,
+
                   );
                   adDreamsGoalsProvider.getAddActionIdAndName(
                     value: addActionsProvider.goalModelIdName!,
@@ -1184,6 +1189,8 @@ class _AddEditActionScreenState extends State<AddEditActionScreen> {
                   goalId: widget.goalId,
                   mediaThumbs: addActionsProvider.mediaThumbList, // ✅ pass here
                   isReminder: "0",
+                  editDetectedLinks: adDreamsGoalsProvider.detectedLinks,
+
                 );
                 adDreamsGoalsProvider.getAddActionIdAndName(
                   value: addActionsProvider.goalModelIdName!,

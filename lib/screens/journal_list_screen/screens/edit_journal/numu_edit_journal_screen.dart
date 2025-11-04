@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:link_preview_generator/link_preview_generator.dart';
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/screens/addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
 import 'package:mentalhelth/screens/dash_borad_screen/provider/dash_board_provider.dart';
@@ -98,6 +99,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
       _descriptionFocusNode.unfocus();
       _titleFocusNode.unfocus(); // Ensure it does not get focus automatically
       mentalStrengthEditProvider.mediaSelected = -1;
+      mentalStrengthEditProvider.editDetectedLinks.clear();
       _isTokenExpired();
     });
     logger.i(
@@ -352,11 +354,13 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                                 if (mentalStrengthEditProvider
                                                         .titleEditTextController
                                                         .text
-                                                        .isNotEmpty &&
-                                                    mentalStrengthEditProvider
-                                                        .descriptionEditTextController
-                                                        .text
-                                                        .isNotEmpty) {
+                                                        .isNotEmpty
+                                                    // &&
+                                                    // mentalStrengthEditProvider
+                                                    //     .descriptionEditTextController
+                                                    //     .text
+                                                    //     .isNotEmpty
+                                                ) {
                                                   _tabController.animateTo(
                                                       currentTabIndex + 1);
                                                 } else {
@@ -462,10 +466,11 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                             _isTokenExpired();
                                             if (!mentalStrengthEditProvider
                                                 .isVideoUploading) {
-                                              if (mentalStrengthEditProvider
-                                                      .descriptionEditTextController
-                                                      .text
-                                                      .isNotEmpty &&
+                                              if (
+                                              // mentalStrengthEditProvider
+                                              //         .descriptionEditTextController
+                                              //         .text
+                                              //         .isNotEmpty &&
                                                   mentalStrengthEditProvider
                                                       .titleEditTextController
                                                       .text
@@ -525,6 +530,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                                           .map(
                                                               (e) => e.id ?? "")
                                                           .toList(),
+                                                      editDetectedLinks: mentalStrengthEditProvider.editDetectedLinks,
                                                 );
                                                 if (isSuccess) {
                                                   Future.delayed(
@@ -586,7 +592,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                             alignment: Alignment.center,
                                             children: [
                                               SvgPicture.asset(ImageConstant
-                                                  .numuSubmitEditAdd),
+                                                  .saveButtonNumuBuild),
                                               if (mentalStrengthEditProvider
                                                   .saveJournalLoading)
                                                 const Padding(
@@ -616,10 +622,11 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                             _isTokenExpired();
                                             if (!mentalStrengthEditProvider
                                                 .isVideoUploading) {
-                                              if (mentalStrengthEditProvider
-                                                      .descriptionEditTextController
-                                                      .text
-                                                      .isNotEmpty &&
+                                              if (
+                                              // mentalStrengthEditProvider
+                                              //         .descriptionEditTextController
+                                              //         .text
+                                              //         .isNotEmpty &&
                                                   mentalStrengthEditProvider
                                                       .titleEditTextController
                                                       .text
@@ -679,6 +686,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                                           .map(
                                                               (e) => e.id ?? "")
                                                           .toList(),
+                                                      editDetectedLinks: mentalStrengthEditProvider.editDetectedLinks,
                                                 );
                                                 if (isSuccess) {
                                                   Future.delayed(
@@ -740,7 +748,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                             alignment: Alignment.center,
                                             children: [
                                               SvgPicture.asset(ImageConstant
-                                                  .submitButtonNumuBuild),
+                                                  .saveButtonNumuBuild),
                                               if (mentalStrengthEditProvider
                                                   .saveJournalLoading)
                                                 const Padding(
@@ -1637,7 +1645,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
           children: [
             _buildTitleEditText(context, mentalStrengthEditProvider),
             SizedBox(height: size.height * 0.02),
-            _buildDescriptionEditText(context, mentalStrengthEditProvider),
+            _buildDescriptionEditText(context, mentalStrengthEditProvider,homeProvider),
             SizedBox(height: size.height * 0.02),
             _buildAddMediaColumn(context, size),
           ],
@@ -2284,59 +2292,146 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
     );
   }
 
-  Widget _buildDescriptionEditText(BuildContext context,
-      MentalStrengthEditProvider mentalStrengthEditProvider) {
-    return Consumer<MentalStrengthEditProvider>(
-      builder: (context, mentalStrengthEditProvider, _) {
-        // Decode the text before setting it to the controller
-        String decodedText = HtmlUnescape().convert(
-            mentalStrengthEditProvider.descriptionEditTextController.text);
-        mentalStrengthEditProvider.descriptionEditTextController.text =
-            decodedText;
+  Widget _buildDescriptionEditText(
+      BuildContext context,
+      MentalStrengthEditProvider provider,
+      HomeProvider homeProvider,
+      )
+  {
+    final journal = homeProvider.journalDetails?.journals;
+    final previewLink = journal?.preview_link?.trim() ?? "";
 
-        return CustomTextFormFieldNumu(
-          controller: mentalStrengthEditProvider.descriptionEditTextController,
-          hintText: "Description",
-          hintStyle: CustomTextStyles.bodySmallGray700,
-          textInputAction: TextInputAction.newline, // ✅ allow newline
-          textInputType: TextInputType.multiline, // ✅ multiline keyboard
-          maxLines: 4,
-          focusNode: _descriptionFocusNode,
-          onTap: () => setState(() {}),
-          // Rebuild when tapped
-          onEditingComplete: () {
-            _descriptionFocusNode
-                .unfocus(); // Ensure focus is removed when done
-            setState(() {});
-          },
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(
-                RegExp(r'[\u0000-\uFFFF]'), // allows nearly all Unicode characters, including emojis
-              ),
-            ],
-          onChanged: (text) {
-            // Ensure space is allowed only if at least one letter is typed
-            if (text.isNotEmpty &&
-                !text.trim().isEmpty &&
-                text.trim().length == 1 &&
-                text.contains(' ')) {
-              // Remove space if there's no letter typed yet
-              mentalStrengthEditProvider.descriptionEditTextController.text =
-                  text.trim();
-              mentalStrengthEditProvider.descriptionEditTextController
-                  .selection = TextSelection.collapsed(offset: text.length);
-            } else if (text.trim().isEmpty) {
-              // Prevent space if text is empty or contains only spaces
-              mentalStrengthEditProvider.descriptionEditTextController.text =
-                  text.trim();
-              mentalStrengthEditProvider.descriptionEditTextController
-                  .selection = TextSelection.collapsed(offset: text.length);
-            }
-          },
-        );
-      },
+    // ✅ Initialize backend link ONLY on first load
+    if (previewLink.isNotEmpty &&
+        provider.editDetectedLinks.isEmpty &&
+        !provider.hasUserClearedLink) {
+      provider.editDetectedLinks = [previewLink];
+    }
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // 📝 Text field shown only when no preview
+          if (provider.editDetectedLinks.isEmpty)
+            CustomTextFormFieldNumu(
+              controller: provider.descriptionEditTextController,
+              hintText: "Description",
+              hintStyle: CustomTextStyles.bodySmallGray700,
+              textInputAction: TextInputAction.newline,
+              textInputType: TextInputType.multiline,
+              maxLines: 4,
+              focusNode: _descriptionFocusNode,
+              borderDecoration: InputBorder.none,
+              textAlign: TextAlign.start,
+              onTap: () => provider.notifyListeners(),
+              onEditingComplete: () {
+                _descriptionFocusNode.unfocus();
+                provider.notifyListeners();
+              },
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                  RegExp(r'[\u0000-\uFFFF]'),
+                ),
+              ],
+              onChanged: (text) {
+                // ✅ Detect new link
+                final matches = provider.editUrlRegex
+                    .allMatches(text)
+                    .map((m) => m.group(0)!)
+                    .toList();
+
+                if (matches.isNotEmpty) {
+                  provider.editDetectedLinks = [matches.first];
+                  provider.hasUserClearedLink = false;
+                  provider.descriptionEditTextController.clear();
+                  provider.notifyListeners(); // 🔔 refresh preview
+                }
+              },
+            ),
+
+          // 🔗 Link preview (either backend or user-pasted)
+          if (provider.editDetectedLinks.isNotEmpty)
+            ...provider.editDetectedLinks.map((link) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Stack(
+                  alignment: Alignment.topRight,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.grey.shade300,
+                          width: 1.5,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: LinkPreviewGenerator(
+                          link: link,
+                          linkPreviewStyle: LinkPreviewStyle.small,
+                          showDomain: true,
+                          showTitle: true,
+                          bodyMaxLines: 1,
+                          borderRadius: 10,
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 4,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    // ❌ Close icon - FIXED
+                    Positioned(
+                      top: 6,
+                      right: 6,
+                      child: GestureDetector(
+                        onTap: () {
+                          logger.i(
+                              "provider.editDetectedLinks before clear: ${provider.editDetectedLinks}");
+
+                          // ✅ Mark that user cleared the link
+                          provider.hasUserClearedLink = true;
+                          provider.editDetectedLinks = [];
+                          provider.descriptionEditTextController.clear();
+                          provider.notifyListeners();
+                        },
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.black54,
+                          ),
+                          padding: const EdgeInsets.all(4),
+                          child: const Icon(
+                            Icons.close,
+                            color: Colors.white,
+                            size: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+        ],
+      ),
     );
   }
+
+
+
 
   Widget _buildAddMediaColumn(BuildContext context, Size size) {
     return Consumer<MentalStrengthEditProvider>(

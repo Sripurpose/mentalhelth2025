@@ -76,6 +76,7 @@ class Goalsanddream {
   List<Action>? action;
   Location? location;
   List<GemMedia>? gemMedia;
+  String? preview_link;
 
   Goalsanddream({
     this.goalId,
@@ -93,6 +94,7 @@ class Goalsanddream {
     this.action,
     this.location,
     this.gemMedia,
+    this.preview_link,
   });
 
   factory Goalsanddream.fromJson(Map<String, dynamic> json) => Goalsanddream(
@@ -118,6 +120,7 @@ class Goalsanddream {
             ? []
             : List<GemMedia>.from(
                 json["gem_media"]!.map((x) => GemMedia.fromJson(x))),
+    preview_link: json["preview_link"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -140,6 +143,7 @@ class Goalsanddream {
         "gem_media": gemMedia == null
             ? []
             : List<dynamic>.from(gemMedia!.map((x) => x.toJson())),
+    "preview_link": preview_link,
       };
 }
 

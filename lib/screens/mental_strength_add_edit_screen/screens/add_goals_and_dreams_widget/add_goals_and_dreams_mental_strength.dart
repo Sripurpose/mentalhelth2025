@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:link_preview_generator/link_preview_generator.dart';
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/screens/addactions_screen/addactions_screen.dart';
 import 'package:mentalhelth/screens/addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
@@ -50,6 +51,7 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
   late AdDreamsGoalsProvider adDreamsGoalsProvider;
   bool tokenStatus = false;
   var logger = Logger();
+  late FocusNode _goalDescFocusNode;
 
 
   Future<void> _isTokenExpired() async {
@@ -75,7 +77,10 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
     dashBoardProvider = Provider.of<DashBoardProvider>(context, listen: false);
     editProfileProvider = Provider.of<EditProfileProvider>(context, listen: false);
     adDreamsGoalsProvider = Provider.of<AdDreamsGoalsProvider>(context, listen: false);
+    _goalDescFocusNode = FocusNode();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+
+      _goalDescFocusNode.unfocus(); // Ensure it does not get focus automatically
       logger.t("adDreamsGoalsProvider.selectedDate${adDreamsGoalsProvider.selectedDate}");
       ///added for clearing///19-03-2025
       adDreamsGoalsProvider.nameEditTextController.text = "";
@@ -88,11 +93,18 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
       adDreamsGoalsProvider.takedImages.clear();
       adDreamsGoalsProvider.selectedLocationName = "";
       adDreamsGoalsProvider.mediaSelected = 0;
+      adDreamsGoalsProvider.detectedLinks.clear();
       ///added for clearing///19-03-2025
       editProfileProvider.fetchCategory();
       _isTokenExpired();
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _goalDescFocusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -480,19 +492,127 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
 
   Widget _buildCommentEditText(BuildContext context) {
     return Consumer<AdDreamsGoalsProvider>(
-        builder: (context, adDreamsGoalsProvider, _) {
-      return Padding(
-        padding: const EdgeInsets.only(left: 2),
-        child: CustomTextFormFieldGoalOrActionDescPopUp(
-          controller: adDreamsGoalsProvider.commentEditTextController,
-          hintText: "Goal Description",
-          hintStyle: CustomTextStyles.bodySmallGray700,
-          textInputAction: TextInputAction.newline, // ✅ allow newline
-          textInputType: TextInputType.multiline, // ✅ multiline keyboard
-          maxLines: 4,
-        ),
-      );
-    });
+      builder: (context, adDreamsGoalsProvider, _) {
+        return Padding(
+          padding: const EdgeInsets.only(left: 2),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.grey.shade300),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 📝 Show text field only when no link is detected
+                if (adDreamsGoalsProvider.detectedLinks.isEmpty)
+                  CustomTextFormFieldGoalOrActionDesc(
+                    controller: adDreamsGoalsProvider.commentEditTextController,
+                    hintText: _goalDescFocusNode.hasFocus
+                        ? ''
+                        : "Goal Description",
+                    hintStyle: CustomTextStyles.bodySmallGray700,
+                    maxLines: 4,
+                    focusNode: _goalDescFocusNode,
+                    textInputAction: TextInputAction.newline,
+                    textInputType: TextInputType.multiline,
+                    borderDecoration: InputBorder.none,
+                    onTap: () => setState(() {}),
+                    onChanged: (value) {
+                      // Detect URLs in text
+                      final matches = adDreamsGoalsProvider.urlRegex
+                          .allMatches(value)
+                          .map((match) => match.group(0)!)
+                          .toList();
+
+                      // ✅ If contains a link, show preview instead of text
+                      if (matches.isNotEmpty) {
+                        setState(() {
+                          adDreamsGoalsProvider.detectedLinks = matches;
+                          adDreamsGoalsProvider.commentEditTextController.clear();
+                        });
+                      }
+                    },
+                    onEditingComplete: () {
+                    //  _goalDescFocusNode.unfocus();
+                      setState(() {});
+                    },
+                  ),
+
+                // 🔗 Show link preview if a link is detected
+                if (adDreamsGoalsProvider.detectedLinks.isNotEmpty)
+                  ...adDreamsGoalsProvider.detectedLinks.map((link) {
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Stack(
+                        alignment: Alignment.topRight,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.grey.shade300, // ✅ Border color
+                                width: 1.5, // ✅ Border width
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: LinkPreviewGenerator(
+                                link: link,
+                                linkPreviewStyle: LinkPreviewStyle.small,
+                                showDomain: true,
+                                showTitle: true,
+                                bodyMaxLines: 1,
+                                borderRadius: 10,
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    blurRadius: 4,
+                                    offset: Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          // ❌ Close icon to clear preview
+                          Positioned(
+                            top: 6,
+                            right: 6,
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  adDreamsGoalsProvider.detectedLinks.clear();
+                                  adDreamsGoalsProvider
+                                      .commentEditTextController
+                                      .clear();
+                                });
+                              },
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.black54,
+                                ),
+                                padding: const EdgeInsets.all(4),
+                                child: const Icon(
+                                  Icons.close,
+                                  color: Colors.white,
+                                  size: 16,
+                                  //fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   /// Section Widget
@@ -527,8 +647,8 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
         onPressed: () async {
           if (!adDreamsGoalsProvider.isVideoUploading) {
             if (adDreamsGoalsProvider.nameEditTextController.text.isNotEmpty &&
-                adDreamsGoalsProvider
-                    .commentEditTextController.text.isNotEmpty &&
+                // adDreamsGoalsProvider
+                //     .commentEditTextController.text.isNotEmpty &&
                 adDreamsGoalsProvider.selectedDate.isNotEmpty &&
                 editProfileProvider
                     .interestsValueController.text.isNotEmpty

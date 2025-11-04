@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:link_preview_generator/link_preview_generator.dart';
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/screens/addactions_screen/provider/add_actions_provider.dart';
 import 'package:mentalhelth/screens/addgoals_dreams_screen/model/id_model.dart';
@@ -101,6 +103,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
       _isTokenExpired();
     });
     adDreamsGoalsProvider.goalModelIdName.clear();
+    adDreamsGoalsProvider.editDetectedLinks.clear();
 
     init();
     super.initState();
@@ -774,25 +777,136 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
   Widget _buildCommentEditText(BuildContext context) {
     return Consumer<AdDreamsGoalsProvider>(
         builder: (context, adDreamsGoalsProvider, _) {
-      return Padding(
-        padding: const EdgeInsets.only(left: 2),
-        child: CustomTextFormFieldNumu(
-          controller: adDreamsGoalsProvider.commentEditTextController,
-          hintText: _descriptionFocusNode.hasFocus ? '' : "Goal Description",
-          hintStyle: CustomTextStyles.bodySmallGray700,
-          maxLines: 4,
-          textInputAction: TextInputAction.newline, // ✅ allow newline
-          textInputType: TextInputType.multiline, // ✅ multiline keyboard
-          focusNode: _descriptionFocusNode,
-          onTap: () => setState(() {}),
-          // Rebuild when tapped
-          onEditingComplete: () {
-            _descriptionFocusNode.unfocus(); // Ensure focus is removed when done
-            setState(() {});
-          }, // Rebuild when focus is lost
-        ),
-      );
-    });
+          final previewLink = widget.goalsanddream.preview_link?.toString().trim() ?? "";
+
+          // ✅ Initialize backend link ONLY on first load
+          if (previewLink.isNotEmpty &&
+              adDreamsGoalsProvider.editDetectedLinks.isEmpty &&
+              !adDreamsGoalsProvider.hasUserClearedLink) {
+            adDreamsGoalsProvider.editDetectedLinks = [previewLink];
+          }
+
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.grey.shade300),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 📝 Text field shown only when no preview
+                if (adDreamsGoalsProvider.editDetectedLinks.isEmpty)
+                  CustomTextFormFieldNumu(
+                    controller: adDreamsGoalsProvider.commentEditTextController,
+                    hintText: _descriptionFocusNode.hasFocus ? '' : "Goal Description",
+                    hintStyle: CustomTextStyles.bodySmallGray700,
+                    textInputAction: TextInputAction.newline,
+                    textInputType: TextInputType.multiline,
+                    maxLines: 4,
+                    focusNode: _descriptionFocusNode,
+                    borderDecoration: InputBorder.none,
+                    textAlign: TextAlign.start,
+                    onTap: () => setState(() {}),
+                    onEditingComplete: () {
+                      _descriptionFocusNode.unfocus();
+                      setState(() {});
+                    },
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(
+                        RegExp(r'[\u0000-\uFFFF]'),
+                      ),
+                    ],
+                    onChanged: (text) {
+                      // ✅ Detect new link
+                      final matches = adDreamsGoalsProvider.editUrlRegex
+                          .allMatches(text)
+                          .map((m) => m.group(0)!)
+                          .toList();
+
+                      if (matches.isNotEmpty) {
+                        adDreamsGoalsProvider.editDetectedLinks = [matches.first];
+                        adDreamsGoalsProvider.hasUserClearedLink = false;
+                        adDreamsGoalsProvider.commentEditTextController.clear();
+                        setState(() {});
+                      }
+                    },
+                  ),
+
+                // 🔗 Link preview (either backend or user-pasted)
+                if (adDreamsGoalsProvider.editDetectedLinks.isNotEmpty)
+                  ...adDreamsGoalsProvider.editDetectedLinks.map((link) {
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Stack(
+                        alignment: Alignment.topRight,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.grey.shade300,
+                                width: 1.5,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: LinkPreviewGenerator(
+                                link: link,
+                                linkPreviewStyle: LinkPreviewStyle.small,
+                                showDomain: true,
+                                showTitle: true,
+                                bodyMaxLines: 1,
+                                borderRadius: 10,
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    blurRadius: 4,
+                                    offset: Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          // ❌ Close icon - FIXED
+                          Positioned(
+                            top: 6,
+                            right: 6,
+                            child: GestureDetector(
+                              onTap: () {
+                                logger.i(
+                                    "adDreamsGoalsProvider.editDetectedLinks before clear: ${adDreamsGoalsProvider.editDetectedLinks}");
+
+                                // ✅ Mark that user cleared the link
+                                adDreamsGoalsProvider.hasUserClearedLink = true;
+                                adDreamsGoalsProvider.editDetectedLinks = [];
+                                adDreamsGoalsProvider.commentEditTextController.clear();
+                                setState(() {});
+                              },
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.black54,
+                                ),
+                                padding: const EdgeInsets.all(4),
+                                child: const Icon(
+                                  Icons.close,
+                                  color: Colors.white,
+                                  size: 16,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+              ],
+            ),
+          );
+        });
   }
 
   /// Section Widget
@@ -855,9 +969,11 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
         onPressed: () async {
           _isTokenExpired();
           if (!adDreamsGoalsProvider.isVideoUploading) {
-            if (adDreamsGoalsProvider.nameEditTextController.text.isNotEmpty &&
-                adDreamsGoalsProvider
-                    .commentEditTextController.text.isNotEmpty &&
+            if (adDreamsGoalsProvider.nameEditTextController.text.isNotEmpty
+                // &&
+                // adDreamsGoalsProvider
+                //     .commentEditTextController.text.isNotEmpty
+                &&
                 editProfileProvider.categorys != null &&
                 adDreamsGoalsProvider.formattedDate != null) {
               if (adDreamsGoalsProvider.formattedDate.isNotEmpty) {
@@ -878,6 +994,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                   mediaThumbs: adDreamsGoalsProvider.mediaThumbList, // ✅ pass here
                   actionId: adDreamsGoalsProvider.goalModelIdName,
                   gemId: widget.goalsanddream.goalId.toString(),
+                  editDetectedLinks: adDreamsGoalsProvider.editDetectedLinks,
                 );
                 GoalsDreamsProvider goalsDreamsProvider =
                     Provider.of<GoalsDreamsProvider>(
@@ -903,6 +1020,8 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                   mediaThumbs: adDreamsGoalsProvider.mediaThumbList, // ✅ pass here
                   actionId: adDreamsGoalsProvider.goalModelIdName,
                   gemId: widget.goalsanddream.goalId.toString(),
+                  editDetectedLinks: adDreamsGoalsProvider.editDetectedLinks,
+
                 );
                 GoalsDreamsProvider goalsDreamsProvider =
                     Provider.of<GoalsDreamsProvider>(

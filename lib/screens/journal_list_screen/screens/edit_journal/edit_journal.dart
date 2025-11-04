@@ -947,7 +947,9 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
                                                             .map((e) =>
                                                                 e.id ?? "")
                                                             .toList(),
-                                                  );
+                                                        editDetectedLinks: mentalStrengthEditProvider.editDetectedLinks,
+
+                                                      );
                                                   if (isSuccess) {
                                                     Future.delayed(
                                                         const Duration(

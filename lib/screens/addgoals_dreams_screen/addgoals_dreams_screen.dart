@@ -726,13 +726,15 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
                   context: context,
                   message: "Please fill Achievement date",
                 );
-              } else if (adDreamsGoalsProvider
-                  .commentEditTextController.text.isEmpty) {
-                showCustomSnackBar(
-                  context: context,
-                  message: "Please fill Goal Description",
-                );
-              } else if (adDreamsGoalsProvider.formattedDate == null) {
+              }
+              // else if (adDreamsGoalsProvider
+              //     .commentEditTextController.text.isEmpty) {
+              //   showCustomSnackBar(
+              //     context: context,
+              //     message: "Please fill Goal Description",
+              //   );
+              // }
+              else if (adDreamsGoalsProvider.formattedDate == null) {
                 showCustomSnackBar(
                   context: context,
                   message: "Please select a valid date",

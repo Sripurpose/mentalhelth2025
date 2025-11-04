@@ -2102,6 +2102,21 @@ class MentalStrengthEditProvider extends ChangeNotifier {
         'journal_title': journalTitle,
       };
 
+// ✅ Add preview_link only if link exists
+      if (descriptionEditTextController.text.contains(RegExp(r'https?://')) ||
+          (detectedLinks.isNotEmpty)) {
+        final previewLink = detectedLinks.isNotEmpty
+            ? detectedLinks.first
+            : RegExp(r'https?://[^\s]+')
+            .firstMatch(descriptionEditTextController.text)
+            ?.group(0);
+
+        if (previewLink != null && previewLink.isNotEmpty) {
+          body['preview_link'] = previewLink;
+        }
+      }
+
+
       // ✅ Add filtered media files
       for (int i = 0; i < mediaName.length; i++) {
         body['media_name[$i]'] = mediaName[i];
@@ -2175,22 +2190,24 @@ logger.i("body$body");
 //update journal
 //   bool saveJournalLoading = false;
   Future<bool> updateJournalLoading(
-    BuildContext context, {
-    required String journalId,
-    required String journalTitle,
-    required String emotionId,
-    required String emotionValue,
-    required String journalDesc,
-    required String driveValue,
-    required String goalId,
-    required locationName,
-    required locationLatitude,
-    required locationLongitude,
-    required List<String> mediaName,
+      BuildContext context, {
+        required String journalId,
+        required String journalTitle,
+        required String emotionId,
+        required String emotionValue,
+        required String journalDesc,
+        required String driveValue,
+        required String goalId,
+        required locationName,
+        required locationLatitude,
+        required locationLongitude,
+        required List<String> mediaName,
         List<String>? mediaThumbs, // ✅ optional param
-    required locationAddress,
-    required List<String> actionIdList,
-  }) async {
+        required locationAddress,
+        required List<String> actionIdList,
+        required List<String> editDetectedLinks, // ✅ add this param
+      })
+  async {
     try {
       saveJournalLoading = true;
       String deviceType = Platform.isAndroid ? 'android' : 'ios';
@@ -2212,9 +2229,6 @@ logger.i("body$body");
         'journal_desc': journalDesc,
         'drive_value': driveValue,
         'goal_id': goalId,
-        // 'action_id': actionId,
-        // 'media_name[]': '926297553.jpeg',
-        // 'media_name[]': '926297553.jpeg',
         'location_name': locationName,
         'location_address': locationAddress,
         'location_latitude': locationLatitude,
@@ -2222,6 +2236,12 @@ logger.i("body$body");
         'journal_title': journalTitle,
         'journal_id': journalId,
       };
+
+      // ✅ Add preview_link if editDetectedLinks is not empty
+      if (editDetectedLinks.isNotEmpty) {
+        body['preview_link'] = editDetectedLinks.first;
+      }
+
       for (int i = 0; i < mediaName.length; i++) {
         body['media_name[$i]'] = mediaName[i];
       }
@@ -2508,7 +2528,8 @@ logger.i("body$body");
 
   Future<void> saveButtonFunction(BuildContext context) async {
     if (!isVideoUploading) {
-      if (descriptionEditTextController.text.isNotEmpty && titleEditTextController.text.isNotEmpty) {
+      if (
+          titleEditTextController.text.isNotEmpty) {
         bool isSuccess = await saveJournalsFunction(
           context,
           journalTitle: titleEditTextController.text,
@@ -2633,5 +2654,14 @@ logger.i("body$body");
     r'(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-&?=%.]+',
     caseSensitive: false,
   );
+
+  List<String> editDetectedLinks = [];
+  RegExp editUrlRegex = RegExp(
+    r'(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-&?=%.]+',
+    caseSensitive: false,
+  );
+
+  bool editBackendLinkAdded = false; // <- new flag
+  bool hasUserClearedLink = false;
 
 }

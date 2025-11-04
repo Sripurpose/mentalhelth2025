@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:html_unescape/html_unescape.dart';
 import 'package:intl/intl.dart';
+import 'package:link_preview_generator/link_preview_generator.dart';
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/screens/addactions_screen/model/alaram_info.dart';
 import 'package:mentalhelth/screens/addactions_screen/provider/add_actions_provider.dart';
@@ -195,6 +197,11 @@ class _ActionViewInParallelScreenState
                                             .actionsDetailsModel!
                                             .actions!
                                             .actionTitle
+                                            .toString(),
+                                        previewLinkApi: mentalStrengthEditProvider
+                                            .actionsDetailsModel!
+                                            .actions!
+                                            .preview_link
                                             .toString(),
                                       ),
                                       audioList.isEmpty ?
@@ -690,7 +697,8 @@ class _ActionViewInParallelScreenState
         required String achiveDate,
         required String status,
         required String comments,
-        required String title,}) {
+        required String title,
+        required String previewLinkApi}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -868,64 +876,143 @@ class _ActionViewInParallelScreenState
           height: 10,
         ),
         Container(
+          width: double.infinity,
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(5),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(
-                    ImageConstant.actionDetailsMark,
-                  ),
-                  const SizedBox(width: 10),
-                  const Text(
-                    "Description",
-                    style: TextStyle(
-                      fontSize: 16.5,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'Poppins',
-                      color: Colors.black,
+          child: Builder(
+            builder: (context) {
+              final commentsText = (comments ?? "").trim();
+              final previewLink = previewLinkApi;
+              print("previewLink${previewLink}");
+
+              // 🧠 CASE 1: If description text exists
+              if (commentsText.isNotEmpty) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          ImageConstant.actionDetailsMark,
+                        ),
+                        const SizedBox(width: 10),
+                        const Text(
+                          "Description",
+                          style: TextStyle(
+                            fontSize: 16.5,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Poppins',
+                            color: Colors.black,
+                          ),
+                        ),
+                        const Text(
+                          " : ",
+                          style: TextStyle(
+                            fontSize: 16.5,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'Poppins',
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  Text(
-                    " : ",
-                    style: CustomTextStyles.blackText16000000W700(),
-                  ),
-                  if (comments.length < 25)
-                    Flexible(
+                    const SizedBox(height: 6),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: const BorderRadius.vertical(
+                          bottom: Radius.circular(5),
+                        ),
+                      ),
                       child: Text(
-                        comments,
+                        HtmlUnescape().convert(commentsText),
                         style: const TextStyle(
-                          fontSize: 18,
+                          color: Colors.black,
+                          fontSize: 16,
                           fontWeight: FontWeight.w400,
                           fontFamily: 'Poppins',
-                          color: Colors.black,
                         ),
                       ),
                     ),
-                ],
-              ),
-              if (comments.length >= 25)
-                SizedBox(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Text(
-                      comments,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Poppins',
-                        color: Colors.black,
+                  ],
+                );
+              }
+
+              // 🔗 CASE 2: If no comments, but preview link exists
+              else if (previewLink.isNotEmpty) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          ImageConstant.actionDetailsMark,
+                        ),
+                        const SizedBox(width: 10),
+                        const Text(
+                          "Description",
+                          style: TextStyle(
+                            fontSize: 16.5,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Poppins',
+                            color: Colors.black,
+                          ),
+                        ),
+                        const Text(
+                          " : ",
+                          style: TextStyle(
+                            fontSize: 16.5,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'Poppins',
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.grey.shade300,
+                          width: 1.5,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: LinkPreviewGenerator(
+                          link: previewLink,
+                          linkPreviewStyle: LinkPreviewStyle.small,
+                          showDomain: true,
+                          showTitle: true,
+                          bodyMaxLines: 1,
+                          borderRadius: 10,
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 4,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ),
-            ],
+                  ],
+                );
+              }
+
+              // ❌ CASE 3: If both are empty → show nothing
+              else {
+                return const SizedBox.shrink();
+              }
+            },
           ),
         ),
       ],

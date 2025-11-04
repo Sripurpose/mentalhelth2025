@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:link_preview_generator/link_preview_generator.dart';
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/screens/dash_borad_screen/provider/dash_board_provider.dart';
 import 'package:mentalhelth/screens/edit_add_profile_screen/provider/edit_provider.dart';
@@ -217,26 +218,70 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                 ),
                                 const SizedBox(height: 2),
                                 SizedBox(
-                                  width: size.width * 0.70,
-                                  // color: Colors.amber,
-                                  child: Text(
-                                    homeProvider.journalDetails == null
-                                        ? ""
-                                        : HtmlUnescape().convert(homeProvider
-                                        .journalDetails!.journals!.journalDesc
-                                        .toString(),),
-                                    maxLines:HtmlUnescape().convert(homeProvider
-                                        .journalDetails!.journals!.journalDesc
-                                        .toString(),).length,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                      fontFamily: 'Poppins',
-                                      color:  ColorsContent.goalCompletedTextColor,
-                                    ),
+                                  width: size.width * 0.90,
+                                  child: Builder(
+                                    builder: (context) {
+                                      final journal = homeProvider.journalDetails?.journals;
+                                      final journalDesc = journal?.journalDesc?.trim() ?? "";
+                                      final previewLink = journal?.preview_link?.trim() ?? "";
+
+                                      // 🧠 If journalDesc exists → show text
+                                      if (journalDesc.isNotEmpty) {
+                                        return Text(
+                                          HtmlUnescape().convert(journalDesc),
+                                          maxLines: HtmlUnescape().convert(journalDesc).length,
+                                          overflow: TextOverflow.ellipsis,
+                                          style:  TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: 'Poppins',
+                                            color: ColorsContent.goalCompletedTextColor,
+                                          ),
+                                        );
+                                      }
+
+                                      // 🔗 If journalDesc is empty and previewLink exists → show preview
+                                      else if (previewLink.isNotEmpty) {
+                                        return Padding(
+                                          padding: const EdgeInsets.only(top: 8.0),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                color: Colors.grey.shade300,
+                                                width: 1.5,
+                                              ),
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                            child: ClipRRect(
+                                              borderRadius: BorderRadius.circular(10),
+                                              child: LinkPreviewGenerator(
+                                                link: previewLink,
+                                                linkPreviewStyle: LinkPreviewStyle.small,
+                                                showDomain: true,
+                                                showTitle: true,
+                                                bodyMaxLines: 1,
+                                                borderRadius: 10,
+                                                boxShadow: const [
+                                                  BoxShadow(
+                                                    color: Colors.black12,
+                                                    blurRadius: 4,
+                                                    offset: Offset(0, 2),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }
+
+                                      // ❌ If both are empty → show nothing
+                                      else {
+                                        return const SizedBox.shrink();
+                                      }
+                                    },
                                   ),
                                 ),
+
                                 const SizedBox(height: 15),
                                 audioList.isEmpty
                                     ? const SizedBox()

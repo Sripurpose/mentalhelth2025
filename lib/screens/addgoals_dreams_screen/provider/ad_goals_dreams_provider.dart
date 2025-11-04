@@ -1347,7 +1347,8 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
       }) async {
     try {
       // ✅ Keep only the last .mp3 file, keep all other files untouched
-      int lastMp3Index = mediaName.lastIndexWhere((file) => file.toLowerCase().endsWith('.mp3'));
+      int lastMp3Index =
+      mediaName.lastIndexWhere((file) => file.toLowerCase().endsWith('.mp3'));
       if (lastMp3Index != -1) {
         String lastMp3File = mediaName[lastMp3Index];
         mediaName.removeWhere((file) => file.toLowerCase().endsWith('.mp3'));
@@ -1392,12 +1393,19 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
           body['media_thumb[$i]'] = mediaThumbs[i];
         }
       }
-      logger.i("body$body");
 
-      // ✅ Add action ID list
+      // ✅ Add action IDs
       for (int i = 0; i < actionId.length; i++) {
         body['action_id[$i]'] = actionId[i].id;
       }
+
+      // ✅ Add link if exists in detectedLinks
+      final linkList = detectedLinks; // ← from your provider
+      if (linkList.isNotEmpty) {
+        body['preview_link'] = linkList.first; // send only one link (as per backend)
+      }
+
+      logger.i("Final SaveGem Body => $body");
 
       final response = await http.post(
         Uri.parse(UrlConstant.savegemUrl),
@@ -1425,7 +1433,8 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => const MaintenenceScreen(
-                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                title:
+                "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
                 message: "",
               ),
             ),
@@ -1452,23 +1461,25 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
   }
 
 
+
   bool updateGoalLoading = false;
 
   Future<void> updateGoalFunction(
-    BuildContext context, {
-    required String title,
-    required String details,
-    required List<String> mediaName,
-    required String locationName,
-    required String locationLatitude,
-    required String locationLongitude,
-    required String locationAddress,
-    required String categoryId,
-    required String gemEndDate,
+      BuildContext context, {
+        required String title,
+        required String details,
+        required List<String> mediaName,
+        required String locationName,
+        required String locationLatitude,
+        required String locationLongitude,
+        required String locationAddress,
+        required String categoryId,
+        required String gemEndDate,
         List<String>? mediaThumbs, // ✅ optional param
-    required List<GoalModelIdName> actionId,
-    required String gemId,
-  }) async {
+        required List<GoalModelIdName> actionId,
+        required String gemId,
+        required List<String> editDetectedLinks, // ✅ now a list
+      }) async {
     try {
       updateGoalLoading = true;
       String deviceType = Platform.isAndroid ? 'android' : 'ios';
@@ -1476,14 +1487,17 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
       if (Platform.isAndroid) {
         versionCode = Constent.versionCodeAndroid.isNotEmpty
             ? Constent.versionCodeAndroid
-            : await getVersionSharePref(); // Fetch user ID if version code is empty
+            : await getVersionSharePref();
       } else if (Platform.isIOS) {
         versionCode = Constent.versionCodeIOS.isNotEmpty
             ? Constent.versionCodeIOS
-            : await getVersionSharePref(); // Fetch user ID if version code is empty
+            : await getVersionSharePref();
       }
+
       notifyListeners();
+
       String? token = await getUserTokenSharePref();
+
       var body = {
         'title': title,
         'gem_type': 'goal',
@@ -1496,30 +1510,42 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
         'location_address': locationAddress,
         'gem_id': gemId,
       };
+
+      // ✅ Add preview_link if the list is not empty
+      if (editDetectedLinks.isNotEmpty) {
+        // Option 1 (most common): send as comma-separated string
+        body['preview_link'] = editDetectedLinks.join(',');
+
+        // ✅ Option 2 (if backend expects array-style fields)
+        // for (int i = 0; i < editDetectedLinks.length; i++) {
+        //   body['preview_link[$i]'] = editDetectedLinks[i];
+        // }
+      }
+
+      // ✅ Add media files
       for (int i = 0; i < mediaName.length; i++) {
         body['media_name[$i]'] = mediaName[i];
       }
 
+      // ✅ Add media thumbs if available
       if (mediaThumbs != null && mediaThumbs.isNotEmpty) {
         for (int i = 0; i < mediaThumbs.length; i++) {
           body['media_thumb[$i]'] = mediaThumbs[i];
         }
       }
-      logger.i("body$body");
-      //comented sarath on 16-09-2024
-      // for (int i = 0; i < actionId.length; i++) {
-      //   body['action_id[$i]'] = actionId[i].id;
-      // }
+
+      logger.i("body $body");
+
       final response = await http.post(
-        Uri.parse(
-          UrlConstant.savegemUrl,
-        ),
+        Uri.parse(UrlConstant.savegemUrl),
         headers: <String, String>{
           'device-type': deviceType,
           'version': versionCode.toString(),
-          "authorization": "$token"},
+          "authorization": "$token",
+        },
         body: body,
       );
+
       if (response.statusCode == 200 || response.statusCode == 201) {
         showCustomSnackBar(
           context: context,
@@ -1528,34 +1554,29 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
         clearAction();
         Navigator.of(context).pop();
         Navigator.of(context).pop();
-      }
-      else if(response.statusCode == 503){
+      } else if (response.statusCode == 503) {
         Future.delayed(Duration.zero, () {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => const MaintenenceScreen(
-                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                title:
+                "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
                 message: "",
               ),
             ),
           );
         });
-      }
-      else {
-        // Handle errors based on the status code
+      } else {
         showCustomSnackBar(
           context: context,
           message: json.decode(response.body)["text"],
         );
       }
-      if(response.statusCode == 401){
+
+      if (response.statusCode == 401 || response.statusCode == 403) {
         TokenManager.setTokenStatus(true);
-        //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
-      if(response.statusCode == 403){
-        TokenManager.setTokenStatus(true);
-        //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
-      }
+
       updateGoalLoading = false;
       notifyListeners();
     } catch (error) {
@@ -1564,6 +1585,7 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
 
   // ad media upload
   bool saveMediaUploadLoading = false;
@@ -1798,5 +1820,14 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
     r'(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-&?=%.]+',
     caseSensitive: false,
   );
+
+  List<String> editDetectedLinks = [];
+  RegExp editUrlRegex = RegExp(
+    r'(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-&?=%.]+',
+    caseSensitive: false,
+  );
+
+  bool editBackendLinkAdded = false; // <- new flag
+  bool hasUserClearedLink = false;
 
 }

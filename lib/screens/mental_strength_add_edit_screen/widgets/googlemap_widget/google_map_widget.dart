@@ -79,6 +79,10 @@ class _MentalGoogleMapState extends State<MentalGoogleMap> {
     } else {
       _fetchCurrentLocation();
     }
+
+    _searchController.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
@@ -153,9 +157,33 @@ class _MentalGoogleMapState extends State<MentalGoogleMap> {
 
   final Set<Marker> _markers = {};
 
-  // Search functionality methods
-  //List<Map<String, dynamic>> _searchResultsWithNames = [];
+  // Helper method to build display name from placemark
+  String _buildDisplayName(Placemark placemark) {
+    List<String> parts = [];
 
+    if (placemark.name != null && placemark.name!.isNotEmpty) {
+      parts.add(placemark.name!);
+    }
+    if (placemark.locality != null && placemark.locality!.isNotEmpty) {
+      if (!parts.contains(placemark.locality)) {
+        parts.add(placemark.locality!);
+      }
+    }
+    if (placemark.administrativeArea != null && placemark.administrativeArea!.isNotEmpty) {
+      if (!parts.contains(placemark.administrativeArea)) {
+        parts.add(placemark.administrativeArea!);
+      }
+    }
+    if (placemark.country != null && placemark.country!.isNotEmpty) {
+      if (!parts.contains(placemark.country)) {
+        parts.add(placemark.country!);
+      }
+    }
+
+    return parts.join(', ');
+  }
+
+  // Search functionality methods - IMPROVED FOR 10 NEARBY LOCATIONS
   Future<void> _searchLocation(String query) async {
     if (query.isEmpty) {
       setState(() {
@@ -174,42 +202,68 @@ class _MentalGoogleMapState extends State<MentalGoogleMap> {
 
       // Get placemark details for each location
       List<Map<String, dynamic>> resultsWithNames = [];
-      for (var location in locations) {
-        try {
-          List<Placemark> placemarks = await placemarkFromCoordinates(
-              location.latitude,
-              location.longitude
-          );
-          if (placemarks.isNotEmpty) {
-            Placemark placemark = placemarks[0];
-            String displayName = '';
 
-            if (placemark.name != null && placemark.name!.isNotEmpty) {
-              displayName = placemark.name!;
-            }
-            if (placemark.locality != null && placemark.locality!.isNotEmpty) {
-              displayName += displayName.isNotEmpty ? ', ${placemark.locality}' : placemark.locality!;
-            }
-            if (placemark.administrativeArea != null && placemark.administrativeArea!.isNotEmpty) {
-              displayName += displayName.isNotEmpty ? ', ${placemark.administrativeArea}' : placemark.administrativeArea!;
-            }
-            if (placemark.country != null && placemark.country!.isNotEmpty) {
-              displayName += displayName.isNotEmpty ? ', ${placemark.country}' : placemark.country!;
-            }
+      if (locations.isNotEmpty) {
+        Location mainLocation = locations[0];
 
-            resultsWithNames.add({
-              'location': location,
-              'placemark': placemark,
-              'displayName': displayName.isNotEmpty ? displayName : 'Unknown Location',
-            });
+        // Create a larger grid of search points for more results
+        double lat = mainLocation.latitude;
+        double lng = mainLocation.longitude;
+        double offset = 0.03; // ~3km offset for denser grid
+
+        List<LatLng> searchPoints = [
+          LatLng(lat, lng),
+          LatLng(lat + offset, lng),
+          LatLng(lat - offset, lng),
+          LatLng(lat, lng + offset),
+          LatLng(lat, lng - offset),
+          LatLng(lat + offset, lng + offset),
+          LatLng(lat - offset, lng - offset),
+          LatLng(lat + offset, lng - offset),
+          LatLng(lat - offset, lng + offset),
+          LatLng(lat + offset * 2, lng),
+          LatLng(lat - offset * 2, lng),
+          LatLng(lat, lng + offset * 2),
+          LatLng(lat, lng - offset * 2),
+        ];
+
+        // Get placemarks for each search point
+        for (var point in searchPoints) {
+          try {
+            List<Placemark> placemarks = await placemarkFromCoordinates(
+              point.latitude,
+              point.longitude,
+            );
+            if (placemarks.isNotEmpty) {
+              Placemark placemark = placemarks[0];
+              String displayName = _buildDisplayName(placemark);
+
+              // Avoid duplicate entries
+              bool isDuplicate = resultsWithNames.any((r) =>
+              r['displayName'] == displayName
+              );
+
+              if (!isDuplicate && displayName.isNotEmpty) {
+                resultsWithNames.add({
+                  'location': Location(
+                    latitude: point.latitude,
+                    longitude: point.longitude,
+                    timestamp: DateTime.now(),
+                  ),
+                  'placemark': placemark,
+                  'displayName': displayName,
+                });
+              }
+            }
+          } catch (e) {
+            logger.e('Error getting placemark for nearby: $e');
           }
-        } catch (e) {
-          logger.e('Error getting placemark: $e');
         }
       }
 
       setState(() {
-        _searchResultsWithNames = resultsWithNames;
+        // Limit to 10 results
+        _searchResultsWithNames = resultsWithNames.take(10).toList();
         _isSearching = false;
       });
     } catch (e) {
@@ -238,10 +292,9 @@ class _MentalGoogleMapState extends State<MentalGoogleMap> {
       _selectedLocation = selectedLatLng;
       _selectedAddress = address;
       _searchResultsWithNames.clear(); // hide dropdown
-      // _searchController.clear(); // ❌ remove this line to keep text
     });
 
-    // Keep the text in the search box (optional: update it with selected address)
+    // Keep the text in the search box
     _searchController.text = result['displayName'];
 
     // Animate to the selected location
@@ -350,7 +403,7 @@ class _MentalGoogleMapState extends State<MentalGoogleMap> {
                         ),
                       ],
                     ),
-                    constraints: const BoxConstraints(maxHeight: 150),
+                    constraints: const BoxConstraints(maxHeight: 250),
                     child: ListView.builder(
                       shrinkWrap: true,
                       itemCount: _searchResultsWithNames.length,
@@ -361,6 +414,8 @@ class _MentalGoogleMapState extends State<MentalGoogleMap> {
                           title: Text(
                             result['displayName'],
                             style: const TextStyle(fontSize: 14),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           dense: true,
                           onTap: () => _selectSearchResult(result),
@@ -453,7 +508,9 @@ class _MentalGoogleMapState extends State<MentalGoogleMap> {
         );
       }
       _updateMarkerPosition();
-    } catch (e) {}
+    } catch (e) {
+      logger.e('Error getting location: $e');
+    }
   }
 
   void _onMarkerDragEnd(LatLng location) {

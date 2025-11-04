@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:link_preview_generator/link_preview_generator.dart';
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/screens/addactions_screen/provider/add_actions_provider.dart';
 import 'package:mentalhelth/screens/addactions_screen/widget/googlemap_widget/google_map_widget.dart';
@@ -81,6 +83,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
         Provider.of<EditProfileProvider>(context, listen: false);
     addActionsProvider =
         Provider.of<AddActionsProvider>(context, listen: false);
+    addActionsProvider.editDetectedLinks.clear();
     logger.w(
         "addActionsProvider.reminderStartDate${addActionsProvider.reminderStartDate}");
     alarmDetails();
@@ -1711,25 +1714,140 @@ class _EditActionScreenState extends State<EditActionScreen> {
   }
 
   /// Section Widget
+  /// Section Widget
   Widget _buildDescriptionEditText(BuildContext context) {
     return Consumer<AddActionsProvider>(
         builder: (context, addActionsProvider, _) {
-      return CustomTextFormFieldNumu(
-        controller: addActionsProvider.descriptionEditTextController,
-        hintText: _descriptionFocusNode.hasFocus ? '' : "Description",
-        hintStyle: CustomTextStyles.bodySmallGray700,
-        textInputAction: TextInputAction.newline, // ✅ allow newline
-        textInputType: TextInputType.multiline, // ✅ multiline keyboard
-        maxLines: 4,
-        focusNode: _descriptionFocusNode,
-        onTap: () => setState(() {}),
-        // Rebuild when tapped
-        onEditingComplete: () {
-          _descriptionFocusNode.unfocus(); // Ensure focus is removed when done
-          setState(() {});
-        }, // Rebuild when focus is lost
-      );
-    });
+          final previewLink = widget.actionsDetailsModel!.actions!.preview_link.toString().trim() ?? "";
+
+          // ✅ Initialize backend link ONLY on first load
+          if (previewLink.isNotEmpty &&
+              addActionsProvider.editDetectedLinks.isEmpty &&
+              !addActionsProvider.hasUserClearedLink) {
+            addActionsProvider.editDetectedLinks = [previewLink];
+          }
+
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.grey.shade300),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 📝 Text field shown only when no preview
+                if (addActionsProvider.editDetectedLinks.isEmpty)
+                  CustomTextFormFieldNumu(
+                    controller: addActionsProvider.descriptionEditTextController,
+                    hintText: _descriptionFocusNode.hasFocus ? '' : "Description",
+                    hintStyle: CustomTextStyles.bodySmallGray700,
+                    textInputAction: TextInputAction.newline,
+                    textInputType: TextInputType.multiline,
+                    maxLines: 4,
+                    focusNode: _descriptionFocusNode,
+                    borderDecoration: InputBorder.none,
+                    textAlign: TextAlign.start,
+                    onTap: () => setState(() {}),
+                    onEditingComplete: () {
+                      _descriptionFocusNode.unfocus();
+                      setState(() {});
+                    },
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(
+                        RegExp(r'[\u0000-\uFFFF]'),
+                      ),
+                    ],
+                    onChanged: (text) {
+                      // ✅ Detect new link
+                      final matches = addActionsProvider.editUrlRegex
+                          .allMatches(text)
+                          .map((m) => m.group(0)!)
+                          .toList();
+
+                      if (matches.isNotEmpty) {
+                        addActionsProvider.editDetectedLinks = [matches.first];
+                        addActionsProvider.hasUserClearedLink = false;
+                        addActionsProvider.descriptionEditTextController.clear();
+                        setState(() {});
+                      }
+                    },
+                  ),
+
+                // 🔗 Link preview (either backend or user-pasted)
+                if (addActionsProvider.editDetectedLinks.isNotEmpty)
+                  ...addActionsProvider.editDetectedLinks.map((link) {
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Stack(
+                        alignment: Alignment.topRight,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.grey.shade300,
+                                width: 1.5,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: LinkPreviewGenerator(
+                                link: link,
+                                linkPreviewStyle: LinkPreviewStyle.small,
+                                showDomain: true,
+                                showTitle: true,
+                                bodyMaxLines: 1,
+                                borderRadius: 10,
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    blurRadius: 4,
+                                    offset: Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          // ❌ Close icon - FIXED
+                          Positioned(
+                            top: 6,
+                            right: 6,
+                            child: GestureDetector(
+                              onTap: () {
+                                logger.i(
+                                    "addActionsProvider.editDetectedLinks before clear: ${addActionsProvider.editDetectedLinks}");
+
+                                // ✅ Mark that user cleared the link
+                                addActionsProvider.hasUserClearedLink = true;
+                                addActionsProvider.editDetectedLinks = [];
+                                addActionsProvider.descriptionEditTextController.clear();
+                                setState(() {});
+                              },
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.black54,
+                                ),
+                                padding: const EdgeInsets.all(4),
+                                child: const Icon(
+                                  Icons.close,
+                                  color: Colors.white,
+                                  size: 16,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+              ],
+            ),
+          );
+        });
   }
 
   /// Section Widget
@@ -1741,8 +1859,8 @@ class _EditActionScreenState extends State<EditActionScreen> {
         onPressed: () async {
           if (!addActionsProvider.isVideoUploading) {
             if (addActionsProvider.titleEditTextController.text.isNotEmpty &&
-                addActionsProvider
-                    .descriptionEditTextController.text.isNotEmpty &&
+                // addActionsProvider
+                //     .descriptionEditTextController.text.isNotEmpty &&
                 (addActionsProvider.setRemainder
                     ? addActionsProvider.reminderStartDate.isNotEmpty &&
                         addActionsProvider.reminderEndDate.isNotEmpty &&
@@ -1764,7 +1882,9 @@ class _EditActionScreenState extends State<EditActionScreen> {
                         .toString(),
                     goalId: widget.actionsDetailsModel!.actions?.goalId ?? "",
                     mediaThumbs: addActionsProvider.mediaThumbList, // ✅ pass here
-                    isReminder: "1");
+                    isReminder: "1",
+                  editDetectedLinks: addActionsProvider.editDetectedLinks,
+                );
               } else {
                 await addActionsProvider.editActionFunction(context,
                     title: addActionsProvider.titleEditTextController.text,
@@ -1779,7 +1899,9 @@ class _EditActionScreenState extends State<EditActionScreen> {
                         .toString(),
                     goalId: widget.actionsDetailsModel!.actions?.goalId ?? "",
                     mediaThumbs: addActionsProvider.mediaThumbList, // ✅ pass here
-                    isReminder: "0");
+                    isReminder: "0",
+                  editDetectedLinks: addActionsProvider.editDetectedLinks,
+                );
               }
 
               mentalStrengthEditProvider.fetchGoalActions(

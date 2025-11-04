@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:html_unescape/html_unescape.dart';
 import 'package:intl/intl.dart';
+import 'package:link_preview_generator/link_preview_generator.dart';
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/screens/addactions_screen/model/alaram_info.dart';
 import 'package:mentalhelth/screens/addactions_screen/provider/add_actions_provider.dart';
@@ -36,7 +38,7 @@ class ActionsFullView extends StatefulWidget {
       required this.indexs,
       required this.action,
       required this.goalId,
-         this.actionStatus})
+      this.actionStatus})
       : super(
           key: key,
         );
@@ -72,11 +74,9 @@ class _ActionsFullViewState extends State<ActionsFullView> {
       listen: false,
     );
     await mentalStrengthEditProvider.fetchActionDetails(
-      actionId: widget.id,
-      context: context
-    );
+        actionId: widget.id, context: context);
     //added sarath
-    if( mentalStrengthEditProvider.actionsDetailsModel != null){
+    if (mentalStrengthEditProvider.actionsDetailsModel != null) {
       addAudio(
           actionsDetailsModel: mentalStrengthEditProvider.actionsDetailsModel!);
       addImage(
@@ -89,7 +89,8 @@ class _ActionsFullViewState extends State<ActionsFullView> {
       );
     }
 
-    logger.w("widget.action.actionStatus${mentalStrengthEditProvider.actionsDetailsModel?.actions!.actionStatus!}");
+    logger.w(
+        "widget.action.actionStatus${mentalStrengthEditProvider.actionsDetailsModel?.actions!.actionStatus!}");
 
     setState(() {});
   }
@@ -146,16 +147,19 @@ class _ActionsFullViewState extends State<ActionsFullView> {
           return Scaffold(
             appBar: mentalStrengthEditProvider.actionsDetailsModel == null
                 ? AppBar()
-                : buildAppBarActionView(context, size,
+                : buildAppBarActionView(
+                    context,
+                    size,
                     heading: capitalText(mentalStrengthEditProvider
                         .actionsDetailsModel!.actions!.actionTitle
                         .toString()),
                     id: mentalStrengthEditProvider
                         .actionsDetailsModel!.actions!.actionId
                         .toString(),
-            actionStatus:  mentalStrengthEditProvider
-                .actionsDetailsModel!.actions!.actionStatus
-                .toString(),),
+                    actionStatus: mentalStrengthEditProvider
+                        .actionsDetailsModel!.actions!.actionStatus
+                        .toString(),
+                  ),
             body: Stack(
               children: [
                 Positioned.fill(
@@ -182,552 +186,535 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    SizedBox(height: 20,),
-                                    mentalStrengthEditProvider.actionsDetailsModel ==
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    mentalStrengthEditProvider
+                                                .actionsDetailsModel ==
                                             null
                                         ? const SizedBox()
                                         : _buildUntitledOne(
                                             context,
                                             size,
                                             category: mentalStrengthEditProvider
-                                                .actionsDetailsModel!.actions!.goalTitle
-                                                .toString(),
-                                            createDate: mentalStrengthEditProvider
                                                 .actionsDetailsModel!
                                                 .actions!
-                                                .actionDatetime
+                                                .goalTitle
                                                 .toString(),
-                                            achiveDate: mentalStrengthEditProvider
-                                                .actionsDetailsModel!
-                                                .actions!
-                                                .actionDatetime
-                                                .toString(),
+                                            createDate:
+                                                mentalStrengthEditProvider
+                                                    .actionsDetailsModel!
+                                                    .actions!
+                                                    .actionDatetime
+                                                    .toString(),
+                                            achiveDate:
+                                                mentalStrengthEditProvider
+                                                    .actionsDetailsModel!
+                                                    .actions!
+                                                    .actionDatetime
+                                                    .toString(),
                                             status: mentalStrengthEditProvider
                                                 .actionsDetailsModel!
                                                 .actions!
                                                 .actionStatus
                                                 .toString(),
-                                      comments:  mentalStrengthEditProvider
+                                            comments: mentalStrengthEditProvider
+                                                .actionsDetailsModel!
+                                                .actions!
+                                                .actionDetails
+                                                .toString(),
+                                            title: mentalStrengthEditProvider
+                                                .actionsDetailsModel!
+                                                .actions!
+                                                .actionTitle
+                                                .toString(),
+                                      previewLinkApi: mentalStrengthEditProvider
                                           .actionsDetailsModel!
                                           .actions!
-                                          .actionDetails
-                                          .toString(),
-                                      title: mentalStrengthEditProvider
-                                          .actionsDetailsModel!
-                                          .actions!
-                                          .actionTitle
+                                          .preview_link
                                           .toString(),
                                           ),
-                                    audioList.isEmpty ?
-                                        const SizedBox():
-                                    const SizedBox(height: 10),
                                     audioList.isEmpty
-                                        ? const SizedBox() :
-                                    Container(
-                                      padding: const EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      height: size.height * 0.18, // Adjusted height for text + list
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: [
-                                              SvgPicture.asset(
-                                                ImageConstant.actionDetailsMark, // Replace with your actual SVG asset path
-                                              ),
-                                              const SizedBox(width: 10),
-                                              const Text(
-                                                "Audio",
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
-                                                  fontFamily: 'Poppins',
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                              Text(
-                                                " : ",
-                                                style: CustomTextStyles.blackText16000000W700(),
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 10), // Space between text row and list
-                                          Expanded(
-                                            child: ListView.builder(
-                                              itemCount: audioList.length,
-                                              itemBuilder: (context, index) {
-                                                return JournalAudioPlayer(
-                                                  url: audioList[index],
-                                                );
-                                              },
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    imageList.isEmpty?const SizedBox():
-                                    const SizedBox(height: 10),
-                                    imageList.isEmpty
-                                        ?  const SizedBox() :
-                                    Container(
-                                      padding: const EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      height: imageList.isNotEmpty ? size.height * 0.35 : 0, // increased for label + images
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              SvgPicture.asset(
-                                                ImageConstant.actionDetailsMark, // Replace with your photo SVG path
-                                              ),
-                                              const SizedBox(width: 10),
-                                              const Text(
-                                                "Photo",
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
-                                                  fontFamily: 'Poppins',
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                              Text(
-                                                " : ",
-                                                style: CustomTextStyles.blackText16000000W700(),
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 8),
-                                          Expanded(
-                                            child: Stack(
-                                              children: [
-                                                PageView.builder(
-                                                  controller: photoController,
-                                                  itemCount: imageList.length,
-                                                  itemBuilder: (context, index) {
-                                                    return GestureDetector(
-                                                      onTap: () {
-                                                        showDialog(
-                                                          context: context,
-                                                          barrierDismissible: true,
-                                                          builder: (_) => Dialog(
-                                                            insetPadding: EdgeInsets.zero,
-                                                            backgroundColor: Colors.black,
-                                                            shape: const RoundedRectangleBorder(
-                                                              borderRadius: BorderRadius.zero, // Removes all corner curves
-                                                            ),
-                                                            child: Stack(
-                                                              children: [
-                                                                InteractiveViewer(
-                                                                  child: Center(
-                                                                    child: Image.network(
-                                                                      imageList[index],
-                                                                      fit: BoxFit.contain,
-                                                                      loadingBuilder: (context, child, loadingProgress) {
-                                                                        if (loadingProgress == null) return child;
-                                                                        return const Center(child: CupertinoActivityIndicator());
-                                                                      },
-                                                                      errorBuilder: (context, error, stackTrace) =>
-                                                                      const Center(child: Icon(Icons.broken_image, color: Colors.white)),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                Positioned(
-                                                                  top: 40,
-                                                                  right: 20,
-                                                                  child: IconButton(
-                                                                    icon: const Icon(Icons.close, color: Colors.white, size: 30),
-                                                                    onPressed: () => Navigator.of(context).pop(),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        );
-                                                      },
-                                                      child: CustomImageView(
-                                                        fit: BoxFit.cover,
-                                                        imagePath: imageList[index],
-                                                        height: size.height * 0.30,
-                                                        width: size.width,
-                                                        alignment: Alignment.center,
-                                                      ),
-                                                    );
-                                                  },
-                                                  onPageChanged: (int pageIndex) {
-                                                    setState(() {
-                                                      photoCurrentIndex = pageIndex;
-                                                    });
-                                                  },
-                                                ),
-                                                if(imageList.length != 1)
-                                                Positioned(
-                                                  bottom: 10,
-                                                  left: 0,
-                                                  right: 0,
-                                                  child: Center(
-                                                    child: buildIndicators(
-                                                      imageList.length,
-                                                      photoCurrentIndex,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    videoList.isEmpty? const SizedBox():
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    videoList.isEmpty
+                                        ? const SizedBox()
+                                        : const SizedBox(height: 10),
+                                    audioList.isEmpty
                                         ? const SizedBox()
                                         : Container(
-                                      padding: const EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      height: videoList.isNotEmpty ? size.height * 0.35 : 0, // increased to include title
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              SvgPicture.asset(
-                                                ImageConstant.actionDetailsMark, // Replace with your SVG icon for video
-                                              ),
-                                              const SizedBox(width: 10),
-                                              const Text(
-                                                "Video",
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
-                                                  fontFamily: 'Poppins',
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                              Text(
-                                                " : ",
-                                                style: CustomTextStyles.blackText16000000W700(),
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 8),
-                                          Expanded(
-                                            child: Stack(
-                                              children: [
-
-                                                PageView.builder(
-                                                  controller: videoController,
-                                                  itemCount: videoList.length,
-                                                  itemBuilder: (context, index) {
-                                                    return GestureDetector(
-                                                      onTap: () {
-                                                        showDialog(
-                                                          context: context,
-                                                          barrierDismissible: true,
-                                                          builder: (_) => Dialog(
-                                                            insetPadding: EdgeInsets.zero,
-                                                            backgroundColor: Colors.black,
-                                                            shape: const RoundedRectangleBorder(
-                                                              borderRadius: BorderRadius.zero,
-                                                            ),
-                                                            child: Stack(
-                                                              children: [
-                                                                // ✅ Removed fixed AspectRatio — let the widget calculate and adjust
-                                                                Center(
-                                                                  child: VideoPlayerWidgetViewAndAlreadyActionProgressBar(
-                                                                    videoUrl: videoList[index],
-                                                                  ),
-                                                                ),
-
-                                                                // ❌ Close button remains fixed at the top-right
-                                                                Positioned(
-                                                                  top: 40,
-                                                                  right: 20,
-                                                                  child: IconButton(
-                                                                    icon: const Icon(Icons.close, color: Colors.white, size: 30),
-                                                                    onPressed: () => Navigator.of(context).pop(),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        );
-
-                                                      },
-                                                      child: ClipRRect(
-                                                        borderRadius: BorderRadius.circular(5),
-                                                        child: VideoPlayerWidgetViewAndAlreadyAction(
-                                                          videoUrl: videoList[index],
-                                                        ),
-                                                      ),
-                                                    );
-                                                  },
-                                                  onPageChanged: (int pageIndex) {
-                                                    setState(() {
-                                                      videoCurrentIndex = pageIndex;
-                                                    });
-                                                  },
-                                                ),
-                                                // PageView.builder(
-                                                //   controller: videoController,
-                                                //   itemCount: videoList.length,
-                                                //   itemBuilder: (context, index) {
-                                                //     return VideoPlayerWidget(
-                                                //       videoUrl: videoList[index],
-                                                //     );
-                                                //   },
-                                                //   onPageChanged: (int pageIndex) {
-                                                //     setState(() {
-                                                //       videoCurrentIndex = pageIndex;
-                                                //     });
-                                                //   },
-                                                // ),
-                                                if(videoList.length != 1)
-                                                Positioned(
-                                                  bottom: 10,
-                                                  left: 0,
-                                                  right: 0,
-                                                  child: Center(
-                                                    child: buildIndicators(
-                                                      videoList.length,
-                                                      videoCurrentIndex,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    mentalStrengthEditProvider.actionsDetailsModel!.actions!.location?.locationAddress != null?
-                                    const SizedBox(height: 10):const SizedBox(),
-                                    mentalStrengthEditProvider.actionsDetailsModel!.actions!.location?.locationAddress != null?
-                                    Container(
-                                      padding: const EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              SvgPicture.asset(
-                                                ImageConstant.actionDetailsMark, // Replace with your location SVG asset
-                                              ),
-                                              const SizedBox(width: 10),
-                                              const Text(
-                                                "Location",
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
-                                                  fontFamily: 'Poppins',
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                              Text(
-                                                " : ",
-                                                style: CustomTextStyles.blackText16000000W700(),
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 8),
-                                          Row(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Icon(
-                                                Icons.location_on,
-                                                color: ColorsContent.newThemeColor,
-                                                size: 20,
-                                              ),
-                                              const SizedBox(width: 8),
-                                              Expanded(
-                                                child: SingleChildScrollView(
-                                                  scrollDirection: Axis.vertical,
-                                                  child: Text(
-                                                    mentalStrengthEditProvider.actionsDetailsModel?.actions?.location?.locationAddress
-                                                        ?.replaceAll(RegExp(r'[^a-zA-Z0-9, ]'), '') // Remove unwanted characters
-                                                        .replaceAll(RegExp(r',\s*,+'), ',') // Replace multiple consecutive commas
-                                                        .replaceAll(RegExp(r'^,|,$'), '') // Trim leading/trailing commas
-                                                        .trim() ??
-                                                        "",
-                                                    style: const TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.w400,
-                                                      fontFamily: 'Poppins',
-                                                      color: Colors.black,
-                                                    ),
-                                                    overflow: TextOverflow.visible,
-                                                    maxLines: 4,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                        :
-                                   const SizedBox(),
-                                    mentalStrengthEditProvider.actionsDetailsModel!.actions!.actionStatus == "1" ||
-                                        mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder == null ? const SizedBox():const SizedBox(height: 10),
-                                    Consumer<AddActionsProvider>(
-                                        builder: (context, addActionsProvider, _) {
-                                      return Column(
-                                        children: [
-                                          mentalStrengthEditProvider.actionsDetailsModel!.actions!.actionStatus == "1" ||
-                                              mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder == null
-                                                  ? const SizedBox()
-                                                  : Container(
                                             padding: const EdgeInsets.all(10),
                                             decoration: BoxDecoration(
                                               color: Colors.white,
-                                              borderRadius: BorderRadius.circular(5),
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                            ),
+                                            height: size.height * 0.18,
+                                            // Adjusted height for text + list
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    SvgPicture.asset(
+                                                      ImageConstant
+                                                          .actionDetailsMark, // Replace with your actual SVG asset path
+                                                    ),
+                                                    const SizedBox(width: 10),
+                                                    const Text(
+                                                      "Audio",
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontFamily: 'Poppins',
+                                                        color: Colors.black,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      " : ",
+                                                      style: CustomTextStyles
+                                                          .blackText16000000W700(),
+                                                    ),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 10),
+                                                // Space between text row and list
+                                                Expanded(
+                                                  child: ListView.builder(
+                                                    itemCount: audioList.length,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      return JournalAudioPlayer(
+                                                        url: audioList[index],
+                                                      );
+                                                    },
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                    imageList.isEmpty
+                                        ? const SizedBox()
+                                        : const SizedBox(height: 10),
+                                    imageList.isEmpty
+                                        ? const SizedBox()
+                                        : Container(
+                                            padding: const EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                            ),
+                                            height: imageList.isNotEmpty
+                                                ? size.height * 0.35
+                                                : 0,
+                                            // increased for label + images
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    SvgPicture.asset(
+                                                      ImageConstant
+                                                          .actionDetailsMark, // Replace with your photo SVG path
+                                                    ),
+                                                    const SizedBox(width: 10),
+                                                    const Text(
+                                                      "Photo",
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontFamily: 'Poppins',
+                                                        color: Colors.black,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      " : ",
+                                                      style: CustomTextStyles
+                                                          .blackText16000000W700(),
+                                                    ),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Expanded(
+                                                  child: Stack(
+                                                    children: [
+                                                      PageView.builder(
+                                                        controller:
+                                                            photoController,
+                                                        itemCount:
+                                                            imageList.length,
+                                                        itemBuilder:
+                                                            (context, index) {
+                                                          return GestureDetector(
+                                                            onTap: () {
+                                                              showDialog(
+                                                                context:
+                                                                    context,
+                                                                barrierDismissible:
+                                                                    true,
+                                                                builder: (_) =>
+                                                                    Dialog(
+                                                                  insetPadding:
+                                                                      EdgeInsets
+                                                                          .zero,
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .black,
+                                                                  shape:
+                                                                      const RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .zero, // Removes all corner curves
+                                                                  ),
+                                                                  child: Stack(
+                                                                    children: [
+                                                                      InteractiveViewer(
+                                                                        child:
+                                                                            Center(
+                                                                          child:
+                                                                              Image.network(
+                                                                            imageList[index],
+                                                                            fit:
+                                                                                BoxFit.contain,
+                                                                            loadingBuilder: (context,
+                                                                                child,
+                                                                                loadingProgress) {
+                                                                              if (loadingProgress == null)
+                                                                                return child;
+                                                                              return const Center(child: CupertinoActivityIndicator());
+                                                                            },
+                                                                            errorBuilder: (context, error, stackTrace) =>
+                                                                                const Center(child: Icon(Icons.broken_image, color: Colors.white)),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Positioned(
+                                                                        top: 40,
+                                                                        right:
+                                                                            20,
+                                                                        child:
+                                                                            IconButton(
+                                                                          icon: const Icon(
+                                                                              Icons.close,
+                                                                              color: Colors.white,
+                                                                              size: 30),
+                                                                          onPressed: () =>
+                                                                              Navigator.of(context).pop(),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            },
+                                                            child:
+                                                                CustomImageView(
+                                                              fit: BoxFit.cover,
+                                                              imagePath:
+                                                                  imageList[
+                                                                      index],
+                                                              height:
+                                                                  size.height *
+                                                                      0.30,
+                                                              width: size.width,
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                            ),
+                                                          );
+                                                        },
+                                                        onPageChanged:
+                                                            (int pageIndex) {
+                                                          setState(() {
+                                                            photoCurrentIndex =
+                                                                pageIndex;
+                                                          });
+                                                        },
+                                                      ),
+                                                      if (imageList.length != 1)
+                                                        Positioned(
+                                                          bottom: 10,
+                                                          left: 0,
+                                                          right: 0,
+                                                          child: Center(
+                                                            child:
+                                                                buildIndicators(
+                                                              imageList.length,
+                                                              photoCurrentIndex,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                    videoList.isEmpty
+                                        ? const SizedBox()
+                                        : const SizedBox(
+                                            height: 10,
+                                          ),
+                                    videoList.isEmpty
+                                        ? const SizedBox()
+                                        : Container(
+                                            padding: const EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                            ),
+                                            height: videoList.isNotEmpty
+                                                ? size.height * 0.35
+                                                : 0, // increased to include title
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    SvgPicture.asset(
+                                                      ImageConstant
+                                                          .actionDetailsMark, // Replace with your SVG icon for video
+                                                    ),
+                                                    const SizedBox(width: 10),
+                                                    const Text(
+                                                      "Video",
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontFamily: 'Poppins',
+                                                        color: Colors.black,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      " : ",
+                                                      style: CustomTextStyles
+                                                          .blackText16000000W700(),
+                                                    ),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Expanded(
+                                                  child: Stack(
+                                                    children: [
+                                                      PageView.builder(
+                                                        controller:
+                                                            videoController,
+                                                        itemCount:
+                                                            videoList.length,
+                                                        itemBuilder:
+                                                            (context, index) {
+                                                          return GestureDetector(
+                                                            onTap: () {
+                                                              showDialog(
+                                                                context:
+                                                                    context,
+                                                                barrierDismissible:
+                                                                    true,
+                                                                builder: (_) =>
+                                                                    Dialog(
+                                                                  insetPadding:
+                                                                      EdgeInsets
+                                                                          .zero,
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .black,
+                                                                  shape:
+                                                                      const RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .zero,
+                                                                  ),
+                                                                  child: Stack(
+                                                                    children: [
+                                                                      // ✅ Removed fixed AspectRatio — let the widget calculate and adjust
+                                                                      Center(
+                                                                        child:
+                                                                            VideoPlayerWidgetViewAndAlreadyActionProgressBar(
+                                                                          videoUrl:
+                                                                              videoList[index],
+                                                                        ),
+                                                                      ),
+
+                                                                      // ❌ Close button remains fixed at the top-right
+                                                                      Positioned(
+                                                                        top: 40,
+                                                                        right:
+                                                                            20,
+                                                                        child:
+                                                                            IconButton(
+                                                                          icon: const Icon(
+                                                                              Icons.close,
+                                                                              color: Colors.white,
+                                                                              size: 30),
+                                                                          onPressed: () =>
+                                                                              Navigator.of(context).pop(),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            },
+                                                            child: ClipRRect(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          5),
+                                                              child:
+                                                                  VideoPlayerWidgetViewAndAlreadyAction(
+                                                                videoUrl:
+                                                                    videoList[
+                                                                        index],
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                        onPageChanged:
+                                                            (int pageIndex) {
+                                                          setState(() {
+                                                            videoCurrentIndex =
+                                                                pageIndex;
+                                                          });
+                                                        },
+                                                      ),
+                                                      // PageView.builder(
+                                                      //   controller: videoController,
+                                                      //   itemCount: videoList.length,
+                                                      //   itemBuilder: (context, index) {
+                                                      //     return VideoPlayerWidget(
+                                                      //       videoUrl: videoList[index],
+                                                      //     );
+                                                      //   },
+                                                      //   onPageChanged: (int pageIndex) {
+                                                      //     setState(() {
+                                                      //       videoCurrentIndex = pageIndex;
+                                                      //     });
+                                                      //   },
+                                                      // ),
+                                                      if (videoList.length != 1)
+                                                        Positioned(
+                                                          bottom: 10,
+                                                          left: 0,
+                                                          right: 0,
+                                                          child: Center(
+                                                            child:
+                                                                buildIndicators(
+                                                              videoList.length,
+                                                              videoCurrentIndex,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                    mentalStrengthEditProvider
+                                                .actionsDetailsModel!
+                                                .actions!
+                                                .location
+                                                ?.locationAddress !=
+                                            null
+                                        ? const SizedBox(height: 10)
+                                        : const SizedBox(),
+                                    mentalStrengthEditProvider
+                                                .actionsDetailsModel!
+                                                .actions!
+                                                .location
+                                                ?.locationAddress !=
+                                            null
+                                        ? Container(
+                                            padding: const EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
                                             ),
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                // Header row with SVG and "Reminder" label
                                                 Row(
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
                                                   children: [
-                                                    Expanded(
-                                                      child: Row(
-                                                        mainAxisSize: MainAxisSize.min,
-                                                        children: [
-                                                          SvgPicture.asset(
-                                                            ImageConstant.actionDetailsMark,
-                                                          ),
-                                                          const SizedBox(width: 10),
-                                                          const Text(
-                                                            "Reminder",
-                                                            style: TextStyle(
-                                                              fontSize: 16,
-                                                              fontWeight: FontWeight.w600,
-                                                              fontFamily: 'Poppins',
-                                                              color: Colors.black,
-                                                            ),
-                                                          ),
-                                                          const Text(
-                                                            " : ",
-                                                            style: TextStyle(
-                                                              fontSize: 16,
-                                                              fontWeight: FontWeight.w600,
-                                                              fontFamily: 'Poppins',
-                                                              color: Colors.black,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
                                                     SvgPicture.asset(
-                                                      ImageConstant.reminderClock,
-
+                                                      ImageConstant
+                                                          .actionDetailsMark, // Replace with your location SVG asset
                                                     ),
-                                                  ],
-                                                ),
-
-                                                const SizedBox(height: 10),
-
-                                                // Date row
-                                                Row(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
+                                                    const SizedBox(width: 10),
                                                     const Text(
-                                                      "Date  : ",
+                                                      "Location",
                                                       style: TextStyle(
                                                         fontSize: 16,
-                                                        fontWeight: FontWeight.w600,
+                                                        fontWeight:
+                                                            FontWeight.w600,
                                                         fontFamily: 'Poppins',
                                                         color: Colors.black,
                                                       ),
                                                     ),
-                                                    Expanded(
-                                                      child: Text(
-                                                        mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.reminder_startdate != null &&
-                                                            mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.reminder_enddate != null
-                                                            ? "${unixTimestampToDate(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.reminder_startdate!)} to ${unixTimestampToDate(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.reminder_enddate!)}"
-                                                            : "",
-                                                        style: const TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight: FontWeight.w400,
-                                                          fontFamily: 'Poppins',
-                                                          color: Colors.black,
-                                                        ),
-                                                      ),
+                                                    Text(
+                                                      " : ",
+                                                      style: CustomTextStyles
+                                                          .blackText16000000W700(),
                                                     ),
                                                   ],
                                                 ),
-
-                                                const SizedBox(height: 5),
-
-                                                // Time row
+                                                const SizedBox(height: 8),
                                                 Row(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
-                                                    const Text(
-                                                      "Time  : ",
-                                                      style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight: FontWeight.w600,
-                                                        fontFamily: 'Poppins',
-                                                        color: Colors.black,
-                                                      ),
+                                                    Icon(
+                                                      Icons.location_on,
+                                                      color: ColorsContent
+                                                          .newThemeColor,
+                                                      size: 20,
                                                     ),
+                                                    const SizedBox(width: 8),
                                                     Expanded(
-                                                      child: Text(
-                                                        mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.from_time != null &&
-                                                            mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.to_time != null
-                                                            ? "${formatTimeOfDay(stringToTimeOfDay(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.from_time!)!)} to ${formatTimeOfDay(stringToTimeOfDay(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.to_time!)!)}"
-                                                            : "",
-                                                        style: const TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight: FontWeight.w400,
-                                                          fontFamily: 'Poppins',
-                                                          color: Colors.black,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-
-                                                const SizedBox(height: 5),
-
-                                                // Repeat row
-                                                Row(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    const Text(
-                                                      "Repeat: ",
-                                                      style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight: FontWeight.w600,
-                                                        fontFamily: 'Poppins',
-                                                        color: Colors.black,
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      child: Text(
-                                                        mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.reminder_repeat ?? "",
-                                                        style: const TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight: FontWeight.w400,
-                                                          fontFamily: 'Poppins',
-                                                          color: Colors.black,
+                                                      child:
+                                                          SingleChildScrollView(
+                                                        scrollDirection:
+                                                            Axis.vertical,
+                                                        child: Text(
+                                                          mentalStrengthEditProvider
+                                                                  .actionsDetailsModel
+                                                                  ?.actions
+                                                                  ?.location
+                                                                  ?.locationAddress
+                                                                  ?.replaceAll(
+                                                                      RegExp(
+                                                                          r'[^a-zA-Z0-9, ]'),
+                                                                      '') // Remove unwanted characters
+                                                                  .replaceAll(
+                                                                      RegExp(
+                                                                          r',\s*,+'),
+                                                                      ',') // Replace multiple consecutive commas
+                                                                  .replaceAll(
+                                                                      RegExp(
+                                                                          r'^,|,$'),
+                                                                      '') // Trim leading/trailing commas
+                                                                  .trim() ??
+                                                              "",
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            fontFamily:
+                                                                'Poppins',
+                                                            color: Colors.black,
+                                                          ),
+                                                          overflow: TextOverflow
+                                                              .visible,
+                                                          maxLines: 4,
                                                         ),
                                                       ),
                                                     ),
@@ -736,27 +723,288 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                               ],
                                             ),
                                           )
+                                        : const SizedBox(),
+                                    mentalStrengthEditProvider
+                                                    .actionsDetailsModel!
+                                                    .actions!
+                                                    .actionStatus ==
+                                                "1" ||
+                                            mentalStrengthEditProvider
+                                                    .actionsDetailsModel!
+                                                    .actions!
+                                                    .reminder ==
+                                                null
+                                        ? const SizedBox()
+                                        : const SizedBox(height: 10),
+                                    Consumer<AddActionsProvider>(builder:
+                                        (context, addActionsProvider, _) {
+                                      return Column(
+                                        children: [
+                                          mentalStrengthEditProvider
+                                                          .actionsDetailsModel!
+                                                          .actions!
+                                                          .actionStatus ==
+                                                      "1" ||
+                                                  mentalStrengthEditProvider
+                                                          .actionsDetailsModel!
+                                                          .actions!
+                                                          .reminder ==
+                                                      null
+                                              ? const SizedBox()
+                                              : Container(
+                                                  padding:
+                                                      const EdgeInsets.all(10),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5),
+                                                  ),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      // Header row with SVG and "Reminder" label
+                                                      Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Expanded(
+                                                            child: Row(
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .min,
+                                                              children: [
+                                                                SvgPicture
+                                                                    .asset(
+                                                                  ImageConstant
+                                                                      .actionDetailsMark,
+                                                                ),
+                                                                const SizedBox(
+                                                                    width: 10),
+                                                                const Text(
+                                                                  "Reminder",
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        16,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    fontFamily:
+                                                                        'Poppins',
+                                                                    color: Colors
+                                                                        .black,
+                                                                  ),
+                                                                ),
+                                                                const Text(
+                                                                  " : ",
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        16,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    fontFamily:
+                                                                        'Poppins',
+                                                                    color: Colors
+                                                                        .black,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          SvgPicture.asset(
+                                                            ImageConstant
+                                                                .reminderClock,
+                                                          ),
+                                                        ],
+                                                      ),
+
+                                                      const SizedBox(
+                                                          height: 10),
+
+                                                      // Date row
+                                                      Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          const Text(
+                                                            "Date  : ",
+                                                            style: TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                              fontFamily:
+                                                                  'Poppins',
+                                                              color:
+                                                                  Colors.black,
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            child: Text(
+                                                              mentalStrengthEditProvider
+                                                                              .actionsDetailsModel
+                                                                              ?.actions
+                                                                              ?.reminder
+                                                                              ?.reminder_startdate !=
+                                                                          null &&
+                                                                      mentalStrengthEditProvider
+                                                                              .actionsDetailsModel
+                                                                              ?.actions
+                                                                              ?.reminder
+                                                                              ?.reminder_enddate !=
+                                                                          null
+                                                                  ? "${unixTimestampToDate(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.reminder_startdate!)} to ${unixTimestampToDate(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.reminder_enddate!)}"
+                                                                  : "",
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontSize: 16,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+
+                                                      const SizedBox(height: 5),
+
+                                                      // Time row
+                                                      Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          const Text(
+                                                            "Time  : ",
+                                                            style: TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                              fontFamily:
+                                                                  'Poppins',
+                                                              color:
+                                                                  Colors.black,
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            child: Text(
+                                                              mentalStrengthEditProvider
+                                                                              .actionsDetailsModel
+                                                                              ?.actions
+                                                                              ?.reminder
+                                                                              ?.from_time !=
+                                                                          null &&
+                                                                      mentalStrengthEditProvider
+                                                                              .actionsDetailsModel
+                                                                              ?.actions
+                                                                              ?.reminder
+                                                                              ?.to_time !=
+                                                                          null
+                                                                  ? "${formatTimeOfDay(stringToTimeOfDay(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.from_time!)!)} to ${formatTimeOfDay(stringToTimeOfDay(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.to_time!)!)}"
+                                                                  : "",
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontSize: 16,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+
+                                                      const SizedBox(height: 5),
+
+                                                      // Repeat row
+                                                      Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          const Text(
+                                                            "Repeat: ",
+                                                            style: TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                              fontFamily:
+                                                                  'Poppins',
+                                                              color:
+                                                                  Colors.black,
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            child: Text(
+                                                              mentalStrengthEditProvider
+                                                                      .actionsDetailsModel
+                                                                      ?.actions
+                                                                      ?.reminder
+                                                                      ?.reminder_repeat ??
+                                                                  "",
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontSize: 16,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                )
                                         ],
                                       );
                                     }),
-      
                                     const SizedBox(height: 20),
-                                    mentalStrengthEditProvider.actionsDetailsModel!.actions!.actionStatus! == "1"
+                                    mentalStrengthEditProvider
+                                                .actionsDetailsModel!
+                                                .actions!
+                                                .actionStatus! ==
+                                            "1"
                                         ? const Text(
-                                          "Completed",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'Poppins',
-                                          ),
-                                          // style: theme.textTheme.titleSmall,
-                                        )
+                                            "Completed",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'Poppins',
+                                            ),
+                                            // style: theme.textTheme.titleSmall,
+                                          )
                                         : Consumer2<AddActionsProvider,
                                                 MentalStrengthEditProvider>(
-                                            builder: (context, addActionsProvider,
-                                                mentalStrengthEditProvider, _) {
+                                            builder: (context,
+                                                addActionsProvider,
+                                                mentalStrengthEditProvider,
+                                                _) {
                                             return CustomCheckboxButton(
-                                              text: "Mark this action is completed",
+                                              text:
+                                                  "Mark this action is completed",
                                               value: isCompleted,
                                               onChange: (value) async {
                                                 customPopup(
@@ -768,13 +1016,15 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                                     await addActionsProvider
                                                         .updateActionStatusFunction(
                                                       context,
-                                                      goalId: widget.goalId.toString(),
-                                                      actionId:
-                                                      widget.action.id.toString(),
+                                                      goalId: widget.goalId
+                                                          .toString(),
+                                                      actionId: widget.action.id
+                                                          .toString(),
                                                     );
                                                     mentalStrengthEditProvider
                                                         .fetchGoalActions(
-                                                      goalId: widget.goalId.toString(),
+                                                      goalId: widget.goalId
+                                                          .toString(),
                                                     );
                                                     Navigator.of(context).pop();
                                                     Navigator.of(context).pop();
@@ -782,10 +1032,8 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                                   yes: "Yes",
                                                   title: 'Action Completed',
                                                   content:
-                                                  'Are you sure You want to mark this action as completed?',
+                                                      'Are you sure You want to mark this action as completed?',
                                                 );
-
-
                                               },
                                             );
                                           }),
@@ -806,14 +1054,17 @@ class _ActionsFullViewState extends State<ActionsFullView> {
   }
 
   /// Section Widget
-  Widget _buildUntitledOne(BuildContext context, Size size,
-      {required String category,
-      required String createDate,
-      required String achiveDate,
-      required String status,
-        required String comments,
-        required String title,
-      }) {
+  Widget _buildUntitledOne(
+    BuildContext context,
+    Size size, {
+    required String category,
+    required String createDate,
+    required String achiveDate,
+    required String status,
+    required String comments,
+    required String title,
+        required String previewLinkApi,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -827,9 +1078,12 @@ class _ActionsFullViewState extends State<ActionsFullView> {
           child: Row(
             children: [
               SvgPicture.asset(
-                ImageConstant.actionDetailsMark, // Replace with your actual asset path
+                ImageConstant
+                    .actionDetailsMark, // Replace with your actual asset path
               ),
-              const SizedBox(width: 10,),
+              const SizedBox(
+                width: 10,
+              ),
               const Text(
                 "Status : ",
                 style: TextStyle(
@@ -840,7 +1094,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                 ),
               ),
               SizedBox(
-               // color: Colors.blue,
+                // color: Colors.blue,
                 width: size.width * 0.60,
                 child: Text(
                   status == "0" ? "Active" : "DeActive",
@@ -919,11 +1173,9 @@ class _ActionsFullViewState extends State<ActionsFullView> {
             ],
           ),
         ),
-
         const SizedBox(
           height: 10,
         ),
-
         Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
@@ -989,64 +1241,142 @@ class _ActionsFullViewState extends State<ActionsFullView> {
           height: 10,
         ),
         Container(
+          width: double.infinity,
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(5),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(
-                    ImageConstant.actionDetailsMark,
-                  ),
-                  const SizedBox(width: 10),
-                  const Text(
-                    "Description",
-                    style: TextStyle(
-                      fontSize: 16.5,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'Poppins',
-                      color: Colors.black,
+          child: Builder(
+            builder: (context) {
+              final commentsText = (comments ?? "").trim();
+              final previewLink = previewLinkApi;
+
+              // 🧠 CASE 1: If description text exists
+              if (commentsText.isNotEmpty) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          ImageConstant.actionDetailsMark,
+                        ),
+                        const SizedBox(width: 10),
+                        const Text(
+                          "Description",
+                          style: TextStyle(
+                            fontSize: 16.5,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Poppins',
+                            color: Colors.black,
+                          ),
+                        ),
+                        const Text(
+                          " : ",
+                          style: TextStyle(
+                            fontSize: 16.5,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'Poppins',
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  Text(
-                    " : ",
-                    style: CustomTextStyles.blackText16000000W700(),
-                  ),
-                  if (comments.length < 25)
-                    Flexible(
+                    const SizedBox(height: 6),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: const BorderRadius.vertical(
+                          bottom: Radius.circular(5),
+                        ),
+                      ),
                       child: Text(
-                        comments,
+                        HtmlUnescape().convert(commentsText),
                         style: const TextStyle(
-                          fontSize: 18,
+                          color: Colors.black,
+                          fontSize: 16,
                           fontWeight: FontWeight.w400,
                           fontFamily: 'Poppins',
-                          color: Colors.black,
                         ),
                       ),
                     ),
-                ],
-              ),
-              if (comments.length >= 25)
-                SizedBox(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Text(
-                      comments,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Poppins',
-                        color: Colors.black,
+                  ],
+                );
+              }
+
+              // 🔗 CASE 2: If no comments, but preview link exists
+              else if (previewLink.isNotEmpty) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          ImageConstant.actionDetailsMark,
+                        ),
+                        const SizedBox(width: 10),
+                        const Text(
+                          "Description",
+                          style: TextStyle(
+                            fontSize: 16.5,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Poppins',
+                            color: Colors.black,
+                          ),
+                        ),
+                        const Text(
+                          " : ",
+                          style: TextStyle(
+                            fontSize: 16.5,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'Poppins',
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.grey.shade300,
+                          width: 1.5,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: LinkPreviewGenerator(
+                          link: previewLink,
+                          linkPreviewStyle: LinkPreviewStyle.small,
+                          showDomain: true,
+                          showTitle: true,
+                          bodyMaxLines: 1,
+                          borderRadius: 10,
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 4,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ),
-            ],
+                  ],
+                );
+              }
+
+              // ❌ CASE 3: If both are empty → show nothing
+              else {
+                return const SizedBox.shrink();
+              }
+            },
           ),
         ),
       ],
@@ -1059,7 +1389,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: List.generate(
         pageCount,
-            (index) {
+        (index) {
           return Container(
             width: 12,
             height: 12,
@@ -1071,7 +1401,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                   : ColorsContent.goalNotCompletedColorNew,
               border: Border.all(
                 color: Colors.white, // Change to your desired border color
-                width: 1.0,           // Adjust thickness as needed
+                width: 1.0, // Adjust thickness as needed
               ),
             ),
           );
@@ -1080,9 +1410,8 @@ class _ActionsFullViewState extends State<ActionsFullView> {
     );
   }
 
-
   PreferredSizeWidget buildAppBarActionView(BuildContext context, Size size,
-      {String? heading, required String id,required actionStatus}) {
+      {String? heading, required String id, required actionStatus}) {
     return CustomAppBarNumu(
       backgroundColor: ColorsContent.homeBackGroundColor,
       leadingWidth: 36,
@@ -1109,8 +1438,10 @@ class _ActionsFullViewState extends State<ActionsFullView> {
           builder: (context, mentalStrengthEditProvider, addActionsProvider,
               goalsDreamsProvider, _) {
             return PopupMenuButton<String>(
-              icon: Icon(Icons.more_vert, color: ColorsContent.newThemeColor), // 👈 Vertical dots icon
-              padding: EdgeInsets.zero, // Removes extra padding
+              icon: Icon(Icons.more_vert, color: ColorsContent.newThemeColor),
+              // 👈 Vertical dots icon
+              padding: EdgeInsets.zero,
+              // Removes extra padding
               constraints: const BoxConstraints(
                 minWidth: 100, // 👈 Reduce width here
                 maxWidth: 100,
@@ -1118,54 +1449,52 @@ class _ActionsFullViewState extends State<ActionsFullView> {
               onSelected: (value) {},
               itemBuilder: (BuildContext context) {
                 return [
-                  if(actionStatus == "0")
-                  PopupMenuItem<String>(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => EditActionScreen(
-                            actionsDetailsModel: mentalStrengthEditProvider.actionsDetailsModel!,
+                  if (actionStatus == "0")
+                    PopupMenuItem<String>(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => EditActionScreen(
+                              actionsDetailsModel: mentalStrengthEditProvider
+                                  .actionsDetailsModel!,
+                            ),
                           ),
+                        );
+                      },
+                      value: 'Edit',
+                      height: 20, // 👈 Reduce height here
+                      child: Center(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.mode_edit_outline_outlined,
+                                color: ColorsContent.newThemeColor),
+                            const SizedBox(width: 5),
+                            const Padding(
+                              padding: EdgeInsets.only(right: 12.0),
+                              child: Text('Edit',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'Roboto',
+                                    color: Colors.black,
+                                  )),
+                            ),
+                          ],
                         ),
-                      );
-                    },
-                    value: 'Edit',
-                    height: 20, // 👈 Reduce height here
-                    child:
-                    Center(
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.mode_edit_outline_outlined, color: ColorsContent.newThemeColor),
-                          const SizedBox(width: 5),
-                          const Padding(
-                            padding: EdgeInsets.only(right: 12.0),
-                            child: Text('Edit', style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: 'Roboto',
-                              color:  Colors.black,
-                            )),
-                          ),
-                        ],
                       ),
                     ),
-                  ),
-                  if(actionStatus == "0")
-                  const PopupMenuDivider(), // 👈 This adds the divider
+                  if (actionStatus == "0")
+                    const PopupMenuDivider(), // 👈 This adds the divider
                   PopupMenuItem<String>(
                     onTap: () async {
                       customPopup(
                         context: context,
                         onPressedDelete: () async {
                           await addActionsProvider.deleteActionFunction(
-                            deleteId: id,
-                            context: context
-                          );
+                              deleteId: id, context: context);
                           goalsDreamsProvider.fetchGoalsAndDreams(
-                            initial: true,
-                            context: context
-                          );
+                              initial: true, context: context);
                           Navigator.of(context).pop();
 
                           Navigator.of(context).pop();
@@ -1174,23 +1503,22 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                         title: 'Confirm Delete',
                         content: 'Are you sure You want to Delete this Action?',
                       );
-
                     },
                     height: 20, // 👈 Reduce height here
                     value: 'Delete',
-                    child:
-                    Center(
+                    child: Center(
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.delete_outline, color: ColorsContent.newThemeColor),
+                          Icon(Icons.delete_outline,
+                              color: ColorsContent.newThemeColor),
                           const SizedBox(width: 5),
                           const Text('Delete',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                                 fontFamily: 'Roboto',
-                                color:  Colors.black,
+                                color: Colors.black,
                               )),
                         ],
                       ),
@@ -1204,13 +1532,15 @@ class _ActionsFullViewState extends State<ActionsFullView> {
       ],
     );
   }
+
   String unixTimestampToDate(String timestamp) {
     try {
       // Convert the timestamp to an integer
       int unixTimestamp = int.parse(timestamp);
 
       // Create a DateTime object from the Unix timestamp (assumes timestamp is in seconds)
-      DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(unixTimestamp * 1000);
+      DateTime dateTime =
+          DateTime.fromMillisecondsSinceEpoch(unixTimestamp * 1000);
 
       // Format the DateTime object into the desired string format
       final DateFormat formatter = DateFormat('dd MMM yyyy');
@@ -1222,6 +1552,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
       return "Invalid date";
     }
   }
+
   TimeOfDay? stringToTimeOfDay(String time) {
     try {
       // Trim and normalize to uppercase
@@ -1273,8 +1604,10 @@ class _ActionsFullViewState extends State<ActionsFullView> {
   String formatTimeOfDay(TimeOfDay time) {
     final hour = time.hourOfPeriod; // Hour within the 12-hour range
     final period = time.period == DayPeriod.am ? "AM" : "PM";
-    final formattedHour = (hour == 0 ? 12 : hour).toString(); // Adjust for midnight and noon
-    final formattedMinute = time.minute.toString().padLeft(2, '0'); // Ensure two-digit minute
+    final formattedHour =
+        (hour == 0 ? 12 : hour).toString(); // Adjust for midnight and noon
+    final formattedMinute =
+        time.minute.toString().padLeft(2, '0'); // Ensure two-digit minute
 
     return "$formattedHour:$formattedMinute $period";
   }

@@ -55,6 +55,7 @@ class Journals {
   List<Action>? action;
   Location? location;
   List<JournalMedia>? journalMedia;
+  String? preview_link;
 
   Journals({
     this.userId,
@@ -72,6 +73,7 @@ class Journals {
     this.action,
     this.location,
     this.journalMedia,
+    this.preview_link,
   });
 
   factory Journals.fromJson(Map<String, dynamic> json) => Journals(
@@ -97,6 +99,7 @@ class Journals {
             ? []
             : List<JournalMedia>.from(
                 json["journal_media"]!.map((x) => JournalMedia.fromJson(x))),
+    preview_link: json["preview_link"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -119,6 +122,7 @@ class Journals {
         "journal_media": journalMedia == null
             ? []
             : List<dynamic>.from(journalMedia!.map((x) => x.toJson())),
+    "preview_link":preview_link
       };
 }
 

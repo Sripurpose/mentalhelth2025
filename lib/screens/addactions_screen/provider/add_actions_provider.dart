@@ -2157,7 +2157,9 @@ var logger = Logger();
         required String goalId,
         List<String>? mediaThumbs, // ✅ optional param
         String? isReminder,
-      }) async {
+        required List<String> editDetectedLinks, // ✅ add this param
+      })
+  async {
     try {
       // ✅ Keep only the last .mp3 file, preserve other media
       int lastMp3Index = mediaName.lastIndexWhere((file) => file.toLowerCase().endsWith('.mp3'));
@@ -2216,6 +2218,11 @@ var logger = Logger();
           'goal_id': goalId,
           'is_reminder': isReminder ?? '',
         };
+      }
+
+      // ✅ Add preview_link if editDetectedLinks is not empty
+      if (editDetectedLinks.isNotEmpty) {
+        body['preview_link'] = editDetectedLinks.first;
       }
 
       // Add media files
@@ -2486,7 +2493,9 @@ var logger = Logger();
         required String goalId,
         List<String>? mediaThumbs, // ✅ optional param
         String? isReminder,
-      }) async {
+        required List<String> editDetectedLinks, // ✅ add this param
+      })
+  async {
     try {
       // ✅ Keep only the last .mp3 file, keep all other files untouched
       int lastMp3Index = mediaName.lastIndexWhere((file) => file.toLowerCase().endsWith('.mp3'));
@@ -2548,6 +2557,11 @@ var logger = Logger();
           'gem_id': actionId,
           'is_reminder': isReminder ?? '',
         };
+      }
+
+      // ✅ Add preview_link if editDetectedLinks is not empty
+      if (editDetectedLinks.isNotEmpty) {
+        body['preview_link'] = editDetectedLinks.first;
       }
 
       // ✅ Add media
@@ -2992,7 +3006,14 @@ var logger = Logger();
     r'(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-&?=%.]+',
     caseSensitive: false,
   );
+  List<String> editDetectedLinks = [];
+  RegExp editUrlRegex = RegExp(
+    r'(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-&?=%.]+',
+    caseSensitive: false,
+  );
 
+  bool editBackendLinkAdded = false; // <- new flag
+  bool hasUserClearedLink = false;
 
 }
 
