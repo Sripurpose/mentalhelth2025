@@ -37,9 +37,11 @@ import 'package:video_compress/video_compress.dart';
 
 import '../../../utils/core/constent.dart';
 import '../../../widgets/video_player.dart';
+import '../../auth/sign_in/InAppBrowserScreen.dart';
 import '../../goals_dreams_page/model/actions_details_model.dart';
 import '../../maintenence_screen/maintenence_screen.dart';
 import '../../token_expiry/token_expiry.dart';
+import '../chat_gpt_screen.dart';
 
 class MentalStrengthEditProvider extends ChangeNotifier {
   var logger = Logger();
@@ -2127,7 +2129,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
           body['media_thumb[$i]'] = mediaThumbs[i];
         }
       }
-logger.i("body$body");
+      logger.i("body$body");
 
       // ✅ Add action ID list
       for (int i = 0; i < actionIdList.length; i++) {
@@ -2161,29 +2163,70 @@ logger.i("body$body");
         });
       }
 
+      // ✅ Handle 200/201 - Extract link and open immediately
       if (response.statusCode == 200 || response.statusCode == 201) {
-        clearAllValuesInSaveTime();
-        showCustomSnackBar(
-          context: context,
-          message: json.decode(response.body)["text"],
-        );
-        saveJournalLoading = false;
-        notifyListeners();
-        return true;
+        try {
+          final responseData = json.decode(response.body);
+
+          clearAllValuesInSaveTime();
+
+          // Show success message
+          showCustomSnackBar(
+            context: context,
+            message: responseData["text"] ?? "Journal saved successfully",
+          );
+
+          saveJournalLoading = false;
+          notifyListeners();
+
+          // ✅ Extract link from response and open it immediately
+          String? linkUrl = responseData["link"];
+          if (linkUrl != null && linkUrl.isNotEmpty) {
+            logger.i("Opening link: $linkUrl");
+            _launchInAppWithBrowserOptions(Uri.parse(linkUrl),context);
+          }
+
+          return true;
+        } catch (e) {
+          logger.e("Error parsing response: $e");
+          saveJournalLoading = false;
+          notifyListeners();
+          return false;
+        }
       } else {
-        showCustomSnackBar(
-          context: context,
-          message: json.decode(response.body)["text"],
-        );
+        try {
+          showCustomSnackBar(
+            context: context,
+            message: json.decode(response.body)["text"],
+          );
+        } catch (e) {
+          showCustomSnackBar(
+            context: context,
+            message: "An error occurred",
+          );
+        }
         saveJournalLoading = false;
         notifyListeners();
         return false;
       }
     } catch (error) {
+      logger.e("Error in saveJournalsFunction: $error");
       saveJournalLoading = false;
       notifyListeners();
       return false;
     }
+  }
+
+  // ✅ Add this method to open URL in-app
+  Future<void> _launchInAppWithBrowserOptions(Uri url,BuildContext context) async {
+    logger.i("Launching URL in custom in-app browser: $url");
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => ChatGptScreen(initialUrl: url),
+      ),
+    );
   }
 
 
@@ -2268,13 +2311,13 @@ logger.i("body$body");
         },
         body: body,
       );
+
       if(response.statusCode == 401){
         TokenManager.setTokenStatus(true);
-        //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
+
       if(response.statusCode == 403){
         TokenManager.setTokenStatus(true);
-        //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
       }
       else if(response.statusCode == 503){
         Future.delayed(Duration.zero, () {
@@ -2288,27 +2331,54 @@ logger.i("body$body");
           );
         });
       }
+
+      // ✅ Handle 200/201 - Extract link and open immediately
       if (response.statusCode == 200 || response.statusCode == 201) {
-        clearAllValuesInSaveTime();
-        showCustomSnackBar(
-          context: context,
-          message: "Journal updated Successfully",
-        );
-        // showCustomSnackBar(
-        //   context: context,
-        //   message: json.decode(response.body)["text"],
-        // );
-        saveJournalLoading = false;
-        notifyListeners();
-        return true;
+        try {
+          final responseData = json.decode(response.body);
+
+          clearAllValuesInSaveTime();
+
+          showCustomSnackBar(
+            context: context,
+            message: "Journal updated Successfully",
+          );
+
+          saveJournalLoading = false;
+          notifyListeners();
+
+          // ✅ Extract link from response and open it immediately
+          String? linkUrl = responseData["link"];
+          if (linkUrl != null && linkUrl.isNotEmpty) {
+            logger.i("Opening link: $linkUrl");
+            _launchInAppWithBrowserOptions(Uri.parse(linkUrl),context);
+          }
+
+          return true;
+        } catch (e) {
+          logger.e("Error parsing response: $e");
+          saveJournalLoading = false;
+          notifyListeners();
+          return false;
+        }
       } else {
-        showCustomSnackBar(
-            context: context, message: json.decode(response.body)["text"]);
+        try {
+          showCustomSnackBar(
+              context: context,
+              message: json.decode(response.body)["text"]
+          );
+        } catch (e) {
+          showCustomSnackBar(
+              context: context,
+              message: "An error occurred"
+          );
+        }
         saveJournalLoading = false;
         notifyListeners();
         return false;
       }
     } catch (error) {
+      logger.e("Error in updateJournalLoading: $error");
       saveJournalLoading = false;
       notifyListeners();
       return false;
