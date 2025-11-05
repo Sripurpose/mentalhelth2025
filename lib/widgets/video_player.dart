@@ -1,10 +1,13 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:video_player/video_player.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
+
+import '../utils/core/image_constant.dart';
 
 ///build mental///
 class VideoPlayerWidgetBuildMental extends StatefulWidget {
@@ -213,17 +216,10 @@ class _VideoPlayerWidgetViewAndAlreadyBuildMentalState extends State<VideoPlayer
                     : _controller.play();
               });
             },
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.5), // dark background
-                shape: BoxShape.circle,
-              ),
-              padding: const EdgeInsets.all(12),
-              child: Icon(
-                _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-                color: Colors.white,
-                size: 30,
-              ),
+            child: SvgPicture.asset(
+              _controller.value.isPlaying
+                  ? ImageConstant.gridVideoPauseIconNumu
+                  : ImageConstant.gridVideoPlayIconNumu,
             ),
           ),
         )
@@ -342,17 +338,10 @@ class _VideoPlayerWidgetViewAndAlreadyBuildMentalProgressBarState
                       });
                     },
                     child: Center(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.5), // dark background
-                          shape: BoxShape.circle,
-                        ),
-                        padding: const EdgeInsets.all(12),
-                        child: Icon(
-                          _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-                          color: Colors.white,
-                          size: 30,
-                        ),
+                      child: SvgPicture.asset(
+                        _controller.value.isPlaying
+                            ? ImageConstant.gridVideoPauseIconNumu
+                            : ImageConstant.gridVideoPlayIconNumu,
                       ),
                     ),
                   ),

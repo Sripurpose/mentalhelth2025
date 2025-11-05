@@ -781,6 +781,8 @@ class _AddActionMentalStrengthBottomSheetState
   Widget _buildDescriptionEditText(BuildContext context) {
     return Consumer<AddActionsProvider>(
       builder: (context, addActionsProvider, _) {
+        final hasLink = addActionsProvider.detectedLinks.isNotEmpty;
+
         return Container(
           decoration: BoxDecoration(
             color: Colors.white,
@@ -791,54 +793,60 @@ class _AddActionMentalStrengthBottomSheetState
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 📝 Show text field only if no link preview
-              if (addActionsProvider.detectedLinks.isEmpty)
-                CustomTextFormFieldGoalOrActionDesc(
-                  controller: addActionsProvider.descriptionEditTextController,
-                  hintText: _actionDescFocusNode.hasFocus
-                      ? ''
-                      : "Action Description",
-                  hintStyle: CustomTextStyles.bodySmallGray700,
-                  textInputAction: TextInputAction.newline,
-                  textInputType: TextInputType.multiline,
-                  maxLines: 4,
-                  focusNode: _actionDescFocusNode,
-                  borderDecoration: InputBorder.none,
-                  onTap: () => setState(() {}),
-                  onChanged: (value) {
-                    // Extract URLs from text
-                    final matches = addActionsProvider.urlRegex
-                        .allMatches(value)
-                        .map((match) => match.group(0)!)
-                        .toList();
+              // 📝 Always show text field (even if link detected)
+              CustomTextFormFieldGoalOrActionDesc(
+                controller: addActionsProvider.descriptionEditTextController,
+                hintText:
+                _actionDescFocusNode.hasFocus ? '' : "Action Description",
+                hintStyle: CustomTextStyles.bodySmallGray700,
+                textInputAction: TextInputAction.newline,
+                textInputType: TextInputType.multiline,
+                maxLines: 4,
+                focusNode: _actionDescFocusNode,
+                borderDecoration: InputBorder.none,
+                onTap: () => setState(() {}),
+                onEditingComplete: () {
+                  _actionDescFocusNode.unfocus();
+                  setState(() {});
+                },
+                onChanged: (value) {
+                  // 🔍 Detect URLs dynamically
+                  final matches = addActionsProvider.urlRegex
+                      .allMatches(value)
+                      .map((match) => match.group(0)!)
+                      .toList();
 
-                    // ✅ If a link exists, hide text and show preview
-                    if (matches.isNotEmpty) {
-                      setState(() {
-                        addActionsProvider.detectedLinks = matches;
-                        addActionsProvider.descriptionEditTextController.clear();
-                      });
-                    }
-                  },
-                  onEditingComplete: () {
-                    _actionDescFocusNode.unfocus();
-                    setState(() {});
-                  },
-                ),
+                  // ✅ If found any new link, show preview
+                  if (matches.isNotEmpty) {
+                    setState(() {
+                      addActionsProvider.detectedLinks = matches;
+                      // Remove pasted URL text from field
+                      addActionsProvider.descriptionEditTextController.text =
+                          value.replaceAll(addActionsProvider.urlRegex, '').trimRight();
+                      addActionsProvider.descriptionEditTextController.selection =
+                          TextSelection.fromPosition(
+                            TextPosition(
+                                offset: addActionsProvider
+                                    .descriptionEditTextController.text.length),
+                          );
+                    });
+                  }
+                },
+              ),
 
-              // 🔗 Show link preview if link detected
-              if (addActionsProvider.detectedLinks.isNotEmpty)
+              // 🔗 Show link preview below text
+              if (hasLink)
                 ...addActionsProvider.detectedLinks.map((link) {
                   return Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
+                    padding: const EdgeInsets.only(top: 0.0),
                     child: Stack(
                       alignment: Alignment.topRight,
                       children: [
                         Container(
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color: Colors.grey.shade300, // ✅ Border color
-                              width: 1.5, // ✅ Border width
+                              color: Colors.grey.shade300,
+                              width: 1.5,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -861,7 +869,8 @@ class _AddActionMentalStrengthBottomSheetState
                             ),
                           ),
                         ),
-                        // ❌ Close (delete) icon
+
+                        // ❌ Close icon — remove preview
                         Positioned(
                           top: 6,
                           right: 6,
@@ -869,8 +878,6 @@ class _AddActionMentalStrengthBottomSheetState
                             onTap: () {
                               setState(() {
                                 addActionsProvider.detectedLinks.clear();
-                                addActionsProvider.descriptionEditTextController
-                                    .clear();
                               });
                             },
                             child: Container(
@@ -883,7 +890,6 @@ class _AddActionMentalStrengthBottomSheetState
                                 Icons.close,
                                 color: Colors.white,
                                 size: 16,
-                                //fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),

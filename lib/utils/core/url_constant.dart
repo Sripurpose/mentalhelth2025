@@ -38,6 +38,10 @@ class UrlConstant {
     return "${baseUrl}journals/$page";
   }
 
+  static String journalsUrlGrid({required String page}) {
+    return "${baseUrl}listjournals/";
+  }
+
   static String deleteJournal({required String journalId}) {
     return "${baseUrl}journal/$journalId";
   }

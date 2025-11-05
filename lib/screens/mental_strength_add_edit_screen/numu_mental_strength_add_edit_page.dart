@@ -1385,64 +1385,71 @@ class _NumuMentalStrengthAddEditPageState
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 📝 Text field
-              if (mentalStrengthEditProvider.detectedLinks.isEmpty)
-                CustomTextFormFieldNumu(
-                  textAlign: TextAlign.start,
-                  controller: mentalStrengthEditProvider
-                      .descriptionEditTextController,
-                  hintText: _descriptionFocusNode.hasFocus
-                      ? ''
-                      : "Start writing...",
-                  hintStyle: TextStyle(
-                    color: ColorsContent.hintColor,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'OpenSans',
-                  ),
-                  textInputAction: TextInputAction.newline,
-                  textInputType: TextInputType.multiline,
-                  maxLines: 4,
-                  focusNode: _descriptionFocusNode,
-                  borderDecoration: InputBorder.none,
-                  onChanged: (value) {
-                    // Detect URLs
-                    final matches = mentalStrengthEditProvider.urlRegex
-                        .allMatches(value)
-                        .map((match) => match.group(0)!)
-                        .toList();
-
-                    // ✅ If text contains a link, show preview instead of text
-                    if (matches.isNotEmpty) {
-                      setState(() {
-                        mentalStrengthEditProvider.detectedLinks = matches;
-                        // Clear the text field (hide text)
-                        mentalStrengthEditProvider
-                            .descriptionEditTextController
-                            .clear();
-                      });
-                    }
-                  },
-                  onTap: () => setState(() {}),
-                  onEditingComplete: () {
-                    _descriptionFocusNode.unfocus();
-                    setState(() {});
-                  },
+              // 📝 Text field — always visible
+              CustomTextFormFieldNumu(
+                textAlign: TextAlign.start,
+                controller:
+                mentalStrengthEditProvider.descriptionEditTextController,
+                hintText:
+                _descriptionFocusNode.hasFocus ? '' : "Start writing...",
+                hintStyle: TextStyle(
+                  color: ColorsContent.hintColor,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'OpenSans',
                 ),
+                textInputAction: TextInputAction.newline,
+                textInputType: TextInputType.multiline,
+                maxLines: 4,
+                focusNode: _descriptionFocusNode,
+                borderDecoration: InputBorder.none,
+                onChanged: (value) {
+                  final regex = mentalStrengthEditProvider.urlRegex;
+                  final matches = regex.allMatches(value).map((m) => m.group(0)!).toList();
 
-              // 🔗 Link preview (only if a link is detected)
+                  // 🧩 Case 1: Found new link(s)
+                  if (matches.isNotEmpty) {
+                    final updatedText = value.replaceAll(regex, '').trimRight();
+
+                    setState(() {
+                      // Append new links only if not already present
+                      for (var link in matches) {
+                        if (!mentalStrengthEditProvider.detectedLinks.contains(link)) {
+                          mentalStrengthEditProvider.detectedLinks.add(link);
+                        }
+                      }
+
+                      // Remove the link text from the field
+                      mentalStrengthEditProvider.descriptionEditTextController.text = updatedText;
+                      mentalStrengthEditProvider.descriptionEditTextController.selection =
+                          TextSelection.fromPosition(
+                            TextPosition(offset: updatedText.length),
+                          );
+                    });
+                  }
+                  // 🧩 Case 2: No new link found → do nothing, keep existing previews
+                },
+
+                onTap: () => setState(() {}),
+                onEditingComplete: () {
+                  _descriptionFocusNode.unfocus();
+                  setState(() {});
+                },
+              ),
+
+              // 🔗 Show link previews (not link text)
               if (mentalStrengthEditProvider.detectedLinks.isNotEmpty)
                 ...mentalStrengthEditProvider.detectedLinks.map((link) {
                   return Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
+                    padding: const EdgeInsets.only(bottom: 0.0),
                     child: Stack(
                       alignment: Alignment.topRight,
                       children: [
                         Container(
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color: Colors.grey.shade300, // ✅ Border color
-                              width: 1.5, // ✅ Border width
+                              color: Colors.grey.shade300,
+                              width: 1.5,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -1466,7 +1473,7 @@ class _NumuMentalStrengthAddEditPageState
                           ),
                         ),
 
-                        // ❌ Close icon
+                        // ❌ Remove link preview
                         Positioned(
                           top: 6,
                           right: 6,
@@ -1474,9 +1481,6 @@ class _NumuMentalStrengthAddEditPageState
                             onTap: () {
                               setState(() {
                                 mentalStrengthEditProvider.detectedLinks.clear();
-                                mentalStrengthEditProvider
-                                    .descriptionEditTextController
-                                    .clear();
                               });
                             },
                             child: Container(
@@ -1489,7 +1493,6 @@ class _NumuMentalStrengthAddEditPageState
                                 Icons.close,
                                 color: Colors.white,
                                 size: 16,
-                               // fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
@@ -1504,6 +1507,7 @@ class _NumuMentalStrengthAddEditPageState
       },
     );
   }
+
 
 
 

@@ -2296,8 +2296,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
       BuildContext context,
       MentalStrengthEditProvider provider,
       HomeProvider homeProvider,
-      )
-  {
+      ) {
     final journal = homeProvider.journalDetails?.journals;
     final previewLink = journal?.preview_link?.trim() ?? "";
 
@@ -2308,127 +2307,140 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
       provider.editDetectedLinks = [previewLink];
     }
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade300),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // 📝 Text field shown only when no preview
-          if (provider.editDetectedLinks.isEmpty)
-            CustomTextFormFieldNumu(
-              controller: provider.descriptionEditTextController,
-              hintText: "Description",
-              hintStyle: CustomTextStyles.bodySmallGray700,
-              textInputAction: TextInputAction.newline,
-              textInputType: TextInputType.multiline,
-              maxLines: 4,
-              focusNode: _descriptionFocusNode,
-              borderDecoration: InputBorder.none,
-              textAlign: TextAlign.start,
-              onTap: () => provider.notifyListeners(),
-              onEditingComplete: () {
-                _descriptionFocusNode.unfocus();
-                provider.notifyListeners();
-              },
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(
-                  RegExp(r'[\u0000-\uFFFF]'),
-                ),
-              ],
-              onChanged: (text) {
-                // ✅ Detect new link
-                final matches = provider.editUrlRegex
-                    .allMatches(text)
-                    .map((m) => m.group(0)!)
-                    .toList();
+    return StatefulBuilder(
+      builder: (context, setState) {
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.grey.shade300),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 📝 Text field — always visible
+              CustomTextFormFieldNumu(
+                controller: provider.descriptionEditTextController,
+                hintText: "Start writing...",
+                hintStyle: CustomTextStyles.bodySmallGray700,
+                textInputAction: TextInputAction.newline,
+                textInputType: TextInputType.multiline,
+                maxLines: 4,
+                focusNode: _descriptionFocusNode,
+                borderDecoration: InputBorder.none,
+                textAlign: TextAlign.start,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[\u0000-\uFFFF]')),
+                ],
+                onChanged: (value) {
+                  final regex = provider.editUrlRegex;
+                  final matches =
+                  regex.allMatches(value).map((m) => m.group(0)!).toList();
 
-                if (matches.isNotEmpty) {
-                  provider.editDetectedLinks = [matches.first];
-                  provider.hasUserClearedLink = false;
-                  provider.descriptionEditTextController.clear();
-                  provider.notifyListeners(); // 🔔 refresh preview
-                }
-              },
-            ),
+                  // 🧩 If new link found, extract & show preview
+                  if (matches.isNotEmpty) {
+                    final updatedText = value.replaceAll(regex, '').trimRight();
 
-          // 🔗 Link preview (either backend or user-pasted)
-          if (provider.editDetectedLinks.isNotEmpty)
-            ...provider.editDetectedLinks.map((link) {
-              return Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Stack(
-                  alignment: Alignment.topRight,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.grey.shade300,
-                          width: 1.5,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: LinkPreviewGenerator(
-                          link: link,
-                          linkPreviewStyle: LinkPreviewStyle.small,
-                          showDomain: true,
-                          showTitle: true,
-                          bodyMaxLines: 1,
-                          borderRadius: 10,
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.black12,
-                              blurRadius: 4,
-                              offset: Offset(0, 2),
+                    setState(() {
+                      for (var link in matches) {
+                        if (!provider.editDetectedLinks.contains(link)) {
+                          provider.editDetectedLinks.add(link);
+                        }
+                      }
+
+                      // ✅ Keep only normal text (remove link text)
+                      provider.descriptionEditTextController.text = updatedText;
+                      provider.descriptionEditTextController.selection =
+                          TextSelection.fromPosition(
+                            TextPosition(offset: updatedText.length),
+                          );
+
+                      provider.hasUserClearedLink = false;
+                    });
+                  }
+                  // 🚫 Do nothing if no new links — keep previews
+                },
+                onTap: () => setState(() {}),
+                onEditingComplete: () {
+                  _descriptionFocusNode.unfocus();
+                  setState(() {});
+                },
+              ),
+
+              // 🔗 Link previews — shown below text
+              if (provider.editDetectedLinks.isNotEmpty)
+                ...provider.editDetectedLinks.map((link) {
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 0.0),
+                    child: Stack(
+                      alignment: Alignment.topRight,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.grey.shade300,
+                              width: 1.2,
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-
-                    // ❌ Close icon - FIXED
-                    Positioned(
-                      top: 6,
-                      right: 6,
-                      child: GestureDetector(
-                        onTap: () {
-                          logger.i(
-                              "provider.editDetectedLinks before clear: ${provider.editDetectedLinks}");
-
-                          // ✅ Mark that user cleared the link
-                          provider.hasUserClearedLink = true;
-                          provider.editDetectedLinks = [];
-                          provider.descriptionEditTextController.clear();
-                          provider.notifyListeners();
-                        },
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.black54,
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          padding: const EdgeInsets.all(4),
-                          child: const Icon(
-                            Icons.close,
-                            color: Colors.white,
-                            size: 16,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: LinkPreviewGenerator(
+                              link: link,
+                              linkPreviewStyle: LinkPreviewStyle.small,
+                              showDomain: true,
+                              showTitle: true,
+                              bodyMaxLines: 1,
+                              borderRadius: 10,
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 4,
+                                  offset: Offset(0, 2),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
+
+                        // ❌ Close button (removes only that one preview)
+                        Positioned(
+                          top: 6,
+                          right: 6,
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                provider.editDetectedLinks.remove(link);
+                                provider.hasUserClearedLink =
+                                    provider.editDetectedLinks.isEmpty;
+                              });
+                            },
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.black54,
+                              ),
+                              padding: const EdgeInsets.all(4),
+                              child: const Icon(
+                                Icons.close,
+                                color: Colors.white,
+                                size: 16,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              );
-            }).toList(),
-        ],
-      ),
+                  );
+                }).toList(),
+            ],
+          ),
+        );
+      },
     );
   }
+
 
 
 

@@ -1717,138 +1717,150 @@ class _EditActionScreenState extends State<EditActionScreen> {
   /// Section Widget
   Widget _buildDescriptionEditText(BuildContext context) {
     return Consumer<AddActionsProvider>(
-        builder: (context, addActionsProvider, _) {
-          final previewLink = widget.actionsDetailsModel!.actions!.preview_link.toString().trim() ?? "";
+      builder: (context, addActionsProvider, _) {
+        final previewLink =
+        widget.actionsDetailsModel!.actions!.preview_link.toString().trim();
 
-          // ✅ Initialize backend link ONLY on first load
-          if (previewLink.isNotEmpty &&
-              addActionsProvider.editDetectedLinks.isEmpty &&
-              !addActionsProvider.hasUserClearedLink) {
-            addActionsProvider.editDetectedLinks = [previewLink];
-          }
+        // ✅ Initialize backend link preview on first load
+        if (previewLink.isNotEmpty &&
+            addActionsProvider.editDetectedLinks.isEmpty &&
+            !addActionsProvider.hasUserClearedLink) {
+          addActionsProvider.editDetectedLinks = [previewLink];
+        }
 
-          return Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.grey.shade300),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // 📝 Text field shown only when no preview
-                if (addActionsProvider.editDetectedLinks.isEmpty)
-                  CustomTextFormFieldNumu(
-                    controller: addActionsProvider.descriptionEditTextController,
-                    hintText: _descriptionFocusNode.hasFocus ? '' : "Description",
-                    hintStyle: CustomTextStyles.bodySmallGray700,
-                    textInputAction: TextInputAction.newline,
-                    textInputType: TextInputType.multiline,
-                    maxLines: 4,
-                    focusNode: _descriptionFocusNode,
-                    borderDecoration: InputBorder.none,
-                    textAlign: TextAlign.start,
-                    onTap: () => setState(() {}),
-                    onEditingComplete: () {
-                      _descriptionFocusNode.unfocus();
-                      setState(() {});
-                    },
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(
-                        RegExp(r'[\u0000-\uFFFF]'),
-                      ),
-                    ],
-                    onChanged: (text) {
-                      // ✅ Detect new link
-                      final matches = addActionsProvider.editUrlRegex
-                          .allMatches(text)
-                          .map((m) => m.group(0)!)
-                          .toList();
-
-                      if (matches.isNotEmpty) {
-                        addActionsProvider.editDetectedLinks = [matches.first];
-                        addActionsProvider.hasUserClearedLink = false;
-                        addActionsProvider.descriptionEditTextController.clear();
-                        setState(() {});
-                      }
-                    },
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.grey.shade300),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 📝 Always show the text field (for normal text)
+              CustomTextFormFieldNumu(
+                controller: addActionsProvider.descriptionEditTextController,
+                hintText:
+                _descriptionFocusNode.hasFocus ? '' : "Description",
+                hintStyle: CustomTextStyles.bodySmallGray700,
+                textInputAction: TextInputAction.newline,
+                textInputType: TextInputType.multiline,
+                maxLines: 4,
+                focusNode: _descriptionFocusNode,
+                borderDecoration: InputBorder.none,
+                textAlign: TextAlign.start,
+                onTap: () => setState(() {}),
+                onEditingComplete: () {
+                  _descriptionFocusNode.unfocus();
+                  setState(() {});
+                },
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(
+                    RegExp(r'[\u0000-\uFFFF]'),
                   ),
+                ],
+                onChanged: (text) {
+                  // ✅ Detect link (if any)
+                  final matches = addActionsProvider.editUrlRegex
+                      .allMatches(text)
+                      .map((m) => m.group(0)!)
+                      .toList();
 
-                // 🔗 Link preview (either backend or user-pasted)
-                if (addActionsProvider.editDetectedLinks.isNotEmpty)
-                  ...addActionsProvider.editDetectedLinks.map((link) {
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Stack(
-                        alignment: Alignment.topRight,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.grey.shade300,
-                                width: 1.5,
-                              ),
-                              borderRadius: BorderRadius.circular(10),
+                  if (matches.isNotEmpty) {
+                    final link = matches.first;
+                    // ✅ Store link, but keep normal text
+                    addActionsProvider.editDetectedLinks = [link];
+                    addActionsProvider.hasUserClearedLink = false;
+
+                    // ✅ Remove only the link text from the controller
+                    final newText =
+                    text.replaceAll(RegExp(RegExp.escape(link)), "").trim();
+                    addActionsProvider.descriptionEditTextController.text =
+                        newText;
+                    addActionsProvider.descriptionEditTextController.selection =
+                        TextSelection.fromPosition(
+                          TextPosition(
+                              offset:
+                              addActionsProvider.descriptionEditTextController.text
+                                  .length),
+                        );
+
+                    setState(() {});
+                  }
+                },
+              ),
+
+              // 🔗 Show preview (from backend or newly detected link)
+              if (addActionsProvider.editDetectedLinks.isNotEmpty)
+                ...addActionsProvider.editDetectedLinks.map((link) {
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 0.0),
+                    child: Stack(
+                      alignment: Alignment.topRight,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.grey.shade300,
+                              width: 1.5,
                             ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: LinkPreviewGenerator(
-                                link: link,
-                                linkPreviewStyle: LinkPreviewStyle.small,
-                                showDomain: true,
-                                showTitle: true,
-                                bodyMaxLines: 1,
-                                borderRadius: 10,
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Colors.black12,
-                                    blurRadius: 4,
-                                    offset: Offset(0, 2),
-                                  ),
-                                ],
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: LinkPreviewGenerator(
+                              link: link,
+                              linkPreviewStyle: LinkPreviewStyle.small,
+                              showDomain: true,
+                              showTitle: true,
+                              bodyMaxLines: 1,
+                              borderRadius: 10,
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 4,
+                                  offset: Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        // ❌ Close icon
+                        Positioned(
+                          top: 6,
+                          right: 6,
+                          child: GestureDetector(
+                            onTap: () {
+                              addActionsProvider.hasUserClearedLink = true;
+                              addActionsProvider.editDetectedLinks = [];
+                              setState(() {});
+                            },
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.black54,
+                              ),
+                              padding: const EdgeInsets.all(4),
+                              child: const Icon(
+                                Icons.close,
+                                color: Colors.white,
+                                size: 16,
                               ),
                             ),
                           ),
-
-                          // ❌ Close icon - FIXED
-                          Positioned(
-                            top: 6,
-                            right: 6,
-                            child: GestureDetector(
-                              onTap: () {
-                                logger.i(
-                                    "addActionsProvider.editDetectedLinks before clear: ${addActionsProvider.editDetectedLinks}");
-
-                                // ✅ Mark that user cleared the link
-                                addActionsProvider.hasUserClearedLink = true;
-                                addActionsProvider.editDetectedLinks = [];
-                                addActionsProvider.descriptionEditTextController.clear();
-                                setState(() {});
-                              },
-                              child: Container(
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.black54,
-                                ),
-                                padding: const EdgeInsets.all(4),
-                                child: const Icon(
-                                  Icons.close,
-                                  color: Colors.white,
-                                  size: 16,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }).toList(),
-              ],
-            ),
-          );
-        });
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+            ],
+          ),
+        );
+      },
+    );
   }
+
 
   /// Section Widget
   Widget _buildSaveButton(BuildContext context) {

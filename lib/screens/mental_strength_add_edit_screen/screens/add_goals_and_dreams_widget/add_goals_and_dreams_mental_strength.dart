@@ -493,6 +493,8 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
   Widget _buildCommentEditText(BuildContext context) {
     return Consumer<AdDreamsGoalsProvider>(
       builder: (context, adDreamsGoalsProvider, _) {
+        final hasLink = adDreamsGoalsProvider.detectedLinks.isNotEmpty;
+
         return Padding(
           padding: const EdgeInsets.only(left: 2),
           child: Container(
@@ -505,54 +507,55 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // 📝 Show text field only when no link is detected
-                if (adDreamsGoalsProvider.detectedLinks.isEmpty)
-                  CustomTextFormFieldGoalOrActionDesc(
-                    controller: adDreamsGoalsProvider.commentEditTextController,
-                    hintText: _goalDescFocusNode.hasFocus
-                        ? ''
-                        : "Goal Description",
-                    hintStyle: CustomTextStyles.bodySmallGray700,
-                    maxLines: 4,
-                    focusNode: _goalDescFocusNode,
-                    textInputAction: TextInputAction.newline,
-                    textInputType: TextInputType.multiline,
-                    borderDecoration: InputBorder.none,
-                    onTap: () => setState(() {}),
-                    onChanged: (value) {
-                      // Detect URLs in text
-                      final matches = adDreamsGoalsProvider.urlRegex
-                          .allMatches(value)
-                          .map((match) => match.group(0)!)
-                          .toList();
+                // 📝 Always show description field
+                CustomTextFormFieldGoalOrActionDesc(
+                  controller: adDreamsGoalsProvider.commentEditTextController,
+                  hintText: _goalDescFocusNode.hasFocus ? '' : "Goal Description",
+                  hintStyle: CustomTextStyles.bodySmallGray700,
+                  maxLines: 4,
+                  focusNode: _goalDescFocusNode,
+                  textInputAction: TextInputAction.newline,
+                  textInputType: TextInputType.multiline,
+                  borderDecoration: InputBorder.none,
+                  onTap: () => setState(() {}),
+                  onChanged: (value) {
+                    final matches = adDreamsGoalsProvider.urlRegex
+                        .allMatches(value)
+                        .map((match) => match.group(0)!)
+                        .toList();
 
-                      // ✅ If contains a link, show preview instead of text
-                      if (matches.isNotEmpty) {
-                        setState(() {
-                          adDreamsGoalsProvider.detectedLinks = matches;
-                          adDreamsGoalsProvider.commentEditTextController.clear();
-                        });
-                      }
-                    },
-                    onEditingComplete: () {
-                    //  _goalDescFocusNode.unfocus();
-                      setState(() {});
-                    },
-                  ),
+                    if (matches.isNotEmpty) {
+                      // ✅ Save detected links
+                      setState(() {
+                        adDreamsGoalsProvider.detectedLinks = matches;
+                      });
 
-                // 🔗 Show link preview if a link is detected
-                if (adDreamsGoalsProvider.detectedLinks.isNotEmpty)
+                      // ✅ Remove the link text from the input field (keep only normal text)
+                      final cleanedText = value.replaceAll(adDreamsGoalsProvider.urlRegex, '').trim();
+                      adDreamsGoalsProvider.commentEditTextController.text = cleanedText;
+                      adDreamsGoalsProvider.commentEditTextController.selection =
+                          TextSelection.fromPosition(TextPosition(offset: cleanedText.length));
+                    }
+                  },
+                  onEditingComplete: () {
+                    _goalDescFocusNode.unfocus();
+                    setState(() {});
+                  },
+                ),
+
+                // 🔗 Show link preview (without showing the link text)
+                if (hasLink)
                   ...adDreamsGoalsProvider.detectedLinks.map((link) {
                     return Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
+                      padding: const EdgeInsets.only(top: 0.0),
                       child: Stack(
                         alignment: Alignment.topRight,
                         children: [
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(
-                                color: Colors.grey.shade300, // ✅ Border color
-                                width: 1.5, // ✅ Border width
+                                color: Colors.grey.shade300,
+                                width: 1.5,
                               ),
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -575,7 +578,7 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
                               ),
                             ),
                           ),
-                          // ❌ Close icon to clear preview
+                          // ❌ Close icon to remove preview
                           Positioned(
                             top: 6,
                             right: 6,
@@ -583,9 +586,6 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
                               onTap: () {
                                 setState(() {
                                   adDreamsGoalsProvider.detectedLinks.clear();
-                                  adDreamsGoalsProvider
-                                      .commentEditTextController
-                                      .clear();
                                 });
                               },
                               child: Container(
@@ -598,7 +598,6 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
                                   Icons.close,
                                   color: Colors.white,
                                   size: 16,
-                                  //fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),

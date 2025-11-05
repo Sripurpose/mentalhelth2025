@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:link_preview_generator/link_preview_generator.dart';
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/screens/dash_borad_screen/provider/dash_board_provider.dart';
@@ -33,6 +34,7 @@ import 'package:mentalhelth/widgets/video_player.dart';
 import 'package:mentalhelth/widgets/widget/shimmer.dart';
 import 'package:provider/provider.dart';
 import 'package:html_unescape/html_unescape.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../utils/logic/logic.dart';
 import '../../widgets/background_image/background_imager.dart';
@@ -225,62 +227,67 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                       final journalDesc = journal?.journalDesc?.trim() ?? "";
                                       final previewLink = journal?.preview_link?.trim() ?? "";
 
-                                      // 🧠 If journalDesc exists → show text
-                                      if (journalDesc.isNotEmpty) {
-                                        return Text(
-                                          HtmlUnescape().convert(journalDesc),
-                                          maxLines: HtmlUnescape().convert(journalDesc).length,
-                                          overflow: TextOverflow.ellipsis,
-                                          style:  TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: 'Poppins',
-                                            color: ColorsContent.goalCompletedTextColor,
-                                          ),
-                                        );
-                                      }
+                                      final hasDesc = journalDesc.isNotEmpty;
+                                      final hasPreview = previewLink.isNotEmpty;
 
-                                      // 🔗 If journalDesc is empty and previewLink exists → show preview
-                                      else if (previewLink.isNotEmpty) {
-                                        return Padding(
-                                          padding: const EdgeInsets.only(top: 8.0),
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: Colors.grey.shade300,
-                                                width: 1.5,
-                                              ),
-                                              borderRadius: BorderRadius.circular(10),
-                                            ),
-                                            child: ClipRRect(
-                                              borderRadius: BorderRadius.circular(10),
-                                              child: LinkPreviewGenerator(
-                                                link: previewLink,
-                                                linkPreviewStyle: LinkPreviewStyle.small,
-                                                showDomain: true,
-                                                showTitle: true,
-                                                bodyMaxLines: 1,
-                                                borderRadius: 10,
-                                                boxShadow: const [
-                                                  BoxShadow(
-                                                    color: Colors.black12,
-                                                    blurRadius: 4,
-                                                    offset: Offset(0, 2),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      }
-
-                                      // ❌ If both are empty → show nothing
-                                      else {
+                                      // ❌ If both empty → show nothing
+                                      if (!hasDesc && !hasPreview) {
                                         return const SizedBox.shrink();
                                       }
+
+                                      return Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          // 🧠 Show description text (if available)
+                                          if (hasDesc)
+                                            Text(
+                                              HtmlUnescape().convert(journalDesc),
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w400,
+                                                fontFamily: 'Poppins',
+                                                color: ColorsContent.goalCompletedTextColor,
+                                              ),
+                                            ),
+
+                                          // 🔗 Show preview link (if available)
+                                          if (hasPreview)
+                                            Padding(
+                                              padding: EdgeInsets.only(top: hasDesc ? 6.0 : 0.0), // small space only if text shown
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                    color: Colors.grey.shade300,
+                                                    width: 1.2,
+                                                  ),
+                                                  borderRadius: BorderRadius.circular(10),
+                                                ),
+                                                child: ClipRRect(
+                                                  borderRadius: BorderRadius.circular(10),
+                                                  child: LinkPreviewGenerator(
+                                                    link: previewLink,
+                                                    linkPreviewStyle: LinkPreviewStyle.small,
+                                                    showDomain: true,
+                                                    showTitle: true,
+                                                    bodyMaxLines: 1,
+                                                    borderRadius: 10,
+                                                    boxShadow: const [
+                                                      BoxShadow(
+                                                        color: Colors.black12,
+                                                        blurRadius: 4,
+                                                        offset: Offset(0, 2),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                        ],
+                                      );
                                     },
                                   ),
                                 ),
+
 
                                 const SizedBox(height: 15),
                                 audioList.isEmpty
@@ -614,38 +621,51 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                     ?
                              const SizedBox()
                                     :
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons
-                                          .location_on,
-                                      color: ColorsContent.newThemeColor,
-                                      size: size.width *
-                                          0.06,
-                                    ),
-                                    const SizedBox(width: 5), // Optional spacing
-                                    Expanded(
-                                      child: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal,
-                                        child: Text(
-                                          homeProvider.journalDetails?.journals?.location?.locationName
-                                              ?.toString()
-                                              .replaceAll(RegExp(r'[^a-zA-Z0-9, ]'), '') // Remove unwanted characters except commas
-                                              .replaceAll(RegExp(r',\s*,+'), ',') // Replace multiple consecutive commas (with or without spaces) with a single comma
-                                              .replaceAll(RegExp(r'^,|,$'), '') // Remove leading and trailing commas
-                                              .trim() ?? "",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: 'Poppins',
-                                            color:  ColorsContent.goalCompletedTextColor,
+
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 0),
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      final lat =  homeProvider.journalDetails!.journals!.location?.locationLatitude;
+                                      final lon = homeProvider.journalDetails!.journals!.location?.locationLatitude;
+                                      final googleMapsUrl =
+                                          'https://www.google.com/maps/search/?api=1&query=$lat,$lon';
+                                      if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
+                                        await launchUrl(
+                                          Uri.parse(googleMapsUrl),
+                                          mode: LaunchMode.externalApplication,
+                                        );
+                                      }
+                                    },
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 5.0),
+                                          child: SvgPicture.asset(
+                                            ImageConstant.locationIconGridNumu, // Button icon
                                           ),
-                                          overflow: TextOverflow.visible, // Ensures scrolling works
                                         ),
-                                      ),
+                                        const SizedBox(width: 4),
+                                        Expanded(
+                                          child: Text(
+                                            homeProvider.journalDetails!.journals!.location?.locationName ?? "",
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              color: ColorsContent.newThemeColor,
+                                              decoration: TextDecoration.underline,
+                                              decorationColor: ColorsContent.newThemeColor,
+                                              decorationThickness: 1.5,
+                                              fontFamily: 'Poppins',
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-        
-                                  ],
+                                  ),
                                 ),
         
                                 homeProvider.journalDetails!.journals!.location == null ?
@@ -910,7 +930,13 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                   ),
                                 ),
 
-                               // const SizedBox(height: 10),
+                                Center(
+                                  child: SvgPicture.asset(
+                                    ImageConstant.chatIconNumu,
+                                  ),
+                                ),
+
+                                const SizedBox(height: 10),
                               ],
                             ):
                       mentalStrengthEditProvider.goalDetailModel == null
@@ -1251,8 +1277,10 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                             }
                           }
                           await homeProvider.fetchJournals(pageNo:homeProvider.currentPage.toString(),context: context);
+                          await homeProvider.fetchJournalsGridView(pageNo:homeProvider.currentPage.toString(),context: context);
                           if(homeProvider.journalStatus == 404){
                             await homeProvider.fetchJournals(pageNo:1.toString(),context: context);
+                            await homeProvider.fetchJournalsGridView(pageNo:1.toString(),context: context);
                           }
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(

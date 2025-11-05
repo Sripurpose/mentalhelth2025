@@ -19,6 +19,21 @@ class ImageConstant {
   static String noData = '$imagePath/home/noData.gif';
   static String imgMenu = '$imagePath/img_menu.svg';
   static String feelingDummyNumu = '$imagePath/feeling_dummy_numu.svg';
+  static String homeSearchNumu = '$imagePath/home_search.svg';
+  static String homeDotNumu = '$imagePath/home_dot.svg';
+
+  static String locationIconGridNumu = '$imagePath/location_icon_grid.svg';
+  static String dateIconGridNumu = '$imagePath/date_icon_grid.svg';
+  static String timeIconGridNumu = '$imagePath/time_icon_grid.svg';
+
+  static String toggleActiveNumu = '$imagePath/toggle_active.svg';
+  static String toggleInActiveNumu = '$imagePath/toggle_in_active.svg';
+  static String chatIconNumu = '$imagePath/chat_icon.svg';
+
+  static String gridVideoPlayIconNumu = '$imagePath/grid_video_play_icon.svg';
+  static String gridVideoPauseIconNumu = '$imagePath/video_pause_icon_grid.svg';
+  static String gridAudioPlayIconNumu = '$imagePath/grid_audio_play_icon.svg';
+  static String gridAudioPauseIconNumu = '$imagePath/audio_pause_icon_grid.svg';
   static String lineNumu = '$imagePath/line_numu.svg';
   static String submitButtonNumu = 'assets/images/submit_button_numu.svg';
   static String submitButtonNumuBuild = 'assets/images/submit_button_mental_strength.svg';

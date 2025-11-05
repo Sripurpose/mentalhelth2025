@@ -6,6 +6,9 @@ class ColorsContent {
   static Color blackText = const Color(0xFF000000);
 
   static Color greyText = const Color(0xFF666666);
+  static Color datePickerGreyText = const Color(0xFFA7A7A7);
+  static Color datePickerDarkText = const Color(0xFF919191);
+  static Color dateTimeColor = const Color(0xFF464848);
   static Color whiteText = const Color(0xFFFFFFFF);
   static Color newThemeColor = const Color(0xFF7E69F8);
   static Color actionBackColor = const Color(0xFF604DD1);

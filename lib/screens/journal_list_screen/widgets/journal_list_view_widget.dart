@@ -38,6 +38,7 @@ class _JournalListViewWidgetState extends State<JournalListViewWidget> {
       print("currentPagnewse$currentPage");
       _scrollController.addListener(_loadMoreData);
       homeProvider.fetchJournals(initial: true,context: context); // Fetch initial journals
+      homeProvider.fetchJournalsGridView(initial: true,context: context); // Fetch initial journals
       Future.delayed(const Duration(seconds: 1), () {
         setState(() {
           isLoading = false;
@@ -49,6 +50,7 @@ class _JournalListViewWidgetState extends State<JournalListViewWidget> {
   void _loadMoreData() {
     if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
       homeProvider.fetchJournals(context: context);
+      homeProvider.fetchJournalsGridView(initial: true,context: context); // Fetch initial journals
     }
   }
 
@@ -60,6 +62,7 @@ class _JournalListViewWidgetState extends State<JournalListViewWidget> {
         return RefreshIndicator(
           onRefresh: () async {
             homeProvider.fetchJournals(initial: true,context: context);
+            homeProvider.fetchJournalsGridView(initial: true,context: context); // Fetch initial journals
           },
           child: Column(
             children: [
@@ -159,6 +162,8 @@ class _JournalListViewWidgetState extends State<JournalListViewWidget> {
                               homeProvider.journalsModelList.clear();
                               print("currentPagenews ${homeProvider.currentPage}");
                               homeProvider.fetchJournals(
+                                  pageNo: homeProvider.currentPage.toString(),context: context);
+                              homeProvider.fetchJournalsGridView(
                                   pageNo: homeProvider.currentPage.toString(),context: context);
                             },
                             child: Container(

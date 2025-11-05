@@ -19,6 +19,7 @@ import '../../mental_strength_add_edit_screen/model/list_goal_actions.dart';
 import '../../token_expiry/token_expiry.dart';
 import '../model/chart_view_model.dart';
 import '../model/journal_details.dart';
+import '../model/journal_model_grid.dart';
 import '../model/reminder_details.dart';
 
 class HomeProvider extends ChangeNotifier {
@@ -229,6 +230,150 @@ class HomeProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+
+  JournalsModelGrid? journalsModelGrid;
+  List<JournalGrid> journalsModelGridList = [];
+  int journalGridStatus = 0;
+  bool journalsGridModelLoading = false;
+  int totalPages = 1; // default
+
+
+  Future fetchJournalsGridView({
+    bool initial = false,
+    String? pageNo,
+    required BuildContext context,
+    DateTime? fromDate,
+    DateTime? toDate,
+  })
+  async {
+    try {
+      String? token = await getUserTokenSharePref();
+      journalsGridModelLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref();
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref();
+      }
+
+      journalGridStatus = 0;
+      notifyListeners();
+
+      Map<String, String> headers = {
+        'device-type': deviceType,
+        'version': versionCode.toString(),
+        'authorization': token ?? "",
+        // ✅ Removed 'Content-Type': 'application/json' for form-data
+      };
+      if (pageNo != null) {
+        pageLoad = int.tryParse(pageNo) ?? 1;
+      } else if (initial) {
+        pageLoad = 1;
+      } else {
+        pageLoad += 1;
+      }
+
+
+
+      // Use pageLoad for API call if pageNo not provided
+      Uri url = Uri.parse(UrlConstant.journalsUrlGrid(
+        page: pageNo ?? pageLoad.toString(),
+      ));
+
+      logger.w("url $url");
+
+      // ✅ Set default dates to today if not provided
+      final startDate = fromDate ?? DateTime.now();
+      final endDate = toDate ?? DateTime.now();
+
+      // ✅ Format dates as YYYY-MM-DD
+      String formattedFromDate = _formatDateForApi(startDate);
+      String formattedToDate = _formatDateForApi(endDate);
+
+      // ✅ POST body with date parameters (form-data)
+      final body = {
+        "page_no": pageNo ?? "1",
+        "from_date": formattedFromDate,
+        "to_date": formattedToDate,
+      };
+
+      logger.w("Request body: $body");
+
+      final response = await http.post(url, headers: headers, body: body);
+
+      if (response.statusCode == 200) {
+        journalGridStatus = response.statusCode;
+        journalsModelGrid = journalsModelGridFromJson(response.body);
+
+        final newJournals = journalsModelGrid!.journals ?? [];
+
+        if (initial) {
+          // Fresh load, clear the list
+          journalsModelGridList.clear();
+        } else {
+          // Previous/Next: replace the list for current page
+          journalsModelGridList.clear();
+        }
+
+        journalsModelGridList.addAll(newJournals);
+
+        // Update totalPages from API if available
+        final totalCount = journalsModelGrid?.totalCount ?? journalsModelGridList.length;
+        totalPages = (totalCount / 10).ceil();
+
+        journalsGridModelLoading = false;
+        notifyListeners();
+      }
+
+      else if (response.statusCode == 503) {
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title:
+                "App is in maintenance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      } else {
+        TokenManager.setTokenStatus(false);
+        journalGridStatus = response.statusCode;
+        logger.w("journalsModelelse ${journalsModelFromJson(response.body)}");
+        journalsGridModelLoading = false;
+        journalsModelGridList.clear();
+        notifyListeners();
+      }
+
+      if (response.statusCode == 401 || response.statusCode == 403) {
+        journalGridStatus = response.statusCode;
+        TokenManager.setTokenStatus(true);
+      }
+
+      journalsGridModelLoading = false;
+      notifyListeners();
+    } catch (e) {
+      logger.w("catch $e");
+      journalsGridModelLoading = false;
+      notifyListeners();
+    }
+    notifyListeners();
+  }
+
+// ✅ Helper function to format date as YYYY-MM-DD
+  String _formatDateForApi(DateTime date) {
+    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+  }
+
+
 
 
   //get journal details

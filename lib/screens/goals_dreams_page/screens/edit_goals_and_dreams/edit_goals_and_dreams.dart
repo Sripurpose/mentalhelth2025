@@ -776,138 +776,146 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
 
   Widget _buildCommentEditText(BuildContext context) {
     return Consumer<AdDreamsGoalsProvider>(
-        builder: (context, adDreamsGoalsProvider, _) {
-          final previewLink = widget.goalsanddream.preview_link?.toString().trim() ?? "";
+      builder: (context, adDreamsGoalsProvider, _) {
+        final previewLink = widget.goalsanddream.preview_link?.toString().trim() ?? "";
 
-          // ✅ Initialize backend link ONLY on first load
-          if (previewLink.isNotEmpty &&
-              adDreamsGoalsProvider.editDetectedLinks.isEmpty &&
-              !adDreamsGoalsProvider.hasUserClearedLink) {
-            adDreamsGoalsProvider.editDetectedLinks = [previewLink];
-          }
+        // ✅ Initialize backend link ONLY on first load
+        if (previewLink.isNotEmpty &&
+            adDreamsGoalsProvider.editDetectedLinks.isEmpty &&
+            !adDreamsGoalsProvider.hasUserClearedLink) {
+          adDreamsGoalsProvider.editDetectedLinks = [previewLink];
+        }
 
-          return Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.grey.shade300),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // 📝 Text field shown only when no preview
-                if (adDreamsGoalsProvider.editDetectedLinks.isEmpty)
-                  CustomTextFormFieldNumu(
-                    controller: adDreamsGoalsProvider.commentEditTextController,
-                    hintText: _descriptionFocusNode.hasFocus ? '' : "Goal Description",
-                    hintStyle: CustomTextStyles.bodySmallGray700,
-                    textInputAction: TextInputAction.newline,
-                    textInputType: TextInputType.multiline,
-                    maxLines: 4,
-                    focusNode: _descriptionFocusNode,
-                    borderDecoration: InputBorder.none,
-                    textAlign: TextAlign.start,
-                    onTap: () => setState(() {}),
-                    onEditingComplete: () {
-                      _descriptionFocusNode.unfocus();
-                      setState(() {});
-                    },
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(
-                        RegExp(r'[\u0000-\uFFFF]'),
-                      ),
-                    ],
-                    onChanged: (text) {
-                      // ✅ Detect new link
-                      final matches = adDreamsGoalsProvider.editUrlRegex
-                          .allMatches(text)
-                          .map((m) => m.group(0)!)
-                          .toList();
+        final hasLink = adDreamsGoalsProvider.editDetectedLinks.isNotEmpty;
 
-                      if (matches.isNotEmpty) {
-                        adDreamsGoalsProvider.editDetectedLinks = [matches.first];
-                        adDreamsGoalsProvider.hasUserClearedLink = false;
-                        adDreamsGoalsProvider.commentEditTextController.clear();
-                        setState(() {});
-                      }
-                    },
-                  ),
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.grey.shade300),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 📝 Always show text field
+              CustomTextFormFieldNumu(
+                controller: adDreamsGoalsProvider.commentEditTextController,
+                hintText: _descriptionFocusNode.hasFocus ? '' : "Goal Description",
+                hintStyle: CustomTextStyles.bodySmallGray700,
+                textInputAction: TextInputAction.newline,
+                textInputType: TextInputType.multiline,
+                maxLines: 4,
+                focusNode: _descriptionFocusNode,
+                borderDecoration: InputBorder.none,
+                textAlign: TextAlign.start,
+                onTap: () => setState(() {}),
+                onEditingComplete: () {
+                  _descriptionFocusNode.unfocus();
+                  setState(() {});
+                },
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[\u0000-\uFFFF]')),
+                ],
+                onChanged: (text) {
+                  // ✅ Detect new link dynamically
+                  final matches = adDreamsGoalsProvider.editUrlRegex
+                      .allMatches(text)
+                      .map((m) => m.group(0)!)
+                      .toList();
 
-                // 🔗 Link preview (either backend or user-pasted)
-                if (adDreamsGoalsProvider.editDetectedLinks.isNotEmpty)
-                  ...adDreamsGoalsProvider.editDetectedLinks.map((link) {
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Stack(
-                        alignment: Alignment.topRight,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.grey.shade300,
-                                width: 1.5,
-                              ),
-                              borderRadius: BorderRadius.circular(10),
+                  if (matches.isNotEmpty) {
+                    // ✅ Store detected link
+                    adDreamsGoalsProvider.editDetectedLinks = [matches.first];
+                    adDreamsGoalsProvider.hasUserClearedLink = false;
+
+                    // ✅ Remove link text from the field
+                    final cleanedText = text.replaceAll(adDreamsGoalsProvider.editUrlRegex, '').trim();
+                    adDreamsGoalsProvider.commentEditTextController.text = cleanedText;
+                    adDreamsGoalsProvider.commentEditTextController.selection =
+                        TextSelection.fromPosition(TextPosition(offset: cleanedText.length));
+
+                    setState(() {});
+                  }
+                },
+              ),
+
+              // 🔗 Link preview (either backend or pasted link)
+              if (hasLink)
+                ...adDreamsGoalsProvider.editDetectedLinks.map((link) {
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Stack(
+                      alignment: Alignment.topRight,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.grey.shade300,
+                              width: 1.5,
                             ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: LinkPreviewGenerator(
-                                link: link,
-                                linkPreviewStyle: LinkPreviewStyle.small,
-                                showDomain: true,
-                                showTitle: true,
-                                bodyMaxLines: 1,
-                                borderRadius: 10,
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Colors.black12,
-                                    blurRadius: 4,
-                                    offset: Offset(0, 2),
-                                  ),
-                                ],
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: LinkPreviewGenerator(
+                              link: link,
+                              linkPreviewStyle: LinkPreviewStyle.small,
+                              showDomain: true,
+                              showTitle: true,
+                              bodyMaxLines: 1,
+                              borderRadius: 10,
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 4,
+                                  offset: Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        // ❌ Close icon - remove preview
+                        Positioned(
+                          top: 6,
+                          right: 6,
+                          child: GestureDetector(
+                            onTap: () {
+                              logger.i(
+                                  "editDetectedLinks before clear: ${adDreamsGoalsProvider.editDetectedLinks}");
+
+                              adDreamsGoalsProvider.hasUserClearedLink = true;
+                              adDreamsGoalsProvider.editDetectedLinks = [];
+                              setState(() {});
+                            },
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.black54,
+                              ),
+                              padding: const EdgeInsets.all(4),
+                              child: const Icon(
+                                Icons.close,
+                                color: Colors.white,
+                                size: 16,
                               ),
                             ),
                           ),
-
-                          // ❌ Close icon - FIXED
-                          Positioned(
-                            top: 6,
-                            right: 6,
-                            child: GestureDetector(
-                              onTap: () {
-                                logger.i(
-                                    "adDreamsGoalsProvider.editDetectedLinks before clear: ${adDreamsGoalsProvider.editDetectedLinks}");
-
-                                // ✅ Mark that user cleared the link
-                                adDreamsGoalsProvider.hasUserClearedLink = true;
-                                adDreamsGoalsProvider.editDetectedLinks = [];
-                                adDreamsGoalsProvider.commentEditTextController.clear();
-                                setState(() {});
-                              },
-                              child: Container(
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.black54,
-                                ),
-                                padding: const EdgeInsets.all(4),
-                                child: const Icon(
-                                  Icons.close,
-                                  color: Colors.white,
-                                  size: 16,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }).toList(),
-              ],
-            ),
-          );
-        });
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+            ],
+          ),
+        );
+      },
+    );
   }
+
+
+
 
   /// Section Widget
   Widget _buildAddActionsButton(BuildContext context) {

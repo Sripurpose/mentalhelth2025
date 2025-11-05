@@ -265,6 +265,7 @@ class _JournalListPageState extends State<JournalListPage> {
   Future<void> _isTokenExpired() async {
    // await homeProvider.fetchChartView(context);
     await homeProvider.fetchJournals(initial: true,context: context);
+    await homeProvider.fetchJournalsGridView(initial: true,context: context);
     await editProfileProvider.fetchUserProfile(context);
     tokenStatus = TokenManager.checkTokenExpiry();
     if (tokenStatus) {

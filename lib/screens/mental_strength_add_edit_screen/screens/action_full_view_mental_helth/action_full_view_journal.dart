@@ -206,7 +206,7 @@ class _ActionFullViewJournalCreateBottomSheetState
                             },
                             child: SizedBox(
                               width: size.width * 0.2,
-                              child:  Align(
+                              child: Align(
                                 alignment: Alignment.topRight,
                                 child: CustomImageView(
                                   imagePath: ImageConstant.imgClosePrimaryNew,
@@ -225,19 +225,24 @@ class _ActionFullViewJournalCreateBottomSheetState
                     mentalStrengthEditProvider.actionsDetailsModel == null
                         ? const SizedBox()
                         : SizedBox(
-                          width: size.width * 0.80,
-                          child: Text(
-                            capitalText(mentalStrengthEditProvider.actionsDetailsModel!.actions!.actionTitle.toString(),),
-                           // textAlign: TextAlign.center,
-                            maxLines: 4, // Set the maximum number of lines to 3
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'Poppins',
-                              color: Colors.black,
+                            width: size.width * 0.80,
+                            child: Text(
+                              capitalText(
+                                mentalStrengthEditProvider
+                                    .actionsDetailsModel!.actions!.actionTitle
+                                    .toString(),
+                              ),
+                              // textAlign: TextAlign.center,
+                              maxLines:
+                                  4, // Set the maximum number of lines to 3
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Poppins',
+                                color: Colors.black,
+                              ),
                             ),
                           ),
-                        ),
                     SizedBox(
                       height: size.height * 0.005,
                     ),
@@ -258,561 +263,676 @@ class _ActionFullViewJournalCreateBottomSheetState
                             status: mentalStrengthEditProvider
                                 .actionsDetailsModel!.actions!.actionStatus
                                 .toString(),
-                      title: mentalStrengthEditProvider
-                          .actionsDetailsModel!.actions!.actionTitle
-                          .toString(),
-                      comments: mentalStrengthEditProvider
-                          .actionsDetailsModel!.actions!.actionDetails
-                          .toString(),
-                      previewLinkApi:  mentalStrengthEditProvider
-                          .actionsDetailsModel!.actions!.preview_link
-                          .toString(),
+                            title: mentalStrengthEditProvider
+                                .actionsDetailsModel!.actions!.actionTitle
+                                .toString(),
+                            comments: mentalStrengthEditProvider
+                                .actionsDetailsModel!.actions!.actionDetails
+                                .toString(),
+                            previewLinkApi: mentalStrengthEditProvider
+                                .actionsDetailsModel!.actions!.preview_link
+                                .toString(),
                           ),
-                    audioList.isEmpty ?
-                    const SizedBox():
-                    const SizedBox(height: 10),
                     audioList.isEmpty
-                        ? const SizedBox() :
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(
-                          color: ColorsContent.newThemeColor, // You can change this to any color you want
-                          width: 0.3,           // Adjust the thickness of the border
-                        ),
-                      ),
-                      height: size.height * 0.18, // Adjusted height for text + list
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                ImageConstant.actionDetailsMark, // Replace with your actual SVG asset path
-                              ),
-                              const SizedBox(width: 10),
-                              const Text(
-                                "Audio",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Poppins',
-                                  color: Colors.black,
-                                ),
-                              ),
-                              Text(
-                                " : ",
-                                style: CustomTextStyles.blackText16000000W700(),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 10), // Space between text row and list
-                          Expanded(
-                            child: ListView.builder(
-                              itemCount: audioList.length,
-                              itemBuilder: (context, index) {
-                                return JournalAudioPlayer(
-                                  url: audioList[index],
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    imageList.isEmpty ?
-                        SizedBox():
-                    SizedBox(height: 10,),
-                    imageList.isEmpty?
-                        SizedBox():
-                    imageList.isEmpty?const SizedBox():
-                    const SizedBox(height: 10),
-                    imageList.isEmpty
-                        ?  const SizedBox() :
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(
-                          color: ColorsContent.newThemeColor, // You can change this to any color you want
-                          width: 0.3,           // Adjust the thickness of the border
-                        ),
-                      ),
-                      height: imageList.isNotEmpty ? size.height * 0.35 : 0, // increased for label + images
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              SvgPicture.asset(
-                                ImageConstant.actionDetailsMark, // Replace with your photo SVG path
-                              ),
-                              const SizedBox(width: 10),
-                              const Text(
-                                "Photo",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Poppins',
-                                  color: Colors.black,
-                                ),
-                              ),
-                              Text(
-                                " : ",
-                                style: CustomTextStyles.blackText16000000W700(),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Expanded(
-                            child: Stack(
-                              children: [
-                                PageView.builder(
-                                  controller: photoController,
-                                  itemCount: imageList.length,
-                                  itemBuilder: (context, index) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        showDialog(
-                                          context: context,
-                                          barrierDismissible: true,
-                                          builder: (_) => Dialog(
-                                            insetPadding: EdgeInsets.zero,
-                                            backgroundColor: Colors.black,
-                                            shape: const RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.zero, // Removes all curves
-                                            ),
-                                            child: Stack(
-                                              children: [
-                                                InteractiveViewer(
-                                                  child: Center(
-                                                    child: Image.network(
-                                                      imageList[index],
-                                                      fit: BoxFit.contain,
-                                                      loadingBuilder: (context, child, loadingProgress) {
-                                                        if (loadingProgress == null) return child;
-                                                        return const Center(child: CupertinoActivityIndicator());
-                                                      },
-                                                      errorBuilder: (context, error, stackTrace) =>
-                                                      const Center(child: Icon(Icons.broken_image, color: Colors.white)),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Positioned(
-                                                  top: 40,
-                                                  right: 20,
-                                                  child: IconButton(
-                                                    icon: const Icon(Icons.close, color: Colors.white, size: 30),
-                                                    onPressed: () => Navigator.of(context).pop(),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      child: CustomImageView(
-                                        fit: BoxFit.cover,
-                                        imagePath: imageList[index],
-                                        height: size.height * 0.30,
-                                        width: size.width,
-                                        alignment: Alignment.center,
-                                      ),
-                                    );
-                                  },
-                                  onPageChanged: (int pageIndex) {
-                                    setState(() {
-                                      photoCurrentIndex = pageIndex;
-                                    });
-                                  },
-                                ),
-
-                                Positioned(
-                                  bottom: 10,
-                                  left: 0,
-                                  right: 0,
-                                  child: Center(
-                                    child: buildIndicators(
-                                      imageList.length,
-                                      photoCurrentIndex,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    videoList.isEmpty? const SizedBox():
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    videoList.isEmpty
+                        ? const SizedBox()
+                        : const SizedBox(height: 10),
+                    audioList.isEmpty
                         ? const SizedBox()
                         : Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(
-                          color: ColorsContent.newThemeColor, // You can change this to any color you want
-                          width: 0.3,           // Adjust the thickness of the border
-                        ),
-                      ),
-                      height: videoList.isNotEmpty ? size.height * 0.35 : 0, // increased to include title
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              SvgPicture.asset(
-                                ImageConstant.actionDetailsMark, // Replace with your SVG icon for video
-                              ),
-                              const SizedBox(width: 10),
-                              const Text(
-                                "Video",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Poppins',
-                                  color: Colors.black,
-                                ),
-                              ),
-                              Text(
-                                " : ",
-                                style: CustomTextStyles.blackText16000000W700(),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Expanded(
-                            child: Stack(
-                              children: [
-
-                                PageView.builder(
-                                  controller: videoController,
-                                  itemCount: videoList.length,
-                                  itemBuilder: (context, index) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        showDialog(
-                                          context: context,
-                                          barrierDismissible: true,
-                                          builder: (_) => Dialog(
-                                            insetPadding: EdgeInsets.zero,
-                                            backgroundColor: Colors.black,
-                                            shape: const RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.zero,
-                                            ),
-                                            child: Stack(
-                                              children: [
-                                                Center(
-                                                  child: AspectRatio(
-                                                    aspectRatio: 16 / 9,
-                                                    child: VideoPlayerWidgetViewAndAlreadyActionProgressBar(
-                                                      videoUrl: videoList[index],
-                                                    ),
-                                                  ),
-                                                ),
-                                                Positioned(
-                                                  top: 40,
-                                                  right: 20,
-                                                  child: IconButton(
-                                                    icon: const Icon(Icons.close, color: Colors.white, size: 30),
-                                                    onPressed: () => Navigator.of(context).pop(),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(5),
-                                        child: VideoPlayerWidgetViewAndAlreadyAction(
-                                          videoUrl: videoList[index],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  onPageChanged: (int pageIndex) {
-                                    setState(() {
-                                      videoCurrentIndex = pageIndex;
-                                    });
-                                  },
-                                ),
-                                // PageView.builder(
-                                //   controller: videoController,
-                                //   itemCount: videoList.length,
-                                //   itemBuilder: (context, index) {
-                                //     return VideoPlayerWidget(
-                                //       videoUrl: videoList[index],
-                                //     );
-                                //   },
-                                //   onPageChanged: (int pageIndex) {
-                                //     setState(() {
-                                //       videoCurrentIndex = pageIndex;
-                                //     });
-                                //   },
-                                // ),
-                                Positioned(
-                                  bottom: 10,
-                                  left: 0,
-                                  right: 0,
-                                  child: Center(
-                                    child: buildIndicators(
-                                      videoList.length,
-                                      videoCurrentIndex,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    mentalStrengthEditProvider.actionsDetailsModel!.actions!.location?.locationAddress != null?
-                    const SizedBox(height: 10):const SizedBox(),
-                    mentalStrengthEditProvider.actionsDetailsModel!.actions!.location?.locationAddress != null?
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(
-                          color: ColorsContent.newThemeColor, // You can change this to any color you want
-                          width: 0.3,           // Adjust the thickness of the border
-                        ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              SvgPicture.asset(
-                                ImageConstant.actionDetailsMark, // Replace with your location SVG asset
-                              ),
-                              const SizedBox(width: 10),
-                              const Text(
-                                "Location",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Poppins',
-                                  color: Colors.black,
-                                ),
-                              ),
-                              Text(
-                                " : ",
-                                style: CustomTextStyles.blackText16000000W700(),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Icon(
-                                Icons.location_on,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(
                                 color: ColorsContent.newThemeColor,
-                                size: 20,
+                                // You can change this to any color you want
+                                width:
+                                    0.3, // Adjust the thickness of the border
                               ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: SingleChildScrollView(
-                                  scrollDirection: Axis.vertical,
-                                  child: Text(
-                                    mentalStrengthEditProvider.actionsDetailsModel?.actions?.location?.locationAddress
-                                        ?.replaceAll(RegExp(r'[^a-zA-Z0-9, ]'), '') // Remove unwanted characters
-                                        .replaceAll(RegExp(r',\s*,+'), ',') // Replace multiple consecutive commas
-                                        .replaceAll(RegExp(r'^,|,$'), '') // Trim leading/trailing commas
-                                        .trim() ??
-                                        "",
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                      fontFamily: 'Poppins',
-                                      color: Colors.black,
-                                    ),
-                                    overflow: TextOverflow.visible,
-                                    maxLines: 4,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    )
-                        :
-                    const SizedBox(),
-                    mentalStrengthEditProvider.actionsDetailsModel!.actions!.actionStatus == "1" ||
-                        mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder == null ? const SizedBox():const SizedBox(height: 10),
-                    Consumer<AddActionsProvider>(
-                        builder: (context, addActionsProvider, _) {
-                          return Column(
-                            children: [
-                              mentalStrengthEditProvider.actionsDetailsModel!.actions!.actionStatus == "1" ||
-                                  mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder == null
-                                  ? const SizedBox()
-                                  : Container(
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(5),
-                                  border: Border.all(
-                                    color:ColorsContent.newThemeColor, // You can change this to any color you want
-                                    width: 0.3,           // Adjust the thickness of the border
-                                  ),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                            ),
+                            height: size.height * 0.18,
+                            // Adjusted height for text + list
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    // Header row with SVG and "Reminder" label
-                                    Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Expanded(
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              SvgPicture.asset(
-                                                ImageConstant.actionDetailsMark,
-                                              ),
-                                              const SizedBox(width: 10),
-                                              const Text(
-                                                "Reminder",
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
-                                                  fontFamily: 'Poppins',
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                              const Text(
-                                                " : ",
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
-                                                  fontFamily: 'Poppins',
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        SvgPicture.asset(
-                                          ImageConstant.reminderClock,
-
-                                        ),
-                                      ],
+                                    SvgPicture.asset(
+                                      ImageConstant
+                                          .actionDetailsMark, // Replace with your actual SVG asset path
                                     ),
-
-                                    const SizedBox(height: 10),
-
-                                    // Date row
-                                    Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        const Text(
-                                          "Date  : ",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w600,
-                                            fontFamily: 'Poppins',
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.reminder_startdate != null &&
-                                                mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.reminder_enddate != null
-                                                ? "${unixTimestampToDate(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.reminder_startdate!)} to ${unixTimestampToDate(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.reminder_enddate!)}"
-                                                : "",
-                                            style: const TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w400,
-                                              fontFamily: 'Poppins',
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                                    const SizedBox(width: 10),
+                                    const Text(
+                                      "Audio",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'Poppins',
+                                        color: Colors.black,
+                                      ),
                                     ),
-
-                                    const SizedBox(height: 5),
-
-                                    // Time row
-                                    Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        const Text(
-                                          "Time  : ",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w600,
-                                            fontFamily: 'Poppins',
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.from_time != null &&
-                                                mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.to_time != null
-                                                ? "${formatTimeOfDay(stringToTimeOfDay(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.from_time!)!)} to ${formatTimeOfDay(stringToTimeOfDay(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.to_time!)!)}"
-                                                : "",
-                                            style: const TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w400,
-                                              fontFamily: 'Poppins',
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-
-                                    const SizedBox(height: 5),
-
-                                    // Repeat row
-                                    Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        const Text(
-                                          "Repeat: ",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w600,
-                                            fontFamily: 'Poppins',
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            mentalStrengthEditProvider.actionsDetailsModel?.actions?.reminder?.reminder_repeat ?? "",
-                                            style: const TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w400,
-                                              fontFamily: 'Poppins',
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                                    Text(
+                                      " : ",
+                                      style: CustomTextStyles
+                                          .blackText16000000W700(),
                                     ),
                                   ],
                                 ),
-                              )
-                            ],
-                          );
-                        }),
+                                const SizedBox(height: 10),
+                                // Space between text row and list
+                                Expanded(
+                                  child: ListView.builder(
+                                    itemCount: audioList.length,
+                                    itemBuilder: (context, index) {
+                                      return JournalAudioPlayer(
+                                        url: audioList[index],
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                    imageList.isEmpty
+                        ? SizedBox()
+                        : SizedBox(
+                            height: 10,
+                          ),
+                    imageList.isEmpty
+                        ? SizedBox()
+                        : imageList.isEmpty
+                            ? const SizedBox()
+                            : const SizedBox(height: 10),
+                    imageList.isEmpty
+                        ? const SizedBox()
+                        : Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(
+                                color: ColorsContent.newThemeColor,
+                                // You can change this to any color you want
+                                width:
+                                    0.3, // Adjust the thickness of the border
+                              ),
+                            ),
+                            height:
+                                imageList.isNotEmpty ? size.height * 0.35 : 0,
+                            // increased for label + images
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    SvgPicture.asset(
+                                      ImageConstant
+                                          .actionDetailsMark, // Replace with your photo SVG path
+                                    ),
+                                    const SizedBox(width: 10),
+                                    const Text(
+                                      "Photo",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'Poppins',
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    Text(
+                                      " : ",
+                                      style: CustomTextStyles
+                                          .blackText16000000W700(),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+                                Expanded(
+                                  child: Stack(
+                                    children: [
+                                      PageView.builder(
+                                        controller: photoController,
+                                        itemCount: imageList.length,
+                                        itemBuilder: (context, index) {
+                                          return GestureDetector(
+                                            onTap: () {
+                                              showDialog(
+                                                context: context,
+                                                barrierDismissible: true,
+                                                builder: (_) => Dialog(
+                                                  insetPadding: EdgeInsets.zero,
+                                                  backgroundColor: Colors.black,
+                                                  shape:
+                                                      const RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius
+                                                        .zero, // Removes all curves
+                                                  ),
+                                                  child: Stack(
+                                                    children: [
+                                                      InteractiveViewer(
+                                                        child: Center(
+                                                          child: Image.network(
+                                                            imageList[index],
+                                                            fit: BoxFit.contain,
+                                                            loadingBuilder:
+                                                                (context, child,
+                                                                    loadingProgress) {
+                                                              if (loadingProgress ==
+                                                                  null)
+                                                                return child;
+                                                              return const Center(
+                                                                  child:
+                                                                      CupertinoActivityIndicator());
+                                                            },
+                                                            errorBuilder: (context,
+                                                                    error,
+                                                                    stackTrace) =>
+                                                                const Center(
+                                                                    child: Icon(
+                                                                        Icons
+                                                                            .broken_image,
+                                                                        color: Colors
+                                                                            .white)),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Positioned(
+                                                        top: 40,
+                                                        right: 20,
+                                                        child: IconButton(
+                                                          icon: const Icon(
+                                                              Icons.close,
+                                                              color:
+                                                                  Colors.white,
+                                                              size: 30),
+                                                          onPressed: () =>
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop(),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: CustomImageView(
+                                              fit: BoxFit.cover,
+                                              imagePath: imageList[index],
+                                              height: size.height * 0.30,
+                                              width: size.width,
+                                              alignment: Alignment.center,
+                                            ),
+                                          );
+                                        },
+                                        onPageChanged: (int pageIndex) {
+                                          setState(() {
+                                            photoCurrentIndex = pageIndex;
+                                          });
+                                        },
+                                      ),
+                                      Positioned(
+                                        bottom: 10,
+                                        left: 0,
+                                        right: 0,
+                                        child: Center(
+                                          child: buildIndicators(
+                                            imageList.length,
+                                            photoCurrentIndex,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                    videoList.isEmpty
+                        ? const SizedBox()
+                        : const SizedBox(
+                            height: 10,
+                          ),
+                    videoList.isEmpty
+                        ? const SizedBox()
+                        : Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(
+                                color: ColorsContent.newThemeColor,
+                                // You can change this to any color you want
+                                width:
+                                    0.3, // Adjust the thickness of the border
+                              ),
+                            ),
+                            height:
+                                videoList.isNotEmpty ? size.height * 0.35 : 0,
+                            // increased to include title
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    SvgPicture.asset(
+                                      ImageConstant
+                                          .actionDetailsMark, // Replace with your SVG icon for video
+                                    ),
+                                    const SizedBox(width: 10),
+                                    const Text(
+                                      "Video",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'Poppins',
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    Text(
+                                      " : ",
+                                      style: CustomTextStyles
+                                          .blackText16000000W700(),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+                                Expanded(
+                                  child: Stack(
+                                    children: [
+                                      PageView.builder(
+                                        controller: videoController,
+                                        itemCount: videoList.length,
+                                        itemBuilder: (context, index) {
+                                          return GestureDetector(
+                                            onTap: () {
+                                              showDialog(
+                                                context: context,
+                                                barrierDismissible: true,
+                                                builder: (_) => Dialog(
+                                                  insetPadding: EdgeInsets.zero,
+                                                  backgroundColor: Colors.black,
+                                                  shape:
+                                                      const RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.zero,
+                                                  ),
+                                                  child: Stack(
+                                                    children: [
+                                                      Center(
+                                                        child: AspectRatio(
+                                                          aspectRatio: 16 / 9,
+                                                          child:
+                                                              VideoPlayerWidgetViewAndAlreadyActionProgressBar(
+                                                            videoUrl: videoList[
+                                                                index],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Positioned(
+                                                        top: 40,
+                                                        right: 20,
+                                                        child: IconButton(
+                                                          icon: const Icon(
+                                                              Icons.close,
+                                                              color:
+                                                                  Colors.white,
+                                                              size: 30),
+                                                          onPressed: () =>
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop(),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              child:
+                                                  VideoPlayerWidgetViewAndAlreadyAction(
+                                                videoUrl: videoList[index],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        onPageChanged: (int pageIndex) {
+                                          setState(() {
+                                            videoCurrentIndex = pageIndex;
+                                          });
+                                        },
+                                      ),
+                                      // PageView.builder(
+                                      //   controller: videoController,
+                                      //   itemCount: videoList.length,
+                                      //   itemBuilder: (context, index) {
+                                      //     return VideoPlayerWidget(
+                                      //       videoUrl: videoList[index],
+                                      //     );
+                                      //   },
+                                      //   onPageChanged: (int pageIndex) {
+                                      //     setState(() {
+                                      //       videoCurrentIndex = pageIndex;
+                                      //     });
+                                      //   },
+                                      // ),
+                                      Positioned(
+                                        bottom: 10,
+                                        left: 0,
+                                        right: 0,
+                                        child: Center(
+                                          child: buildIndicators(
+                                            videoList.length,
+                                            videoCurrentIndex,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                    mentalStrengthEditProvider.actionsDetailsModel!.actions!
+                                .location?.locationAddress !=
+                            null
+                        ? const SizedBox(height: 10)
+                        : const SizedBox(),
+                    mentalStrengthEditProvider.actionsDetailsModel!.actions!
+                                .location?.locationAddress !=
+                            null
+                        ? Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(
+                                color: ColorsContent.newThemeColor,
+                                // You can change this to any color you want
+                                width:
+                                    0.3, // Adjust the thickness of the border
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    SvgPicture.asset(
+                                      ImageConstant
+                                          .actionDetailsMark, // Replace with your location SVG asset
+                                    ),
+                                    const SizedBox(width: 10),
+                                    const Text(
+                                      "Location",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'Poppins',
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    Text(
+                                      " : ",
+                                      style: CustomTextStyles
+                                          .blackText16000000W700(),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Icon(
+                                      Icons.location_on,
+                                      color: ColorsContent.newThemeColor,
+                                      size: 20,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.vertical,
+                                        child: Text(
+                                          mentalStrengthEditProvider
+                                                  .actionsDetailsModel
+                                                  ?.actions
+                                                  ?.location
+                                                  ?.locationAddress
+                                                  ?.replaceAll(
+                                                      RegExp(r'[^a-zA-Z0-9, ]'),
+                                                      '') // Remove unwanted characters
+                                                  .replaceAll(RegExp(r',\s*,+'),
+                                                      ',') // Replace multiple consecutive commas
+                                                  .replaceAll(RegExp(r'^,|,$'),
+                                                      '') // Trim leading/trailing commas
+                                                  .trim() ??
+                                              "",
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: 'Poppins',
+                                            color: Colors.black,
+                                          ),
+                                          overflow: TextOverflow.visible,
+                                          maxLines: 4,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )
+                        : const SizedBox(),
+                    mentalStrengthEditProvider.actionsDetailsModel!.actions!
+                                    .actionStatus ==
+                                "1" ||
+                            mentalStrengthEditProvider
+                                    .actionsDetailsModel!.actions!.reminder ==
+                                null
+                        ? const SizedBox()
+                        : const SizedBox(height: 10),
+                    Consumer<AddActionsProvider>(
+                        builder: (context, addActionsProvider, _) {
+                      return Column(
+                        children: [
+                          mentalStrengthEditProvider.actionsDetailsModel!
+                                          .actions!.actionStatus ==
+                                      "1" ||
+                                  mentalStrengthEditProvider
+                                          .actionsDetailsModel!
+                                          .actions!
+                                          .reminder ==
+                                      null
+                              ? const SizedBox()
+                              : Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(5),
+                                    border: Border.all(
+                                      color: ColorsContent.newThemeColor,
+                                      // You can change this to any color you want
+                                      width:
+                                          0.3, // Adjust the thickness of the border
+                                    ),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      // Header row with SVG and "Reminder" label
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Expanded(
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                SvgPicture.asset(
+                                                  ImageConstant
+                                                      .actionDetailsMark,
+                                                ),
+                                                const SizedBox(width: 10),
+                                                const Text(
+                                                  "Reminder",
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily: 'Poppins',
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                const Text(
+                                                  " : ",
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily: 'Poppins',
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SvgPicture.asset(
+                                            ImageConstant.reminderClock,
+                                          ),
+                                        ],
+                                      ),
+
+                                      const SizedBox(height: 10),
+
+                                      // Date row
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const Text(
+                                            "Date  : ",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily: 'Poppins',
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              mentalStrengthEditProvider
+                                                              .actionsDetailsModel
+                                                              ?.actions
+                                                              ?.reminder
+                                                              ?.reminder_startdate !=
+                                                          null &&
+                                                      mentalStrengthEditProvider
+                                                              .actionsDetailsModel
+                                                              ?.actions
+                                                              ?.reminder
+                                                              ?.reminder_enddate !=
+                                                          null
+                                                  ? "${unixTimestampToDate(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.reminder_startdate!)} to ${unixTimestampToDate(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.reminder_enddate!)}"
+                                                  : "",
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w400,
+                                                fontFamily: 'Poppins',
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+
+                                      const SizedBox(height: 5),
+
+                                      // Time row
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const Text(
+                                            "Time  : ",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily: 'Poppins',
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              mentalStrengthEditProvider
+                                                              .actionsDetailsModel
+                                                              ?.actions
+                                                              ?.reminder
+                                                              ?.from_time !=
+                                                          null &&
+                                                      mentalStrengthEditProvider
+                                                              .actionsDetailsModel
+                                                              ?.actions
+                                                              ?.reminder
+                                                              ?.to_time !=
+                                                          null
+                                                  ? "${formatTimeOfDay(stringToTimeOfDay(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.from_time!)!)} to ${formatTimeOfDay(stringToTimeOfDay(mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder!.to_time!)!)}"
+                                                  : "",
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w400,
+                                                fontFamily: 'Poppins',
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+
+                                      const SizedBox(height: 5),
+
+                                      // Repeat row
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const Text(
+                                            "Repeat: ",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily: 'Poppins',
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              mentalStrengthEditProvider
+                                                      .actionsDetailsModel
+                                                      ?.actions
+                                                      ?.reminder
+                                                      ?.reminder_repeat ??
+                                                  "",
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w400,
+                                                fontFamily: 'Poppins',
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                )
+                        ],
+                      );
+                    }),
                     const SizedBox(height: 20),
                     // mentalStrengthEditProvider
                     //             .actionsDetailsModel!.actions!.actionStatus ==
@@ -880,9 +1000,9 @@ class _ActionFullViewJournalCreateBottomSheetState
       required String createDate,
       required String achiveDate,
       required String status,
-        required String title,
-        required String comments,
-        required String previewLinkApi}) {
+      required String title,
+      required String comments,
+      required String previewLinkApi}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -893,9 +1013,10 @@ class _ActionFullViewJournalCreateBottomSheetState
             color: Colors.white,
             borderRadius: BorderRadius.circular(5),
             border: Border.all(
-              color:ColorsContent.newThemeColor, // You can change this to any color you want
-              width: 0.3           // Adjust the thickness of the border
-            ),
+                color: ColorsContent.newThemeColor,
+                // You can change this to any color you want
+                width: 0.3 // Adjust the thickness of the border
+                ),
           ),
           child: Row(
             children: [
@@ -930,16 +1051,16 @@ class _ActionFullViewJournalCreateBottomSheetState
         const SizedBox(
           height: 10,
         ),
-
         Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(5),
             border: Border.all(
-                color:ColorsContent.newThemeColor, // You can change this to any color you want
-                width: 0.3           // Adjust the thickness of the border
-            ),
+                color: ColorsContent.newThemeColor,
+                // You can change this to any color you want
+                width: 0.3 // Adjust the thickness of the border
+                ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1005,9 +1126,10 @@ class _ActionFullViewJournalCreateBottomSheetState
             color: Colors.white,
             borderRadius: BorderRadius.circular(5),
             border: Border.all(
-                color:ColorsContent.newThemeColor, // You can change this to any color you want
-                width: 0.3           // Adjust the thickness of the border
-            ),
+                color: ColorsContent.newThemeColor,
+                // You can change this to any color you want
+                width: 0.3 // Adjust the thickness of the border
+                ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1067,7 +1189,6 @@ class _ActionFullViewJournalCreateBottomSheetState
         const SizedBox(
           height: 10,
         ),
-
         Container(
           width: double.infinity,
           padding: const EdgeInsets.all(10),
@@ -1078,20 +1199,100 @@ class _ActionFullViewJournalCreateBottomSheetState
           child: Builder(
             builder: (context) {
               final commentsText = (comments ?? "").trim();
-              final previewLink = previewLinkApi;
-              print("previewLink${previewLink}");
+              final previewLink = previewLinkApi.toString().trim();
+              print("previewLink: $previewLink");
 
-              // 🧠 CASE 1: If description text exists
-              if (commentsText.isNotEmpty) {
+              // 🧠 CASE 1: If both description and preview link exist
+              if (commentsText.isNotEmpty && previewLink.isNotEmpty) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SvgPicture.asset(
-                          ImageConstant.actionDetailsMark,
+                        SvgPicture.asset(ImageConstant.actionDetailsMark),
+                        const SizedBox(width: 10),
+                        const Text(
+                          "Description",
+                          style: TextStyle(
+                            fontSize: 16.5,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Poppins',
+                            color: Colors.black,
+                          ),
                         ),
+                        const Text(
+                          " : ",
+                          style: TextStyle(
+                            fontSize: 16.5,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'Poppins',
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: const BorderRadius.vertical(
+                          bottom: Radius.circular(5),
+                        ),
+                      ),
+                      child: Text(
+                        HtmlUnescape().convert(commentsText),
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Poppins',
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.grey.shade300,
+                          width: 1.5,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: LinkPreviewGenerator(
+                          link: previewLink,
+                          linkPreviewStyle: LinkPreviewStyle.small,
+                          showDomain: true,
+                          showTitle: true,
+                          bodyMaxLines: 1,
+                          borderRadius: 10,
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 4,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }
+
+              // 🧠 CASE 2: Only description text exists
+              else if (commentsText.isNotEmpty) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(ImageConstant.actionDetailsMark),
                         const SizedBox(width: 10),
                         const Text(
                           "Description",
@@ -1137,7 +1338,7 @@ class _ActionFullViewJournalCreateBottomSheetState
                 );
               }
 
-              // 🔗 CASE 2: If no comments, but preview link exists
+              // 🔗 CASE 3: Only preview link exists
               else if (previewLink.isNotEmpty) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -1145,9 +1346,7 @@ class _ActionFullViewJournalCreateBottomSheetState
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SvgPicture.asset(
-                          ImageConstant.actionDetailsMark,
-                        ),
+                        SvgPicture.asset(ImageConstant.actionDetailsMark),
                         const SizedBox(width: 10),
                         const Text(
                           "Description",
@@ -1201,7 +1400,7 @@ class _ActionFullViewJournalCreateBottomSheetState
                 );
               }
 
-              // ❌ CASE 3: If both are empty → show nothing
+              // ❌ CASE 4: Neither exists
               else {
                 return const SizedBox.shrink();
               }
@@ -1283,13 +1482,9 @@ class _ActionFullViewJournalCreateBottomSheetState
                   PopupMenuItem<String>(
                     onTap: () async {
                       await addActionsProvider.deleteActionFunction(
-                        deleteId: id,
-                        context: context
-                      );
+                          deleteId: id, context: context);
                       goalsDreamsProvider.fetchGoalsAndDreams(
-                        initial: true,
-                        context: context
-                      );
+                          initial: true, context: context);
                       Navigator.of(context).pop();
                     },
                     value: 'Delete',
@@ -1306,13 +1501,15 @@ class _ActionFullViewJournalCreateBottomSheetState
       ],
     );
   }
+
   String unixTimestampToDate(String timestamp) {
     try {
       // Convert the timestamp to an integer
       int unixTimestamp = int.parse(timestamp);
 
       // Create a DateTime object from the Unix timestamp (assumes timestamp is in seconds)
-      DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(unixTimestamp * 1000);
+      DateTime dateTime =
+          DateTime.fromMillisecondsSinceEpoch(unixTimestamp * 1000);
 
       // Format the DateTime object into the desired string format
       final DateFormat formatter = DateFormat('dd MMM yyyy');
@@ -1324,6 +1521,7 @@ class _ActionFullViewJournalCreateBottomSheetState
       return "Invalid date";
     }
   }
+
   TimeOfDay? stringToTimeOfDay(String time) {
     try {
       // Trim and normalize to uppercase
@@ -1375,8 +1573,10 @@ class _ActionFullViewJournalCreateBottomSheetState
   String formatTimeOfDay(TimeOfDay time) {
     final hour = time.hourOfPeriod; // Hour within the 12-hour range
     final period = time.period == DayPeriod.am ? "AM" : "PM";
-    final formattedHour = (hour == 0 ? 12 : hour).toString(); // Adjust for midnight and noon
-    final formattedMinute = time.minute.toString().padLeft(2, '0'); // Ensure two-digit minute
+    final formattedHour =
+        (hour == 0 ? 12 : hour).toString(); // Adjust for midnight and noon
+    final formattedMinute =
+        time.minute.toString().padLeft(2, '0'); // Ensure two-digit minute
 
     return "$formattedHour:$formattedMinute $period";
   }

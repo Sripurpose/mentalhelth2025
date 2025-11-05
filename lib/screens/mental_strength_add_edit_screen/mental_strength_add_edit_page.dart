@@ -69,6 +69,7 @@ class _MentalStrengthAddEditFullViewScreenState
   late FocusNode _descriptionFocusNode;
   Future<void> _isTokenExpired() async {
     await homeProvider.fetchJournals(initial: true,context: context);
+    await homeProvider.fetchJournalsGridView(initial: true,context: context);
     //  await editProfileProvider.fetchUserProfile();
     tokenStatus = TokenManager.checkTokenExpiry();
     if (tokenStatus) {

@@ -2245,27 +2245,32 @@ class MentalStrengthEditProvider extends ChangeNotifier {
         required locationLatitude,
         required locationLongitude,
         required List<String> mediaName,
-        List<String>? mediaThumbs, // ✅ optional param
+        List<String>? mediaThumbs,
         required locationAddress,
         required List<String> actionIdList,
-        required List<String> editDetectedLinks, // ✅ add this param
-      })
-  async {
+        required List<String> editDetectedLinks,
+      }) async {
     try {
       saveJournalLoading = true;
-      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      notifyListeners();
+
+      final deviceType = Platform.isAndroid ? 'android' : 'ios';
       String? versionCode = '';
       if (Platform.isAndroid) {
         versionCode = Constent.versionCodeAndroid.isNotEmpty
             ? Constent.versionCodeAndroid
-            : await getVersionSharePref(); // Fetch user ID if version code is empty
-      } else if (Platform.isIOS) {
+            : await getVersionSharePref();
+      } else {
         versionCode = Constent.versionCodeIOS.isNotEmpty
             ? Constent.versionCodeIOS
-            : await getVersionSharePref(); // Fetch user ID if version code is empty
+            : await getVersionSharePref();
       }
-      notifyListeners();
-      String? token = await getUserTokenSharePref();
+
+      final token = await getUserTokenSharePref();
+
+      // Ensure there's a slash between base URL and id
+      final uri = Uri.parse("${UrlConstant.journalUrl}/$journalId");
+
       var body = {
         'emotion_id': emotionId,
         'emotion_value': emotionValue,
@@ -2280,9 +2285,12 @@ class MentalStrengthEditProvider extends ChangeNotifier {
         'journal_id': journalId,
       };
 
-      // ✅ Add preview_link if editDetectedLinks is not empty
+      // Add preview_link if available from editDetectedLinks
       if (editDetectedLinks.isNotEmpty) {
-        body['preview_link'] = editDetectedLinks.first;
+        final firstLink = editDetectedLinks.first;
+        if (firstLink != null && firstLink.isNotEmpty) {
+          body['preview_link'] = firstLink;
+        }
       }
 
       for (int i = 0; i < mediaName.length; i++) {
@@ -2294,45 +2302,51 @@ class MentalStrengthEditProvider extends ChangeNotifier {
           body['media_thumb[$i]'] = mediaThumbs[i];
         }
       }
-      logger.i("body$body");
 
       for (int i = 0; i < actionIdList.length; i++) {
         body['action_id[$i]'] = actionIdList[i];
       }
 
+      logger.i("Update journal body: $body");
+
+      // Use PUT for update (many APIs expect PUT/PATCH for updates).
+      // If your backend expects POST, switch back to http.post.
       final response = await http.post(
-        Uri.parse(
-          "${UrlConstant.journalUrl}$journalId",
-        ),
+        uri,
         headers: <String, String>{
           'device-type': deviceType,
           'version': versionCode.toString(),
-          "authorization": "$token",
+          'authorization': "$token",
         },
         body: body,
       );
 
-      if(response.statusCode == 401){
+      // Handle auth + maintenance
+      if (response.statusCode == 401 || response.statusCode == 403) {
         TokenManager.setTokenStatus(true);
+        saveJournalLoading = false;
+        notifyListeners();
+        return false;
       }
 
-      if(response.statusCode == 403){
-        TokenManager.setTokenStatus(true);
-      }
-      else if(response.statusCode == 503){
-        Future.delayed(Duration.zero, () {
+      if (response.statusCode == 503) {
+        // push maintenance screen on next frame to avoid navigation errors
+        WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => const MaintenenceScreen(
-                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                title:
+                "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
                 message: "",
               ),
             ),
           );
         });
+        saveJournalLoading = false;
+        notifyListeners();
+        return false;
       }
 
-      // ✅ Handle 200/201 - Extract link and open immediately
       if (response.statusCode == 200 || response.statusCode == 201) {
         try {
           final responseData = json.decode(response.body);
@@ -2347,43 +2361,54 @@ class MentalStrengthEditProvider extends ChangeNotifier {
           saveJournalLoading = false;
           notifyListeners();
 
-          // ✅ Extract link from response and open it immediately
-          String? linkUrl = responseData["link"];
+          // Extract link and open in-app. Use addPostFrameCallback so navigation
+          // happens after current frame (prevents navigator errors).
+          final String? linkUrl = responseData["link"];
           if (linkUrl != null && linkUrl.isNotEmpty) {
             logger.i("Opening link: $linkUrl");
-            _launchInAppWithBrowserOptions(Uri.parse(linkUrl),context);
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              try {
+                _launchInAppWithBrowserOptions(Uri.parse(linkUrl), context);
+              } catch (e) {
+                logger.e("Failed to open link: $e");
+              }
+            });
           }
 
           return true;
         } catch (e) {
-          logger.e("Error parsing response: $e");
+          logger.e("Error parsing update response: $e");
           saveJournalLoading = false;
           notifyListeners();
           return false;
         }
       } else {
+        // show server-provided message if possible
         try {
+          final decoded = json.decode(response.body);
           showCustomSnackBar(
-              context: context,
-              message: json.decode(response.body)["text"]
+            context: context,
+            message: decoded["text"] ?? "An error occurred",
           );
         } catch (e) {
           showCustomSnackBar(
-              context: context,
-              message: "An error occurred"
+            context: context,
+            message: "An error occurred",
           );
         }
+
         saveJournalLoading = false;
         notifyListeners();
         return false;
       }
-    } catch (error) {
-      logger.e("Error in updateJournalLoading: $error");
+    } catch (error, st) {
+      logger.e("Error in updateJournalLoading: $error\n$st");
       saveJournalLoading = false;
       notifyListeners();
       return false;
     }
   }
+
 
   //mediaUpload
   bool saveMediaUploadLoading = false;

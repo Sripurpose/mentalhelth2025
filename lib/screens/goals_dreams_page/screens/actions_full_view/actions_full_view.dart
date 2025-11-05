@@ -228,11 +228,12 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                                 .actions!
                                                 .actionTitle
                                                 .toString(),
-                                      previewLinkApi: mentalStrengthEditProvider
-                                          .actionsDetailsModel!
-                                          .actions!
-                                          .preview_link
-                                          .toString(),
+                                            previewLinkApi:
+                                                mentalStrengthEditProvider
+                                                    .actionsDetailsModel!
+                                                    .actions!
+                                                    .preview_link
+                                                    .toString(),
                                           ),
                                     audioList.isEmpty
                                         ? const SizedBox()
@@ -1063,7 +1064,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
     required String status,
     required String comments,
     required String title,
-        required String previewLinkApi,
+    required String previewLinkApi,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1252,8 +1253,97 @@ class _ActionsFullViewState extends State<ActionsFullView> {
               final commentsText = (comments ?? "").trim();
               final previewLink = previewLinkApi;
 
-              // 🧠 CASE 1: If description text exists
-              if (commentsText.isNotEmpty) {
+              // 🧠 CASE 1: If both text and link exist → show both
+              if (commentsText.isNotEmpty && previewLink.isNotEmpty) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          ImageConstant.actionDetailsMark,
+                        ),
+                        const SizedBox(width: 10),
+                        const Text(
+                          "Description",
+                          style: TextStyle(
+                            fontSize: 16.5,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Poppins',
+                            color: Colors.black,
+                          ),
+                        ),
+                        const Text(
+                          " : ",
+                          style: TextStyle(
+                            fontSize: 16.5,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'Poppins',
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+
+                    // 📝 Description Text
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(10),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.vertical(
+                          bottom: Radius.circular(5),
+                        ),
+                      ),
+                      child: Text(
+                        HtmlUnescape().convert(commentsText),
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Poppins',
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    // 🔗 Link Preview
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.grey.shade300,
+                          width: 1.5,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: LinkPreviewGenerator(
+                          link: previewLink,
+                          linkPreviewStyle: LinkPreviewStyle.small,
+                          showDomain: true,
+                          showTitle: true,
+                          bodyMaxLines: 1,
+                          borderRadius: 10,
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 4,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }
+
+              // 🧠 CASE 2: Only text exists
+              else if (commentsText.isNotEmpty) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -1288,9 +1378,9 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.white,
-                        borderRadius: const BorderRadius.vertical(
+                        borderRadius: BorderRadius.vertical(
                           bottom: Radius.circular(5),
                         ),
                       ),
@@ -1308,7 +1398,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                 );
               }
 
-              // 🔗 CASE 2: If no comments, but preview link exists
+              // 🔗 CASE 3: Only link exists
               else if (previewLink.isNotEmpty) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -1372,7 +1462,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                 );
               }
 
-              // ❌ CASE 3: If both are empty → show nothing
+              // ❌ CASE 4: Nothing to show
               else {
                 return const SizedBox.shrink();
               }
