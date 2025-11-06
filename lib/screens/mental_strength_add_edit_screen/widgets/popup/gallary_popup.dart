@@ -336,34 +336,6 @@ Future galleryBottomSheet({
                                                         ),
                                             ),
 
-                                            // Container(
-                                            //   width: size.width,
-                                            //   height: 200,
-                                            //   decoration: BoxDecoration(
-                                            //     border: Border.all(
-                                            //       color: Colors.grey,
-                                            //       width: 0.5,
-                                            //     ),
-                                            //     borderRadius: BorderRadius.circular(8),
-                                            //   ),
-                                            //   clipBehavior: Clip.hardEdge,
-                                            //   child: FutureBuilder<ui.Image>(
-                                            //     future: getImage(File(mentalStrengthEditProvider.pickedImages[index])),
-                                            //     builder: (context, snapshot) {
-                                            //       if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
-                                            //         final image = snapshot.data!;
-                                            //         final isHorizontal = image.width > image.height;
-                                            //         return Image.file(
-                                            //           File(mentalStrengthEditProvider.pickedImages[index]),
-                                            //           fit: isHorizontal ? BoxFit.cover : BoxFit.contain,
-                                            //         );
-                                            //       } else {
-                                            //         // Show a placeholder or loader while loading
-                                            //         return const Center(child: CircularProgressIndicator());
-                                            //       }
-                                            //     },
-                                            //   ),
-                                            // )
                                           ),
                                           GestureDetector(
                                             onTap: () {
@@ -490,52 +462,6 @@ Future galleryBottomSheet({
                                               ),
                                             ),
 
-                                              // Container(
-                                              //   width: size.width,
-                                              //   height: 200,
-                                              //   decoration: BoxDecoration(
-                                              //     border: Border.all(
-                                              //       color: Colors.grey, // Change color as needed
-                                              //       width: 2,           // Change width as needed
-                                              //     ),
-                                              //     borderRadius: BorderRadius.circular(8), // Optional: rounded corners
-                                              //   ),
-                                              //   clipBehavior: Clip.hardEdge, // Ensures image respects border radius
-                                              //   child: Image.file(
-                                              //     File(mentalStrengthEditProvider.pickedImages[index]),
-                                              //     fit: BoxFit.contain,
-                                              //   ),
-                                              // )
-
-                                            ///og///
-                                            // Container(
-                                            //   width: size.width,
-                                            //   height: 200,
-                                            //   decoration: BoxDecoration(
-                                            //     border: Border.all(
-                                            //       color: Colors.grey,
-                                            //       width: 0.5,
-                                            //     ),
-                                            //     borderRadius: BorderRadius.circular(8),
-                                            //   ),
-                                            //   clipBehavior: Clip.hardEdge,
-                                            //   child: FutureBuilder<ui.Image>(
-                                            //     future: getImage(File(mentalStrengthEditProvider.pickedImages[index])),
-                                            //     builder: (context, snapshot) {
-                                            //       if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
-                                            //         final image = snapshot.data!;
-                                            //         final isHorizontal = image.width > image.height;
-                                            //         return Image.file(
-                                            //           File(mentalStrengthEditProvider.pickedImages[index]),
-                                            //           fit: isHorizontal ? BoxFit.cover : BoxFit.contain,
-                                            //         );
-                                            //       } else {
-                                            //         // Show a placeholder or loader while loading
-                                            //         return Center(child: CircularProgressIndicator());
-                                            //       }
-                                            //     },
-                                            //   ),
-                                            // )
 
 
                                           ),

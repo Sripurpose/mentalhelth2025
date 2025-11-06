@@ -19,6 +19,7 @@ import '../../../token_expiry/token_expiry.dart';
 import '../../subscribe_plan_page/subscribe_plan_page.dart';
 import '../model/app_settings_model.dart';
 import '../model/app_settings_register_model.dart';
+import '../model/app_share_response.dart';
 import '../model/messages_model.dart';
 import '../model/version_update_model.dart';
 
@@ -1044,6 +1045,87 @@ class SignInProvider extends ChangeNotifier {
       notifyListeners();
     }
     notifyListeners();
+  }
+
+
+  int? statusAppShare;
+  bool appShareLoading = false;
+  AppShareResponse? appShareResponseModel;
+
+
+  Future<void> fetchAppShare(
+      BuildContext context) async {
+    try {
+      statusAppShare = 0;
+      appShareResponseModel = null;
+
+      String? token = await getUserTokenSharePref();
+      appShareLoading = true;
+      logger.w("appShareLoading $appShareLoading");
+      notifyListeners();
+
+      Uri url = Uri.parse(UrlConstant.appShareUrl);
+      logger.w("url $url");
+
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
+
+      Map<String, String> headers = {
+        'Device-Type': deviceType,
+        'Version': versionCode.toString(),
+        'authorization': token!, // Assuming token is not null
+      };
+
+      final response = await http.get(url, headers: headers);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        statusAppShare = response.statusCode;
+        appShareResponseModel = appShareResponseFromJson(response.body);
+        appShareLoading = false;
+        notifyListeners();
+
+        logger.w("appShareLoading $appShareLoading");
+        logger.w("appShareResponseModel $appShareResponseModel");
+      }
+      else if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+      else {
+        statusAppShare = response.statusCode;
+        logger.i("settingsRegisterModel${jsonEncode(settingsRegisterModel?.status)}");
+        if (response.statusCode == 401 || response.statusCode == 403) {
+          statusAppShare = response.statusCode;
+          //   TokenManager.setTokenStatus(true);
+          // CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
+        }
+      }
+      statusAppShare = response.statusCode;
+
+      appShareLoading = false;
+      notifyListeners();
+    } catch (e) {
+      logger.e("Error fetching app register: $e");
+      appShareLoading = false;
+      notifyListeners();
+    }
   }
 
 }

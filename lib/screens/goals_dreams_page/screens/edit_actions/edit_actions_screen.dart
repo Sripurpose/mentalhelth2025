@@ -1713,7 +1713,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
     });
   }
 
-  /// Section Widget
+
   /// Section Widget
   Widget _buildDescriptionEditText(BuildContext context) {
     return Consumer<AddActionsProvider>(
@@ -1768,14 +1768,16 @@ class _EditActionScreenState extends State<EditActionScreen> {
                       .toList();
 
                   if (matches.isNotEmpty) {
-                    final link = matches.first;
-                    // ✅ Store link, but keep normal text
-                    addActionsProvider.editDetectedLinks = [link];
+                    final firstLink = matches.first;
+
+                    // ✅ Store ONLY the first link (replace any previous)
+                    addActionsProvider.editDetectedLinks.clear();
+                    addActionsProvider.editDetectedLinks = [firstLink];
                     addActionsProvider.hasUserClearedLink = false;
 
                     // ✅ Remove only the link text from the controller
                     final newText =
-                    text.replaceAll(RegExp(RegExp.escape(link)), "").trim();
+                    text.replaceAll(RegExp(RegExp.escape(firstLink)), "").trim();
                     addActionsProvider.descriptionEditTextController.text =
                         newText;
                     addActionsProvider.descriptionEditTextController.selection =
@@ -1791,69 +1793,67 @@ class _EditActionScreenState extends State<EditActionScreen> {
                 },
               ),
 
-              // 🔗 Show preview (from backend or newly detected link)
+              // 🔗 Show preview (ONLY ONE - no multiple links)
               if (addActionsProvider.editDetectedLinks.isNotEmpty)
-                ...addActionsProvider.editDetectedLinks.map((link) {
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 0.0),
-                    child: Stack(
-                      alignment: Alignment.topRight,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.grey.shade300,
-                              width: 1.5,
-                            ),
-                            borderRadius: BorderRadius.circular(10),
+                Padding(
+                  padding: const EdgeInsets.only(top: 12.0),
+                  child: Stack(
+                    alignment: Alignment.topRight,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey.shade300,
+                            width: 1.5,
                           ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: LinkPreviewGenerator(
-                              link: link,
-                              linkPreviewStyle: LinkPreviewStyle.small,
-                              showDomain: true,
-                              showTitle: true,
-                              bodyMaxLines: 1,
-                              borderRadius: 10,
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 4,
-                                  offset: Offset(0, 2),
-                                ),
-                              ],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: LinkPreviewGenerator(
+                            link: addActionsProvider.editDetectedLinks.first,
+                            linkPreviewStyle: LinkPreviewStyle.small,
+                            showDomain: true,
+                            showTitle: true,
+                            bodyMaxLines: 1,
+                            borderRadius: 10,
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 4,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      // ❌ Close icon
+                      Positioned(
+                        top: 6,
+                        right: 6,
+                        child: GestureDetector(
+                          onTap: () {
+                            addActionsProvider.hasUserClearedLink = true;
+                            addActionsProvider.editDetectedLinks.clear();
+                            setState(() {});
+                          },
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.black54,
+                            ),
+                            padding: const EdgeInsets.all(4),
+                            child: const Icon(
+                              Icons.close,
+                              color: Colors.white,
+                              size: 16,
                             ),
                           ),
                         ),
-                        // ❌ Close icon
-                        Positioned(
-                          top: 6,
-                          right: 6,
-                          child: GestureDetector(
-                            onTap: () {
-                              addActionsProvider.hasUserClearedLink = true;
-                              addActionsProvider.editDetectedLinks = [];
-                              setState(() {});
-                            },
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.black54,
-                              ),
-                              padding: const EdgeInsets.all(4),
-                              child: const Icon(
-                                Icons.close,
-                                color: Colors.white,
-                                size: 16,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }).toList(),
+                      ),
+                    ],
+                  ),
+                ),
             ],
           ),
         );

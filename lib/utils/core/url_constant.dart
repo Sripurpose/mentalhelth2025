@@ -32,6 +32,7 @@ class UrlConstant {
   static String appRegisterUrl= "${baseUrl}setup";
   static String version_update = "${baseUrl}version_update";
   static String messages = "${baseUrl}messages";
+  static String appShareUrl= "${baseUrl}appshare";
 
 
   static String journalsUrl({required String page}) {
@@ -89,6 +90,9 @@ class UrlConstant {
     return "${baseUrl}reminder/$reminder_id";
   }
 
+  static String deleteEmotions({required String emotion_id}) {
+    return "${baseUrl}removesupportingemotion/$emotion_id";
+  }
   static String removemediaUrl = "${baseUrl}removemedia";
   static String removemediabeforesaveUrl = "${baseUrl}removemediabeforesave";
 

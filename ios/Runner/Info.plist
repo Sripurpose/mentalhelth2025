@@ -21,15 +21,29 @@
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
-	<string>????</string>
+    <string>????</string>
     <key>CFBundleURLTypes</key>
     <array>
+      <!-- Primary scheme: numuapp -->
       <dict>
         <key>CFBundleTypeRole</key>
         <string>Editor</string>
+        <key>CFBundleURLName</key>
+        <string>com.numuapp.numu</string>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>numuapp</string> <!-- Your custom URL scheme -->
+          <string>numuapp</string>
+        </array>
+      </dict>
+      <!-- Secondary scheme: mental (for flexibility) -->
+      <dict>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+        <key>CFBundleURLName</key>
+        <string>com.numuapp.mental</string>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>mental</string>
         </array>
       </dict>
     </array>

@@ -379,59 +379,42 @@ Widget buildPopupDialog(BuildContext context, Size size) {
               SizedBox(
                 height: size.height * 0.001,
               ),
-              // GestureDetector(
-              //   onTap: () async {
-              //
-              //     if(Platform.isIOS){
-              //       await Share.share(
-              //           "https://mh.featureme.live/downloads");
-              //     }else{
-              //       await Share.share(
-              //           "https://mh.featureme.live/downloads");
-              //     }
-              //     // final url
-              //
-              //   },
-              //   child: Align(
-              //     alignment: Alignment.topLeft,
-              //     child: Text(
-              //       "App share",
-              //       maxLines: 13,
-              //       overflow: TextOverflow.ellipsis,
-              //       style: CustomTextStyles.titleMediumOnSecondaryContainerMedium
-              //           .copyWith(
-              //         height: 2.19,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              GestureDetector(
-                onTap: () async {
-                  final shareMessage = '''
-Check out the Numu app!
 
-Build mental strength, reduce anxiety, and stay focused on your goals with Numu.
+              Consumer<SignInProvider>(
+                builder: (context, signInProvider, child) {
+                  final shareData = signInProvider.appShareResponseModel;
+                  final downloadUrl = Theme.of(context).platform == TargetPlatform.iOS
+                      ? shareData?.appstoreUrl
+                      : shareData?.playstoreUrl;
 
-Download now: ${UrlConstant.appShareDownloads}/downloads
+                  return GestureDetector(
+                    onTap: () async {
+                      final shareMessage = '''
+${shareData?.title}
+
+${shareData?.message}
+
+Download now: $downloadUrl
 ''';
 
-                  await Share.share(shareMessage);
-                },
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    "App share",
-                    maxLines: 13,
-                    overflow: TextOverflow.ellipsis,
-                    style: CustomTextStyles
-                        .titleMediumOnSecondaryContainerMedium
-                        .copyWith(
-                      height: 2.19,
+                      await Share.share(shareMessage);
+                    },
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "App share",
+                        maxLines: 13,
+                        overflow: TextOverflow.ellipsis,
+                        style: CustomTextStyles
+                            .titleMediumOnSecondaryContainerMedium
+                            .copyWith(
+                          height: 2.19,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
-
 
               SizedBox(
                 height: size.height * 0.005,

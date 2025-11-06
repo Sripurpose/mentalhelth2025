@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/screens/auth/sign_in/provider/sign_in_provider.dart';
 import 'package:mentalhelth/screens/auth/sign_in/screen_sign_in.dart';
+import 'package:mentalhelth/screens/auth/sign_in/widget/referral_code_helper.dart';
 import 'package:mentalhelth/screens/maintenence_screen/maintenence_screen.dart';
 import 'package:mentalhelth/utils/core/image_constant.dart';
 import 'package:mentalhelth/utils/theme/colors.dart';
@@ -35,7 +36,6 @@ class _LandingRegisterScreenScreenState
   @override
   void initState() {
     super.initState();
-   //_handleIncomingDeepLinks();
     signInProvider = Provider.of<SignInProvider>(context, listen: false);
 
     Future.delayed(const Duration(seconds: 5), () {
@@ -46,28 +46,25 @@ class _LandingRegisterScreenScreenState
       final deviceType = Platform.isAndroid ? 'android' : 'ios';
       if (signInProvider.statusAppSetup == 503) {
         logger.w("App in maintenance: ${signInProvider.statusAppSetup}");
-       // WidgetsBinding.instance.addPostFrameCallback((_) {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => MaintenenceScreen(
-                title:
-                "App is in maintenance mode. We'll be back in a couple of hours!",
-                message: signInProvider.versionUpdateModel?.message ?? "",
-              ),
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => MaintenenceScreen(
+              title:
+              "App is in maintenance mode. We'll be back in a couple of hours!",
+              message: signInProvider.versionUpdateModel?.message ?? "",
             ),
-          );
-       // });
+          ),
+        );
       }
     });
   }
 
-
   @override
   void dispose() {
     _sub?.cancel();
+    ReferralCodeHelper().dispose();
     super.dispose();
   }
-
 
   Future<void> _launchInAppWithBrowserOptions(Uri url) async {
     logger.i("Launching URL in custom in-app browser: $url");
@@ -80,9 +77,6 @@ class _LandingRegisterScreenScreenState
       ),
     );
   }
-
-
-
 
   Future<void> _launchInAppWithWebView(Uri url) async {
     if (url.scheme == "mental") {
@@ -113,6 +107,7 @@ class _LandingRegisterScreenScreenState
     final provider = Provider.of<SignInProvider>(context);
     final settings = provider.settingsRegisterModel?.settings?.first;
     final size = MediaQuery.of(context).size;
+    final referralHelper = ReferralCodeHelper();
 
     return SafeArea(
       child: WillPopScope(
@@ -156,7 +151,6 @@ class _LandingRegisterScreenScreenState
                                 ),
                               ),
                               SizedBox(height: size.height * 0.02),
-
                               Text(
                                 settings?.message ?? '',
                                 textAlign: TextAlign.center,
@@ -167,32 +161,19 @@ class _LandingRegisterScreenScreenState
                                   color: Colors.white,
                                 ),
                               ),
-                              // RichText(
-                              //   textAlign: TextAlign.center,
-                              //   text: const TextSpan(
-                              //     style: TextStyle(
-                              //       fontSize: 14,
-                              //       fontWeight: FontWeight.w400,
-                              //       fontFamily: 'Open Sans',
-                              //       color: Colors.white,
-                              //     ),
-                              //     children: [
-                              //       TextSpan(
-                              //           text:
-                              //           'Empower your mental well-being with\n'),
-                              //       TextSpan(
-                              //           text:
-                              //           'simple, effective tools!'),
-                              //     ],
-                              //   ),
-                              // ),
                               SizedBox(height: size.height * 0.05),
                               if (settings?.link != null &&
                                   settings?.status == "1")
                                 GestureDetector(
                                   onTap: () {
-                                    final url = Uri.parse(
-                                        settings?.linkUrl ?? "");
+                                    // Get base URL and append referrer code
+                                    final baseUrl = settings?.linkUrl ?? "";
+                                    final urlWithReferrer =
+                                    referralHelper.getRegistrationUrlWithReferrer(baseUrl);
+                                    final url = Uri.parse(urlWithReferrer);
+
+                                    logger.i("Registration URL with referrer: $urlWithReferrer");
+
                                     if (settings?.target == "external") {
                                       _launchInAppWithBrowserOptions(url);
                                     } else {
@@ -273,7 +254,6 @@ class _LandingRegisterScreenScreenState
                                       fontWeight: FontWeight.bold,
                                       color: ColorsContent.whiteText,
                                       fontFamily: 'Poppins',
-
                                     ),
                                   ),
                                 ),

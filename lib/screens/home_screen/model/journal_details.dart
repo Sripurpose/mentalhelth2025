@@ -56,6 +56,7 @@ class Journals {
   Location? location;
   List<JournalMedia>? journalMedia;
   String? preview_link;
+  String? chatlink;
 
   Journals({
     this.userId,
@@ -74,6 +75,7 @@ class Journals {
     this.location,
     this.journalMedia,
     this.preview_link,
+    this.chatlink,
   });
 
   factory Journals.fromJson(Map<String, dynamic> json) => Journals(
@@ -100,6 +102,7 @@ class Journals {
             : List<JournalMedia>.from(
                 json["journal_media"]!.map((x) => JournalMedia.fromJson(x))),
     preview_link: json["preview_link"],
+    chatlink: json["chatlink"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -122,7 +125,8 @@ class Journals {
         "journal_media": journalMedia == null
             ? []
             : List<dynamic>.from(journalMedia!.map((x) => x.toJson())),
-    "preview_link":preview_link
+    "preview_link":preview_link,
+    "chatlink":chatlink,
       };
 }
 
@@ -172,6 +176,7 @@ class JournalMedia {
   String? mediaType;
   String? gemMedia;
   String? videoThumb;
+  String? is_chart;
 
   JournalMedia({
     this.mediaId,
@@ -179,6 +184,7 @@ class JournalMedia {
     this.mediaType,
     this.gemMedia,
     this.videoThumb,
+    this.is_chart,
   });
 
   factory JournalMedia.fromJson(Map<String, dynamic> json) => JournalMedia(
@@ -187,6 +193,7 @@ class JournalMedia {
         mediaType: json["media_type"],
         gemMedia: json["gem_media"],
         videoThumb: json["video_thumb"],
+    is_chart: json["is_chart"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -195,6 +202,7 @@ class JournalMedia {
         "media_type": mediaType,
         "gem_media": gemMedia,
         "video_thumb": videoThumb,
+    "is_chart":is_chart,
       };
 }
 

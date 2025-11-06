@@ -1113,8 +1113,13 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
 
                   // ✅ If found any new link, show preview
                   if (matches.isNotEmpty) {
+                    final firstLink = matches.first;
+
                     setState(() {
-                      addActionsProvider.detectedLinks = matches;
+                      // ❌ Clear previous links and add ONLY the first one
+                      addActionsProvider.detectedLinks.clear();
+                      addActionsProvider.detectedLinks = [firstLink];
+
                       // Remove pasted URL text from field
                       addActionsProvider.descriptionEditTextController.text =
                           value.replaceAll(addActionsProvider.urlRegex, '').trimRight();
@@ -1129,70 +1134,82 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                 },
               ),
 
-              // 🔗 Show link preview below text
+              // 🔗 Show link preview (ONLY ONE - no multiple links)
+              // Show link preview (ONLY ONE - no multiple links)
               if (hasLink)
-                ...addActionsProvider.detectedLinks.map((link) {
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 0.0),
-                    child: Stack(
-                      alignment: Alignment.topRight,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.grey.shade300,
-                              width: 1.5,
-                            ),
-                            borderRadius: BorderRadius.circular(10),
+                Padding(
+                  padding: const EdgeInsets.only(top: 12.0),
+                  child: Stack(
+                    alignment: Alignment.topRight,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey.shade300,
+                            width: 1.5,
                           ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: LinkPreviewGenerator(
-                              link: link,
-                              linkPreviewStyle: LinkPreviewStyle.small,
-                              showDomain: true,
-                              showTitle: true,
-                              bodyMaxLines: 1,
-                              borderRadius: 10,
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 4,
-                                  offset: Offset(0, 2),
-                                ),
-                              ],
-                            ),
-                          ),
+                          borderRadius: BorderRadius.circular(10),
                         ),
-
-                        // ❌ Close icon — remove preview
-                        Positioned(
-                          top: 6,
-                          right: 6,
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                addActionsProvider.detectedLinks.clear();
-                              });
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: FutureBuilder(
+                            future: Future.delayed(const Duration(milliseconds: 500)),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return Container(
+                                  height: 100,
+                                  color: Colors.grey.shade100,
+                                  child: const Center(
+                                    child: CircularProgressIndicator(strokeWidth: 2),
+                                  ),
+                                );
+                              }
+                              return LinkPreviewGenerator(
+                                link: addActionsProvider.detectedLinks.first,
+                                linkPreviewStyle: LinkPreviewStyle.small,
+                                showDomain: true,
+                                showTitle: true,
+                                bodyMaxLines: 1,
+                                borderRadius: 10,
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    blurRadius: 4,
+                                    offset: Offset(0, 2),
+                                  ),
+                                ],
+                              );
                             },
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.black54,
-                              ),
-                              padding: const EdgeInsets.all(4),
-                              child: const Icon(
-                                Icons.close,
-                                color: Colors.white,
-                                size: 16,
-                              ),
+                          ),
+                        ),
+                      ),
+                      // ❌ Close icon — remove preview
+                      Positioned(
+                        top: 6,
+                        right: 6,
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              addActionsProvider.detectedLinks.clear();
+                            });
+                          },
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.black54,
+                            ),
+                            padding: const EdgeInsets.all(4),
+                            child: const Icon(
+                              Icons.close,
+                              color: Colors.white,
+                              size: 16,
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                  );
-                }).toList(),
+                      ),
+                    ],
+                  ),
+                ),
             ],
           ),
         );

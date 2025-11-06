@@ -825,8 +825,11 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                       .toList();
 
                   if (matches.isNotEmpty) {
-                    // ✅ Store detected link
-                    adDreamsGoalsProvider.editDetectedLinks = [matches.first];
+                    final firstLink = matches.first;
+
+                    // ✅ Store ONLY the first detected link (replace any previous)
+                    adDreamsGoalsProvider.editDetectedLinks.clear();
+                    adDreamsGoalsProvider.editDetectedLinks = [firstLink];
                     adDreamsGoalsProvider.hasUserClearedLink = false;
 
                     // ✅ Remove link text from the field
@@ -840,73 +843,71 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                 },
               ),
 
-              // 🔗 Link preview (either backend or pasted link)
+              // 🔗 Link preview (ONLY ONE - no multiple links)
               if (hasLink)
-                ...adDreamsGoalsProvider.editDetectedLinks.map((link) {
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Stack(
-                      alignment: Alignment.topRight,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.grey.shade300,
-                              width: 1.5,
-                            ),
-                            borderRadius: BorderRadius.circular(10),
+                Padding(
+                  padding: const EdgeInsets.only(top: 12.0),
+                  child: Stack(
+                    alignment: Alignment.topRight,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey.shade300,
+                            width: 1.5,
                           ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: LinkPreviewGenerator(
-                              link: link,
-                              linkPreviewStyle: LinkPreviewStyle.small,
-                              showDomain: true,
-                              showTitle: true,
-                              bodyMaxLines: 1,
-                              borderRadius: 10,
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 4,
-                                  offset: Offset(0, 2),
-                                ),
-                              ],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: LinkPreviewGenerator(
+                            link: adDreamsGoalsProvider.editDetectedLinks.first,
+                            linkPreviewStyle: LinkPreviewStyle.small,
+                            showDomain: true,
+                            showTitle: true,
+                            bodyMaxLines: 1,
+                            borderRadius: 10,
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 4,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      // ❌ Close icon - remove preview
+                      Positioned(
+                        top: 6,
+                        right: 6,
+                        child: GestureDetector(
+                          onTap: () {
+                            logger.i(
+                                "editDetectedLinks before clear: ${adDreamsGoalsProvider.editDetectedLinks}");
+
+                            adDreamsGoalsProvider.hasUserClearedLink = true;
+                            adDreamsGoalsProvider.editDetectedLinks.clear();
+                            setState(() {});
+                          },
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.black54,
+                            ),
+                            padding: const EdgeInsets.all(4),
+                            child: const Icon(
+                              Icons.close,
+                              color: Colors.white,
+                              size: 16,
                             ),
                           ),
                         ),
-
-                        // ❌ Close icon - remove preview
-                        Positioned(
-                          top: 6,
-                          right: 6,
-                          child: GestureDetector(
-                            onTap: () {
-                              logger.i(
-                                  "editDetectedLinks before clear: ${adDreamsGoalsProvider.editDetectedLinks}");
-
-                              adDreamsGoalsProvider.hasUserClearedLink = true;
-                              adDreamsGoalsProvider.editDetectedLinks = [];
-                              setState(() {});
-                            },
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.black54,
-                              ),
-                              padding: const EdgeInsets.all(4),
-                              child: const Icon(
-                                Icons.close,
-                                color: Colors.white,
-                                size: 16,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }).toList(),
+                      ),
+                    ],
+                  ),
+                ),
             ],
           ),
         );

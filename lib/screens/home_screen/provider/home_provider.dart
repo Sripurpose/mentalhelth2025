@@ -238,40 +238,37 @@ class HomeProvider extends ChangeNotifier {
   bool journalsGridModelLoading = false;
   int totalPages = 1; // default
 
+  DateTime? fromDate;
+  DateTime? toDate;
 
   Future fetchJournalsGridView({
     bool initial = false,
     String? pageNo,
     required BuildContext context,
-    DateTime? fromDate,
-    DateTime? toDate,
-  })
-  async {
+    DateTime? fromDateParam,
+    DateTime? toDateParam,
+  }) async {
     try {
+      // Use the date from parameters first, then stored date, then fallback to today
+      final start = fromDateParam ?? this.fromDate ?? DateTime.now();
+      final end = toDateParam ?? this.toDate ?? DateTime.now();
+
+      // Save selected dates in provider for pagination
+      this.fromDate = start;
+      this.toDate = end;
+
       String? token = await getUserTokenSharePref();
       journalsGridModelLoading = true;
-      String deviceType = Platform.isAndroid ? 'android' : 'ios';
-      String? versionCode = '';
 
-      if (Platform.isAndroid) {
-        versionCode = Constent.versionCodeAndroid.isNotEmpty
-            ? Constent.versionCodeAndroid
-            : await getVersionSharePref();
-      } else if (Platform.isIOS) {
-        versionCode = Constent.versionCodeIOS.isNotEmpty
-            ? Constent.versionCodeIOS
-            : await getVersionSharePref();
-      }
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = Platform.isAndroid
+          ? (Constent.versionCodeAndroid.isNotEmpty ? Constent.versionCodeAndroid : await getVersionSharePref())
+          : (Constent.versionCodeIOS.isNotEmpty ? Constent.versionCodeIOS : await getVersionSharePref());
 
       journalGridStatus = 0;
       notifyListeners();
 
-      Map<String, String> headers = {
-        'device-type': deviceType,
-        'version': versionCode.toString(),
-        'authorization': token ?? "",
-        // ✅ Removed 'Content-Type': 'application/json' for form-data
-      };
+      // Determine current page
       if (pageNo != null) {
         pageLoad = int.tryParse(pageNo) ?? 1;
       } else if (initial) {
@@ -280,33 +277,30 @@ class HomeProvider extends ChangeNotifier {
         pageLoad += 1;
       }
 
-
-
-      // Use pageLoad for API call if pageNo not provided
+      // API URL
       Uri url = Uri.parse(UrlConstant.journalsUrlGrid(
-        page: pageNo ?? pageLoad.toString(),
+        page: pageLoad.toString(),
       ));
 
       logger.w("url $url");
 
-      // ✅ Set default dates to today if not provided
-      final startDate = fromDate ?? DateTime.now();
-      final endDate = toDate ?? DateTime.now();
+      // Format dates for API
+      String formattedFromDate = _formatDateForApi(start);
+      String formattedToDate = _formatDateForApi(end);
 
-      // ✅ Format dates as YYYY-MM-DD
-      String formattedFromDate = _formatDateForApi(startDate);
-      String formattedToDate = _formatDateForApi(endDate);
-
-      // ✅ POST body with date parameters (form-data)
       final body = {
-        "page_no": pageNo ?? "1",
+        "page_no": pageLoad.toString(),
         "from_date": formattedFromDate,
         "to_date": formattedToDate,
       };
 
       logger.w("Request body: $body");
 
-      final response = await http.post(url, headers: headers, body: body);
+      final response = await http.post(url, headers: {
+        'device-type': deviceType,
+        'version': versionCode.toString(),
+        'authorization': token ?? "",
+      }, body: body);
 
       if (response.statusCode == 200) {
         journalGridStatus = response.statusCode;
@@ -314,31 +308,20 @@ class HomeProvider extends ChangeNotifier {
 
         final newJournals = journalsModelGrid!.journals ?? [];
 
-        if (initial) {
-          // Fresh load, clear the list
-          journalsModelGridList.clear();
-        } else {
-          // Previous/Next: replace the list for current page
-          journalsModelGridList.clear();
-        }
-
+        // Always replace list on page change
+        journalsModelGridList.clear();
         journalsModelGridList.addAll(newJournals);
 
-        // Update totalPages from API if available
+        // Update total pages
         final totalCount = journalsModelGrid?.totalCount ?? journalsModelGridList.length;
         totalPages = (totalCount / 10).ceil();
 
-        journalsGridModelLoading = false;
-        notifyListeners();
-      }
-
-      else if (response.statusCode == 503) {
+      } else if (response.statusCode == 503) {
         Future.delayed(Duration.zero, () {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => const MaintenenceScreen(
-                title:
-                "App is in maintenance mode, Please be patient, we'll be back in a couple of hours!",
+                title: "App is in maintenance mode, Please be patient, we'll be back in a couple of hours!",
                 message: "",
               ),
             ),
@@ -347,10 +330,7 @@ class HomeProvider extends ChangeNotifier {
       } else {
         TokenManager.setTokenStatus(false);
         journalGridStatus = response.statusCode;
-        logger.w("journalsModelelse ${journalsModelFromJson(response.body)}");
-        journalsGridModelLoading = false;
         journalsModelGridList.clear();
-        notifyListeners();
       }
 
       if (response.statusCode == 401 || response.statusCode == 403) {
@@ -358,20 +338,20 @@ class HomeProvider extends ChangeNotifier {
         TokenManager.setTokenStatus(true);
       }
 
-      journalsGridModelLoading = false;
-      notifyListeners();
     } catch (e) {
       logger.w("catch $e");
-      journalsGridModelLoading = false;
-      notifyListeners();
+      journalsModelGridList.clear();
     }
+
+    journalsGridModelLoading = false;
     notifyListeners();
   }
 
-// ✅ Helper function to format date as YYYY-MM-DD
+// Helper function to format date as YYYY-MM-DD
   String _formatDateForApi(DateTime date) {
     return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
   }
+
 
 
 

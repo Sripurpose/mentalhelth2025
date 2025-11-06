@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.numuapp.numuapp">
 
-<uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -18,14 +18,14 @@
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
     <uses-permission android:name="android.permission.CAMERA"/>
-<!--    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />-->
+    <!--    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />-->
 
 
     <application
         android:label="Numu"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        tools:replace="android:icon, android:label"> <!-- Corrected the syntax here -->
+        tools:replace="android:icon, android:label">
 
         <meta-data android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyB_mUl0uBmISnObRAdQEF-Ffaa4mxq1LpQ"/>
@@ -48,19 +48,27 @@
                 android:name="io.flutter.embedding.android.NormalTheme"
                 android:resource="@style/NormalTheme"/>
 
+            <!-- Main launcher intent filter -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+
+            <!-- Custom scheme for deep links (numuapp://) -->
             <intent-filter>
-            <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="numuapp" />
+            </intent-filter>
 
-            <category android:name="android.intent.category.DEFAULT" />
-            <category android:name="android.intent.category.BROWSABLE" />
-
-            <!-- This is your custom scheme -->
-            <data android:scheme="numuapp" />
-        </intent-filter>
+            <!-- Alternative scheme (mental://) for flexibility -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="mental" />
+            </intent-filter>
 
         </activity>
 

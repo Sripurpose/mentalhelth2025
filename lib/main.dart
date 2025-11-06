@@ -14,6 +14,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mentalhelth/firebase_options.dart';
 import 'package:mentalhelth/screens/addactions_screen/model/alaram_info.dart';
+import 'package:mentalhelth/screens/auth/sign_in/widget/referral_code_helper.dart';
 import 'package:mentalhelth/screens/auth/signup_screen/provider/signup_provider.dart';
 import 'package:mentalhelth/screens/auth/splash/splash.dart';
 import 'package:mentalhelth/screens/auth/subscribe_plan_page/provider/subscribe_plan_provider.dart';
@@ -55,6 +56,13 @@ Future _firebaseBackgroundMessage(RemoteMessage message) async {
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
+// Initialize referral tracking
+void initializeReferralTracking() async {
+  final referralHelper = ReferralCodeHelper();
+  await referralHelper.initializeReferralTracking();
+  print("Referral tracking initialized");
+}
+
 void main() async {
   // Set this before initializing bindings
   BindingBase.debugZoneErrorsAreFatal = true;
@@ -63,6 +71,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   try {
+    // Initialize referral code tracking early
+    initializeReferralTracking();
+
     // Initialize Firebase
     if(Platform.isAndroid){
       await Firebase.initializeApp(

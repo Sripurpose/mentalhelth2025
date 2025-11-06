@@ -41,6 +41,7 @@ import '../../widgets/background_image/background_imager.dart';
 import '../addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
 import '../journal_list_screen/journal_list_page.dart';
 import '../journal_list_screen/screens/edit_journal/numu_edit_journal_screen.dart';
+import '../mental_strength_add_edit_screen/chat_gpt_screen.dart';
 import '../mental_strength_add_edit_screen/screens/goals_and_dreams_full_view/goals_and_dreams_full_view_screen.dart';
 import '../no_internet/duplicate_screen.dart';
 
@@ -930,11 +931,27 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                   ),
                                 ),
 
-                                Center(
-                                  child: SvgPicture.asset(
-                                    ImageConstant.chatIconNumu,
+                                GestureDetector(
+                                  onTap: () {
+                                    final linkUrl = homeProvider.journalDetails?.journals?.chatlink;
+
+                                    if (linkUrl != null && linkUrl.isNotEmpty) {
+                                      _launchInAppWithBrowserOptions(Uri.parse(linkUrl), context);
+                                    } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('No chat link available'),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  child: Center(
+                                    child: SvgPicture.asset(
+                                      ImageConstant.chatIconNumu,
+                                    ),
                                   ),
                                 ),
+
 
                                 const SizedBox(height: 10),
                               ],
@@ -1124,7 +1141,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                           i++) {
                         if (homeProvider.journalDetails!.journals!
                                 .journalMedia![i].mediaType ==
-                            'image') {
+                            'image' &&  homeProvider.journalDetails?.journals!.journalMedia![i].is_chart != '1') {
                           mentalStrengthEditProvider.alreadyPickedImages.add(
                             AllModel(
                               id: homeProvider.journalDetails!.journals!
@@ -1325,6 +1342,18 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
         //   Icons.more_vert,
         // ),
       ],
+    );
+  }
+
+
+  Future<void> _launchInAppWithBrowserOptions(Uri url,BuildContext context) async {
+    logger.i("Launching URL in custom in-app browser: $url");
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => ChatGptScreen(initialUrl: url),
+      ),
     );
   }
 

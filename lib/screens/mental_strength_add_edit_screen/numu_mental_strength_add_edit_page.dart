@@ -1407,19 +1407,19 @@ class _NumuMentalStrengthAddEditPageState
                   final regex = mentalStrengthEditProvider.urlRegex;
                   final matches = regex.allMatches(value).map((m) => m.group(0)!).toList();
 
-                  // 🧩 Case 1: Found new link(s)
+                  // 🧩 Found link(s) - ONLY keep the first one, replace any previous
                   if (matches.isNotEmpty) {
                     final updatedText = value.replaceAll(regex, '').trimRight();
+                    final firstLink = matches.first;
 
                     setState(() {
-                      // Append new links only if not already present
-                      for (var link in matches) {
-                        if (!mentalStrengthEditProvider.detectedLinks.contains(link)) {
-                          mentalStrengthEditProvider.detectedLinks.add(link);
-                        }
-                      }
+                      // ❌ Clear all previous links
+                      mentalStrengthEditProvider.detectedLinks.clear();
 
-                      // Remove the link text from the field
+                      // ✅ Add ONLY the first link
+                      mentalStrengthEditProvider.detectedLinks.add(firstLink);
+
+                      // Remove link text from field
                       mentalStrengthEditProvider.descriptionEditTextController.text = updatedText;
                       mentalStrengthEditProvider.descriptionEditTextController.selection =
                           TextSelection.fromPosition(
@@ -1427,7 +1427,6 @@ class _NumuMentalStrengthAddEditPageState
                           );
                     });
                   }
-                  // 🧩 Case 2: No new link found → do nothing, keep existing previews
                 },
 
                 onTap: () => setState(() {}),
@@ -1437,70 +1436,68 @@ class _NumuMentalStrengthAddEditPageState
                 },
               ),
 
-              // 🔗 Show link previews (not link text)
+              // 🔗 Show link preview (ONLY ONE)
               if (mentalStrengthEditProvider.detectedLinks.isNotEmpty)
-                ...mentalStrengthEditProvider.detectedLinks.map((link) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 0.0),
-                    child: Stack(
-                      alignment: Alignment.topRight,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.grey.shade300,
-                              width: 1.5,
-                            ),
-                            borderRadius: BorderRadius.circular(10),
+                Padding(
+                  padding: const EdgeInsets.only(top: 12.0),
+                  child: Stack(
+                    alignment: Alignment.topRight,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey.shade300,
+                            width: 1.5,
                           ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: LinkPreviewGenerator(
-                              link: link,
-                              linkPreviewStyle: LinkPreviewStyle.small,
-                              showDomain: true,
-                              showTitle: true,
-                              bodyMaxLines: 1,
-                              borderRadius: 10,
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 4,
-                                  offset: Offset(0, 2),
-                                ),
-                              ],
-                            ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: LinkPreviewGenerator(
+                            link: mentalStrengthEditProvider.detectedLinks.first,
+                            linkPreviewStyle: LinkPreviewStyle.small,
+                            showDomain: true,
+                            showTitle: true,
+                            bodyMaxLines: 1,
+                            borderRadius: 10,
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 4,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
                           ),
                         ),
+                      ),
 
-                        // ❌ Remove link preview
-                        Positioned(
-                          top: 6,
-                          right: 6,
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                mentalStrengthEditProvider.detectedLinks.clear();
-                              });
-                            },
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.black54,
-                              ),
-                              padding: const EdgeInsets.all(4),
-                              child: const Icon(
-                                Icons.close,
-                                color: Colors.white,
-                                size: 16,
-                              ),
+                      // ❌ Remove link preview button
+                      Positioned(
+                        top: 6,
+                        right: 6,
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              mentalStrengthEditProvider.detectedLinks.clear();
+                            });
+                          },
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.black54,
+                            ),
+                            padding: const EdgeInsets.all(4),
+                            child: const Icon(
+                              Icons.close,
+                              color: Colors.white,
+                              size: 16,
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                  );
-                }).toList(),
+                      ),
+                    ],
+                  ),
+                ),
             ],
           ),
         );

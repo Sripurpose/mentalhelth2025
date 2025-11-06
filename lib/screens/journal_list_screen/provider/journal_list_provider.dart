@@ -153,4 +153,78 @@ class JournalListProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+
+  bool deleteEmotionLoading = false;
+  Future<bool> deleteReminderFunction({required String emotion_id,required BuildContext context}) async {
+    try {
+      // String? userId = await getUserIdSharePref();
+      String? token = await getUserTokenSharePref();
+      deleteEmotionLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
+      notifyListeners();
+      Map<String, String> headers = {
+        'device-type': deviceType,
+        'version': versionCode.toString(),
+        'authorization': token ?? '',
+      };
+      notifyListeners();
+      Uri url = Uri.parse(
+        UrlConstant.deleteEmotions(
+          emotion_id: emotion_id,
+        ),
+      );
+      final response = await http.delete(
+        url,
+        headers: headers,
+      );
+      print(response.body.toString());
+      notifyListeners();
+      if(response.statusCode == 401){
+        TokenManager.setTokenStatus(true);
+        //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
+      }
+      if(response.statusCode == 403){
+        TokenManager.setTokenStatus(true);
+        //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
+      }
+      if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+      if (response.statusCode == 200) {
+        deleteEmotionLoading = false;
+
+        notifyListeners();
+        return true;
+      }
+      else {
+        deleteEmotionLoading = false;
+        notifyListeners();
+        return false;
+      }
+    } catch (e) {
+      deleteEmotionLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
 }
