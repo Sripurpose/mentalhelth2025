@@ -2,25 +2,25 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>$(DEVELOPMENT_LANGUAGE)</string>
-	<key>CFBundleDisplayName</key>
-	<string>Numu</string>
-	<key>CFBundleExecutable</key>
-	<string>$(EXECUTABLE_NAME)</string>
-	<key>CFBundleIdentifier</key>
-	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string>mentalhealth</string>
-	<key>CFBundlePackageType</key>
-	<string>APPL</string>
-	<key>CFBundleShortVersionString</key>
-	<string>$(FLUTTER_BUILD_NAME)</string>
-	<key>CFBundleSignature</key>
+    <key>CADisableMinimumFrameDurationOnPhone</key>
+    <true/>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>$(DEVELOPMENT_LANGUAGE)</string>
+    <key>CFBundleDisplayName</key>
+    <string>Numu</string>
+    <key>CFBundleExecutable</key>
+    <string>$(EXECUTABLE_NAME)</string>
+    <key>CFBundleIdentifier</key>
+    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundleName</key>
+    <string>mentalhealth</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleShortVersionString</key>
+    <string>$(FLUTTER_BUILD_NAME)</string>
+    <key>CFBundleSignature</key>
     <string>????</string>
     <key>CFBundleURLTypes</key>
     <array>
@@ -47,76 +47,76 @@
         </array>
       </dict>
     </array>
-	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
-	<key>FacebookAdvertiserIDCollectionEnabled</key>
-	<string>FALSE</string>
-	<key>FacebookAppID</key>
-	<string>23rf234f</string>
-	<key>FacebookClientToken</key>
-	<string>hcjsakdbfuywkjhckblsc</string>
-	<key>FirebaseAppDelegateProxyEnabled</key>
-	<false/>
-	<key>FirebaseMessagingAutoInitEnabled</key>
-	<true/>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
-	<key>NSAppleMusicUsageDescription</key>
-	<string>This app requires access to your media library to enable features such as saving and sharing photos and videos. Your privacy is important, and we will only use this access to enhance your experience within the app.</string>
-	<key>NSCameraUsageDescription</key>
-	<string>We need access to your camera to allow you to take and upload photos for your profile, Mental strength,Goals, Actions.</string>
-	<key>NSDocumentsFolderUsageDescription</key>
-	<string>This app requires access to your Documents folder to save audio files securely</string>
-	<key>NSFileProviderUsageDescription</key>
-	<string>App requires access to files for playback.</string>
-	<key>NSFileTypeAudioRecording</key>
-	<string>public.audio</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>This app requires access to your location both while in use and in the background to provide location-based features and services</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>This app requires access to your location at all times to provide personalized features and services. Your privacy is important, and your location data will only be used to enhance your experience.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>We need access to your location to display your current location in the Mental Strength, goals and actions.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>We need access to your microphone to record voice messages for your Mental strength,Goals, Actions.</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>This app requires access to your photo library to save images. Your privacy is important, and we will only use this access to enhance your experience.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>We need access to your photo library to let you upload images to your posts. in for your profile, Mental strength,Goals, Actions.</string>
-	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>This app requires access to speech recognition to enable voice commands and enhance user interaction. Your privacy is important, and we will only use this access to improve your experience within the app.</string>
-	<key>NSUserNotificationUsageDescription</key>
-	<string>This app needs access to notifications.</string>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>fetch</string>
-		<string>remote-notification</string>
-	</array>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
-	<key>UIMainStoryboardFile</key>
-	<string>Main</string>
-	<key>UISupportedInterfaceOrientations</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>UISupportedInterfaceOrientations~ipad</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>io.flutter.embedded_views_preview</key>
-	<true/>
+    <key>CFBundleVersion</key>
+    <string>$(FLUTTER_BUILD_NUMBER)</string>
+    <key>FacebookAdvertiserIDCollectionEnabled</key>
+    <string>FALSE</string>
+    <key>FacebookAppID</key>
+    <string>23rf234f</string>
+    <key>FacebookClientToken</key>
+    <string>hcjsakdbfuywkjhckblsc</string>
+    <key>FirebaseAppDelegateProxyEnabled</key>
+    <false/>
+    <key>FirebaseMessagingAutoInitEnabled</key>
+    <true/>
+    <key>LSRequiresIPhoneOS</key>
+    <true/>
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+    </dict>
+    <key>NSAppleMusicUsageDescription</key>
+    <string>This app requires access to your media library to enable features such as saving and sharing photos and videos. Your privacy is important, and we will only use this access to enhance your experience within the app.</string>
+    <key>NSCameraUsageDescription</key>
+    <string>We need access to your camera to allow you to take and upload photos for your profile, Mental strength,Goals, Actions.</string>
+    <key>NSDocumentsFolderUsageDescription</key>
+    <string>This app requires access to your Documents folder to save audio files securely</string>
+    <key>NSFileProviderUsageDescription</key>
+    <string>App requires access to files for playback.</string>
+    <key>NSFileTypeAudioRecording</key>
+    <string>public.audio</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>This app requires access to your location both while in use and in the background to provide location-based features and services</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>This app requires access to your location at all times to provide personalized features and services. Your privacy is important, and your location data will only be used to enhance your experience.</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>We need access to your location to display your current location in the Mental Strength, goals and actions.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>We need access to your microphone to record voice messages for your Mental strength,Goals, Actions.</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>This app requires access to your photo library to save images. Your privacy is important, and we will only use this access to enhance your experience.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>We need access to your photo library to let you upload images to your posts. in for your profile, Mental strength,Goals, Actions.</string>
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>This app requires access to speech recognition to enable voice commands and enhance user interaction. Your privacy is important, and we will only use this access to improve your experience within the app.</string>
+    <key>NSUserNotificationUsageDescription</key>
+    <string>This app needs access to notifications.</string>
+    <key>UIApplicationSupportsIndirectInputEvents</key>
+    <true/>
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>fetch</string>
+        <string>remote-notification</string>
+    </array>
+    <key>UILaunchStoryboardName</key>
+    <string>LaunchScreen</string>
+    <key>UIMainStoryboardFile</key>
+    <string>Main</string>
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+    <key>UISupportedInterfaceOrientations~ipad</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationPortraitUpsideDown</string>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+    <key>io.flutter.embedded_views_preview</key>
+    <true/>
 </dict>
 </plist>
