@@ -15,8 +15,10 @@ class ChartViewList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return SingleChildScrollView( // ✅ Makes the whole section scrollable
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 20),
+    return SingleChildScrollView(
+      // ✅ Makes the whole section scrollable
+      padding:
+          EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 20),
       child: Column(
         children: [
           SizedBox(height: size.height * 0.02),
@@ -66,14 +68,24 @@ class ChartCircularWidgetState extends State<ChartCircularWidget> {
     if (provider.journalChartViewModel != null) {
       setState(() {
         data = [
-          ChartData('Optimal',
-              provider.journalChartViewModel?.chartpercentage?.optimalPercent ?? 0),
-          ChartData('Stressful',
-              provider.journalChartViewModel?.chartpercentage?.stressfullPercent ?? 0),
-          ChartData('Passive',
-              provider.journalChartViewModel?.chartpercentage?.passivePercent ?? 0),
-          ChartData('Destructive',
-              provider.journalChartViewModel?.chartpercentage?.destructivePercent ?? 0),
+          ChartData(
+              'Optimal',
+              provider.journalChartViewModel?.chartpercentage?.optimalPercent ??
+                  0),
+          ChartData(
+              'Stressful',
+              provider.journalChartViewModel?.chartpercentage
+                      ?.stressfullPercent ??
+                  0),
+          ChartData(
+              'Passive',
+              provider.journalChartViewModel?.chartpercentage?.passivePercent ??
+                  0),
+          ChartData(
+              'Destructive',
+              provider.journalChartViewModel?.chartpercentage
+                      ?.destructivePercent ??
+                  0),
         ].where((e) => e.y > 0).toList();
       });
     }
@@ -85,83 +97,89 @@ class ChartCircularWidgetState extends State<ChartCircularWidget> {
     return Consumer<JournalListProvider>(
       builder: (context, provider, _) {
         return provider.journalChartViewModelLoading
-            ?  Center(
-          child: CupertinoActivityIndicator(
-            color: ColorsContent.newThemeColor,
-            radius: 15,
-          ),
-        )
-            : provider.journalChartStatusCode != 404
-            ? Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0),
-          child: Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(8),
-                topRight: Radius.circular(8),
-              ),
-            ),
-            child: Column(
-              children: [
-                const SizedBox(height: 25),
-                Padding(
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: 40.0),
-                  child: CustomLegend(
-                    data: data,
-                    colorMap: colorMap,
-                  ),
+            ? Center(
+                child: CupertinoActivityIndicator(
+                  color: ColorsContent.newThemeColor,
+                  radius: 15,
                 ),
-                SfCircularChart(
-                  tooltipBehavior: tooltip,
-                  series: <CircularSeries>[
-                    PieSeries<ChartData, String>(
-                      dataSource: data,
-                      xValueMapper: (ChartData d, _) => d.x,
-                      yValueMapper: (ChartData d, _) => d.y,
-                      pointColorMapper: (ChartData d, _) =>
-                      colorMap[d.x] ?? Colors.grey,
-                      dataLabelSettings: const DataLabelSettings(
-                        isVisible: true,
-                        labelPosition:
-                        ChartDataLabelPosition.inside,
-                        textStyle: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontFamily: 'Poppins',
+              )
+            : provider.journalChartStatusCode != 404
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(8),
+                          topRight: Radius.circular(8),
                         ),
                       ),
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 25),
+
+                          // ✅ PIE CHART FIRST
+                          SfCircularChart(
+                            tooltipBehavior: tooltip,
+                            series: <CircularSeries>[
+                              PieSeries<ChartData, String>(
+                                dataSource: data,
+                                xValueMapper: (ChartData d, _) => d.x,
+                                yValueMapper: (ChartData d, _) => d.y,
+                                pointColorMapper: (ChartData d, _) =>
+                                    colorMap[d.x] ?? Colors.grey,
+                                dataLabelSettings: const DataLabelSettings(
+                                  isVisible: true,
+                                  labelPosition: ChartDataLabelPosition.inside,
+                                  textStyle: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          const SizedBox(height: 10),
+
+                          // ✅ LEGEND BELOW CHART
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 40.0),
+                            child: CustomLegend(
+                              data: data,
+                              colorMap: colorMap,
+                            ),
+                          ),
+
+                          const SizedBox(height: 25),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
-               // const SizedBox(height: ),
-              ],
-            ),
-          ),
-        )
-            : Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset(ImageConstant.noDataNumu),
-            const Text(
-              "No data found",
-              style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              "Check back later",
-              style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black,
-                  fontWeight: FontWeight.normal),
-            ),
-          ],
-        );
+                  )
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(ImageConstant.noDataNumu),
+                      const Text(
+                        "No data found",
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 10),
+                      const Text(
+                        "Check back later",
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.black,
+                            fontWeight: FontWeight.normal),
+                      ),
+                    ],
+                  );
       },
     );
   }
@@ -179,42 +197,54 @@ class CustomLegend extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 20,
-      runSpacing: 10,
-      alignment: WrapAlignment.center,
-      children: data
-          .map(
-            (d) => Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 16,
-              height: 16,
-              decoration: BoxDecoration(
-                color: colorMap[d.x] ?? Colors.grey,
-                shape: BoxShape.circle,
-              ),
-            ),
-            const SizedBox(width: 6),
-            Text(
-              d.x,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-                fontFamily: 'Poppins',
-              ),
-            ),
-          ],
-        ),
-      )
-          .toList(),
+    // Ensures even distribution: 2 columns layout
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, // ✅ two columns
+            mainAxisSpacing: 3,
+            crossAxisSpacing: 3,
+            childAspectRatio: 5, // adjust spacing between text and dot
+          ),
+          itemCount: data.length,
+          itemBuilder: (context, index) {
+            final d = data[index];
+            return Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 16,
+                  height: 16,
+                  decoration: BoxDecoration(
+                    color: colorMap[d.x] ?? Colors.grey,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  d.x,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 }
 
+
 class ChartData {
   ChartData(this.x, this.y);
+
   final String x;
   final int y;
 }
@@ -300,11 +330,13 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                     ),
                     child: ExpansionTile(
                       tilePadding: const EdgeInsets.symmetric(horizontal: 16),
-                      childrenPadding: const EdgeInsets.only(left: 20, right: 10),
+                      childrenPadding:
+                          const EdgeInsets.only(left: 20, right: 10),
                       initiallyExpanded: expandedKey == section['key'],
                       onExpansionChanged: (isExpanded) {
                         setState(() {
-                          expandedKey = isExpanded ? section['key'] as String : null;
+                          expandedKey =
+                              isExpanded ? section['key'] as String : null;
                         });
                       },
                       title: Text(
@@ -333,10 +365,11 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                               title: Text(
                                 emotionTitle.toUpperCase(),
                                 style: const TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.black54,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,),
+                                  fontSize: 14,
+                                  color: Colors.black54,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
                             ),
                           );
@@ -443,8 +476,8 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                                     );
 
                                     // Call delete function
-                                    final result = await provider
-                                        .deleteReminderFunction(
+                                    final result =
+                                        await provider.deleteReminderFunction(
                                       emotion_id: emotionId,
                                       context: context,
                                     );
@@ -461,16 +494,18 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                                           context: context);
 
                                       // Close the confirmation popup if it's still open
-                                      if (mounted && Navigator.canPop(context)) {
+                                      if (mounted &&
+                                          Navigator.canPop(context)) {
                                         Navigator.of(context).pop();
                                       }
 
                                       // Show success message (optional)
                                       if (mounted) {
-                                        ScaffoldMessenger.of(context).showSnackBar(
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
                                           const SnackBar(
-                                            content:
-                                            Text('Emotion removed successfully'),
+                                            content: Text(
+                                                'Emotion removed successfully'),
                                             duration: Duration(seconds: 2),
                                             backgroundColor: Colors.green,
                                           ),
@@ -479,9 +514,11 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                                     } else {
                                       // Delete failed
                                       if (mounted) {
-                                        ScaffoldMessenger.of(context).showSnackBar(
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
                                           const SnackBar(
-                                            content: Text('Failed to remove emotion'),
+                                            content: Text(
+                                                'Failed to remove emotion'),
                                             duration: Duration(seconds: 2),
                                             backgroundColor: Colors.red,
                                           ),
@@ -491,7 +528,7 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                                   },
                                   title: 'Confirm Delete',
                                   content:
-                                  'Are you sure you want to delete this reminder?',
+                                      'Are you sure you want to delete this reminder?',
                                 );
                               },
                               child: Container(
@@ -528,13 +565,8 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
         ),
       ),
     );
-
   }
 }
-
-
-
-
 
 // import 'package:flutter/cupertino.dart';
 // import 'package:flutter/material.dart';
