@@ -250,7 +250,7 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
       {
         'key': 'Stressful',
         'color': ColorsContent.stressFullStateColor.withOpacity(0.2),
-        'title': 'Productive',
+        'title': 'Stressful',
         'data': chart?.stressful,
         'percent': chart?.stressful?.percent ?? 0,
         'count': chart?.stressful?.count ?? 0,
@@ -258,7 +258,7 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
       {
         'key': 'Passive',
         'color': ColorsContent.passiveStateColor.withOpacity(0.2),
-        'title': 'Pleasure',
+        'title': 'Passive',
         'data': chart?.passive,
         'percent': chart?.passive?.percent ?? 0,
         'count': chart?.passive?.count ?? 0,
