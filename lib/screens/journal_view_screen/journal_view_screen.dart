@@ -35,6 +35,7 @@ import 'package:mentalhelth/widgets/widget/shimmer.dart';
 import 'package:provider/provider.dart';
 import 'package:html_unescape/html_unescape.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../utils/logic/logic.dart';
 import '../../widgets/background_image/background_imager.dart';
@@ -64,12 +65,25 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
   late MentalStrengthEditProvider mentalStrengthEditProvider;
   late HomeProvider homeProvider;
   var logger = Logger();
+  late WebViewController _webViewController;
+
+
   @override
   void initState() {
     mentalStrengthEditProvider = Provider.of<MentalStrengthEditProvider>(context, listen: false,);
     mentalStrengthEditProvider.openGoalViewSheet = false;
     init();
     super.initState();
+  }
+
+  void _initializeWebView() {
+    final linkUrl = homeProvider.journalDetails?.journals?.chartlink;
+
+    if (linkUrl != null && linkUrl.isNotEmpty) {
+      _webViewController = WebViewController()
+        ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..loadRequest(Uri.parse(linkUrl));
+    }
   }
 
   void init() async {
@@ -93,6 +107,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
         journalDetails: homeProvider.journalDetails!,
       );
     }
+    _initializeWebView();
   }
 
   int sliderIndex = 1;
@@ -509,6 +524,25 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                 imageList.isEmpty?
                                 const SizedBox():
                                 const SizedBox(height: 28),
+
+                                // ✅ WebView Container - Opens link automatically
+                                if (homeProvider.journalDetails?.journals?.chartlink != null &&
+                                    homeProvider.journalDetails!.journals!.chartlink!.isNotEmpty)
+                                  Container(
+                                    height: size.height * 0.40, // Adjust height as needed
+                                    margin: const EdgeInsets.symmetric(horizontal: 0),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: Colors.white,
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: WebViewWidget(
+                                        controller: _webViewController,
+                                      ),
+                                    ),
+                                  ),
+                                const SizedBox(height: 10),
                                 videoList.isEmpty
                                     ? const SizedBox()
                                     : const SizedBox(
@@ -1294,10 +1328,12 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                             }
                           }
                           await homeProvider.fetchJournals(pageNo:homeProvider.currentPage.toString(),context: context);
-                          await homeProvider.fetchJournalsGridView(pageNo:homeProvider.currentPage.toString(),context: context);
+                          await homeProvider.fetchJournalsGridView(initial: true,context: context,fullList: true);
+                       //   await homeProvider.fetchJournalsGridView(pageNo:homeProvider.currentPage.toString(),context: context);
                           if(homeProvider.journalStatus == 404){
                             await homeProvider.fetchJournals(pageNo:1.toString(),context: context);
-                            await homeProvider.fetchJournalsGridView(pageNo:1.toString(),context: context);
+                            await homeProvider.fetchJournalsGridView(initial: true,context: context,fullList: true);
+                            //await homeProvider.fetchJournalsGridView(pageNo:1.toString(),context: context);
                           }
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(

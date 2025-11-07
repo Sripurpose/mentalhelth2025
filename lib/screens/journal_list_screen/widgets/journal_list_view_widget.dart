@@ -163,8 +163,7 @@ class _JournalListViewWidgetState extends State<JournalListViewWidget> {
                               print("currentPagenews ${homeProvider.currentPage}");
                               homeProvider.fetchJournals(
                                   pageNo: homeProvider.currentPage.toString(),context: context);
-                              homeProvider.fetchJournalsGridView(
-                                  pageNo: homeProvider.currentPage.toString(),context: context);
+                               homeProvider.fetchJournalsGridView(initial: true,context: context,fullList: true);
                             },
                             child: Container(
                               margin: const EdgeInsets.all(4.0),

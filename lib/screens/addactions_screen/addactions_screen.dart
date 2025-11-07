@@ -1285,7 +1285,7 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                     goalId: widget.goalId,
                     mediaThumbs: addActionsProvider.mediaThumbList, // ✅ pass here
                     isReminder: "1",
-                    editDetectedLinks: adDreamsGoalsProvider.detectedLinks,
+                    editDetectedLinks: addActionsProvider.detectedLinks,
 
                   );
                   adDreamsGoalsProvider.getAddActionIdAndName(
@@ -1319,7 +1319,7 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                   goalId: widget.goalId,
                   mediaThumbs: addActionsProvider.mediaThumbList, // ✅ pass here
                   isReminder: "0",
-                  editDetectedLinks: adDreamsGoalsProvider.detectedLinks,
+                  editDetectedLinks: addActionsProvider.detectedLinks,
 
                 );
                 adDreamsGoalsProvider.getAddActionIdAndName(

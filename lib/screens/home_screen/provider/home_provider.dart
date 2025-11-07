@@ -247,23 +247,20 @@ class HomeProvider extends ChangeNotifier {
     required BuildContext context,
     DateTime? fromDateParam,
     DateTime? toDateParam,
+    bool fullList = false, // 👈 new parameter
   }) async {
     try {
-      // Use the date from parameters first, then stored date, then fallback to today
-      final start = fromDateParam ?? this.fromDate ?? DateTime.now();
-      final end = toDateParam ?? this.toDate ?? DateTime.now();
-
-      // Save selected dates in provider for pagination
-      this.fromDate = start;
-      this.toDate = end;
-
       String? token = await getUserTokenSharePref();
       journalsGridModelLoading = true;
 
       String deviceType = Platform.isAndroid ? 'android' : 'ios';
       String? versionCode = Platform.isAndroid
-          ? (Constent.versionCodeAndroid.isNotEmpty ? Constent.versionCodeAndroid : await getVersionSharePref())
-          : (Constent.versionCodeIOS.isNotEmpty ? Constent.versionCodeIOS : await getVersionSharePref());
+          ? (Constent.versionCodeAndroid.isNotEmpty
+          ? Constent.versionCodeAndroid
+          : await getVersionSharePref())
+          : (Constent.versionCodeIOS.isNotEmpty
+          ? Constent.versionCodeIOS
+          : await getVersionSharePref());
 
       journalGridStatus = 0;
       notifyListeners();
@@ -284,23 +281,46 @@ class HomeProvider extends ChangeNotifier {
 
       logger.w("url $url");
 
-      // Format dates for API
-      String formattedFromDate = _formatDateForApi(start);
-      String formattedToDate = _formatDateForApi(end);
+      // 👇 Handle dates conditionally
+      String? formattedFromDate;
+      String? formattedToDate;
 
+      if (!fullList) {
+        // Only set if not fullList
+        final start = fromDateParam ?? this.fromDate ?? DateTime.now();
+        final end = toDateParam ?? this.toDate ?? DateTime.now();
+
+        this.fromDate = start;
+        this.toDate = end;
+
+        formattedFromDate = _formatDateForApi(start);
+        formattedToDate = _formatDateForApi(end);
+      } else {
+        // Clear stored dates if full list requested
+        this.fromDate = null;
+        this.toDate = null;
+      }
+
+      // 👇 Build body conditionally based on fullList flag
       final body = {
         "page_no": pageLoad.toString(),
-        "from_date": formattedFromDate,
-        "to_date": formattedToDate,
+        if (!fullList) ...{
+          "from_date": formattedFromDate!,
+          "to_date": formattedToDate!,
+        },
       };
 
       logger.w("Request body: $body");
 
-      final response = await http.post(url, headers: {
-        'device-type': deviceType,
-        'version': versionCode.toString(),
-        'authorization': token ?? "",
-      }, body: body);
+      final response = await http.post(
+        url,
+        headers: {
+          'device-type': deviceType,
+          'version': versionCode.toString(),
+          'authorization': token ?? "",
+        },
+        body: body,
+      );
 
       if (response.statusCode == 200) {
         journalGridStatus = response.statusCode;
@@ -313,15 +333,16 @@ class HomeProvider extends ChangeNotifier {
         journalsModelGridList.addAll(newJournals);
 
         // Update total pages
-        final totalCount = journalsModelGrid?.totalCount ?? journalsModelGridList.length;
+        final totalCount =
+            journalsModelGrid?.totalCount ?? journalsModelGridList.length;
         totalPages = (totalCount / 10).ceil();
-
       } else if (response.statusCode == 503) {
         Future.delayed(Duration.zero, () {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => const MaintenenceScreen(
-                title: "App is in maintenance mode, Please be patient, we'll be back in a couple of hours!",
+                title:
+                "App is in maintenance mode, Please be patient, we'll be back in a couple of hours!",
                 message: "",
               ),
             ),
@@ -337,7 +358,6 @@ class HomeProvider extends ChangeNotifier {
         journalGridStatus = response.statusCode;
         TokenManager.setTokenStatus(true);
       }
-
     } catch (e) {
       logger.w("catch $e");
       journalsModelGridList.clear();
@@ -346,6 +366,8 @@ class HomeProvider extends ChangeNotifier {
     journalsGridModelLoading = false;
     notifyListeners();
   }
+
+
 
 // Helper function to format date as YYYY-MM-DD
   String _formatDateForApi(DateTime date) {

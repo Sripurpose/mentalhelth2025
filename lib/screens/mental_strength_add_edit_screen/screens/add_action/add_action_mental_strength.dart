@@ -940,7 +940,7 @@ class _AddActionMentalStrengthBottomSheetState
                   goalId: widget.goalId,
                   mediaThumbs: addActionsProvider.mediaThumbList, // ✅ pass here
                     isReminder: "1",
-                editDetectedLinks: adDreamsGoalsProvider.detectedLinks,
+                editDetectedLinks: addActionsProvider.detectedLinks,
                 );
                 // if (getGemStatus) {
                 //   Navigator.of(context).pop();
@@ -972,7 +972,7 @@ class _AddActionMentalStrengthBottomSheetState
                 goalId: widget.goalId,
                   mediaThumbs: addActionsProvider.mediaThumbList, // ✅ pass here
                   isReminder: "0",
-                editDetectedLinks: adDreamsGoalsProvider.detectedLinks,
+                editDetectedLinks: addActionsProvider.detectedLinks,
 
               );
               adDreamsGoalsProvider.getAddActionIdAndName(

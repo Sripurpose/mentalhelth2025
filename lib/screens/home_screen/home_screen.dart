@@ -95,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _isTokenExpired() async {
 
     await homeProvider.fetchJournals(initial: true,context: context);
-    await homeProvider.fetchJournalsGridView(initial: true,context: context);
+    await homeProvider.fetchJournalsGridView(initial: true,context: context,fullList: true);
    // await homeProvider.fetchChartView(context);
   //  checkAndFetchVersionUpdate(context);
 
@@ -590,7 +590,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       _isTokenExpired();
                    //   homeProvider.fetchChartView(context);
                       homeProvider.fetchJournals(initial: true,context: context);
-                      homeProvider.fetchJournalsGridView(initial: true,context: context);
+                      homeProvider.fetchJournalsGridView(initial: true,context: context,fullList: true);
                       editProfileProvider.fetchUserProfile(context);
                     },
                     child: Column(
@@ -771,6 +771,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                           final isPrevEnabled = homeProvider.pageLoad != 1;
                                           final isNextEnabled = homeProvider.pageLoad < homeProvider.totalPages;
 
+                                          // Check if dates are selected or not
+                                          final bool noDateSelected =
+                                              homeProvider.fromDate == null && homeProvider.toDate == null;
+
                                           return Row(
                                             children: [
                                               // Previous button
@@ -784,6 +788,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     initial: false,
                                                     fromDateParam: homeProvider.fromDate,
                                                     toDateParam: homeProvider.toDate,
+                                                    fullList: noDateSelected, // 👈 key change
                                                   );
                                                 }
                                                     : null,
@@ -819,6 +824,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     initial: false,
                                                     fromDateParam: homeProvider.fromDate,
                                                     toDateParam: homeProvider.toDate,
+                                                    fullList: noDateSelected, // 👈 key change
                                                   );
                                                 }
                                                     : null,
@@ -846,10 +852,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
 
                                     const SizedBox(width: 12),
-
-
                                   ],
                                 ),
+
 
                                 const SizedBox(height: 50),
                               ],
