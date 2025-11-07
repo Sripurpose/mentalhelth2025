@@ -54,6 +54,34 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
 
+            <!-- Allow receiving shared text -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/*" />
+            </intent-filter>
+
+            <!-- Allow receiving shared single image -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
+
+            <!-- Allow receiving shared single video -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="video/*" />
+            </intent-filter>
+
+            <!-- Allow receiving multiple files (images, videos, etc.) -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="*/*" />
+            </intent-filter>
+
             <!-- Custom scheme for deep links (numuapp://) -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
