@@ -2217,15 +2217,16 @@ class MentalStrengthEditProvider extends ChangeNotifier {
     }
   }
 
-
-
-  _launchInAppWithBrowserOptions(Uri url, BuildContext context) async {
+// Updated launch function
+  void _launchInAppWithBrowserOptions(Uri url, BuildContext context) async {
     logger.i("Launching URL in custom bottom sheet: $url");
 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
+      isDismissible: false,
+      enableDrag: false,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -2235,6 +2236,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
       ),
     );
   }
+
 
 
 //update journal

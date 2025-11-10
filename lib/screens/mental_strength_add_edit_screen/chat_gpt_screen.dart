@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:mentalhelth/screens/auth/sign_in/screen_sign_in.dart';
 import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import '../../../widgets/app_bar/appbar_leading_image.dart';
 
 class ChatGptBottomSheet extends StatefulWidget {
   final Uri initialUrl;
@@ -145,3 +144,4 @@ class _ChatGptBottomSheetState extends State<ChatGptBottomSheet> {
     );
   }
 }
+

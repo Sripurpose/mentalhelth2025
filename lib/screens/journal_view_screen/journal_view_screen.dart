@@ -1376,6 +1376,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
   }
 
 
+// Updated launch function
   void _launchInAppWithBrowserOptions(Uri url, BuildContext context) async {
     logger.i("Launching URL in custom bottom sheet: $url");
 
@@ -1383,6 +1384,8 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
+      isDismissible: false,
+      enableDrag: false,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
