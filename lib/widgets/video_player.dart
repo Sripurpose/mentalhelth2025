@@ -397,6 +397,228 @@ class _VideoPlayerWidgetViewAndAlreadyBuildMentalProgressBarState
   }
 }
 
+
+class VideoPlayerWidgetViewAndAlreadyBuildHomeProgressBar extends StatefulWidget {
+  const VideoPlayerWidgetViewAndAlreadyBuildHomeProgressBar({
+    super.key,
+    required this.videoUrl,
+  });
+
+  final String videoUrl;
+
+  @override
+  _VideoPlayerWidgetViewAndAlreadyBuildHomeProgressBarState createState() =>
+      _VideoPlayerWidgetViewAndAlreadyBuildHomeProgressBarState();
+}
+
+class _VideoPlayerWidgetViewAndAlreadyBuildHomeProgressBarState
+    extends State<VideoPlayerWidgetViewAndAlreadyBuildHomeProgressBar> {
+  late VideoPlayerController _controller;
+  bool _isLoading = true;
+  bool _hasError = false;
+  bool _showPlayButton = true;
+
+  // ✅ Public method — pause video from outside
+  void pauseVideo() {
+    if (_controller.value.isInitialized && _controller.value.isPlaying) {
+      _controller.pause();
+      setState(() => _showPlayButton = true);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initVideo();
+  }
+
+
+
+
+  Future<void> _initVideo() async {
+    try {
+      File videoFile;
+
+      if (widget.videoUrl.startsWith('http')) {
+        final response = await http.get(Uri.parse(widget.videoUrl));
+        if (response.statusCode == 200) {
+          final tempDir = await getTemporaryDirectory();
+          final filePath =
+              '${tempDir.path}/${DateTime.now().millisecondsSinceEpoch}.mp4';
+          videoFile = File(filePath);
+          await videoFile.writeAsBytes(response.bodyBytes);
+        } else {
+          throw Exception('Failed to download video');
+        }
+      } else {
+        videoFile = File(widget.videoUrl);
+      }
+
+      _controller = VideoPlayerController.file(videoFile);
+      await _controller.initialize();
+      _controller.addListener(_onControllerUpdate);
+      setState(() => _isLoading = false);
+    } catch (e) {
+      print('Error initializing video: $e');
+      setState(() {
+        _hasError = true;
+        _isLoading = false;
+      });
+    }
+  }
+
+  void _onControllerUpdate() {
+    if (mounted) {
+      setState(() {
+        _showPlayButton = !_controller.value.isPlaying;
+      });
+    }
+  }
+
+  void _onPlayButtonPressed() {
+    print('Play button pressed');
+    if (_controller.value.isPlaying) {
+      _controller.pause();
+      print('Paused');
+    } else {
+      _controller.play();
+      print('Playing');
+    }
+  }
+
+  String _formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final minutes = twoDigits(duration.inMinutes.remainder(60));
+    final seconds = twoDigits(duration.inSeconds.remainder(60));
+    return "$minutes:$seconds";
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isLoading) {
+      return Center(
+        child: CupertinoActivityIndicator(radius: 15, color: ColorsContent.newThemeColor),
+      );
+    }
+
+    if (_hasError) {
+      return const Center(
+        child: Text(
+          'Failed to load video',
+          style: TextStyle(color: Colors.red),
+        ),
+      );
+    }
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return FittedBox(
+          fit: BoxFit.contain,
+          alignment: Alignment.center,
+          child: SizedBox(
+            width: _controller.value.size.width,
+            height: _controller.value.size.height,
+            child: GestureDetector(
+              onTap: _onPlayButtonPressed,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  // Video Player
+                  VideoPlayer(_controller),
+
+                  // Play/Pause Overlay Button
+                  if (_showPlayButton)
+                    Center(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.black.withOpacity(0.6),
+                        ),
+                        padding: const EdgeInsets.all(20),
+                        child: const Icon(
+                          Icons.play_arrow,
+                          color: Colors.white,
+                          size: 60,
+                        ),
+                      ),
+                    )
+                  else
+                    Center(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.black.withOpacity(0.6),
+                        ),
+                        padding: const EdgeInsets.all(20),
+                        child: const Icon(
+                          Icons.pause,
+                          color: Colors.white,
+                          size: 60,
+                        ),
+                      ),
+                    ),
+
+                  // Bottom Progress Bar
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      color: Colors.black.withOpacity(0.7),
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          VideoProgressIndicator(
+                            _controller,
+                            allowScrubbing: true,
+                            colors: VideoProgressColors(
+                              playedColor: ColorsContent.newThemeColor,
+                              bufferedColor: Colors.grey.shade400,
+                              backgroundColor: Colors.grey.shade300,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                _formatDuration(_controller.value.position),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                ),
+                              ),
+                              Text(
+                                _formatDuration(_controller.value.duration),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.removeListener(_onControllerUpdate);
+    _controller.dispose();
+    super.dispose();
+  }
+}
+
 ///-///
 
 

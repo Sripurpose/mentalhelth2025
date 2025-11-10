@@ -29,6 +29,8 @@ class ImageConstant {
   static String toggleActiveNumu = '$imagePath/toggle_active.svg';
   static String toggleInActiveNumu = '$imagePath/toggle_in_active.svg';
   static String chatIconNumu = '$imagePath/chat_icon.svg';
+  static String summaryChatIcon = '$imagePath/summary_chat_icon.svg';
+
 
   static String gridVideoPlayIconNumu = '$imagePath/grid_video_play_icon.svg';
   static String gridVideoPauseIconNumu = '$imagePath/video_pause_icon_grid.svg';

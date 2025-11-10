@@ -598,267 +598,254 @@ class _HomeScreenState extends State<HomeScreen> {
                         SizedBox(height: size.height * 0.01),
                         _buildHeaderRow(context, size, editProfileProvider, dashBoardProvider),
                         Expanded(
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
+                          child: Column(
+                            children: [
 
-                                // 🔹 Pinned message UI goes here
-                                if (showPinnedMessage && messages != null && messages.isNotEmpty)
-                                  Builder(
-                                    builder: (context) {
-                                      final pinnedMessage = messages.firstWhere(
-                                            (msg) => msg.type == "2",
-                                        orElse: () => Messages(),
-                                      );
+                              // 🔹 Pinned message UI goes here
+                              if (showPinnedMessage && messages != null && messages.isNotEmpty)
+                                Builder(
+                                  builder: (context) {
+                                    final pinnedMessage = messages.firstWhere(
+                                          (msg) => msg.type == "2",
+                                      orElse: () => Messages(),
+                                    );
 
-                                      if ((pinnedMessage.title ?? "").isNotEmpty || (pinnedMessage.description ?? "").isNotEmpty) {
-                                        return Container(
-                                          margin: const EdgeInsets.symmetric(horizontal: 21, vertical: 8),
-                                          padding: const EdgeInsets.all(12),
-                                          decoration: BoxDecoration(
-                                            color: Colors.amber.shade100,
-                                            borderRadius: BorderRadius.circular(8),
-                                          ),
-                                          child: Row(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              const Icon(Icons.lightbulb, color: Colors.amber),
-                                              const SizedBox(width: 8),
-                                              Expanded(
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    if (pinnedMessage.title?.isNotEmpty ?? false)
-                                                      Text(
-                                                        pinnedMessage.title!,
-                                                        style: const TextStyle(
-                                                          fontWeight: FontWeight.bold,
-                                                          fontSize: 16,
-                                                        ),
-                                                      ),
-                                                    if (pinnedMessage.description?.isNotEmpty ?? false)
-                                                      Text(
-                                                        pinnedMessage.description!,
-                                                        style: const TextStyle(fontSize: 14),
-                                                      ),
-                                                  ],
-                                                ),
-                                              ),
-                                              IconButton(
-                                                icon: const Icon(Icons.close, size: 20),
-                                                onPressed: () async {
-                                                  await setPinLastClosedTimestamp();
-                                                  setState(() {
-                                                    showPinnedMessage = false;
-                                                  });
-                                                },
-
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      } else {
-                                        return const SizedBox.shrink();
-                                      }
-                                    },
-                                  ),
-
-
-                                GestureDetector(
-                                  onTap: (){
-                                    dashBoardProvider.changePage(index: 1);
-                                    mentalStrengthEditProvider.fetchEmotions(context: context);
-                                  },
-                                  child: SizedBox(
-                                    width: 500,
-                                    height: 200,
-                                    child: Image.asset(
-                                      ImageConstant.homeBannerNumuNew,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                          
-                                // homeProvider.journalsModelList.isEmpty?
-                                //    const SizedBox():
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 22),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        // Title
-                                        Text(
-                                          "Your Recent Journals",
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontFamily: 'Poppins',
-                                            fontWeight: FontWeight.w700,
-                                            color: ColorsContent.blackThemeColor,
-                                          ),
+                                    if ((pinnedMessage.title ?? "").isNotEmpty || (pinnedMessage.description ?? "").isNotEmpty) {
+                                      return Container(
+                                        margin: const EdgeInsets.symmetric(horizontal: 21, vertical: 8),
+                                        padding: const EdgeInsets.all(12),
+                                        decoration: BoxDecoration(
+                                          color: Colors.amber.shade100,
+                                          borderRadius: BorderRadius.circular(8),
                                         ),
-
-
-
-                                        // Search icon (always visible)
-                                        GestureDetector(
-                                          onTap: () {
-                                            DateRangePickerScreen.show(
-                                              context,
-                                              onDateRangeSelected: (startDate, endDate) {
-                                                homeProvider.fromDate = startDate;
-                                                homeProvider.toDate = endDate;
-
-                                                homeProvider.fetchJournalsGridView(
-                                                  initial: true,
-                                                  context: context,
-                                                  fromDateParam: startDate,
-                                                  toDateParam: endDate,
-                                                );
+                                        child: Row(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            const Icon(Icons.lightbulb, color: Colors.amber),
+                                            const SizedBox(width: 8),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  if (pinnedMessage.title?.isNotEmpty ?? false)
+                                                    Text(
+                                                      pinnedMessage.title!,
+                                                      style: const TextStyle(
+                                                        fontWeight: FontWeight.bold,
+                                                        fontSize: 16,
+                                                      ),
+                                                    ),
+                                                  if (pinnedMessage.description?.isNotEmpty ?? false)
+                                                    Text(
+                                                      pinnedMessage.description!,
+                                                      style: const TextStyle(fontSize: 14),
+                                                    ),
+                                                ],
+                                              ),
+                                            ),
+                                            IconButton(
+                                              icon: const Icon(Icons.close, size: 20),
+                                              onPressed: () async {
+                                                await setPinLastClosedTimestamp();
+                                                setState(() {
+                                                  showPinnedMessage = false;
+                                                });
                                               },
-                                            );
 
-                                          },
-                                          child: SvgPicture.asset(
-                                            ImageConstant.homeSearchNumu,
-                                          ),
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                  ),
+                                      );
+                                    } else {
+                                      return const SizedBox.shrink();
+                                    }
+                                  },
                                 ),
 
 
+                              GestureDetector(
+                                onTap: (){
+                                  dashBoardProvider.changePage(index: 1);
+                                  mentalStrengthEditProvider.fetchEmotions(context: context);
+                                },
+                                child: SizedBox(
+                                  width: 500,
+                                  height: 200,
+                                  child: Image.asset(
+                                    ImageConstant.homeBannerNumuNew,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
 
-
-
-                                const SizedBox(height: 10),
-                                SingleChildScrollView(
-                                  child: Column(
+                              // homeProvider.journalsModelList.isEmpty?
+                              //    const SizedBox():
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 22),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      homeProvider.journalsGridModelLoading
-                                          ? Center(child: CupertinoActivityIndicator(
-                                        color: ColorsContent.newThemeColor,
-                                        radius: 15,
-                                      ))
-                                          :
-                                      homeProvider.journalsModelGridList.isEmpty?
+                                      // Title
+                                      Text(
+                                        "Your Recent Journals",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontFamily: 'Poppins',
+                                          fontWeight: FontWeight.w700,
+                                          color: ColorsContent.blackThemeColor,
+                                        ),
+                                      ),
+
+
+
+                                      // Search icon (always visible)
                                       GestureDetector(
-                                        onTap: (){
+                                        onTap: () {
+                                          DateRangePickerScreen.show(
+                                            context,
+                                            onDateRangeSelected: (startDate, endDate) {
+                                              homeProvider.fromDate = startDate;
+                                              homeProvider.toDate = endDate;
+
+                                              homeProvider.fetchJournalsGridView(
+                                                initial: true,
+                                                context: context,
+                                                fromDateParam: startDate,
+                                                toDateParam: endDate,
+                                              );
+                                            },
+                                          );
+
                                         },
                                         child: SvgPicture.asset(
-                                          ImageConstant.homeScreenNoData,
-                                          width:  size.width * 0.90,
-                                          height: size.height * 0.43,
+                                          ImageConstant.homeSearchNumu,
                                         ),
-                                      ):
-
-                                      _buildUserProfileList(context, size, homeProvider),
+                                      ),
                                     ],
                                   ),
                                 ),
-                                const SizedBox(height: 20),
-                                // Row with Previous/Next + Search
-                                homeProvider.journalsGridModelLoading
-                                    ? const SizedBox():
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    if (homeProvider.journalsModelGridList.isNotEmpty)
-                                      Builder(
-                                        builder: (context) {
-                                          final isPrevEnabled = homeProvider.pageLoad != 1;
-                                          final isNextEnabled = homeProvider.pageLoad < homeProvider.totalPages;
-
-                                          // Check if dates are selected or not
-                                          final bool noDateSelected =
-                                              homeProvider.fromDate == null && homeProvider.toDate == null;
-
-                                          return Row(
-                                            children: [
-                                              // Previous button
-                                              GestureDetector(
-                                                onTap: isPrevEnabled
-                                                    ? () {
-                                                  final prevPage = (homeProvider.pageLoad - 1).toString();
-                                                  homeProvider.fetchJournalsGridView(
-                                                    context: context,
-                                                    pageNo: prevPage,
-                                                    initial: false,
-                                                    fromDateParam: homeProvider.fromDate,
-                                                    toDateParam: homeProvider.toDate,
-                                                    fullList: noDateSelected, // 👈 key change
-                                                  );
-                                                }
-                                                    : null,
-                                                child: Container(
-                                                  width: 28,
-                                                  height: 28,
-                                                  decoration: BoxDecoration(
-                                                    color: isPrevEnabled
-                                                        ? ColorsContent.newThemeColor
-                                                        : Colors.grey.shade400,
-                                                    shape: BoxShape.circle,
-                                                  ),
-                                                  child: const Center(
-                                                    child: Icon(
-                                                      Icons.arrow_back_ios_new,
-                                                      size: 16,
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-
-                                              const SizedBox(width: 8),
-
-                                              // Next button
-                                              GestureDetector(
-                                                onTap: isNextEnabled
-                                                    ? () {
-                                                  final nextPage = (homeProvider.pageLoad + 1).toString();
-                                                  homeProvider.fetchJournalsGridView(
-                                                    context: context,
-                                                    pageNo: nextPage,
-                                                    initial: false,
-                                                    fromDateParam: homeProvider.fromDate,
-                                                    toDateParam: homeProvider.toDate,
-                                                    fullList: noDateSelected, // 👈 key change
-                                                  );
-                                                }
-                                                    : null,
-                                                child: Container(
-                                                  width: 28,
-                                                  height: 28,
-                                                  decoration: BoxDecoration(
-                                                    color: isNextEnabled
-                                                        ? ColorsContent.newThemeColor
-                                                        : Colors.grey.shade400,
-                                                    shape: BoxShape.circle,
-                                                  ),
-                                                  child: const Center(
-                                                    child: Icon(
-                                                      Icons.arrow_forward_ios,
-                                                      size: 16,
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      ),
-
-                                    const SizedBox(width: 12),
-                                  ],
+                              ),
+                              const SizedBox(height: 10),
+                              const SizedBox(height: 10),
+                              homeProvider.journalsGridModelLoading
+                                  ? Center(child: CupertinoActivityIndicator(
+                                color: ColorsContent.newThemeColor,
+                                radius: 15,
+                              ))
+                                  : homeProvider.journalsModelGridList.isEmpty
+                                  ? GestureDetector(
+                                onTap: () {},
+                                child: SvgPicture.asset(
+                                  ImageConstant.homeScreenNoData,
+                                  width: size.width * 0.90,
+                                  height: size.height * 0.43,
                                 ),
+                              )
+                                  : Expanded(
+                                child: _buildUserProfileList(context, size, homeProvider),
+                              ),
+                              const SizedBox(height: 10),
+                              // Row with Previous/Next + Search
+                              homeProvider.journalsGridModelLoading
+                                  ? const SizedBox():
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  if (homeProvider.journalsModelGridList.isNotEmpty)
+                                    Builder(
+                                      builder: (context) {
+                                        final isPrevEnabled = homeProvider.pageLoad != 1;
+                                        final isNextEnabled = homeProvider.pageLoad < homeProvider.totalPages;
+
+                                        // Check if dates are selected or not
+                                        final bool noDateSelected =
+                                            homeProvider.fromDate == null && homeProvider.toDate == null;
+
+                                        return Row(
+                                          children: [
+                                            // Previous button
+                                            GestureDetector(
+                                              onTap: isPrevEnabled
+                                                  ? () {
+                                                final prevPage = (homeProvider.pageLoad - 1).toString();
+                                                homeProvider.fetchJournalsGridView(
+                                                  context: context,
+                                                  pageNo: prevPage,
+                                                  initial: false,
+                                                  fromDateParam: homeProvider.fromDate,
+                                                  toDateParam: homeProvider.toDate,
+                                                  fullList: noDateSelected, // 👈 key change
+                                                );
+                                              }
+                                                  : null,
+                                              child: Container(
+                                                width: 28,
+                                                height: 28,
+                                                decoration: BoxDecoration(
+                                                  color: isPrevEnabled
+                                                      ? ColorsContent.newThemeColor
+                                                      : Colors.grey.shade400,
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: const Center(
+                                                  child: Icon(
+                                                    Icons.arrow_back_ios_new,
+                                                    size: 16,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+
+                                            const SizedBox(width: 8),
+
+                                            // Next button
+                                            GestureDetector(
+                                              onTap: isNextEnabled
+                                                  ? () {
+                                                final nextPage = (homeProvider.pageLoad + 1).toString();
+                                                homeProvider.fetchJournalsGridView(
+                                                  context: context,
+                                                  pageNo: nextPage,
+                                                  initial: false,
+                                                  fromDateParam: homeProvider.fromDate,
+                                                  toDateParam: homeProvider.toDate,
+                                                  fullList: noDateSelected, // 👈 key change
+                                                );
+                                              }
+                                                  : null,
+                                              child: Container(
+                                                width: 28,
+                                                height: 28,
+                                                decoration: BoxDecoration(
+                                                  color: isNextEnabled
+                                                      ? ColorsContent.newThemeColor
+                                                      : Colors.grey.shade400,
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: const Center(
+                                                  child: Icon(
+                                                    Icons.arrow_forward_ios,
+                                                    size: 16,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    ),
+
+                                  const SizedBox(width: 12),
+                                ],
+                              ),
 
 
-                                const SizedBox(height: 50),
-                              ],
-                            ),
+                              const SizedBox(height: 10),
+                            ],
                           ),
                         ),
                       ],
@@ -1004,8 +991,7 @@ class _HomeScreenState extends State<HomeScreen> {
       BuildContext context,
       Size size,
       HomeProvider homeProvider,
-      )
-  {
+      ) {
     var logger = Logger();
 
     return Padding(
@@ -1013,15 +999,13 @@ class _HomeScreenState extends State<HomeScreen> {
       child: homeProvider.journalsModelGridList.isEmpty
           ? const SizedBox()
           : ListView.separated(
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
+        shrinkWrap: false,  // ✅ Change this
         separatorBuilder: (_, __) => const SizedBox(height: 10),
         itemCount: (homeProvider.journalsModelGrid?.journals?.length ?? 0) < 10
             ? (homeProvider.journalsModelGrid?.journals?.length ?? 0)
             : 10,
         itemBuilder: (context, index) {
           final journal = homeProvider.journalsModelGrid!.journals![index];
-
           logger.i("Media Data: ${journal.journalMedia}");
 
           return GestureDetector(
@@ -1036,16 +1020,15 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             },
             child: UserProfileListItemWidget(
-              title: journal.journalTitle ?? '',
-              date: journal.journalDatetime ?? '',
-              description: journal.journalDesc ?? '',
-              journalMedia: journal.journalMedia ?? [],
-              locationName: journal.location?.locationName,
-              locationLatitude: journal.location?.locationLatitude,
-              locationLongitude: journal.location?.locationLongitude,
+                title: journal.journalTitle ?? '',
+                date: journal.journalDatetime ?? '',
+                description: journal.journalDesc ?? '',
+                journalMedia: journal.journalMedia ?? [],
+                locationName: journal.location?.locationName,
+                locationLatitude: journal.location?.locationLatitude,
+                locationLongitude: journal.location?.locationLongitude,
+                journalId: journal.journalId ?? ""
             ),
-
-
           );
         },
       ),

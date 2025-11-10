@@ -11,10 +11,10 @@ class ChatGptScreen extends StatefulWidget {
   const ChatGptScreen({Key? key, required this.initialUrl}) : super(key: key);
 
   @override
-  State<ChatGptScreen> createState() => _InAppBrowserScreenState();
+  State<ChatGptScreen> createState() => _ChatGptScreenState();
 }
 
-class _InAppBrowserScreenState extends State<ChatGptScreen> {
+class _ChatGptScreenState extends State<ChatGptScreen> {
   late final WebViewController _controller;
   String? _currentUrl;
   Timer? _redirectTimer;
@@ -37,7 +37,6 @@ class _InAppBrowserScreenState extends State<ChatGptScreen> {
             debugPrint("Page started: $url");
           },
           onProgress: (progress) {
-            // progress is from 0 to 100
             setState(() {
               _progress = progress / 100.0;
             });
@@ -61,7 +60,7 @@ class _InAppBrowserScreenState extends State<ChatGptScreen> {
                 }
               });
 
-              // Redirect after a total of 15 seconds
+              // Redirect after 10 seconds
               _redirectTimer = Timer(const Duration(seconds: 10), () {
                 if (mounted) {
                   Navigator.pushReplacement(
@@ -91,43 +90,44 @@ class _InAppBrowserScreenState extends State<ChatGptScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Stack(
-      children: [
-        Scaffold(
-          appBar: buildAppBarWebScreen(
-            context,
-            size,
-            heading: "Numu Chat",
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          body: Column(
+    final size = MediaQuery.of(context).size;
+
+    return Scaffold(
+      appBar: buildAppBarWebScreen(
+        context,
+        size,
+        heading: "Numu Chat",
+        onTap: () => Navigator.of(context).pop(),
+      ),
+      body: Stack(
+        children: [
+          Column(
             children: [
               if (_progress < 1.0)
                 LinearProgressIndicator(
                   value: _progress,
-                  backgroundColor: Colors.grey,
-                  valueColor: AlwaysStoppedAnimation<Color>(ColorsContent.newThemeColor),
+                  backgroundColor: Colors.grey.shade300,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    ColorsContent.newThemeColor,
+                  ),
                 ),
               Expanded(
                 child: WebViewWidget(controller: _controller),
               ),
             ],
           ),
-        ),
-        if (_showLoadingOverlay)
-          Container(
-            color: Colors.black.withOpacity(0.5),
-            child: const Center(
-              child: CupertinoActivityIndicator(
-                color: Colors.white,
-                radius: 15,
+          if (_showLoadingOverlay)
+            Container(
+              color: Colors.black.withOpacity(0.5),
+              child: const Center(
+                child: CupertinoActivityIndicator(
+                  color: Colors.white,
+                  radius: 15,
+                ),
               ),
             ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 }

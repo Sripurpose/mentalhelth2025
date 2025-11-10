@@ -1,5 +1,7 @@
+import 'package:audio_session/audio_session.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:link_preview_generator/link_preview_generator.dart';
 import 'package:logger/logger.dart';
@@ -72,8 +74,14 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
   void initState() {
     mentalStrengthEditProvider = Provider.of<MentalStrengthEditProvider>(context, listen: false,);
     mentalStrengthEditProvider.openGoalViewSheet = false;
+    _pauseAllMedia(); // 👈 add this
     init();
     super.initState();
+  }
+
+  Future<void> _pauseAllMedia() async {
+    final session = await AudioSession.instance;
+    await session.setActive(false); // This tells all players to pause/stop
   }
 
   void _initializeWebView() {
@@ -192,7 +200,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 _buildUntitledOne(context, size),
-                                const SizedBox(height: 20),
+                                const SizedBox(height: 10),
                                 const Text(
                                   "In your mind",
                                   style: TextStyle(
@@ -981,7 +989,8 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                   },
                                   child: Center(
                                     child: SvgPicture.asset(
-                                      ImageConstant.chatIconNumu,
+                                      height: 70,
+                                      ImageConstant.summaryChatIcon,
                                     ),
                                   ),
                                 ),
@@ -1029,49 +1038,34 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Consumer2<HomeProvider, EditProfileProvider>(
-            builder: (context, homeProvider, editProfileProvider, _) {
-          return editProfileProvider.getProfileModel == null
-              ? const SizedBox()
-              : CircleAvatar(
-                  radius: 35,
-                  backgroundImage: NetworkImage(
-                    editProfileProvider.getProfileModel!.profileurl.toString(),
-                  ),
-                );
-          // CustomImageView(
-          //         imagePath:
-          //             homeProvider.journalDetails!.journals!.displayImage,
-          //         height: 71,
-          //         width: 71,
-          //         radius: BorderRadius.circular(
-          //           35,
-          //         ),
-          //         alignment: Alignment.center,
-          //       );
-        }),
-        SizedBox(
-          width: size.width * 0.05,
-        ),
+        // Consumer2<HomeProvider, EditProfileProvider>(
+        //     builder: (context, homeProvider, editProfileProvider, _) {
+        //   return editProfileProvider.getProfileModel == null
+        //       ? const SizedBox()
+        //       : CircleAvatar(
+        //           radius: 35,
+        //           backgroundImage: NetworkImage(
+        //             editProfileProvider.getProfileModel!.profileurl.toString(),
+        //           ),
+        //         );
+        //   // CustomImageView(
+        //   //         imagePath:
+        //   //             homeProvider.journalDetails!.journals!.displayImage,
+        //   //         height: 71,
+        //   //         width: 71,
+        //   //         radius: BorderRadius.circular(
+        //   //           35,
+        //   //         ),
+        //   //         alignment: Alignment.center,
+        //   //       );
+        // }),
+        // SizedBox(
+        //   width: size.width * 0.05,
+        // ),
         Consumer2<EditProfileProvider,HomeProvider>(builder: (context,editProfileProvider, homeProvider, _) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                //color: Colors.red,
-                width: size.width * 0.50,
-                child: Text(
-                  capitalText(editProfileProvider.getProfileModel == null
-                      ? ""
-                      : editProfileProvider.getProfileModel!.firstname.toString()),
-                  style: const TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: 'Poppins',
-                    color: Colors.black,
-                  ),
-                ),
-              ),
               Text(
                 homeProvider.journalDetails == null
                     ? ""
@@ -1086,7 +1080,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                   const SizedBox():
               ConstrainedBox(
                 constraints: const BoxConstraints(
-                  maxWidth: 200,
+                  maxWidth: 320,
                 ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
