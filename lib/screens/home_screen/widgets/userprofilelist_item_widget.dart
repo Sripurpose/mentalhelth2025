@@ -284,7 +284,7 @@ class _UserProfileListItemWidgetState extends State<UserProfileListItemWidget> {
                     // 🔘 Page indicators (bottom)
                     if (mediaList.length > 1)
                       Positioned(
-                        bottom: 10,
+                        bottom: 0,
                         left: 0,
                         right: 0,
                         child: Row(
