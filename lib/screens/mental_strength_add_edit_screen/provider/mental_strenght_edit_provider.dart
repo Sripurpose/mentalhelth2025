@@ -2217,14 +2217,21 @@ class MentalStrengthEditProvider extends ChangeNotifier {
     }
   }
 
-  // ✅ Add this method to open URL in-app
-  Future<void> _launchInAppWithBrowserOptions(Uri url,BuildContext context) async {
-    logger.i("Launching URL in custom in-app browser: $url");
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => ChatGptScreen(initialUrl: url),
+
+  _launchInAppWithBrowserOptions(Uri url, BuildContext context) async {
+    logger.i("Launching URL in custom bottom sheet: $url");
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) => SizedBox(
+        height: MediaQuery.of(context).size.height * 0.9,
+        child: ChatGptBottomSheet(initialUrl: url),
       ),
     );
   }

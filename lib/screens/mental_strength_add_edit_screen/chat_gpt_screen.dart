@@ -6,15 +6,15 @@ import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../../../widgets/app_bar/appbar_leading_image.dart';
 
-class ChatGptScreen extends StatefulWidget {
+class ChatGptBottomSheet extends StatefulWidget {
   final Uri initialUrl;
-  const ChatGptScreen({Key? key, required this.initialUrl}) : super(key: key);
+  const ChatGptBottomSheet({Key? key, required this.initialUrl}) : super(key: key);
 
   @override
-  State<ChatGptScreen> createState() => _ChatGptScreenState();
+  State<ChatGptBottomSheet> createState() => _ChatGptBottomSheetState();
 }
 
-class _ChatGptScreenState extends State<ChatGptScreen> {
+class _ChatGptBottomSheetState extends State<ChatGptBottomSheet> {
   late final WebViewController _controller;
   String? _currentUrl;
   Timer? _redirectTimer;
@@ -60,9 +60,10 @@ class _ChatGptScreenState extends State<ChatGptScreen> {
                 }
               });
 
-              // Redirect after 10 seconds
+              // Close bottom sheet and redirect after 10 seconds
               _redirectTimer = Timer(const Duration(seconds: 10), () {
                 if (mounted) {
+                  Navigator.pop(context); // Close bottom sheet
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (_) => const ScreenSignIn()),
@@ -90,44 +91,57 @@ class _ChatGptScreenState extends State<ChatGptScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
-    return Scaffold(
-      appBar: buildAppBarWebScreen(
-        context,
-        size,
-        heading: "Numu Chat",
-        onTap: () => Navigator.of(context).pop(),
-      ),
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              if (_progress < 1.0)
-                LinearProgressIndicator(
-                  value: _progress,
-                  backgroundColor: Colors.grey.shade300,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    ColorsContent.newThemeColor,
+    return Stack(
+      children: [
+        Column(
+          children: [
+            // Header with close button and title
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Numu Chat",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-              Expanded(
-                child: WebViewWidget(controller: _controller),
-              ),
-            ],
-          ),
-          if (_showLoadingOverlay)
-            Container(
-              color: Colors.black.withOpacity(0.5),
-              child: const Center(
-                child: CupertinoActivityIndicator(
-                  color: Colors.white,
-                  radius: 15,
-                ),
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: const Icon(Icons.close, size: 24),
+                  ),
+                ],
               ),
             ),
-        ],
-      ),
+            // Progress indicator
+            if (_progress < 1.0)
+              LinearProgressIndicator(
+                value: _progress,
+                backgroundColor: Colors.grey.shade300,
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  ColorsContent.newThemeColor,
+                ),
+              ),
+            // WebView
+            Expanded(
+              child: WebViewWidget(controller: _controller),
+            ),
+          ],
+        ),
+        // Loading overlay
+        if (_showLoadingOverlay)
+          Container(
+            color: Colors.black.withOpacity(0.5),
+            child: const Center(
+              child: CupertinoActivityIndicator(
+                color: Colors.white,
+                radius: 15,
+              ),
+            ),
+          ),
+      ],
     );
   }
 }
