@@ -18,6 +18,7 @@ class ColorsContent {
   static Color whatsOnYourMindBoxColor = const Color(0xFFE6EBFF);
   static Color closeActionsColor = const Color(0xFF5E4CCC);
   static Color tokenExpiryTextColor = const Color(0xFF4A4A4A);
+  static Color linkDropDownBackGroundColor = const Color(0xFFD1C9FF);
 
   static Color galleryCountColor = const Color(0xFF6551DC);
   static Color cameraCountColor = const Color(0xFF4B73EF);

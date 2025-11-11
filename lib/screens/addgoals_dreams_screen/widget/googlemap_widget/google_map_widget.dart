@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/screens/addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
+import 'package:mentalhelth/screens/mental_strength_add_edit_screen/provider/mental_strenght_edit_provider.dart';
 import 'package:mentalhelth/utils/core/image_constant.dart';
 import 'package:mentalhelth/widgets/custom_image_view.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -16,8 +17,14 @@ import '../../../../utils/theme/colors.dart';
 import '../../../goals_dreams_page/model/goals_and_dreams_model.dart' hide Location;
 
 class AddGoalsGoogleMap extends StatefulWidget {
-  const AddGoalsGoogleMap({super.key, this.goalsanddream});
+  const AddGoalsGoogleMap({
+    super.key,
+    this.goalsanddream,
+    this.isEdit = false,
+  });
+
   final Goalsanddream? goalsanddream;
+  final bool isEdit;
 
   @override
   _AddGoalsGoogleMapState createState() => _AddGoalsGoogleMapState();
@@ -27,6 +34,7 @@ class _AddGoalsGoogleMapState extends State<AddGoalsGoogleMap> {
   PermissionStatus permissionStatus = PermissionStatus.denied;
   Position? _currentLocation;
   late AdDreamsGoalsProvider adDreamsGoalsProvider;
+  late MentalStrengthEditProvider mentalStrengthEditProvider;
   double? savedLatitude = 0.0;
   double? savedLongitude = 0.0;
   String? savedLocationAddress = '';
@@ -41,6 +49,7 @@ class _AddGoalsGoogleMapState extends State<AddGoalsGoogleMap> {
   void initState() {
     super.initState();
     adDreamsGoalsProvider = Provider.of<AdDreamsGoalsProvider>(context, listen: false);
+    mentalStrengthEditProvider = Provider.of<MentalStrengthEditProvider>(context, listen: false);
 
     // Check if provider already has a selected location (persisted from previous interaction)
     if (adDreamsGoalsProvider.selectedLocation != null) {
@@ -49,9 +58,18 @@ class _AddGoalsGoogleMapState extends State<AddGoalsGoogleMap> {
       _updateMarkerPosition();
     } else {
       // Retrieve saved location from the model if available
-      savedLatitude = double.parse(widget.goalsanddream?.location?.locationLatitude ?? "0.0");
-      savedLongitude = double.parse(widget.goalsanddream?.location?.locationLongitude ?? "0.0");
-      savedLocationAddress = widget.goalsanddream?.location?.locationAddress ?? "";
+      if (widget.isEdit) {
+        // Use goalDetailModel when in edit mode
+        final goalDetailModel = mentalStrengthEditProvider.goalDetailModel;
+        savedLatitude = double.parse(goalDetailModel?.goals?.location?.locationLatitude ?? "0.0");
+        savedLongitude = double.parse(goalDetailModel?.goals?.location?.locationLongitude ?? "0.0");
+        savedLocationAddress = goalDetailModel?.goals?.location?.locationAddress ?? "";
+      } else {
+        // Use goalsanddream when in add mode
+        savedLatitude = double.parse(widget.goalsanddream?.location?.locationLatitude ?? "0.0");
+        savedLongitude = double.parse(widget.goalsanddream?.location?.locationLongitude ?? "0.0");
+        savedLocationAddress = widget.goalsanddream?.location?.locationAddress ?? "";
+      }
 
       logger.w("Saved Latitude: $savedLatitude");
       logger.w("Saved Longitude: $savedLongitude");

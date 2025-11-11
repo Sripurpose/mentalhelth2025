@@ -413,6 +413,7 @@ class _HomeScreenState extends State<HomeScreen> {
       future: Future.wait([
         signInProvider.fetchSettings(context),
         signInProvider.fetchMessages(context),
+        signInProvider.fetchDynamicMenu(context),
       ]),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {

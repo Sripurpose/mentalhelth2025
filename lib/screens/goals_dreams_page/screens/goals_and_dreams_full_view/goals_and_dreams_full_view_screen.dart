@@ -71,6 +71,7 @@ class _GoalAndDreamFullViewScreenState
     mentalStrengthEditProvider.fetchGoalActions(
       goalId: widget.goalsanddream.goalId.toString(),
     );
+   
     isActionCompletedList =
         List.filled(widget.goalsanddream.action!.length, false);
     super.initState();

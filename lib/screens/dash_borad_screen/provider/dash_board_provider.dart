@@ -10,6 +10,7 @@ import 'package:mentalhelth/screens/privacy_screen/privacy_screen.dart';
 import 'package:mentalhelth/screens/terms_service_screen/terms_serivce_screen.dart';
 
 import '../../../utils/core/url_constant.dart';
+import '../../dynamic_menu_pages/dynamic_Menu_Webview_Screen.dart';
 import '../../feedback_screen/feedback_screen.dart';
 import '../../goals_dreams_page/goals_dreams_page.dart';
 import '../../help_screen/help_screen.dart';
@@ -72,6 +73,10 @@ class DashBoardProvider extends ChangeNotifier {
             url: "${UrlConstant.baseUrl}/help/",
           );
         case 13:
+        // ✅ One dynamic screen for Chat / AI / Affiliation etc.
+          return const DynamicMenuWebviewScreen(
+          );
+        case 14:
           return FeedbackScreen();
         default:
           return const HomeScreen();

@@ -1,19 +1,26 @@
-import 'dart:async'; // Import this for runZonedGuarded
+// ==============================
+// main.dart (CLEAN + FIXED)
+// ==============================
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart'; // Import for Crashlytics
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mentalhelth/firebase_options.dart';
+import 'package:mentalhelth/screens/SharePostView.dart';
 import 'package:mentalhelth/screens/addactions_screen/model/alaram_info.dart';
+import 'package:mentalhelth/screens/addgoals_dreams_screen/add_goals_link_screen.dart';
+import 'package:mentalhelth/screens/addgoals_dreams_screen/addgoals_dreams_screen.dart';
 import 'package:mentalhelth/screens/auth/sign_in/widget/referral_code_helper.dart';
 import 'package:mentalhelth/screens/auth/signup_screen/provider/signup_provider.dart';
 import 'package:mentalhelth/screens/auth/splash/splash.dart';
@@ -23,7 +30,6 @@ import 'package:mentalhelth/screens/edit_add_profile_screen/provider/edit_provid
 import 'package:mentalhelth/screens/goals_dreams_page/provider/goals_dreams_provider.dart';
 import 'package:mentalhelth/screens/journal_list_screen/provider/journal_list_provider.dart';
 import 'package:mentalhelth/screens/mental_strength_add_edit_screen/provider/mental_strenght_edit_provider.dart';
-import 'package:mentalhelth/screens/no_internet/duplicate_screen.dart';
 import 'package:mentalhelth/screens/reminder_push_view_screen/reminder_push_view_screen.dart';
 import 'package:mentalhelth/utils/core/constants.dart';
 import 'package:mentalhelth/utils/core/firebase_api.dart';
@@ -33,6 +39,8 @@ import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
+
 import 'screens/actions_screen/provider/my_action_provider.dart';
 import 'screens/addactions_screen/provider/add_actions_provider.dart';
 import 'screens/addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
@@ -43,343 +51,196 @@ import 'screens/feedback_screen/provider/feed_back_provider.dart';
 import 'screens/home_screen/provider/home_provider.dart';
 import 'screens/phone_singin_screen/provider/phone_sign_in_provider.dart';
 import 'screens/privacy_screen/provider/privacy_policy_provider.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
+// ===== Globals =====
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+const platform = MethodChannel('com.numuapp.numuapp/native');
+String? oneSignalIdOriginal;
 
-Future _firebaseBackgroundMessage(RemoteMessage message) async {
+// ===== Background FCM handler =====
+Future<void> _firebaseBackgroundMessage(RemoteMessage message) async {
   if (message.notification != null) {
-    print("Some notification Received in background...");
+    debugPrint("[BG] Notification title: ${message.notification!.title}");
   }
 }
 
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
-// Initialize referral tracking
-void initializeReferralTracking() async {
+// ===== Referral init =====
+Future<void> initializeReferralTracking() async {
   final referralHelper = ReferralCodeHelper();
   await referralHelper.initializeReferralTracking();
-  print("Referral tracking initialized");
+  debugPrint("Referral tracking initialized");
 }
 
+// ===== main() =====
 void main() async {
-  // Set this before initializing bindings
   BindingBase.debugZoneErrorsAreFatal = true;
-
-  // Ensure Flutter bindings are initialized
   WidgetsFlutterBinding.ensureInitialized();
 
   try {
-    // Initialize referral code tracking early
-    initializeReferralTracking();
+    // Share extension callbacks MUST be set early on iOS
+    ShareExtensionService.initialize(); // set up callback
 
-    // Initialize Firebase
-    if(Platform.isAndroid){
-      await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform,
-      );
-    }else if(Platform.isIOS){
-      await Firebase.initializeApp(
-        name: 'numuapp',
-        options: DefaultFirebaseOptions.currentPlatform,
-      );
-    } else if (kIsWeb) { // Check for web platform
-      await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform,
-      );
+
+
+    await initializeReferralTracking();
+
+    if (kIsWeb) {
+      await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    } else if (Platform.isAndroid) {
+      await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    } else if (Platform.isIOS) {
+      await Firebase.initializeApp(name: 'numuapp', options: DefaultFirebaseOptions.currentPlatform);
     }
 
-    if(Platform.isIOS){
+    // OneSignal setup (iOS)
+    if (!kIsWeb && Platform.isIOS) {
       OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
-
-      //OneSignal.initialize("efe6e3e8-86a4-4d67-851b-ce8151850bc1");
       OneSignal.initialize("2c9a2265-f0a5-45a8-8f88-9faa90a04040");
-      // OneSignal.Notifications.addClickListener((event) {
-      //   print("object");
-      //   // Handle notification click
-      // });
-
-  final oneSignalId = await OneSignal.User.getOnesignalId();
-      print("oneSignalId--${oneSignalId}");
-  if(oneSignalId!= null){
-    oneSignalIdOriginal = oneSignalId;
-    print("oneSignalId--${oneSignalId}");
-  }
-      print("oneSignalId--${oneSignalId}");
-
-// The promptForPushNotificationsWithUserResponse function will show the iOS or Android push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
       OneSignal.Notifications.requestPermission(true);
 
+      oneSignalIdOriginal = await OneSignal.User.getOnesignalId();
+      debugPrint("OneSignal ID: $oneSignalIdOriginal");
+
       OneSignal.Notifications.addForegroundWillDisplayListener((event) {
-        print('Foreground Notification Received: ${event.notification.jsonRepresentation()}');
+        debugPrint('Foreground Notification: ${event.notification.jsonRepresentation()}');
       });
 
       OneSignal.Notifications.addClickListener((event) {
-        print('Notification Clicked: ${event.notification.jsonRepresentation()}');
-
         final data = event.notification.additionalData;
-
-        if (data == null) {
-          print('No additional data found in notification');
-          return;
+        if (data == null) return;
+        final type = data['notification_type'];
+        final ctx = navigatorKey.currentContext;
+        if (ctx == null) return;
+        if (type == 'actionreminder') {
+          Navigator.push(ctx, PageRouteBuilder(pageBuilder: (_, __, ___) =>
+              ReminderPushViewScreen(reminderData: Map<String, dynamic>.from(data)), transitionDuration: Duration.zero));
+        } else if (type == 'subscription') {
+          final url = data['url'] as String?;
+          if (url != null && url.isNotEmpty) _launchInAppWithBrowserOptions(Uri.parse(url));
         }
-
-        final notificationType = data['notification_type'];
-        final context = navigatorKey.currentContext;
-
-        if (context == null) {
-          print('Navigator context is null');
-          return;
-        }
-
-        if (notificationType == 'actionreminder') {
-          final reminderData = Map<String, dynamic>.from(data);
-
-          Navigator.push(
-            context,
-            PageRouteBuilder(
-              pageBuilder: (_, __, ___) =>
-                  ReminderPushViewScreen(reminderData: reminderData),
-              transitionDuration: const Duration(seconds: 0),
-            ),
-          );
-        } else if (notificationType == 'subscription') {
-          final urlString = data['url'];
-          if (urlString != null && urlString.isNotEmpty) {
-            _launchInAppWithBrowserOptions(Uri.parse(urlString));
-          } else {
-            print('URL is missing in subscription notification');
-          }
-        } else {
-          print('Unhandled notification type: $notificationType');
-        }
-      });
-
-
-
-
-      OneSignal.Notifications.addPermissionObserver((event) {
-        print('Notification Permission Changed: ${event.toString()}');
       });
     }
-    else if(Platform.isAndroid){
+
+    // Push (Android)
+    if (!kIsWeb && Platform.isAndroid) {
       await PushNotifications.init();
-      //await PushNotifications().initNotification();
-      // initialize local notifications
-      // dont use local notifications for web platform
-      if (!kIsWeb) {
-        await PushNotifications.localNotiInit();
-      }
+      await PushNotifications.localNotiInit();
     }
 
-    // Listen to background notifications
+    // FCM listeners
     FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundMessage);
 
-    // --- Android FCM notification tap handling ---
-    if (Platform.isAndroid) {
-      // to handle foreground notifications
+    if (!kIsWeb && Platform.isAndroid) {
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        String payloadData = jsonEncode(message.data);
-        print("Got a message in foreground");
-        print("payloadData$payloadData");
-
-        String? imageUrl = message.notification?.android?.imageUrl ??
-            message.notification?.apple?.imageUrl ??
-            message.data['image'];
-
-        print("imageUrl--$imageUrl");
-
+        final payloadData = jsonEncode(message.data);
+        final imageUrl = message.notification?.android?.imageUrl ??
+            message.notification?.apple?.imageUrl ?? message.data['image'];
         if (message.notification != null) {
           PushNotifications.showSimpleNotification(
-            title: message.notification!.title ?? "",
-            body: message.notification!.body ?? "",
-            payload: payloadData, // <- used for click handling
+            title: message.notification!.title ?? '',
+            body: message.notification!.body ?? '',
+            payload: payloadData,
             imageUrl: imageUrl,
           );
         }
       });
 
-
-      // Background or resumed (user taps on the notification)
       FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-        print("Notification tapped (background/resumed): ${message.data}");
         final data = message.data;
-        print("dataasdfgb$data");
-
+        final ctx = navigatorKey.currentContext;
+        if (ctx == null) return;
         if (data['notification_type'] == 'actionreminder') {
-          final context = navigatorKey.currentContext;
-
-          if (context != null) {
-            final reminderData = Map<String, dynamic>.from(data);
-
-            Navigator.push(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (_, __, ___) =>
-                    ReminderPushViewScreen(reminderData: reminderData),
-                transitionDuration: const Duration(seconds: 0),
-              ),
-            );
-          } else {
-            print('Navigator context is null');
-          }
-        }
-        else if (data['notification_type'] == 'subscription') {
-          final urlString = data['url'];
-          if (urlString != null && urlString.isNotEmpty) {
-            final context = navigatorKey.currentContext;
-            if (context != null) {
-              _launchInAppWithBrowserOptions(Uri.parse(urlString));
-            } else {
-              print('Navigator context is null for subscription');
-            }
-          } else {
-            print('URL is missing in subscription notification');
+          Navigator.push(ctx, PageRouteBuilder(pageBuilder: (_, __, ___) =>
+              ReminderPushViewScreen(reminderData: Map<String, dynamic>.from(data)), transitionDuration: Duration.zero));
+        } else if (data['notification_type'] == 'subscription') {
+          final url = data['url'];
+          if (url != null && (url as String).isNotEmpty) {
+            _launchInAppWithBrowserOptions(Uri.parse(url));
           }
         }
       });
 
-
-      // Terminated state
-      // Terminated state
-      final RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
-
+      final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
       if (initialMessage != null) {
-        print("Notification tapped (terminated): ${initialMessage.data}");
-        final data = initialMessage.data;
-
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          final context = navigatorKey.currentContext;
-
+          final ctx = navigatorKey.currentContext;
+          if (ctx == null) return;
+          final data = initialMessage.data;
           if (data['notification_type'] == 'actionreminder') {
-            if (context != null) {
-              final reminderData = Map<String, dynamic>.from(data);
-
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (_, __, ___) =>
-                      ReminderPushViewScreen(reminderData: reminderData),
-                  transitionDuration: const Duration(seconds: 0),
-                ),
-              );
-            } else {
-              print('Navigator context is null for actionreminder');
-            }
+            Navigator.push(ctx, PageRouteBuilder(pageBuilder: (_, __, ___) =>
+                ReminderPushViewScreen(reminderData: Map<String, dynamic>.from(data)), transitionDuration: Duration.zero));
           } else if (data['notification_type'] == 'subscription') {
-            final urlString = data['url'];
-            if (urlString != null && urlString.isNotEmpty) {
-              if (context != null) {
-                _launchInAppWithBrowserOptions(Uri.parse(urlString));
-              } else {
-                print('Navigator context is null for subscription');
-              }
-            } else {
-              print('URL is missing in subscription notification');
+            final url = data['url'];
+            if (url != null && (url as String).isNotEmpty) {
+              _launchInAppWithBrowserOptions(Uri.parse(url));
             }
           }
         });
       }
-
     }
 
-
-    // ///for handling in terminated state
-    // final RemoteMessage? message =
-    // await FirebaseMessaging.instance.getInitialMessage();
-    // if (message != null) {
-    //   String payloadData = jsonEncode(message.data);
-    //   print('Got a Message in Foreground');
-    //   if (message.notification != null) {
-    //     PushNotifications.showSimpleNotification(
-    //         title: message.notification!.title ?? "",
-    //         body: message.notification!.body ?? "",
-    //         payload: payloadData);
-    //   }
-    //   print('Launched from terminated state');
-    //   Future.delayed(Duration(seconds: 1), () {
-    //     ///if to navigate to another screen
-    //   });
-    // }
-
-    FlutterError.onError = (errorDetails) {
-      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
-    };
-    // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
+    // Crashlytics
+    FlutterError.onError = (details) => FirebaseCrashlytics.instance.recordFlutterFatalError(details);
     PlatformDispatcher.instance.onError = (error, stack) {
-      print("Error during initialization: $error");
       FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
       return true;
     };
-    // Initialize Hive
+
+    // Hive
     await Hive.initFlutter();
     Hive.registerAdapter(AlarmInfoAdapter());
-    await Hive.openBox<AlarmInfo>("alarm");
+    await Hive.openBox<AlarmInfo>('alarm');
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(!kDebugMode);
 
-    // // Set up Crashlytics
-    FirebaseCrashlytics crashlytics = FirebaseCrashlytics.instance;
-    await crashlytics.setCrashlyticsCollectionEnabled(!kDebugMode);
-
-    debugPrint("Firebase and Crashlytics initialized successfully");
-
-    runApp(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => SignInProvider()),
-          ChangeNotifierProvider(create: (_) => SignUpProvider()),
-          ChangeNotifierProvider(create: (_) => SubScribePlanProvider()),
-          ChangeNotifierProvider(create: (_) => PhoneSignInProvider()),
-          ChangeNotifierProvider(create: (_) => EditProfileProvider()),
-          ChangeNotifierProvider(create: (_) => DashBoardProvider()),
-          ChangeNotifierProvider(create: (_) => GoalsDreamsProvider()),
-          ChangeNotifierProvider(create: (_) => JournalListProvider()),
-          ChangeNotifierProvider(create: (_) => ConfirmPlanProvider()),
-          ChangeNotifierProvider(create: (_) => HomeProvider()),
-          ChangeNotifierProvider(create: (_) => DeleteProvider()),
-          ChangeNotifierProvider(create: (_) => PrivacyPolicyProvider()),
-          ChangeNotifierProvider(create: (_) => FeedBackProvider()),
-          ChangeNotifierProvider(create: (_) => AdDreamsGoalsProvider()),
-          ChangeNotifierProvider(create: (_) => AddActionsProvider()),
-          ChangeNotifierProvider(create: (_) => MentalStrengthEditProvider()),
-          ChangeNotifierProvider(create: (_) => MyActionProvider()),
-        ],
-        child: const MyApp(),
-      ),
-    );
-  } catch (error, stackTrace) {
-    print("Uncaught error during main initialization: $error");
-    FirebaseCrashlytics.instance.recordError(error, stackTrace);
+    runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => SignInProvider()),
+        ChangeNotifierProvider(create: (_) => SignUpProvider()),
+        ChangeNotifierProvider(create: (_) => SubScribePlanProvider()),
+        ChangeNotifierProvider(create: (_) => PhoneSignInProvider()),
+        ChangeNotifierProvider(create: (_) => EditProfileProvider()),
+        ChangeNotifierProvider(create: (_) => DashBoardProvider()),
+        ChangeNotifierProvider(create: (_) => GoalsDreamsProvider()),
+        ChangeNotifierProvider(create: (_) => JournalListProvider()),
+        ChangeNotifierProvider(create: (_) => ConfirmPlanProvider()),
+        ChangeNotifierProvider(create: (_) => HomeProvider()),
+        ChangeNotifierProvider(create: (_) => DeleteProvider()),
+        ChangeNotifierProvider(create: (_) => PrivacyPolicyProvider()),
+        ChangeNotifierProvider(create: (_) => FeedBackProvider()),
+        ChangeNotifierProvider(create: (_) => AdDreamsGoalsProvider()),
+        ChangeNotifierProvider(create: (_) => AddActionsProvider()),
+        ChangeNotifierProvider(create: (_) => MentalStrengthEditProvider()),
+        ChangeNotifierProvider(create: (_) => MyActionProvider()),
+      ],
+      child: const MyApp(),
+    ));
+  } catch (e, st) {
+    debugPrint("Uncaught error during main initialization: $e");
+    FirebaseCrashlytics.instance.recordError(e, st);
   }
 }
 
 Future<void> _launchInAppWithBrowserOptions(Uri url) async {
-  // Check if the URL is a deep link
-  if (url.scheme == "mental") {
-    // Handle the deep link (navigate to a specific screen in your app)
-    // For example, navigate to a MentalScreen page
-    //Navigator.pushNamed(context, '/mentalScreen', arguments: url);
-  } else {
-    // If it's a regular URL, open it in an in-app browser
-    if (!await launchUrl(
-      url,
-      mode: LaunchMode.inAppBrowserView,
-      browserConfiguration: const BrowserConfiguration(showTitle: true),
-    )) {
-      throw Exception('Could not launch $url');
-    }
+  if (url.scheme == 'mental') {
+    // TODO: handle custom deep link
+    return;
   }
+  final ok = await launchUrl(
+    url,
+    mode: LaunchMode.inAppBrowserView,
+    browserConfiguration: const BrowserConfiguration(showTitle: true),
+  );
+  if (!ok) throw Exception('Could not launch $url');
 }
-
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
-
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   PermissionStatus permissionStatus = PermissionStatus.denied;
 
   late DatabaseReference ref;
@@ -393,232 +254,472 @@ class _MyAppState extends State<MyApp> {
   String? oneSignalLive;
   String? oneSignalStaging;
 
+  // iOS share state
+  SharedContent? _sharedContent;
+  String _shareStatus = 'Waiting for shared content...';
 
-  Future<void> _launchInAppWithBrowserOptions(Uri url) async {
-    // Check if the URL is a deep link
-    if (url.scheme == "mental") {
-      // Handle the deep link (navigate to a specific screen in your app)
-      // For example, navigate to a MentalScreen page
-      Navigator.pushNamed(context, '/mentalScreen', arguments: url);
-    } else {
-      // If it's a regular URL, open it in an in-app browser
-      if (!await launchUrl(
-        url,
-        mode: LaunchMode.inAppBrowserView,
-        browserConfiguration: const BrowserConfiguration(showTitle: true),
-      )) {
-        throw Exception('Could not launch $url');
-      }
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+
+    _checkPermissionStatus();
+    _requestPermissions();
+    _setupNotificationTapHandler();
+    _setupMethodChannelHandler();
+
+    if (!kIsWeb && Platform.isIOS) {
+      _setupShareExtensionHandler();
+      Future.delayed(const Duration(milliseconds: 500), _checkForSharedContent);
+    }
+
+    ref = FirebaseDatabase.instance.ref().child('mentalHealth');
+    _observeDatabase();
+    Future.delayed(const Duration(seconds: 5), _fetchAppRegister);
+
+
+    // When native tells us about new content:
+    ShareExtensionService.onSharedContent = (data) {
+      _openShareScreen(data);
+    };
+
+    // Also poll on resume:
+    _checkOnResume();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _checkOnResume();
     }
   }
 
-  void setupNotificationTapHandler() {
-    if(Platform.isAndroid){
-      const AndroidInitializationSettings androidInitSettings =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
-      final InitializationSettings initSettings = InitializationSettings(
-        android: androidInitSettings,
-      );
+  Future<void> _checkOnResume() async {
+    if (await ShareExtensionService.checkForSharedContent()) {
+      final data = await ShareExtensionService.getSharedData();
+      if (data != null) _openShareScreen(data);
+      await ShareExtensionService.clearSharedData();
+    }
+  }
+  void _openShareScreen(Map<String, dynamic> data) {
+    final images = (data['imagePaths'] as List?)?.map((e) => e.toString()).toList();
+    Navigator.of(navigatorKey.currentContext!).push(
+      // MaterialPageRoute(
+      //   builder: (_) => SharePostView(
+      //     sharedUrl: data['url'] as String?,
+      //     sharedText: data['text'] as String?, // or data['sharedText']
+      //     sharedImages: images,
+      //     onClose: () => Navigator.of(navigatorKey.currentContext!).pop(),
+      //   ),
+      // ),
+
+      MaterialPageRoute(
+        builder: (_) => AddGoalsLinkScreen(
+          sharedUrl: data['url'] as String?,
+          sharedText: data['text'] as String?, // or data['sharedText']
+          sharedImages: images,
+          onClose: () => Navigator.of(navigatorKey.currentContext!).pop(),
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+
+  void _observeDatabase() {
+    ref.onValue.listen((event) {
+      final snapshot = event.snapshot;
+      if (snapshot.value is Map) {
+        final value = Map<String, dynamic>.from(snapshot.value as Map);
+        setState(() {
+          baseUrlLive = value['base_url_live'] as String?;
+          baseUrlQA = value['base_url_qa'] as String?;
+          oneSignalLive = value['onesignal_live'] as String?;
+          oneSignalStaging = value['onesignal_qa'] as String?;
+          baseUrlLiveIos = value['base_url_live_ios'] as String?;
+          baseUrlLiveAndroid = value['base_url_live_android'] as String?;
+          baseUrlAppShareDownloads = value['app_share_url'] as String?;
+        });
+        _setupRemoteConfig();
+      } else {
+        debugPrint('Remote config snapshot invalid');
+      }
+    }, onError: (error) {
+      _hideLoader();
+      debugPrint('Remote config observing error: $error');
+    });
+  }
+
+  void _setupRemoteConfig() {
+    final deviceType = Platform.isAndroid ? 'android' : 'ios';
+    if (kDebugMode) {
+      if ((baseUrlQA ?? '').isNotEmpty) {
+        UrlConstant.baseUrl = baseUrlQA ?? '';
+        UrlConstant.oneSignalRemote = oneSignalStaging ?? '';
+        UrlConstant.appShareDownloads = baseUrlAppShareDownloads ?? '';
+        isBaseUrlReady = true;
+        debugPrint('QA Base URL: $baseUrlQA');
+      }
+    } else if (kReleaseMode) {
+      if ((baseUrlLive ?? '').isNotEmpty) {
+        UrlConstant.baseUrl = baseUrlLive ?? '';
+        UrlConstant.oneSignalRemote = oneSignalLive ?? '';
+        UrlConstant.appShareDownloads = baseUrlAppShareDownloads ?? '';
+        isBaseUrlReady = true;
+        debugPrint('Live Base URL (${deviceType == 'ios' ? 'iOS' : 'Android'}): $baseUrlLive');
+      }
+    } else {
+      debugPrint('Profile mode');
+    }
+  }
+
+  void _hideLoader() => debugPrint('Loader hidden');
+
+  Future<void> _checkPermissionStatus() async {
+    final status = await Permission.locationWhenInUse.status;
+    setState(() => permissionStatus = status);
+  }
+
+  Future<void> _fetchAppRegister() async {
+    final deviceType = Platform.isAndroid ? 'android' : 'ios';
+    final signInProvider = Provider.of<SignInProvider>(context, listen: false);
+    await signInProvider.fetchAppRegister(context, deviceType: deviceType);
+  }
+
+  Future<void> _requestPermissions() async {
+    if (!kIsWeb && Platform.isAndroid) {
+      await Permission.notification.request();
+    }
+    final locationStatus = await Permission.locationWhenInUse.status;
+    setState(() => permissionStatus = locationStatus);
+  }
+
+  void _setupNotificationTapHandler() {
+    if (!kIsWeb && Platform.isAndroid) {
+      const androidInitSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+      final initSettings = InitializationSettings(android: androidInitSettings);
 
       flutterLocalNotificationsPlugin.initialize(
         initSettings,
         onDidReceiveNotificationResponse: (NotificationResponse response) {
           final payload = response.payload;
-          print("payload$payload");
-          if (payload != null) {
-            final data = jsonDecode(payload);
-
+          if (payload == null) return;
+          try {
+            final data = jsonDecode(payload) as Map<String, dynamic>;
             if (data['notification_type'] == 'actionreminder') {
-              final context = navigatorKey.currentContext;
-
-              if (context != null) {
-                final reminderData = Map<String, dynamic>.from(data);
-
-                Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (_, __, ___) =>
-                        ReminderPushViewScreen(reminderData: reminderData),
-                    transitionDuration: const Duration(seconds: 0),
-                  ),
-                );
-              }
+              final ctx = navigatorKey.currentContext;
+              if (ctx == null) return;
+              Navigator.push(
+                ctx,
+                PageRouteBuilder(
+                  pageBuilder: (_, __, ___) => ReminderPushViewScreen(reminderData: Map<String, dynamic>.from(data)),
+                  transitionDuration: Duration.zero,
+                ),
+              );
             } else {
-              if (payload != null) {
-                try {
-                  final Map<String, dynamic> data = jsonDecode(payload);
-                  final String? url = data['url'];
-                  if (url != null && url.isNotEmpty) {
-                    _launchInAppWithBrowserOptions(Uri.parse(url));
-                  } else {
-                    print("URL is missing in payload.");
-                  }
-                } catch (e) {
-                  print("Error decoding payload: $e");
-                }
+              final url = data['url'] as String?;
+              if (url != null && url.isNotEmpty) {
+                _launchInAppWithBrowserOptions(Uri.parse(url));
               }
             }
+          } catch (e) {
+            debugPrint('Error decoding payload: $e');
           }
         },
       );
-    }
-    else{
-      print("Skipping flutter_local_notifications initialization on iOS.");
-    }
-
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _checkPermissionStatus();
-    _requestPermissions();
-    setupNotificationTapHandler();
-    ref = FirebaseDatabase.instance.ref().child("mentalHealth");
-    observeDatabase();
-    // Delay the fetchAppRegister call by 2 seconds
-    Future.delayed(Duration(seconds: 5), () {
-      fetchAppRegister();
-    });
-  }
-
-  void observeDatabase() {
-    ref.onValue.listen((event) {
-      final snapshot = event.snapshot;
-      if (snapshot.value is Map) {
-        final value = Map<String, dynamic>.from(snapshot.value as Map);
-
-        setState(() {
-          baseUrlLive = value["base_url_live"] as String?;
-          baseUrlQA = value["base_url_qa"] as String?;
-          oneSignalLive = value["onesignal_live"] as String?;
-          oneSignalStaging = value["onesignal_qa"] as String?;
-          baseUrlLiveIos = value["base_url_live_ios"] as String?;
-          baseUrlLiveAndroid = value["base_url_live_android"] as String?;
-          baseUrlAppShareDownloads = value["app_share_url"] as String?;
-        });
-
-        setupRemoteConfig();
-      } else {
-        print("Error: Snapshot does not contain valid data");
-      }
-    }, onError: (error) {
-      hideLoader();
-      print("${error.toString()} ====> remote config feature me database observing error");
-    });
-  }
-
-
-  void setupRemoteConfig() {
-    String deviceType = Platform.isAndroid ? 'android' : 'ios';
-    if (kDebugMode) {
-      if(baseUrlQA!.isNotEmpty){
-        UrlConstant.baseUrl = baseUrlQA ?? "";
-        UrlConstant.oneSignalRemote = oneSignalStaging ?? "";
-        UrlConstant.appShareDownloads = baseUrlAppShareDownloads ?? "";
-        isBaseUrlReady = true;
-        print("QA Base URL set to1: $baseUrlQA");
-      }
-      print("App is running in Debug mode.");
-      // Debug-specific code here
-    } else if (kReleaseMode) {
-      if(baseUrlLive!.isNotEmpty){
-        if(deviceType == "ios"){
-          ///appstore///
-         // UrlConstant.baseUrl = baseUrlLiveIos ?? "";
-          /// /// ///
-
-          /// Testing only///
-          UrlConstant.baseUrl = baseUrlLive ?? "";
-          /// /// ///
-          UrlConstant.oneSignalRemote = oneSignalLive ?? "";
-          UrlConstant.appShareDownloads = baseUrlAppShareDownloads ?? "";
-          isBaseUrlReady = true;
-          print("Live Base URL set to1: $baseUrlLiveIos");
-        }
-        else{
-          ///playsStore///
-        //  UrlConstant.baseUrl = baseUrlLiveAndroid ?? "";
-          /// /// ///
-
-          /// Testing only///
-           UrlConstant.baseUrl = baseUrlLive ?? "";
-           /// /// ///
-
-          UrlConstant.oneSignalRemote = oneSignalLive ?? "";
-          UrlConstant.appShareDownloads = baseUrlAppShareDownloads ?? "";
-          isBaseUrlReady = true;
-          print("Live Base URL set to1: $baseUrlLiveAndroid");
-        }
-
-      }
-
-      print("App is running in Release mode.");
-      // Production-specific code here
     } else {
-      print("App is running in Profile mode.");
-      // Profile-specific code here
+      debugPrint('Skipping flutter_local_notifications on non-Android');
     }
-    // Your remote config setup logic here
-    print("Live Base URL set to: $baseUrlLive");
-    print("QA Base URL set to: $baseUrlQA");
-    print("Live onesignalset to: $oneSignalLive");
-    print("staging onesiganl set to: $oneSignalStaging");
-    print("staging baseUrlAppShareDownloads set to: $baseUrlAppShareDownloads");
   }
 
-  void hideLoader() {
-    // Logic to hide loader
-    print("Loader hidden");
-  }
-  Future<void> _checkPermissionStatus() async {
-    // Check location permission status
-    final status = await Permission.locationWhenInUse.status;
-    setState(() {
-      permissionStatus = status;
+  void _setupMethodChannelHandler() {
+    if (kIsWeb) return;
+    platform.setMethodCallHandler((call) async {
+      if (call.method == 'showSharePost') {
+        _navigateToSharePostPage();
+      }
+      return null;
     });
   }
-  Future<void> fetchAppRegister() async {
-    String deviceType = Platform.isAndroid ? 'android' : 'ios';
-    //isLoading = true;
-    final signInProvider = Provider.of<SignInProvider>(context, listen: false);
 
-    await signInProvider.fetchAppRegister(context, deviceType: deviceType);
-
+  // ===== Share Extension (iOS) =====
+  void _setupShareExtensionHandler() {
+    ShareExtensionService.onSharedContent = (data) {
+      setState(() {
+        _sharedContent = ShareExtensionService.parseSharedData(data);
+        _shareStatus = (_sharedContent?.hasContent ?? false)
+            ? '✅ Received shared content'
+            : '⚠️ No content in shared data';
+      });
+      if (_sharedContent?.hasContent ?? false) {
+        _handleSharedContent();
+      }
+    };
+    ShareExtensionService.onNoSharedContent = () {
+      setState(() => _shareStatus = 'ℹ️ No shared content available');
+    };
   }
 
-  Future<void> _requestPermissions() async {
-    // Request location permission (Platform specific)
-    if (Platform.isIOS) {
-
-    } else if (Platform.isAndroid) {
-
-      await Permission.notification.request();
-
+  Future<void> _checkForSharedContent() async {
+    if (kIsWeb || !Platform.isIOS) return;
+    final hasData = await ShareExtensionService.checkForSharedContent();
+    if (!hasData) {
+      setState(() => _shareStatus = 'ℹ️ No shared content found');
+      return;
     }
+    final result = await ShareExtensionService.getSharedDataWithStatus();
+    if (result.isSuccess && result.data != null) {
+      setState(() {
+        _sharedContent = ShareExtensionService.parseSharedData(result.data!);
+        _shareStatus = '✅ ${result.message}';
+      });
+      if (_sharedContent?.hasContent ?? false) {
+        _handleSharedContent();
+      }
+    } else {
+      setState(() => _shareStatus = '❌ ${result.message}');
+    }
+  }
 
-    // Check updated location permission status
-    final locationStatus = await Permission.locationWhenInUse.status;
-    setState(() {
-      permissionStatus = locationStatus;
+  void _handleSharedContent() {
+    if (_sharedContent == null || !_sharedContent!.hasContent) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _navigateToSharePostPageWithData();
     });
+  }
+
+  void _navigateToSharePostPage() {
+    final ctx = navigatorKey.currentContext;
+    if (ctx == null) {
+      debugPrint('[ShareNav] Context is null');
+      return;
+    }
+    Navigator.of(ctx).push(MaterialPageRoute(builder: (context) {
+      return SharePostView(onClose: () => Navigator.of(context).pop());
+    }));
+  }
+
+  void _navigateToSharePostPageWithData() {
+    final ctx = navigatorKey.currentContext;
+    if (ctx == null) {
+      debugPrint('[ShareNav] Context is null');
+      return;
+    }
+    Navigator.of(ctx).push(MaterialPageRoute(builder: (context) {
+      return SharePostView(
+        onClose: () async {
+          await ShareExtensionService.clearSharedData();
+          setState(() {
+            _sharedContent = null;
+            _shareStatus = 'Cleared shared content';
+          });
+          if (Navigator.of(context).canPop()) Navigator.of(context).pop();
+        },
+        sharedUrl: _sharedContent?.url,
+        sharedText: _sharedContent?.sharedText ?? _sharedContent?.text,
+        sharedImages: _sharedContent?.imagePaths,
+      );
+    }));
   }
 
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
-      navigatorKey: navigatorKey, // <-- Add this line
+    return MaterialApp(
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       home: isBaseUrlReady
-          ? const SplashScreen() // Navigate to SplashScreen if baseUrl is ready
-          :  Scaffold(
-                  body: Center(
+          ? const SplashScreen()
+          : Scaffold(
+        body: Center(
           child: CupertinoActivityIndicator(
             color: ColorsContent.newThemeColor,
             radius: 15,
-          )// Show a loader while waiting
-                  ),
-                ),
+          ),
+        ),
+      ),
     );
   }
 }
+
+// ==============================
+// Legacy ShareHandler – kept for Android native shares
+// ==============================
+class ShareHandler {
+  static const _channel = MethodChannel('numuapp.share');
+
+  static Future<Map<String, dynamic>?> getSharedData() async {
+    try {
+      final jsonString = await _channel.invokeMethod<String>('getSharedData');
+      if (jsonString == null) return null;
+      return jsonDecode(jsonString);
+    } catch (e) {
+      debugPrint('❌ Error reading shared data: $e');
+      return null;
+    }
+  }
+}
+
+// ShareExtensionService.dart — drop-in replacement
+// Channel name matches your AppDelegate: "numuapp.share"
+
+
+
+class ShareExtensionService {
+  static const MethodChannel platform = MethodChannel('numuapp.share');
+
+  /// Called when native iOS notifies that new shared content is available.
+  static Function(Map<String, dynamic>)? onSharedContent;
+
+  /// Optional: called when native notifies but no content is available.
+  static Function()? onNoSharedContent;
+
+  /// Wire up native -> Dart callbacks. Call this early in main() before runApp().
+  static void initialize() {
+    platform.setMethodCallHandler((call) async {
+      if (call.method == 'onSharedContent') {
+        final result = await getSharedDataWithStatus();
+        if (result.isSuccess && result.data != null) {
+          onSharedContent?.call(result.data!);
+        } else {
+          onNoSharedContent?.call();
+        }
+      }
+      return null;
+    });
+  }
+
+  /// Old helper kept for compatibility.
+  static Future<Map<String, dynamic>?> getSharedData() async {
+    final r = await getSharedDataWithStatus();
+    return r.data;
+  }
+
+  /// NEW: returns structured status + payload, with friendly messages.
+  static Future<SharedDataResult> getSharedDataWithStatus() async {
+    try {
+      final result = await platform.invokeMethod('getSharedData');
+      if (result == null) {
+        return SharedDataResult(
+          hasData: false,
+          data: null,
+          message: 'No shared content found',
+        );
+      }
+      final map = Map<String, dynamic>.from(result as Map);
+      return SharedDataResult(
+        hasData: true,
+        data: map,
+        message: 'Shared content loaded successfully',
+      );
+    } on PlatformException catch (e) {
+      return SharedDataResult(
+        hasData: false,
+        data: null,
+        message: 'Platform error: ${e.message}',
+        error: e,
+      );
+    } catch (e) {
+      return SharedDataResult(
+        hasData: false,
+        data: null,
+        message: 'Unknown error occurred',
+        error: e,
+      );
+    }
+  }
+
+  /// Clears the stored shared payload in the App Group.
+  static Future<bool> clearSharedData() async {
+    try {
+      final result = await platform.invokeMethod('clearSharedData');
+      return result == true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// Ask native if there is new content (alias to hasSharedData/checkForSharedContent).
+  static Future<bool> checkForSharedContent() async {
+    try {
+      // Prefer explicit method; fallback to hasSharedData if not implemented
+      bool? has = await platform.invokeMethod('checkForSharedContent');
+      has ??= await platform.invokeMethod('hasSharedData');
+      return has ?? false;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// Parse the native payload into a typed model convenient for UI.
+  static SharedContent parseSharedData(Map<String, dynamic> data) {
+    // Accept either 'imagePaths' (preferred) or 'images'
+    final List<String> images = (() {
+      final raw = data['imagePaths'] ?? data['images'];
+      if (raw is List) {
+        return raw.map((e) => e.toString()).toList();
+      }
+      return <String>[];
+    })();
+
+    final String? text = data['text'] as String?;
+    final String? sharedText = (data['sharedText'] as String?) ?? text;
+    final String? url = data['url'] as String?;
+
+    final bool hasContent = ((text ?? '').isNotEmpty) ||
+        ((sharedText ?? '').isNotEmpty) ||
+        ((url ?? '').isNotEmpty) ||
+        images.isNotEmpty;
+
+    return SharedContent(
+      text: text,
+      sharedText: sharedText,
+      url: url,
+      imagePaths: images,
+      hasContent: hasContent,
+    );
+  }
+}
+
+/// Lightweight model used by UI widgets (e.g., SharePostView)
+class SharedContent {
+  final String? text;        // comment/caption
+  final String? sharedText;  // additional text from host app
+  final String? url;         // shared URL
+  final List<String> imagePaths; // local image file paths
+  final bool hasContent;
+
+  SharedContent({
+    this.text,
+    this.sharedText,
+    this.url,
+    required this.imagePaths,
+    required this.hasContent,
+  });
+
+  @override
+  String toString() => 'SharedContent(text: $text, sharedText: $sharedText, url: $url, images: ${imagePaths.length}, has: $hasContent)';
+}
+
+class SharedDataResult {
+  final bool hasData;
+  final Map<String, dynamic>? data;
+  final String message;
+  final Object? error;
+
+  const SharedDataResult({
+    required this.hasData,
+    required this.data,
+    required this.message,
+    this.error,
+  });
+
+  bool get isSuccess => hasData && error == null;
+}
+
+
+

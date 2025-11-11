@@ -40,6 +40,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../utils/logic/logic.dart';
+import '../../utils/theme/app_decoration.dart';
 import '../../widgets/background_image/background_imager.dart';
 import '../addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
 import '../journal_list_screen/journal_list_page.dart';
@@ -378,7 +379,19 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                     : const SizedBox(height: 4),
                                 imageList.isEmpty
                                     ?  const SizedBox()
-                                    : SizedBox(
+                                    : Container(
+                                  decoration: AppDecoration.outlineGray.copyWith(
+                                    borderRadius: BorderRadiusStyle.roundedBorder10,
+                                    border: Border.all(
+                                      color: ColorsContent.allBorderColor,
+                                      width: 0.5,
+                                    ),
+                                  ),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+
+                                      SizedBox(
                                         height: size.height * 0.3,
                                         child: Stack(
                                           children: [
@@ -394,7 +407,9 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                                       builder: (_) => Dialog(
                                                         insetPadding: EdgeInsets.zero,
                                                         backgroundColor: Colors.black,
-                                                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero), // <-- removes curves
+                                                        shape: const RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.zero,
+                                                        ),
                                                         child: Stack(
                                                           children: [
                                                             InteractiveViewer(
@@ -442,93 +457,27 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                                 });
                                               },
                                             ),
-                                            // PageView.builder(
-                                            //   controller: photoController,
-                                            //   itemCount: imageList.length,
-                                            //   itemBuilder: (context, index) {
-                                            //     return GestureDetector(
-                                            //       onTap: () {
-                                            //         showDialog(
-                                            //           context: context,
-                                            //           barrierDismissible: true,
-                                            //           builder: (_) {
-                                            //             PageController dialogController = PageController(initialPage: index);
-                                            //             return Dialog(
-                                            //               insetPadding: EdgeInsets.zero,
-                                            //               backgroundColor: Colors.black,
-                                            //               shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-                                            //               child: Stack(
-                                            //                 children: [
-                                            //                   PageView.builder(
-                                            //                     controller: dialogController,
-                                            //                     itemCount: imageList.length,
-                                            //                     itemBuilder: (context, dialogIndex) {
-                                            //                       return InteractiveViewer(
-                                            //                         child: Center(
-                                            //                           child: Image.network(
-                                            //                             imageList[dialogIndex],
-                                            //                             fit: BoxFit.contain,
-                                            //                             loadingBuilder: (context, child, loadingProgress) {
-                                            //                               if (loadingProgress == null) return child;
-                                            //                               return const Center(child: CupertinoActivityIndicator());
-                                            //                             },
-                                            //                             errorBuilder: (context, error, stackTrace) =>
-                                            //                             const Center(child: Icon(Icons.broken_image, color: Colors.white)),
-                                            //                           ),
-                                            //                         ),
-                                            //                       );
-                                            //                     },
-                                            //                   ),
-                                            //                   Positioned(
-                                            //                     top: 40,
-                                            //                     right: 20,
-                                            //                     child: IconButton(
-                                            //                       icon: const Icon(Icons.close, color: Colors.white, size: 30),
-                                            //                       onPressed: () => Navigator.of(context).pop(),
-                                            //                     ),
-                                            //                   ),
-                                            //                 ],
-                                            //               ),
-                                            //             );
-                                            //           },
-                                            //         );
-                                            //       },
-                                            //       child: ClipRRect(
-                                            //         borderRadius: BorderRadius.circular(5),
-                                            //         child: CustomImageView(
-                                            //           fit: BoxFit.cover,
-                                            //           imagePath: imageList[index],
-                                            //           height: size.height * 0.30,
-                                            //           width: size.width,
-                                            //           alignment: Alignment.center,
-                                            //         ),
-                                            //       ),
-                                            //     );
-                                            //   },
-                                            //   onPageChanged: (int pageIndex) {
-                                            //     setState(() {
-                                            //       photoCurrentIndex = pageIndex;
-                                            //     });
-                                            //   },
-                                            // ),
-                                            if(imageList.length != 1)
-                                            Positioned(
-                                              bottom: 10,
-                                              left: 0,
-                                              right: 0,
-                                              child: SizedBox(
-                                                width: imageList.length *
-                                                    size.width *
-                                                    0.1,
-                                                child: buildIndicators(
-                                                  imageList.length,
-                                                  photoCurrentIndex,
-                                                ),
-                                              ),
-                                            ),
                                           ],
                                         ),
                                       ),
+
+                                      // 👇 moved indicator outside the Stack (now below the images)
+                                      if (imageList.length > 1)
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 8.0),
+                                          child: SizedBox(
+                                            width: imageList.length * size.width * 0.1,
+                                            child: buildIndicators(
+                                              imageList.length,
+                                              photoCurrentIndex,
+                                            ),
+                                          ),
+                                        ),
+                                      const SizedBox(height: 10,),
+                                    ],
+                                  ),
+                                ),
+
                                 imageList.isEmpty?
                                 const SizedBox():
                                 const SizedBox(height: 28),
@@ -576,71 +525,84 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                     : const SizedBox(height: 4),
                                 videoList.isEmpty
                                     ?  const SizedBox()
-                                    : SizedBox(
+                                    : Container(
+                                  decoration: AppDecoration.outlineGray.copyWith(
+                                    borderRadius: BorderRadiusStyle.roundedBorder10,
+                                    border: Border.all(
+                                      color: ColorsContent.allBorderColor,
+                                      width: 0.5,
+                                    ),
+                                  ),
                                   height: size.height * 0.3,
-                                  child: Stack(
+                                  child: Column(
                                     children: [
-                                      PageView.builder(
-                                        controller: videoController,
-                                        itemCount: videoList.length,
-                                        itemBuilder: (context, index) {
-                                          return GestureDetector(
-                                            onTap: () {
-                                              showDialog(
-                                                context: context,
-                                                barrierDismissible: true,
-                                                builder: (_) => Dialog(
-                                                  insetPadding: EdgeInsets.zero,
-                                                  backgroundColor: Colors.black,
-                                                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-                                                  child: Stack(
-                                                    children: [
-                                                      Positioned.fill(
-                                                        child: VideoPlayerWidgetViewAndAlreadyBuildMentalProgressBar(
-                                                          videoUrl: videoList[index],
+                                      Expanded(
+                                        child: PageView.builder(
+                                          controller: videoController,
+                                          itemCount: videoList.length,
+                                          itemBuilder: (context, index) {
+                                            return GestureDetector(
+                                              onTap: () {
+                                                showDialog(
+                                                  context: context,
+                                                  barrierDismissible: true,
+                                                  builder: (_) => Dialog(
+                                                    insetPadding: EdgeInsets.zero,
+                                                    backgroundColor: Colors.black,
+                                                    shape: const RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.zero,
+                                                    ),
+                                                    child: Stack(
+                                                      children: [
+                                                        Positioned.fill(
+                                                          child: VideoPlayerWidgetViewAndAlreadyBuildMentalProgressBar(
+                                                            videoUrl: videoList[index],
+                                                          ),
                                                         ),
-                                                      ),
-                                                      Positioned(
-                                                        top: 40,
-                                                        right: 20,
-                                                        child: IconButton(
-                                                          icon: const Icon(Icons.close, color: Colors.white, size: 30),
-                                                          onPressed: () => Navigator.of(context).pop(),
+                                                        Positioned(
+                                                          top: 40,
+                                                          right: 20,
+                                                          child: IconButton(
+                                                            icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                                                            onPressed: () => Navigator.of(context).pop(),
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ],
+                                                      ],
+                                                    ),
                                                   ),
+                                                );
+                                              },
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius.circular(5),
+                                                child: VideoPlayerWidgetViewAndAlreadyBuildMental(
+                                                  videoUrl: videoList[index],
                                                 ),
-                                              );
-
-                                            },
-                                            child: ClipRRect(
-                                              borderRadius: BorderRadius.circular(5),
-                                              child: VideoPlayerWidgetViewAndAlreadyBuildMental(
-                                                videoUrl: videoList[index],
                                               ),
-                                            ),
-                                          );
-                                        },
-                                        onPageChanged: (int pageIndex) {
-                                          setState(() {
-                                            videoCurrentIndex = pageIndex;
-                                          });
-                                        },
-                                      ),
-                                      if( videoList.length != 1)
-                                      Positioned(
-                                        bottom: 10,
-                                        left: 0,
-                                        right: 0,
-                                        child: SizedBox(
-                                          width: videoList.length * size.width * 0.1,
-                                          child: buildIndicators(videoList.length, videoCurrentIndex),
+                                            );
+                                          },
+                                          onPageChanged: (int pageIndex) {
+                                            setState(() {
+                                              videoCurrentIndex = pageIndex;
+                                            });
+                                          },
                                         ),
                                       ),
+                                      if (videoList.length != 1)
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 8.0, bottom: 5.0),
+                                          child: SizedBox(
+                                            width: videoList.length * size.width * 0.1,
+                                            child: buildIndicators(
+                                              videoList.length,
+                                              videoCurrentIndex,
+                                            ),
+                                          ),
+                                        ),
+                                      const SizedBox(height: 10,),
                                     ],
                                   ),
                                 ),
+
 
                                 videoList.isEmpty?
                                 const SizedBox():
@@ -972,7 +934,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                     },
                                   ),
                                 ),
-
+                                homeProvider.journalDetails?.journals?.chatlink == null ?
                                 GestureDetector(
                                   onTap: () {
                                     final linkUrl = homeProvider.journalDetails?.journals?.chatlink;
@@ -993,7 +955,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                       ImageConstant.summaryChatIcon,
                                     ),
                                   ),
-                                ),
+                                ):SizedBox(),
 
 
                                 const SizedBox(height: 10),

@@ -22,6 +22,11 @@ class UrlConstant {
   static String subscribePlanUrl = "${baseUrl}subscribe";
   static String accountUrl = "${baseUrl}account";
   static String categoryUrl = "${baseUrl}category";
+  static String allGoalsUrl = "${baseUrl}allgoals";
+  static String fetchGoalsDetailsLinkUrl({required String goal_id}) {
+    return "${baseUrl}goal/$goal_id";
+  }
+
 
   static String interestsUrl = "${baseUrl}interests";
   static String feedbackUrl = "${baseUrl}feedback";
@@ -33,6 +38,7 @@ class UrlConstant {
   static String version_update = "${baseUrl}version_update";
   static String messages = "${baseUrl}messages";
   static String appShareUrl= "${baseUrl}appshare";
+  static String pageSettingsUrl= "${baseUrl}pagesettings";
 
 
   static String journalsUrl({required String page}) {

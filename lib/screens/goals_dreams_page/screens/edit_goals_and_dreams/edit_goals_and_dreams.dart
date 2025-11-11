@@ -187,12 +187,6 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
               value: widget.goalsanddream.gemMedia![i].gemMedia!.toString()));
         }
       }
-      // if (audioList.isNotEmpty) {
-      //   adDreamsGoalsProvider.alreadyRecordedFilePath
-      //       .addAll(AllModel(id: id, value: value));
-      //   log(adDreamsGoalsProvider.alreadyRecordedFilePath.length.toString(),
-      //       name: "audiosall");
-      // }
 
       for (int i = 0; i < widget.goalsanddream.gemMedia!.length; i++) {
         if (widget.goalsanddream.gemMedia![i].mediaType == 'image' ||
@@ -205,10 +199,6 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
           );
         }
       }
-      // if (imageList.isNotEmpty) {
-      //   adDreamsGoalsProvider.alreadyPickedImages.add(imageList);
-      //   log(adDreamsGoalsProvider.pickedImages.toString(), name: "imageLists");
-      // }
 
       adDreamsGoalsProvider.selectedDate = formatDate2(
           widget.goalsanddream.goalEnddate == null ||

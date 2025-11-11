@@ -22,6 +22,7 @@ import '../../../../utils/core/image_constant.dart';
 import '../../../../utils/core/url_constant.dart';
 import '../../../../utils/theme/custom_text_style.dart';
 import '../../../../widgets/custom_image_view.dart';
+import '../../../dynamic_menu_pages/dynamic_Menu_Webview_Screen.dart';
 
 Widget buildPopupDialog(BuildContext context, Size size) {
   return AlertDialog(
@@ -381,47 +382,56 @@ Widget buildPopupDialog(BuildContext context, Size size) {
               ),
 
               Consumer<SignInProvider>(
-                builder: (context, signInProvider, child) {
-                  final shareData = signInProvider.appShareResponseModel;
-                  final downloadUrl = Theme.of(context).platform == TargetPlatform.iOS
-                      ? shareData?.appstoreUrl
-                      : shareData?.playstoreUrl;
+              builder: (context, signInProvider, child) {
+              final shareData = signInProvider.appShareResponseModel;
+              final downloadUrl = Theme.of(context).platform == TargetPlatform.iOS
+              ? shareData?.appstoreUrl
+                  : shareData?.playstoreUrl;
 
-                  return GestureDetector(
-                    onTap: () async {
-                      final shareMessage = '''
-${shareData?.title}
+              // ✅ Check if shareData or its fields are empty/null
+              final bool hasValidData = shareData != null &&
+              (shareData.title?.isNotEmpty ?? false) &&
+              (shareData.message?.isNotEmpty ?? false) &&
+              (downloadUrl?.isNotEmpty ?? false);
 
-${shareData?.message}
+              if (!hasValidData) {
+              return const SizedBox.shrink(); // hide the widget completely
+              }
+
+              return GestureDetector(
+              onTap: () async {
+              final shareMessage = '''
+${shareData.title}
+
+${shareData.message}
 
 Download now: $downloadUrl
 ''';
 
-                      await Share.share(shareMessage);
-                    },
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        "App share",
-                        maxLines: 13,
-                        overflow: TextOverflow.ellipsis,
-                        style: CustomTextStyles
-                            .titleMediumOnSecondaryContainerMedium
-                            .copyWith(
-                          height: 2.19,
-                        ),
-                      ),
-                    ),
-                  );
-                },
+              await Share.share(shareMessage);
+              },
+              child: Align(
+              alignment: Alignment.topLeft,
+              child: Text(
+              "App share",
+              maxLines: 13,
+              overflow: TextOverflow.ellipsis,
+              style: CustomTextStyles
+                  .titleMediumOnSecondaryContainerMedium
+                  .copyWith(height: 2.19),
               ),
+              ),
+              );
+              },
+              ),
+
 
               SizedBox(
                 height: size.height * 0.005,
               ),
               GestureDetector(
                 onTap: () {
-                  dashBoardProvider.changeCommentPage(index: 13);
+                  dashBoardProvider.changeCommentPage(index: 14);
                   Navigator.of(context).pop();
                   // Navigator.of(context).push(
                   //   MaterialPageRoute(
@@ -443,6 +453,78 @@ Download now: $downloadUrl
                   ),
                 ),
               ),
+              SizedBox(
+                height: size.height * 0.005,
+              ),
+              Consumer<SignInProvider>(
+                builder: (context, signInProvider, child) {
+                  final dynamicMenuList = signInProvider.dynamicMenuList;
+
+                  if (dynamicMenuList == null || dynamicMenuList.isEmpty) {
+                    return const SizedBox.shrink();
+                  }
+
+                  final uniqueTitles = <String>{};
+                  final activeMenuItems = dynamicMenuList.where((item) {
+                    final isActive = item.status == "1";
+                    final isUnique = !uniqueTitles.contains(item.title);
+                    if (isActive && isUnique) {
+                      uniqueTitles.add(item.title ?? '');
+                      return true;
+                    }
+                    return false;
+                  }).toList();
+
+                  if (activeMenuItems.isEmpty) {
+                    return const SizedBox.shrink();
+                  }
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: List.generate(activeMenuItems.length, (index) {
+                      final menuItem = activeMenuItems[index];
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pop();
+
+                              // ✅ Open the selected item’s webview with correct URL
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => DynamicMenuWebviewScreen(
+                                    title: menuItem.title,
+                                    url: menuItem.linkUrl,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                menuItem.title ?? '',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: CustomTextStyles
+                                    .titleMediumOnSecondaryContainerMedium
+                                    .copyWith(height: 2.19),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: size.height * 0.005),
+                        ],
+                      );
+                    }),
+                  );
+                },
+              ),
+
+
+
+
               SizedBox(
                 height: size.height * 0.03,
               ),

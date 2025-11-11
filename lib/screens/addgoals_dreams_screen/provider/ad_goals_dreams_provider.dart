@@ -26,6 +26,7 @@ import '../../../utils/theme/colors.dart';
 import '../../maintenence_screen/maintenence_screen.dart';
 import '../../mental_strength_add_edit_screen/model/all_model.dart';
 import '../../token_expiry/token_expiry.dart';
+import '../model/all_Goals_List_Link_Response_Model.dart';
 import '../model/id_model.dart';
 
 class AdDreamsGoalsProvider extends ChangeNotifier {
@@ -54,6 +55,101 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
     _selectedAddress = '';
     notifyListeners();
   }
+
+
+  String? selectedOption;
+
+  final List<String> goalOptions = [
+    'Create New Goal',
+    'Add to Existing Goal',
+  ];
+
+  String? selectedExistingGoal;
+
+
+  AllGoalsListLinkResponseModel? getAllGoalsLinkModel;
+  bool getAllGoalsLinkLoading = false;
+  List<GoalListLink> goalListLink = [];
+
+  Future<void> fetchAllGoalsForLink(
+      BuildContext context)
+  async {
+    try {
+      getAllGoalsLinkModel = null;
+
+      String? token = await getUserTokenSharePref();
+      getAllGoalsLinkLoading = true;
+      logger.w("getAllGoalsLinkLoading $getAllGoalsLinkLoading");
+      notifyListeners();
+
+      Uri url = Uri.parse(UrlConstant.allGoalsUrl);
+      logger.w("url $url");
+
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref(); // Fetch user ID if version code is empty
+      }
+
+      Map<String, String> headers = {
+        'Device-Type': deviceType,
+        'Version': versionCode.toString(),
+        'authorization': token!, // Assuming token is not null
+      };
+
+      final response = await http.get(url, headers: headers);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+      //  statusDynamicMenu = response.statusCode;
+        getAllGoalsLinkModel = allGoalsListLinkResponseModelFromJson(response.body);
+        if (getAllGoalsLinkModel != null) {
+          if (getAllGoalsLinkModel!.goalsListLink != null) {
+            goalListLink.addAll(getAllGoalsLinkModel!.goalsListLink!);
+            logger.w("goalListLink${jsonEncode(getAllGoalsLinkModel)}");
+          }
+        }
+        getAllGoalsLinkLoading = false;
+        notifyListeners();
+
+        logger.w("getAllGoalsLinkLoading $getAllGoalsLinkLoading");
+        logger.w("dynamicMenuResponseModel $getAllGoalsLinkModel");
+      }
+      else if(response.statusCode == 503){
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      }
+      else {
+        logger.i("getAllGoalsLinkModel${jsonEncode(getAllGoalsLinkModel?.status)}");
+        if (response.statusCode == 401 || response.statusCode == 403) {
+        //  statusDynamicMenu = response.statusCode;
+          //   TokenManager.setTokenStatus(true);
+          // CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
+        }
+      }
+
+      getAllGoalsLinkLoading = false;
+      notifyListeners();
+    } catch (e) {
+      logger.e("Error fetching all goals list: $e");
+      getAllGoalsLinkLoading = false;
+      notifyListeners();
+    }
+  }
+
 
   TextEditingController nameEditTextController = TextEditingController();
 
@@ -1479,7 +1575,8 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
         required List<GoalModelIdName> actionId,
         required String gemId,
         required List<String> editDetectedLinks, // ✅ now a list
-      }) async {
+      })
+  async {
     try {
       updateGoalLoading = true;
       String deviceType = Platform.isAndroid ? 'android' : 'ios';
@@ -1553,6 +1650,129 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
         );
         clearAction();
         Navigator.of(context).pop();
+        Navigator.of(context).pop();
+      } else if (response.statusCode == 503) {
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title:
+                "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      } else {
+        showCustomSnackBar(
+          context: context,
+          message: json.decode(response.body)["text"],
+        );
+      }
+
+      if (response.statusCode == 401 || response.statusCode == 403) {
+        TokenManager.setTokenStatus(true);
+      }
+
+      updateGoalLoading = false;
+      notifyListeners();
+    } catch (error) {
+      showCustomSnackBar(context: context, message: "Failed");
+      updateGoalLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> updateGoalFunctionLink(
+      BuildContext context, {
+        required String title,
+        required String details,
+        required List<String> mediaName,
+        required String locationName,
+        required String locationLatitude,
+        required String locationLongitude,
+        required String locationAddress,
+        required String categoryId,
+        required String gemEndDate,
+        List<String>? mediaThumbs, // ✅ optional param
+        required List<GoalModelIdName> actionId,
+        required String gemId,
+        required List<String> editDetectedLinks, // ✅ now a list
+      })
+  async {
+    try {
+      updateGoalLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref();
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref();
+      }
+
+      notifyListeners();
+
+      String? token = await getUserTokenSharePref();
+
+      var body = {
+        'title': title,
+        'gem_type': 'goal',
+        'details': details,
+        'gem_enddate': gemEndDate,
+        'location_name': locationName,
+        'location_latitude': locationLatitude,
+        'location_longitude': locationLongitude,
+        'category_id': categoryId,
+        'location_address': locationAddress,
+        'gem_id': gemId,
+      };
+
+      // ✅ Add preview_link if the list is not empty
+      if (editDetectedLinks.isNotEmpty) {
+        // Option 1 (most common): send as comma-separated string
+        body['preview_link'] = editDetectedLinks.join(',');
+
+        // ✅ Option 2 (if backend expects array-style fields)
+        // for (int i = 0; i < editDetectedLinks.length; i++) {
+        //   body['preview_link[$i]'] = editDetectedLinks[i];
+        // }
+      }
+
+      // ✅ Add media files
+      for (int i = 0; i < mediaName.length; i++) {
+        body['media_name[$i]'] = mediaName[i];
+      }
+
+      // ✅ Add media thumbs if available
+      if (mediaThumbs != null && mediaThumbs.isNotEmpty) {
+        for (int i = 0; i < mediaThumbs.length; i++) {
+          body['media_thumb[$i]'] = mediaThumbs[i];
+        }
+      }
+
+      logger.i("bodyupdateLink $body");
+
+      final response = await http.post(
+        Uri.parse(UrlConstant.savegemUrl),
+        headers: <String, String>{
+          'device-type': deviceType,
+          'version': versionCode.toString(),
+          "authorization": "$token",
+        },
+        body: body,
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        showCustomSnackBar(
+          context: context,
+          message: json.decode(response.body)["text"],
+        );
+        clearAction();
+       // Navigator.of(context).pop();
         Navigator.of(context).pop();
       } else if (response.statusCode == 503) {
         Future.delayed(Duration.zero, () {
