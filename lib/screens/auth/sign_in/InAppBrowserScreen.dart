@@ -37,7 +37,6 @@ class _InAppBrowserScreenState extends State<InAppBrowserScreen> {
             debugPrint("Page started: $url");
           },
           onProgress: (progress) {
-            // progress is from 0 to 100
             setState(() {
               _progress = progress / 100.0;
             });
@@ -61,12 +60,13 @@ class _InAppBrowserScreenState extends State<InAppBrowserScreen> {
                 }
               });
 
-              // Redirect after a total of 15 seconds
+              // Redirect after 10 seconds
               _redirectTimer = Timer(const Duration(seconds: 10), () {
                 if (mounted) {
-                  Navigator.pushReplacement(
+                  Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (_) => const ScreenSignIn()),
+                        (route) => false,
                   );
                 }
               });
@@ -91,43 +91,49 @@ class _InAppBrowserScreenState extends State<InAppBrowserScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Stack(
-      children: [
-        Scaffold(
-          appBar: buildAppBarWebScreen(
-            context,
-            size,
-            heading: "Numu Registration",
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          body: Column(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      extendBodyBehindAppBar: false,
+      appBar: buildAppBarWebScreen(
+        context,
+        MediaQuery.of(context).size,
+        heading: "Numu Registration",
+        onTap: () => Navigator.of(context).pop(),
+      ),
+      body: Stack(
+        children: [
+          Column(
             children: [
               if (_progress < 1.0)
                 LinearProgressIndicator(
                   value: _progress,
-                  backgroundColor: Colors.grey,
+                  backgroundColor: Colors.grey.shade300,
                   valueColor: AlwaysStoppedAnimation<Color>(ColorsContent.newThemeColor),
                 ),
               Expanded(
-                child: WebViewWidget(controller: _controller),
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).padding.bottom,
+                  ),
+                  child: WebViewWidget(controller: _controller),
+                ),
               ),
             ],
           ),
-        ),
-        if (_showLoadingOverlay)
-          Container(
-            color: Colors.black.withOpacity(0.5),
-            child: const Center(
-              child: CupertinoActivityIndicator(
-                color: Colors.white,
-                radius: 15,
+          if (_showLoadingOverlay)
+            Positioned.fill(
+              child: Container(
+                color: Colors.black.withOpacity(0.5),
+                child: const Center(
+                  child: CupertinoActivityIndicator(
+                    color: Colors.white,
+                    radius: 15,
+                  ),
+                ),
               ),
             ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 }

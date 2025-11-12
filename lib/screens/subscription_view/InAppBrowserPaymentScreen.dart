@@ -51,6 +51,7 @@ class _InAppBrowserPaymentScreenState extends State<InAppBrowserPaymentScreen> {
             if (url.endsWith("/success")) {
               debugPrint("Matched success URL: $url");
 
+              // Show loading overlay after 5 seconds
               Timer(const Duration(seconds: 5), () {
                 if (mounted) {
                   setState(() {
@@ -59,11 +60,13 @@ class _InAppBrowserPaymentScreenState extends State<InAppBrowserPaymentScreen> {
                 }
               });
 
+              // Redirect after 10 seconds
               _redirectTimer = Timer(const Duration(seconds: 10), () {
                 if (mounted) {
-                  Navigator.pushReplacement(
+                  Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (_) => const DashBoardScreen()),
+                        (route) => false,
                   );
                 }
               });
@@ -88,48 +91,52 @@ class _InAppBrowserPaymentScreenState extends State<InAppBrowserPaymentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return WillPopScope(
-      onWillPop: () async => false,
-      child: Stack(
-        children: [
-          Scaffold(
-            appBar: buildAppBarWebScreen(
+      onWillPop: () async => false, // disable system back
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: buildAppBarWebScreen(
+          context,
+          MediaQuery.of(context).size,
+          heading: "Numu Subscription",
+          onTap: () {
+            Navigator.pushAndRemoveUntil(
               context,
-              size,
-              heading: "Numu Subscription",
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => const DashBoardScreen()),
-                );
-              },
-            ),
-            body: Column(
+              MaterialPageRoute(builder: (_) => const DashBoardScreen()),
+                  (route) => false,
+            );
+          },
+        ),
+        body: Stack(
+          children: [
+            Column(
               children: [
                 if (_progress < 1.0)
                   LinearProgressIndicator(
                     value: _progress,
-                    backgroundColor: Colors.grey,
-                    valueColor: AlwaysStoppedAnimation<Color>(ColorsContent.newThemeColor),
+                    backgroundColor: Colors.grey.shade300,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      ColorsContent.newThemeColor,
+                    ),
                   ),
+                // WebView takes full remaining space and handles its own scroll
                 Expanded(
                   child: WebViewWidget(controller: _controller),
                 ),
               ],
             ),
-          ),
-          if (_showLoadingOverlay)
-            Container(
-              color: Colors.black.withOpacity(0.5),
-              child: const Center(
-                child: CupertinoActivityIndicator(
-                  color: Colors.white,
-                  radius: 15,
+            if (_showLoadingOverlay)
+              Container(
+                color: Colors.black.withOpacity(0.5),
+                child: const Center(
+                  child: CupertinoActivityIndicator(
+                    color: Colors.white,
+                    radius: 15,
+                  ),
                 ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }

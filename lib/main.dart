@@ -206,7 +206,7 @@ void main() async {
 
 
 
-    //await initializeReferralTracking();
+    await initializeReferralTracking();
 
     if (kIsWeb) {
       await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
