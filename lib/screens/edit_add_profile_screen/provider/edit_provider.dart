@@ -569,6 +569,8 @@ class EditProfileProvider extends ChangeNotifier {
   }
 
   Category? categorys;
+  Category? selectedCategory;
+
 
   void selectCategory({required String value, required Category mainCategory}) {
     interestsValueController.text = value;

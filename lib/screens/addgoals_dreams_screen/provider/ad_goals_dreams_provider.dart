@@ -1613,10 +1613,6 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
         // Option 1 (most common): send as comma-separated string
         body['preview_link'] = editDetectedLinks.join(',');
 
-        // ✅ Option 2 (if backend expects array-style fields)
-        // for (int i = 0; i < editDetectedLinks.length; i++) {
-        //   body['preview_link[$i]'] = editDetectedLinks[i];
-        // }
       }
 
       // ✅ Add media files
@@ -1631,7 +1627,7 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
         }
       }
 
-      logger.i("body $body");
+      logger.i("bodyupdate $body");
 
       final response = await http.post(
         Uri.parse(UrlConstant.savegemUrl),
@@ -1694,10 +1690,10 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
         required String locationAddress,
         required String categoryId,
         required String gemEndDate,
-        List<String>? mediaThumbs, // ✅ optional param
+        List<String>? mediaThumbs,
         required List<GoalModelIdName> actionId,
         required String gemId,
-        required List<String> editDetectedLinks, // ✅ now a list
+        required List<String> editDetectedLinks,
       })
   async {
     try {
@@ -1733,18 +1729,21 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
 
       // ✅ Add preview_link if the list is not empty
       if (editDetectedLinks.isNotEmpty) {
-        // Option 1 (most common): send as comma-separated string
         body['preview_link'] = editDetectedLinks.join(',');
+      }
 
-        // ✅ Option 2 (if backend expects array-style fields)
-        // for (int i = 0; i < editDetectedLinks.length; i++) {
-        //   body['preview_link[$i]'] = editDetectedLinks[i];
-        // }
+      // ✅ Add ALL actionIds (send complete list - backend should replace, not append)
+      if (actionId.isNotEmpty) {
+        for (int i = 0; i < actionId.length; i++) {
+          body['action_id[$i]'] = actionId[i].id;
+        }
       }
 
       // ✅ Add media files
-      for (int i = 0; i < mediaName.length; i++) {
-        body['media_name[$i]'] = mediaName[i];
+      if (mediaName.isNotEmpty) {
+        for (int i = 0; i < mediaName.length; i++) {
+          body['media_name[$i]'] = mediaName[i];
+        }
       }
 
       // ✅ Add media thumbs if available
@@ -1757,7 +1756,7 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
       logger.i("bodyupdateLink $body");
 
       final response = await http.post(
-        Uri.parse(UrlConstant.savegemUrl),
+        Uri.parse(UrlConstant.updateGemUrl),
         headers: <String, String>{
           'device-type': deviceType,
           'version': versionCode.toString(),
@@ -1772,7 +1771,6 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
           message: json.decode(response.body)["text"],
         );
         clearAction();
-       // Navigator.of(context).pop();
         Navigator.of(context).pop();
       } else if (response.statusCode == 503) {
         Future.delayed(Duration.zero, () {
@@ -1800,11 +1798,13 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
       updateGoalLoading = false;
       notifyListeners();
     } catch (error) {
+      logger.e("Error updating goal: $error");
       showCustomSnackBar(context: context, message: "Failed");
       updateGoalLoading = false;
       notifyListeners();
     }
   }
+
 
 
   // ad media upload

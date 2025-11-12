@@ -31,6 +31,7 @@ class UrlConstant {
   static String interestsUrl = "${baseUrl}interests";
   static String feedbackUrl = "${baseUrl}feedback";
   static String savegemUrl = "${baseUrl}savegem";
+  static String updateGemUrl = "${baseUrl}updategoal";
   static String mediauploadUrl = "${baseUrl}mediaupload";
   static String chartviewUrl = "${baseUrl}chartview";
   static String appSettingsUrl = "${baseUrl}appsettings";

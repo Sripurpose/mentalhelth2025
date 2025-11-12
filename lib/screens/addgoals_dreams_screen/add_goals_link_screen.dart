@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -30,8 +32,10 @@ import '../../utils/core/date_time_utils.dart';
 import '../../utils/logic/permissions.dart';
 import '../../utils/theme/colors.dart';
 import '../../utils/theme/custom_button_style.dart';
+import '../../widgets/functions/popup.dart';
 import '../SharePostView.dart';
 import '../addactions_screen/addactions_screen.dart';
+import '../addactions_screen/provider/add_actions_provider.dart';
 import '../dash_borad_screen/provider/dash_board_provider.dart';
 import '../goals_dreams_page/provider/goals_dreams_provider.dart';
 import '../home_screen/provider/home_provider.dart';
@@ -90,7 +94,6 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
 
   String? unixTimestamp;
 
-
   @override
   void initState() {
     _loadSharedContent();
@@ -145,13 +148,14 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
     super.initState();
   }
 
-
   /// 🔹 Your safe logic that resets and populates data after API success
   // Also update applyRiskLogicInit() to handle the actions properly:
   void applyRiskLogicInit() {
     try {
-      EditProfileProvider editProfileProvider = Provider.of<EditProfileProvider>(context, listen: false);
-      AdDreamsGoalsProvider adDreamsGoalsProvider = Provider.of<AdDreamsGoalsProvider>(context, listen: false);
+      EditProfileProvider editProfileProvider =
+          Provider.of<EditProfileProvider>(context, listen: false);
+      AdDreamsGoalsProvider adDreamsGoalsProvider =
+          Provider.of<AdDreamsGoalsProvider>(context, listen: false);
 
       adDreamsGoalsProvider.alreadyRecordedFilePath.clear();
       adDreamsGoalsProvider.alreadyPickedImages.clear();
@@ -160,19 +164,25 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
       final goal = mentalStrengthEditProvider.goalDetailModel;
       if (goal == null) return;
 
-      adDreamsGoalsProvider.nameEditTextController.text = goal.goals?.goalTitle ?? '';
-      adDreamsGoalsProvider.commentEditTextController.text = goal.goals?.goalDetails ?? '';
+      adDreamsGoalsProvider.nameEditTextController.text =
+          goal.goals?.goalTitle ?? '';
+      adDreamsGoalsProvider.commentEditTextController.text =
+          goal.goals?.goalDetails ?? '';
 
       // Handle media files
       if (goal.goals?.gemMedia != null) {
         for (var media in goal.goals!.gemMedia!) {
           if (media.mediaType == 'audio') {
             adDreamsGoalsProvider.alreadyRecordedFilePath.add(
-              AllModel(id: media.mediaId.toString(), value: media.gemMedia.toString()),
+              AllModel(
+                  id: media.mediaId.toString(),
+                  value: media.gemMedia.toString()),
             );
           } else if (media.mediaType == 'image' || media.mediaType == 'video') {
             adDreamsGoalsProvider.alreadyPickedImages.add(
-              AllModel(id: media.mediaId.toString(), value: media.gemMedia.toString()),
+              AllModel(
+                  id: media.mediaId.toString(),
+                  value: media.gemMedia.toString()),
             );
           }
         }
@@ -184,16 +194,30 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
             : int.parse(goal.goals!.goalEnddate!),
       );
 
-      adDreamsGoalsProvider.selectedLocationName = goal.goals?.location?.locationName ?? '';
-      adDreamsGoalsProvider.selectedLatitude = goal.goals?.location?.locationLatitude ?? '';
-      adDreamsGoalsProvider.selectedLongitude = goal.goals?.location?.locationLongitude ?? '';
-      adDreamsGoalsProvider.selectedLocationAddress = goal.goals?.location?.locationAddress ?? '';
+      adDreamsGoalsProvider.selectedLocationName =
+          goal.goals?.location?.locationName ?? '';
+      adDreamsGoalsProvider.selectedLatitude =
+          goal.goals?.location?.locationLatitude ?? '';
+      adDreamsGoalsProvider.selectedLongitude =
+          goal.goals?.location?.locationLongitude ?? '';
+      adDreamsGoalsProvider.selectedLocationAddress =
+          goal.goals?.location?.locationAddress ?? '';
 
-      editProfileProvider.categorys = Category(
-        id: goal.goals?.categoryId.toString(),
-        categoryName: goal.goals?.categoryName.toString(),
+      // editProfileProvider.categorys = Category(
+      //   id: goal.goals?.categoryId.toString(),
+      //   categoryName: goal.goals?.categoryName.toString(),
+      //   categoryImg: "",
+      // );
+
+      final selectedCat = Category(
+        id: goal.goals?.categoryId?.toString(),
+        categoryName: goal.goals?.categoryName?.toString(),
         categoryImg: "",
       );
+
+// ✅ Store selected category
+      editProfileProvider.categorys = selectedCat;
+      editProfileProvider.selectedCategory = selectedCat;
 
       unixTimestamp = goal.goals!.goalEnddate.toString();
       logger.w(" unixTimestamp--${unixTimestamp}");
@@ -201,19 +225,19 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
 
       // ✅ This should properly populate goalModelIdName
       if (goal.goals?.action != null && goal.goals!.action!.isNotEmpty) {
-        for (var act in goal.goals!.action!) {
+        for (int i = 0; i < goal.goals!.action!.length; i++) {
           adDreamsGoalsProvider.getAddActionIdAndName(
             value: GoalModelIdName(
-              id: act.actionId.toString(),
-              name: act.actionTitle.toString(),
+              id: goal.goals!.action![i].actionId.toString(),
+              name: goal.goals!.action![i].actionTitle.toString(),
             ),
           );
         }
-        debugPrint("✅ Actions loaded: ${adDreamsGoalsProvider.goalModelIdName.length}");
+        debugPrint(
+            "✅ Actions loaded: ${adDreamsGoalsProvider.goalModelIdName.length}");
       } else {
         debugPrint("⚠️ No actions found in goal");
       }
-
     } catch (e) {
       debugPrint("⚠️ Risk logic failed: $e");
     }
@@ -223,9 +247,10 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
     setState(() => isLoading = true);
 
     // 1) Prefer injected data if present
-    final hasInjected = (widget.sharedUrl != null && widget.sharedUrl!.isNotEmpty) ||
-        (widget.sharedText != null && widget.sharedText!.isNotEmpty) ||
-        ((widget.sharedImages?.isNotEmpty) ?? false);
+    final hasInjected =
+        (widget.sharedUrl != null && widget.sharedUrl!.isNotEmpty) ||
+            (widget.sharedText != null && widget.sharedText!.isNotEmpty) ||
+            ((widget.sharedImages?.isNotEmpty) ?? false);
 
     if (hasInjected) {
       sharedData = SharedContentData(
@@ -241,8 +266,8 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
 
     // 2) Otherwise query native via MethodChannel
     try {
-      final Map<dynamic, dynamic>? result =
-      await shareDataChannel.invokeMethod<Map<dynamic, dynamic>>('getSharedData');
+      final Map<dynamic, dynamic>? result = await shareDataChannel
+          .invokeMethod<Map<dynamic, dynamic>>('getSharedData');
 
       if (result == null) {
         sharedData = null;
@@ -250,7 +275,8 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
         final json = result.cast<String, dynamic>();
         final String? text = json['text'] as String?;
         final String? url = json['url'] as String?;
-        final String? sharedText = json['sharedText'] as String?; // optional in payload
+        final String? sharedText =
+            json['sharedText'] as String?; // optional in payload
 
         final dynamic tVal = json['timestamp'];
         final int? timestamp = tVal is num ? tVal.toInt() : null;
@@ -260,7 +286,8 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
         if (Platform.isIOS && imageCount > 0) {
           imagePaths = await _getImagePathsFromAppGroup(imageCount);
         } else if (json['images'] is List) {
-          imagePaths = List<String>.from((json['images'] as List).map((e) => e.toString()));
+          imagePaths = List<String>.from(
+              (json['images'] as List).map((e) => e.toString()));
         }
 
         sharedData = SharedContentData(
@@ -268,7 +295,8 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
           url: url,
           sharedText: sharedText,
           imagePaths: imagePaths,
-          timestamp: timestamp ?? (DateTime.now().millisecondsSinceEpoch ~/ 1000),
+          timestamp:
+              timestamp ?? (DateTime.now().millisecondsSinceEpoch ~/ 1000),
         );
 
         // Clear after reading so we don't re-consume on next open
@@ -292,7 +320,8 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
     // In production you should write exact file paths from the extension into the payload.
     final List<String> paths = [];
     try {
-      final Directory baseDir = Directory('/var/mobile/Containers/Shared/AppGroup');
+      final Directory baseDir =
+          Directory('/var/mobile/Containers/Shared/AppGroup');
       if (!baseDir.existsSync()) return paths;
       for (final entity in baseDir.listSync()) {
         if (entity is! Directory) continue;
@@ -332,7 +361,8 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final adDreamsGoalsProvider = Provider.of<AdDreamsGoalsProvider>(context, listen: false);
+    final adDreamsGoalsProvider =
+        Provider.of<AdDreamsGoalsProvider>(context, listen: false);
 
     Size size = MediaQuery.of(context).size;
     return tokenStatus == false
@@ -342,7 +372,10 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                 appBar: buildAppBarNumuEditGoals(
                   context,
                   size,
-                  heading: "Add Goals & Dreams",
+                  heading:
+                  adDreamsGoalsProvider
+                      .selectedOption ==
+                      "Add to Existing Goal" ? "Update Goals & Dreams":"Add Goals & Dreams",
                 ),
                 body: Stack(
                   children: [
@@ -360,124 +393,160 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                             horizontal: 27,
                             vertical: 6,
                           ),
-                          child: Consumer2<AdDreamsGoalsProvider, MentalStrengthEditProvider>(
-                        builder: (context, adDreamsGoalsProvider, mentalStrengthEditProvider, _){
+                          child: Consumer2<AdDreamsGoalsProvider,
+                                  MentalStrengthEditProvider>(
+                              builder: (context, adDreamsGoalsProvider,
+                                  mentalStrengthEditProvider, _) {
                             return SingleChildScrollView(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                              Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                              child: Container(
-                                decoration: ShapeDecoration(
-                                  color: ColorsContent.linkDropDownBackGroundColor,
-                                  shape: RoundedRectangleBorder(
-                                    side: const BorderSide(
-                                      width: 0.8,
-                                      style: BorderStyle.solid,
-                                      color: Colors.transparent,
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 0.0),
+                                    child: Container(
+                                      decoration: ShapeDecoration(
+                                        color: ColorsContent
+                                            .linkDropDownBackGroundColor,
+                                        shape: RoundedRectangleBorder(
+                                          side: const BorderSide(
+                                            width: 0.8,
+                                            style: BorderStyle.solid,
+                                            color: Colors.transparent,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                        ),
+                                      ),
+                                      child: DropdownButtonFormField<String>(
+                                        hint: Text(
+                                          "Select Category",
+                                          style:
+                                              CustomTextStyles.bodySmallGray700,
+                                        ),
+                                        style:
+                                            CustomTextStyles.bodySmallGray700,
+                                        iconEnabledColor:
+                                            ColorsContent.newThemeColor,
+                                        iconDisabledColor:
+                                            ColorsContent.newThemeColor,
+
+                                        // ✅ Default or valid selection
+                                        value: adDreamsGoalsProvider.goalOptions
+                                                .contains(adDreamsGoalsProvider
+                                                    .selectedOption)
+                                            ? adDreamsGoalsProvider
+                                                .selectedOption
+                                            : (adDreamsGoalsProvider.goalOptions
+                                                    .contains("Create New Goal")
+                                                ? "Create New Goal"
+                                                : null),
+
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                          contentPadding: EdgeInsets.symmetric(
+                                              horizontal: 18, vertical: 10),
+                                        ),
+
+                                        // ✅ Ensure unique + always include "Create New Goal"
+                                        items: [
+                                          if (!adDreamsGoalsProvider.goalOptions
+                                              .contains("Create New Goal"))
+                                            "Create New Goal",
+                                          ...adDreamsGoalsProvider.goalOptions,
+                                        ].toSet().map((String option) {
+                                          return DropdownMenuItem<String>(
+                                            value: option,
+                                            child: Text(option),
+                                          );
+                                        }).toList(),
+
+                                        // ✅ Disable dropdown when "Add to Existing Goal" is selected
+                                        onChanged: adDreamsGoalsProvider
+                                                    .selectedOption ==
+                                                "Add to Existing Goal"
+                                            ? null
+                                            : (String? newValue) {
+                                                setState(() {
+                                                  adDreamsGoalsProvider
+                                                          .selectedOption =
+                                                      newValue;
+
+                                                  // Reset the second dropdown safely
+                                                  if (newValue !=
+                                                      'Add to Existing Goal') {
+                                                    adDreamsGoalsProvider
+                                                            .selectedExistingGoal =
+                                                        null;
+                                                  }
+                                                });
+                                              },
+                                      ),
                                     ),
-                                    borderRadius: BorderRadius.circular(8.0),
-                                  ),
-                                ),
-                                child: DropdownButtonFormField<String>(
-                                  hint: Text(
-                                    "Select Category",
-                                    style: CustomTextStyles.bodySmallGray700,
-                                  ),
-                                  style: CustomTextStyles.bodySmallGray700,
-                                  iconEnabledColor: ColorsContent.newThemeColor,
-                                  iconDisabledColor: ColorsContent.newThemeColor,
-
-                                  // ✅ Default or valid selection
-                                  value: adDreamsGoalsProvider.goalOptions.contains(adDreamsGoalsProvider.selectedOption)
-                                      ? adDreamsGoalsProvider.selectedOption
-                                      : (adDreamsGoalsProvider.goalOptions.contains("Create New Goal")
-                                      ? "Create New Goal"
-                                      : null),
-
-                                  decoration: const InputDecoration(
-                                    border: InputBorder.none,
-                                    contentPadding: EdgeInsets.symmetric(horizontal: 18, vertical: 10),
                                   ),
 
-                                  // ✅ Ensure unique + always include "Create New Goal"
-                                  items: [
-                                    if (!adDreamsGoalsProvider.goalOptions.contains("Create New Goal"))
-                                      "Create New Goal",
-                                    ...adDreamsGoalsProvider.goalOptions,
-                                  ].toSet().map((String option) {
-                                    return DropdownMenuItem<String>(
-                                      value: option,
-                                      child: Text(option),
-                                    );
-                                  }).toList(),
-
-                                  // ✅ Disable dropdown when "Add to Existing Goal" is selected
-                                  onChanged: adDreamsGoalsProvider.selectedOption == "Add to Existing Goal"
-                                      ? null
-                                      : (String? newValue) {
-                                    setState(() {
-                                      adDreamsGoalsProvider.selectedOption = newValue;
-
-                                      // Reset the second dropdown safely
-                                      if (newValue != 'Add to Existing Goal') {
-                                        adDreamsGoalsProvider.selectedExistingGoal = null;
-                                      }
-                                    });
-                                  },
-                                ),
-                              ),
-                            ),
-
-
-
-
-
-                            const SizedBox(height: 5),
+                                  const SizedBox(height: 5),
 
                                   // ✅ Show only when needed
-                                  if (adDreamsGoalsProvider.selectedOption == 'Add to Existing Goal') ...[
+                                  if (adDreamsGoalsProvider.selectedOption ==
+                                      'Add to Existing Goal') ...[
                                     const SizedBox(height: 10),
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 0.0),
                                       child: Container(
                                         decoration: ShapeDecoration(
                                           color: Colors.white,
                                           shape: RoundedRectangleBorder(
-                                            side: const BorderSide(width: 0.8, color: Colors.transparent),
-                                            borderRadius: BorderRadius.circular(8.0),
+                                            side: const BorderSide(
+                                                width: 0.8,
+                                                color: Colors.transparent),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
                                           ),
                                         ),
                                         child: IgnorePointer(
-                                          ignoring: _isLoadingNew, // Disable while loading
-                                          child: DropdownButtonFormField<String>(
+                                          ignoring: _isLoadingNew,
+                                          // Disable while loading
+                                          child:
+                                              DropdownButtonFormField<String>(
                                             hint: Text(
                                               "Select Existing Goal",
-                                              style: CustomTextStyles.bodySmallGray700,
+                                              style: CustomTextStyles
+                                                  .bodySmallGray700,
                                             ),
 
                                             // ✅ Safely set the selected value only if it exists once in the list
                                             value: (() {
-                                              final selected = adDreamsGoalsProvider.selectedExistingGoal;
-                                              final list = adDreamsGoalsProvider.goalListLink;
+                                              final selected =
+                                                  adDreamsGoalsProvider
+                                                      .selectedExistingGoal;
+                                              final list = adDreamsGoalsProvider
+                                                  .goalListLink;
 
                                               // No goals? No value.
-                                              if (selected == null || list.isEmpty) return null;
+                                              if (selected == null ||
+                                                  list.isEmpty) return null;
 
                                               // Filter to find matches
-                                              final matches =
-                                              list.where((g) => g.id?.toString() == selected).toList();
+                                              final matches = list
+                                                  .where((g) =>
+                                                      g.id?.toString() ==
+                                                      selected)
+                                                  .toList();
 
                                               // If exactly one match, return it; otherwise reset
                                               if (matches.length == 1) {
                                                 return selected;
                                               } else {
-                                                WidgetsBinding.instance.addPostFrameCallback((_) {
+                                                WidgetsBinding.instance
+                                                    .addPostFrameCallback((_) {
                                                   // Reset safely without triggering rebuild conflict
                                                   if (mounted) {
                                                     setState(() {
-                                                      adDreamsGoalsProvider.selectedExistingGoal = null;
+                                                      adDreamsGoalsProvider
+                                                              .selectedExistingGoal =
+                                                          null;
                                                     });
                                                   }
                                                 });
@@ -485,50 +554,66 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                                               }
                                             })(),
 
-                                            iconEnabledColor: ColorsContent.newThemeColor,
-                                            iconDisabledColor: ColorsContent.newThemeColor,
+                                            iconEnabledColor:
+                                                ColorsContent.newThemeColor,
+                                            iconDisabledColor:
+                                                ColorsContent.newThemeColor,
                                             decoration: const InputDecoration(
                                               border: InputBorder.none,
                                               contentPadding:
-                                              EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                                                  EdgeInsets.symmetric(
+                                                      horizontal: 18,
+                                                      vertical: 10),
                                             ),
 
                                             // ✅ Ensure each ID is unique
-                                            items: adDreamsGoalsProvider.goalListLink
+                                            items: adDreamsGoalsProvider
+                                                .goalListLink
                                                 .where((g) => g.id != null)
                                                 .toSet()
-                                                .map((goalItem) => DropdownMenuItem<String>(
-                                              value: goalItem.id!.toString(),
-                                              child: Text(
-                                                goalItem.title ?? 'Unnamed Goal',
-                                                style: CustomTextStyles.bodySmallGray700,
-                                              ),
-                                            ))
+                                                .map((goalItem) =>
+                                                    DropdownMenuItem<String>(
+                                                      value: goalItem.id!
+                                                          .toString(),
+                                                      child: Text(
+                                                        goalItem.title ??
+                                                            'Unnamed Goal',
+                                                        style: CustomTextStyles
+                                                            .bodySmallGray700,
+                                                      ),
+                                                    ))
                                                 .toList(),
 
                                             // In the dropdown onChanged callback (around line 380):
-                                            onChanged: (String? newValue) async {
-                                              if (newValue == null || newValue.isEmpty) return;
+                                            onChanged:
+                                                (String? newValue) async {
+                                              if (newValue == null ||
+                                                  newValue.isEmpty) return;
 
                                               setState(() {
-                                                adDreamsGoalsProvider.selectedExistingGoal = newValue;
+                                                adDreamsGoalsProvider
+                                                        .selectedExistingGoal =
+                                                    newValue;
                                                 _isLoadingNew = true;
                                               });
 
                                               try {
                                                 // ✅ IMPORTANT: Clear BEFORE fetching
-                                                adDreamsGoalsProvider.goalModelIdName.clear();
+                                                adDreamsGoalsProvider
+                                                    .goalModelIdName
+                                                    .clear();
 
-                                                await mentalStrengthEditProvider.fetchGoalDetails(
+                                                await mentalStrengthEditProvider
+                                                    .fetchGoalDetails(
                                                   goalId: newValue,
                                                   context: context,
                                                 );
 
                                                 // ✅ Call applyRiskLogicInit() AFTER fetching is complete
                                                 applyRiskLogicInit();
-
                                               } catch (e) {
-                                                debugPrint("⚠️ Error fetching goal details: $e");
+                                                debugPrint(
+                                                    "⚠️ Error fetching goal details: $e");
                                               } finally {
                                                 if (mounted) {
                                                   setState(() {
@@ -541,60 +626,81 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                                         ),
                                       ),
                                     ),
-
-                                    if (_isLoadingNew)
-                                      const Padding(
-                                        padding: EdgeInsets.only(top: 12.0),
-                                        child: Center(
-                                          child: CircularProgressIndicator(
-                                            strokeWidth: 2,
-                                            color: Colors.blueAccent,
-                                          ),
-                                        ),
-                                      ),
+                                    // if (_isLoadingNew)
+                                    //   const Padding(
+                                    //     padding: EdgeInsets.only(top: 12.0),
+                                    //     child: Center(
+                                    //       child: CircularProgressIndicator(
+                                    //         strokeWidth: 2,
+                                    //         color: Colors.blueAccent,
+                                    //       ),
+                                    //     ),
+                                    //   ),
                                   ],
-
-
 
                                   const SizedBox(height: 15),
                                   _buildNameEditText(context),
                                   const SizedBox(height: 15),
                                   Consumer<EditProfileProvider>(
                                     builder: (context, editProfileProvider, _) {
+                                      final categoryList = editProfileProvider
+                                              .getCategoryModel?.category ??
+                                          [];
+
+                                      // 🔹 Ensure the selected value actually exists in the dropdown list
+                                      Category? selectedCategory =
+                                          editProfileProvider.selectedCategory;
+
+                                      if (selectedCategory != null &&
+                                          categoryList.isNotEmpty) {
+                                        final match = categoryList.firstWhere(
+                                          (cat) =>
+                                              cat.id.toString() ==
+                                              selectedCategory?.id.toString(),
+                                          orElse: () => Category(
+                                              id: '',
+                                              categoryName: '',
+                                              categoryImg: ''),
+                                        );
+
+                                        // If no valid match, reset to null
+                                        if (match.id == '') {
+                                          selectedCategory = null;
+                                        } else {
+                                          selectedCategory = match;
+                                        }
+                                      }
+
                                       return Container(
                                         height: size.height * 0.055,
                                         padding: const EdgeInsets.only(
-                                          left: 10,
-                                          right: 5,
-                                        ),
+                                            left: 10, right: 5),
                                         decoration: ShapeDecoration(
                                           color: Colors.white,
-                                          // Set background color here
                                           shape: RoundedRectangleBorder(
                                             side: const BorderSide(
-                                              width: 0.8,
-                                              style: BorderStyle.solid,
-                                              color: Colors.transparent,
-                                            ),
+                                                width: 0.8,
+                                                color: Colors.transparent),
                                             borderRadius:
                                                 BorderRadius.circular(8.0),
                                           ),
                                         ),
-                                        child: editProfileProvider
-                                                    .getCategoryModel ==
-                                                null
+                                        child: categoryList.isEmpty
                                             ? const SizedBox()
-                                            :
-                                        DropdownButton<Category>(
-                                                items: editProfileProvider
-                                                    .getCategoryModel!.category!
+                                            : DropdownButton<Category>(
+                                                // ✅ Use verified selectedCategory
+                                                value: selectedCategory,
+                                                items: categoryList
                                                     .map((Category value) {
                                                   return DropdownMenuItem<
                                                       Category>(
                                                     value: value,
-                                                    child: Text(value
-                                                        .categoryName
-                                                        .toString()),
+                                                    child: Text(
+                                                        value.categoryName ??
+                                                            '',
+                                                      style: CustomTextStyles
+                                                          .bodySmallGray700,
+                                                    ),
                                                   );
                                                 }).toList(),
                                                 hint: Text(
@@ -602,8 +708,7 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                                                           .interestsValueController
                                                           .text
                                                           .isEmpty
-                                                      ? 'Education and '
-                                                      'career'
+                                                      ? 'Select a category'
                                                       : editProfileProvider
                                                           .interestsValueController
                                                           .text,
@@ -616,12 +721,13 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                                                 isExpanded: true,
                                                 iconEnabledColor:
                                                     ColorsContent.newThemeColor,
-                                                // 👈 Dropdown icon color
                                                 iconDisabledColor:
                                                     ColorsContent.newThemeColor,
-                                                // 👈 Optional: icon color when disabled
                                                 onChanged: (value) {
                                                   if (value != null) {
+                                                    editProfileProvider
+                                                            .selectedCategory =
+                                                        value;
                                                     editProfileProvider
                                                         .selectCategory(
                                                       value: value.categoryName
@@ -629,29 +735,34 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                                                       mainCategory: value,
                                                     );
                                                     _isTokenExpired();
+                                                    editProfileProvider
+                                                        .notifyListeners();
                                                   }
                                                 },
                                               ),
                                       );
                                     },
                                   ),
+
                                   const SizedBox(height: 15),
                                   _buildAchievementDate(context),
                                   const SizedBox(height: 25),
-                                  adDreamsGoalsProvider.selectedOption == 'Add to Existing Goal' ?
-                                  _buildAddMediaColumnEdit(
-                                    context,
-                                    size,
-                                  ):
-                                  _buildAddMediaColumn(
-                                    context,
-                                    size,
-                                  ),
+                                  adDreamsGoalsProvider.selectedOption ==
+                                          'Add to Existing Goal'
+                                      ? _buildAddMediaColumnEdit(
+                                          context,
+                                          size,
+                                        )
+                                      : _buildAddMediaColumn(
+                                          context,
+                                          size,
+                                        ),
                                   const SizedBox(height: 11),
                                   const SizedBox(height: 24),
-                                  adDreamsGoalsProvider.selectedOption == 'Add to Existing Goal' ?
-                                  _buildCommentEditTextEditLink(context):
-                                  _buildCommentEditText(context),
+                                  adDreamsGoalsProvider.selectedOption ==
+                                          'Add to Existing Goal'
+                                      ? _buildCommentEditTextEditLink(context)
+                                      : _buildCommentEditText(context),
                                   const SizedBox(height: 25),
 
                                   Padding(
@@ -672,136 +783,299 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                                   const SizedBox(
                                     height: 15,
                                   ),
-                                  Consumer<AdDreamsGoalsProvider>(
-                                    builder:
-                                        (context, adDreamsGoalsProvider, _) {
-                                      return SizedBox(
-                                        height: adDreamsGoalsProvider
-                                                .goalModelIdName.length *
-                                            size.height *
-                                            0.06,
-                                        child: ListView.builder(
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          itemCount: adDreamsGoalsProvider
-                                              .goalModelIdName.length,
-                                          itemBuilder: (context, index) {
-                                            return Row(
-                                              children: [
-                                                // Checkbox(
-                                                //     value: false,
-                                                //     onChanged: (value) {}),
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    // Navigator.of(context).push(
-                                                    //   MaterialPageRoute(
-                                                    //     builder: (context) =>
-                                                    //         ActionsFullView(
-                                                    //       id: mentalStrengthEditProvider
-                                                    //           .getListGoalActionsModel!
-                                                    //           .actions![index]
-                                                    //           .id
-                                                    //           .toString(),
-                                                    //       indexs: index,
-                                                    //     ),
-                                                    //   ),
-                                                    // );
-                                                  },
-                                                  child: Container(
-                                                    height: size.height * 0.04,
-                                                    width: size.width * 0.85,
-                                                    margin:
-                                                        const EdgeInsets.only(
-                                                      bottom: 4,
-                                                    ),
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                      bottom: 5,
-                                                      top: 5,
-                                                      left: 0,
-                                                      right: 5,
-                                                    ),
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                        100,
-                                                      ),
-                                                      border: Border.all(
-                                                        color: Colors.grey,
-                                                        width: 0.5,
-                                                      ),
-                                                    ),
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        GestureDetector(
-                                                          onTap: () {
-                                                            adDreamsGoalsProvider
-                                                                .getAddActionIdAndNameClear(
-                                                              index,
-                                                            );
-                                                          },
-                                                          child: CircleAvatar(
-                                                            radius: size.width *
-                                                                0.04,
-                                                            backgroundColor:
-                                                                ColorsContent
-                                                                    .newThemeColor,
-                                                            child: Icon(
-                                                              Icons.close,
+                                  adDreamsGoalsProvider.selectedOption ==
+                                          'Add to Existing Goal'
+                                      ? Consumer2<AdDreamsGoalsProvider,
+                                          AddActionsProvider>(
+                                          builder: (context,
+                                              adDreamsGoalsProvider,
+                                              addActionsProvider,
+                                              _) {
+                                            return SizedBox(
+                                              height: adDreamsGoalsProvider
+                                                      .goalModelIdName.length *
+                                                  size.height *
+                                                  0.065,
+                                              child: ListView.builder(
+                                                physics:
+                                                    const NeverScrollableScrollPhysics(),
+                                                itemCount: adDreamsGoalsProvider
+                                                    .goalModelIdName.length,
+                                                itemBuilder: (context, index) {
+                                                  var data =
+                                                      adDreamsGoalsProvider
+                                                              .goalModelIdName[
+                                                          index];
+
+                                                  return Row(
+                                                    children: [
+                                                      GestureDetector(
+                                                        onTap: () {},
+                                                        child: Container(
+                                                          margin:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  bottom: 10),
+                                                          height: size.height *
+                                                              0.055,
+                                                          width:
+                                                              size.width * 0.86,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                            bottom: 5,
+                                                            top: 5,
+                                                            left: 0,
+                                                            right: 5,
+                                                          ),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: Colors.white,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                              5,
+                                                            ),
+                                                            border: Border.all(
                                                               color:
-                                                                  Colors.white,
-                                                              size: size.width *
-                                                                  0.04,
+                                                                  Colors.grey,
+                                                              width: 0.5,
                                                             ),
                                                           ),
-                                                        ),
-                                                        Text(
-                                                          adDreamsGoalsProvider
-                                                              .goalModelIdName[
-                                                                  index]
-                                                              .name,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style:
-                                                              const TextStyle(
-                                                            color: Colors.grey,
+                                                          child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              GestureDetector(
+                                                                onTap:
+                                                                    () async {
+                                                                  customPopup(
+                                                                    context:
+                                                                        context,
+                                                                    onPressedDelete:
+                                                                        () async {
+                                                                      adDreamsGoalsProvider
+                                                                          .getAddActionIdAndNameClear(
+                                                                              index);
+                                                                      await addActionsProvider.deleteActionFunction(
+                                                                          deleteId: data
+                                                                              .id,
+                                                                          context:
+                                                                              context);
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    },
+                                                                    yes: "Yes",
+                                                                    title:
+                                                                        'Do you Need Delete',
+                                                                    content:
+                                                                        'Are you sure do you need delete',
+                                                                  );
+                                                                },
+                                                                child: Padding(
+                                                                  padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal:
+                                                                          8.0),
+                                                                  child:
+                                                                      CircleAvatar(
+                                                                    radius: size
+                                                                            .width *
+                                                                        0.04,
+                                                                    backgroundColor:
+                                                                        ColorsContent
+                                                                            .newThemeColor,
+                                                                    child: Icon(
+                                                                      Icons
+                                                                          .close_outlined,
+                                                                      color: Colors
+                                                                          .white,
+                                                                      size: size
+                                                                              .width *
+                                                                          0.04,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Padding(
+                                                                padding: const EdgeInsets
+                                                                    .symmetric(
+                                                                    horizontal:
+                                                                        10.0),
+                                                                child:
+                                                                    SingleChildScrollView(
+                                                                  scrollDirection:
+                                                                      Axis.horizontal,
+                                                                  // Enable horizontal scrolling
+                                                                  child:
+                                                                      SizedBox(
+                                                                    width: 250,
+                                                                    child: Text(
+                                                                      data.name,
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      maxLines:
+                                                                          4,
+                                                                      // Set the maximum number of lines to 3
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .start,
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        fontSize:
+                                                                            14,
+                                                                        fontWeight:
+                                                                            FontWeight.w400,
+                                                                        color: Colors
+                                                                            .black,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
                                                           ),
                                                         ),
-                                                        CircleAvatar(
-                                                          radius:
-                                                              size.width * 0.04,
-                                                          backgroundColor:
-                                                              ColorsContent
-                                                                  .newThemeColor,
-                                                          child: Icon(
-                                                            Icons
-                                                                .arrow_forward_ios_outlined,
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              ),
+                                            );
+                                          },
+                                        )
+                                      : Consumer<AdDreamsGoalsProvider>(
+                                          builder: (context,
+                                              adDreamsGoalsProvider, _) {
+                                            return SizedBox(
+                                              height: adDreamsGoalsProvider
+                                                      .goalModelIdName.length *
+                                                  size.height *
+                                                  0.06,
+                                              child: ListView.builder(
+                                                physics:
+                                                    const NeverScrollableScrollPhysics(),
+                                                itemCount: adDreamsGoalsProvider
+                                                    .goalModelIdName.length,
+                                                itemBuilder: (context, index) {
+                                                  return Row(
+                                                    children: [
+                                                      GestureDetector(
+                                                        onTap: () {},
+                                                        child: Container(
+                                                          height: size.height *
+                                                              0.04,
+                                                          width:
+                                                              size.width * 0.85,
+                                                          margin:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                            bottom: 4,
+                                                          ),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                            bottom: 5,
+                                                            top: 5,
+                                                            left: 0,
+                                                            right: 5,
+                                                          ),
+                                                          decoration:
+                                                              BoxDecoration(
                                                             color: Colors.white,
-                                                            size: size.width *
-                                                                0.04,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                              100,
+                                                            ),
+                                                            border: Border.all(
+                                                              color:
+                                                                  Colors.grey,
+                                                              width: 0.5,
+                                                            ),
+                                                          ),
+                                                          child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              GestureDetector(
+                                                                onTap: () {
+                                                                  adDreamsGoalsProvider
+                                                                      .getAddActionIdAndNameClear(
+                                                                    index,
+                                                                  );
+                                                                },
+                                                                child:
+                                                                    CircleAvatar(
+                                                                  radius:
+                                                                      size.width *
+                                                                          0.04,
+                                                                  backgroundColor:
+                                                                      ColorsContent
+                                                                          .newThemeColor,
+                                                                  child: Icon(
+                                                                    Icons.close,
+                                                                    color: Colors
+                                                                        .white,
+                                                                    size: size
+                                                                            .width *
+                                                                        0.04,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                adDreamsGoalsProvider
+                                                                    .goalModelIdName[
+                                                                        index]
+                                                                    .name,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                ),
+                                                              ),
+                                                              CircleAvatar(
+                                                                radius:
+                                                                    size.width *
+                                                                        0.04,
+                                                                backgroundColor:
+                                                                    ColorsContent
+                                                                        .newThemeColor,
+                                                                child: Icon(
+                                                                  Icons
+                                                                      .arrow_forward_ios_outlined,
+                                                                  color: Colors
+                                                                      .white,
+                                                                  size:
+                                                                      size.width *
+                                                                          0.04,
+                                                                ),
+                                                              ),
+                                                            ],
                                                           ),
                                                         ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              ),
                                             );
                                           },
                                         ),
-                                      );
-                                    },
-                                  ),
                                   const SizedBox(
                                     height: 30,
                                   ),
-                                  adDreamsGoalsProvider.selectedOption == 'Add to Existing Goal' ?
-                                  _buildUpdateButton(context):
-                                  _buildSaveButton(context),
+                                  adDreamsGoalsProvider.selectedOption ==
+                                          'Add to Existing Goal'
+                                      ? _buildUpdateButton(context)
+                                      : _buildSaveButton(context),
                                   const SizedBox(
                                     height: 20,
                                   ),
@@ -812,6 +1086,23 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                         ),
                       ),
                     ),
+                    // ✅ FULL SCREEN LOADING OVERLAY
+                    if (_isLoadingNew)
+                      Positioned(
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        child: Container(
+                          color:  Colors.grey.withOpacity(0.5),
+                          child:  Center(
+                            child: CupertinoActivityIndicator(
+                              radius: 20,
+                              color: ColorsContent.newThemeColor,
+                            ),
+                          ),
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -911,7 +1202,8 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                 // 📝 Description field
                 CustomTextFormFieldGoalOrActionDesc(
                   controller: adDreamsGoalsProvider.commentEditTextController,
-                  hintText: _goalDescFocusNode.hasFocus ? '' : "Goal Description",
+                  hintText:
+                      _goalDescFocusNode.hasFocus ? '' : "Goal Description",
                   hintStyle: CustomTextStyles.bodySmallGray700,
                   maxLines: 4,
                   focusNode: _goalDescFocusNode,
@@ -920,11 +1212,12 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                   borderDecoration: InputBorder.none,
                   onTap: () {
                     // Pre-populate with shared text if available and field is empty
-                    if (adDreamsGoalsProvider.commentEditTextController.text.isEmpty &&
+                    if (adDreamsGoalsProvider
+                            .commentEditTextController.text.isEmpty &&
                         sharedData != null &&
                         (sharedData!.sharedText ?? '').isNotEmpty) {
                       adDreamsGoalsProvider.commentEditTextController.text =
-                      sharedData!.sharedText!;
+                          sharedData!.sharedText!;
                     }
                     setState(() {});
                   },
@@ -944,8 +1237,10 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                       final cleanedText = value
                           .replaceAll(adDreamsGoalsProvider.urlRegex, '')
                           .trim();
-                      adDreamsGoalsProvider.commentEditTextController.text = cleanedText;
-                      adDreamsGoalsProvider.commentEditTextController.selection =
+                      adDreamsGoalsProvider.commentEditTextController.text =
+                          cleanedText;
+                      adDreamsGoalsProvider
+                              .commentEditTextController.selection =
                           TextSelection.fromPosition(
                               TextPosition(offset: cleanedText.length));
                     }
@@ -974,7 +1269,8 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: LinkPreviewGenerator(
-                              link: adDreamsGoalsProvider.detectedLinks.isNotEmpty
+                              link: adDreamsGoalsProvider
+                                      .detectedLinks.isNotEmpty
                                   ? adDreamsGoalsProvider.detectedLinks.first
                                   : '',
                               linkPreviewStyle: LinkPreviewStyle.small,
@@ -1048,7 +1344,8 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                 // 📝 Description field
                 CustomTextFormFieldGoalOrActionDesc(
                   controller: adDreamsGoalsProvider.commentEditTextController,
-                  hintText: _goalDescFocusNode.hasFocus ? '' : "Goal Description",
+                  hintText:
+                      _goalDescFocusNode.hasFocus ? '' : "Goal Description",
                   hintStyle: CustomTextStyles.bodySmallGray700,
                   maxLines: 4,
                   focusNode: _goalDescFocusNode,
@@ -1057,11 +1354,12 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                   borderDecoration: InputBorder.none,
                   onTap: () {
                     // Pre-populate with shared text if available and field is empty
-                    if (adDreamsGoalsProvider.commentEditTextController.text.isEmpty &&
+                    if (adDreamsGoalsProvider
+                            .commentEditTextController.text.isEmpty &&
                         sharedData != null &&
                         (sharedData!.sharedText ?? '').isNotEmpty) {
                       adDreamsGoalsProvider.commentEditTextController.text =
-                      sharedData!.sharedText!;
+                          sharedData!.sharedText!;
                     }
                     setState(() {});
                   },
@@ -1081,8 +1379,10 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                       final cleanedText = value
                           .replaceAll(adDreamsGoalsProvider.urlRegex, '')
                           .trim();
-                      adDreamsGoalsProvider.commentEditTextController.text = cleanedText;
-                      adDreamsGoalsProvider.commentEditTextController.selection =
+                      adDreamsGoalsProvider.commentEditTextController.text =
+                          cleanedText;
+                      adDreamsGoalsProvider
+                              .commentEditTextController.selection =
                           TextSelection.fromPosition(
                               TextPosition(offset: cleanedText.length));
                     }
@@ -1111,8 +1411,10 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: LinkPreviewGenerator(
-                              link: adDreamsGoalsProvider.editDetectedLinks.isNotEmpty
-                                  ? adDreamsGoalsProvider.editDetectedLinks.first
+                              link: adDreamsGoalsProvider
+                                      .editDetectedLinks.isNotEmpty
+                                  ? adDreamsGoalsProvider
+                                      .editDetectedLinks.first
                                   : '',
                               linkPreviewStyle: LinkPreviewStyle.small,
                               showDomain: true,
@@ -1164,8 +1466,6 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
     );
   }
 
-
-
   /// Section Widget
   Widget _buildAddActionsButton(BuildContext context) {
     return CustomElevatedButton(
@@ -1216,8 +1516,7 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                   context: context,
                   message: "Please fill Achievement date",
                 );
-              }
-              else if (adDreamsGoalsProvider.formattedDate == null) {
+              } else if (adDreamsGoalsProvider.formattedDate == null) {
                 showCustomSnackBar(
                   context: context,
                   message: "Please select a valid date",
@@ -1285,96 +1584,91 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
   Widget _buildUpdateButton(BuildContext context) {
     return Consumer2<AdDreamsGoalsProvider, EditProfileProvider>(
         builder: (context, adDreamsGoalsProvider, editProfileProvider, _) {
-          return CustomElevatedButton(
-            loading: adDreamsGoalsProvider.saveAddActionsLoading,
-            onPressed: () async {
-              _isTokenExpired();
-              if (!adDreamsGoalsProvider.isVideoUploading) {
-                if (adDreamsGoalsProvider.nameEditTextController.text.isNotEmpty
-                    // &&
-                    // adDreamsGoalsProvider
-                    //     .commentEditTextController.text.isNotEmpty
-                    &&
-                    editProfileProvider.categorys != null &&
-                    adDreamsGoalsProvider.formattedDate != null) {
-                  if (adDreamsGoalsProvider.formattedDate.isNotEmpty) {
-                    logger.w("formattedDate${adDreamsGoalsProvider.formattedDate}");
-                    logger.w("adDreamsGoalsProvider.goalModelIdName${adDreamsGoalsProvider.goalModelIdName}");
+      return CustomElevatedButton(
+        loading: adDreamsGoalsProvider.saveAddActionsLoading,
+        onPressed: () async {
+          _isTokenExpired();
+          if (!adDreamsGoalsProvider.isVideoUploading) {
+            if (adDreamsGoalsProvider.nameEditTextController.text.isNotEmpty &&
+                editProfileProvider.categorys != null &&
+                adDreamsGoalsProvider.formattedDate != null) {
+              if (adDreamsGoalsProvider.formattedDate.isNotEmpty) {
+                logger.w("formattedDate${adDreamsGoalsProvider.formattedDate}");
+                logger.w(
+                    "adDreamsGoalsProvider.goalModelIdName${adDreamsGoalsProvider.goalModelIdName}");
 
-                    await adDreamsGoalsProvider.updateGoalFunctionLink(
-                      context,
-                      title: adDreamsGoalsProvider.nameEditTextController.text,
-                      details: adDreamsGoalsProvider.commentEditTextController.text,
-                      mediaName: adDreamsGoalsProvider.addMediaUploadResponseList,
-                      locationName: adDreamsGoalsProvider.selectedLocationName,
-                      locationLatitude: adDreamsGoalsProvider.selectedLatitude,
-                      locationLongitude: adDreamsGoalsProvider.selectedLongitude,
-                      locationAddress:
+                // ✅ Call update function with all required parameters
+                await adDreamsGoalsProvider.updateGoalFunctionLink(
+                  context,
+                  title: adDreamsGoalsProvider.nameEditTextController.text,
+                  details: adDreamsGoalsProvider.commentEditTextController.text,
+                  mediaName: adDreamsGoalsProvider.addMediaUploadResponseList,
+                  locationName: adDreamsGoalsProvider.selectedLocationName,
+                  locationLatitude: adDreamsGoalsProvider.selectedLatitude,
+                  locationLongitude: adDreamsGoalsProvider.selectedLongitude,
+                  locationAddress:
                       adDreamsGoalsProvider.selectedLocationAddress,
-                      categoryId: editProfileProvider.categorys!.id.toString(),
-                      gemEndDate: adDreamsGoalsProvider.formattedDate,
-                      mediaThumbs: adDreamsGoalsProvider.mediaThumbList, // ✅ pass here
-                      actionId: adDreamsGoalsProvider.goalModelIdName,
-                      gemId:  adDreamsGoalsProvider.selectedExistingGoal.toString(),
-                      editDetectedLinks: adDreamsGoalsProvider.editDetectedLinks,
-                    );
-                    GoalsDreamsProvider goalsDreamsProvider =
-                    Provider.of<GoalsDreamsProvider>(
-                      context,
-                      listen: false,
-                    );
-                    // goalsDreamsProvider.fetchGoalsAndDreams(initial: true);
-                  } else {
-                    logger.w("formattedDate${adDreamsGoalsProvider.formattedDate}");
-                    logger.w("selectedDate${adDreamsGoalsProvider.selectedDate}");
-                    logger.w("adDreamsGoalsProvider.goalModelIdName1${adDreamsGoalsProvider.goalModelIdName}");
-                    await adDreamsGoalsProvider.updateGoalFunctionLink(
-                      context,
-                      title: adDreamsGoalsProvider.nameEditTextController.text,
-                      details: adDreamsGoalsProvider.commentEditTextController.text,
-                      mediaName: adDreamsGoalsProvider.addMediaUploadResponseList,
-                      locationName: adDreamsGoalsProvider.selectedLocationName,
-                      locationLatitude: adDreamsGoalsProvider.selectedLatitude,
-                      locationLongitude: adDreamsGoalsProvider.selectedLongitude,
-                      locationAddress:
-                      adDreamsGoalsProvider.selectedLocationAddress,
-                      categoryId: editProfileProvider.categorys!.id.toString(),
-                      gemEndDate: unixTimestamp.toString(),
-                      mediaThumbs: adDreamsGoalsProvider.mediaThumbList, // ✅ pass here
-                      actionId: adDreamsGoalsProvider.goalModelIdName,
-                      gemId: adDreamsGoalsProvider.selectedExistingGoal.toString(),
-                      editDetectedLinks: adDreamsGoalsProvider.editDetectedLinks,
-
-                    );
-                    GoalsDreamsProvider goalsDreamsProvider =
-                    Provider.of<GoalsDreamsProvider>(
-                      context,
-                      listen: false,
-                    );
-
-                    //goalsDreamsProvider.fetchGoalsAndDreams(initial: true);
-                  }
-                } else {
-                  showCustomSnackBar(
-                    context: context,
-                    message: "Please fill in all the fields",
-                  );
-                }
-              } else {
-                showCustomSnackBar(
-                  context: context,
-                  message: "Please Wait Video Uploading",
+                  categoryId: editProfileProvider.categorys!.id.toString(),
+                  gemEndDate: adDreamsGoalsProvider.formattedDate,
+                  mediaThumbs: adDreamsGoalsProvider.mediaThumbList,
+                  actionId: adDreamsGoalsProvider.goalModelIdName,
+                  gemId: adDreamsGoalsProvider.selectedExistingGoal.toString(),
+                  editDetectedLinks: adDreamsGoalsProvider.editDetectedLinks,
                 );
+
+                GoalsDreamsProvider goalsDreamsProvider =
+                    Provider.of<GoalsDreamsProvider>(context, listen: false);
+                // goalsDreamsProvider.fetchGoalsAndDreams(initial: true);
+              } else {
+                logger.w("formattedDate${adDreamsGoalsProvider.formattedDate}");
+                logger.w("selectedDate${adDreamsGoalsProvider.selectedDate}");
+                logger.w(
+                    "adDreamsGoalsProvider.goalModelIdName1${jsonEncode(adDreamsGoalsProvider.goalModelIdName)}");
+
+                // ✅ Call update function with all required parameters
+                await adDreamsGoalsProvider.updateGoalFunctionLink(
+                  context,
+                  title: adDreamsGoalsProvider.nameEditTextController.text,
+                  details: adDreamsGoalsProvider.commentEditTextController.text,
+                  mediaName: adDreamsGoalsProvider.addMediaUploadResponseList,
+                  locationName: adDreamsGoalsProvider.selectedLocationName,
+                  locationLatitude: adDreamsGoalsProvider.selectedLatitude,
+                  locationLongitude: adDreamsGoalsProvider.selectedLongitude,
+                  locationAddress:
+                      adDreamsGoalsProvider.selectedLocationAddress,
+                  categoryId: editProfileProvider.categorys!.id.toString(),
+                  gemEndDate: unixTimestamp.toString(),
+                  mediaThumbs: adDreamsGoalsProvider.mediaThumbList,
+                  actionId: adDreamsGoalsProvider.goalModelIdName,
+                  gemId: adDreamsGoalsProvider.selectedExistingGoal.toString(),
+                  editDetectedLinks: adDreamsGoalsProvider.editDetectedLinks,
+                );
+
+                GoalsDreamsProvider goalsDreamsProvider =
+                    Provider.of<GoalsDreamsProvider>(context, listen: false);
+                // goalsDreamsProvider.fetchGoalsAndDreams(initial: true);
               }
-            },
-            height: 45,
-            text: "Update",
-            margin: const EdgeInsets.only(left: 2),
-            buttonStyle: CustomButtonStyles.outlinePrimaryTL5,
-            buttonTextStyle:
+            } else {
+              showCustomSnackBar(
+                context: context,
+                message: "Please fill in all the fields",
+              );
+            }
+          } else {
+            showCustomSnackBar(
+              context: context,
+              message: "Please Wait Video Uploading",
+            );
+          }
+        },
+        height: 45,
+        text: "Update",
+        margin: const EdgeInsets.only(left: 2),
+        buttonStyle: CustomButtonStyles.outlinePrimaryTL5,
+        buttonTextStyle:
             CustomTextStyles.titleSmallHelveticaOnSecondaryContainer,
-          );
-        });
+      );
+    });
   }
 
   Widget _buildAddMediaColumn(BuildContext context, Size size) {
@@ -1521,7 +1815,6 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                           if (mentalStrengthEditProvider.takedImages.isEmpty) {
                             return const SizedBox();
                           } else {
-
                             return Container(
                               width: size.height * 0.04,
                               // Ensure width
@@ -1763,435 +2056,443 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
   Widget _buildAddMediaColumnEdit(BuildContext context, Size size) {
     return Consumer<AdDreamsGoalsProvider>(
         builder: (context, adDreamsGoalsProvider, _) {
-          return Align(
-            alignment: Alignment.topCenter,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
+      return Align(
+        alignment: Alignment.topCenter,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Add Media",
+              style: theme.textTheme.titleSmall,
+            ),
+            const SizedBox(
+              height: 11,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  "Add Media",
-                  style: theme.textTheme.titleSmall,
-                ),
-                const SizedBox(
-                  height: 11,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-
-                    SizedBox(
-                      height: size.height * 0.09,
-                      child: Stack(
-                        children: [
-                          GestureDetector(
-                            onTap: () async {
-                              FocusScope.of(context).requestFocus(FocusNode());
-                              _isTokenExpired();
-                              if (await requestGalleryPermission() && Platform.isAndroid) {
-                                adDreamsGoalsProvider.selectedMedia(1);
-                                await galleryBottomSheetAddGoals(
-                                  context: context,
-                                  title: 'Gallery',
-                                );
-                              } else if(Platform.isIOS){
-                                adDreamsGoalsProvider.selectedMedia(1);
-                                await galleryBottomSheetAddGoals(
-                                  context: context,
-                                  title: 'Gallery',
-                                );
-                              }else{
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content:
+                SizedBox(
+                  height: size.height * 0.09,
+                  child: Stack(
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          FocusScope.of(context).requestFocus(FocusNode());
+                          _isTokenExpired();
+                          if (await requestGalleryPermission() &&
+                              Platform.isAndroid) {
+                            adDreamsGoalsProvider.selectedMedia(1);
+                            await galleryBottomSheetAddGoals(
+                              context: context,
+                              title: 'Gallery',
+                            );
+                          } else if (Platform.isIOS) {
+                            adDreamsGoalsProvider.selectedMedia(1);
+                            await galleryBottomSheetAddGoals(
+                              context: context,
+                              title: 'Gallery',
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content:
                                       Text("Gallery permission is required.")),
-                                );
-                              }
-                            },
-                            child: SvgPicture.asset(
-                              ImageConstant
-                                  .galleryAddMediaNumu, // Replace with your SVG asset path
-                            ),
-                          ),
-                          Positioned(
-                            bottom: Platform.isIOS ? 50 : 45, // Adjust this value as needed
-                            right: 0, // Move to the right
-                            left: 40,
-                            child: Consumer<AdDreamsGoalsProvider>(
-                              builder: (context, adDreamsGoalsProvider, _) {
-                                if (adDreamsGoalsProvider
+                            );
+                          }
+                        },
+                        child: SvgPicture.asset(
+                          ImageConstant
+                              .galleryAddMediaNumu, // Replace with your SVG asset path
+                        ),
+                      ),
+                      Positioned(
+                        bottom: Platform.isIOS ? 50 : 45,
+                        // Adjust this value as needed
+                        right: 0,
+                        // Move to the right
+                        left: 40,
+                        child: Consumer<AdDreamsGoalsProvider>(
+                          builder: (context, adDreamsGoalsProvider, _) {
+                            if (adDreamsGoalsProvider
                                     .alreadyPickedImages.isEmpty &&
-                                    adDreamsGoalsProvider.pickedImages.isEmpty) {
-                                  return const SizedBox();
-                                } else {
-                                  return Container(
-                                    width: size.height * 0.04,
-                                    // Set width
-                                    height: size.height * 0.04,
-                                    // Set height same as width to make it a circle
-                                    decoration: BoxDecoration(
-                                      color: ColorsContent.galleryCountColor,
-                                      shape: BoxShape.circle,
-                                      // Ensures the container is circular
-                                      image: DecorationImage(
-                                        image: AssetImage(ImageConstant.imgMenu),
-                                        fit: BoxFit.cover,
-                                      ),
-                                      border: Border.all(
-                                        color: Colors.white,
-                                        width: 1.0,
-                                      ),
+                                adDreamsGoalsProvider.pickedImages.isEmpty) {
+                              return const SizedBox();
+                            } else {
+                              return Container(
+                                width: size.height * 0.04,
+                                // Set width
+                                height: size.height * 0.04,
+                                // Set height same as width to make it a circle
+                                decoration: BoxDecoration(
+                                  color: ColorsContent.galleryCountColor,
+                                  shape: BoxShape.circle,
+                                  // Ensures the container is circular
+                                  image: DecorationImage(
+                                    image: AssetImage(ImageConstant.imgMenu),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 1.0,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "${adDreamsGoalsProvider.pickedImages.length + adDreamsGoalsProvider.alreadyPickedImages.length}",
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins',
                                     ),
-                                    child: Center(
-                                      child: Text(
-                                        "${adDreamsGoalsProvider.pickedImages.length + adDreamsGoalsProvider.alreadyPickedImages.length}",
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: 'Poppins',
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                }
-                              },
-                            ),
-                          ),
-
-                        ],
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                        ),
                       ),
-                    ),
-
-                    SizedBox(
-                      height: size.height * 0.09,
-                      child: Stack(
-                        children: [
-                          GestureDetector(
-                            onTap: () async {
-                              FocusScope.of(context).requestFocus(FocusNode());
-                              _isTokenExpired();
-                              if (await requestCameraPermission() && Platform.isAndroid) {
-                                adDreamsGoalsProvider.selectedMedia(2);
-                                cameraBottomSheetAdGoals(
-                                  context: context,
-                                  title: "Camera",
-                                );
-                              } else if(Platform.isIOS){
-                                adDreamsGoalsProvider.selectedMedia(2);
-                                cameraBottomSheetAdGoals(
-                                  context: context,
-                                  title: "Camera",
-                                );
-
-                              }else{
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content:
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: size.height * 0.09,
+                  child: Stack(
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          FocusScope.of(context).requestFocus(FocusNode());
+                          _isTokenExpired();
+                          if (await requestCameraPermission() &&
+                              Platform.isAndroid) {
+                            adDreamsGoalsProvider.selectedMedia(2);
+                            cameraBottomSheetAdGoals(
+                              context: context,
+                              title: "Camera",
+                            );
+                          } else if (Platform.isIOS) {
+                            adDreamsGoalsProvider.selectedMedia(2);
+                            cameraBottomSheetAdGoals(
+                              context: context,
+                              title: "Camera",
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content:
                                       Text("Camera permission is required.")),
-                                );
-                              }
-                            },
-                            child: SvgPicture.asset(
-                              ImageConstant
-                                  .cameraAddMediaNumu, // Replace with your SVG asset path
-                            ),
-                          ),
-
-                          Positioned(
-                            bottom: Platform.isIOS ? 50 : 45, // Adjust this value as needed
-                            right: 0, // Move to the right
-                            left: 40,
-                            child: Consumer<AdDreamsGoalsProvider>(
-                              builder: (context, adDreamsGoalsProvider, _) {
-                                if (adDreamsGoalsProvider.takedImages.isEmpty) {
-                                  return const SizedBox();
-                                } else {
-                                  return Container(
-                                    width: size.height * 0.04,
-                                    // Ensure width
-                                    height: size.height * 0.04,
-                                    // Ensure height matches width for a circle
-                                    decoration: BoxDecoration(
-                                      color: ColorsContent.cameraCountColor,
-                                      shape: BoxShape.circle,
-                                      // This makes it perfectly round
-                                      image: DecorationImage(
-                                        image: AssetImage(ImageConstant.imgMenu),
-                                        fit: BoxFit.cover,
-                                      ),
-                                      border: Border.all(
-                                        color: Colors.white,
-                                        width: 1.0,
-                                      ),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        adDreamsGoalsProvider.takedImages.length
-                                            .toString(),
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: 'Poppins',
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                }
-                              },
-                            ),
-                          )
-
-                        ],
+                            );
+                          }
+                        },
+                        child: SvgPicture.asset(
+                          ImageConstant
+                              .cameraAddMediaNumu, // Replace with your SVG asset path
+                        ),
                       ),
-                    ),
-
-                    SizedBox(
-                      height: size.height * 0.09,
-                      child: Stack(
-                        children: [
-                          GestureDetector(
-                            onTap: () async {
-                              FocusScope.of(context).requestFocus(FocusNode());
-                              _isTokenExpired();
-                              adDreamsGoalsProvider.selectedMedia(0);
-                              await audioBottomSheetAddGoals(
-                                context: context,
-                                title: 'Record Audio',
+                      Positioned(
+                        bottom: Platform.isIOS ? 50 : 45,
+                        // Adjust this value as needed
+                        right: 0,
+                        // Move to the right
+                        left: 40,
+                        child: Consumer<AdDreamsGoalsProvider>(
+                          builder: (context, adDreamsGoalsProvider, _) {
+                            if (adDreamsGoalsProvider.takedImages.isEmpty) {
+                              return const SizedBox();
+                            } else {
+                              return Container(
+                                width: size.height * 0.04,
+                                // Ensure width
+                                height: size.height * 0.04,
+                                // Ensure height matches width for a circle
+                                decoration: BoxDecoration(
+                                  color: ColorsContent.cameraCountColor,
+                                  shape: BoxShape.circle,
+                                  // This makes it perfectly round
+                                  image: DecorationImage(
+                                    image: AssetImage(ImageConstant.imgMenu),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 1.0,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    adDreamsGoalsProvider.takedImages.length
+                                        .toString(),
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins',
+                                    ),
+                                  ),
+                                ),
                               );
-                            },
-                            child: SvgPicture.asset(
-                              ImageConstant
-                                  .recordAddMediaNumu, // Replace with your SVG asset path
-                            ),
-                          ),
-                          Positioned(
-                            bottom: Platform.isIOS ? 50: 45, // Adjust this value as needed
-                            right: 0, // Move to the right
-                            left: 40,
-                            child: Consumer<AdDreamsGoalsProvider>(
-                              builder: (context, adDreamsGoalsProvider, _) {
-                                if (adDreamsGoalsProvider
+                            }
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: size.height * 0.09,
+                  child: Stack(
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          FocusScope.of(context).requestFocus(FocusNode());
+                          _isTokenExpired();
+                          adDreamsGoalsProvider.selectedMedia(0);
+                          await audioBottomSheetAddGoals(
+                            context: context,
+                            title: 'Record Audio',
+                          );
+                        },
+                        child: SvgPicture.asset(
+                          ImageConstant
+                              .recordAddMediaNumu, // Replace with your SVG asset path
+                        ),
+                      ),
+                      Positioned(
+                        bottom: Platform.isIOS ? 50 : 45,
+                        // Adjust this value as needed
+                        right: 0,
+                        // Move to the right
+                        left: 40,
+                        child: Consumer<AdDreamsGoalsProvider>(
+                          builder: (context, adDreamsGoalsProvider, _) {
+                            if (adDreamsGoalsProvider
                                     .alreadyRecordedFilePath.isEmpty &&
-                                    adDreamsGoalsProvider.recordedFilePath.isEmpty) {
-                                  return const SizedBox();
-                                } else {
-                                  return Container(
-                                    width: size.height * 0.04,
-                                    // Ensuring width
-                                    height: size.height * 0.04,
-                                    // Ensuring height for a circle
-                                    decoration: BoxDecoration(
-                                      color: ColorsContent.recordCountColor,
-                                      shape: BoxShape.circle,
-                                      // Ensuring a perfect circle
-                                      image: DecorationImage(
-                                        image: AssetImage(ImageConstant.imgMenu),
-                                        fit: BoxFit.cover,
-                                      ),
-                                      border: Border.all(
-                                        color: Colors.white,
-                                        width: 1.0,
-                                      ),
+                                adDreamsGoalsProvider
+                                    .recordedFilePath.isEmpty) {
+                              return const SizedBox();
+                            } else {
+                              return Container(
+                                width: size.height * 0.04,
+                                // Ensuring width
+                                height: size.height * 0.04,
+                                // Ensuring height for a circle
+                                decoration: BoxDecoration(
+                                  color: ColorsContent.recordCountColor,
+                                  shape: BoxShape.circle,
+                                  // Ensuring a perfect circle
+                                  image: DecorationImage(
+                                    image: AssetImage(ImageConstant.imgMenu),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 1.0,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "${adDreamsGoalsProvider.recordedFilePath.length + adDreamsGoalsProvider.alreadyRecordedFilePath.length}",
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins',
                                     ),
-                                    child: Center(
-                                      child: Text(
-                                        "${adDreamsGoalsProvider.recordedFilePath.length + adDreamsGoalsProvider.alreadyRecordedFilePath.length}",
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: 'Poppins',
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                }
-                              },
-                            ),
-                          )
-
-                        ],
-                      ),
-                    ),
-
-                    SizedBox(
-                      height: size.height * 0.09,
-                      child: Stack(
-                        children: [
-                          GestureDetector(
-                            onTap: () async {
-                              FocusScope.of(context).requestFocus(FocusNode());
-                              // _checkPermissionStatus();
-                              // _requestPermissions();
-                              adDreamsGoalsProvider.selectedMedia(
-                                3,
+                                  ),
+                                ),
                               );
+                            }
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: size.height * 0.09,
+                  child: Stack(
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          FocusScope.of(context).requestFocus(FocusNode());
+                          // _checkPermissionStatus();
+                          // _requestPermissions();
+                          adDreamsGoalsProvider.selectedMedia(
+                            3,
+                          );
 
-                              final status = await Permission.locationWhenInUse.status;
+                          final status =
+                              await Permission.locationWhenInUse.status;
 
-                              print("Permission status is ${status}");
-                              if (status.isDenied || status.isPermanentlyDenied) {
-                                final result =
+                          print("Permission status is ${status}");
+                          if (status.isDenied || status.isPermanentlyDenied) {
+                            final result =
                                 await Permission.locationWhenInUse.request();
 
-                                if (result.isDenied || result.isPermanentlyDenied) {
-                                  if (mounted) {
-                                    showDialog(
-                                      context: context,
-                                      barrierDismissible: false,
-                                      builder: (context) => AlertDialog(
-                                        title: const Text(
-                                            'Location Permission Required'),
-                                        content: const Text(
-                                            'Location permission is needed to add your current location to the mental strength entry. Please enable it in settings.'),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () => Navigator.pop(context),
-                                            child: const Text('Cancel'),
-                                          ),
-                                          TextButton(
-                                            onPressed: () async {
-                                              Navigator.pop(context);
-                                              await openAppSettings();
-                                            },
-                                            child: const Text('Open Settings'),
-                                          ),
-                                        ],
+                            if (result.isDenied || result.isPermanentlyDenied) {
+                              if (mounted) {
+                                showDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (context) => AlertDialog(
+                                    title: const Text(
+                                        'Location Permission Required'),
+                                    content: const Text(
+                                        'Location permission is needed to add your current location to the mental strength entry. Please enable it in settings.'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child: const Text('Cancel'),
                                       ),
-                                    );
-                                  }
-                                  return;
-                                }
+                                      TextButton(
+                                        onPressed: () async {
+                                          Navigator.pop(context);
+                                          await openAppSettings();
+                                        },
+                                        child: const Text('Open Settings'),
+                                      ),
+                                    ],
+                                  ),
+                                );
                               }
-                              if (await Permission.locationWhenInUse.isGranted){
-                                if (mounted) {
-
-                                  showModalBottomSheet(
-                                    context: context,
-                                    isScrollControlled: true, // <== Helps with full height layout
-                                    backgroundColor: Colors.transparent, // Optional for rounded corners
-                                    builder: (BuildContext context) {
-                                      return SafeArea(
-                                        child: Padding(
-                                          padding: EdgeInsets.only(
-                                            bottom: MediaQuery.of(context).viewInsets.bottom, // Avoid overlap with keyboard or bottom inset
-                                          ),
-                                          child: Container(
-                                            width: double.infinity,
-                                            padding: const EdgeInsets.all(20),
-                                            decoration: const BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                                            ),
-                                            child: const AddGoalsGoogleMap(
-                                              isEdit: true,),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  );
-                                }
-                              }
-
-                            },
-                            child: SvgPicture.asset(
-                              ImageConstant
-                                  .locationAddMediaNumu, // Replace with your SVG asset path
-                            ),
-                          ),
-
-                          Positioned(
-                            bottom: Platform.isIOS ? 50:45, // Adjust this value as needed
-                            right: 0, // Move to the right
-                            left: 40,
-                            child: Consumer<AdDreamsGoalsProvider>(
-                              builder: (context, adDreamsGoalsProvider, _) {
-                                if (adDreamsGoalsProvider
-                                    .selectedLocationName.isEmpty) {
-                                  return const SizedBox();
-                                } else {
-                                  return Container(
-                                    width: size.height * 0.04,
-                                    height: size.height * 0.04,
-                                    decoration: BoxDecoration(
-                                      color: ColorsContent.locationCountColor,
-                                      shape: BoxShape.circle,
-                                      // Ensuring a perfect circle
-                                      image: DecorationImage(
-                                        image: AssetImage(ImageConstant.imgMenu),
-                                        fit: BoxFit.cover,
+                              return;
+                            }
+                          }
+                          if (await Permission.locationWhenInUse.isGranted) {
+                            if (mounted) {
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                // <== Helps with full height layout
+                                backgroundColor: Colors.transparent,
+                                // Optional for rounded corners
+                                builder: (BuildContext context) {
+                                  return SafeArea(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                        bottom: MediaQuery.of(context)
+                                            .viewInsets
+                                            .bottom, // Avoid overlap with keyboard or bottom inset
                                       ),
-                                      border: Border.all(
-                                        color: Colors.white,
-                                        width: 1.0,
-                                      ),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        adDreamsGoalsProvider
-                                            .selectedLocationName.isEmpty ? "":
-                                        "1",
-                                        style: const TextStyle(
+                                      child: Container(
+                                        width: double.infinity,
+                                        padding: const EdgeInsets.all(20),
+                                        decoration: const BoxDecoration(
                                           color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: 'Poppins',
+                                          borderRadius: BorderRadius.vertical(
+                                              top: Radius.circular(20)),
+                                        ),
+                                        child: const AddGoalsGoogleMap(
+                                          isEdit: true,
                                         ),
                                       ),
                                     ),
                                   );
-                                }
-                              },
-                            ),
-                          ),
-                          // Positioned(
-                          //   bottom: 0,
-                          //   left: 10,
-                          //   right: 10,
-                          //   child: Consumer<AdDreamsGoalsProvider>(
-                          //       builder: (context, adDreamsGoalsProvider, _) {
-                          //     if (adDreamsGoalsProvider
-                          //         .selectedLocationName.isEmpty) {
-                          //       return const SizedBox();
-                          //     } else {
-                          //       return Container(
-                          //         width: size.height * 0.04,
-                          //         decoration: BoxDecoration(
-                          //           color: Colors.white,
-                          //           image: DecorationImage(
-                          //             image: AssetImage(ImageConstant.imgMenu),
-                          //             fit: BoxFit.cover,
-                          //           ),
-                          //           borderRadius: const BorderRadius.all(
-                          //             Radius.circular(
-                          //               50.0,
-                          //             ),
-                          //           ),
-                          //           border: Border.all(
-                          //             color: appTheme.blue300,
-                          //             width: 2.0,
-                          //           ),
-                          //         ),
-                          //         child: const Center(
-                          //           child: Text(
-                          //             "1",
-                          //             style: TextStyle(
-                          //               color: Colors.blue,
-                          //               fontWeight: FontWeight.bold,
-                          //             ),
-                          //           ),
-                          //         ),
-                          //       );
-                          //     }
-                          //   }),
-                          // )
-                        ],
+                                },
+                              );
+                            }
+                          }
+                        },
+                        child: SvgPicture.asset(
+                          ImageConstant
+                              .locationAddMediaNumu, // Replace with your SVG asset path
+                        ),
                       ),
-                    ),
-                  ],
+
+                      Positioned(
+                        bottom: Platform.isIOS ? 50 : 45,
+                        // Adjust this value as needed
+                        right: 0,
+                        // Move to the right
+                        left: 40,
+                        child: Consumer<AdDreamsGoalsProvider>(
+                          builder: (context, adDreamsGoalsProvider, _) {
+                            if (adDreamsGoalsProvider
+                                .selectedLocationName.isEmpty) {
+                              return const SizedBox();
+                            } else {
+                              return Container(
+                                width: size.height * 0.04,
+                                height: size.height * 0.04,
+                                decoration: BoxDecoration(
+                                  color: ColorsContent.locationCountColor,
+                                  shape: BoxShape.circle,
+                                  // Ensuring a perfect circle
+                                  image: DecorationImage(
+                                    image: AssetImage(ImageConstant.imgMenu),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 1.0,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    adDreamsGoalsProvider
+                                            .selectedLocationName.isEmpty
+                                        ? ""
+                                        : "1",
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins',
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                      // Positioned(
+                      //   bottom: 0,
+                      //   left: 10,
+                      //   right: 10,
+                      //   child: Consumer<AdDreamsGoalsProvider>(
+                      //       builder: (context, adDreamsGoalsProvider, _) {
+                      //     if (adDreamsGoalsProvider
+                      //         .selectedLocationName.isEmpty) {
+                      //       return const SizedBox();
+                      //     } else {
+                      //       return Container(
+                      //         width: size.height * 0.04,
+                      //         decoration: BoxDecoration(
+                      //           color: Colors.white,
+                      //           image: DecorationImage(
+                      //             image: AssetImage(ImageConstant.imgMenu),
+                      //             fit: BoxFit.cover,
+                      //           ),
+                      //           borderRadius: const BorderRadius.all(
+                      //             Radius.circular(
+                      //               50.0,
+                      //             ),
+                      //           ),
+                      //           border: Border.all(
+                      //             color: appTheme.blue300,
+                      //             width: 2.0,
+                      //           ),
+                      //         ),
+                      //         child: const Center(
+                      //           child: Text(
+                      //             "1",
+                      //             style: TextStyle(
+                      //               color: Colors.blue,
+                      //               fontWeight: FontWeight.bold,
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       );
+                      //     }
+                      //   }),
+                      // )
+                    ],
+                  ),
                 ),
               ],
             ),
-          );
-        });
+          ],
+        ),
+      );
+    });
   }
 }
 
@@ -2207,7 +2508,6 @@ int convertToUnixTimestamp(String dateString) {
 
   return timestamp; // This will return the value in milliseconds.
 }
-
 
 class SharedContentData {
   final String? text;
