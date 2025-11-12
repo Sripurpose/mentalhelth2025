@@ -487,133 +487,106 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
 
                                   const SizedBox(height: 5),
 
+
                                   // ✅ Show only when needed
-                                  if (adDreamsGoalsProvider.selectedOption ==
-                                      'Add to Existing Goal') ...[
+                                  if (adDreamsGoalsProvider.selectedOption == 'Add to Existing Goal') ...[
                                     const SizedBox(height: 10),
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 0.0),
+                                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
                                       child: Container(
                                         decoration: ShapeDecoration(
                                           color: Colors.white,
                                           shape: RoundedRectangleBorder(
-                                            side: const BorderSide(
-                                                width: 0.8,
-                                                color: Colors.transparent),
-                                            borderRadius:
-                                                BorderRadius.circular(8.0),
+                                            side: const BorderSide(width: 0.8, color: Colors.transparent),
+                                            borderRadius: BorderRadius.circular(8.0),
                                           ),
                                         ),
                                         child: IgnorePointer(
                                           ignoring: _isLoadingNew,
-                                          // Disable while loading
-                                          child:
-                                              DropdownButtonFormField<String>(
+                                          child: DropdownButtonFormField<String>(
                                             hint: Text(
                                               "Select Existing Goal",
-                                              style: CustomTextStyles
-                                                  .bodySmallGray700,
+                                              style: CustomTextStyles.bodySmallGray700,
                                             ),
 
-                                            // ✅ Safely set the selected value only if it exists once in the list
+                                            // ✅ Safely set the selected value
                                             value: (() {
-                                              final selected =
-                                                  adDreamsGoalsProvider
-                                                      .selectedExistingGoal;
-                                              final list = adDreamsGoalsProvider
-                                                  .goalListLink;
+                                              final selected = adDreamsGoalsProvider.selectedExistingGoal;
+                                              final list = adDreamsGoalsProvider.goalListLink;
 
-                                              // No goals? No value.
-                                              if (selected == null ||
-                                                  list.isEmpty) return null;
+                                              if (selected == null || list.isEmpty) return null;
 
-                                              // Filter to find matches
-                                              final matches = list
-                                                  .where((g) =>
-                                                      g.id?.toString() ==
-                                                      selected)
-                                                  .toList();
+                                              // Check if selected ID exists in list
+                                              final exists = list.any((g) => g.id?.toString() == selected);
 
-                                              // If exactly one match, return it; otherwise reset
-                                              if (matches.length == 1) {
+                                              if (exists) {
                                                 return selected;
                                               } else {
-                                                WidgetsBinding.instance
-                                                    .addPostFrameCallback((_) {
-                                                  // Reset safely without triggering rebuild conflict
+                                                // Reset invalid selection
+                                                WidgetsBinding.instance.addPostFrameCallback((_) {
                                                   if (mounted) {
-                                                    setState(() {
-                                                      adDreamsGoalsProvider
-                                                              .selectedExistingGoal =
-                                                          null;
-                                                    });
+                                                    adDreamsGoalsProvider.selectedExistingGoal = null;
                                                   }
                                                 });
                                                 return null;
                                               }
                                             })(),
 
-                                            iconEnabledColor:
-                                                ColorsContent.newThemeColor,
-                                            iconDisabledColor:
-                                                ColorsContent.newThemeColor,
+                                            iconEnabledColor: ColorsContent.newThemeColor,
+                                            iconDisabledColor: ColorsContent.newThemeColor,
                                             decoration: const InputDecoration(
                                               border: InputBorder.none,
-                                              contentPadding:
-                                                  EdgeInsets.symmetric(
-                                                      horizontal: 18,
-                                                      vertical: 10),
+                                              contentPadding: EdgeInsets.symmetric(horizontal: 18, vertical: 10),
                                             ),
 
-                                            // ✅ Ensure each ID is unique
-                                            items: adDreamsGoalsProvider
-                                                .goalListLink
-                                                .where((g) => g.id != null)
-                                                .toSet()
-                                                .map((goalItem) =>
-                                                    DropdownMenuItem<String>(
-                                                      value: goalItem.id!
-                                                          .toString(),
-                                                      child: Text(
-                                                        goalItem.title ??
-                                                            'Unnamed Goal',
-                                                        style: CustomTextStyles
-                                                            .bodySmallGray700,
-                                                      ),
-                                                    ))
-                                                .toList(),
+                                            // ✅ Remove duplicates by ID using a Map
+                                            items: (() {
+                                              final list = adDreamsGoalsProvider.goalListLink;
 
-                                            // In the dropdown onChanged callback (around line 380):
-                                            onChanged:
-                                                (String? newValue) async {
-                                              if (newValue == null ||
-                                                  newValue.isEmpty) return;
+                                              // Create a Map to ensure unique IDs (last occurrence wins)
+                                              final Map<String, dynamic> uniqueGoals = {};
+
+                                              for (var goalItem in list) {
+                                                if (goalItem.id != null) {
+                                                  final id = goalItem.id!.toString();
+                                                  uniqueGoals[id] = goalItem;
+                                                }
+                                              }
+
+                                              // Convert back to DropdownMenuItem list
+                                              return uniqueGoals.entries.map((entry) {
+                                                final goalItem = entry.value;
+                                                return DropdownMenuItem<String>(
+                                                  value: entry.key,
+                                                  child: Text(
+                                                    goalItem.title ?? 'Unnamed Goal',
+                                                    style: CustomTextStyles.bodySmallGray700,
+                                                  ),
+                                                );
+                                              }).toList();
+                                            })(),
+
+                                            onChanged: (String? newValue) async {
+                                              if (newValue == null || newValue.isEmpty) return;
 
                                               setState(() {
-                                                adDreamsGoalsProvider
-                                                        .selectedExistingGoal =
-                                                    newValue;
+                                                adDreamsGoalsProvider.selectedExistingGoal = newValue;
                                                 _isLoadingNew = true;
                                               });
 
                                               try {
-                                                // ✅ IMPORTANT: Clear BEFORE fetching
-                                                adDreamsGoalsProvider
-                                                    .goalModelIdName
-                                                    .clear();
+                                                // ✅ Clear BEFORE fetching
+                                                adDreamsGoalsProvider.goalModelIdName.clear();
 
-                                                await mentalStrengthEditProvider
-                                                    .fetchGoalDetails(
+                                                await mentalStrengthEditProvider.fetchGoalDetails(
                                                   goalId: newValue,
                                                   context: context,
                                                 );
 
-                                                // ✅ Call applyRiskLogicInit() AFTER fetching is complete
+                                                // ✅ Call applyRiskLogicInit() AFTER fetching
                                                 applyRiskLogicInit();
                                               } catch (e) {
-                                                debugPrint(
-                                                    "⚠️ Error fetching goal details: $e");
+                                                debugPrint("⚠️ Error fetching goal details: $e");
                                               } finally {
                                                 if (mounted) {
                                                   setState(() {
@@ -626,16 +599,6 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                                         ),
                                       ),
                                     ),
-                                    // if (_isLoadingNew)
-                                    //   const Padding(
-                                    //     padding: EdgeInsets.only(top: 12.0),
-                                    //     child: Center(
-                                    //       child: CircularProgressIndicator(
-                                    //         strokeWidth: 2,
-                                    //         color: Colors.blueAccent,
-                                    //       ),
-                                    //     ),
-                                    //   ),
                                   ],
 
                                   const SizedBox(height: 15),

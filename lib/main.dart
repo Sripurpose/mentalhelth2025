@@ -14,6 +14,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mentalhelth/firebase_options.dart';
@@ -72,6 +73,125 @@ Future<void> initializeReferralTracking() async {
   debugPrint("Referral tracking initialized");
 }
 
+
+
+
+
+
+class ShareReceiver {
+  static const _channel = MethodChannel('com.numuapp.share/channel');
+
+  static void init() {
+    _channel.setMethodCallHandler((call) async {
+      if (call.method == "onShareReceived") {
+        final type = call.arguments["type"];
+        final data = call.arguments["data"];
+
+        print("📩 Received shared data ($type): $data");
+
+        // ✅ Store shared content in SharedPreferences
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('shared_type', type);
+        await prefs.setString('shared_data', data);
+
+        // ✅ Verify that it was stored correctly
+        final storedType = prefs.getString('shared_type');
+        final storedData = prefs.getString('shared_data');
+
+        print("✅ Stored successfully:");
+        print("   Type: $storedType");
+        print("   Data: $storedData");
+
+        // ✅ Navigate to AddGoalsLinkScreen
+        _navigateToAddGoalsScreen(type, data);
+      }
+    });
+  }
+
+  /// ✅ Navigate to AddGoalsLinkScreen with shared content
+  static void _navigateToAddGoalsScreen(String type, String data) {
+    final ctx = navigatorKey.currentContext;
+    if (ctx == null) {
+      print("⚠️ Navigator context is null, will check on app resume");
+      return;
+    }
+
+    String? sharedUrl;
+    String? sharedText;
+    List<String>? sharedImages;
+
+    // Parse based on type
+    if (type == "text") {
+      sharedText = data;
+      print("📄 Shared Text: $data");
+    } else if (type == "image") {
+      sharedImages = [data];
+      print("🖼 Shared Image URI: $data");
+    } else if (type == "video") {
+      sharedImages = [data];
+      print("🎥 Shared Video URI: $data");
+    } else if (type == "multiple") {
+      // Parse comma-separated URIs
+      sharedImages = data.split(',').map((e) => e.trim()).toList();
+      print("📦 Multiple Shared URIs: ${sharedImages.length} items");
+    }
+
+    // Check if it's a URL
+    if (sharedText != null && (sharedText.startsWith('http://') || sharedText.startsWith('https://'))) {
+      sharedUrl = sharedText;
+      sharedText = null; // Move to URL field
+    }
+
+    // Navigate to AddGoalsLinkScreen
+    Navigator.of(ctx).push(
+      MaterialPageRoute(
+        builder: (_) => AddGoalsLinkScreen(
+          sharedUrl: sharedUrl,
+          sharedText: sharedText,
+          sharedImages: sharedImages,
+          onClose: () {
+            Navigator.of(ctx).pop();
+            clearSharedData(); // Clear after processing
+          },
+        ),
+      ),
+    );
+  }
+
+  /// ✅ Helper function to fetch last stored shared data
+  static Future<Map<String, String?>> getStoredShareData() async {
+    final prefs = await SharedPreferences.getInstance();
+    return {
+      'type': prefs.getString('shared_type'),
+      'data': prefs.getString('shared_data'),
+    };
+  }
+
+  /// ✅ Check and navigate on app resume (for cold start scenarios)
+  static Future<void> checkAndNavigateOnResume() async {
+    final sharedData = await getStoredShareData();
+    final type = sharedData['type'];
+    final data = sharedData['data'];
+
+    if (type != null && data != null && data.isNotEmpty) {
+      print("🔄 Found stored shared data on resume: $type - $data");
+      _navigateToAddGoalsScreen(type, data);
+      await clearSharedData(); // Clear after processing
+    }
+  }
+
+  /// ✅ Clear stored share data after processing
+  static Future<void> clearSharedData() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('shared_type');
+    await prefs.remove('shared_data');
+    print("🧹 Cleared stored share data");
+  }
+}
+
+
+
+
 // ===== main() =====
 void main() async {
   BindingBase.debugZoneErrorsAreFatal = true;
@@ -81,9 +201,12 @@ void main() async {
     // Share extension callbacks MUST be set early on iOS
     ShareExtensionService.initialize(); // set up callback
 
+// ✅ Initialize share receiver
+    ShareReceiver.init();
 
 
-    await initializeReferralTracking();
+
+    //await initializeReferralTracking();
 
     if (kIsWeb) {
       await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -273,6 +396,13 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       Future.delayed(const Duration(milliseconds: 500), _checkForSharedContent);
     }
 
+    // ✅ Android: Check for shared content on app start
+    if (!kIsWeb && Platform.isAndroid) {
+      Future.delayed(const Duration(milliseconds: 500), () async {
+        await ShareReceiver.checkAndNavigateOnResume();
+      });
+    }
+
     ref = FirebaseDatabase.instance.ref().child('mentalHealth');
     _observeDatabase();
     Future.delayed(const Duration(seconds: 5), _fetchAppRegister);
@@ -292,27 +422,26 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     if (state == AppLifecycleState.resumed) {
       _checkOnResume();
     }
+
+    // ✅ Android: Check for new shared content on resume
+    if (!kIsWeb && Platform.isAndroid) {
+      ShareReceiver.checkAndNavigateOnResume();
+    }
   }
 
   Future<void> _checkOnResume() async {
-    if (await ShareExtensionService.checkForSharedContent()) {
-      final data = await ShareExtensionService.getSharedData();
-      if (data != null) _openShareScreen(data);
-      await ShareExtensionService.clearSharedData();
+    // iOS check
+    if (!kIsWeb && Platform.isIOS) {
+      if (await ShareExtensionService.checkForSharedContent()) {
+        final data = await ShareExtensionService.getSharedData();
+        if (data != null) _openShareScreen(data);
+        await ShareExtensionService.clearSharedData();
+      }
     }
   }
   void _openShareScreen(Map<String, dynamic> data) {
     final images = (data['imagePaths'] as List?)?.map((e) => e.toString()).toList();
     Navigator.of(navigatorKey.currentContext!).push(
-      // MaterialPageRoute(
-      //   builder: (_) => SharePostView(
-      //     sharedUrl: data['url'] as String?,
-      //     sharedText: data['text'] as String?, // or data['sharedText']
-      //     sharedImages: images,
-      //     onClose: () => Navigator.of(navigatorKey.currentContext!).pop(),
-      //   ),
-      // ),
-
       MaterialPageRoute(
         builder: (_) => AddGoalsLinkScreen(
           sharedUrl: data['url'] as String?,

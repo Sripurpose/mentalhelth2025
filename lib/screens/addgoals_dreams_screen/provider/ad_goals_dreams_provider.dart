@@ -1771,7 +1771,13 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
           message: json.decode(response.body)["text"],
         );
         clearAction();
-        Navigator.of(context).pop();
+        if (Platform.isIOS) {
+          Navigator.of(context).pop();
+        }else{
+          Navigator.of(context).pop();
+          Navigator.of(context).pop();
+        }
+
       } else if (response.statusCode == 503) {
         Future.delayed(Duration.zero, () {
           Navigator.of(context).push(
