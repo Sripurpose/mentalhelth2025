@@ -1492,7 +1492,7 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                 );
               } else {
                 // All fields are validated, proceed with saving the data
-                await adDreamsGoalsProvider.saveGemFunction(
+                await adDreamsGoalsProvider.saveGemFunctionLink(
                   context,
                   title: adDreamsGoalsProvider.nameEditTextController.text,
                   details: adDreamsGoalsProvider.commentEditTextController.text,

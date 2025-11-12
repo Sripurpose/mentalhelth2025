@@ -1440,7 +1440,8 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
         required String gemEndDate,
         List<String>? mediaThumbs, // ✅ optional param
         required List<GoalModelIdName> actionId,
-      }) async {
+      })
+  async {
     try {
       // ✅ Keep only the last .mp3 file, keep all other files untouched
       int lastMp3Index =
@@ -1522,6 +1523,141 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
         );
         clearAction();
         if (isPop) {
+          Navigator.of(context).pop();
+        }
+      } else if (response.statusCode == 503) {
+        Future.delayed(Duration.zero, () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MaintenenceScreen(
+                title:
+                "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                message: "",
+              ),
+            ),
+          );
+        });
+      } else {
+        showCustomSnackBar(
+          context: context,
+          message: json.decode(response.body)["text"],
+        );
+      }
+
+      if (response.statusCode == 401 || response.statusCode == 403) {
+        TokenManager.setTokenStatus(true);
+      }
+
+      saveAddActionsLoading = false;
+      notifyListeners();
+    } catch (error) {
+      showCustomSnackBar(context: context, message: "Failed");
+      saveAddActionsLoading = false;
+      notifyListeners();
+    }
+  }
+
+
+  Future<void> saveGemFunctionLink(
+      BuildContext context, {
+        bool isPop = true,
+        required String title,
+        required String details,
+        required List<String> mediaName,
+        required String locationName,
+        required String locationLatitude,
+        required String locationLongitude,
+        required String locationAddress,
+        required String categoryId,
+        required String gemEndDate,
+        List<String>? mediaThumbs, // ✅ optional param
+        required List<GoalModelIdName> actionId,
+      })
+  async {
+    try {
+      // ✅ Keep only the last .mp3 file, keep all other files untouched
+      int lastMp3Index =
+      mediaName.lastIndexWhere((file) => file.toLowerCase().endsWith('.mp3'));
+      if (lastMp3Index != -1) {
+        String lastMp3File = mediaName[lastMp3Index];
+        mediaName.removeWhere((file) => file.toLowerCase().endsWith('.mp3'));
+        mediaName.add(lastMp3File);
+      }
+
+      saveAddActionsLoading = true;
+      String deviceType = Platform.isAndroid ? 'android' : 'ios';
+      String? versionCode = '';
+      if (Platform.isAndroid) {
+        versionCode = Constent.versionCodeAndroid.isNotEmpty
+            ? Constent.versionCodeAndroid
+            : await getVersionSharePref();
+      } else if (Platform.isIOS) {
+        versionCode = Constent.versionCodeIOS.isNotEmpty
+            ? Constent.versionCodeIOS
+            : await getVersionSharePref();
+      }
+      notifyListeners();
+
+      String? token = await getUserTokenSharePref();
+
+      var body = {
+        'title': title,
+        'gem_type': 'goal',
+        'details': details,
+        'gem_enddate': gemEndDate,
+        'location_name': locationName,
+        'location_latitude': locationLatitude,
+        'location_longitude': locationLongitude,
+        'category_id': categoryId,
+        'location_address': locationAddress,
+      };
+
+      // ✅ Add media files
+      for (int i = 0; i < mediaName.length; i++) {
+        body['media_name[$i]'] = mediaName[i];
+      }
+
+      if (mediaThumbs != null && mediaThumbs.isNotEmpty) {
+        for (int i = 0; i < mediaThumbs.length; i++) {
+          body['media_thumb[$i]'] = mediaThumbs[i];
+        }
+      }
+
+      // ✅ Add action IDs
+      for (int i = 0; i < actionId.length; i++) {
+        body['action_id[$i]'] = actionId[i].id;
+      }
+
+      // ✅ Add link if exists in detectedLinks
+      final linkList = detectedLinks; // ← from your provider
+      if (linkList.isNotEmpty) {
+        body['preview_link'] = linkList.first; // send only one link (as per backend)
+      }
+
+      logger.i("Final SaveGem Body => $body");
+
+      final response = await http.post(
+        Uri.parse(UrlConstant.savegemUrl),
+        headers: <String, String>{
+          'device-type': deviceType,
+          'version': versionCode.toString(),
+          "authorization": "$token",
+        },
+        body: body,
+      );
+
+      print(response.statusCode.toString());
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        showCustomSnackBar(
+          context: context,
+          message: json.decode(response.body)["text"],
+        );
+        clearAction();
+        if (Platform.isIOS) {
+          Navigator.of(context).pop();
+        }else{
+          Navigator.of(context).pop();
           Navigator.of(context).pop();
         }
       } else if (response.statusCode == 503) {
