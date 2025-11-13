@@ -224,7 +224,7 @@ class _SharePostViewState extends State<SharePostView> {
                           data.url!,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(color: Colors.blue),
+                          style: const TextStyle(color: Colors.blue, fontFamily: 'Poppins',),
                         ),
                       ),
                       const Icon(Icons.arrow_outward, size: 18),
@@ -274,7 +274,7 @@ class _SharePostViewState extends State<SharePostView> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Text('Shared ${_formattedDate(data.timestamp!)}',
-                    style: Theme.of(context).textTheme.bodySmall),
+                    style: Theme.of(context).textTheme.bodySmall,),
               ),
             ),
 
@@ -323,9 +323,9 @@ class _SharePostViewState extends State<SharePostView> {
         children: [
           const Icon(Icons.warning_rounded, size: 60, color: Colors.orange),
           const SizedBox(height: 16),
-          const Text('No Shared Content', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+          const Text('No Shared Content', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, fontFamily: 'Poppins',)),
           const SizedBox(height: 8),
-          const Text("There's no content to display", style: TextStyle(color: Colors.grey)),
+          const Text("There's no content to display", style: TextStyle(color: Colors.grey, fontFamily: 'Poppins',)),
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {

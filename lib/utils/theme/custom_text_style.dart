@@ -10,15 +10,18 @@ class CustomTextStyles {
   // Body text style
   static get bodyLarge18 => theme.textTheme.bodyLarge!.copyWith(
         fontSize: 18,
+    fontFamily: 'Poppins',
       );
 
   static get bodyLargeGray700 => theme.textTheme.bodyLarge!.copyWith(
         color: appTheme.gray700,
+    fontFamily: 'Poppins',
       );
 
   static get bodyLargeNunitoOnSecondaryContainer =>
       theme.textTheme.bodyLarge!.nunito.copyWith(
         color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
+        fontFamily: 'Poppins',
       );
 
   static get bodyLargeOnSecondaryContainer =>
@@ -26,10 +29,12 @@ class CustomTextStyles {
         color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
         fontSize: 18,
         fontWeight: FontWeight.w300,
+        fontFamily: 'Poppins',
       );
 
   static get bodyLargeRoboto => theme.textTheme.bodyLarge!.roboto.copyWith(
         fontSize: 17,
+    fontFamily: 'Poppins',
       );
 
   static get bodyLargeRobotoOnSecondaryContainer =>
@@ -41,170 +46,206 @@ class CustomTextStyles {
 
   static get bodyLargeff000000 => theme.textTheme.bodyLarge!.copyWith(
         color: const Color(0XFF000000),
+    fontFamily: 'Poppins',
       );
 
   static get bodyMedium14 => theme.textTheme.bodyMedium!.copyWith(
         fontSize: 14,
+    fontFamily: 'Poppins',
       );
   static get bodyMedium12 => theme.textTheme.bodyMedium!.copyWith(
     fontSize: 12,
+    fontFamily: 'Poppins',
   );
   static get bodyMedium18 => theme.textTheme.bodyMedium!.copyWith(
     fontSize: 18,
+    fontFamily: 'Poppins',
   );
 
   static get bodyMediumGray50001 => theme.textTheme.bodyMedium!.copyWith(
         color: appTheme.gray50001,
         fontSize: 14,
+    fontFamily: 'Poppins',
       );
 
   static get bodyMediumGray700 => theme.textTheme.bodyMedium!.copyWith(
         color: appTheme.gray700,
         fontSize: 14,
+    fontFamily: 'Poppins',
       );
 
   static get bodyMediumGray70013 => theme.textTheme.bodyMedium!.copyWith(
         color: appTheme.gray700,
         fontSize: 13,
+    fontFamily: 'Poppins',
       );
 
   static get bodyMediumWhite => theme.textTheme.bodyMedium!.copyWith(
         color: Colors.white,
         fontSize: 13,
+    fontFamily: 'Poppins',
       );
   static get bodyMediumWhite18 => theme.textTheme.bodyMedium!.copyWith(
     color: Colors.white,
+    fontFamily: 'Poppins',
     fontSize: 18,
   );
 
   static get bodyMediumGray700_1 => theme.textTheme.bodyMedium!.copyWith(
         color: appTheme.gray700,
+    fontFamily: 'Poppins',
       );
 
   static get bodyMediumNunitoOnPrimary =>
       theme.textTheme.bodyMedium!.nunito.copyWith(
         color: theme.colorScheme.onPrimary,
         fontSize: 14,
+        fontFamily: 'Poppins',
       );
 
   static get bodyMediumOnPrimary => theme.textTheme.bodyMedium!.copyWith(
         color: theme.colorScheme.onPrimary,
         fontSize: 13,
+    fontFamily: 'Poppins',
       );
 
   static get bodyMediumOnPrimary14 => theme.textTheme.bodyMedium!.copyWith(
         color: theme.colorScheme.onPrimary,
         fontSize: 14,
+    fontFamily: 'Poppins',
       );
 
   static get bodyMediumOnSecondaryContainer =>
       theme.textTheme.bodyMedium!.copyWith(
         color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
+        fontFamily: 'Poppins',
       );
 
   static get bodyMediumRobotoGray700 =>
       theme.textTheme.bodyMedium!.roboto.copyWith(
         color: appTheme.gray700,
         fontSize: 14,
+        fontFamily: 'Poppins',
       );
 
   static get bodyMediumRobotoOnPrimary =>
       theme.textTheme.bodyMedium!.roboto.copyWith(
         color: theme.colorScheme.onPrimary,
         fontSize: 14,
+        fontFamily: 'Poppins',
       );
 
   static get bodyMediumRobotoOnSecondaryContainer =>
       theme.textTheme.bodyMedium!.roboto.copyWith(
         color: theme.colorScheme.onSecondaryContainer,
         fontSize: 13,
+        fontFamily: 'Poppins',
       );
 
   static get bodyMediumRobotoff333333 =>
       theme.textTheme.bodyMedium!.roboto.copyWith(
         color: const Color(0XFF333333),
         fontSize: 14,
+        fontFamily: 'Poppins',
       );
 
   static get bodyMediumRoboto16 =>
       theme.textTheme.bodyMedium!.roboto.copyWith(
         color: const Color(0XFF333333),
         fontSize: 16,
+        fontFamily: 'Poppins',
       );
 
   static get bodySmall10 => theme.textTheme.bodySmall!.copyWith(
         fontSize: 10,
+    fontFamily: 'Poppins',
       );
 
   static get bodySmallGray200 => theme.textTheme.bodySmall!.copyWith(
         color: appTheme.gray200,
+    fontFamily: 'Poppins',
       );
 
   static get bodySmallGray500 => theme.textTheme.bodySmall!.copyWith(
         color: appTheme.gray500,
+    fontFamily: 'Poppins',
       );
 
   static get bodySmallGray500_1 => theme.textTheme.bodySmall!.copyWith(
         color: appTheme.gray500,
+    fontFamily: 'Poppins',
       );
 
   static get bodySmallGray700 => theme.textTheme.bodySmall!.copyWith(
         color: appTheme.gray700,
+    fontFamily: 'Poppins',
       );
 
   static get bodySmallGray70001 => theme.textTheme.bodySmall!.copyWith(
         color: appTheme.gray70001,
+    fontFamily: 'Poppins',
       );
 
   static get bodySmallGray700_1 => theme.textTheme.bodySmall!.copyWith(
         color: appTheme.gray700,
+    fontFamily: 'Poppins',
       );
 
   static get bodySmallNunitoBlue300 =>
       theme.textTheme.bodySmall!.nunito.copyWith(
         color: appTheme.blue300,
+        fontFamily: 'Poppins',
       );
 
   static get bodySmallNunitoff333333 =>
       theme.textTheme.bodySmall!.nunito.copyWith(
         color: const Color(0XFF333333),
+        fontFamily: 'Poppins',
       );
 
   static get bodySmallNunitoff59a9f2 =>
       theme.textTheme.bodySmall!.nunito.copyWith(
         color: const Color(0XFF59A9F2),
+        fontFamily: 'Poppins',
       );
 
   static get bodySmallOnPrimary => theme.textTheme.bodySmall!.copyWith(
         color: theme.colorScheme.onPrimary,
+    fontFamily: 'Poppins',
       );
 
   static get bodySmallOnSecondaryContainer =>
       theme.textTheme.bodySmall!.copyWith(
         color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
+        fontFamily: 'Poppins',
       );
 
   static get bodySmallPrimary => theme.textTheme.bodySmall!.copyWith(
         color: theme.colorScheme.primary.withOpacity(1),
+    fontFamily: 'Poppins',
       );
 
   static get bodySmallRobotoOnSecondaryContainer =>
       theme.textTheme.bodySmall!.roboto.copyWith(
         color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
+        fontFamily: 'Poppins',
       );
 
   // Display text style
   static get displayMediumRed800 => theme.textTheme.displayMedium!.copyWith(
         color: appTheme.red800,
+    fontFamily: 'Poppins',
       );
 
   // Headline text style
   static get headlineLargeffaa0d0d => theme.textTheme.headlineLarge!.copyWith(
         color: const Color(0XFFAA0D0D),
+    fontFamily: 'Poppins',
       );
 
   static get headlineLargeffe40c0c => theme.textTheme.headlineLarge!.copyWith(
         color: const Color(0XFFE40C0C),
+    fontFamily: 'Poppins',
       );
 
   // Label text style
@@ -212,35 +253,42 @@ class CustomTextStyles {
       theme.textTheme.labelLarge!.helvetica.copyWith(
         color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
         fontSize: 13,
+        fontFamily: 'Poppins',
       );
 
   static get labelLargeNunitoff59a9f2 =>
       theme.textTheme.labelLarge!.nunito.copyWith(
         color: const Color(0XFF59A9F2),
+        fontFamily: 'Poppins',
       );
 
   static get labelLargeff59a9f2 => theme.textTheme.labelLarge!.copyWith(
         color: const Color(0XFF59A9F2),
         fontSize: 13,
+    fontFamily: 'Poppins',
       );
 
   static get labelLargeNewThemecolor => theme.textTheme.labelLarge!.copyWith(
     color: const Color(0xFF7E69F8),
     fontSize: 13,
+    fontFamily: 'Poppins',
   );
 
   static get labelLarge16 => theme.textTheme.labelLarge!.copyWith(
     color: const Color(0XFF59A9F2),
     fontSize: 16,
+    fontFamily: 'Poppins',
   );
   static get labelLarge16red => theme.textTheme.labelLarge!.copyWith(
     color: const Color(0xFFFF0000), // Example: A custom red color using hex
     fontSize: 16,
+    fontFamily: 'Poppins',
   );
 
   static get labelLarge14 => theme.textTheme.labelLarge!.copyWith(
     color: const Color(0XFF59A9F2),
     fontSize: 14,
+    fontFamily: 'Poppins',
   );
 
   static get labelLargeffffffff => theme.textTheme.labelLarge!.copyWith(
@@ -249,38 +297,46 @@ class CustomTextStyles {
         fontWeight: FontWeight.w500,
         decoration: TextDecoration.underline,
         decorationColor: ColorsContent.whiteText,
+    fontFamily: 'Poppins',
       );
 
   // Title text style
   static get titleLargeBlue300 => theme.textTheme.titleLarge!.copyWith(
         color: appTheme.blue300,
         fontSize: 21,
+    fontFamily: 'Poppins',
       );
 
   static get titleLargeGray50 => theme.textTheme.titleLarge!.copyWith(
         color: appTheme.gray50,
+    fontFamily: 'Poppins',
       );
 
   static get titleLargeff000000 => theme.textTheme.titleLarge!.copyWith(
         color: const Color(0XFF000000),
+    fontFamily: 'Poppins',
       );
 
   static get titleMedium16 => theme.textTheme.titleMedium!.copyWith(
         fontSize: 16,
+    fontFamily: 'Poppins',
       );
 
   static get titleMediumBlue300 => theme.textTheme.titleMedium!.copyWith(
         color: appTheme.blue300,
         fontSize: 16,
+    fontFamily: 'Poppins',
       );
 
   static get titleMediumGray500 => theme.textTheme.titleMedium!.copyWith(
         color: appTheme.gray500,
+    fontFamily: 'Poppins',
       );
 
   static get titleMediumOnSecondaryContainer =>
       theme.textTheme.titleMedium!.copyWith(
         color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
+        fontFamily: 'Poppins',
       );
 
   static get titleMediumOnSecondaryContainerMedium =>
@@ -288,84 +344,99 @@ class CustomTextStyles {
         color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
         fontSize: 16,
         fontWeight: FontWeight.w500,
+        fontFamily: 'Poppins',
       );
 
   static get titleMediumff000000 => theme.textTheme.titleMedium!.copyWith(
         color: const Color(0XFF000000),
         fontSize: 16,
+    fontFamily: 'Poppins',
       );
 
   static get titleMediumff333333 => theme.textTheme.titleMedium!.copyWith(
         color: const Color(0XFF333333),
         fontSize: 16,
+    fontFamily: 'Poppins',
       );
 
   static get titleMediumffffffff => theme.textTheme.titleMedium!.copyWith(
         color: const Color(0XFFFFFFFF),
         fontSize: 16,
         fontWeight: FontWeight.w500,
+    fontFamily: 'Poppins',
       );
 
   static get titleMediumffffffff15 => theme.textTheme.titleMedium!.copyWith(
         color: const Color(0XFFFFFFFF),
         fontSize: 15,
         fontWeight: FontWeight.w500,
+    fontFamily: 'Poppins',
       );
 
   static get titleMediumffffffff13 => theme.textTheme.titleMedium!.copyWith(
         color: const Color(0XFFFFFFFF),
         fontSize: 13,
         fontWeight: FontWeight.w500,
+    fontFamily: 'Poppins',
       );
 
   static get titleSmallBlue300 => theme.textTheme.titleSmall!.copyWith(
         color: appTheme.blue300,
+    fontFamily: 'Poppins',
       );
 
   static get titleSmallHelveticaOnPrimary =>
       theme.textTheme.titleSmall!.helvetica.copyWith(
         color: theme.colorScheme.onPrimary,
+        fontFamily: 'Poppins',
       );
 
   static get titleSmallHelveticaOnSecondaryContainer =>
       theme.textTheme.titleSmall!.helvetica.copyWith(
         color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
+        fontFamily: 'Poppins',
       );
 
   static get titleSmallOnSecondaryContainer =>
       theme.textTheme.titleSmall!.copyWith(
         color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
         fontWeight: FontWeight.w500,
+        fontFamily: 'Poppins',
       );
 
   static get titleSmallOnSecondaryContainer15 =>
       theme.textTheme.titleSmall!.copyWith(
         color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
         fontSize: 15,
+        fontFamily: 'Poppins',
       );
 
   static get titleSmallOnSecondaryContainer_1 =>
       theme.textTheme.titleSmall!.copyWith(
         color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
+        fontFamily: 'Poppins',
       );
 
   static get titleSmallRobotoff333333 =>
       theme.textTheme.titleSmall!.roboto.copyWith(
         color: const Color(0XFF333333),
         fontWeight: FontWeight.w900,
+        fontFamily: 'Poppins',
       );
 
   static get titleSmallRobotoff333333ExtraBold =>
       theme.textTheme.titleSmall!.roboto.copyWith(
         color: const Color(0XFF333333),
         fontWeight: FontWeight.w800,
+        fontFamily: 'Poppins',
       );
 
   static get titleSmallRobotoff333333ExtraBoldDelete =>
       theme.textTheme.titleSmall!.roboto.copyWith(
         color: const Color(0XFF333333),
         fontWeight: FontWeight.w800,
-        fontSize: 16
+        fontSize: 16,
+        fontFamily: 'Poppins',
       );
 
   static blackTextStyleCustom({required double size}) {
@@ -373,6 +444,7 @@ class CustomTextStyles {
       color: Colors.black,
       fontWeight: FontWeight.w800,
       fontSize: size,
+      fontFamily: 'Poppins',
     );
   }
 
@@ -381,6 +453,7 @@ class CustomTextStyles {
       color: Colors.white,
       fontWeight: FontWeight.w800,
       fontSize: size,
+      fontFamily: 'Poppins',
     );
   }
 
@@ -389,6 +462,7 @@ class CustomTextStyles {
       color: ColorsContent.blackText,
       fontWeight: FontWeight.w700,
       fontSize: 20,
+      fontFamily: 'Poppins',
     );
   }
 
@@ -397,6 +471,7 @@ class CustomTextStyles {
       color: ColorsContent.blackText,
       fontWeight: FontWeight.w700,
       fontSize: 18,
+      fontFamily: 'Poppins',
     );
   }
 
@@ -405,6 +480,7 @@ class CustomTextStyles {
       color: ColorsContent.blackText,
       fontWeight: FontWeight.w600,
       fontSize: 16,
+      fontFamily: 'Poppins',
     );
   }
 
@@ -413,6 +489,7 @@ class CustomTextStyles {
       color: ColorsContent.blackText,
       fontWeight: FontWeight.w700,
       fontSize: 16,
+      fontFamily: 'Poppins',
     );
   }
 
@@ -421,6 +498,7 @@ class CustomTextStyles {
       color: ColorsContent.greyText,
       fontWeight: FontWeight.w400,
       fontSize: 15,
+      fontFamily: 'Poppins',
     );
   }
 
@@ -429,6 +507,7 @@ class CustomTextStyles {
       color: ColorsContent.blackText,
       fontWeight: FontWeight.w400,
       fontSize: 17,
+      fontFamily: 'Poppins',
     );
   }
 
@@ -437,6 +516,7 @@ class CustomTextStyles {
       color: ColorsContent.blackText,
       fontWeight: FontWeight.w500,
       fontSize: 24,
+      fontFamily: 'Poppins',
     );
   }
 }

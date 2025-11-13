@@ -35,6 +35,7 @@ class UserProfileListItemWidget extends StatefulWidget {
     this.locationName,
     this.locationLatitude,
     this.locationLongitude,
+    this.viewDefImage,
   }) : super(key: key);
 
   final String title;
@@ -45,6 +46,7 @@ class UserProfileListItemWidget extends StatefulWidget {
   final String? locationName;
   final String? locationLatitude;
   final String? locationLongitude;
+  final String? viewDefImage;
 
   @override
   State<UserProfileListItemWidget> createState() => _UserProfileListItemWidgetState();
@@ -101,8 +103,8 @@ class _UserProfileListItemWidgetState extends State<UserProfileListItemWidget> {
                   ),
                   style: TextStyle(
                     fontSize: 16,
+                    fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
-                    fontFamily: 'Open Sans',
                     color: ColorsContent.blackThemeColor,
                   ),
                 ),
@@ -111,7 +113,7 @@ class _UserProfileListItemWidgetState extends State<UserProfileListItemWidget> {
               _buildThreeDotMenu(context),
             ],
           ),
-          const SizedBox(height: 4),
+          //const SizedBox(height: 2),
 
           // 📅 Date
           Row(
@@ -121,9 +123,9 @@ class _UserProfileListItemWidgetState extends State<UserProfileListItemWidget> {
               Text(
                 formatDateOnly(int.parse(widget.date)),
                 style: TextStyle(
-                  fontSize: 15,
+                  fontSize: 13,
+                  fontFamily: 'Poppins',
                   fontWeight: FontWeight.w400,
-                  fontFamily: 'Regular',
                   color: ColorsContent.dateTimeColor,
                 ),
               ),
@@ -133,9 +135,9 @@ class _UserProfileListItemWidgetState extends State<UserProfileListItemWidget> {
               Text(
                 formatTimeOnly(int.parse(widget.date)),
                 style: TextStyle(
-                  fontSize: 15,
+                  fontSize: 13,
+                  fontFamily: 'Poppins',
                   fontWeight: FontWeight.w400,
-                  fontFamily: 'Regular',
                   color: ColorsContent.dateTimeColor,
                 ),
               ),
@@ -177,12 +179,13 @@ class _UserProfileListItemWidgetState extends State<UserProfileListItemWidget> {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          color: ColorsContent.newThemeColor,
                           decoration: TextDecoration.underline,
                           decorationColor: ColorsContent.newThemeColor,
                           decorationThickness: 1.5,
+                          fontSize: 13,
                           fontFamily: 'Poppins',
-                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          color: ColorsContent.newThemeColor,
                         ),
                       ),
                     ),
@@ -193,6 +196,7 @@ class _UserProfileListItemWidgetState extends State<UserProfileListItemWidget> {
           const SizedBox(height: 5),
 
           // 🎞️ Unified Media Carousel
+          // 🎞️ Unified Media Carousel or Display Image
           if (mediaList.isNotEmpty)
             Column(
               children: [
@@ -318,31 +322,33 @@ class _UserProfileListItemWidgetState extends State<UserProfileListItemWidget> {
                     ),
                   ),
               ],
+            )
+          else if (widget.viewDefImage != null && widget.viewDefImage!.isNotEmpty)
+          // 🖼️ Fallback Display Image
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.network(
+                widget.viewDefImage!,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: size.height * 0.25,
+                errorBuilder: (context, error, stackTrace) => const Center(
+                  child: Icon(Icons.broken_image, size: 50, color: Colors.grey),
+                ),
+                loadingBuilder: (context, child, progress) {
+                  if (progress == null) return child;
+                  return const Center(child: CircularProgressIndicator());
+                },
+              ),
             ),
 
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // ✅ Description
-              if (widget.description != null && widget.description!.trim().isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.only(top: 5),
-                  child: Text(
-                    widget.description,
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'Open Sans',
-                      color: ColorsContent.blackThemeColor,
-                    ),
-                  ),
-                ),
-            ],
-          ),
+
+          ExpandableDescription(description: widget.description),
         ],
       ),
     );
   }
+
 
   // 🎯 3-Dot Menu Widget
   Widget _buildThreeDotMenu(BuildContext context) {
@@ -352,7 +358,7 @@ class _UserProfileListItemWidgetState extends State<UserProfileListItemWidget> {
           mentalStrengthEditProvider, editProfileProvider, _) {
         return PopupMenuButton<String>(
           color: Colors.white,
-          icon: Icon(Icons.more_horiz, color: ColorsContent.newThemeColor),
+          icon: Icon(Icons.more_horiz, color: ColorsContent.blackText),
           padding: EdgeInsets.zero,
           constraints: const BoxConstraints(minWidth: 100, maxWidth: 100),
           onSelected: (value) {},
@@ -569,5 +575,74 @@ class _UserProfileListItemWidgetState extends State<UserProfileListItemWidget> {
     int milliseconds = int.parse("${millisecondsMain}000");
     DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(milliseconds);
     return DateFormat('hh:mm a').format(dateTime);
+  }
+}
+
+
+
+
+class ExpandableDescription extends StatefulWidget {
+  final String? description;
+
+  const ExpandableDescription({Key? key, this.description}) : super(key: key);
+
+  @override
+  _ExpandableDescriptionState createState() => _ExpandableDescriptionState();
+}
+
+class _ExpandableDescriptionState extends State<ExpandableDescription> {
+  bool _isExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final String? text = widget.description;
+    if (text == null || text.trim().isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    // Limit text length to 30 chars initially
+    final bool isLongText = text.length > 70;
+    final String displayText = !_isExpanded && isLongText
+        ? '${text.substring(0, 70)}...'
+        : text;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 5),
+          child: Text(
+            displayText,
+            style: TextStyle(
+              fontSize: 14,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w400,
+              color: ColorsContent.blackText,
+            ),
+          ),
+        ),
+        if (isLongText)
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _isExpanded = !_isExpanded;
+              });
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(top: 4.0),
+              child: Text(
+                _isExpanded ? 'less' : 'more',
+                style:  TextStyle(
+                  color: ColorsContent.moreColor,
+                  fontSize: 14,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w400,
+                  decorationThickness: 1.5,
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
   }
 }

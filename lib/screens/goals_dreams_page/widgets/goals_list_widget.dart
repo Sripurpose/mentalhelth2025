@@ -336,6 +336,7 @@ class _GoalsListWidgetState extends State<GoalsListWidget> {
                                             .toString(),
                                         textAlign: TextAlign.center,
                                         style: const TextStyle(
+                                          fontFamily: 'Poppins',
                                           color: Colors.grey,
                                         ),
                                       ),
@@ -367,6 +368,7 @@ class _GoalsListWidgetState extends State<GoalsListWidget> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
+                      fontFamily: 'Poppins',
                     ),
                     // style: theme.textTheme.titleSmall,
                   ),

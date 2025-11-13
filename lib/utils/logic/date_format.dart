@@ -35,6 +35,18 @@ String dateTimeFormatter({required String date}) {
   return formattedDate;
 }
 
+String dateFormatterViewJournal({required String date}) {
+  final DateTime parsedDate =
+  DateTime.fromMillisecondsSinceEpoch(int.parse("${date}000"));
+  return DateFormat("dd MMM yyyy").format(parsedDate);
+}
+
+String timeFormatter({required String date}) {
+  final DateTime parsedDate =
+  DateTime.fromMillisecondsSinceEpoch(int.parse("${date}000"));
+  return DateFormat("hh:mma").format(parsedDate);
+}
+
 
 String formatTimestampToDate(String timestamp) {
   // Convert the timestamp string to an integer

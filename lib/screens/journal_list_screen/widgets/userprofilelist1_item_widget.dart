@@ -289,7 +289,7 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                                 child: Text('Edit', style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
-                                  fontFamily: 'Roboto',
+                                  fontFamily: 'Poppins',
                                   color:  Colors.black,
                                 )),
                               ),
@@ -358,7 +358,7 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
-                                  fontFamily: 'Roboto',
+                                  fontFamily: 'Poppins',
                                   color: Colors.black,
                                 ),
                               ),

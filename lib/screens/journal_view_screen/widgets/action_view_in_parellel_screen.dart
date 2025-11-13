@@ -502,7 +502,7 @@ class _ActionViewInParallelScreenState
                                                       style: const TextStyle(
                                                         fontSize: 16,
                                                         fontWeight: FontWeight.w400,
-                                                        fontFamily: 'Open Sans',
+                                                        fontFamily: 'Poppins',
                                                         color: Colors.black,
                                                       ),
                                                       overflow: TextOverflow.visible,
@@ -796,7 +796,7 @@ class _ActionViewInParallelScreenState
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
-                        fontFamily: 'Open Sans',
+                        fontFamily: 'Poppins',
                         color: Colors.black,
                       ),
                     ),

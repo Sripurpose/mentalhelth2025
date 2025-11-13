@@ -26,6 +26,7 @@ import 'package:provider/provider.dart';
 import '../../utils/logic/permissions.dart';
 import '../../utils/theme/colors.dart';
 import '../../utils/theme/custom_button_style.dart';
+import '../../widgets/preview_custom_link.dart';
 import '../addactions_screen/addactions_screen.dart';
 import '../dash_borad_screen/provider/dash_board_provider.dart';
 import '../goals_dreams_page/provider/goals_dreams_provider.dart';
@@ -390,6 +391,7 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
                                                           textAlign:
                                                               TextAlign.center,
                                                           style: const TextStyle(
+                                                            fontFamily: 'Poppins',
                                                             color: Colors.grey,
                                                           ),
                                                         ),
@@ -543,7 +545,7 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
                   hintStyle: CustomTextStyles.bodySmallGray700,
                   maxLines: 4,
                   focusNode: _goalDescFocusNode,
-                  textInputAction: TextInputAction.newline,
+                  textInputAction: TextInputAction.done,
                   textInputType: TextInputType.multiline,
                   borderDecoration: InputBorder.none,
                   onTap: () => setState(() {}),
@@ -576,65 +578,75 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
                 ),
 
                 // 🔗 Show link preview (ONLY ONE - no multiple links)
+                // if (hasLink)
+                //   Padding(
+                //     padding: const EdgeInsets.only(top: 12.0),
+                //     child: Stack(
+                //       alignment: Alignment.topRight,
+                //       children: [
+                //         Container(
+                //           decoration: BoxDecoration(
+                //             border: Border.all(
+                //               color: Colors.grey.shade300,
+                //               width: 1.5,
+                //             ),
+                //             borderRadius: BorderRadius.circular(10),
+                //           ),
+                //           child: ClipRRect(
+                //             borderRadius: BorderRadius.circular(10),
+                //             child: LinkPreviewGenerator(
+                //               link: adDreamsGoalsProvider.detectedLinks.first,
+                //               linkPreviewStyle: LinkPreviewStyle.small,
+                //               showDomain: true,
+                //               showTitle: true,
+                //               bodyMaxLines: 1,
+                //               borderRadius: 10,
+                //               boxShadow: const [
+                //                 BoxShadow(
+                //                   color: Colors.black12,
+                //                   blurRadius: 4,
+                //                   offset: Offset(0, 2),
+                //                 ),
+                //               ],
+                //             ),
+                //           ),
+                //         ),
+                //         // ❌ Close icon to remove preview
+                //         Positioned(
+                //           top: 6,
+                //           right: 6,
+                //           child: GestureDetector(
+                //             onTap: () {
+                //               setState(() {
+                //                 adDreamsGoalsProvider.detectedLinks.clear();
+                //               });
+                //             },
+                //             child: Container(
+                //               decoration: const BoxDecoration(
+                //                 shape: BoxShape.circle,
+                //                 color: Colors.black54,
+                //               ),
+                //               padding: const EdgeInsets.all(4),
+                //               child: const Icon(
+                //                 Icons.close,
+                //                 color: Colors.white,
+                //                 size: 16,
+                //               ),
+                //             ),
+                //           ),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+
                 if (hasLink)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 12.0),
-                    child: Stack(
-                      alignment: Alignment.topRight,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.grey.shade300,
-                              width: 1.5,
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: LinkPreviewGenerator(
-                              link: adDreamsGoalsProvider.detectedLinks.first,
-                              linkPreviewStyle: LinkPreviewStyle.small,
-                              showDomain: true,
-                              showTitle: true,
-                              bodyMaxLines: 1,
-                              borderRadius: 10,
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 4,
-                                  offset: Offset(0, 2),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        // ❌ Close icon to remove preview
-                        Positioned(
-                          top: 6,
-                          right: 6,
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                adDreamsGoalsProvider.detectedLinks.clear();
-                              });
-                            },
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.black54,
-                              ),
-                              padding: const EdgeInsets.all(4),
-                              child: const Icon(
-                                Icons.close,
-                                color: Colors.white,
-                                size: 16,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                  CustomLinkPreview(
+                    link: adDreamsGoalsProvider.detectedLinks.first,
+                    onRemove: () {
+                      setState(() {
+                        adDreamsGoalsProvider.detectedLinks.clear();
+                      });
+                    },
                   ),
               ],
             ),
@@ -914,6 +926,7 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
                                       .toString(),
                                   style: const TextStyle(
                                     color: Colors.white,
+                                    fontFamily: 'Poppins',
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -1021,6 +1034,7 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
                                   mentalStrengthEditProvider.takedImages.length
                                       .toString(),
                                   style: const TextStyle(
+                                    fontFamily: 'Poppins',
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -1118,6 +1132,7 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
                                           .recordedFilePath.length
                                           .toString(),
                                       style: const TextStyle(
+                                        fontFamily: 'Poppins',
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -1274,6 +1289,7 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
                                 child: Text(
                                   "1",
                                   style: TextStyle(
+                                    fontFamily: 'Poppins',
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                   ),

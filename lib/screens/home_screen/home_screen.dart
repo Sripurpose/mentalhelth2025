@@ -1028,7 +1028,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 locationName: journal.location?.locationName,
                 locationLatitude: journal.location?.locationLatitude,
                 locationLongitude: journal.location?.locationLongitude,
-                journalId: journal.journalId ?? ""
+                journalId: journal.journalId ?? "",
+              viewDefImage: journal.displayImage ?? "",
             ),
           );
         },

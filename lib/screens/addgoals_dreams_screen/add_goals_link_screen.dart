@@ -33,6 +33,7 @@ import '../../utils/logic/permissions.dart';
 import '../../utils/theme/colors.dart';
 import '../../utils/theme/custom_button_style.dart';
 import '../../widgets/functions/popup.dart';
+import '../../widgets/preview_custom_link.dart';
 import '../SharePostView.dart';
 import '../addactions_screen/addactions_screen.dart';
 import '../addactions_screen/provider/add_actions_provider.dart';
@@ -366,8 +367,7 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
 
     Size size = MediaQuery.of(context).size;
     return tokenStatus == false
-        ? ConnectivityWidget(
-            child: SafeArea(
+        ? SafeArea(
               child: Scaffold(
                 appBar: buildAppBarNumuEditGoals(
                   context,
@@ -375,7 +375,7 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                   heading:
                   adDreamsGoalsProvider
                       .selectedOption ==
-                      "Add to Existing Goal" ? "Update Goals & Dreams":"Add Goals & Dreams",
+                      "Add to Existing Goal" ? "Share to Goal":"Share to Goal",
                 ),
                 body: Stack(
                   children: [
@@ -402,59 +402,52 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 0.0),
+                                    padding: const EdgeInsets.symmetric(horizontal: 0.0),
                                     child: Container(
                                       decoration: ShapeDecoration(
-                                        color: ColorsContent
-                                            .linkDropDownBackGroundColor,
+                                        color: ColorsContent.linkDropDownBackGroundColor,
                                         shape: RoundedRectangleBorder(
                                           side: const BorderSide(
                                             width: 0.8,
                                             style: BorderStyle.solid,
                                             color: Colors.transparent,
                                           ),
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
+                                          borderRadius: BorderRadius.circular(8.0),
                                         ),
                                       ),
                                       child: DropdownButtonFormField<String>(
                                         hint: Text(
                                           "Select Category",
-                                          style:
-                                              CustomTextStyles.bodySmallGray700,
+                                          style: CustomTextStyles.bodySmallGray700,
                                         ),
-                                        style:
-                                            CustomTextStyles.bodySmallGray700,
-                                        iconEnabledColor:
-                                            ColorsContent.newThemeColor,
-                                        iconDisabledColor:
-                                            ColorsContent.newThemeColor,
+                                        style: CustomTextStyles.bodySmallGray700,
+                                        iconEnabledColor: ColorsContent.newThemeColor,
+                                        iconDisabledColor: ColorsContent.newThemeColor,
 
                                         // ✅ Default or valid selection
                                         value: adDreamsGoalsProvider.goalOptions
-                                                .contains(adDreamsGoalsProvider
-                                                    .selectedOption)
-                                            ? adDreamsGoalsProvider
-                                                .selectedOption
-                                            : (adDreamsGoalsProvider.goalOptions
-                                                    .contains("Create New Goal")
-                                                ? "Create New Goal"
-                                                : null),
+                                            .contains(adDreamsGoalsProvider.selectedOption)
+                                            ? adDreamsGoalsProvider.selectedOption
+                                            : (adDreamsGoalsProvider.goalOptions.contains("Create New Goal")
+                                            ? "Create New Goal"
+                                            : null),
 
                                         decoration: const InputDecoration(
                                           border: InputBorder.none,
-                                          contentPadding: EdgeInsets.symmetric(
-                                              horizontal: 18, vertical: 10),
+                                          contentPadding: EdgeInsets.symmetric(horizontal: 18, vertical: 10),
                                         ),
 
-                                        // ✅ Ensure unique + always include "Create New Goal"
-                                        items: [
+                                        // ✅ Conditionally show only "Create New Goal" when goalListLink is empty
+                                        items: (adDreamsGoalsProvider.goalListLink.isEmpty
+                                            ? ["Create New Goal"]
+                                            : [
                                           if (!adDreamsGoalsProvider.goalOptions
                                               .contains("Create New Goal"))
                                             "Create New Goal",
                                           ...adDreamsGoalsProvider.goalOptions,
-                                        ].toSet().map((String option) {
+                                        ])
+                                            .toSet()
+                                            .map((String option) {
                                           return DropdownMenuItem<String>(
                                             value: option,
                                             child: Text(option),
@@ -462,28 +455,22 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                                         }).toList(),
 
                                         // ✅ Disable dropdown when "Add to Existing Goal" is selected
-                                        onChanged: adDreamsGoalsProvider
-                                                    .selectedOption ==
-                                                "Add to Existing Goal"
+                                        onChanged: adDreamsGoalsProvider.selectedOption == "Add to Existing Goal"
                                             ? null
                                             : (String? newValue) {
-                                                setState(() {
-                                                  adDreamsGoalsProvider
-                                                          .selectedOption =
-                                                      newValue;
+                                          setState(() {
+                                            adDreamsGoalsProvider.selectedOption = newValue;
 
-                                                  // Reset the second dropdown safely
-                                                  if (newValue !=
-                                                      'Add to Existing Goal') {
-                                                    adDreamsGoalsProvider
-                                                            .selectedExistingGoal =
-                                                        null;
-                                                  }
-                                                });
-                                              },
+                                            // Reset the second dropdown safely
+                                            if (newValue != 'Add to Existing Goal') {
+                                              adDreamsGoalsProvider.selectedExistingGoal = null;
+                                            }
+                                          });
+                                        },
                                       ),
                                     ),
                                   ),
+
 
                                   const SizedBox(height: 5),
 
@@ -888,6 +875,7 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                                                                               .start,
                                                                       style:
                                                                           const TextStyle(
+                                                                            fontFamily: 'Poppins',
                                                                         fontSize:
                                                                             14,
                                                                         fontWeight:
@@ -1000,6 +988,7 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                                                                         .center,
                                                                 style:
                                                                     const TextStyle(
+                                                                      fontFamily: 'Poppins',
                                                                   color: Colors
                                                                       .grey,
                                                                 ),
@@ -1069,7 +1058,6 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                   ],
                 ),
               ),
-            ),
           )
         : const TokenExpireScreen();
   }
@@ -1170,7 +1158,7 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                   hintStyle: CustomTextStyles.bodySmallGray700,
                   maxLines: 4,
                   focusNode: _goalDescFocusNode,
-                  textInputAction: TextInputAction.newline,
+                  textInputAction: TextInputAction.done,
                   textInputType: TextInputType.multiline,
                   borderDecoration: InputBorder.none,
                   onTap: () {
@@ -1215,69 +1203,80 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                 ),
 
                 // 🔗 Show link preview (shared URL or detected link)
+                // if (hasLink)
+                //   Padding(
+                //     padding: const EdgeInsets.only(top: 12.0),
+                //     child: Stack(
+                //       alignment: Alignment.topRight,
+                //       children: [
+                //         Container(
+                //           decoration: BoxDecoration(
+                //             border: Border.all(
+                //               color: Colors.grey.shade300,
+                //               width: 1.5,
+                //             ),
+                //             borderRadius: BorderRadius.circular(10),
+                //           ),
+                //           child: ClipRRect(
+                //             borderRadius: BorderRadius.circular(10),
+                //             child: LinkPreviewGenerator(
+                //               link: adDreamsGoalsProvider
+                //                       .detectedLinks.isNotEmpty
+                //                   ? adDreamsGoalsProvider.detectedLinks.first
+                //                   : '',
+                //               linkPreviewStyle: LinkPreviewStyle.small,
+                //               showDomain: true,
+                //               showTitle: true,
+                //               bodyMaxLines: 1,
+                //               borderRadius: 10,
+                //               boxShadow: const [
+                //                 BoxShadow(
+                //                   color: Colors.black12,
+                //                   blurRadius: 4,
+                //                   offset: Offset(0, 2),
+                //                 ),
+                //               ],
+                //             ),
+                //           ),
+                //         ),
+                //         // ❌ Close icon to remove preview
+                //         Positioned(
+                //           top: 6,
+                //           right: 6,
+                //           child: GestureDetector(
+                //             onTap: () {
+                //               setState(() {
+                //                 adDreamsGoalsProvider.detectedLinks.clear();
+                //               });
+                //             },
+                //             child: Container(
+                //               decoration: const BoxDecoration(
+                //                 shape: BoxShape.circle,
+                //                 color: Colors.black54,
+                //               ),
+                //               padding: const EdgeInsets.all(4),
+                //               child: const Icon(
+                //                 Icons.close,
+                //                 color: Colors.white,
+                //                 size: 16,
+                //               ),
+                //             ),
+                //           ),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+
                 if (hasLink)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 12.0),
-                    child: Stack(
-                      alignment: Alignment.topRight,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.grey.shade300,
-                              width: 1.5,
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: LinkPreviewGenerator(
-                              link: adDreamsGoalsProvider
-                                      .detectedLinks.isNotEmpty
-                                  ? adDreamsGoalsProvider.detectedLinks.first
-                                  : '',
-                              linkPreviewStyle: LinkPreviewStyle.small,
-                              showDomain: true,
-                              showTitle: true,
-                              bodyMaxLines: 1,
-                              borderRadius: 10,
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 4,
-                                  offset: Offset(0, 2),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        // ❌ Close icon to remove preview
-                        Positioned(
-                          top: 6,
-                          right: 6,
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                adDreamsGoalsProvider.detectedLinks.clear();
-                              });
-                            },
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.black54,
-                              ),
-                              padding: const EdgeInsets.all(4),
-                              child: const Icon(
-                                Icons.close,
-                                color: Colors.white,
-                                size: 16,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                  CustomLinkPreview(
+                    link: adDreamsGoalsProvider.detectedLinks.first,
+                    onRemove: () {
+                      setState(() {
+                        adDreamsGoalsProvider.detectedLinks.clear();
+                      });
+                    },
                   ),
+
               ],
             ),
           ),
@@ -1721,6 +1720,7 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                                   mentalStrengthEditProvider.pickedImages.length
                                       .toString(),
                                   style: const TextStyle(
+                                    fontFamily: 'Poppins',
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -1801,6 +1801,7 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                                   mentalStrengthEditProvider.takedImages.length
                                       .toString(),
                                   style: const TextStyle(
+                                    fontFamily: 'Poppins',
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -1868,6 +1869,7 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                                       .recordedFilePath.length
                                       .toString(),
                                   style: const TextStyle(
+                                    fontFamily: 'Poppins',
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -1996,6 +1998,7 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                                 child: Text(
                                   "1",
                                   style: TextStyle(
+                                    fontFamily: 'Poppins',
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                   ),

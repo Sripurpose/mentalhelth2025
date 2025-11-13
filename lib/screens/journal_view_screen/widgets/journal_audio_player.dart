@@ -125,11 +125,11 @@ class _JournalAudioPlayerState extends State<JournalAudioPlayer> {
                     children: [
                       Text(
                         _formatDuration(position),
-                        style: const TextStyle(color: Colors.white, fontSize: 12),
+                        style: const TextStyle(color: Colors.white, fontSize: 12,fontFamily: 'Poppins',),
                       ),
                       Text(
                         _formatDuration(duration),
-                        style: const TextStyle(color: Colors.white, fontSize: 12),
+                        style: const TextStyle(color: Colors.white, fontSize: 12, fontFamily: 'Poppins',),
                       ),
                     ],
                   ),

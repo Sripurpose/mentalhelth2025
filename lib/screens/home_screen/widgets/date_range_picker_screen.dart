@@ -77,7 +77,7 @@ class _DateRangePickerDialogState extends State<DateRangePickerDialog> {
                     const SizedBox(height: 4),
                     Text(
                       _selectedStart != null ? _formatDateFull(_selectedStart!) : 'Select date',
-                      style:  TextStyle(fontSize: 18, fontWeight: FontWeight.w600,color: ColorsContent.datePickerDarkText,),
+                      style:  TextStyle(fontSize: 18,   fontFamily: 'Poppins',fontWeight: FontWeight.w600,color: ColorsContent.datePickerDarkText,),
                     ),
                   ],
                 ),
@@ -86,12 +86,12 @@ class _DateRangePickerDialogState extends State<DateRangePickerDialog> {
                   children: [
                      Text(
                       'To',
-                      style: TextStyle(color: ColorsContent.datePickerGreyText, fontSize: 14),
+                      style: TextStyle(color: ColorsContent.datePickerGreyText, fontFamily: 'Poppins',fontSize: 14),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       _selectedEnd != null ? _formatDateFull(_selectedEnd!) : 'Select date',
-                      style:  TextStyle(fontSize: 18, fontWeight: FontWeight.w600,color: ColorsContent.datePickerDarkText,),
+                      style:  TextStyle(fontSize: 18,fontFamily: 'Poppins',fontWeight: FontWeight.w600,color: ColorsContent.datePickerDarkText,),
                     ),
                   ],
                 ),
@@ -120,7 +120,7 @@ class _DateRangePickerDialogState extends State<DateRangePickerDialog> {
                 ),
                 Text(
                   _getMonthYearString(_displayedMonth),
-                  style:  TextStyle(fontSize: 20, color:  ColorsContent.datePickerDarkText, fontWeight: FontWeight.w600),
+                  style:  TextStyle(fontSize: 20, color:  ColorsContent.datePickerDarkText, fontWeight: FontWeight.w600,fontFamily: 'Poppins',),
                 ),
                 Container(
                   decoration: BoxDecoration(
@@ -153,6 +153,7 @@ class _DateRangePickerDialogState extends State<DateRangePickerDialog> {
                   style:  TextStyle(
                     color: ColorsContent.newThemeColor,
                     fontWeight: FontWeight.w600,
+                    fontFamily: 'Poppins',
                     fontSize: 16,
                   ),
                 ),
@@ -181,8 +182,10 @@ class _DateRangePickerDialogState extends State<DateRangePickerDialog> {
                       style: TextStyle(
                         color:  ColorsContent.newThemeColor,
                         fontSize: 18,
+                        fontFamily: 'Poppins',
                         fontWeight: FontWeight.w600,
                       ),
+
                     ),
                   ),
                 ),
@@ -286,6 +289,7 @@ class _DateRangePickerDialogState extends State<DateRangePickerDialog> {
                         ? ColorsContent.newThemeColor
                         : Colors.black,
                     fontWeight: FontWeight.w600,
+                    fontFamily: 'Poppins',
                   ),
                 ),
               ),

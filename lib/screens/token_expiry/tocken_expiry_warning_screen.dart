@@ -86,7 +86,7 @@ class _TokenExpireScreenState extends State<TokenExpireScreen> {
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
-                              fontFamily: 'Open Sans',
+                              fontFamily: 'Poppins',
                               color: ColorsContent.tokenExpiryTextColor,
                             ),
                           ),
@@ -100,7 +100,7 @@ class _TokenExpireScreenState extends State<TokenExpireScreen> {
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w400,
-                              fontFamily: 'Open Sans',
+                              fontFamily: 'Poppins',
                               color: ColorsContent.tokenExpiryTextColor,
                             ),
                           ),
@@ -157,7 +157,7 @@ class _TokenExpireScreenState extends State<TokenExpireScreen> {
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w600,
-                                            fontFamily: 'Roboto',
+                                            fontFamily: 'Poppins',
                                             color: ColorsContent.whiteText,
                                           ),
                                         ),
@@ -203,7 +203,7 @@ class _TokenExpireScreenState extends State<TokenExpireScreen> {
                                         style: TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.w400,
-                                          fontFamily: 'Roboto',
+                                          fontFamily: 'Poppins',
                                           color: ColorsContent.tokenExpiryTextColor,
                                         ),
                                       ),

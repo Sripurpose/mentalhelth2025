@@ -186,8 +186,6 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                 size: size,
                 child: Padding(
                   padding: const EdgeInsets.only(
-                      // left: 20,
-                      // right: 20,
                       ),
                   child:
                       Consumer<HomeProvider>(builder: (context, homeProvider, _) {
@@ -201,7 +199,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 _buildUntitledOne(context, size),
-                                const SizedBox(height: 10),
+                                const SizedBox(height: 15),
                                 const Text(
                                   "In your mind",
                                   style: TextStyle(
@@ -934,13 +932,14 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                     },
                                   ),
                                 ),
-                                homeProvider.journalDetails?.journals?.chatlink == null ?
+                                homeProvider.journalDetails?.journals?.chatlink != null && homeProvider.journalDetails!.journals!.chatlink!.isNotEmpty ?
                                 GestureDetector(
                                   onTap: () {
                                     final linkUrl = homeProvider.journalDetails?.journals?.chatlink;
+                                    final chatTitle = homeProvider.journalDetails?.journals?.chatpage_title;
 
                                     if (linkUrl != null && linkUrl.isNotEmpty) {
-                                      _launchInAppWithBrowserOptions(Uri.parse(linkUrl), context);
+                                      _launchInAppWithBrowserOptions(Uri.parse(linkUrl),chatTitle!, context);
                                     } else {
                                       ScaffoldMessenger.of(context).showSnackBar(
                                         const SnackBar(
@@ -1000,44 +999,336 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // Consumer2<HomeProvider, EditProfileProvider>(
-        //     builder: (context, homeProvider, editProfileProvider, _) {
-        //   return editProfileProvider.getProfileModel == null
-        //       ? const SizedBox()
-        //       : CircleAvatar(
-        //           radius: 35,
-        //           backgroundImage: NetworkImage(
-        //             editProfileProvider.getProfileModel!.profileurl.toString(),
-        //           ),
-        //         );
-        //   // CustomImageView(
-        //   //         imagePath:
-        //   //             homeProvider.journalDetails!.journals!.displayImage,
-        //   //         height: 71,
-        //   //         width: 71,
-        //   //         radius: BorderRadius.circular(
-        //   //           35,
-        //   //         ),
-        //   //         alignment: Alignment.center,
-        //   //       );
-        // }),
-        // SizedBox(
-        //   width: size.width * 0.05,
-        // ),
         Consumer2<EditProfileProvider,HomeProvider>(builder: (context,editProfileProvider, homeProvider, _) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                homeProvider.journalDetails == null
-                    ? ""
-                    : dateTimeFormatter(
-                        date: homeProvider
-                            .journalDetails!.journals!.journalDatetime
-                            .toString(),
+              Container(
+                width:372,
+                padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                decoration: BoxDecoration(
+                  color: ColorsContent.dateTimeBack,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                           Icon(
+                            Icons.calendar_today_outlined,
+                            size: 20,
+                            color: ColorsContent.newThemeColor,
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            homeProvider.journalDetails == null
+                                ? ""
+                                : dateFormatterViewJournal(
+                              date: homeProvider
+                                  .journalDetails!.journals!.journalDatetime
+                                  .toString(),
+                            ),
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w400,
+                              color: ColorsContent.blackText,
+                            ),
+                          ),
+                          const SizedBox(width: 30),
+                          SvgPicture.asset(
+                            ImageConstant.line, // Button icon
+                          ),
+                          const SizedBox(width: 30),
+                           Icon(
+                            Icons.access_time,
+                            size: 20,
+                            color: ColorsContent.newThemeColor,
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            homeProvider.journalDetails == null
+                                ? ""
+                                : timeFormatter(
+                              date: homeProvider
+                                  .journalDetails!.journals!.journalDatetime
+                                  .toString(),
+                            ),
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w400,
+                              color: ColorsContent.blackText,
+                            ),
+                          ),
+                        ],
                       ),
-                style: CustomTextStyles.bodyMediumGray700,
+                    ),
+                    Consumer5<DashBoardProvider,JournalListProvider, HomeProvider, MentalStrengthEditProvider,
+                        EditProfileProvider>(
+                        builder: (contexts, dashBoardProvider,journalListProvider, homeProvider,
+                            mentalStrengthEditProvider, editProfileProvider, _) {
+                          return PopupMenuButton<String>(
+                            color: Colors.white,
+                            icon: Icon(Icons.more_vert, color: ColorsContent.newThemeColor), // 👈 Vertical dots icon
+                            padding: EdgeInsets.zero, // Removes extra padding
+                            constraints: const BoxConstraints(
+                              minWidth: 100, // 👈 Reduce width here
+                              maxWidth: 100,
+                            ),
+                            onSelected: (value) {},
+                            itemBuilder: (BuildContext context) {
+                              return [
+                                PopupMenuItem<String>(
+                                  onTap: () async {
+                                    mentalStrengthEditProvider.openAllCloser();
+                                    editProfileProvider.fetchUserProfile(context);
+                                    if (homeProvider.journalDetails != null) {
+                                      mentalStrengthEditProvider
+                                          .descriptionEditTextController.text =
+                                          homeProvider.journalDetails!.journals!.journalDesc
+                                              .toString();
+                                      mentalStrengthEditProvider
+                                          .titleEditTextController.text =
+                                          homeProvider.journalDetails!.journals!.journalTitle
+                                              .toString();
+                                      for (int i = 0;
+                                      i <
+                                          homeProvider.journalDetails!.journals!
+                                              .journalMedia!.length;
+                                      i++) {
+                                        if (homeProvider.journalDetails!.journals!
+                                            .journalMedia![i].mediaType ==
+                                            'audio') {
+                                          mentalStrengthEditProvider.alreadyRecordedFilePath
+                                              .add(
+                                            AllModel(
+                                              id: homeProvider.journalDetails!.journals!
+                                                  .journalMedia![i].mediaId
+                                                  .toString(),
+                                              value: homeProvider.journalDetails!.journals!
+                                                  .journalMedia![i].gemMedia!,
+                                            ),
+                                          );
+                                        }
+                                      }
+                                      for (int i = 0;
+                                      i <
+                                          homeProvider.journalDetails!.journals!
+                                              .journalMedia!.length;
+                                      i++) {
+                                        if (homeProvider.journalDetails!.journals!
+                                            .journalMedia![i].mediaType ==
+                                            'image' &&  homeProvider.journalDetails?.journals!.journalMedia![i].is_chart != '1') {
+                                          mentalStrengthEditProvider.alreadyPickedImages.add(
+                                            AllModel(
+                                              id: homeProvider.journalDetails!.journals!
+                                                  .journalMedia![i].mediaId
+                                                  .toString(),
+                                              value: homeProvider.journalDetails!.journals!
+                                                  .journalMedia![i].gemMedia!,
+                                            ),
+                                          );
+                                        }
+                                      }
+                                      for (int i = 0;
+                                      i <
+                                          homeProvider.journalDetails!.journals!
+                                              .journalMedia!.length;
+                                      i++) {
+                                        if (homeProvider.journalDetails!.journals!
+                                            .journalMedia![i].mediaType ==
+                                            'video') {
+                                          mentalStrengthEditProvider.alreadyPickedImages.add(
+                                            AllModel(
+                                              id: homeProvider.journalDetails!.journals!
+                                                  .journalMedia![i].mediaId
+                                                  .toString(),
+                                              value: homeProvider.journalDetails!.journals!
+                                                  .journalMedia![i].gemMedia!,
+                                            ),
+                                          );
+                                        }
+                                      }
+
+                                      if (homeProvider.journalDetails!.journals!.location !=
+                                          null) {
+                                        mentalStrengthEditProvider.selectedLocationName =
+                                            homeProvider.journalDetails!.journals!.location!
+                                                .locationName!
+                                                .toString();
+                                        mentalStrengthEditProvider.selectedLocationAddress =
+                                            homeProvider.journalDetails!.journals!.location!
+                                                .locationAddress!
+                                                .toString();
+                                        mentalStrengthEditProvider.selectedLatitude =
+                                            homeProvider.journalDetails!.journals!.location!
+                                                .locationLatitude!
+                                                .toString();
+
+                                        mentalStrengthEditProvider.selectedLongitude =
+                                            homeProvider.journalDetails!.journals!.location!
+                                                .locationLongitude!
+                                                .toString();
+                                      }
+                                      mentalStrengthEditProvider.emotionalValueStar =
+                                          double.parse(
+                                            homeProvider.journalDetails!.journals!.emotionValue
+                                                .toString(),
+                                          );
+                                      mentalStrengthEditProvider.fetchEmotions(
+                                          editing: true,
+                                          emotionId: homeProvider
+                                              .journalDetails!.journals!.emotionId
+                                              .toString(),
+                                          context: context
+                                      );
+                                      // log(message)
+
+                                      mentalStrengthEditProvider.driveValueStar = double.parse(
+                                          homeProvider.journalDetails!.journals!.driveValue
+                                              .toString());
+                                      if (homeProvider.journalDetails!.journals!.goal != null) {
+                                        mentalStrengthEditProvider.goalsValue = goalMain.Goal(
+                                          id: homeProvider
+                                              .journalDetails!.journals!.goal!.goalId
+                                              .toString(),
+                                          title: homeProvider
+                                              .journalDetails!.journals!.goal!.goalTitle
+                                              .toString(),
+                                        );
+                                      }
+
+                                      for (int i = 0;
+                                      i <
+                                          homeProvider
+                                              .journalDetails!.journals!.action!.length;
+                                      i++) {
+                                        mentalStrengthEditProvider.actionList.add(action.Action(
+                                          title: homeProvider
+                                              .journalDetails!.journals!.action![i].actionTitle,
+                                          id: homeProvider
+                                              .journalDetails!.journals!.action![i].actionId,
+                                        ));
+                                      }
+                                    }
+                                    // Navigator.of(context).push(
+                                    //   MaterialPageRoute(
+                                    //     builder: (context) => const EditJournalMentalStrength(
+                                    //       valueBool: true,
+                                    //     ),
+                                    //   ),
+                                    // );
+
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => const NumuEditJournalScreen(
+                                          valueBool: true,
+                                        ),
+                                      ),
+                                    );
+
+                                  },
+                                  value: 'Edit',
+                                  height: 20, // 👈 Reduce height here
+                                  child:
+                                  Center(
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(Icons.mode_edit_outline_outlined, color: ColorsContent.newThemeColor),
+                                        const SizedBox(width: 5),
+                                        const Padding(
+                                          padding: EdgeInsets.only(right: 12.0),
+                                          child: Text('Edit', style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                            fontFamily: 'Roboto',
+                                            color:  Colors.black,
+                                          )),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const PopupMenuDivider(), // 👈 This adds the divider
+                                PopupMenuItem<String>(
+                                  onTap: () {
+                                    customPopup(
+                                      context: context,
+                                      onPressedDelete: () {
+                                        journalListProvider
+                                            .deleteJournalsFunction(
+                                          journalId: homeProvider.journalDetails!.journals!.journalId.toString(),
+                                        )
+                                            .then((value) async {
+
+                                          // Check if the journal exists in the list and remove it
+                                          for (var journals in homeProvider.journalsModelList) {
+                                            if (journals.journalId ==
+                                                homeProvider.journalDetails!.journals!.journalId.toString()) {
+                                              homeProvider.journalsModelList.removeAt(widget.index);
+                                              break; // Stop the loop once item is removed
+                                            }
+                                          }
+                                          await homeProvider.fetchJournals(pageNo:homeProvider.currentPage.toString(),context: context);
+                                          await homeProvider.fetchJournalsGridView(initial: true,context: context,fullList: true);
+                                          //   await homeProvider.fetchJournalsGridView(pageNo:homeProvider.currentPage.toString(),context: context);
+                                          if(homeProvider.journalStatus == 404){
+                                            await homeProvider.fetchJournals(pageNo:1.toString(),context: context);
+                                            await homeProvider.fetchJournalsGridView(initial: true,context: context,fullList: true);
+                                            //await homeProvider.fetchJournalsGridView(pageNo:1.toString(),context: context);
+                                          }
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            const SnackBar(
+                                                content:
+                                                Text("Journals deleted successfully")),
+                                          );
+                                          // Close the dialog and then close the previous screen if needed
+                                          await Future.delayed(const Duration(seconds: 0));
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).pop();
+                                        });
+                                      },
+                                      title: 'Confirm Delete',
+                                      content: 'Are you sure you want to delete this journals?',
+                                    );
+                                  },
+                                  height: 20, // 👈 Reduce height here
+                                  value: 'Delete',
+                                  child:
+                                  Center(
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(Icons.delete_outline, color: ColorsContent.newThemeColor),
+                                        const SizedBox(width: 5),
+                                        const Text('Delete',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: 'Roboto',
+                                              color:  Colors.black,
+                                            )),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ];
+                            },
+                          );
+                        }),
+                  ],
+                ),
               ),
+
+              homeProvider.journalDetails!.journals!.location != null ?
+                  const SizedBox(height: 5,):const SizedBox(),
               homeProvider.journalDetails!.journals!.location == null ?
                   const SizedBox():
               ConstrainedBox(
@@ -1076,270 +1367,13 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
           );
         }),
         const Spacer(),
-        Consumer5<DashBoardProvider,JournalListProvider, HomeProvider, MentalStrengthEditProvider,
-                EditProfileProvider>(
-            builder: (contexts, dashBoardProvider,journalListProvider, homeProvider,
-                mentalStrengthEditProvider, editProfileProvider, _) {
-          return PopupMenuButton<String>(
-            color: Colors.white,
-            icon: Icon(Icons.more_vert, color: ColorsContent.newThemeColor), // 👈 Vertical dots icon
-            padding: EdgeInsets.zero, // Removes extra padding
-            constraints: const BoxConstraints(
-              minWidth: 100, // 👈 Reduce width here
-              maxWidth: 100,
-            ),
-            onSelected: (value) {},
-            itemBuilder: (BuildContext context) {
-              return [
-                PopupMenuItem<String>(
-                  onTap: () async {
-                    mentalStrengthEditProvider.openAllCloser();
-                    editProfileProvider.fetchUserProfile(context);
-                    if (homeProvider.journalDetails != null) {
-                      mentalStrengthEditProvider
-                              .descriptionEditTextController.text =
-                          homeProvider.journalDetails!.journals!.journalDesc
-                              .toString();
-                      mentalStrengthEditProvider
-                          .titleEditTextController.text =
-                          homeProvider.journalDetails!.journals!.journalTitle
-                              .toString();
-                      for (int i = 0;
-                          i <
-                              homeProvider.journalDetails!.journals!
-                                  .journalMedia!.length;
-                          i++) {
-                        if (homeProvider.journalDetails!.journals!
-                                .journalMedia![i].mediaType ==
-                            'audio') {
-                          mentalStrengthEditProvider.alreadyRecordedFilePath
-                              .add(
-                            AllModel(
-                              id: homeProvider.journalDetails!.journals!
-                                  .journalMedia![i].mediaId
-                                  .toString(),
-                              value: homeProvider.journalDetails!.journals!
-                                  .journalMedia![i].gemMedia!,
-                            ),
-                          );
-                        }
-                      }
-                      for (int i = 0;
-                          i <
-                              homeProvider.journalDetails!.journals!
-                                  .journalMedia!.length;
-                          i++) {
-                        if (homeProvider.journalDetails!.journals!
-                                .journalMedia![i].mediaType ==
-                            'image' &&  homeProvider.journalDetails?.journals!.journalMedia![i].is_chart != '1') {
-                          mentalStrengthEditProvider.alreadyPickedImages.add(
-                            AllModel(
-                              id: homeProvider.journalDetails!.journals!
-                                  .journalMedia![i].mediaId
-                                  .toString(),
-                              value: homeProvider.journalDetails!.journals!
-                                  .journalMedia![i].gemMedia!,
-                            ),
-                          );
-                        }
-                      }
-                      for (int i = 0;
-                          i <
-                              homeProvider.journalDetails!.journals!
-                                  .journalMedia!.length;
-                          i++) {
-                        if (homeProvider.journalDetails!.journals!
-                                .journalMedia![i].mediaType ==
-                            'video') {
-                          mentalStrengthEditProvider.alreadyPickedImages.add(
-                            AllModel(
-                              id: homeProvider.journalDetails!.journals!
-                                  .journalMedia![i].mediaId
-                                  .toString(),
-                              value: homeProvider.journalDetails!.journals!
-                                  .journalMedia![i].gemMedia!,
-                            ),
-                          );
-                        }
-                      }
-
-                      if (homeProvider.journalDetails!.journals!.location !=
-                          null) {
-                        mentalStrengthEditProvider.selectedLocationName =
-                            homeProvider.journalDetails!.journals!.location!
-                                .locationName!
-                                .toString();
-                        mentalStrengthEditProvider.selectedLocationAddress =
-                            homeProvider.journalDetails!.journals!.location!
-                                .locationAddress!
-                                .toString();
-                        mentalStrengthEditProvider.selectedLatitude =
-                            homeProvider.journalDetails!.journals!.location!
-                                .locationLatitude!
-                                .toString();
-
-                        mentalStrengthEditProvider.selectedLongitude =
-                            homeProvider.journalDetails!.journals!.location!
-                                .locationLongitude!
-                                .toString();
-                      }
-                      mentalStrengthEditProvider.emotionalValueStar =
-                          double.parse(
-                        homeProvider.journalDetails!.journals!.emotionValue
-                            .toString(),
-                      );
-                      mentalStrengthEditProvider.fetchEmotions(
-                        editing: true,
-                        emotionId: homeProvider
-                            .journalDetails!.journals!.emotionId
-                            .toString(),
-                        context: context
-                      );
-                      // log(message)
-
-                      mentalStrengthEditProvider.driveValueStar = double.parse(
-                          homeProvider.journalDetails!.journals!.driveValue
-                              .toString());
-                      if (homeProvider.journalDetails!.journals!.goal != null) {
-                        mentalStrengthEditProvider.goalsValue = goalMain.Goal(
-                          id: homeProvider
-                              .journalDetails!.journals!.goal!.goalId
-                              .toString(),
-                          title: homeProvider
-                              .journalDetails!.journals!.goal!.goalTitle
-                              .toString(),
-                        );
-                      }
-
-                      for (int i = 0;
-                          i <
-                              homeProvider
-                                  .journalDetails!.journals!.action!.length;
-                          i++) {
-                        mentalStrengthEditProvider.actionList.add(action.Action(
-                          title: homeProvider
-                              .journalDetails!.journals!.action![i].actionTitle,
-                          id: homeProvider
-                              .journalDetails!.journals!.action![i].actionId,
-                        ));
-                      }
-                    }
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => const EditJournalMentalStrength(
-                    //       valueBool: true,
-                    //     ),
-                    //   ),
-                    // );
-
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const NumuEditJournalScreen(
-                          valueBool: true,
-                        ),
-                      ),
-                    );
-
-                  },
-                  value: 'Edit',
-                  height: 20, // 👈 Reduce height here
-                  child:
-                  Center(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.mode_edit_outline_outlined, color: ColorsContent.newThemeColor),
-                        const SizedBox(width: 5),
-                        const Padding(
-                          padding: EdgeInsets.only(right: 12.0),
-                          child: Text('Edit', style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'Roboto',
-                            color:  Colors.black,
-                          )),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const PopupMenuDivider(), // 👈 This adds the divider
-                PopupMenuItem<String>(
-                  onTap: () {
-                    customPopup(
-                      context: context,
-                      onPressedDelete: () {
-                        journalListProvider
-                            .deleteJournalsFunction(
-                          journalId: homeProvider.journalDetails!.journals!.journalId.toString(),
-                        )
-                            .then((value) async {
-
-                          // Check if the journal exists in the list and remove it
-                          for (var journals in homeProvider.journalsModelList) {
-                            if (journals.journalId ==
-                                homeProvider.journalDetails!.journals!.journalId.toString()) {
-                              homeProvider.journalsModelList.removeAt(widget.index);
-                              break; // Stop the loop once item is removed
-                            }
-                          }
-                          await homeProvider.fetchJournals(pageNo:homeProvider.currentPage.toString(),context: context);
-                          await homeProvider.fetchJournalsGridView(initial: true,context: context,fullList: true);
-                       //   await homeProvider.fetchJournalsGridView(pageNo:homeProvider.currentPage.toString(),context: context);
-                          if(homeProvider.journalStatus == 404){
-                            await homeProvider.fetchJournals(pageNo:1.toString(),context: context);
-                            await homeProvider.fetchJournalsGridView(initial: true,context: context,fullList: true);
-                            //await homeProvider.fetchJournalsGridView(pageNo:1.toString(),context: context);
-                          }
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content:
-                                Text("Journals deleted successfully")),
-                          );
-                          // Close the dialog and then close the previous screen if needed
-                          await Future.delayed(const Duration(seconds: 0));
-                          Navigator.of(context).pop();
-                          Navigator.of(context).pop();
-                        });
-                      },
-                      title: 'Confirm Delete',
-                      content: 'Are you sure you want to delete this journals?',
-                    );
-                  },
-                  height: 20, // 👈 Reduce height here
-                  value: 'Delete',
-                  child:
-                  Center(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.delete_outline, color: ColorsContent.newThemeColor),
-                        const SizedBox(width: 5),
-                        const Text('Delete',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: 'Roboto',
-                              color:  Colors.black,
-                            )),
-                      ],
-                    ),
-                  ),
-                ),
-              ];
-            },
-          );
-        }),
-        // const Icon(
-        //   Icons.more_vert,
-        // ),
       ],
     );
   }
 
 
 // Updated launch function
-  void _launchInAppWithBrowserOptions(Uri url, BuildContext context) async {
+  void _launchInAppWithBrowserOptions(Uri url, String title,BuildContext context) async {
     logger.i("Launching URL in custom bottom sheet: $url");
 
     showModalBottomSheet(
@@ -1353,7 +1387,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
       ),
       builder: (_) => SizedBox(
         height: MediaQuery.of(context).size.height * 0.9,
-        child: ChatGptBottomSheet(initialUrl: url),
+        child: ChatGptBottomSheet(initialUrl: url,chatTitle: title,),
       ),
     );
   }

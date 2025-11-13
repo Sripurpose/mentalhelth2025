@@ -1,5 +1,5 @@
 // ==============================
-// main.dart (CLEAN + FIXED)
+// main.dart (COMPLETE + FIXED)
 // ==============================
 import 'dart:async';
 import 'dart:convert';
@@ -59,6 +59,81 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 const platform = MethodChannel('com.numuapp.numuapp/native');
 String? oneSignalIdOriginal;
 
+// ===== YouTube URL Handler =====
+class YouTubeUrlHandler {
+  /// Detect if URL is YouTube and convert to playable format
+  static String? getPlayableYouTubeUrl(String? urlString) {
+    if (urlString == null || urlString.isEmpty) return null;
+
+    try {
+      var url = urlString.trim();
+
+      // Add https if missing
+      if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        url = 'https://$url';
+      }
+
+      final uri = Uri.parse(url);
+      String? videoId;
+
+      // Format: youtube.com/watch?v=VIDEO_ID
+      if ((uri.host.contains('youtube.com')) && uri.queryParameters.containsKey('v')) {
+        videoId = uri.queryParameters['v'];
+      }
+      // Format: youtu.be/VIDEO_ID
+      else if (uri.host.contains('youtu.be')) {
+        videoId = uri.pathSegments.isNotEmpty ? uri.pathSegments.first : null;
+      }
+      // Format: youtube.com/embed/VIDEO_ID
+      else if (uri.host.contains('youtube.com') && uri.path.contains('/embed/')) {
+        videoId = uri.pathSegments.where((e) => e.isNotEmpty).lastWhere(
+              (_) => true,
+          orElse: () => '',
+        );
+      }
+      // Format: youtube.com/v/VIDEO_ID
+      else if (uri.host.contains('youtube.com') && uri.path.contains('/v/')) {
+        videoId = uri.pathSegments.where((e) => e.isNotEmpty).lastWhere(
+              (_) => true,
+          orElse: () => '',
+        );
+      }
+
+      if (videoId != null && videoId.isNotEmpty) {
+        final playableUrl = 'https://www.youtube.com/watch?v=$videoId';
+        debugPrint('✅ YouTube Video ID extracted: $videoId → $playableUrl');
+        return playableUrl;
+      }
+
+      return url;
+    } catch (e) {
+      debugPrint('❌ Error parsing YouTube URL: $e');
+      return urlString;
+    }
+  }
+
+  /// Check if URL is YouTube
+  static bool isYouTubeUrl(String? url) {
+    if (url == null || url.isEmpty) return false;
+    final lowerUrl = url.toLowerCase();
+    return lowerUrl.contains('youtube.com') ||
+        lowerUrl.contains('youtu.be') ||
+        lowerUrl.contains('youtube.com/embed');
+  }
+
+  /// Check if string looks like a URL
+  static bool looksLikeUrl(String text) {
+    if (text.isEmpty) return false;
+    return text.startsWith('http://') ||
+        text.startsWith('https://') ||
+        text.startsWith('www.') ||
+        text.contains('youtube.com') ||
+        text.contains('youtu.be') ||
+        (text.contains('.') &&
+            (text.contains('com') || text.contains('io') || text.contains('app') || text.contains('org')));
+  }
+}
+
 // ===== Background FCM handler =====
 Future<void> _firebaseBackgroundMessage(RemoteMessage message) async {
   if (message.notification != null) {
@@ -73,11 +148,7 @@ Future<void> initializeReferralTracking() async {
   debugPrint("Referral tracking initialized");
 }
 
-
-
-
-
-
+// ===== Share Receiver =====
 class ShareReceiver {
   static const _channel = MethodChannel('com.numuapp.share/channel');
 
@@ -85,34 +156,37 @@ class ShareReceiver {
     _channel.setMethodCallHandler((call) async {
       if (call.method == "onShareReceived") {
         final type = call.arguments["type"];
-        final data = call.arguments["data"];
+        var data = call.arguments["data"] as String?;
 
-        print("📩 Received shared data ($type): $data");
+        if (data != null) {
+          data = data.trim();
+          // Add https to URLs without scheme
+          if (YouTubeUrlHandler.looksLikeUrl(data) && !data.startsWith('http')) {
+            data = 'https://$data';
+          }
+        }
 
-        // ✅ Store shared content in SharedPreferences
+        debugPrint("📩 Received shared data ($type): $data");
+
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('shared_type', type);
-        await prefs.setString('shared_data', data);
+        await prefs.setString('shared_data', data ?? '');
 
-        // ✅ Verify that it was stored correctly
         final storedType = prefs.getString('shared_type');
         final storedData = prefs.getString('shared_data');
 
-        print("✅ Stored successfully:");
-        print("   Type: $storedType");
-        print("   Data: $storedData");
+        debugPrint("✅ Stored successfully: Type: $storedType, Data: $storedData");
 
-        // ✅ Navigate to AddGoalsLinkScreen
         _navigateToAddGoalsScreen(type, data);
       }
     });
   }
 
-  /// ✅ Navigate to AddGoalsLinkScreen with shared content
-  static void _navigateToAddGoalsScreen(String type, String data) {
+  /// Navigate to AddGoalsLinkScreen with shared content
+  static void _navigateToAddGoalsScreen(String type, String? data) {
     final ctx = navigatorKey.currentContext;
     if (ctx == null) {
-      print("⚠️ Navigator context is null, will check on app resume");
+      debugPrint("⚠️ Navigator context is null");
       return;
     }
 
@@ -120,45 +194,63 @@ class ShareReceiver {
     String? sharedText;
     List<String>? sharedImages;
 
-    // Parse based on type
-    if (type == "text") {
-      sharedText = data;
-      print("📄 Shared Text: $data");
-    } else if (type == "image") {
-      sharedImages = [data];
-      print("🖼 Shared Image URI: $data");
-    } else if (type == "video") {
-      sharedImages = [data];
-      print("🎥 Shared Video URI: $data");
-    } else if (type == "multiple") {
-      // Parse comma-separated URIs
-      sharedImages = data.split(',').map((e) => e.trim()).toList();
-      print("📦 Multiple Shared URIs: ${sharedImages.length} items");
-    }
+    try {
+      if (type == "text") {
+        var processedData = data?.trim() ?? '';
+        debugPrint("📄 Processing Text: $processedData");
 
-    // Check if it's a URL
-    if (sharedText != null && (sharedText.startsWith('http://') || sharedText.startsWith('https://'))) {
-      sharedUrl = sharedText;
-      sharedText = null; // Move to URL field
-    }
+        if (YouTubeUrlHandler.looksLikeUrl(processedData)) {
+          // It's a URL
+          if (!processedData.startsWith('http')) {
+            processedData = 'https://$processedData';
+          }
 
-    // Navigate to AddGoalsLinkScreen
-    Navigator.of(ctx).push(
-      MaterialPageRoute(
-        builder: (_) => AddGoalsLinkScreen(
-          sharedUrl: sharedUrl,
-          sharedText: sharedText,
-          sharedImages: sharedImages,
-          onClose: () {
-            Navigator.of(ctx).pop();
-            clearSharedData(); // Clear after processing
-          },
+          if (YouTubeUrlHandler.isYouTubeUrl(processedData)) {
+            final playableUrl = YouTubeUrlHandler.getPlayableYouTubeUrl(processedData);
+            sharedUrl = playableUrl;
+            debugPrint("🎥 YouTube URL: $sharedUrl");
+          } else {
+            sharedUrl = processedData;
+            debugPrint("🔗 Regular URL: $sharedUrl");
+          }
+        } else {
+          // It's plain text
+          sharedText = processedData;
+          debugPrint("📝 Plain text: $sharedText");
+        }
+      } else if (type == "image") {
+        sharedImages = [data ?? ''];
+        debugPrint("🖼 Image: $data");
+      } else if (type == "video") {
+        sharedImages = [data ?? ''];
+        debugPrint("🎥 Video: $data");
+      } else if (type == "multiple") {
+        sharedImages = (data ?? '')
+            .split(',')
+            .map((e) => e.trim())
+            .where((e) => e.isNotEmpty)
+            .toList();
+        debugPrint("📦 Multiple files: ${sharedImages.length}");
+      }
+
+      Navigator.of(ctx).push(
+        MaterialPageRoute(
+          builder: (_) => AddGoalsLinkScreen(
+            sharedUrl: sharedUrl,
+            sharedText: sharedText,
+            sharedImages: sharedImages,
+            onClose: () {
+              Navigator.of(ctx).pop();
+              clearSharedData();
+            },
+          ),
         ),
-      ),
-    );
+      );
+    } catch (e) {
+      debugPrint("❌ Error in _navigateToAddGoalsScreen: $e");
+    }
   }
 
-  /// ✅ Helper function to fetch last stored shared data
   static Future<Map<String, String?>> getStoredShareData() async {
     final prefs = await SharedPreferences.getInstance();
     return {
@@ -167,30 +259,33 @@ class ShareReceiver {
     };
   }
 
-  /// ✅ Check and navigate on app resume (for cold start scenarios)
   static Future<void> checkAndNavigateOnResume() async {
-    final sharedData = await getStoredShareData();
-    final type = sharedData['type'];
-    final data = sharedData['data'];
+    try {
+      final sharedData = await getStoredShareData();
+      final type = sharedData['type'];
+      final data = sharedData['data'];
 
-    if (type != null && data != null && data.isNotEmpty) {
-      print("🔄 Found stored shared data on resume: $type - $data");
-      _navigateToAddGoalsScreen(type, data);
-      await clearSharedData(); // Clear after processing
+      if (type != null && data != null && data.isNotEmpty) {
+        debugPrint("🔄 Found stored shared data: $type - $data");
+        _navigateToAddGoalsScreen(type, data);
+        await clearSharedData();
+      }
+    } catch (e) {
+      debugPrint("❌ Error checking stored data: $e");
     }
   }
 
-  /// ✅ Clear stored share data after processing
   static Future<void> clearSharedData() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('shared_type');
-    await prefs.remove('shared_data');
-    print("🧹 Cleared stored share data");
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove('shared_type');
+      await prefs.remove('shared_data');
+      debugPrint("🧹 Cleared stored share data");
+    } catch (e) {
+      debugPrint("❌ Error clearing data: $e");
+    }
   }
 }
-
-
-
 
 // ===== main() =====
 void main() async {
@@ -198,14 +293,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   try {
-    // Share extension callbacks MUST be set early on iOS
-    ShareExtensionService.initialize(); // set up callback
-
-// ✅ Initialize share receiver
+    ShareExtensionService.initialize();
     ShareReceiver.init();
-
-
-
     await initializeReferralTracking();
 
     if (kIsWeb) {
@@ -251,7 +340,6 @@ void main() async {
       await PushNotifications.localNotiInit();
     }
 
-    // FCM listeners
     FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundMessage);
 
     if (!kIsWeb && Platform.isAndroid) {
@@ -303,14 +391,12 @@ void main() async {
       }
     }
 
-    // Crashlytics
     FlutterError.onError = (details) => FirebaseCrashlytics.instance.recordFlutterFatalError(details);
     PlatformDispatcher.instance.onError = (error, stack) {
       FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
       return true;
     };
 
-    // Hive
     await Hive.initFlutter();
     Hive.registerAdapter(AlarmInfoAdapter());
     await Hive.openBox<AlarmInfo>('alarm');
@@ -339,24 +425,59 @@ void main() async {
       child: const MyApp(),
     ));
   } catch (e, st) {
-    debugPrint("Uncaught error during main initialization: $e");
+    debugPrint("❌ Error during main initialization: $e");
     FirebaseCrashlytics.instance.recordError(e, st);
   }
 }
 
+// ===== Launch URL function =====
 Future<void> _launchInAppWithBrowserOptions(Uri url) async {
-  if (url.scheme == 'mental') {
-    // TODO: handle custom deep link
-    return;
+  try {
+    String urlToLaunch = url.toString();
+
+    if (urlToLaunch.isEmpty) {
+      debugPrint("❌ URL is empty");
+      return;
+    }
+
+    // Handle YouTube URLs
+    if (YouTubeUrlHandler.isYouTubeUrl(urlToLaunch)) {
+      final playableUrl = YouTubeUrlHandler.getPlayableYouTubeUrl(urlToLaunch);
+      if (playableUrl != null) {
+        urlToLaunch = playableUrl;
+      }
+      debugPrint("🎥 Launching YouTube: $urlToLaunch");
+    }
+
+    // Handle custom deep links
+    if (urlToLaunch.startsWith('mental://')) {
+      debugPrint("⚠️ Custom deep link not implemented");
+      return;
+    }
+
+    // Ensure URL has scheme
+    if (!urlToLaunch.startsWith('http://') && !urlToLaunch.startsWith('https://')) {
+      urlToLaunch = 'https://$urlToLaunch';
+    }
+
+    final uri = Uri.parse(urlToLaunch);
+
+    final ok = await launchUrl(
+      uri,
+      mode: LaunchMode.inAppBrowserView,
+      browserConfiguration: const BrowserConfiguration(showTitle: true),
+    );
+
+    if (!ok) {
+      debugPrint("⚠️ In-app browser failed, trying external browser");
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  } catch (e) {
+    debugPrint("❌ Error launching URL: $e");
   }
-  final ok = await launchUrl(
-    url,
-    mode: LaunchMode.inAppBrowserView,
-    browserConfiguration: const BrowserConfiguration(showTitle: true),
-  );
-  if (!ok) throw Exception('Could not launch $url');
 }
 
+// ===== MyApp =====
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
   @override
@@ -377,7 +498,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   String? oneSignalLive;
   String? oneSignalStaging;
 
-  // iOS share state
   SharedContent? _sharedContent;
   String _shareStatus = 'Waiting for shared content...';
 
@@ -396,7 +516,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       Future.delayed(const Duration(milliseconds: 500), _checkForSharedContent);
     }
 
-    // ✅ Android: Check for shared content on app start
     if (!kIsWeb && Platform.isAndroid) {
       Future.delayed(const Duration(milliseconds: 500), () async {
         await ShareReceiver.checkAndNavigateOnResume();
@@ -407,13 +526,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     _observeDatabase();
     Future.delayed(const Duration(seconds: 5), _fetchAppRegister);
 
-
-    // When native tells us about new content:
     ShareExtensionService.onSharedContent = (data) {
       _openShareScreen(data);
     };
 
-    // Also poll on resume:
     _checkOnResume();
   }
 
@@ -423,14 +539,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       _checkOnResume();
     }
 
-    // ✅ Android: Check for new shared content on resume
     if (!kIsWeb && Platform.isAndroid) {
       ShareReceiver.checkAndNavigateOnResume();
     }
   }
 
   Future<void> _checkOnResume() async {
-    // iOS check
     if (!kIsWeb && Platform.isIOS) {
       if (await ShareExtensionService.checkForSharedContent()) {
         final data = await ShareExtensionService.getSharedData();
@@ -439,18 +553,40 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       }
     }
   }
+
   void _openShareScreen(Map<String, dynamic> data) {
-    final images = (data['imagePaths'] as List?)?.map((e) => e.toString()).toList();
-    Navigator.of(navigatorKey.currentContext!).push(
-      MaterialPageRoute(
-        builder: (_) => AddGoalsLinkScreen(
-          sharedUrl: data['url'] as String?,
-          sharedText: data['text'] as String?, // or data['sharedText']
-          sharedImages: images,
-          onClose: () => Navigator.of(navigatorKey.currentContext!).pop(),
+    try {
+      final images = (data['imagePaths'] as List?)?.map((e) => e.toString()).toList();
+
+      var sharedUrl = data['url'] as String?;
+      var sharedText = data['text'] as String? ?? data['sharedText'] as String?;
+
+      // Process YouTube URLs in text
+      if (sharedText != null && YouTubeUrlHandler.isYouTubeUrl(sharedText)) {
+        sharedUrl = YouTubeUrlHandler.getPlayableYouTubeUrl(sharedText);
+        sharedText = null;
+        debugPrint("🎥 YouTube from text: $sharedUrl");
+      }
+
+      // Normalize YouTube URLs
+      if (sharedUrl != null && YouTubeUrlHandler.isYouTubeUrl(sharedUrl)) {
+        sharedUrl = YouTubeUrlHandler.getPlayableYouTubeUrl(sharedUrl);
+        debugPrint("🎥 YouTube normalized: $sharedUrl");
+      }
+
+      Navigator.of(navigatorKey.currentContext!).push(
+        MaterialPageRoute(
+          builder: (_) => AddGoalsLinkScreen(
+            sharedUrl: sharedUrl,
+            sharedText: sharedText,
+            sharedImages: images,
+            onClose: () => Navigator.of(navigatorKey.currentContext!).pop(),
+          ),
         ),
-      ),
-    );
+      );
+    } catch (e) {
+      debugPrint("❌ Error in _openShareScreen: $e");
+    }
   }
 
   @override
@@ -458,7 +594,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
-
 
   void _observeDatabase() {
     ref.onValue.listen((event) {
@@ -476,11 +611,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         });
         _setupRemoteConfig();
       } else {
-        debugPrint('Remote config snapshot invalid');
+        debugPrint('❌ Remote config snapshot invalid');
       }
     }, onError: (error) {
       _hideLoader();
-      debugPrint('Remote config observing error: $error');
+      debugPrint('❌ Remote config error: $error');
     });
   }
 
@@ -492,7 +627,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         UrlConstant.oneSignalRemote = oneSignalStaging ?? '';
         UrlConstant.appShareDownloads = baseUrlAppShareDownloads ?? '';
         isBaseUrlReady = true;
-        debugPrint('QA Base URL: $baseUrlQA');
+        debugPrint('✅ QA Base URL: $baseUrlQA');
       }
     } else if (kReleaseMode) {
       if ((baseUrlLive ?? '').isNotEmpty) {
@@ -500,10 +635,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         UrlConstant.oneSignalRemote = oneSignalLive ?? '';
         UrlConstant.appShareDownloads = baseUrlAppShareDownloads ?? '';
         isBaseUrlReady = true;
-        debugPrint('Live Base URL (${deviceType == 'ios' ? 'iOS' : 'Android'}): $baseUrlLive');
+        debugPrint('✅ Live Base URL ($deviceType): $baseUrlLive');
       }
     } else {
-      debugPrint('Profile mode');
+      debugPrint('📱 Profile mode');
     }
   }
 
@@ -557,12 +692,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               }
             }
           } catch (e) {
-            debugPrint('Error decoding payload: $e');
+            debugPrint('❌ Error decoding payload: $e');
           }
         },
       );
     } else {
-      debugPrint('Skipping flutter_local_notifications on non-Android');
+      debugPrint('⏭️ Skipping flutter_local_notifications on non-Android');
     }
   }
 
@@ -576,7 +711,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     });
   }
 
-  // ===== Share Extension (iOS) =====
   void _setupShareExtensionHandler() {
     ShareExtensionService.onSharedContent = (data) {
       setState(() {
@@ -625,7 +759,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void _navigateToSharePostPage() {
     final ctx = navigatorKey.currentContext;
     if (ctx == null) {
-      debugPrint('[ShareNav] Context is null');
+      debugPrint('[ShareNav] ⚠️ Context is null');
       return;
     }
     Navigator.of(ctx).push(MaterialPageRoute(builder: (context) {
@@ -636,21 +770,37 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void _navigateToSharePostPageWithData() {
     final ctx = navigatorKey.currentContext;
     if (ctx == null) {
-      debugPrint('[ShareNav] Context is null');
+      debugPrint('[ShareNav] ⚠️ Context is null');
       return;
     }
+
+    // Process shared URL if it's YouTube
+    var sharedUrl = _sharedContent?.url;
+    var sharedText = _sharedContent?.sharedText ?? _sharedContent?.text;
+
+    if (sharedText != null && YouTubeUrlHandler.isYouTubeUrl(sharedText)) {
+      sharedUrl = YouTubeUrlHandler.getPlayableYouTubeUrl(sharedText);
+      sharedText = null;
+      debugPrint("🎥 YouTube from text: $sharedUrl");
+    }
+
+    if (sharedUrl != null && YouTubeUrlHandler.isYouTubeUrl(sharedUrl)) {
+      sharedUrl = YouTubeUrlHandler.getPlayableYouTubeUrl(sharedUrl);
+      debugPrint("🎥 YouTube normalized: $sharedUrl");
+    }
+
     Navigator.of(ctx).push(MaterialPageRoute(builder: (context) {
       return SharePostView(
         onClose: () async {
           await ShareExtensionService.clearSharedData();
           setState(() {
             _sharedContent = null;
-            _shareStatus = 'Cleared shared content';
+            _shareStatus = '🧹 Cleared shared content';
           });
           if (Navigator.of(context).canPop()) Navigator.of(context).pop();
         },
-        sharedUrl: _sharedContent?.url,
-        sharedText: _sharedContent?.sharedText ?? _sharedContent?.text,
+        sharedUrl: sharedUrl,
+        sharedText: sharedText,
         sharedImages: _sharedContent?.imagePaths,
       );
     }));
@@ -675,39 +825,15 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 }
 
-// ==============================
-// Legacy ShareHandler – kept for Android native shares
-// ==============================
-class ShareHandler {
-  static const _channel = MethodChannel('numuapp.share');
-
-  static Future<Map<String, dynamic>?> getSharedData() async {
-    try {
-      final jsonString = await _channel.invokeMethod<String>('getSharedData');
-      if (jsonString == null) return null;
-      return jsonDecode(jsonString);
-    } catch (e) {
-      debugPrint('❌ Error reading shared data: $e');
-      return null;
-    }
-  }
-}
-
-// ShareExtensionService.dart — drop-in replacement
-// Channel name matches your AppDelegate: "numuapp.share"
-
-
-
+// ============================================================
+// ShareExtensionService - iOS Share Extension Handler
+// ============================================================
 class ShareExtensionService {
   static const MethodChannel platform = MethodChannel('numuapp.share');
 
-  /// Called when native iOS notifies that new shared content is available.
   static Function(Map<String, dynamic>)? onSharedContent;
-
-  /// Optional: called when native notifies but no content is available.
   static Function()? onNoSharedContent;
 
-  /// Wire up native -> Dart callbacks. Call this early in main() before runApp().
   static void initialize() {
     platform.setMethodCallHandler((call) async {
       if (call.method == 'onSharedContent') {
@@ -722,13 +848,11 @@ class ShareExtensionService {
     });
   }
 
-  /// Old helper kept for compatibility.
   static Future<Map<String, dynamic>?> getSharedData() async {
     final r = await getSharedDataWithStatus();
     return r.data;
   }
 
-  /// NEW: returns structured status + payload, with friendly messages.
   static Future<SharedDataResult> getSharedDataWithStatus() async {
     try {
       final result = await platform.invokeMethod('getSharedData');
@@ -762,7 +886,6 @@ class ShareExtensionService {
     }
   }
 
-  /// Clears the stored shared payload in the App Group.
   static Future<bool> clearSharedData() async {
     try {
       final result = await platform.invokeMethod('clearSharedData');
@@ -772,10 +895,8 @@ class ShareExtensionService {
     }
   }
 
-  /// Ask native if there is new content (alias to hasSharedData/checkForSharedContent).
   static Future<bool> checkForSharedContent() async {
     try {
-      // Prefer explicit method; fallback to hasSharedData if not implemented
       bool? has = await platform.invokeMethod('checkForSharedContent');
       has ??= await platform.invokeMethod('hasSharedData');
       return has ?? false;
@@ -784,9 +905,7 @@ class ShareExtensionService {
     }
   }
 
-  /// Parse the native payload into a typed model convenient for UI.
   static SharedContent parseSharedData(Map<String, dynamic> data) {
-    // Accept either 'imagePaths' (preferred) or 'images'
     final List<String> images = (() {
       final raw = data['imagePaths'] ?? data['images'];
       if (raw is List) {
@@ -797,7 +916,13 @@ class ShareExtensionService {
 
     final String? text = data['text'] as String?;
     final String? sharedText = (data['sharedText'] as String?) ?? text;
-    final String? url = data['url'] as String?;
+    var url = data['url'] as String?;
+
+    // Process YouTube URLs
+    if (url != null && YouTubeUrlHandler.isYouTubeUrl(url)) {
+      url = YouTubeUrlHandler.getPlayableYouTubeUrl(url);
+      debugPrint("🎥 YouTube URL processed: $url");
+    }
 
     final bool hasContent = ((text ?? '').isNotEmpty) ||
         ((sharedText ?? '').isNotEmpty) ||
@@ -814,12 +939,14 @@ class ShareExtensionService {
   }
 }
 
-/// Lightweight model used by UI widgets (e.g., SharePostView)
+// ============================================================
+// SharedContent Model
+// ============================================================
 class SharedContent {
-  final String? text;        // comment/caption
-  final String? sharedText;  // additional text from host app
-  final String? url;         // shared URL
-  final List<String> imagePaths; // local image file paths
+  final String? text;
+  final String? sharedText;
+  final String? url;
+  final List<String> imagePaths;
   final bool hasContent;
 
   SharedContent({
@@ -834,6 +961,9 @@ class SharedContent {
   String toString() => 'SharedContent(text: $text, sharedText: $sharedText, url: $url, images: ${imagePaths.length}, has: $hasContent)';
 }
 
+// ============================================================
+// SharedDataResult Model
+// ============================================================
 class SharedDataResult {
   final bool hasData;
   final Map<String, dynamic>? data;
@@ -850,5 +980,20 @@ class SharedDataResult {
   bool get isSuccess => hasData && error == null;
 }
 
+// ============================================================
+// Legacy ShareHandler for Android
+// ============================================================
+class ShareHandler {
+  static const _channel = MethodChannel('numuapp.share');
 
-
+  static Future<Map<String, dynamic>?> getSharedData() async {
+    try {
+      final jsonString = await _channel.invokeMethod<String>('getSharedData');
+      if (jsonString == null) return null;
+      return jsonDecode(jsonString);
+    } catch (e) {
+      debugPrint('❌ Error reading shared data: $e');
+      return null;
+    }
+  }
+}

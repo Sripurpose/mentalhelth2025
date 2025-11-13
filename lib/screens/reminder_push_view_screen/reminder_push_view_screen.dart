@@ -424,7 +424,7 @@ class _ReminderPushViewScreenState extends State<ReminderPushViewScreen> {
                                                         style: const TextStyle(
                                                           fontSize: 16,
                                                           fontWeight: FontWeight.w400,
-                                                          fontFamily: 'Open Sans',
+                                                          fontFamily: 'Poppins',
                                                           color: Colors.black,
                                                         ),
                                                       ),

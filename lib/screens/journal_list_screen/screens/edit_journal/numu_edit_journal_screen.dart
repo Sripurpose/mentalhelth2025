@@ -41,6 +41,7 @@ import '../../../../widgets/app_bar/appbar_leading_image.dart';
 import '../../../../widgets/custom_image_view.dart';
 import '../../../../widgets/custom_rating_bar.dart';
 import '../../../../widgets/functions/popup.dart';
+import '../../../../widgets/preview_custom_link.dart';
 import '../../../mental_strength_add_edit_screen/provider/mental_strenght_edit_provider.dart';
 import '../../../token_expiry/tocken_expiry_warning_screen.dart';
 import '../../../token_expiry/token_expiry.dart';
@@ -2370,67 +2371,77 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
 
               // 🔗 Link preview (ONLY ONE - no multiple links)
               if (provider.editDetectedLinks.isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.only(top: 12.0),
-                  child: Stack(
-                    alignment: Alignment.topRight,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.grey.shade300,
-                            width: 1.2,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: LinkPreviewGenerator(
-                            link: provider.editDetectedLinks.first,
-                            linkPreviewStyle: LinkPreviewStyle.small,
-                            showDomain: true,
-                            showTitle: true,
-                            bodyMaxLines: 1,
-                            borderRadius: 10,
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Colors.black12,
-                                blurRadius: 4,
-                                offset: Offset(0, 2),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                // Padding(
+                //   padding: const EdgeInsets.only(top: 12.0),
+                //   child: Stack(
+                //     alignment: Alignment.topRight,
+                //     children: [
+                //       Container(
+                //         decoration: BoxDecoration(
+                //           border: Border.all(
+                //             color: Colors.grey.shade300,
+                //             width: 1.2,
+                //           ),
+                //           borderRadius: BorderRadius.circular(10),
+                //         ),
+                //         child: ClipRRect(
+                //           borderRadius: BorderRadius.circular(10),
+                //           child: LinkPreviewGenerator(
+                //             link: provider.editDetectedLinks.first,
+                //             linkPreviewStyle: LinkPreviewStyle.small,
+                //             showDomain: true,
+                //             showTitle: true,
+                //             bodyMaxLines: 1,
+                //             borderRadius: 10,
+                //             boxShadow: const [
+                //               BoxShadow(
+                //                 color: Colors.black12,
+                //                 blurRadius: 4,
+                //                 offset: Offset(0, 2),
+                //               ),
+                //             ],
+                //           ),
+                //         ),
+                //       ),
+                //
+                //       // ❌ Close button (removes the link)
+                //       Positioned(
+                //         top: 6,
+                //         right: 6,
+                //         child: GestureDetector(
+                //           onTap: () {
+                //             setState(() {
+                //               provider.editDetectedLinks.clear();
+                //               provider.hasUserClearedLink = true;
+                //             });
+                //           },
+                //           child: Container(
+                //             decoration: const BoxDecoration(
+                //               shape: BoxShape.circle,
+                //               color: Colors.black54,
+                //             ),
+                //             padding: const EdgeInsets.all(4),
+                //             child: const Icon(
+                //               Icons.close,
+                //               color: Colors.white,
+                //               size: 16,
+                //             ),
+                //           ),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+              CustomLinkPreview(
+                link: provider.editDetectedLinks.first,
+                onRemove: () {
+                  setState(() {
+                    provider.hasUserClearedLink = true;
+                    provider.editDetectedLinks.clear();
 
-                      // ❌ Close button (removes the link)
-                      Positioned(
-                        top: 6,
-                        right: 6,
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              provider.editDetectedLinks.clear();
-                              provider.hasUserClearedLink = true;
-                            });
-                          },
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.black54,
-                            ),
-                            padding: const EdgeInsets.all(4),
-                            child: const Icon(
-                              Icons.close,
-                              color: Colors.white,
-                              size: 16,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                  });
+                },
+              ),
             ],
           ),
         );

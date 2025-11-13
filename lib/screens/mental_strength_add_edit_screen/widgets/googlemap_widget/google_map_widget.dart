@@ -413,7 +413,7 @@ class _MentalGoogleMapState extends State<MentalGoogleMap> {
                           leading: const Icon(Icons.location_on, color: Colors.red),
                           title: Text(
                             result['displayName'],
-                            style: const TextStyle(fontSize: 14),
+                            style: const TextStyle(fontSize: 14, fontFamily: 'Poppins',),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),

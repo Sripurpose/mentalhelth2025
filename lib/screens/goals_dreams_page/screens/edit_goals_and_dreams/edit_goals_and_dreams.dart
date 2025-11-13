@@ -40,6 +40,7 @@ import '../../../../utils/core/date_time_utils.dart';
 import '../../../../utils/logic/permissions.dart';
 import '../../../../widgets/app_bar/custom_app_bar.dart';
 import '../../../../widgets/functions/popup.dart';
+import '../../../../widgets/preview_custom_link.dart';
 import '../../../addactions_screen/add_edit_action_screen.dart';
 import '../../../addactions_screen/addactions_screen.dart';
 import '../../../addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
@@ -562,6 +563,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                                                                       fontSize: 14,
                                                                       fontWeight: FontWeight.w400,
                                                                       color: Colors.black,
+                                                                      fontFamily: 'Poppins',
                                                                     ),
                                                                   ),
                                                                 ),
@@ -793,7 +795,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                 controller: adDreamsGoalsProvider.commentEditTextController,
                 hintText: _descriptionFocusNode.hasFocus ? '' : "Goal Description",
                 hintStyle: CustomTextStyles.bodySmallGray700,
-                textInputAction: TextInputAction.newline,
+                textInputAction: TextInputAction.done,
                 textInputType: TextInputType.multiline,
                 maxLines: 4,
                 focusNode: _descriptionFocusNode,
@@ -834,70 +836,83 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
               ),
 
               // 🔗 Link preview (ONLY ONE - no multiple links)
+              // if (hasLink)
+              //   Padding(
+              //     padding: const EdgeInsets.only(top: 12.0),
+              //     child: Stack(
+              //       alignment: Alignment.topRight,
+              //       children: [
+              //         Container(
+              //           decoration: BoxDecoration(
+              //             border: Border.all(
+              //               color: Colors.grey.shade300,
+              //               width: 1.5,
+              //             ),
+              //             borderRadius: BorderRadius.circular(10),
+              //           ),
+              //           child: ClipRRect(
+              //             borderRadius: BorderRadius.circular(10),
+              //             child: LinkPreviewGenerator(
+              //               link: adDreamsGoalsProvider.editDetectedLinks.first,
+              //               linkPreviewStyle: LinkPreviewStyle.small,
+              //               showDomain: true,
+              //               showTitle: true,
+              //               bodyMaxLines: 1,
+              //               borderRadius: 10,
+              //               boxShadow: const [
+              //                 BoxShadow(
+              //                   color: Colors.black12,
+              //                   blurRadius: 4,
+              //                   offset: Offset(0, 2),
+              //                 ),
+              //               ],
+              //             ),
+              //           ),
+              //         ),
+              //
+              //         // ❌ Close icon - remove preview
+              //         Positioned(
+              //           top: 6,
+              //           right: 6,
+              //           child: GestureDetector(
+              //             onTap: () {
+              //               logger.i(
+              //                   "editDetectedLinks before clear: ${adDreamsGoalsProvider.editDetectedLinks}");
+              //
+              //               adDreamsGoalsProvider.hasUserClearedLink = true;
+              //               adDreamsGoalsProvider.editDetectedLinks.clear();
+              //               setState(() {});
+              //             },
+              //             child: Container(
+              //               decoration: const BoxDecoration(
+              //                 shape: BoxShape.circle,
+              //                 color: Colors.black54,
+              //               ),
+              //               padding: const EdgeInsets.all(4),
+              //               child: const Icon(
+              //                 Icons.close,
+              //                 color: Colors.white,
+              //                 size: 16,
+              //               ),
+              //             ),
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+
               if (hasLink)
-                Padding(
-                  padding: const EdgeInsets.only(top: 12.0),
-                  child: Stack(
-                    alignment: Alignment.topRight,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.grey.shade300,
-                            width: 1.5,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: LinkPreviewGenerator(
-                            link: adDreamsGoalsProvider.editDetectedLinks.first,
-                            linkPreviewStyle: LinkPreviewStyle.small,
-                            showDomain: true,
-                            showTitle: true,
-                            bodyMaxLines: 1,
-                            borderRadius: 10,
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Colors.black12,
-                                blurRadius: 4,
-                                offset: Offset(0, 2),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                CustomLinkPreview(
+                  link: adDreamsGoalsProvider.editDetectedLinks.first,
+                  onRemove: () {
+                    setState(() {
+                      adDreamsGoalsProvider.hasUserClearedLink = true;
+                      adDreamsGoalsProvider.editDetectedLinks.clear();
 
-                      // ❌ Close icon - remove preview
-                      Positioned(
-                        top: 6,
-                        right: 6,
-                        child: GestureDetector(
-                          onTap: () {
-                            logger.i(
-                                "editDetectedLinks before clear: ${adDreamsGoalsProvider.editDetectedLinks}");
-
-                            adDreamsGoalsProvider.hasUserClearedLink = true;
-                            adDreamsGoalsProvider.editDetectedLinks.clear();
-                            setState(() {});
-                          },
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.black54,
-                            ),
-                            padding: const EdgeInsets.all(4),
-                            child: const Icon(
-                              Icons.close,
-                              color: Colors.white,
-                              size: 16,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    });
+                  },
                 ),
+
             ],
           ),
         );

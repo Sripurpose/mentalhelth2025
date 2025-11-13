@@ -35,7 +35,7 @@ void showErrorPopupDialog(BuildContext context, String message, Function() onSuc
                   style: const TextStyle(
                     color: Color(0xFF2F2A42),
                     fontSize: 12,
-                    fontFamily: 'Roboto',
+                    fontFamily: 'Poppins',
                     fontWeight: FontWeight.w600,
                   ),
                   child: Text(
@@ -43,7 +43,7 @@ void showErrorPopupDialog(BuildContext context, String message, Function() onSuc
                     style: const TextStyle(
                       color: Color(0xFF694C00),
                       fontSize: 14,
-                      fontFamily: 'Roboto',
+                      fontFamily: 'Poppins',
                       fontWeight: FontWeight.w500,
                     ),
                   ),

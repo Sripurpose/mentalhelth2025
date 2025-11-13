@@ -1,13 +1,17 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:mentalhelth/screens/auth/sign_in/screen_sign_in.dart';
 import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../../utils/core/image_constant.dart';
+
 class ChatGptBottomSheet extends StatefulWidget {
   final Uri initialUrl;
-  const ChatGptBottomSheet({Key? key, required this.initialUrl}) : super(key: key);
+  final String chatTitle;
+  const ChatGptBottomSheet({Key? key, required this.initialUrl,required this.chatTitle}) : super(key: key);
 
   @override
   State<ChatGptBottomSheet> createState() => _ChatGptBottomSheetState();
@@ -95,25 +99,31 @@ class _ChatGptBottomSheetState extends State<ChatGptBottomSheet> {
         Column(
           children: [
             // Header with close button and title
-            Padding(
+            Container(
+              color: Colors.white, // ⬅️ White background for header
               padding: const EdgeInsets.all(16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    "Numu Chat",
+                  Text(
+                    widget.chatTitle,
                     style: TextStyle(
                       fontSize: 18,
+                      color: ColorsContent.newThemeColor,
                       fontWeight: FontWeight.bold,
+                      fontFamily: 'Poppins',
                     ),
                   ),
                   GestureDetector(
                     onTap: () => Navigator.pop(context),
-                    child: const Icon(Icons.close, size: 24),
+                    child: SvgPicture.asset(
+                      ImageConstant.numuChatClose, // Button icon
+                    ),
                   ),
                 ],
               ),
             ),
+
             // Progress indicator
             if (_progress < 1.0)
               LinearProgressIndicator(
@@ -123,12 +133,14 @@ class _ChatGptBottomSheetState extends State<ChatGptBottomSheet> {
                   ColorsContent.newThemeColor,
                 ),
               ),
+
             // WebView
             Expanded(
               child: WebViewWidget(controller: _controller),
             ),
           ],
         ),
+
         // Loading overlay
         if (_showLoadingOverlay)
           Container(
@@ -143,5 +155,6 @@ class _ChatGptBottomSheetState extends State<ChatGptBottomSheet> {
       ],
     );
   }
+
 }
 

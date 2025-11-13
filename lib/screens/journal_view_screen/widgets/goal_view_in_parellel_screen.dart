@@ -242,6 +242,7 @@ class _GoalAndDreamFullViewBottomParellelSheetState
                         child:  Text(
                           "Audio",
                           style: TextStyle(
+                            fontFamily: 'Poppins',
                             color:ColorsContent.signInGradientColorViolet, // Purple text
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -300,6 +301,7 @@ class _GoalAndDreamFullViewBottomParellelSheetState
                         child:  Text(
                           "Photo",
                           style: TextStyle(
+                            fontFamily: 'Poppins',
                             color:ColorsContent.signInGradientColorViolet, // Purple text
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -389,6 +391,7 @@ class _GoalAndDreamFullViewBottomParellelSheetState
                         child:  Text(
                           "Video",
                           style: TextStyle(
+                            fontFamily: 'Poppins',
                             color:ColorsContent.signInGradientColorViolet, // Purple text
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -514,6 +517,7 @@ class _GoalAndDreamFullViewBottomParellelSheetState
                         child:  Text(
                           "Your Location",
                           style: TextStyle(
+                            fontFamily: 'Poppins',
                             color:ColorsContent.signInGradientColorViolet, // Purple text
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -598,6 +602,7 @@ class _GoalAndDreamFullViewBottomParellelSheetState
                               "Actions",
                               style: TextStyle(
                                 color: ColorsContent.signInGradientColorViolet,
+                                fontFamily: 'Poppins',
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -644,7 +649,7 @@ class _GoalAndDreamFullViewBottomParellelSheetState
                                                 style: const TextStyle(
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w500,
-                                                  fontFamily: 'Open Sans',
+                                                  fontFamily: 'Poppins',
                                                   color: Colors.white,
                                                 ),
                                                 maxLines: 1,

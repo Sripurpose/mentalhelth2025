@@ -298,7 +298,7 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                                                               style: TextStyle(
                                                                 fontSize: 16,
                                                                 fontWeight: FontWeight.w700,
-                                                                fontFamily: 'Open Sans',
+                                                                fontFamily: 'Poppins',
                                                                 color:  Colors.black,
                                                               ),),
                                                             content: StatefulBuilder(
@@ -321,7 +321,7 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                                                                         title: Text(category.categoryName ?? "",style: TextStyle(
                                                                           fontSize: 16,
                                                                           fontWeight: FontWeight.w500,
-                                                                          fontFamily: 'Open Sans',
+                                                                          fontFamily: 'Poppins',
                                                                           color: isSelected ? ColorsContent.newThemeColor : Colors.black,
                                                                         ),),
                                                                         tileColor: isSelected ? ColorsContent.dropdownSelectedColor : Colors.transparent,
@@ -357,7 +357,7 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                                                                     style: TextStyle(
                                                                       fontSize: 16,
                                                                       fontWeight: FontWeight.w700,
-                                                                      fontFamily: 'Open Sans',
+                                                                      fontFamily: 'Poppins',
                                                                       color: Colors.white,
                                                                     ),
                                                                   ),
@@ -406,6 +406,7 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
                                                         style: const TextStyle(
                                                           color: Colors.black,
                                                           fontWeight: FontWeight.bold,
+                                                          fontFamily: 'Poppins',
                                                         ),
                                                       ),
                                                       Container(
@@ -701,7 +702,7 @@ class _EditAddProfileScreenState extends State<EditAddProfileScreen> {
               child: (editProfileProvider.phoneIsValid == false)
                   ? const Text(
                 'Invalid phone number',
-                style: TextStyle(fontSize: 12, color: Colors.red),
+                style: TextStyle(fontSize: 12, color: Colors.red,  fontFamily: 'Poppins',),
                 key: ValueKey("errorText"),
               )
                   : const SizedBox(

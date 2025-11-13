@@ -2181,9 +2181,10 @@ class MentalStrengthEditProvider extends ChangeNotifier {
 
           // ✅ Extract link from response and open it immediately
           String? linkUrl = responseData["link"];
+          String? chatTitleLink = responseData["chatpage_title"];
           if (linkUrl != null && linkUrl.isNotEmpty) {
             logger.i("Opening link: $linkUrl");
-            _launchInAppWithBrowserOptions(Uri.parse(linkUrl),context);
+            _launchInAppWithBrowserOptions(Uri.parse(linkUrl),chatTitleLink!,context);
           }
 
           return true;
@@ -2218,7 +2219,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
   }
 
 // Updated launch function
-  void _launchInAppWithBrowserOptions(Uri url, BuildContext context) async {
+  void _launchInAppWithBrowserOptions(Uri url, String chatTitle, BuildContext context) async {
     logger.i("Launching URL in custom bottom sheet: $url");
 
     showModalBottomSheet(
@@ -2232,7 +2233,7 @@ class MentalStrengthEditProvider extends ChangeNotifier {
       ),
       builder: (_) => SizedBox(
         height: MediaQuery.of(context).size.height * 0.9,
-        child: ChatGptBottomSheet(initialUrl: url),
+        child: ChatGptBottomSheet(initialUrl: url,chatTitle: chatTitle,),
       ),
     );
   }
@@ -2373,11 +2374,12 @@ class MentalStrengthEditProvider extends ChangeNotifier {
           // Extract link and open in-app. Use addPostFrameCallback so navigation
           // happens after current frame (prevents navigator errors).
           final String? linkUrl = responseData["link"];
+          String? chatTitleLink = responseData["chatpage_title"];
           if (linkUrl != null && linkUrl.isNotEmpty) {
             logger.i("Opening link: $linkUrl");
             WidgetsBinding.instance.addPostFrameCallback((_) {
               try {
-                _launchInAppWithBrowserOptions(Uri.parse(linkUrl), context);
+                _launchInAppWithBrowserOptions(Uri.parse(linkUrl),chatTitleLink!,context);
               } catch (e) {
                 logger.e("Failed to open link: $e");
               }

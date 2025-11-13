@@ -96,6 +96,7 @@ class _AddNewReminderScreenScreenState
                           const Text(
                             "Date",
                             style: TextStyle(
+                                fontFamily: 'Poppins',
                                 fontWeight: FontWeight.bold, fontSize: 15),
                           ),
                           const SizedBox(
@@ -231,6 +232,7 @@ class _AddNewReminderScreenScreenState
                           const Text(
                             "Time",
                             style: TextStyle(
+                                fontFamily: 'Poppins',
                                 fontWeight: FontWeight.bold, fontSize: 15),
                           ),
                           const SizedBox(
@@ -298,7 +300,7 @@ class _AddNewReminderScreenScreenState
                               ),
                               const Text(
                                 "To",
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                                style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Poppins',),
                               ),
                               GestureDetector(
                                 onTap: () {
@@ -371,6 +373,7 @@ class _AddNewReminderScreenScreenState
                                   const Text(
                                     "Remind before",
                                     style: TextStyle(
+                                      fontFamily: 'Poppins',
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15,
                                     ),
@@ -451,6 +454,7 @@ class _AddNewReminderScreenScreenState
                                   const Text(
                                     "Repeat",
                                     style: TextStyle(
+                                      fontFamily: 'Poppins',
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15,
                                     ),
@@ -474,6 +478,7 @@ class _AddNewReminderScreenScreenState
                                               title: const Text(
                                                 "Never",
                                                 style: TextStyle(
+                                                  fontFamily: 'Poppins',
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.bold,
                                                 ),
@@ -488,6 +493,7 @@ class _AddNewReminderScreenScreenState
                                               title: const Text(
                                                 "Daily",
                                                 style: TextStyle(
+                                                  fontFamily: 'Poppins',
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.bold,
                                                 ),
@@ -502,6 +508,7 @@ class _AddNewReminderScreenScreenState
                                               title: const Text(
                                                 "Weekly",
                                                 style: TextStyle(
+                                                  fontFamily: 'Poppins',
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.bold,
                                                 ),
@@ -516,6 +523,7 @@ class _AddNewReminderScreenScreenState
                                               title: const Text(
                                                 "Monthly",
                                                 style: TextStyle(
+                                                  fontFamily: 'Poppins',
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.bold,
                                                 ),
@@ -530,6 +538,7 @@ class _AddNewReminderScreenScreenState
                                               title: const Text(
                                                 "Yearly",
                                                 style: TextStyle(
+                                                  fontFamily: 'Poppins',
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.bold,
                                                 ),

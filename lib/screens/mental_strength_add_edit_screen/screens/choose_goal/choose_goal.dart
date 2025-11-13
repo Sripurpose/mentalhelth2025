@@ -238,12 +238,12 @@ class _ScreenChooseGoalMentalStrengthState
                                     SvgPicture.asset(ImageConstant.noDataNumu),
                                     const Text(
                                       "No data found",
-                                      style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
+                                      style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold, fontFamily: 'Poppins',),
                                     ),
                                     const SizedBox(height: 10),
                                     const Text(
                                       "Check back later",
-                                      style: TextStyle(fontSize: 18, color: Colors.black),
+                                      style: TextStyle(fontSize: 18, color: Colors.black, fontFamily: 'Poppins',),
                                     ),
                                   ],
                                 )
@@ -376,6 +376,7 @@ class _ScreenChooseGoalMentalStrengthState
                   child: Text(
                     goals[index].title.toString(),
                     style: const TextStyle(
+                      fontFamily: 'Poppins',
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),

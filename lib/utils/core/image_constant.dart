@@ -21,6 +21,8 @@ class ImageConstant {
   static String feelingDummyNumu = '$imagePath/feeling_dummy_numu.svg';
   static String homeSearchNumu = '$imagePath/home_search.svg';
   static String homeDotNumu = '$imagePath/home_dot.svg';
+  static String line = '$imagePath/line.svg';
+  static String numuChatClose = '$imagePath/numu_chat_close.svg';
 
   static String locationIconGridNumu = '$imagePath/location_icon_grid.svg';
   static String dateIconGridNumu = '$imagePath/date_icon_grid.svg';

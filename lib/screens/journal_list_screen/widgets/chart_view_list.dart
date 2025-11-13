@@ -167,16 +167,18 @@ class ChartCircularWidgetState extends State<ChartCircularWidget> {
                         "No data found",
                         style: TextStyle(
                             fontSize: 18,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold),
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Poppins',
+                            color: Colors.black,),
                       ),
                       const SizedBox(height: 10),
                       const Text(
                         "Check back later",
                         style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black,
-                            fontWeight: FontWeight.normal),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Poppins',
+                          color: Colors.black,),
                       ),
                     ],
                   );
@@ -364,9 +366,9 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                               dense: true,
                               title: Text(
                                 emotionTitle.toUpperCase(),
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.black54,
+                                style:  TextStyle(
+                                  fontSize: 15,
+                                  color: ColorsContent.greyText,
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w400,
                                 ),

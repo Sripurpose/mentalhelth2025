@@ -307,12 +307,12 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
                                 SvgPicture.asset(ImageConstant.noDataNumu),
                                 const Text(
                                   "No data found",
-                                  style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
+                                  style: TextStyle(fontSize: 18, fontFamily: 'Poppins',color: Colors.black, fontWeight: FontWeight.bold),
                                 ),
                                 const SizedBox(height: 10),
                                 const Text(
                                   "Check back later",
-                                  style: TextStyle(fontSize: 18, color: Colors.black),
+                                  style: TextStyle(fontSize: 18, color: Colors.black, fontFamily: 'Poppins',),
                                 ),
                               ],
                             );
@@ -379,6 +379,7 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
+                      fontFamily: 'Poppins',
                     ),
                   ),
                 );
@@ -683,7 +684,7 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
                     scrollDirection: Axis.horizontal,
                     child: Text(
                       action[index].title.toString(),
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Poppins',),
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,

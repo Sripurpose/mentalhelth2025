@@ -320,7 +320,7 @@ class _EditReminderScreenScreenScreenState
                                 const Text(
                                   "To",
                                   style: TextStyle(
-                                      fontWeight: FontWeight.bold),
+                                      fontWeight: FontWeight.bold, fontFamily: 'Poppins',),
                                 ),
                                 GestureDetector(
                                   onTap: () {
@@ -659,6 +659,7 @@ class _EditReminderScreenScreenScreenState
                                                 title: const Text(
                                                   "Never",
                                                   style: TextStyle(
+                                                    fontFamily: 'Poppins',
                                                     fontSize: 16,
                                                     fontWeight:
                                                     FontWeight.bold,
@@ -677,6 +678,7 @@ class _EditReminderScreenScreenScreenState
                                                   "Daily",
                                                   style: TextStyle(
                                                     fontSize: 16,
+                                                    fontFamily: 'Poppins',
                                                     fontWeight:
                                                     FontWeight.bold,
                                                   ),
@@ -997,7 +999,7 @@ class _EditReminderScreenScreenScreenState
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
-                                fontFamily: 'Roboto',
+                                fontFamily: 'Poppins',
                                 color:  Colors.black,
                               )),
                         ],

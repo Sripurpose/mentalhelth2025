@@ -383,6 +383,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                           fontSize: 14,
                                                           color: Colors.white,
                                                           fontWeight: FontWeight.bold,
+                                                          fontFamily: 'Poppins',
                                                         ),
                                                       ),
                                                     ),

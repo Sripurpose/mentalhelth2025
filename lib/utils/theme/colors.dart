@@ -4,6 +4,7 @@ class ColorsContent {
   static Color primaryColor = const Color(0xFF59A9F3);
   static Color greyColor = const Color(0xFFCCCCCC);
   static Color blackText = const Color(0xFF000000);
+  static Color moreColor = const Color(0xFF6E6E6E);
 
   static Color greyText = const Color(0xFF666666);
   static Color datePickerGreyText = const Color(0xFFA7A7A7);
@@ -19,6 +20,7 @@ class ColorsContent {
   static Color closeActionsColor = const Color(0xFF5E4CCC);
   static Color tokenExpiryTextColor = const Color(0xFF4A4A4A);
   static Color linkDropDownBackGroundColor = const Color(0xFFD1C9FF);
+  static Color dateTimeBack = const Color(0xFFE1E4F5);
 
   static Color galleryCountColor = const Color(0xFF6551DC);
   static Color cameraCountColor = const Color(0xFF4B73EF);

@@ -58,6 +58,7 @@ class Journals {
   String? preview_link;
   String? chatlink;
   String? chartlink;
+  String? chatpage_title;
 
   Journals({
     this.userId,
@@ -78,6 +79,7 @@ class Journals {
     this.preview_link,
     this.chatlink,
     this.chartlink,
+    this.chatpage_title,
   });
 
   factory Journals.fromJson(Map<String, dynamic> json) => Journals(
@@ -106,6 +108,7 @@ class Journals {
     preview_link: json["preview_link"],
     chatlink: json["chatlink"],
     chartlink: json["chartlink"],
+    chatpage_title: json["chatpage_title"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -130,7 +133,8 @@ class Journals {
             : List<dynamic>.from(journalMedia!.map((x) => x.toJson())),
     "preview_link":preview_link,
     "chatlink":chatlink,
-    "chartlink":chartlink
+    "chartlink":chartlink,
+    "chatpage_title":chatpage_title,
       };
 }
 

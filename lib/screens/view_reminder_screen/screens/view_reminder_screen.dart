@@ -153,10 +153,10 @@ class _ViewReminderScreenState extends State<ViewReminderScreen> {
                                     ImageConstant.noDataNumu,
                                   ),
                                   const Text("No data found",
-                                      style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold)),
+                                      style: TextStyle(fontSize: 18, fontFamily: 'Poppins',color: Colors.black, fontWeight: FontWeight.bold)),
                                   const SizedBox(height: 10),
                                   const Text("Check back later",
-                                      style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.normal)),
+                                      style: TextStyle(fontSize: 18,  fontFamily: 'Poppins',color: Colors.black, fontWeight: FontWeight.normal)),
                                 ],
                               )
                                   :

@@ -176,7 +176,7 @@ class _VersionUpdateCheckScreenState extends State<VersionUpdateCheckScreen> {
                                   style: const TextStyle(
                                     fontSize: 22,
                                     fontWeight: FontWeight.w700,
-                                    fontFamily: 'Open Sans',
+                                    fontFamily: 'Poppins',
                                     color: Colors.white,
                                   ),
                                 ),
@@ -186,7 +186,7 @@ class _VersionUpdateCheckScreenState extends State<VersionUpdateCheckScreen> {
                                   style: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,
-                                    fontFamily: 'Open Sans',
+                                    fontFamily: 'Poppins',
                                     color: Colors.white,
                                   ),
                                 ),
@@ -290,6 +290,7 @@ class _VersionUpdateCheckScreenState extends State<VersionUpdateCheckScreen> {
                                       child: Text(
                                         "Update Now",
                                         style:  TextStyle(
+                                          fontFamily: 'Poppins',
                                           fontSize: 15,
                                           fontWeight: FontWeight.bold, // Set font weight to bold
                                           color:ColorsContent.newThemeColor,
@@ -344,6 +345,7 @@ class _VersionUpdateCheckScreenState extends State<VersionUpdateCheckScreen> {
                                       child: Text(
                                         "Update Now",
                                         style:  TextStyle(
+                                          fontFamily: 'Poppins',
                                           fontSize: 15,
                                           fontWeight: FontWeight.bold, // Set font weight to bold
                                           color:ColorsContent.newThemeColor,
@@ -394,6 +396,7 @@ class _VersionUpdateCheckScreenState extends State<VersionUpdateCheckScreen> {
                                     Text(
                                       "Skip",
                                       style:  TextStyle(
+                                        fontFamily: 'Poppins',
                                         fontSize: 15,
                                         fontWeight: FontWeight.bold, // Set font weight to bold
                                         color:ColorsContent.whiteText,
