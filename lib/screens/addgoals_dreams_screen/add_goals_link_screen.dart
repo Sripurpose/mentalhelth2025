@@ -33,7 +33,6 @@ import '../../utils/logic/permissions.dart';
 import '../../utils/theme/colors.dart';
 import '../../utils/theme/custom_button_style.dart';
 import '../../widgets/functions/popup.dart';
-import '../../widgets/preview_custom_link.dart';
 import '../SharePostView.dart';
 import '../addactions_screen/addactions_screen.dart';
 import '../addactions_screen/provider/add_actions_provider.dart';
@@ -1203,80 +1202,69 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                 ),
 
                 // 🔗 Show link preview (shared URL or detected link)
-                // if (hasLink)
-                //   Padding(
-                //     padding: const EdgeInsets.only(top: 12.0),
-                //     child: Stack(
-                //       alignment: Alignment.topRight,
-                //       children: [
-                //         Container(
-                //           decoration: BoxDecoration(
-                //             border: Border.all(
-                //               color: Colors.grey.shade300,
-                //               width: 1.5,
-                //             ),
-                //             borderRadius: BorderRadius.circular(10),
-                //           ),
-                //           child: ClipRRect(
-                //             borderRadius: BorderRadius.circular(10),
-                //             child: LinkPreviewGenerator(
-                //               link: adDreamsGoalsProvider
-                //                       .detectedLinks.isNotEmpty
-                //                   ? adDreamsGoalsProvider.detectedLinks.first
-                //                   : '',
-                //               linkPreviewStyle: LinkPreviewStyle.small,
-                //               showDomain: true,
-                //               showTitle: true,
-                //               bodyMaxLines: 1,
-                //               borderRadius: 10,
-                //               boxShadow: const [
-                //                 BoxShadow(
-                //                   color: Colors.black12,
-                //                   blurRadius: 4,
-                //                   offset: Offset(0, 2),
-                //                 ),
-                //               ],
-                //             ),
-                //           ),
-                //         ),
-                //         // ❌ Close icon to remove preview
-                //         Positioned(
-                //           top: 6,
-                //           right: 6,
-                //           child: GestureDetector(
-                //             onTap: () {
-                //               setState(() {
-                //                 adDreamsGoalsProvider.detectedLinks.clear();
-                //               });
-                //             },
-                //             child: Container(
-                //               decoration: const BoxDecoration(
-                //                 shape: BoxShape.circle,
-                //                 color: Colors.black54,
-                //               ),
-                //               padding: const EdgeInsets.all(4),
-                //               child: const Icon(
-                //                 Icons.close,
-                //                 color: Colors.white,
-                //                 size: 16,
-                //               ),
-                //             ),
-                //           ),
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-
                 if (hasLink)
-                  CustomLinkPreview(
-                    link: adDreamsGoalsProvider.detectedLinks.first,
-                    onRemove: () {
-                      setState(() {
-                        adDreamsGoalsProvider.detectedLinks.clear();
-                      });
-                    },
+                  Padding(
+                    padding: const EdgeInsets.only(top: 12.0),
+                    child: Stack(
+                      alignment: Alignment.topRight,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.grey.shade300,
+                              width: 1.5,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: LinkPreviewGenerator(
+                              link: adDreamsGoalsProvider
+                                      .detectedLinks.isNotEmpty
+                                  ? adDreamsGoalsProvider.detectedLinks.first
+                                  : '',
+                              linkPreviewStyle: LinkPreviewStyle.small,
+                              showDomain: true,
+                              showTitle: true,
+                              bodyMaxLines: 1,
+                              borderRadius: 10,
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 4,
+                                  offset: Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        // ❌ Close icon to remove preview
+                        Positioned(
+                          top: 6,
+                          right: 6,
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                adDreamsGoalsProvider.detectedLinks.clear();
+                              });
+                            },
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.black54,
+                              ),
+                              padding: const EdgeInsets.all(4),
+                              child: const Icon(
+                                Icons.close,
+                                color: Colors.white,
+                                size: 16,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-
               ],
             ),
           ),

@@ -26,8 +26,6 @@ import 'package:provider/provider.dart';
 import '../../../../widgets/app_bar/appbar_subtitle.dart';
 import '../../../../widgets/app_bar/custom_app_bar.dart';
 import '../../../../widgets/functions/popup.dart';
-import '../../../../widgets/preview_custom_link.dart';
-import '../../../../widgets/view_only_preview_customize_link.dart';
 import '../../../addactions_screen/provider/add_actions_provider.dart';
 import '../../../mental_strength_add_edit_screen/provider/mental_strenght_edit_provider.dart';
 import '../../../no_internet/duplicate_screen.dart';
@@ -1173,38 +1171,33 @@ class _GoalAndDreamFullViewScreenState
                             ),
                           ),
                           const SizedBox(height: 8),
-                          CustomViewPreviewLink(
-                            link: previewLink,
-                            isViewOnly: true,
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.grey.shade300,
+                                width: 1.5,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: LinkPreviewGenerator(
+                                link: previewLink,
+                                linkPreviewStyle: LinkPreviewStyle.small,
+                                showDomain: true,
+                                showTitle: true,
+                                bodyMaxLines: 1,
+                                borderRadius: 10,
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    blurRadius: 4,
+                                    offset: Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-
-                          // Container(
-                          //   decoration: BoxDecoration(
-                          //     border: Border.all(
-                          //       color: Colors.grey.shade300,
-                          //       width: 1.5,
-                          //     ),
-                          //     borderRadius: BorderRadius.circular(10),
-                          //   ),
-                          //   child: ClipRRect(
-                          //     borderRadius: BorderRadius.circular(10),
-                          //     child: LinkPreviewGenerator(
-                          //       link: previewLink,
-                          //       linkPreviewStyle: LinkPreviewStyle.small,
-                          //       showDomain: true,
-                          //       showTitle: true,
-                          //       bodyMaxLines: 1,
-                          //       borderRadius: 10,
-                          //       boxShadow: const [
-                          //         BoxShadow(
-                          //           color: Colors.black12,
-                          //           blurRadius: 4,
-                          //           offset: Offset(0, 2),
-                          //         ),
-                          //       ],
-                          //     ),
-                          //   ),
-                          // ),
                         ],
                       );
                     }

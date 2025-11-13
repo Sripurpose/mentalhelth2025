@@ -32,7 +32,6 @@ import '../../utils/theme/theme_helper.dart';
 import '../../widgets/custom_image_view.dart';
 import '../../widgets/custom_rating_bar.dart';
 import '../../widgets/functions/popup.dart';
-import '../../widgets/preview_custom_link.dart';
 import '../addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
 import '../home_screen/provider/home_provider.dart';
 import '../home_screen/widgets/home_menu/home_menu.dart';
@@ -1438,76 +1437,67 @@ class _NumuMentalStrengthAddEditPageState
               ),
 
               // 🔗 Show link preview (ONLY ONE)
-              // if (mentalStrengthEditProvider.detectedLinks.isNotEmpty)
-              //   Padding(
-              //     padding: const EdgeInsets.only(top: 12.0),
-              //     child: Stack(
-              //       alignment: Alignment.topRight,
-              //       children: [
-              //         Container(
-              //           decoration: BoxDecoration(
-              //             border: Border.all(
-              //               color: Colors.grey.shade300,
-              //               width: 1.5,
-              //             ),
-              //             borderRadius: BorderRadius.circular(10),
-              //           ),
-              //           child: ClipRRect(
-              //             borderRadius: BorderRadius.circular(10),
-              //             child: LinkPreviewGenerator(
-              //               link: mentalStrengthEditProvider.detectedLinks.first,
-              //               linkPreviewStyle: LinkPreviewStyle.small,
-              //               showDomain: true,
-              //               showTitle: true,
-              //               bodyMaxLines: 1,
-              //               borderRadius: 10,
-              //               boxShadow: const [
-              //                 BoxShadow(
-              //                   color: Colors.black12,
-              //                   blurRadius: 4,
-              //                   offset: Offset(0, 2),
-              //                 ),
-              //               ],
-              //             ),
-              //           ),
-              //         ),
-              //
-              //         // ❌ Remove link preview button
-              //         Positioned(
-              //           top: 6,
-              //           right: 6,
-              //           child: GestureDetector(
-              //             onTap: () {
-              //               setState(() {
-              //                 mentalStrengthEditProvider.detectedLinks.clear();
-              //               });
-              //             },
-              //             child: Container(
-              //               decoration: const BoxDecoration(
-              //                 shape: BoxShape.circle,
-              //                 color: Colors.black54,
-              //               ),
-              //               padding: const EdgeInsets.all(4),
-              //               child: const Icon(
-              //                 Icons.close,
-              //                 color: Colors.white,
-              //                 size: 16,
-              //               ),
-              //             ),
-              //           ),
-              //         ),
-              //       ],
-              //     ),
-              //   ),
               if (mentalStrengthEditProvider.detectedLinks.isNotEmpty)
-              CustomLinkPreview(
-                link: mentalStrengthEditProvider.detectedLinks.first,
-                onRemove: () {
-                  setState(() {
-                    mentalStrengthEditProvider.detectedLinks.clear();
-                  });
-                },
-              ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 12.0),
+                  child: Stack(
+                    alignment: Alignment.topRight,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey.shade300,
+                            width: 1.5,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: LinkPreviewGenerator(
+                            link: mentalStrengthEditProvider.detectedLinks.first,
+                            linkPreviewStyle: LinkPreviewStyle.small,
+                            showDomain: true,
+                            showTitle: true,
+                            bodyMaxLines: 1,
+                            borderRadius: 10,
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 4,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      // ❌ Remove link preview button
+                      Positioned(
+                        top: 6,
+                        right: 6,
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              mentalStrengthEditProvider.detectedLinks.clear();
+                            });
+                          },
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.black54,
+                            ),
+                            padding: const EdgeInsets.all(4),
+                            child: const Icon(
+                              Icons.close,
+                              color: Colors.white,
+                              size: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
             ],
           ),
         );

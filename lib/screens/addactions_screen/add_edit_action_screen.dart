@@ -26,7 +26,6 @@ import 'package:provider/provider.dart';
 
 import '../../utils/logic/permissions.dart';
 import '../../utils/theme/colors.dart';
-import '../../widgets/preview_custom_link.dart';
 import '../addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
 import '../dash_borad_screen/provider/dash_board_provider.dart';
 import '../edit_add_profile_screen/provider/edit_provider.dart';
@@ -1143,76 +1142,66 @@ class _AddEditActionScreenState extends State<AddEditActionScreen> {
               ),
 
               // 🔗 Show link preview (ONLY ONE - no multiple links)
-              // if (hasLink)
-              //   Padding(
-              //     padding: const EdgeInsets.only(top: 12.0),
-              //     child: Stack(
-              //       alignment: Alignment.topRight,
-              //       children: [
-              //         Container(
-              //           decoration: BoxDecoration(
-              //             border: Border.all(
-              //               color: Colors.grey.shade300,
-              //               width: 1.5,
-              //             ),
-              //             borderRadius: BorderRadius.circular(10),
-              //           ),
-              //           child: ClipRRect(
-              //             borderRadius: BorderRadius.circular(10),
-              //             child: LinkPreviewGenerator(
-              //               link: addActionsProvider.detectedLinks.first,
-              //               linkPreviewStyle: LinkPreviewStyle.small,
-              //               showDomain: true,
-              //               showTitle: true,
-              //               bodyMaxLines: 1,
-              //               borderRadius: 10,
-              //               boxShadow: const [
-              //                 BoxShadow(
-              //                   color: Colors.black12,
-              //                   blurRadius: 4,
-              //                   offset: Offset(0, 2),
-              //                 ),
-              //               ],
-              //             ),
-              //           ),
-              //         ),
-              //
-              //         // ❌ Close icon — remove preview
-              //         Positioned(
-              //           top: 6,
-              //           right: 6,
-              //           child: GestureDetector(
-              //             onTap: () {
-              //               setState(() {
-              //                 addActionsProvider.detectedLinks.clear();
-              //               });
-              //             },
-              //             child: Container(
-              //               decoration: const BoxDecoration(
-              //                 shape: BoxShape.circle,
-              //                 color: Colors.black54,
-              //               ),
-              //               padding: const EdgeInsets.all(4),
-              //               child: const Icon(
-              //                 Icons.close,
-              //                 color: Colors.white,
-              //                 size: 16,
-              //               ),
-              //             ),
-              //           ),
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-
               if (hasLink)
-                CustomLinkPreview(
-                  link: addActionsProvider.detectedLinks.first,
-                  onRemove: () {
-                    setState(() {
-                      addActionsProvider.detectedLinks.clear();
-                    });
-                  },
+                Padding(
+                  padding: const EdgeInsets.only(top: 12.0),
+                  child: Stack(
+                    alignment: Alignment.topRight,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey.shade300,
+                            width: 1.5,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: LinkPreviewGenerator(
+                            link: addActionsProvider.detectedLinks.first,
+                            linkPreviewStyle: LinkPreviewStyle.small,
+                            showDomain: true,
+                            showTitle: true,
+                            bodyMaxLines: 1,
+                            borderRadius: 10,
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 4,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      // ❌ Close icon — remove preview
+                      Positioned(
+                        top: 6,
+                        right: 6,
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              addActionsProvider.detectedLinks.clear();
+                            });
+                          },
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.black54,
+                            ),
+                            padding: const EdgeInsets.all(4),
+                            child: const Icon(
+                              Icons.close,
+                              color: Colors.white,
+                              size: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
             ],
           ),

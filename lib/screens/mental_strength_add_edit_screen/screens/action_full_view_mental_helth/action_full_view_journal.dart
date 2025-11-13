@@ -26,7 +26,6 @@ import 'package:provider/provider.dart';
 
 import '../../../../widgets/app_bar/appbar_subtitle.dart';
 import '../../../../widgets/app_bar/custom_app_bar.dart';
-import '../../../../widgets/view_only_preview_customize_link.dart';
 import '../../../no_internet/duplicate_screen.dart';
 
 class ActionFullViewJournalCreateBottomSheet extends StatefulWidget {
@@ -1370,36 +1369,32 @@ class _ActionFullViewJournalCreateBottomSheetState
                       ],
                     ),
                     const SizedBox(height: 6),
-                    // Container(
-                    //   decoration: BoxDecoration(
-                    //     border: Border.all(
-                    //       color: Colors.grey.shade300,
-                    //       width: 1.5,
-                    //     ),
-                    //     borderRadius: BorderRadius.circular(10),
-                    //   ),
-                    //   child: ClipRRect(
-                    //     borderRadius: BorderRadius.circular(10),
-                    //     child: LinkPreviewGenerator(
-                    //       link: previewLink,
-                    //       linkPreviewStyle: LinkPreviewStyle.small,
-                    //       showDomain: true,
-                    //       showTitle: true,
-                    //       bodyMaxLines: 1,
-                    //       borderRadius: 10,
-                    //       boxShadow: const [
-                    //         BoxShadow(
-                    //           color: Colors.black12,
-                    //           blurRadius: 4,
-                    //           offset: Offset(0, 2),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
-                    CustomViewPreviewLink(
-                      link: previewLink,
-                      isViewOnly: true,
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.grey.shade300,
+                          width: 1.5,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: LinkPreviewGenerator(
+                          link: previewLink,
+                          linkPreviewStyle: LinkPreviewStyle.small,
+                          showDomain: true,
+                          showTitle: true,
+                          bodyMaxLines: 1,
+                          borderRadius: 10,
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 4,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 );
