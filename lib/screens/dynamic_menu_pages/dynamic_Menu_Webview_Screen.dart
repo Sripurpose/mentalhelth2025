@@ -19,7 +19,8 @@ class DynamicMenuWebviewScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<DynamicMenuWebviewScreen> createState() => _DynamicMenuWebviewScreenState();
+  State<DynamicMenuWebviewScreen> createState() =>
+      _DynamicMenuWebviewScreenState();
 }
 
 class _DynamicMenuWebviewScreenState extends State<DynamicMenuWebviewScreen> {
@@ -33,9 +34,22 @@ class _DynamicMenuWebviewScreenState extends State<DynamicMenuWebviewScreen> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final signInProvider = Provider.of<SignInProvider>(context, listen: false);
+      final signInProvider =
+      Provider.of<SignInProvider>(context, listen: false);
+      await _clearWebViewCache(); // ✅ Clear cache before loading
       await _loadDynamicMenu(signInProvider);
     });
+  }
+
+  /// ✅ Clear only WebView cache (no cookies)
+  Future<void> _clearWebViewCache() async {
+    try {
+      final tempController = WebViewController();
+      await tempController.clearCache();
+      debugPrint("✅ WebView cache cleared");
+    } catch (e) {
+      debugPrint("⚠️ Error clearing WebView cache: $e");
+    }
   }
 
   Future<void> _loadDynamicMenu(SignInProvider signInProvider) async {

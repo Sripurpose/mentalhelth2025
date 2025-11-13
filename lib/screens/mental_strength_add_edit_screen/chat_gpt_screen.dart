@@ -11,7 +11,12 @@ import '../../utils/core/image_constant.dart';
 class ChatGptBottomSheet extends StatefulWidget {
   final Uri initialUrl;
   final String chatTitle;
-  const ChatGptBottomSheet({Key? key, required this.initialUrl,required this.chatTitle}) : super(key: key);
+
+  const ChatGptBottomSheet({
+    Key? key,
+    required this.initialUrl,
+    required this.chatTitle,
+  }) : super(key: key);
 
   @override
   State<ChatGptBottomSheet> createState() => _ChatGptBottomSheetState();
@@ -31,7 +36,8 @@ class _ChatGptBottomSheetState extends State<ChatGptBottomSheet> {
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(
         NavigationDelegate(
-          onPageStarted: (url) {
+          onPageStarted: (url) async {
+            await _clearWebViewCache(); // ✅ Clear cache on each load
             setState(() {
               _currentUrl = url;
               _progress = 0.0;
@@ -86,6 +92,16 @@ class _ChatGptBottomSheetState extends State<ChatGptBottomSheet> {
       ..loadRequest(widget.initialUrl);
   }
 
+  /// ✅ Function to clear WebView cache
+  Future<void> _clearWebViewCache() async {
+    try {
+      await _controller.clearCache();
+      debugPrint("✅ WebView cache cleared successfully.");
+    } catch (e) {
+      debugPrint("❌ Error clearing WebView cache: $e");
+    }
+  }
+
   @override
   void dispose() {
     _redirectTimer?.cancel();
@@ -100,7 +116,7 @@ class _ChatGptBottomSheetState extends State<ChatGptBottomSheet> {
           children: [
             // Header with close button and title
             Container(
-              color: Colors.white, // ⬅️ White background for header
+              color: Colors.white,
               padding: const EdgeInsets.all(16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -117,14 +133,14 @@ class _ChatGptBottomSheetState extends State<ChatGptBottomSheet> {
                   GestureDetector(
                     onTap: () => Navigator.pop(context),
                     child: SvgPicture.asset(
-                      ImageConstant.numuChatClose, // Button icon
+                      ImageConstant.numuChatClose,
                     ),
                   ),
                 ],
               ),
             ),
 
-            // Progress indicator
+            // Progress bar
             if (_progress < 1.0)
               LinearProgressIndicator(
                 value: _progress,
@@ -155,6 +171,4 @@ class _ChatGptBottomSheetState extends State<ChatGptBottomSheet> {
       ],
     );
   }
-
 }
-

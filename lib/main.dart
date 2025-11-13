@@ -292,6 +292,13 @@ void main() async {
   BindingBase.debugZoneErrorsAreFatal = true;
   WidgetsFlutterBinding.ensureInitialized();
 
+  // 👇 Lock the app orientation to portrait only
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
+
   try {
     ShareExtensionService.initialize();
     ShareReceiver.init();

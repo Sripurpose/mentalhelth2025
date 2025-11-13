@@ -24,6 +24,13 @@ class _InAppBrowserScreenState extends State<InAppBrowserScreen> {
   @override
   void initState() {
     super.initState();
+    _initializeWebView();
+  }
+
+  /// ✅ Initialize WebView and clear cache before loading
+  Future<void> _initializeWebView() async {
+    await _clearWebViewCache(); // Clear cache before loading
+
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(
@@ -83,6 +90,17 @@ class _InAppBrowserScreenState extends State<InAppBrowserScreen> {
       ..loadRequest(widget.initialUrl);
   }
 
+  /// ✅ Clear only WebView cache (no cookies)
+  Future<void> _clearWebViewCache() async {
+    try {
+      final tempController = WebViewController();
+      await tempController.clearCache();
+      debugPrint("✅ WebView cache cleared");
+    } catch (e) {
+      debugPrint("⚠️ Error clearing WebView cache: $e");
+    }
+  }
+
   @override
   void dispose() {
     _redirectTimer?.cancel();
@@ -108,7 +126,8 @@ class _InAppBrowserScreenState extends State<InAppBrowserScreen> {
                 LinearProgressIndicator(
                   value: _progress,
                   backgroundColor: Colors.grey.shade300,
-                  valueColor: AlwaysStoppedAnimation<Color>(ColorsContent.newThemeColor),
+                  valueColor:
+                  AlwaysStoppedAnimation<Color>(ColorsContent.newThemeColor),
                 ),
               Expanded(
                 child: Padding(
