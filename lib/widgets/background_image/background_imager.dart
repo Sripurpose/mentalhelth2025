@@ -33,6 +33,36 @@ Widget backGroundImager({
 }
 
 
+Widget backGroundImagerViewJournal({
+  required Size size,
+  EdgeInsets? padding,
+  Widget? child,
+}) {
+  return Container(
+    width: size.width,
+    height: size.height,
+    decoration: BoxDecoration(
+      color: ColorsContent.viewJournalColor, // Replace image with a solid color
+      // image: DecorationImage(
+      //   image: AssetImage(
+      //     ImageConstant.imgGroup22,
+      //   ),
+      //   fit: BoxFit.cover,
+      // ),
+    ),
+    child: Container(
+      width: double.maxFinite,
+      padding: padding ??
+          EdgeInsets.only(
+            left: size.width * 0.05,
+            right: size.width * 0.05,
+          ),
+      child: child,
+    ),
+  );
+}
+
+
 Widget backGroundImagerOtherScreens({
   required Size size,
   EdgeInsets? padding,

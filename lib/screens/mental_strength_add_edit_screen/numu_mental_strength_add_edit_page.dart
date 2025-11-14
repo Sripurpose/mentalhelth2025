@@ -32,6 +32,7 @@ import '../../utils/theme/theme_helper.dart';
 import '../../widgets/custom_image_view.dart';
 import '../../widgets/custom_rating_bar.dart';
 import '../../widgets/functions/popup.dart';
+import '../../widgets/functions/snack_bar.dart' as Fluttertoast;
 import '../addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
 import '../home_screen/provider/home_provider.dart';
 import '../home_screen/widgets/home_menu/home_menu.dart';
@@ -1407,27 +1408,47 @@ class _NumuMentalStrengthAddEditPageState
                   final regex = mentalStrengthEditProvider.urlRegex;
                   final matches = regex.allMatches(value).map((m) => m.group(0)!).toList();
 
-                  // 🧩 Found link(s) - ONLY keep the first one, replace any previous
                   if (matches.isNotEmpty) {
-                    final updatedText = value.replaceAll(regex, '').trimRight();
-                    final firstLink = matches.first;
+                    final newLink = matches.first;
+
+                    // ❗ CONDITION: A link is already added
+                    if (mentalStrengthEditProvider.detectedLinks.isNotEmpty) {
+                      showToastTOP(
+                        context: context,
+                        message: "Only one link at a time",
+                      );
+                      // Remove the newly pasted link from text
+                      final cleanedText = value.replaceAll(regex, '').trimRight();
+
+                      setState(() {
+                        mentalStrengthEditProvider.descriptionEditTextController.text = cleanedText;
+                        mentalStrengthEditProvider.descriptionEditTextController.selection =
+                            TextSelection.fromPosition(
+                              TextPosition(offset: cleanedText.length),
+                            );
+                      });
+
+                      return; // STOP here
+                    }
+
+                    // ✔ If no link exists → Allow adding first link
+                    final cleanedText = value.replaceAll(regex, '').trimRight();
 
                     setState(() {
-                      // ❌ Clear all previous links
-                      mentalStrengthEditProvider.detectedLinks.clear();
+                      mentalStrengthEditProvider.detectedLinks
+                        ..clear()
+                        ..add(newLink);
 
-                      // ✅ Add ONLY the first link
-                      mentalStrengthEditProvider.detectedLinks.add(firstLink);
-
-                      // Remove link text from field
-                      mentalStrengthEditProvider.descriptionEditTextController.text = updatedText;
+                      mentalStrengthEditProvider.descriptionEditTextController.text = cleanedText;
                       mentalStrengthEditProvider.descriptionEditTextController.selection =
                           TextSelection.fromPosition(
-                            TextPosition(offset: updatedText.length),
+                            TextPosition(offset: cleanedText.length),
                           );
                     });
                   }
                 },
+
+
 
                 onTap: () => setState(() {}),
                 onEditingComplete: () {
@@ -1438,16 +1459,18 @@ class _NumuMentalStrengthAddEditPageState
 
               // 🔗 Show link preview (ONLY ONE)
               if (mentalStrengthEditProvider.detectedLinks.isNotEmpty)
+
                 Padding(
                   padding: const EdgeInsets.only(top: 12.0),
                   child: Stack(
                     alignment: Alignment.topRight,
                     children: [
+
                       Container(
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: Colors.grey.shade300,
-                            width: 1.5,
+                            width: 1.2,
                           ),
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -1455,10 +1478,11 @@ class _NumuMentalStrengthAddEditPageState
                           borderRadius: BorderRadius.circular(10),
                           child: LinkPreviewGenerator(
                             link: mentalStrengthEditProvider.detectedLinks.first,
-                            linkPreviewStyle: LinkPreviewStyle.small,
+                            linkPreviewStyle: LinkPreviewStyle.large,
                             showDomain: true,
+                            showBody: true,
                             showTitle: true,
-                            bodyMaxLines: 1,
+                            bodyMaxLines: 3,
                             borderRadius: 10,
                             boxShadow: const [
                               BoxShadow(

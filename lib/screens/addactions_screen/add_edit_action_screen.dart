@@ -1148,6 +1148,7 @@ class _AddEditActionScreenState extends State<AddEditActionScreen> {
                   child: Stack(
                     alignment: Alignment.topRight,
                     children: [
+
                       Container(
                         decoration: BoxDecoration(
                           border: Border.all(
@@ -1158,20 +1159,36 @@ class _AddEditActionScreenState extends State<AddEditActionScreen> {
                         ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
-                          child: LinkPreviewGenerator(
-                            link: addActionsProvider.detectedLinks.first,
-                            linkPreviewStyle: LinkPreviewStyle.small,
-                            showDomain: true,
-                            showTitle: true,
-                            bodyMaxLines: 1,
-                            borderRadius: 10,
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Colors.black12,
-                                blurRadius: 4,
-                                offset: Offset(0, 2),
-                              ),
-                            ],
+                          child: FutureBuilder(
+                            future: Future.delayed(const Duration(milliseconds: 500)),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return Container(
+                                  height: 100,
+                                  color: Colors.grey.shade100,
+                                  child: const Center(
+                                    child: CircularProgressIndicator(strokeWidth: 2),
+                                  ),
+                                );
+                              }
+                              return
+                                LinkPreviewGenerator(
+                                  link: addActionsProvider.detectedLinks.first,
+                                  linkPreviewStyle: LinkPreviewStyle.large,
+                                  showDomain: true,
+                                  showBody: true,
+                                  showTitle: true,
+                                  bodyMaxLines: 3,
+                                  borderRadius: 10,
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Colors.black12,
+                                      blurRadius: 4,
+                                      offset: Offset(0, 2),
+                                    ),
+                                  ],
+                                );
+                            },
                           ),
                         ),
                       ),

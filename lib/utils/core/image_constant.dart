@@ -24,6 +24,9 @@ class ImageConstant {
   static String line = '$imagePath/line.svg';
   static String numuChatClose = '$imagePath/numu_chat_close.svg';
 
+  static String dateMove = '$imagePath/date_move.svg';
+  static String dateUpMove = '$imagePath/date_up_move.svg';
+
   static String locationIconGridNumu = '$imagePath/location_icon_grid.svg';
   static String dateIconGridNumu = '$imagePath/date_icon_grid.svg';
   static String timeIconGridNumu = '$imagePath/time_icon_grid.svg';

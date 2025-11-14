@@ -5,6 +5,7 @@ class ColorsContent {
   static Color greyColor = const Color(0xFFCCCCCC);
   static Color blackText = const Color(0xFF000000);
   static Color moreColor = const Color(0xFF6E6E6E);
+  static Color viewJournalColor = const Color(0xFFF6F8FF);
 
   static Color greyText = const Color(0xFF666666);
   static Color datePickerGreyText = const Color(0xFFA7A7A7);

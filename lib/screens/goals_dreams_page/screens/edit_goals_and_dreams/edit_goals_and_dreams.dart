@@ -221,11 +221,22 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
           widget.goalsanddream.location == null
               ? ""
               : widget.goalsanddream.location!.locationAddress.toString();
-      editProfileProvider.categorys = Category(
-        id: widget.goalsanddream.categoryId.toString(),
+      // editProfileProvider.categorys = Category(
+      //   id: widget.goalsanddream.categoryId.toString(),
+      //   categoryName: widget.goalsanddream.categoryName.toString(),
+      //   categoryImg: "",
+      // );
+
+      final selectedCat = Category(
+        id:widget.goalsanddream.categoryId.toString(),
         categoryName: widget.goalsanddream.categoryName.toString(),
         categoryImg: "",
       );
+
+// ✅ Store selected category
+      editProfileProvider.categorys = selectedCat;
+      editProfileProvider.selectedCategory = selectedCat;
+
       if (widget.goalsanddream.action != null) {
         for (int i = 0; i < widget.goalsanddream.action!.length; i++) {
           adDreamsGoalsProvider.getAddActionIdAndName(
@@ -296,72 +307,175 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                                       ),
                                       _buildNameEditText(context),
                                       const SizedBox(height: 11),
-                                      Consumer<EditProfileProvider>(builder:
-                                          (context, editProfileProvider, _) {
-                                        return Container(
-                                          height: size.height * 0.050,
-                                          padding: const EdgeInsets.only(
-                                            left: 10,
-                                            right: 10,
-                                          ),
-                                          decoration: const ShapeDecoration(
-                                            color: Colors.white,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(
-                                                  8.0,
-                                                ),
+
+                                      Consumer<EditProfileProvider>(
+                                        builder: (context, editProfileProvider, _) {
+                                          final categoryList = editProfileProvider
+                                              .getCategoryModel?.category ??
+                                              [];
+
+                                          // 🔹 Ensure the selected value actually exists in the dropdown list
+                                          Category? selectedCategory =
+                                              editProfileProvider.selectedCategory;
+
+                                          if (selectedCategory != null &&
+                                              categoryList.isNotEmpty) {
+                                            final match = categoryList.firstWhere(
+                                                  (cat) =>
+                                              cat.id.toString() ==
+                                                  selectedCategory?.id.toString(),
+                                              orElse: () => Category(
+                                                  id: '',
+                                                  categoryName: '',
+                                                  categoryImg: ''),
+                                            );
+
+                                            // If no valid match, reset to null
+                                            if (match.id == '') {
+                                              selectedCategory = null;
+                                            } else {
+                                              selectedCategory = match;
+                                            }
+                                          }
+
+                                          return Container(
+                                            height: size.height * 0.055,
+                                            padding: const EdgeInsets.only(
+                                                left: 10, right: 5),
+                                            decoration: ShapeDecoration(
+                                              color: Colors.white,
+                                              shape: RoundedRectangleBorder(
+                                                side: const BorderSide(
+                                                    width: 0.8,
+                                                    color: Colors.transparent),
+                                                borderRadius:
+                                                BorderRadius.circular(8.0),
                                               ),
                                             ),
-                                          ),
-                                          child: editProfileProvider
-                                                      .getCategoryModel ==
-                                                  null
-                                              ? const SizedBox()
-                                              : DropdownButton<Category>(
-                                                  items: editProfileProvider
-                                                      .getCategoryModel!.category!
-                                                      .map((Category value) {
-                                                    return DropdownMenuItem<
-                                                        Category>(
-                                                      value: value,
-                                                      child: Text(value
-                                                          .categoryName
-                                                          .toString()),
-                                                    );
-                                                  }).toList(),
-                                                  hint: Text(
-                                                    editProfileProvider
-                                                            .interestsValueController
-                                                            .text
-                                                            .isEmpty
-                                                        ? 'Music, Badminton'
-                                                        : editProfileProvider
-                                                            .interestsValueController
-                                                            .text,
+                                            child: categoryList.isEmpty
+                                                ? const SizedBox()
+                                                : DropdownButton<Category>(
+                                              // ✅ Use verified selectedCategory
+                                              value: selectedCategory,
+                                              items: categoryList
+                                                  .map((Category value) {
+                                                return DropdownMenuItem<
+                                                    Category>(
+                                                  value: value,
+                                                  child: Text(
+                                                    value.categoryName ??
+                                                        '',
                                                     style: CustomTextStyles
                                                         .bodySmallGray700,
                                                   ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  underline: const SizedBox(),
-                                                  isExpanded: true,
-                                            iconEnabledColor: ColorsContent.newThemeColor, // 👈 Dropdown icon color
-                                            iconDisabledColor: ColorsContent.newThemeColor,  // 👈 Optional: icon color when disabled
-                                                  onChanged: (value) {
-                                                    if (value != null) {
-                                                      editProfileProvider
-                                                          .selectCategory(
-                                                        value: value.categoryName
-                                                            .toString(),
-                                                        mainCategory: value,
-                                                      );
-                                                    }
-                                                    _isTokenExpired();
-                                                  },
-                                                ),
-                                        );
-                                      }),
+                                                );
+                                              }).toList(),
+                                              hint: Text(
+                                                editProfileProvider
+                                                    .interestsValueController
+                                                    .text
+                                                    .isEmpty
+                                                    ? 'Select a category'
+                                                    : editProfileProvider
+                                                    .interestsValueController
+                                                    .text,
+                                                style: CustomTextStyles
+                                                    .bodySmallGray700,
+                                              ),
+                                              borderRadius:
+                                              BorderRadius.circular(10),
+                                              underline: const SizedBox(),
+                                              isExpanded: true,
+                                              iconEnabledColor:
+                                              ColorsContent.newThemeColor,
+                                              iconDisabledColor:
+                                              ColorsContent.newThemeColor,
+                                              onChanged: (value) {
+                                                if (value != null) {
+                                                  editProfileProvider
+                                                      .selectedCategory =
+                                                      value;
+                                                  editProfileProvider
+                                                      .selectCategory(
+                                                    value: value.categoryName
+                                                        .toString(),
+                                                    mainCategory: value,
+                                                  );
+                                                  _isTokenExpired();
+                                                  editProfileProvider
+                                                      .notifyListeners();
+                                                }
+                                              },
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                      // Consumer<EditProfileProvider>(builder:
+                                      //     (context, editProfileProvider, _) {
+                                      //   return Container(
+                                      //     height: size.height * 0.050,
+                                      //     padding: const EdgeInsets.only(
+                                      //       left: 10,
+                                      //       right: 10,
+                                      //     ),
+                                      //     decoration: const ShapeDecoration(
+                                      //       color: Colors.white,
+                                      //       shape: RoundedRectangleBorder(
+                                      //         borderRadius: BorderRadius.all(
+                                      //           Radius.circular(
+                                      //             8.0,
+                                      //           ),
+                                      //         ),
+                                      //       ),
+                                      //     ),
+                                      //     child: editProfileProvider
+                                      //                 .getCategoryModel ==
+                                      //             null
+                                      //         ? const SizedBox()
+                                      //         : DropdownButton<Category>(
+                                      //             items: editProfileProvider
+                                      //                 .getCategoryModel!.category!
+                                      //                 .map((Category value) {
+                                      //               return DropdownMenuItem<
+                                      //                   Category>(
+                                      //                 value: value,
+                                      //                 child: Text(value
+                                      //                     .categoryName
+                                      //                     .toString()),
+                                      //               );
+                                      //             }).toList(),
+                                      //             hint: Text(
+                                      //               editProfileProvider
+                                      //                       .interestsValueController
+                                      //                       .text
+                                      //                       .isEmpty
+                                      //                   ? 'Music, Badminton'
+                                      //                   : editProfileProvider
+                                      //                       .interestsValueController
+                                      //                       .text,
+                                      //               style: CustomTextStyles
+                                      //                   .bodySmallGray700,
+                                      //             ),
+                                      //             borderRadius:
+                                      //                 BorderRadius.circular(10),
+                                      //             underline: const SizedBox(),
+                                      //             isExpanded: true,
+                                      //       iconEnabledColor: ColorsContent.newThemeColor, // 👈 Dropdown icon color
+                                      //       iconDisabledColor: ColorsContent.newThemeColor,  // 👈 Optional: icon color when disabled
+                                      //             onChanged: (value) {
+                                      //               if (value != null) {
+                                      //                 editProfileProvider
+                                      //                     .selectCategory(
+                                      //                   value: value.categoryName
+                                      //                       .toString(),
+                                      //                   mainCategory: value,
+                                      //                 );
+                                      //               }
+                                      //               _isTokenExpired();
+                                      //             },
+                                      //           ),
+                                      //   );
+                                      // }),
                                       const SizedBox(height: 11),
                                       _buildAchievmentDateGoals(context),
                                       const SizedBox(height: 25),
@@ -841,11 +955,12 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                   child: Stack(
                     alignment: Alignment.topRight,
                     children: [
+
                       Container(
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: Colors.grey.shade300,
-                            width: 1.5,
+                            width: 1.2,
                           ),
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -853,10 +968,11 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                           borderRadius: BorderRadius.circular(10),
                           child: LinkPreviewGenerator(
                             link: adDreamsGoalsProvider.editDetectedLinks.first,
-                            linkPreviewStyle: LinkPreviewStyle.small,
+                            linkPreviewStyle: LinkPreviewStyle.large,
                             showDomain: true,
+                            showBody: true,
                             showTitle: true,
-                            bodyMaxLines: 1,
+                            bodyMaxLines: 3,
                             borderRadius: 10,
                             boxShadow: const [
                               BoxShadow(

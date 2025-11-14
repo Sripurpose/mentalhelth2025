@@ -1807,11 +1807,12 @@ class _EditActionScreenState extends State<EditActionScreen> {
                   child: Stack(
                     alignment: Alignment.topRight,
                     children: [
+
                       Container(
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: Colors.grey.shade300,
-                            width: 1.5,
+                            width: 1.2,
                           ),
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -1819,10 +1820,11 @@ class _EditActionScreenState extends State<EditActionScreen> {
                           borderRadius: BorderRadius.circular(10),
                           child: LinkPreviewGenerator(
                             link: addActionsProvider.editDetectedLinks.first,
-                            linkPreviewStyle: LinkPreviewStyle.small,
+                            linkPreviewStyle: LinkPreviewStyle.large,
                             showDomain: true,
+                            showBody: true,
                             showTitle: true,
-                            bodyMaxLines: 1,
+                            bodyMaxLines: 3,
                             borderRadius: 10,
                             boxShadow: const [
                               BoxShadow(

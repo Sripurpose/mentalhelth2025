@@ -127,7 +127,7 @@ class _DynamicMenuWebviewScreenState extends State<DynamicMenuWebviewScreen> {
           ),
           child: Column(
             children: [
-              buildAppBar(context, size, heading: _title ?? "Loading..."),
+              buildAppBar(context, size, heading: _title ?? "Loading...",isSigned: false),
               Expanded(
                 child: (_controller == null || _url == null)
                     ? const Center(child: CupertinoActivityIndicator())

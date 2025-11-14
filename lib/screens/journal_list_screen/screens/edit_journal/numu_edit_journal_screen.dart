@@ -538,21 +538,14 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                                           seconds: 3),
                                                       () async {
                                                     //   homeProvider.currentPage == 1;
-                                                    await homeProvider
-                                                        .fetchJournals(
-                                                            pageNo: homeProvider
-                                                                .currentPage
-                                                                .toString(),
-                                                            context: context);
-                                                    if (homeProvider
+                                                        await homeProvider.fetchJournalsGridView(initial: true,context: context,fullList: true);
+
+                                                        if (homeProvider
                                                             .journalStatus ==
                                                         404) {
-                                                      await homeProvider
-                                                          .fetchJournals(
-                                                              pageNo:
-                                                                  1.toString(),
-                                                              context: context);
-                                                    }
+                                                          await homeProvider.fetchJournalsGridView(initial: true,context: context,fullList: true);
+
+                                                        }
                                                     logger.i(
                                                         "homeProvider.currentPage${homeProvider.currentPage}");
                                                   });
@@ -2375,6 +2368,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                   child: Stack(
                     alignment: Alignment.topRight,
                     children: [
+
                       Container(
                         decoration: BoxDecoration(
                           border: Border.all(
@@ -2387,10 +2381,11 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                           borderRadius: BorderRadius.circular(10),
                           child: LinkPreviewGenerator(
                             link: provider.editDetectedLinks.first,
-                            linkPreviewStyle: LinkPreviewStyle.small,
+                            linkPreviewStyle: LinkPreviewStyle.large,
                             showDomain: true,
+                            showBody: true,
                             showTitle: true,
-                            bodyMaxLines: 1,
+                            bodyMaxLines: 3,
                             borderRadius: 10,
                             boxShadow: const [
                               BoxShadow(
@@ -2402,6 +2397,34 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                           ),
                         ),
                       ),
+
+                      // Container(
+                      //   decoration: BoxDecoration(
+                      //     border: Border.all(
+                      //       color: Colors.grey.shade300,
+                      //       width: 1.2,
+                      //     ),
+                      //     borderRadius: BorderRadius.circular(10),
+                      //   ),
+                      //   child: ClipRRect(
+                      //     borderRadius: BorderRadius.circular(10),
+                      //     child: LinkPreviewGenerator(
+                      //       link: provider.editDetectedLinks.first,
+                      //       linkPreviewStyle: LinkPreviewStyle.small,
+                      //       showDomain: true,
+                      //       showTitle: true,
+                      //       bodyMaxLines: 1,
+                      //       borderRadius: 10,
+                      //       boxShadow: const [
+                      //         BoxShadow(
+                      //           color: Colors.black12,
+                      //           blurRadius: 4,
+                      //           offset: Offset(0, 2),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
 
                       // ❌ Close button (removes the link)
                       Positioned(

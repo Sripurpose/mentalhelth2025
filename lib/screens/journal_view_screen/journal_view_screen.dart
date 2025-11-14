@@ -175,14 +175,14 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
         child: SafeArea(
           child: Consumer3<MentalStrengthEditProvider,DashBoardProvider,HomeProvider>(builder: (context,mentalStrengthEditProvider,dashBoardProvider,homeProvider, _) {
             return Scaffold(
-              appBar: buildAppBarJournalViewScreen(context, size, heading: "View your journal",
+              appBar: buildAppBarJournalViewScreenNew(context, size, heading: "View your journal",
                 onTap: (){
                   mentalStrengthEditProvider.openGoalViewSheet = false;
                   mentalStrengthEditProvider.goalDetailModel = null;
                   Navigator.of(context).pop();
                 }
               ),
-              body: backGroundImager(
+              body: backGroundImagerViewJournal(
                 size: size,
                 child: Padding(
                   padding: const EdgeInsets.only(
@@ -212,25 +212,26 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                 const SizedBox(height: 2),
                                 SizedBox(
                                   width: size.width * 0.70,
-                                 // color: Colors.amber,
                                   child: Text(
                                     homeProvider.journalDetails == null
                                         ? ""
-                                        : HtmlUnescape().convert(homeProvider
-                                        .journalDetails!.journals!.journalTitle
-                                        .toString(),),
-                                    maxLines:HtmlUnescape().convert(homeProvider
-                                        .journalDetails!.journals!.journalTitle
-                                        .toString(),).length,
+                                        : capitalizeFirstLetter(
+                                      HtmlUnescape().convert(
+                                        homeProvider.journalDetails!.journals!.journalTitle.toString(),
+                                      ),
+                                    ),
+                                    maxLines: 10,
                                     overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
+                                    textAlign: TextAlign.justify,
+                                    style:  TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w400,
                                       fontFamily: 'Poppins',
-                                      color:  ColorsContent.goalCompletedTextColor,
+                                      color: ColorsContent.goalCompletedTextColor,
                                     ),
                                   ),
                                 ),
+
                                 const SizedBox(height: 10),
                                 const Text(
                                   "Description",
@@ -265,6 +266,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                           if (hasDesc)
                                             Text(
                                               HtmlUnescape().convert(journalDesc),
+                                              textAlign: TextAlign.justify,
                                               style: TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.w400,
@@ -273,11 +275,13 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                               ),
                                             ),
 
+
                                           // 🔗 Show preview link (if available)
                                           if (hasPreview)
                                             Padding(
-                                              padding: EdgeInsets.only(top: hasDesc ? 6.0 : 0.0), // small space only if text shown
-                                              child: Container(
+                                              padding: EdgeInsets.only(top: hasDesc ? 6.0 : 0.0),
+                                              child:
+                                              Container(
                                                 decoration: BoxDecoration(
                                                   border: Border.all(
                                                     color: Colors.grey.shade300,
@@ -289,10 +293,11 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                                   borderRadius: BorderRadius.circular(10),
                                                   child: LinkPreviewGenerator(
                                                     link: previewLink,
-                                                    linkPreviewStyle: LinkPreviewStyle.small,
+                                                    linkPreviewStyle: LinkPreviewStyle.large, // 👈 Forces column format
                                                     showDomain: true,
+                                                    showBody: true,
                                                     showTitle: true,
-                                                    bodyMaxLines: 1,
+                                                    bodyMaxLines: 3,
                                                     borderRadius: 10,
                                                     boxShadow: const [
                                                       BoxShadow(
@@ -305,6 +310,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                                 ),
                                               ),
                                             ),
+
                                         ],
                                       );
                                     },
@@ -484,16 +490,19 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                 if (homeProvider.journalDetails?.journals?.chartlink != null &&
                                     homeProvider.journalDetails!.journals!.chartlink!.isNotEmpty)
                                   Container(
-                                    height: size.height * 0.40, // Adjust height as needed
+                                    height: size.height * 0.35, // Adjust height as needed
                                     margin: const EdgeInsets.symmetric(horizontal: 0),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(8),
                                       color: Colors.white,
                                     ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: WebViewWidget(
-                                        controller: _webViewController,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(8),
+                                        child: WebViewWidget(
+                                          controller: _webViewController,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -786,7 +795,8 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                       context: context
                                     );
                                   },
-                                      child: Container(
+                                      child:
+                                      Container(
                                         height: size.height * 0.05,
                                         width: size.width * 0.88,
                                         padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -799,9 +809,10 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
                                             Expanded(
-                                              child: Center( // ✅ Ensures vertical centering
-                                                child: SingleChildScrollView(
-                                                  scrollDirection: Axis.horizontal,
+                                              child: SingleChildScrollView(
+                                                scrollDirection: Axis.horizontal,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
                                                   child: Text(
                                                     homeProvider.journalDetails?.journals?.goal?.goalTitle ?? '',
                                                     style: const TextStyle(
@@ -901,8 +912,8 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                               Expanded(
-                                                child: Align(
-                                                  alignment: Alignment.center,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
                                                   child: Text(
                                                     action.actionTitle ?? '',
                                                     style: const TextStyle(
@@ -1006,16 +1017,16 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
               Container(
                 width:372,
                 padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                decoration: BoxDecoration(
-                  color: ColorsContent.dateTimeBack,
-                  borderRadius: BorderRadius.circular(2),
-                ),
+                // decoration: BoxDecoration(
+                //   color: ColorsContent.dateTimeBack,
+                //   borderRadius: BorderRadius.circular(2),
+                // ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -1036,7 +1047,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                             style: TextStyle(
                               fontSize: 14,
                               fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w400,
+                              fontWeight: FontWeight.w500,
                               color: ColorsContent.blackText,
                             ),
                           ),
@@ -1062,13 +1073,14 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                             style: TextStyle(
                               fontSize: 14,
                               fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w400,
+                              fontWeight: FontWeight.w500,
                               color: ColorsContent.blackText,
                             ),
                           ),
                         ],
                       ),
                     ),
+
                     Consumer5<DashBoardProvider,JournalListProvider, HomeProvider, MentalStrengthEditProvider,
                         EditProfileProvider>(
                         builder: (contexts, dashBoardProvider,journalListProvider, homeProvider,

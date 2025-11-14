@@ -1175,21 +1175,23 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                                   ),
                                 );
                               }
-                              return LinkPreviewGenerator(
-                                link: addActionsProvider.detectedLinks.first,
-                                linkPreviewStyle: LinkPreviewStyle.small,
-                                showDomain: true,
-                                showTitle: true,
-                                bodyMaxLines: 1,
-                                borderRadius: 10,
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Colors.black12,
-                                    blurRadius: 4,
-                                    offset: Offset(0, 2),
-                                  ),
-                                ],
-                              );
+                              return
+                                LinkPreviewGenerator(
+                                  link: addActionsProvider.detectedLinks.first,
+                                  linkPreviewStyle: LinkPreviewStyle.large,
+                                  showDomain: true,
+                                  showBody: true,
+                                  showTitle: true,
+                                  bodyMaxLines: 3,
+                                  borderRadius: 10,
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Colors.black12,
+                                      blurRadius: 4,
+                                      offset: Offset(0, 2),
+                                    ),
+                                  ],
+                                );
                             },
                           ),
                         ),

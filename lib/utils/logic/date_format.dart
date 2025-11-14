@@ -61,7 +61,10 @@ String formatTimestampToDate(String timestamp) {
 }
 
 
-
+String capitalizeFirstLetter(String text) {
+  if (text.isEmpty) return text;
+  return text[0].toUpperCase() + text.substring(1);
+}
 
 String formatAchievementDate(String dateStr) {
   // Split the date string and handle the case where the year might be incorrect
@@ -79,6 +82,7 @@ String formatAchievementDate(String dateStr) {
     print("Error parsing date: $e");
     return dateStr; // Return original string if parsing fails
   }
+
 }
 
 

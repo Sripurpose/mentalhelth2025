@@ -1138,6 +1138,7 @@ class _GoalAndDreamFullViewBottomSheetState
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
+                            textAlign: TextAlign.justify,
                             HtmlUnescape().convert(commentsText),
                             style: const TextStyle(
                               color: Colors.black,
@@ -1147,30 +1148,35 @@ class _GoalAndDreamFullViewBottomSheetState
                             ),
                           ),
                           const SizedBox(height: 10),
-                          Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.grey.shade300,
-                                width: 1.5,
+                          Padding(
+                            padding: EdgeInsets.only(bottom: commentsText.isNotEmpty ? 10.0 : 0.0),
+                            child: Container(
+                              height:300,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.grey.shade300,
+                                  width: 1.2,
+                                ),
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: LinkPreviewGenerator(
-                                link: previewLink,
-                                linkPreviewStyle: LinkPreviewStyle.small,
-                                showDomain: true,
-                                showTitle: true,
-                                bodyMaxLines: 1,
-                                borderRadius: 10,
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Colors.black12,
-                                    blurRadius: 4,
-                                    offset: Offset(0, 2),
-                                  ),
-                                ],
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: LinkPreviewGenerator(
+                                  link: previewLink,
+                                  linkPreviewStyle: LinkPreviewStyle.large, // 👈 Forces column format
+                                  showDomain: true,
+                                  showBody: true,
+                                  showTitle: true,
+                                  bodyMaxLines: 3,
+                                  borderRadius: 10,
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Colors.black12,
+                                      blurRadius: 4,
+                                      offset: Offset(0, 2),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -1181,6 +1187,7 @@ class _GoalAndDreamFullViewBottomSheetState
                     // 🧠 Only comments → show text
                     else if (commentsText.isNotEmpty) {
                       return Text(
+                        textAlign: TextAlign.justify,
                         HtmlUnescape().convert(commentsText),
                         style: const TextStyle(
                           color: Colors.black,
@@ -1193,33 +1200,39 @@ class _GoalAndDreamFullViewBottomSheetState
 
                     // 🔗 Only preview link → show preview
                     else if (previewLink.isNotEmpty) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.grey.shade300,
-                            width: 1.5,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: LinkPreviewGenerator(
-                            link: previewLink,
-                            linkPreviewStyle: LinkPreviewStyle.small,
-                            showDomain: true,
-                            showTitle: true,
-                            bodyMaxLines: 1,
-                            borderRadius: 10,
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Colors.black12,
-                                blurRadius: 4,
-                                offset: Offset(0, 2),
+                      return
+                        Padding(
+                          padding: EdgeInsets.only(),
+                          child: Container(
+                            height:300,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.grey.shade300,
+                                width: 1.2,
                               ),
-                            ],
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: LinkPreviewGenerator(
+                                link: previewLink,
+                                linkPreviewStyle: LinkPreviewStyle.large, // 👈 Forces column format
+                                showDomain: true,
+                                showBody: true,
+                                showTitle: true,
+                                bodyMaxLines: 3,
+                                borderRadius: 10,
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    blurRadius: 4,
+                                    offset: Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
-                      );
+                        );
                     }
 
                     // ❌ Neither → nothing

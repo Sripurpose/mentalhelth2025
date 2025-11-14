@@ -7,6 +7,7 @@ import 'package:mentalhelth/utils/theme/app_decoration.dart';
 import 'package:html_unescape/html_unescape.dart';
 import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:provider/provider.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../utils/core/image_constant.dart';
 import '../../../utils/theme/theme_helper.dart';
@@ -96,10 +97,12 @@ class _UserProfileListItemWidgetState extends State<UserProfileListItemWidget> {
             children: [
               Expanded(
                 child: Text(
-                  HtmlUnescape().convert(
-                    widget.title.length > 38
-                        ? '${widget.title.substring(0, 38)}...'
-                        : widget.title,
+                  capitalizeFirstLetter(
+                    HtmlUnescape().convert(
+                      widget.title.length > 38
+                          ? '${widget.title.substring(0, 38)}...'
+                          : widget.title,
+                    ),
                   ),
                   style: TextStyle(
                     fontSize: 16,
@@ -109,6 +112,7 @@ class _UserProfileListItemWidgetState extends State<UserProfileListItemWidget> {
                   ),
                 ),
               ),
+
               // 🎯 3-Dot Menu Button
               _buildThreeDotMenu(context),
             ],
@@ -201,7 +205,7 @@ class _UserProfileListItemWidgetState extends State<UserProfileListItemWidget> {
             Column(
               children: [
                 SizedBox(
-                  height: size.height * 0.3,
+                  height: size.height * 0.38,
                   child: Stack(
                     children: [
                       PageView.builder(
@@ -270,7 +274,24 @@ class _UserProfileListItemWidgetState extends State<UserProfileListItemWidget> {
                                 child: GridAudioPlayer(url: url),
                               ),
                             );
-                          } else {
+                          }
+                          else if (type == 'chart') {
+                            final controller = WebViewController()
+                              ..setJavaScriptMode(JavaScriptMode.unrestricted)
+                              ..loadRequest(Uri.parse(url));
+
+                            return SizedBox(
+                              height: 250,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(0),
+                                child: WebViewWidget(
+                                  controller: controller,
+                                ),
+                              ),
+                            );
+                          }
+
+                          else {
                             return const SizedBox.shrink();
                           }
                         },
@@ -576,6 +597,12 @@ class _UserProfileListItemWidgetState extends State<UserProfileListItemWidget> {
     DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(milliseconds);
     return DateFormat('hh:mm a').format(dateTime);
   }
+
+  String capitalizeFirstLetter(String text) {
+    if (text.isEmpty) return text;
+    return text[0].toUpperCase() + text.substring(1);
+  }
+
 }
 
 

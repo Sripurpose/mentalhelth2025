@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
+import '../../../utils/core/image_constant.dart';
 import '../../../utils/theme/colors.dart';
 
 class DateRangePickerScreen {
@@ -57,6 +59,7 @@ class _DateRangePickerDialogState extends State<DateRangePickerDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      backgroundColor: Colors.white, // 👈 add this
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -64,38 +67,47 @@ class _DateRangePickerDialogState extends State<DateRangePickerDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             // Date Range Header
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                     Text(
-                      'From',
-                      style: TextStyle(color: ColorsContent.datePickerGreyText, fontSize: 14),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      _selectedStart != null ? _formatDateFull(_selectedStart!) : 'Select date',
-                      style:  TextStyle(fontSize: 18,   fontFamily: 'Poppins',fontWeight: FontWeight.w600,color: ColorsContent.datePickerDarkText,),
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                     Text(
-                      'To',
-                      style: TextStyle(color: ColorsContent.datePickerGreyText, fontFamily: 'Poppins',fontSize: 14),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      _selectedEnd != null ? _formatDateFull(_selectedEnd!) : 'Select date',
-                      style:  TextStyle(fontSize: 18,fontFamily: 'Poppins',fontWeight: FontWeight.w600,color: ColorsContent.datePickerDarkText,),
-                    ),
-                  ],
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                       Padding(
+                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                         child: Text(
+                          'From',
+                          style: TextStyle(color: ColorsContent.datePickerGreyText, fontSize: 14,fontFamily: 'Poppins',fontWeight: FontWeight.w400),
+                                               ),
+                       ),
+                      const SizedBox(height: 4),
+                      Text(
+                        _selectedStart != null ? _formatDateFull(_selectedStart!) : 'Select date',
+                        style:  TextStyle(fontSize: 14,   fontFamily: 'Poppins',fontWeight: FontWeight.w500,color: ColorsContent.datePickerDarkText,),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                       Padding(
+                         padding: const EdgeInsets.only(right: 35.0),
+                         child: Text(
+                          'To',
+                           style: TextStyle(color: ColorsContent.datePickerGreyText, fontSize: 14,fontFamily: 'Poppins',fontWeight: FontWeight.w400),
+                                               ),
+                       ),
+                      const SizedBox(height: 4),
+                      Text(
+                        _selectedEnd != null ? _formatDateFull(_selectedEnd!) : 'Select date',
+                        style:  TextStyle(fontSize: 14,fontFamily: 'Poppins',fontWeight: FontWeight.w500,color: ColorsContent.datePickerDarkText,),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 24),
 
@@ -103,38 +115,32 @@ class _DateRangePickerDialogState extends State<DateRangePickerDialog> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.grey, width: 0.5),
-                  ),
-                  child: IconButton(
-                    icon:  Icon(Icons.chevron_left, color: ColorsContent.newThemeColor,size: 28),
-                    onPressed: () {
-                      setState(() {
-                        _displayedMonth = DateTime(_displayedMonth.year, _displayedMonth.month - 1);
-                        widget.onDisplayedMonthChanged(_displayedMonth);
-                      });
-                    },
+
+                GestureDetector(
+                  onTap: (){
+                    setState(() {
+                      _displayedMonth = DateTime(_displayedMonth.year, _displayedMonth.month - 1);
+                      widget.onDisplayedMonthChanged(_displayedMonth);
+                    });
+                  },
+                  child: SvgPicture.asset(
+                    ImageConstant.dateMove,
                   ),
                 ),
                 Text(
                   _getMonthYearString(_displayedMonth),
-                  style:  TextStyle(fontSize: 20, color:  ColorsContent.datePickerDarkText, fontWeight: FontWeight.w600,fontFamily: 'Poppins',),
+                  style:  TextStyle(fontSize: 16, color:  ColorsContent.datePickerGreyText, fontWeight: FontWeight.w500,fontFamily: 'Poppins',),
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.grey, width: 0.5),
-                  ),
-                  child: IconButton(
-                    icon:  Icon(Icons.chevron_right, color:  ColorsContent.newThemeColor, size: 28),
-                    onPressed: () {
-                      setState(() {
-                        _displayedMonth = DateTime(_displayedMonth.year, _displayedMonth.month + 1);
-                        widget.onDisplayedMonthChanged(_displayedMonth);
-                      });
-                    },
+
+                GestureDetector(
+                  onTap: (){
+                    setState(() {
+                      _displayedMonth = DateTime(_displayedMonth.year, _displayedMonth.month + 1);
+                      widget.onDisplayedMonthChanged(_displayedMonth);
+                    });
+                  },
+                  child: SvgPicture.asset(
+                    ImageConstant.dateUpMove,
                   ),
                 ),
               ],
@@ -154,7 +160,7 @@ class _DateRangePickerDialogState extends State<DateRangePickerDialog> {
                     color: ColorsContent.newThemeColor,
                     fontWeight: FontWeight.w600,
                     fontFamily: 'Poppins',
-                    fontSize: 16,
+                    fontSize: 13,
                   ),
                 ),
               ))
@@ -181,7 +187,7 @@ class _DateRangePickerDialogState extends State<DateRangePickerDialog> {
                       'Cancel',
                       style: TextStyle(
                         color:  ColorsContent.newThemeColor,
-                        fontSize: 18,
+                        fontSize: 16,
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w600,
                       ),
@@ -208,7 +214,8 @@ class _DateRangePickerDialogState extends State<DateRangePickerDialog> {
                       'Apply',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 18,
+                        fontFamily: 'Poppins',
+                        fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -271,7 +278,7 @@ class _DateRangePickerDialogState extends State<DateRangePickerDialog> {
               color: isInRange ? ColorsContent.newThemeColor.withOpacity(0.2) : Colors.transparent,
               shape: isStart || isEnd ? BoxShape.circle : BoxShape.rectangle,
             ),
-            child:             Container(
+            child: Container(
               decoration: isStart || isEnd
                   ? BoxDecoration(
                 color: ColorsContent.newThemeColor,
@@ -288,8 +295,9 @@ class _DateRangePickerDialogState extends State<DateRangePickerDialog> {
                         : isInRange
                         ? ColorsContent.newThemeColor
                         : Colors.black,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: isInRange ? FontWeight.w500 : FontWeight.w400,
                     fontFamily: 'Poppins',
+                    fontSize: isInRange ? 15:15,
                   ),
                 ),
               ),

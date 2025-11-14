@@ -1088,6 +1088,7 @@ class _ActionFullViewJournalCreateBottomSheetState
                   if (category.length < 25)
                     Flexible(
                       child: Text(
+                        textAlign: TextAlign.justify,
                         category,
                         style: const TextStyle(
                           fontSize: 18,
@@ -1142,6 +1143,7 @@ class _ActionFullViewJournalCreateBottomSheetState
                   ),
                   const SizedBox(width: 10),
                   const Text(
+                    textAlign: TextAlign.justify,
                     "Title",
                     style: TextStyle(
                       fontSize: 16,
@@ -1243,6 +1245,7 @@ class _ActionFullViewJournalCreateBottomSheetState
                         ),
                       ),
                       child: Text(
+                        textAlign: TextAlign.justify,
                         HtmlUnescape().convert(commentsText),
                         style: const TextStyle(
                           color: Colors.black,
@@ -1253,30 +1256,35 @@ class _ActionFullViewJournalCreateBottomSheetState
                       ),
                     ),
                     const SizedBox(height: 10),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.grey.shade300,
-                          width: 1.5,
+                    Padding(
+                      padding: EdgeInsets.only(top: comments.isNotEmpty ? 6.0 : 0.0),
+                      child: Container(
+                        height:300,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey.shade300,
+                            width: 1.2,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: LinkPreviewGenerator(
-                          link: previewLink,
-                          linkPreviewStyle: LinkPreviewStyle.small,
-                          showDomain: true,
-                          showTitle: true,
-                          bodyMaxLines: 1,
-                          borderRadius: 10,
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.black12,
-                              blurRadius: 4,
-                              offset: Offset(0, 2),
-                            ),
-                          ],
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: LinkPreviewGenerator(
+                            link: previewLink,
+                            linkPreviewStyle: LinkPreviewStyle.large, // 👈 Forces column format
+                            showDomain: true,
+                            showBody: true,
+                            showTitle: true,
+                            bodyMaxLines: 3,
+                            borderRadius: 10,
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 4,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -1369,30 +1377,35 @@ class _ActionFullViewJournalCreateBottomSheetState
                       ],
                     ),
                     const SizedBox(height: 6),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.grey.shade300,
-                          width: 1.5,
+                    Padding(
+                      padding: EdgeInsets.only(),
+                      child: Container(
+                        height:300,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey.shade300,
+                            width: 1.2,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: LinkPreviewGenerator(
-                          link: previewLink,
-                          linkPreviewStyle: LinkPreviewStyle.small,
-                          showDomain: true,
-                          showTitle: true,
-                          bodyMaxLines: 1,
-                          borderRadius: 10,
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.black12,
-                              blurRadius: 4,
-                              offset: Offset(0, 2),
-                            ),
-                          ],
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: LinkPreviewGenerator(
+                            link: previewLink,
+                            linkPreviewStyle: LinkPreviewStyle.large, // 👈 Forces column format
+                            showDomain: true,
+                            showBody: true,
+                            showTitle: true,
+                            bodyMaxLines: 3,
+                            borderRadius: 10,
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 4,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),

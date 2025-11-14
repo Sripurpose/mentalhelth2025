@@ -729,7 +729,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                               const SizedBox(height: 10),
-                              const SizedBox(height: 10),
                               homeProvider.journalsGridModelLoading
                                   ? Center(child: CupertinoActivityIndicator(
                                 color: ColorsContent.newThemeColor,
@@ -747,105 +746,106 @@ class _HomeScreenState extends State<HomeScreen> {
                                   : Expanded(
                                 child: _buildUserProfileList(context, size, homeProvider),
                               ),
-                              const SizedBox(height: 10),
+                           //   const SizedBox(height: 10),
+
                               // Row with Previous/Next + Search
-                              homeProvider.journalsGridModelLoading
-                                  ? const SizedBox():
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  if (homeProvider.journalsModelGridList.isNotEmpty)
-                                    Builder(
-                                      builder: (context) {
-                                        final isPrevEnabled = homeProvider.pageLoad != 1;
-                                        final isNextEnabled = homeProvider.pageLoad < homeProvider.totalPages;
+                              // homeProvider.journalsGridModelLoading
+                              //     ? const SizedBox():
+                              // Row(
+                              //   mainAxisAlignment: MainAxisAlignment.center,
+                              //   children: [
+                              //     if (homeProvider.journalsModelGridList.isNotEmpty)
+                              //       Builder(
+                              //         builder: (context) {
+                              //           final isPrevEnabled = homeProvider.pageLoad != 1;
+                              //           final isNextEnabled = homeProvider.pageLoad < homeProvider.totalPages;
+                              //
+                              //           // Check if dates are selected or not
+                              //           final bool noDateSelected =
+                              //               homeProvider.fromDate == null && homeProvider.toDate == null;
+                              //
+                              //           return Row(
+                              //             children: [
+                              //               // Previous button
+                              //               GestureDetector(
+                              //                 onTap: isPrevEnabled
+                              //                     ? () {
+                              //                   final prevPage = (homeProvider.pageLoad - 1).toString();
+                              //                   homeProvider.fetchJournalsGridView(
+                              //                     context: context,
+                              //                     pageNo: prevPage,
+                              //                     initial: false,
+                              //                     fromDateParam: homeProvider.fromDate,
+                              //                     toDateParam: homeProvider.toDate,
+                              //                     fullList: noDateSelected, // 👈 key change
+                              //                   );
+                              //                 }
+                              //                     : null,
+                              //                 child: Container(
+                              //                   width: 28,
+                              //                   height: 28,
+                              //                   decoration: BoxDecoration(
+                              //                     color: isPrevEnabled
+                              //                         ? ColorsContent.newThemeColor
+                              //                         : Colors.grey.shade400,
+                              //                     shape: BoxShape.circle,
+                              //                   ),
+                              //                   child: const Center(
+                              //                     child: Icon(
+                              //                       Icons.arrow_back_ios_new,
+                              //                       size: 16,
+                              //                       color: Colors.white,
+                              //                     ),
+                              //                   ),
+                              //                 ),
+                              //               ),
+                              //
+                              //               const SizedBox(width: 8),
+                              //
+                              //               // Next button
+                              //               GestureDetector(
+                              //                 onTap: isNextEnabled
+                              //                     ? () {
+                              //                   final nextPage = (homeProvider.pageLoad + 1).toString();
+                              //                   homeProvider.fetchJournalsGridView(
+                              //                     context: context,
+                              //                     pageNo: nextPage,
+                              //                     initial: false,
+                              //                     fromDateParam: homeProvider.fromDate,
+                              //                     toDateParam: homeProvider.toDate,
+                              //                     fullList: noDateSelected, // 👈 key change
+                              //                   );
+                              //                 }
+                              //                     : null,
+                              //                 child: Container(
+                              //                   width: 28,
+                              //                   height: 28,
+                              //                   decoration: BoxDecoration(
+                              //                     color: isNextEnabled
+                              //                         ? ColorsContent.newThemeColor
+                              //                         : Colors.grey.shade400,
+                              //                     shape: BoxShape.circle,
+                              //                   ),
+                              //                   child: const Center(
+                              //                     child: Icon(
+                              //                       Icons.arrow_forward_ios,
+                              //                       size: 16,
+                              //                       color: Colors.white,
+                              //                     ),
+                              //                   ),
+                              //                 ),
+                              //               ),
+                              //             ],
+                              //           );
+                              //         },
+                              //       ),
+                              //
+                              //     const SizedBox(width: 12),
+                              //   ],
+                              // ),
 
-                                        // Check if dates are selected or not
-                                        final bool noDateSelected =
-                                            homeProvider.fromDate == null && homeProvider.toDate == null;
 
-                                        return Row(
-                                          children: [
-                                            // Previous button
-                                            GestureDetector(
-                                              onTap: isPrevEnabled
-                                                  ? () {
-                                                final prevPage = (homeProvider.pageLoad - 1).toString();
-                                                homeProvider.fetchJournalsGridView(
-                                                  context: context,
-                                                  pageNo: prevPage,
-                                                  initial: false,
-                                                  fromDateParam: homeProvider.fromDate,
-                                                  toDateParam: homeProvider.toDate,
-                                                  fullList: noDateSelected, // 👈 key change
-                                                );
-                                              }
-                                                  : null,
-                                              child: Container(
-                                                width: 28,
-                                                height: 28,
-                                                decoration: BoxDecoration(
-                                                  color: isPrevEnabled
-                                                      ? ColorsContent.newThemeColor
-                                                      : Colors.grey.shade400,
-                                                  shape: BoxShape.circle,
-                                                ),
-                                                child: const Center(
-                                                  child: Icon(
-                                                    Icons.arrow_back_ios_new,
-                                                    size: 16,
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-
-                                            const SizedBox(width: 8),
-
-                                            // Next button
-                                            GestureDetector(
-                                              onTap: isNextEnabled
-                                                  ? () {
-                                                final nextPage = (homeProvider.pageLoad + 1).toString();
-                                                homeProvider.fetchJournalsGridView(
-                                                  context: context,
-                                                  pageNo: nextPage,
-                                                  initial: false,
-                                                  fromDateParam: homeProvider.fromDate,
-                                                  toDateParam: homeProvider.toDate,
-                                                  fullList: noDateSelected, // 👈 key change
-                                                );
-                                              }
-                                                  : null,
-                                              child: Container(
-                                                width: 28,
-                                                height: 28,
-                                                decoration: BoxDecoration(
-                                                  color: isNextEnabled
-                                                      ? ColorsContent.newThemeColor
-                                                      : Colors.grey.shade400,
-                                                  shape: BoxShape.circle,
-                                                ),
-                                                child: const Center(
-                                                  child: Icon(
-                                                    Icons.arrow_forward_ios,
-                                                    size: 16,
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    ),
-
-                                  const SizedBox(width: 12),
-                                ],
-                              ),
-
-
-                              const SizedBox(height: 10),
+                              const SizedBox(height: 2),
                             ],
                           ),
                         ),
@@ -1002,9 +1002,10 @@ class _HomeScreenState extends State<HomeScreen> {
           : ListView.separated(
         shrinkWrap: false,  // ✅ Change this
         separatorBuilder: (_, __) => const SizedBox(height: 10),
-        itemCount: (homeProvider.journalsModelGrid?.journals?.length ?? 0) < 10
-            ? (homeProvider.journalsModelGrid?.journals?.length ?? 0)
-            : 10,
+        // itemCount: (homeProvider.journalsModelGrid?.journals?.length ?? 0) < 10
+        //     ? (homeProvider.journalsModelGrid?.journals?.length ?? 0)
+        //     : 10,
+          itemCount: homeProvider.journalsModelGrid?.journals?.length ?? 0,
         itemBuilder: (context, index) {
           final journal = homeProvider.journalsModelGrid!.journals![index];
           logger.i("Media Data: ${journal.journalMedia}");
