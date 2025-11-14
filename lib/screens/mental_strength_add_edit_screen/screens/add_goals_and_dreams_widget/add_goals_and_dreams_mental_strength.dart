@@ -78,6 +78,8 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
     editProfileProvider = Provider.of<EditProfileProvider>(context, listen: false);
     adDreamsGoalsProvider = Provider.of<AdDreamsGoalsProvider>(context, listen: false);
     _goalDescFocusNode = FocusNode();
+    adDreamsGoalsProvider.detectedLinks.clear();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
 
       _goalDescFocusNode.unfocus(); // Ensure it does not get focus automatically
@@ -94,6 +96,7 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
       adDreamsGoalsProvider.selectedLocationName = "";
       adDreamsGoalsProvider.mediaSelected = 0;
       adDreamsGoalsProvider.detectedLinks.clear();
+      logger.i("adDreamsGoalsProvider.detectedLinks.clear()${adDreamsGoalsProvider.detectedLinks}");
       ///added for clearing///19-03-2025
       editProfileProvider.fetchCategory();
       _isTokenExpired();
