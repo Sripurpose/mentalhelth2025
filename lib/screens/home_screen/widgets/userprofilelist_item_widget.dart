@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../utils/core/image_constant.dart';
+import '../../../utils/logic/date_format.dart';
 import '../../../utils/theme/theme_helper.dart';
 import '../../../widgets/functions/popup.dart';
 import '../../../widgets/video_player.dart';
@@ -639,7 +640,12 @@ class _ExpandableDescriptionState extends State<ExpandableDescription> {
         Padding(
           padding: const EdgeInsets.only(top: 5),
           child: Text(
-            displayText,
+            textAlign: TextAlign.justify,
+            capitalizeFirstLetter(
+              HtmlUnescape().convert(
+                  displayText
+              ),
+            ),
             style: TextStyle(
               fontSize: 14,
               fontFamily: 'Poppins',
@@ -658,6 +664,7 @@ class _ExpandableDescriptionState extends State<ExpandableDescription> {
             child: Padding(
               padding: const EdgeInsets.only(top: 4.0),
               child: Text(
+                textAlign: TextAlign.justify,
                 _isExpanded ? 'less' : 'more',
                 style:  TextStyle(
                   color: ColorsContent.moreColor,

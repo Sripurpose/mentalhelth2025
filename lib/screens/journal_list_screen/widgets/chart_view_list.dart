@@ -127,13 +127,17 @@ class ChartCircularWidgetState extends State<ChartCircularWidget> {
                                 xValueMapper: (ChartData d, _) => d.x,
                                 yValueMapper: (ChartData d, _) => d.y,
                                 pointColorMapper: (ChartData d, _) =>
-                                    colorMap[d.x] ?? Colors.grey,
+                                colorMap[d.x] ?? Colors.grey,
+
+                                // 👇 Add this line for custom label text with %
+                                dataLabelMapper: (ChartData d, _) => "${d.y}%",
+
                                 dataLabelSettings: const DataLabelSettings(
                                   isVisible: true,
                                   labelPosition: ChartDataLabelPosition.inside,
                                   textStyle: TextStyle(
                                     fontSize: 16,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w700,
                                     color: Colors.white,
                                     fontFamily: 'Poppins',
                                   ),

@@ -374,7 +374,7 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                   heading:
                   adDreamsGoalsProvider
                       .selectedOption ==
-                      "Add to Existing Goal" ? "Share to Goal":"Share to Goal",
+                      "Add to Existing Goal" ? "Share Goal & Dreams":"Share Goal & Dreams",
                 ),
                 body: Stack(
                   children: [
@@ -400,83 +400,90 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                                    child: Container(
-                                      decoration: ShapeDecoration(
-                                        color: ColorsContent.linkDropDownBackGroundColor,
-                                        shape: RoundedRectangleBorder(
-                                          side: const BorderSide(
-                                            width: 0.8,
-                                            style: BorderStyle.solid,
-                                            color: Colors.transparent,
-                                          ),
-                                          borderRadius: BorderRadius.circular(8.0),
-                                        ),
-                                      ),
-                                      child: DropdownButtonFormField<String>(
-                                        hint: Text(
-                                          "Select Category",
-                                          style: CustomTextStyles.bodySmallGray700,
-                                        ),
-                                        style: CustomTextStyles.bodySmallGray700,
-                                        iconEnabledColor: ColorsContent.newThemeColor,
-                                        iconDisabledColor: ColorsContent.newThemeColor,
-
-                                        // ✅ Default or valid selection
-                                        value: adDreamsGoalsProvider.goalOptions
-                                            .contains(adDreamsGoalsProvider.selectedOption)
-                                            ? adDreamsGoalsProvider.selectedOption
-                                            : (adDreamsGoalsProvider.goalOptions.contains("Create New Goal")
-                                            ? "Create New Goal"
-                                            : null),
-
-                                        decoration: const InputDecoration(
-                                          border: InputBorder.none,
-                                          contentPadding: EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-                                        ),
-
-                                        // ✅ Conditionally show only "Create New Goal" when goalListLink is empty
-                                        items: (adDreamsGoalsProvider.goalListLink.isEmpty
-                                            ? ["Create New Goal"]
-                                            : [
-                                          if (!adDreamsGoalsProvider.goalOptions
-                                              .contains("Create New Goal"))
-                                            "Create New Goal",
-                                          ...adDreamsGoalsProvider.goalOptions,
-                                        ])
-                                            .toSet()
-                                            .map((String option) {
-                                          return DropdownMenuItem<String>(
-                                            value: option,
-                                            child: Text(option),
-                                          );
-                                        }).toList(),
-
-                                        // ✅ Disable dropdown when "Add to Existing Goal" is selected
-                                        onChanged: adDreamsGoalsProvider.selectedOption == "Add to Existing Goal"
-                                            ? null
-                                            : (String? newValue) {
-                                          setState(() {
-                                            adDreamsGoalsProvider.selectedOption = newValue;
-
-                                            // Reset the second dropdown safely
-                                            if (newValue != 'Add to Existing Goal') {
-                                              adDreamsGoalsProvider.selectedExistingGoal = null;
-                                            }
-                                          });
-                                        },
+                              Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                              child: GestureDetector(
+                                onTap: () {
+                                  // Show toast only when the dropdown is disabled
+                                  if (adDreamsGoalsProvider.selectedOption == "Add to Existing Goal" &&
+                                      adDreamsGoalsProvider.selectedExistingGoal != null) {
+                                    showToastTOP(
+                                     message:  "You cannot change this after selecting an existing goal", context: context,
+                                    );
+                                  }
+                                },
+                                child: AbsorbPointer(
+                                  absorbing: adDreamsGoalsProvider.selectedOption == "Add to Existing Goal" &&
+                                      adDreamsGoalsProvider.selectedExistingGoal != null,
+                                  child: Container(
+                                    decoration: ShapeDecoration(
+                                      color: ColorsContent.linkDropDownBackGroundColor,
+                                      shape: RoundedRectangleBorder(
+                                        side: const BorderSide(width: 0.8, color: Colors.transparent),
+                                        borderRadius: BorderRadius.circular(8.0),
                                       ),
                                     ),
+
+                                    child: DropdownButtonFormField<String>(
+                                      hint: Text("Select Category", style: CustomTextStyles.bodySmallGray700),
+                                      style: CustomTextStyles.bodySmallGray700,
+                                      iconEnabledColor: ColorsContent.newThemeColor,
+                                      iconDisabledColor: ColorsContent.newThemeColor,
+
+                                      value: adDreamsGoalsProvider.goalOptions
+                                          .contains(adDreamsGoalsProvider.selectedOption)
+                                          ? adDreamsGoalsProvider.selectedOption
+                                          : (adDreamsGoalsProvider.goalOptions.contains("Create New Goal")
+                                          ? "Create New Goal"
+                                          : null),
+
+                                      decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                                      ),
+
+                                      onChanged:
+                                      (adDreamsGoalsProvider.selectedOption == "Add to Existing Goal" &&
+                                          adDreamsGoalsProvider.selectedExistingGoal != null)
+                                          ? null
+                                          : (String? newValue) {
+                                        setState(() {
+                                          adDreamsGoalsProvider.selectedOption = newValue;
+
+                                          if (newValue != "Add to Existing Goal") {
+                                            adDreamsGoalsProvider.selectedExistingGoal = null;
+                                          }
+                                        });
+                                      },
+
+                                      items: (adDreamsGoalsProvider.goalListLink.isEmpty
+                                          ? ["Create New Goal"]
+                                          : [
+                                        if (!adDreamsGoalsProvider.goalOptions
+                                            .contains("Create New Goal"))
+                                          "Create New Goal",
+                                        ...adDreamsGoalsProvider.goalOptions,
+                                      ])
+                                          .toSet()
+                                          .map((String option) {
+                                        return DropdownMenuItem<String>(
+                                          value: option,
+                                          child: Text(option),
+                                        );
+                                      }).toList(),
+                                    ),
                                   ),
+                                ),
+                              ),
+                            ),
 
 
-                                  const SizedBox(height: 5),
+                            const SizedBox(height: 5),
 
-
-                                  // ✅ Show only when needed
-                                  if (adDreamsGoalsProvider.selectedOption == 'Add to Existing Goal') ...[
+// SECOND DROPDOWN (only when needed)
+                                  if (adDreamsGoalsProvider.selectedOption == "Add to Existing Goal") ...[
                                     const SizedBox(height: 10),
+
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 0.0),
                                       child: Container(
@@ -487,28 +494,23 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                                             borderRadius: BorderRadius.circular(8.0),
                                           ),
                                         ),
+
                                         child: IgnorePointer(
                                           ignoring: _isLoadingNew,
                                           child: DropdownButtonFormField<String>(
-                                            hint: Text(
-                                              "Select Existing Goal",
-                                              style: CustomTextStyles.bodySmallGray700,
-                                            ),
+                                            hint: Text("Select Existing Goal", style: CustomTextStyles.bodySmallGray700),
 
-                                            // ✅ Safely set the selected value
                                             value: (() {
                                               final selected = adDreamsGoalsProvider.selectedExistingGoal;
                                               final list = adDreamsGoalsProvider.goalListLink;
 
                                               if (selected == null || list.isEmpty) return null;
 
-                                              // Check if selected ID exists in list
                                               final exists = list.any((g) => g.id?.toString() == selected);
 
                                               if (exists) {
                                                 return selected;
                                               } else {
-                                                // Reset invalid selection
                                                 WidgetsBinding.instance.addPostFrameCallback((_) {
                                                   if (mounted) {
                                                     adDreamsGoalsProvider.selectedExistingGoal = null;
@@ -520,26 +522,23 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
 
                                             iconEnabledColor: ColorsContent.newThemeColor,
                                             iconDisabledColor: ColorsContent.newThemeColor,
+
                                             decoration: const InputDecoration(
                                               border: InputBorder.none,
                                               contentPadding: EdgeInsets.symmetric(horizontal: 18, vertical: 10),
                                             ),
 
-                                            // ✅ Remove duplicates by ID using a Map
                                             items: (() {
                                               final list = adDreamsGoalsProvider.goalListLink;
 
-                                              // Create a Map to ensure unique IDs (last occurrence wins)
                                               final Map<String, dynamic> uniqueGoals = {};
 
                                               for (var goalItem in list) {
                                                 if (goalItem.id != null) {
-                                                  final id = goalItem.id!.toString();
-                                                  uniqueGoals[id] = goalItem;
+                                                  uniqueGoals[goalItem.id!.toString()] = goalItem;
                                                 }
                                               }
 
-                                              // Convert back to DropdownMenuItem list
                                               return uniqueGoals.entries.map((entry) {
                                                 final goalItem = entry.value;
                                                 return DropdownMenuItem<String>(
@@ -561,7 +560,6 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                                               });
 
                                               try {
-                                                // ✅ Clear BEFORE fetching
                                                 adDreamsGoalsProvider.goalModelIdName.clear();
 
                                                 await mentalStrengthEditProvider.fetchGoalDetails(
@@ -569,7 +567,6 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                                                   context: context,
                                                 );
 
-                                                // ✅ Call applyRiskLogicInit() AFTER fetching
                                                 applyRiskLogicInit();
                                               } catch (e) {
                                                 debugPrint("⚠️ Error fetching goal details: $e");
@@ -586,6 +583,7 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                                       ),
                                     ),
                                   ],
+
 
                                   const SizedBox(height: 15),
                                   _buildNameEditText(context),
@@ -1572,12 +1570,13 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                   context,
                   listen: false,
                 );
-                goalsDreamsProvider.fetchGoalsAndDreams(
+                await goalsDreamsProvider.fetchGoalsAndDreams(
                     pageNo: goalsDreamsProvider.currentPage.toString(),
                     context: context);
                 if (goalsDreamsProvider.fetchGoalsAndDreamsStatus == 404) {
-                  goalsDreamsProvider.fetchGoalsAndDreams(
-                      pageNo: 1.toString(), context: context);
+                  await goalsDreamsProvider.fetchGoalsAndDreams(
+                      pageNo: goalsDreamsProvider.currentPage.toString(),
+                      context: context);
                 }
               }
             } else {
@@ -1641,6 +1640,10 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                 GoalsDreamsProvider goalsDreamsProvider =
                     Provider.of<GoalsDreamsProvider>(context, listen: false);
                 // goalsDreamsProvider.fetchGoalsAndDreams(initial: true);
+
+                await goalsDreamsProvider.fetchGoalsAndDreams(
+                    pageNo: goalsDreamsProvider.currentPage.toString(),
+                    context: context);
               } else {
                 logger.w("formattedDate${adDreamsGoalsProvider.formattedDate}");
                 logger.w("selectedDate${adDreamsGoalsProvider.selectedDate}");
@@ -1669,6 +1672,10 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
                 GoalsDreamsProvider goalsDreamsProvider =
                     Provider.of<GoalsDreamsProvider>(context, listen: false);
                 // goalsDreamsProvider.fetchGoalsAndDreams(initial: true);
+
+                await goalsDreamsProvider.fetchGoalsAndDreams(
+                    pageNo: goalsDreamsProvider.currentPage.toString(),
+                    context: context);
               }
             } else {
               showCustomSnackBar(

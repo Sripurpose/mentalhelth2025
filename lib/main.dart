@@ -14,6 +14,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mentalhelth/screens/addgoals_dreams_screen/add_goals_link_par_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -583,7 +584,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
       Navigator.of(navigatorKey.currentContext!).push(
         MaterialPageRoute(
-          builder: (_) => AddGoalsLinkScreen(
+          builder: (_) => AddGoalsLinkParScreen(
             sharedUrl: sharedUrl,
             sharedText: sharedText,
             sharedImages: images,

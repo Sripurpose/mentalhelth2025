@@ -614,75 +614,75 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                 videoList.isEmpty?
                                 const SizedBox():
                                 const SizedBox(height: 28),
-                                homeProvider.journalDetails!.journals!.location == null ?
-                                    const SizedBox():
-                                const Padding(
-                                  padding: EdgeInsets.only(left: 2),
-                                  child: Text(
-                                    "Your Location",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                      fontFamily: 'Poppins',
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 6),
-                                homeProvider.journalDetails!.journals!.location == null
-                                    ?
-                             const SizedBox()
-                                    :
-
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 0),
-                                  child: GestureDetector(
-                                    onTap: () async {
-                                      final lat =  homeProvider.journalDetails!.journals!.location?.locationLatitude;
-                                      final lon = homeProvider.journalDetails!.journals!.location?.locationLatitude;
-                                      final googleMapsUrl =
-                                          'https://www.google.com/maps/search/?api=1&query=$lat,$lon';
-                                      if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
-                                        await launchUrl(
-                                          Uri.parse(googleMapsUrl),
-                                          mode: LaunchMode.externalApplication,
-                                        );
-                                      }
-                                    },
-                                    child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(top: 5.0),
-                                          child: SvgPicture.asset(
-                                            ImageConstant.locationIconGridNumu, // Button icon
-                                          ),
-                                        ),
-                                        const SizedBox(width: 4),
-                                        Expanded(
-                                          child: Text(
-                                            homeProvider.journalDetails!.journals!.location?.locationName ?? "",
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              color: ColorsContent.newThemeColor,
-                                              decoration: TextDecoration.underline,
-                                              decorationColor: ColorsContent.newThemeColor,
-                                              decorationThickness: 1.5,
-                                              fontFamily: 'Poppins',
-                                              fontSize: 15,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-        
-                                homeProvider.journalDetails!.journals!.location == null ?
-                                const SizedBox():
-                                const SizedBox(height: 19),
+                             //    homeProvider.journalDetails!.journals!.location == null ?
+                             //        const SizedBox():
+                             //    const Padding(
+                             //      padding: EdgeInsets.only(left: 2),
+                             //      child: Text(
+                             //        "Your Location",
+                             //        style: TextStyle(
+                             //          fontSize: 16,
+                             //          fontWeight: FontWeight.w600,
+                             //          fontFamily: 'Poppins',
+                             //          color: Colors.black,
+                             //        ),
+                             //      ),
+                             //    ),
+                             //    const SizedBox(height: 6),
+                             //    homeProvider.journalDetails!.journals!.location == null
+                             //        ?
+                             // const SizedBox()
+                             //        :
+                             //
+                             //    Padding(
+                             //      padding: const EdgeInsets.only(top: 0),
+                             //      child: GestureDetector(
+                             //        onTap: () async {
+                             //          final lat =  homeProvider.journalDetails!.journals!.location?.locationLatitude;
+                             //          final lon = homeProvider.journalDetails!.journals!.location?.locationLatitude;
+                             //          final googleMapsUrl =
+                             //              'https://www.google.com/maps/search/?api=1&query=$lat,$lon';
+                             //          if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
+                             //            await launchUrl(
+                             //              Uri.parse(googleMapsUrl),
+                             //              mode: LaunchMode.externalApplication,
+                             //            );
+                             //          }
+                             //        },
+                             //        child: Row(
+                             //          crossAxisAlignment: CrossAxisAlignment.start,
+                             //          mainAxisAlignment: MainAxisAlignment.center,
+                             //          children: [
+                             //            Padding(
+                             //              padding: const EdgeInsets.only(top: 5.0),
+                             //              child: SvgPicture.asset(
+                             //                ImageConstant.locationIconGridNumu, // Button icon
+                             //              ),
+                             //            ),
+                             //            const SizedBox(width: 4),
+                             //            Expanded(
+                             //              child: Text(
+                             //                homeProvider.journalDetails!.journals!.location?.locationName ?? "",
+                             //                maxLines: 2,
+                             //                overflow: TextOverflow.ellipsis,
+                             //                style: TextStyle(
+                             //                  color: ColorsContent.newThemeColor,
+                             //                  decoration: TextDecoration.underline,
+                             //                  decorationColor: ColorsContent.newThemeColor,
+                             //                  decorationThickness: 1.5,
+                             //                  fontFamily: 'Poppins',
+                             //                  fontSize: 15,
+                             //                ),
+                             //              ),
+                             //            ),
+                             //          ],
+                             //        ),
+                             //      ),
+                             //    ),
+                             //
+                             //    homeProvider.journalDetails!.journals!.location == null ?
+                             //    const SizedBox():
+                             //    const SizedBox(height: 19),
                                 const Padding(
                                   padding: EdgeInsets.only(left: 5),
                                   child: Text(

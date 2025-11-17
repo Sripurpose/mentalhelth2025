@@ -36,28 +36,6 @@ Widget shimmerView({required Size size}) {
     children: [
       Row(
         children: [
-          CircleAvatar(
-            radius: size.width * 0.1,
-            backgroundColor: Colors.transparent,
-            child: SizedBox(
-              height: double.infinity,
-              width: double.infinity,
-              child: Shimmer.fromColors(
-                baseColor: Colors.grey[300]!,
-                highlightColor: Colors.grey[100]!,
-                child: Card(
-                  elevation: 1.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(size.width * 0.3),
-                  ),
-                  child: const SizedBox(height: 8),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            width: size.width * 0.05,
-          ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
