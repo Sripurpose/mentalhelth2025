@@ -127,7 +127,7 @@ class ChartCircularWidgetState extends State<ChartCircularWidget> {
                                 xValueMapper: (ChartData d, _) => d.x,
                                 yValueMapper: (ChartData d, _) => d.y,
                                 pointColorMapper: (ChartData d, _) =>
-                                colorMap[d.x] ?? Colors.grey,
+                                    colorMap[d.x] ?? Colors.grey,
 
                                 // 👇 Add this line for custom label text with %
                                 dataLabelMapper: (ChartData d, _) => "${d.y}%",
@@ -170,10 +170,11 @@ class ChartCircularWidgetState extends State<ChartCircularWidget> {
                       const Text(
                         "No data found",
                         style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'Poppins',
-                            color: Colors.black,),
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Poppins',
+                          color: Colors.black,
+                        ),
                       ),
                       const SizedBox(height: 10),
                       const Text(
@@ -182,7 +183,8 @@ class ChartCircularWidgetState extends State<ChartCircularWidget> {
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                           fontFamily: 'Poppins',
-                          color: Colors.black,),
+                          color: Colors.black,
+                        ),
                       ),
                     ],
                   );
@@ -247,7 +249,6 @@ class CustomLegend extends StatelessWidget {
   }
 }
 
-
 class ChartData {
   ChartData(this.x, this.y);
 
@@ -277,7 +278,7 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
     final sections = [
       {
         'key': 'Optimal',
-        'color': ColorsContent.optimalStateColor.withOpacity(0.2),
+        'color': ColorsContent.optimalStateColor.withOpacity(0.3),
         'title': 'Optimal',
         'data': chart?.optimal,
         'percent': chart?.optimal?.percent ?? 0,
@@ -285,7 +286,7 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
       },
       {
         'key': 'Stressful',
-        'color': ColorsContent.stressFullStateColor.withOpacity(0.2),
+        'color': ColorsContent.stressFullStateColor.withOpacity(0.3),
         'title': 'Stressful',
         'data': chart?.stressful,
         'percent': chart?.stressful?.percent ?? 0,
@@ -293,7 +294,7 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
       },
       {
         'key': 'Passive',
-        'color': ColorsContent.passiveStateColor.withOpacity(0.2),
+        'color': ColorsContent.passiveStateColor.withOpacity(0.3),
         'title': 'Passive',
         'data': chart?.passive,
         'percent': chart?.passive?.percent ?? 0,
@@ -301,7 +302,7 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
       },
       {
         'key': 'Destructive',
-        'color': ColorsContent.destructiveStateColor.withOpacity(0.2),
+        'color': ColorsContent.destructiveStateColor.withOpacity(0.3),
         'title': 'Destructive',
         'data': chart?.destructive,
         'percent': chart?.destructive?.percent ?? 0,
@@ -319,140 +320,210 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
             bottomLeft: Radius.circular(8),
           ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 0),
-          child: Column(
-            children: [
-              for (final section in sections)
-                Container(
-                  margin: const EdgeInsets.symmetric(vertical: 0),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: section['color'] as Color,
-                    ),
-                    child: ExpansionTile(
-                      tilePadding: const EdgeInsets.symmetric(horizontal: 16),
-                      childrenPadding:
-                          const EdgeInsets.only(left: 20, right: 10),
-                      initiallyExpanded: expandedKey == section['key'],
-                      onExpansionChanged: (isExpanded) {
-                        setState(() {
-                          expandedKey =
-                              isExpanded ? section['key'] as String : null;
-                        });
-                      },
-                      title: Text(
-                        '${section['title']} (${section['count']}) ${(section['percent'] as num).toStringAsFixed(1)}%',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.bold,
-                          color: ColorsContent.newThemeColor,
-                        ),
-                      ),
-                      children: (() {
-                        final data = section['data'];
-                        if (data == null) return <Widget>[];
-
-                        final emotions =
-                            (data as dynamic).emotions as List<dynamic>? ?? [];
-
-                        final children = <Widget>[];
-                        for (int i = 0; i < emotions.length; i++) {
-                          final e = emotions[i];
-                          final emotionTitle =
-                              (e as dynamic).emotionTitle?.toString() ?? '';
-                          children.add(
-                            ListTile(
-                              dense: true,
-                              title: Text(
-                                emotionTitle.toUpperCase(),
-                                style:  TextStyle(
-                                  fontSize: 15,
-                                  color: ColorsContent.greyText,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ),
-                          );
-                          if (i < emotions.length - 1) {
-                            children.add(
-                              const Divider(
-                                color: Colors.grey,
-                                thickness: 1,
-                                height: 0,
-                              ),
-                            );
-                          }
-                        }
-                        return children;
-                      })(),
-                    ),
-                  ),
-                ),
-
-              // 🔹 My Supporting Emotions Section
-              // In your EmotionBreakdownList widget, update the delete button section:
-
+        child: Column(
+          children: [
+            for (final section in sections)
               Container(
-                margin: const EdgeInsets.symmetric(vertical: 30),
+                margin: const EdgeInsets.symmetric(vertical: 0),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: ColorsContent.optimalStateColor,
+                    color: section['color'] as Color, // KEEP ORIGINAL COLOR
                   ),
-                  child: ExpansionTile(
-                    iconColor: Colors.white,
-                    collapsedIconColor: Colors.white,
-                    title: Row(
-                      children: [
-                        const Text(
-                          'My Supporting Emotions  ',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Poppins',
-                          ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: section['title'] == "Optimal"
+                              ? ColorsContent.optimalStateColor
+                              : section['title'] == "Stressful"
+                              ? ColorsContent.stressFullStateColor
+                              : section['title'] == "Passive"
+                              ? ColorsContent.passiveStateColor
+                              : section['title'] == "Destructive"
+                              ? ColorsContent.destructiveStateColor
+                              : ColorsContent.newThemeColor,
+                          // KEEP ORIGINAL COLOR
+                          width: 1.0,
                         ),
+                      ),
+                    ),
+                    child: ExpansionTile(
+                      tilePadding: const EdgeInsets.symmetric(horizontal: 16),
+                      childrenPadding: const EdgeInsets.only(left: 0, right: 0),
+                      initiallyExpanded: expandedKey == section['key'],
+                      // ⭐ CUSTOM DROPDOWN ICON
+                      trailing: Icon(
+                        expandedKey == section['key']
+                            ? Icons.arrow_drop_up // when expanded
+                            : Icons.arrow_drop_down, // when collapsed
+                        color: section['title'] == "Optimal"
+                            ? ColorsContent.optimalStateColor
+                            : section['title'] == "Stressful"
+                            ? ColorsContent.stressFullStateColor
+                            : section['title'] == "Passive"
+                            ? ColorsContent.passiveStateColor
+                            : section['title'] == "Destructive"
+                            ? ColorsContent.destructiveStateColor
+                            : ColorsContent.newThemeColor,
+                        size: 28,
+                      ),
+                      onExpansionChanged: (isExpanded) {
+                        setState(() {
+                          expandedKey =
+                              isExpanded ? section['key'] as String : null;
+                        });
+                      },
+                      title:Text(
+                        '${section['title']} (${section['count']}) ${(section['percent'] as num).toStringAsFixed(1)}%',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.bold,
+                          color: section['title'] == "Optimal"
+                              ? ColorsContent.optimalStateColor
+                              : section['title'] == "Stressful"
+                              ? ColorsContent.stressFullStateColor
+                              : section['title'] == "Passive"
+                              ? ColorsContent.passiveStateColor
+                              : section['title'] == "Destructive"
+                              ? ColorsContent.destructiveStateColor
+                              : ColorsContent.newThemeColor, // default
+                        ),
+                      ),
+
+                      children: [
                         Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: Colors.white,
-                              width: 1.5,
-                            ),
-                          ),
-                          padding: const EdgeInsets.all(4),
-                          child: const Text(
-                            '?',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Poppins',
-                              fontSize: 12,
-                            ),
+                          width: double.infinity,
+                          color: Colors.white, // EXPANDED PORTION COLOR
+                          child: Column(
+                            children: (() {
+                              final data = section['data'];
+                              if (data == null) return <Widget>[];
+
+                              final emotions = (data as dynamic).emotions
+                                      as List<dynamic>? ??
+                                  [];
+
+                              final children = <Widget>[];
+
+                              for (int i = 0; i < emotions.length; i++) {
+                                final e = emotions[i];
+                                final emotionTitle =
+                                    (e as dynamic).emotionTitle?.toString() ??
+                                        '';
+
+                                children.add(
+                                  ListTile(
+                                    dense: true,
+                                    title: Text(
+                                      emotionTitle.toUpperCase(),
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: ColorsContent.greyText,
+                                        fontFamily: 'Poppins',
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ),
+                                );
+
+                                if (i < emotions.length - 1) {
+                                  children.add(
+                                     Divider(
+                                      color: ColorsContent.expandedBorderColor,
+                                      thickness: 1.0,
+                                      height: 0,
+                                    ),
+                                  );
+                                }
+                              }
+
+                              return children;
+                            })(),
                           ),
                         ),
                       ],
                     ),
-                    children: (() {
-                      final children = <Widget>[];
-                      for (int i = 0; i < support.length; i++) {
-                        final e = support[i];
-                        final emotionTitle =
-                            (e as dynamic).emotionTitle?.toString() ?? '';
-                        children.add(
+                  ),
+                ),
+              ),
+
+            // -----------------------------
+            // Supporting Emotions (same logic)
+            // -----------------------------
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 30),
+              decoration: BoxDecoration(
+                color: ColorsContent.optimalStateColor,
+                borderRadius: BorderRadius.circular(0),
+              ),
+              child: ExpansionTile(
+                iconColor: Colors.white,
+                collapsedIconColor: Colors.white,
+
+                // ⭐ CUSTOM WHITE ICON (DROP DOWN / UP)
+                trailing: Icon(
+                  expandedKey == "supporting"
+                      ? Icons.arrow_drop_down // when expanded
+                      : Icons.arrow_drop_down, // when collapsed
+                  color: Colors.white,
+                  size: 28,
+                ),
+
+                initiallyExpanded: expandedKey == "supporting",
+                onExpansionChanged: (isExpanded) {
+                  setState(() {
+                    expandedKey = isExpanded ? "supporting" : null;
+                  });
+                },
+
+                title: Row(
+                  children: [
+                    const Text(
+                      'My Supporting Emotions  ',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.white,
+                          width: 1.5,
+                        ),
+                      ),
+                      padding: const EdgeInsets.all(4),
+                      child: const Text(
+                        '?',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Poppins',
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                children: [
+                  Container(
+                    color: Colors.white,
+                    child: Column(
+                      children: [
+                        for (int i = 0; i < support.length; i++) ...[
                           ListTile(
                             dense: true,
                             title: Text(
-                              emotionTitle.toUpperCase(),
+                              (support[i].emotionTitle ?? '')
+                                  .toString()
+                                  .toUpperCase(),
                               style: const TextStyle(
                                 fontSize: 14,
                                 color: Colors.black54,
@@ -463,69 +534,56 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                             trailing: GestureDetector(
                               onTap: () {
                                 final emotionId =
-                                    (e as dynamic).emotionId?.toString() ?? '';
+                                    (support[i].emotionId ?? '').toString();
+
                                 customPopup(
                                   context: context,
                                   onPressedDelete: () async {
-                                    // Show loading indicator
                                     showDialog(
                                       context: context,
                                       barrierDismissible: false,
-                                      builder: (BuildContext context) {
-                                        return Center(
-                                          child: CupertinoActivityIndicator(
-                                            color: ColorsContent.newThemeColor,
-                                            radius: 15,
-                                          ),
-                                        );
-                                      },
+                                      builder: (_) => Center(
+                                        child: CupertinoActivityIndicator(
+                                          color: ColorsContent.newThemeColor,
+                                          radius: 15,
+                                        ),
+                                      ),
                                     );
 
-                                    // Call delete function
                                     final result =
                                         await provider.deleteReminderFunction(
                                       emotion_id: emotionId,
                                       context: context,
                                     );
 
-                                    // Close loading dialog
-                                    if (mounted) {
-                                      Navigator.of(context).pop();
-                                    }
+                                    if (mounted) Navigator.of(context).pop();
 
                                     if (result) {
-                                      // Delete was successful
-                                      // Refresh the chart data
                                       await provider.fetchJournalChartView(
                                           context: context);
 
-                                      // Close the confirmation popup if it's still open
                                       if (mounted &&
                                           Navigator.canPop(context)) {
                                         Navigator.of(context).pop();
                                       }
 
-                                      // Show success message (optional)
                                       if (mounted) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           const SnackBar(
                                             content: Text(
                                                 'Emotion removed successfully'),
-                                            duration: Duration(seconds: 2),
                                             backgroundColor: Colors.green,
                                           ),
                                         );
                                       }
                                     } else {
-                                      // Delete failed
                                       if (mounted) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           const SnackBar(
                                             content: Text(
                                                 'Failed to remove emotion'),
-                                            duration: Duration(seconds: 2),
                                             backgroundColor: Colors.red,
                                           ),
                                         );
@@ -537,37 +595,21 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                                       'Are you sure you want to delete this reminder?',
                                 );
                               },
-                              child: Container(
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.red,
-                                ),
-                                child: const Icon(
-                                  Icons.close,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
+                              child: SvgPicture.asset(
+                                ImageConstant.numuCloseChart,
                               ),
                             ),
                           ),
-                        );
-                        if (i < support.length - 1) {
-                          children.add(
-                            const Divider(
-                              color: Colors.black,
-                              thickness: 0.5,
-                              height: 0,
-                            ),
-                          );
-                        }
-                      }
-                      return children;
-                    })(),
+                          if (i < support.length - 1)
+                            const Divider(color: Colors.black, thickness: 0.5),
+                        ],
+                      ],
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

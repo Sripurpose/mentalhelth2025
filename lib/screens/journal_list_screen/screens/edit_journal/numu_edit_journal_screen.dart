@@ -351,6 +351,10 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                             onPressed: () {
                                               // Check for required conditions before moving to the next tab
                                               if (currentTabIndex == 0) {
+                                                mentalStrengthEditProvider.titleEditTextController.selection =
+                                                const TextSelection.collapsed(offset: 0);
+                                                mentalStrengthEditProvider.descriptionEditTextController.selection =
+                                                const TextSelection.collapsed(offset: 0);
                                                 if (mentalStrengthEditProvider
                                                         .titleEditTextController
                                                         .text

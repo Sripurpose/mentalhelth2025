@@ -396,6 +396,10 @@ class _NumuMentalStrengthAddEditPageState
                                                   Colors.transparent,
                                               onPressed: () {
                                                 if (currentTabIndex == 0) {
+                                                  mentalStrengthEditProvider.titleEditTextController.selection =
+                                                  const TextSelection.collapsed(offset: 0);
+                                                  mentalStrengthEditProvider.descriptionEditTextController.selection =
+                                                  const TextSelection.collapsed(offset: 0);
                                                   final title =
                                                       mentalStrengthEditProvider
                                                           .titleEditTextController

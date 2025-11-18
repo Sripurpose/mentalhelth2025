@@ -23,6 +23,7 @@ class ImageConstant {
   static String homeDotNumu = '$imagePath/home_dot.svg';
   static String line = '$imagePath/line.svg';
   static String numuChatClose = '$imagePath/numu_chat_close.svg';
+  static String numuCloseChart = '$imagePath/close_chart.svg';
 
   static String dateMove = '$imagePath/date_move.svg';
   static String dateUpMove = '$imagePath/date_up_move.svg';
