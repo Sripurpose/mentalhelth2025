@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -67,7 +69,7 @@ class _DateRangePickerDialogState extends State<DateRangePickerDialog> {
       child: UnconstrainedBox(
         constrainedAxis: Axis.vertical,
         child: SizedBox(
-          width: 320,   // 👈 FIXED DIALOG WIDTH (change as you like)
+          width: Platform.isAndroid ? 320: 330,   // 👈 FIXED DIALOG WIDTH (change as you like)
           child: Padding(
             padding: const EdgeInsets.all(24),
             child: Column(
