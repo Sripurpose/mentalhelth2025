@@ -78,53 +78,101 @@ class _DateRangePickerDialogState extends State<DateRangePickerDialog> {
                 // Date Range Header
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                           Padding(
-                             padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                             child: Text(
-                              'From',
-                              style: TextStyle(color: ColorsContent.datePickerGreyText, fontSize: 14,fontFamily: 'Poppins',fontWeight: FontWeight.w400),
-                                                   ),
-                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            _selectedStart != null ? _formatDateFull(_selectedStart!) : 'Select date',
-                            style:  TextStyle(fontSize: 14,   fontFamily: 'Poppins',fontWeight: FontWeight.w500,color: ColorsContent.datePickerDarkText,),
+                  child:
+                  IntrinsicHeight(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                child: Text(
+                                  'From',
+                                  style: TextStyle(
+                                    color: ColorsContent.datePickerGreyText,
+                                    fontSize: 14,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                _selectedStart != null ? _formatDateFull(_selectedStart!) : 'Select date',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w500,
+                                  color: ColorsContent.datePickerDarkText,
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                           Padding(
-                             padding: const EdgeInsets.only(right: 35.0),
-                             child: Text(
-                              'To',
-                               style: TextStyle(color: ColorsContent.datePickerGreyText, fontSize: 14,fontFamily: 'Poppins',fontWeight: FontWeight.w400),
-                                                   ),
-                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            _selectedEnd != null ? _formatDateFull(_selectedEnd!) : 'Select date',
-                            style:  TextStyle(fontSize: 14,fontFamily: 'Poppins',fontWeight: FontWeight.w500,color: ColorsContent.datePickerDarkText,),
+                        ),
+
+                        /// 🔥 Full-Height Vertical Divider
+                        const VerticalDivider(
+                          width: 20,
+                          thickness: 1,
+                          color: Colors.grey,
+                        ),
+
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(right: 35.0),
+                                child: Text(
+                                  'To',
+                                  style: TextStyle(
+                                    color: ColorsContent.datePickerGreyText,
+                                    fontSize: 14,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                _selectedEnd != null ? _formatDateFull(_selectedEnd!) : 'Select date',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w500,
+                                  color: ColorsContent.datePickerDarkText,
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ],
+                        ),
+                      ],
+                    ),
+                  ),
+
+                ),
+                const SizedBox(height: 15),
+                const Align(
+                  alignment: Alignment.center,
+                  child: SizedBox(
+                    width: double.infinity, // 🔥 forces full width
+                    child: Divider(
+                      color: Colors.grey,
+                      thickness: 1,
+                      height: 1,
+                    ),
                   ),
                 ),
-                const SizedBox(height: 24),
-          
+                const SizedBox(height: 15),
+
                 // Calendar Header
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-          
+
                     GestureDetector(
                       onTap: (){
                         setState(() {
@@ -140,7 +188,7 @@ class _DateRangePickerDialogState extends State<DateRangePickerDialog> {
                       _getMonthYearString(_displayedMonth),
                       style:  TextStyle(fontSize: 16, color:  ColorsContent.datePickerGreyText, fontWeight: FontWeight.w500,fontFamily: 'Poppins',),
                     ),
-          
+
                     GestureDetector(
                       onTap: (){
                         setState(() {
@@ -155,7 +203,7 @@ class _DateRangePickerDialogState extends State<DateRangePickerDialog> {
                   ],
                 ),
                 const SizedBox(height: 16),
-          
+
                 // Weekday Headers
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -176,11 +224,11 @@ class _DateRangePickerDialogState extends State<DateRangePickerDialog> {
                       .toList(),
                 ),
                 const SizedBox(height: 12),
-          
+
                 // Calendar Grid
                 _buildCalendarGrid(),
                 const SizedBox(height: 24),
-          
+
                 // Buttons
                 Row(
                   children: [
@@ -200,7 +248,7 @@ class _DateRangePickerDialogState extends State<DateRangePickerDialog> {
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,
                           ),
-          
+
                         ),
                       ),
                     ),
