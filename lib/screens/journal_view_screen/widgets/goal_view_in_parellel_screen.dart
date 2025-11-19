@@ -992,6 +992,7 @@ class _GoalAndDreamFullViewBottomParellelSheetState
         const SizedBox(
           height: 10,
         ),
+
         Container(
           width: double.infinity,
           padding: const EdgeInsets.all(10),
@@ -1004,8 +1005,59 @@ class _GoalAndDreamFullViewBottomParellelSheetState
               final commentsText = (comments ?? "").trim();
               final previewLink = previewLinkApi;
 
-              // 🧠 If comments text exists → show text
-              if (commentsText.isNotEmpty) {
+              // 🧠 Case 1: Both text and preview exist → show both
+              if (commentsText.isNotEmpty && previewLink.isNotEmpty) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      HtmlUnescape().convert(commentsText),
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: commentsText.isNotEmpty ? 10.0 : 0.0),
+                      child: Container(
+                        height:300,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey.shade300,
+                            width: 1.2,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: LinkPreviewGenerator(
+                            link: previewLink,
+                            linkPreviewStyle: LinkPreviewStyle.large, // 👈 Forces column format
+                            showDomain: true,
+                            showBody: true,
+                            showTitle: true,
+                            bodyMaxLines: 3,
+                            borderRadius: 10,
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 4,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }
+
+              // 🧠 Case 2: Only text exists
+              else if (commentsText.isNotEmpty) {
                 return Text(
                   HtmlUnescape().convert(commentsText),
                   style: const TextStyle(
@@ -1017,47 +1069,50 @@ class _GoalAndDreamFullViewBottomParellelSheetState
                 );
               }
 
-              // 🔗 If comments text is empty but previewLink exists → show preview
+              // 🔗 Case 3: Only link preview exists
               else if (previewLink.isNotEmpty) {
-                return Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.grey.shade300,
-                        width: 1.5,
+                return
+                  Padding(
+                    padding: EdgeInsets.only(),
+                    child: Container(
+                      height:300,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.grey.shade300,
+                          width: 1.2,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: LinkPreviewGenerator(
-                        link: previewLink,
-                        linkPreviewStyle: LinkPreviewStyle.small,
-                        showDomain: true,
-                        showTitle: true,
-                        bodyMaxLines: 1,
-                        borderRadius: 10,
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 4,
-                            offset: Offset(0, 2),
-                          ),
-                        ],
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: LinkPreviewGenerator(
+                          link: previewLink,
+                          linkPreviewStyle: LinkPreviewStyle.large, // 👈 Forces column format
+                          showDomain: true,
+                          showBody: true,
+                          showTitle: true,
+                          bodyMaxLines: 3,
+                          borderRadius: 10,
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 4,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                );
+                  );
               }
 
-              // ❌ If both empty → return nothing
+              // ❌ Case 4: Nothing
               else {
                 return const SizedBox.shrink();
               }
             },
           ),
-        )
+        ),
       ],
     );
   }
