@@ -930,6 +930,22 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                       .toList();
 
                   if (matches.isNotEmpty) {
+                    // ✅ Check if user already has a link AND is trying to add another
+                    if (adDreamsGoalsProvider.editDetectedLinks.isNotEmpty) {
+                      // Show message for attempting to add multiple links
+                      showToastTOP(
+                        context: context,
+                        message: "Only one link at a time",
+                      );
+
+                      // Remove the pasted link text, keep only normal text
+                      final cleanedText = text.replaceAll(adDreamsGoalsProvider.editUrlRegex, '').trim();
+                      adDreamsGoalsProvider.commentEditTextController.text = cleanedText;
+                      adDreamsGoalsProvider.commentEditTextController.selection =
+                          TextSelection.fromPosition(TextPosition(offset: cleanedText.length));
+                      return;
+                    }
+
                     final firstLink = matches.first;
 
                     // ✅ Store ONLY the first detected link (replace any previous)

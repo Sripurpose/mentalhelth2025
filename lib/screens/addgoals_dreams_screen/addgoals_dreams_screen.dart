@@ -555,6 +555,24 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
                         .toList();
 
                     if (matches.isNotEmpty) {
+                      // ✅ Check if user already has a link AND is trying to add another
+                      if (adDreamsGoalsProvider.detectedLinks.isNotEmpty) {
+                        // Show message for attempting to add multiple links
+                        showToastTOP(
+                          context: context,
+                          message: "Only one link at a time",
+                        );
+
+                        // Revert to keep only the old link (remove the new one)
+                        final cleanedText = value.replaceAll(adDreamsGoalsProvider.urlRegex, '').trim();
+                        adDreamsGoalsProvider.commentEditTextController.text = cleanedText;
+                        adDreamsGoalsProvider.commentEditTextController.selection =
+                            TextSelection.fromPosition(
+                              TextPosition(offset: cleanedText.length),
+                            );
+                        return;
+                      }
+
                       final firstLink = matches.first;
 
                       // ✅ ONLY keep the first link (replace any previous)

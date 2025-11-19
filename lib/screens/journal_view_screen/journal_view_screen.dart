@@ -926,7 +926,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                                       context: context);
                                             },
                                             child: Container(
-                                              height: size.height * 0.05,
+                                              height: size.height * 0.055,
                                               width: size.width * 0.88,
                                               padding:
                                                   const EdgeInsets.symmetric(
@@ -935,7 +935,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                                 color:
                                                     ColorsContent.newThemeColor,
                                                 borderRadius:
-                                                    BorderRadius.circular(8),
+                                                    BorderRadius.circular(5),
                                               ),
                                               child: Row(
                                                 mainAxisAlignment:
@@ -1091,7 +1091,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                                     }
                                                   },
                                                   child: Container(
-                                                    height: size.height * 0.05,
+                                                    height: size.height * 0.055,
                                                     // slightly increased for better alignment
                                                     margin:
                                                         const EdgeInsets.only(
@@ -1104,7 +1104,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                                           .newThemeColor,
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                              8),
+                                                              5),
                                                     ),
                                                     child: Row(
                                                       crossAxisAlignment:
@@ -1254,18 +1254,15 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: 372,
+                width: size.width * 0.90,
                 padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                // decoration: BoxDecoration(
-                //   color: ColorsContent.dateTimeBack,
-                //   borderRadius: BorderRadius.circular(2),
-                // ),
+
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -1517,14 +1514,6 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                     ));
                                   }
                                 }
-                                // Navigator.of(context).push(
-                                //   MaterialPageRoute(
-                                //     builder: (context) => const EditJournalMentalStrength(
-                                //       valueBool: true,
-                                //     ),
-                                //   ),
-                                // );
-
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) =>
@@ -1591,7 +1580,6 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                           initial: true,
                                           context: context,
                                           fullList: true);
-                                      //   await homeProvider.fetchJournalsGridView(pageNo:homeProvider.currentPage.toString(),context: context);
                                       if (homeProvider.journalStatus == 404) {
                                         await homeProvider.fetchJournals(
                                             pageNo: 1.toString(),
@@ -1601,7 +1589,6 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                                 initial: true,
                                                 context: context,
                                                 fullList: true);
-                                        //await homeProvider.fetchJournalsGridView(pageNo:1.toString(),context: context);
                                       }
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
@@ -1675,6 +1662,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                             SvgPicture.asset(
                               ImageConstant.locationView,
                             ),
+                            const SizedBox(width: 5,),
                             Flexible(
                               child: Text(
                                 homeProvider.journalDetails?.journals?.location

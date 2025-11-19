@@ -1775,6 +1775,29 @@ class _EditActionScreenState extends State<EditActionScreen> {
                       .toList();
 
                   if (matches.isNotEmpty) {
+                    // ✅ Check if user already has a link AND is trying to add another
+                    if (addActionsProvider.editDetectedLinks.isNotEmpty) {
+                      // Show message for attempting to add multiple links
+                      showToastTOP(
+                        context: context,
+                        message: "Only one link at a time",
+                      );
+
+                      // Remove the pasted link text, keep only normal text
+                      final firstLink = matches.first;
+                      final newText =
+                      text.replaceAll(RegExp(RegExp.escape(firstLink)), "").trim();
+                      addActionsProvider.descriptionEditTextController.text = newText;
+                      addActionsProvider.descriptionEditTextController.selection =
+                          TextSelection.fromPosition(
+                            TextPosition(
+                                offset:
+                                addActionsProvider.descriptionEditTextController.text
+                                    .length),
+                          );
+                      return;
+                    }
+
                     final firstLink = matches.first;
 
                     // ✅ Store ONLY the first link (replace any previous)
@@ -1785,8 +1808,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
                     // ✅ Remove only the link text from the controller
                     final newText =
                     text.replaceAll(RegExp(RegExp.escape(firstLink)), "").trim();
-                    addActionsProvider.descriptionEditTextController.text =
-                        newText;
+                    addActionsProvider.descriptionEditTextController.text = newText;
                     addActionsProvider.descriptionEditTextController.selection =
                         TextSelection.fromPosition(
                           TextPosition(

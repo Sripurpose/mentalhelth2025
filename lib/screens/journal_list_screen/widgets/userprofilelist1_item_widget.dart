@@ -352,7 +352,7 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Icon(Icons.delete_outline, color: ColorsContent.newThemeColor),
-                              const SizedBox(width: 5),
+                              const SizedBox(width: 0),
                               const Text(
                                 'Delete',
                                 style: TextStyle(

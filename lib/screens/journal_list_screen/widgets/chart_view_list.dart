@@ -601,7 +601,7 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                             ),
                           ),
                           if (i < support.length - 1)
-                            const Divider(color: Colors.black, thickness: 0.5),
+                             Divider(color: ColorsContent.newThemeColor, thickness: 0.5),
                         ],
                       ],
                     ),

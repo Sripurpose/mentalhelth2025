@@ -1120,6 +1120,24 @@ class _AddEditActionScreenState extends State<AddEditActionScreen> {
 
                   // ✅ If found any new link, show preview
                   if (matches.isNotEmpty) {
+                    // ✅ Check if user already has a link AND is trying to add another
+                    if (addActionsProvider.detectedLinks.isNotEmpty) {
+                      // Show message for attempting to add multiple links
+                      showToastTOP(
+                        context: context,
+                        message: "Only one link at a time",
+                      );
+
+                      // Remove the pasted link text, keep only normal text
+                      final cleanedText = value.replaceAll(addActionsProvider.urlRegex, '').trimRight();
+                      addActionsProvider.descriptionEditTextController.text = cleanedText;
+                      addActionsProvider.descriptionEditTextController.selection =
+                          TextSelection.fromPosition(
+                            TextPosition(offset: cleanedText.length),
+                          );
+                      return;
+                    }
+
                     final firstLink = matches.first;
 
                     setState(() {

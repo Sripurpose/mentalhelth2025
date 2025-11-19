@@ -2313,7 +2313,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: Colors.grey.shade300),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 13),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -2368,7 +2368,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
               // 🔗 Link preview (ONLY ONE - no multiple links)
               if (provider.editDetectedLinks.isNotEmpty)
                 Padding(
-                  padding: const EdgeInsets.only(top: 12.0),
+                  padding: const EdgeInsets.only(top: 10.0),
                   child: Stack(
                     alignment: Alignment.topRight,
                     children: [
