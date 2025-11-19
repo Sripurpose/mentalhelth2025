@@ -332,17 +332,25 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                   decoration: BoxDecoration(
                                                     color: ColorsContent.newThemeColor,
                                                     borderRadius: const BorderRadius.only(
-                                                      topLeft: Radius.circular(12),
-                                                      topRight: Radius.circular(12),
+                                                      topLeft: Radius.circular(15),
+                                                      topRight: Radius.circular(15),
                                                     ),
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color:ColorsContent.newThemeColor.withOpacity(0.30), // Shadow color
+                                                        blurRadius: 8, // Softness
+                                                        spreadRadius: 1, // How wide the shadow spreads
+                                                        offset: const Offset(0, -2), // Shadow direction (top shadow)
+                                                      ),
+                                                    ],
                                                   ),
                                                   child: const Center(
                                                     child: Text(
                                                       "Edit Profile",
                                                       style: TextStyle(
-                                                        fontSize: 14,
+                                                        fontSize: 12.5,
                                                         color: Colors.white,
-                                                        fontWeight: FontWeight.bold,
+                                                        fontWeight: FontWeight.w700,
                                                         fontFamily: 'Poppins',
                                                       ),
                                                     ),
@@ -372,17 +380,26 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                     decoration: BoxDecoration(
                                                       color: ColorsContent.blackText,
                                                       borderRadius: const BorderRadius.only(
-                                                        topLeft: Radius.circular(12),
-                                                        topRight: Radius.circular(12),
+                                                        topLeft: Radius.circular(15),
+                                                        topRight: Radius.circular(15),
                                                       ),
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                          color: Colors.black.withOpacity(0.30), // Shadow color
+                                                          blurRadius: 8, // Softness
+                                                          spreadRadius: 1, // How wide the shadow spreads
+                                                          offset: const Offset(0, -2), // Shadow direction (top shadow)
+                                                        ),
+                                                      ],
                                                     ),
+
                                                     child: const Center(
                                                       child: Text(
                                                         "Change Password",
                                                         style: TextStyle(
-                                                          fontSize: 14,
+                                                          fontSize: 12.5,
                                                           color: Colors.white,
-                                                          fontWeight: FontWeight.bold,
+                                                          fontWeight: FontWeight.w700,
                                                           fontFamily: 'Poppins',
                                                         ),
                                                       ),
