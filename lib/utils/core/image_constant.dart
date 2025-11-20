@@ -48,6 +48,9 @@ class ImageConstant {
   static String submitButtonNumuBuild = 'assets/images/submit_button_mental_strength.svg';
   static String saveButtonNumuBuild = 'assets/images/save_button_mental_strength.svg';
   static String homeScreenNoData = 'assets/images/home_screen_no_data.svg';
+  static String homeSearchDataFound = 'assets/images/search_data_found.svg';
+  static String homeSearchDataFoundNew = 'assets/images/search_data_found_new.svg';
+  static String homeSearchDataFoundGradient = 'assets/images/search_data_found_gradient.svg';
   static String tabBackButton = 'assets/images/tab_back_button.svg';
   static String numuMentalBackButton = 'assets/images/numu_mental_back.svg';
   static String goToIcon = 'assets/images/go_to_icon.png';

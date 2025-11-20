@@ -699,8 +699,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       ),
 
-
-
                                       // Search icon (always visible)
                                       GestureDetector(
                                         onTap: () {
@@ -738,29 +736,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     )
                         : homeProvider.journalGridStatus == 404
                         ?
-                    Container(
-                      height: size.height * 0.43,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5),
-                        // border: Border.all(
-                        //     color: ColorsContent.newThemeColor,
-                        //     width: 0.3), // Light purple border
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 50.0),
-                        child: Column(mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              ImageConstant.noDataNumu,
-                            ),
-                            const Text("No data found",
-                                style: TextStyle(fontSize: 18, fontFamily: 'Poppins',color: Colors.black, fontWeight: FontWeight.bold)),
-                            const SizedBox(height: 10),
-                            const Text("Check back later",
-                                style: TextStyle(fontSize: 18, color: Colors.black,fontFamily: 'Poppins', fontWeight: FontWeight.normal)),
-                          ],
-                        ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: SvgPicture.asset(
+                        ImageConstant.homeSearchDataFoundGradient,
+                        width: size.width * 0.90,
+                        height: size.height * 0.43,
                       ),
                     )
 
