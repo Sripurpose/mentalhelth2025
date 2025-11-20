@@ -1549,7 +1549,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w500,
-                                            fontFamily: 'Roboto',
+                                            fontFamily: 'Poppins',
                                             color: Colors.black,
                                           )),
                                     ),
@@ -1632,7 +1632,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500,
-                                          fontFamily: 'Roboto',
+                                          fontFamily: 'Poppins',
                                           color: Colors.black,
                                         )),
                                   ],
