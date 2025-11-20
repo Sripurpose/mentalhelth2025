@@ -956,12 +956,16 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                                                 horizontal:
                                                                     20.0),
                                                         child: Text(
-                                                          homeProvider
-                                                                  .journalDetails
-                                                                  ?.journals
-                                                                  ?.goal
-                                                                  ?.goalTitle ??
-                                                              '',
+                                                          capitalizeFirstLetter(
+                                                            HtmlUnescape().convert(
+                                                                homeProvider
+                                                                    .journalDetails
+                                                                    ?.journals
+                                                                    ?.goal
+                                                                    ?.goalTitle ??
+                                                                    ''
+                                                            ),
+                                                          ),
                                                           style:
                                                               const TextStyle(
                                                             fontSize: 17,
@@ -1123,8 +1127,13 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                                                     horizontal:
                                                                         20.0),
                                                             child: Text(
-                                                              action.actionTitle ??
-                                                                  '',
+                                                              capitalizeFirstLetter(
+                                                                HtmlUnescape().convert(
+                                                                  action.actionTitle ??
+                                                                      '',
+                                                                ),
+                                                              ),
+
                                                               style:
                                                                   const TextStyle(
                                                                 fontSize: 16,
