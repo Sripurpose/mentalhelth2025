@@ -12,6 +12,7 @@ import 'package:mentalhelth/utils/core/url_constant.dart';
 import 'package:mentalhelth/utils/logic/shared_prefrence.dart';
 import 'package:mentalhelth/widgets/functions/snack_bar.dart';
 
+import '../../../utils/core/constants.dart';
 import '../../../utils/core/constent.dart';
 import '../../maintenence_screen/maintenence_screen.dart';
 import '../../mental_strength_add_edit_screen/model/get_goals_model.dart';
@@ -699,7 +700,8 @@ class HomeProvider extends ChangeNotifier {
         required String actionId,
         required String goalId,
         required String reminderId,
-      }) async {
+      })
+  async {
     try {
       editRemindersDetailsLoading = true;
       notifyListeners();
@@ -716,6 +718,8 @@ class HomeProvider extends ChangeNotifier {
         'reminder_before': '',
         'reminder_repeat':repeat,
         'reminder_id':reminderId,
+        'timezone_offset': timeZone
+
       };
       print(body.toString() + "   editReminderFunction");
       final response = await http.post(
