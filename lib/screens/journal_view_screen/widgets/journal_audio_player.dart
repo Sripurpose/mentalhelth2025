@@ -10,7 +10,11 @@ import 'package:provider/provider.dart';
 import '../../../utils/core/image_constant.dart';
 import '../../../utils/theme/colors.dart';
 
-// Define a global AudioPlayer instance
+import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+// your imports…
 final AudioPlayer globalAudioPlayer = AudioPlayer();
 String? currentPlayingUrl;
 
@@ -24,39 +28,51 @@ class JournalAudioPlayer extends StatefulWidget {
 
 class _JournalAudioPlayerState extends State<JournalAudioPlayer> {
   bool isPlaying = false;
-  Duration duration = Duration.zero;
-  Duration position = Duration.zero;
+  Duration duration = Duration.zero;  // total
+  Duration position = Duration.zero;  // current
 
   @override
   void initState() {
     super.initState();
 
-    // Listen for player state changes
+    // Player state listener
     globalAudioPlayer.onPlayerStateChanged.listen((event) {
-      if (mounted) {
-        setState(() {
-          isPlaying = event == PlayerState.playing && currentPlayingUrl == widget.url;
-        });
-      }
+      if (!mounted) return;
+      setState(() {
+        isPlaying =
+            event == PlayerState.playing && currentPlayingUrl == widget.url;
+      });
     });
 
-    // Listen for duration changes
+    // TOTAL duration listener (right side)
     globalAudioPlayer.onDurationChanged.listen((newDuration) {
-      if (mounted && currentPlayingUrl == widget.url) {
-        setState(() {
-          duration = newDuration;
-        });
-      }
+      if (!mounted) return;
+      setState(() {
+        duration = newDuration;
+      });
     });
 
-    // Listen for position changes
+    // CURRENT position listener (left side)
     globalAudioPlayer.onPositionChanged.listen((newPosition) {
-      if (mounted && currentPlayingUrl == widget.url) {
+      if (!mounted) return;
+      if (currentPlayingUrl == widget.url) {
         setState(() {
           position = newPosition;
         });
       }
     });
+
+    // Preload audio (just for duration)
+    _preloadDuration();
+  }
+
+  Future<void> _preloadDuration() async {
+    try {
+      await globalAudioPlayer.setSource(UrlSource(widget.url));
+      // After this, onDurationChanged will fire and set duration
+    } catch (e) {
+      debugPrint('Error preloading audio: $e');
+    }
   }
 
   @override
@@ -69,139 +85,101 @@ class _JournalAudioPlayerState extends State<JournalAudioPlayer> {
         color: ColorsContent.newThemeColor,
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Consumer<JournalListProvider>(builder: (context, journalListProvider, _) {
-        return Row(
-          children: [
-            GestureDetector(
-              onTap: () async {
-                if (isPlaying) {
-                  await globalAudioPlayer.pause();
-                  setState(() {
-                    currentPlayingUrl = null;
-                  });
-                } else {
-                  if (currentPlayingUrl != null && currentPlayingUrl != widget.url) {
-                    await globalAudioPlayer.stop();
+      child: Consumer<JournalListProvider>(
+        builder: (context, journalListProvider, _) {
+          return Row(
+            children: [
+              GestureDetector(
+                onTap: () async {
+                  if (isPlaying) {
+                    // Pause current
+                    await globalAudioPlayer.pause();
+                    setState(() {
+                      currentPlayingUrl = null;
+                    });
+                  } else {
+                    // Stop other audio if any
+                    if (currentPlayingUrl != null &&
+                        currentPlayingUrl != widget.url) {
+                      await globalAudioPlayer.stop();
+                    }
+                    // Play this url
+                    currentPlayingUrl = widget.url;
+                    await globalAudioPlayer.play(UrlSource(widget.url));
                   }
-                  currentPlayingUrl = widget.url;
-                  await globalAudioPlayer.play(UrlSource(widget.url));
-                }
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 15.0),
-                child: Container(
-                  height: 35,
-                  width: 35,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 1.5),
-                  ),
-                  child: CircleAvatar(
-                    backgroundColor: Colors.transparent,
-                    child: Icon(
-                      color: Colors.white,
-                      isPlaying ? Icons.pause : Icons.play_arrow,
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 15.0),
+                  child: Container(
+                    height: 35,
+                    width: 35,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.white, width: 1.5),
+                    ),
+                    child: CircleAvatar(
+                      backgroundColor: Colors.transparent,
+                      child: Icon(
+                        isPlaying ? Icons.pause : Icons.play_arrow,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                children: [
-                  Slider(
-                    min: 0,
-                    max: duration.inSeconds.toDouble().clamp(0.0, double.infinity),
-                    value: position.inSeconds.toDouble().clamp(0.0, duration.inSeconds.toDouble()),
-                    onChanged: (value) async {
-                      final newPosition = Duration(seconds: value.toInt());
-                      await globalAudioPlayer.seek(newPosition);
-                      await globalAudioPlayer.resume();
-                    },
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        _formatDuration(position),
-                        style: const TextStyle(color: Colors.white, fontSize: 12,fontFamily: 'Poppins',),
-                      ),
-                      Text(
-                        _formatDuration(duration),
-                        style: const TextStyle(color: Colors.white, fontSize: 12, fontFamily: 'Poppins',),
-                      ),
-                    ],
-                  ),
-                ],
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  children: [
+                    Slider(
+                      min: 0,
+                      max: duration.inSeconds
+                          .toDouble()
+                          .clamp(0.0, double.infinity),
+                      value: position.inSeconds
+                          .toDouble()
+                          .clamp(0.0, duration.inSeconds.toDouble()),
+                      onChanged: (value) async {
+                        final newPosition = Duration(seconds: value.toInt());
+                        await globalAudioPlayer.seek(newPosition);
+                        await globalAudioPlayer.resume();
+                      },
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // current time (left)
+                        Text(
+                          _formatDuration(position),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontFamily: 'Poppins',
+                          ),
+                        ),
+                        // total time (right)
+                        Text(
+                          _formatDuration(duration),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontFamily: 'Poppins',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-            // Expanded(
-            //   child: Column(
-            //     crossAxisAlignment: CrossAxisAlignment.start,
-            //     children: [
-            //       GestureDetector(
-            //         onHorizontalDragUpdate: (details) async {
-            //           final box = context.findRenderObject() as RenderBox;
-            //           final localPosition = box.globalToLocal(details.globalPosition);
-            //           final newPercent = localPosition.dx / box.size.width;
-            //           final newDuration = duration * newPercent.clamp(0.0, 1.0);
-            //           await globalAudioPlayer.seek(newDuration);
-            //           await globalAudioPlayer.resume();
-            //         },
-            //         child: Container(
-            //           height: 40,
-            //           padding: const EdgeInsets.symmetric(vertical: 6),
-            //           child: Row(
-            //             crossAxisAlignment: CrossAxisAlignment.end,
-            //             children: List.generate(50, (index) {
-            //               final progress = position.inMilliseconds / (duration.inMilliseconds == 0 ? 1 : duration.inMilliseconds);
-            //               final isFilled = index / 50 <= progress;
-            //
-            //               final barHeight = [
-            //                 10.0, 14.0, 12.0, 18.0, 16.0, 20.0, 16.0, 14.0, 18.0, 12.0
-            //               ][index % 10]; // repeating height pattern
-            //
-            //               return Padding(
-            //                 padding: const EdgeInsets.symmetric(horizontal: 1.2),
-            //                 child: AnimatedContainer(
-            //                   duration: const Duration(milliseconds: 300),
-            //                   height: barHeight,
-            //                   width: 3,
-            //                   decoration: BoxDecoration(
-            //                     color: isFilled ? Colors.white : Colors.white.withOpacity(0.3),
-            //                     borderRadius: BorderRadius.circular(4),
-            //                   ),
-            //                 ),
-            //               );
-            //             }),
-            //           ),
-            //         ),
-            //       ),
-            //       Row(
-            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //         children: [
-            //           Text(
-            //             _formatDuration(position),
-            //             style: const TextStyle(color: Colors.white, fontSize: 12),
-            //           ),
-            //           Text(
-            //             _formatDuration(duration),
-            //             style: const TextStyle(color: Colors.white, fontSize: 12),
-            //           ),
-            //         ],
-            //       ),
-            //     ],
-            //   ),
-            // ),
-          ],
-        );
-      }),
+            ],
+          );
+        },
+      ),
     );
   }
-
 }
 
+// time format helper
 String _formatDuration(Duration duration) {
   String twoDigits(int n) => n.toString().padLeft(2, '0');
   final minutes = twoDigits(duration.inMinutes.remainder(60));
