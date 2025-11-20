@@ -640,7 +640,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     } else if (kReleaseMode) {
       if ((baseUrlLive ?? '').isNotEmpty) {
         UrlConstant.baseUrl = baseUrlLive ?? '';
-        UrlConstant.oneSignalRemote = oneSignalLive ?? '';
+        ///appstore live ///
+       // UrlConstant.oneSignalRemote = oneSignalLive ?? '';
+        UrlConstant.oneSignalRemote = oneSignalStaging ?? '';
         UrlConstant.appShareDownloads = baseUrlAppShareDownloads ?? '';
         isBaseUrlReady = true;
         debugPrint('✅ Live Base URL ($deviceType): $baseUrlLive');

@@ -2336,17 +2336,52 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                   final matches =
                   regex.allMatches(value).map((m) => m.group(0)!).toList();
 
-                  // 🧩 If new link found, extract & show preview
                   if (matches.isNotEmpty) {
                     final firstLink = matches.first;
+
+                    // 🚫 Condition: SAME link already exists → show toast
+                    if (provider.editDetectedLinks.isNotEmpty &&
+                        provider.editDetectedLinks.first == firstLink) {
+                      showToastTOP(
+                        context: context,
+                        message: "Only one link at a time",
+                      );
+
+                      // Remove the pasted link text from the field
+                      final updatedText = value.replaceAll(regex, '').trimRight();
+                      provider.descriptionEditTextController.text = updatedText;
+                      provider.descriptionEditTextController.selection =
+                          TextSelection.fromPosition(
+                            TextPosition(offset: updatedText.length),
+                          );
+                      return;
+                    }
+
+                    // 🚫 Condition: Another different link already exists → show toast
+                    if (provider.editDetectedLinks.isNotEmpty &&
+                        provider.editDetectedLinks.first != firstLink) {
+                      showToastTOP(
+                        context: context,
+                        message: "Only one link at a time",
+                      );
+
+                      // Remove pasted link text
+                      final updatedText = value.replaceAll(regex, '').trimRight();
+                      provider.descriptionEditTextController.text = updatedText;
+                      provider.descriptionEditTextController.selection =
+                          TextSelection.fromPosition(
+                            TextPosition(offset: updatedText.length),
+                          );
+                      return;
+                    }
+
+                    // ✅ A new link is detected (first time)
                     final updatedText = value.replaceAll(regex, '').trimRight();
 
                     setState(() {
-                      // ❌ Clear previous links and add ONLY the first one
                       provider.editDetectedLinks.clear();
                       provider.editDetectedLinks = [firstLink];
 
-                      // ✅ Keep only normal text (remove link text)
                       provider.descriptionEditTextController.text = updatedText;
                       provider.descriptionEditTextController.selection =
                           TextSelection.fromPosition(
@@ -2356,8 +2391,8 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                       provider.hasUserClearedLink = false;
                     });
                   }
-                  // 🚫 Do nothing if no new links — keep previews
                 },
+
                 onTap: () => setState(() {}),
                 onEditingComplete: () {
                   _descriptionFocusNode.unfocus();
