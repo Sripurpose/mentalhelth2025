@@ -1163,6 +1163,8 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                               },
                                             ),
                                           ),
+
+                                    const SizedBox(height: 70),
                                     homeProvider.journalDetails?.journals
                                                     ?.chatlink !=
                                                 null &&
@@ -1204,7 +1206,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                           )
                                         : SizedBox(),
 
-                                    const SizedBox(height: 10),
+                                    const SizedBox(height: 50),
                                   ],
                                 )
                           : mentalStrengthEditProvider.goalDetailModel == null
