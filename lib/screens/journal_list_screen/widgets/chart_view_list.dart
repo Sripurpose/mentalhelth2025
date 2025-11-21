@@ -340,12 +340,12 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                           color: section['title'] == "Optimal"
                               ? ColorsContent.optimalStateColor
                               : section['title'] == "Stressful"
-                              ? ColorsContent.stressFullStateColor
-                              : section['title'] == "Passive"
-                              ? ColorsContent.passiveStateColor
-                              : section['title'] == "Destructive"
-                              ? ColorsContent.destructiveStateColor
-                              : ColorsContent.newThemeColor,
+                                  ? ColorsContent.stressFullStateColor
+                                  : section['title'] == "Passive"
+                                      ? ColorsContent.passiveStateColor
+                                      : section['title'] == "Destructive"
+                                          ? ColorsContent.destructiveStateColor
+                                          : ColorsContent.newThemeColor,
                           // KEEP ORIGINAL COLOR
                           width: 1.0,
                         ),
@@ -363,12 +363,12 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                         color: section['title'] == "Optimal"
                             ? ColorsContent.optimalStateColor
                             : section['title'] == "Stressful"
-                            ? ColorsContent.stressFullStateColor
-                            : section['title'] == "Passive"
-                            ? ColorsContent.passiveStateColor
-                            : section['title'] == "Destructive"
-                            ? ColorsContent.destructiveStateColor
-                            : ColorsContent.newThemeColor,
+                                ? ColorsContent.stressFullStateColor
+                                : section['title'] == "Passive"
+                                    ? ColorsContent.passiveStateColor
+                                    : section['title'] == "Destructive"
+                                        ? ColorsContent.destructiveStateColor
+                                        : ColorsContent.newThemeColor,
                         size: 28,
                       ),
                       onExpansionChanged: (isExpanded) {
@@ -377,7 +377,7 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                               isExpanded ? section['key'] as String : null;
                         });
                       },
-                      title:Text(
+                      title: Text(
                         '${section['title']} (${section['count']}) ${(section['percent'] as num).toStringAsFixed(1)}%',
                         style: TextStyle(
                           fontFamily: 'Poppins',
@@ -385,12 +385,13 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                           color: section['title'] == "Optimal"
                               ? ColorsContent.optimalStateColor
                               : section['title'] == "Stressful"
-                              ? ColorsContent.stressFullStateColor
-                              : section['title'] == "Passive"
-                              ? ColorsContent.passiveStateColor
-                              : section['title'] == "Destructive"
-                              ? ColorsContent.destructiveStateColor
-                              : ColorsContent.newThemeColor, // default
+                                  ? ColorsContent.stressFullStateColor
+                                  : section['title'] == "Passive"
+                                      ? ColorsContent.passiveStateColor
+                                      : section['title'] == "Destructive"
+                                          ? ColorsContent.destructiveStateColor
+                                          : ColorsContent
+                                              .newThemeColor, // default
                         ),
                       ),
 
@@ -432,7 +433,7 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
 
                                 if (i < emotions.length - 1) {
                                   children.add(
-                                     Divider(
+                                    Divider(
                                       color: ColorsContent.expandedBorderColor,
                                       thickness: 1.0,
                                       height: 0,
@@ -467,7 +468,7 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                 // ⭐ CUSTOM WHITE ICON (DROP DOWN / UP)
                 trailing: Icon(
                   expandedKey == "supporting"
-                      ? Icons.arrow_drop_down // when expanded
+                      ? Icons.arrow_drop_up // when expanded
                       : Icons.arrow_drop_down, // when collapsed
                   color: Colors.white,
                   size: 28,
@@ -518,90 +519,98 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                     child: Column(
                       children: [
                         for (int i = 0; i < support.length; i++) ...[
-                          ListTile(
-                            dense: true,
-                            title: Text(
-                              (support[i].emotionTitle ?? '')
-                                  .toString()
-                                  .toUpperCase(),
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.black54,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w400,
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: ColorsContent.optimalStateColor,
+                                  width: 0.5,
+                                ),
                               ),
                             ),
-                            trailing: GestureDetector(
-                              onTap: () {
-                                final emotionId =
-                                    (support[i].emotionId ?? '').toString();
+                            child: ListTile(
+                              dense: true,
+                              title: Text(
+                                (support[i].emotionTitle ?? '')
+                                    .toString()
+                                    .toUpperCase(),
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black54,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              trailing: GestureDetector(
+                                onTap: () {
+                                  final emotionId =
+                                  (support[i].emotionId ?? '').toString();
 
-                                customPopup(
-                                  context: context,
-                                  onPressedDelete: () async {
-                                    showDialog(
-                                      context: context,
-                                      barrierDismissible: false,
-                                      builder: (_) => Center(
-                                        child: CupertinoActivityIndicator(
-                                          color: ColorsContent.newThemeColor,
-                                          radius: 15,
+                                  customPopup(
+                                    context: context,
+                                    onPressedDelete: () async {
+                                      showDialog(
+                                        context: context,
+                                        barrierDismissible: false,
+                                        builder: (_) => Center(
+                                          child: CupertinoActivityIndicator(
+                                            color: ColorsContent.newThemeColor,
+                                            radius: 15,
+                                          ),
                                         ),
-                                      ),
-                                    );
+                                      );
 
-                                    final result =
-                                        await provider.deleteReminderFunction(
-                                      emotion_id: emotionId,
-                                      context: context,
-                                    );
+                                      final result =
+                                      await provider.deleteReminderFunction(
+                                        emotion_id: emotionId,
+                                        context: context,
+                                      );
 
-                                    if (mounted) Navigator.of(context).pop();
+                                      if (mounted) Navigator.of(context).pop();
 
-                                    if (result) {
-                                      await provider.fetchJournalChartView(
-                                          context: context);
+                                      if (result) {
+                                        await provider.fetchJournalChartView(
+                                            context: context);
 
-                                      if (mounted &&
-                                          Navigator.canPop(context)) {
-                                        Navigator.of(context).pop();
+                                        if (mounted &&
+                                            Navigator.canPop(context)) {
+                                          Navigator.of(context).pop();
+                                        }
+
+                                        if (mounted) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                  'Emotion removed successfully'),
+                                              backgroundColor: Colors.green,
+                                            ),
+                                          );
+                                        }
+                                      } else {
+                                        if (mounted) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                  'Failed to remove emotion'),
+                                              backgroundColor: Colors.red,
+                                            ),
+                                          );
+                                        }
                                       }
-
-                                      if (mounted) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                                'Emotion removed successfully'),
-                                            backgroundColor: Colors.green,
-                                          ),
-                                        );
-                                      }
-                                    } else {
-                                      if (mounted) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                                'Failed to remove emotion'),
-                                            backgroundColor: Colors.red,
-                                          ),
-                                        );
-                                      }
-                                    }
-                                  },
-                                  title: 'Confirm Delete',
-                                  content:
-                                      'Are you sure you want to delete this reminder?',
-                                );
-                              },
-                              child: SvgPicture.asset(
-                                ImageConstant.numuCloseChart,
+                                    },
+                                    title: 'Confirm Delete',
+                                    content:
+                                    'Are you sure you want to delete this reminder?',
+                                  );
+                                },
+                                child: SvgPicture.asset(
+                                  ImageConstant.numuCloseChart,
+                                ),
                               ),
                             ),
                           ),
-                          if (i < support.length - 1)
-                             Divider(color: ColorsContent.newThemeColor, thickness: 0.5),
                         ],
                       ],
                     ),
