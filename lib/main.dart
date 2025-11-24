@@ -103,12 +103,14 @@ class DeepLinkHandler {
     hasPendingNavigation = false;
   }
 
+// ===== Updated DeepLinkHandler._performNavigation =====
+// Replace the _performNavigation method in DeepLinkHandler class:
   void _performNavigation(
-    BuildContext ctx,
-    String? url,
-    String? text,
-    List<String>? images,
-  ) {
+      BuildContext ctx,
+      String? url,
+      String? text,
+      List<String>? images,
+      ) {
     if (_isNavigating) {
       debugPrint('⚠️ Navigation already in progress');
       return;
@@ -116,11 +118,12 @@ class DeepLinkHandler {
 
     try {
       _isNavigating = true;
-      debugPrint(
-          '🚀 Starting navigation to AddGoalsLinkParScreen with url=$url');
+      debugPrint('🚀 Starting navigation to AddGoalsLinkParScreen with url=$url');
 
-      // Delay slightly to ensure widget tree is ready
-      Future.delayed(const Duration(milliseconds: 500), () {
+      // Longer delay for Android when app was terminated
+      final delay = Platform.isAndroid ? 1000 : 500;
+
+      Future.delayed(Duration(milliseconds: delay), () {
         try {
           final navigator = Navigator.of(ctx);
           debugPrint('📍 Navigator state: ${navigator.mounted}');
@@ -154,8 +157,7 @@ class DeepLinkHandler {
 
           debugPrint('✅ Navigation pushed successfully');
         } catch (e) {
-          debugPrint(
-              '❌ Navigation error in delayed: $e\n${StackTrace.current}');
+          debugPrint('❌ Navigation error in delayed: $e\n${StackTrace.current}');
           _isNavigating = false;
         }
       });
@@ -259,11 +261,16 @@ Future<void> initializeReferralTracking() async {
   debugPrint("Referral tracking initialized");
 }
 
-// ===== Share Receiver (Android) =====
+
+// ===== Share Receiver (Android) - FIXED VERSION =====
 class ShareReceiver {
   static const _channel = MethodChannel('com.numuapp.share/channel');
+  static bool _isInitialized = false;
 
   static void init() {
+    if (_isInitialized) return;
+    _isInitialized = true;
+
     _channel.setMethodCallHandler((call) async {
       if (call.method == "onShareReceived") {
         final type = call.arguments["type"];
@@ -279,10 +286,13 @@ class ShareReceiver {
 
         debugPrint("📩 Received shared data ($type): $data");
 
+        // Store the data for later processing
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('shared_type', type);
         await prefs.setString('shared_data', data ?? '');
+        await prefs.setBool('has_pending_share', true);
 
+        // Try to process immediately
         _processAndNavigate(type, data);
       }
     });
@@ -305,7 +315,7 @@ class ShareReceiver {
 
           if (YouTubeUrlHandler.isYouTubeUrl(processedData)) {
             final playableUrl =
-                YouTubeUrlHandler.getPlayableYouTubeUrl(processedData);
+            YouTubeUrlHandler.getPlayableYouTubeUrl(processedData);
             sharedUrl = playableUrl;
             debugPrint("🎥 YouTube URL: $sharedUrl");
           } else {
@@ -331,8 +341,8 @@ class ShareReceiver {
         debugPrint("📦 Multiple files: ${sharedImages.length}");
       }
 
-      // Clear the stored data immediately after processing
-      unawaited(clearSharedData());
+      // Reset navigation state before new navigation
+      deepLinkHandler.resetNavigation();
 
       deepLinkHandler.handleDeepLink(
         url: sharedUrl,
@@ -347,12 +357,29 @@ class ShareReceiver {
   static Future<void> checkAndNavigateOnResume() async {
     try {
       final prefs = await SharedPreferences.getInstance();
+      final hasPending = prefs.getBool('has_pending_share') ?? false;
+
+      if (!hasPending) {
+        debugPrint("ℹ️ No pending share data");
+        return;
+      }
+
       final type = prefs.getString('shared_type');
       final data = prefs.getString('shared_data');
 
       if (type != null && data != null && data.isNotEmpty) {
-        debugPrint("🔄 Found stored shared data: $type - $data");
+        debugPrint("🔄 Processing stored shared data: $type - $data");
+
+        // Clear the pending flag immediately
+        await prefs.remove('has_pending_share');
+
+        // Wait for navigation context to be ready
+        await Future.delayed(const Duration(milliseconds: 800));
+
         _processAndNavigate(type, data);
+
+        // Clear after successful processing
+        await clearSharedData();
       }
     } catch (e) {
       debugPrint("❌ Error checking stored data: $e");
@@ -364,6 +391,7 @@ class ShareReceiver {
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove('shared_type');
       await prefs.remove('shared_data');
+      await prefs.remove('has_pending_share');
       debugPrint("🧹 Cleared stored share data");
     } catch (e) {
       debugPrint("❌ Error clearing data: $e");
@@ -628,7 +656,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     }
 
     if (!kIsWeb && Platform.isAndroid) {
-      Future.delayed(const Duration(milliseconds: 500), () async {
+      // Wait longer for Android to ensure app is fully initialized
+      Future.delayed(const Duration(milliseconds: 1500), () async {
         debugPrint('🔍 Checking for Android shared data on init');
         await ShareReceiver.checkAndNavigateOnResume();
       });
@@ -647,24 +676,28 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     _checkOnResume();
   }
 
+// ===== Updated didChangeAppLifecycleState =====
+// Replace your existing method with this:
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       debugPrint('🔄 App resumed');
       _checkOnResume();
 
-      // Only try pending navigation if we have pending data
-      if (deepLinkHandler.hasPendingNavigation) {
+      // For iOS - handle pending navigation
+      if (!kIsWeb && Platform.isIOS && deepLinkHandler.hasPendingNavigation) {
         deepLinkHandler._attemptNavigation();
       }
-    }
 
-    if (!kIsWeb && Platform.isAndroid) {
-      if (state == AppLifecycleState.resumed) {
-        ShareReceiver.checkAndNavigateOnResume();
+      // For Android - check for stored share data
+      if (!kIsWeb && Platform.isAndroid) {
+        Future.delayed(const Duration(milliseconds: 500), () async {
+          await ShareReceiver.checkAndNavigateOnResume();
+        });
       }
     }
   }
+
 
   Future<void> _checkOnResume() async {
     if (!kIsWeb && Platform.isIOS) {
