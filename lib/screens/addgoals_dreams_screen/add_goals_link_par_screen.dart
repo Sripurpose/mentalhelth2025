@@ -1113,26 +1113,30 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                     }
                     setState(() {});
                   },
-                  onChanged: (value) {
-                    final matches = adDreamsGoalsProvider.urlRegex
-                        .allMatches(value)
-                        .map((match) => match.group(0)!)
-                        .toList();
+                onChanged: (value) {
+                  final matches = adDreamsGoalsProvider.urlRegex
+                      .allMatches(value)
+                      .map((m) => m.group(0)!)
+                      .toList();
 
-                    if (matches.isNotEmpty) {
-                      final firstLink = matches.first;
-                      setState(() {
-                        adDreamsGoalsProvider.detectedLinks.clear();
-                        adDreamsGoalsProvider.detectedLinks = [firstLink];
-                      });
+                  if (matches.isNotEmpty) {
+                    final realLink = matches.first;
+                    debugPrint("🔗 Extracted Instagram URL: $realLink");
 
-                      final cleanedText = value.replaceAll(adDreamsGoalsProvider.urlRegex, '').trim();
-                      adDreamsGoalsProvider.commentEditTextController.text = cleanedText;
-                      adDreamsGoalsProvider.commentEditTextController.selection =
-                          TextSelection.fromPosition(TextPosition(offset: cleanedText.length));
-                    }
-                  },
-                  onEditingComplete: () {
+                    setState(() {
+                      adDreamsGoalsProvider.detectedLinks = [realLink];
+                    });
+
+                    // Remove the Instagram URL from text
+                    final cleaned = value.replaceAll(adDreamsGoalsProvider.urlRegex, '').trim();
+
+                    adDreamsGoalsProvider.commentEditTextController.text = cleaned;
+                    adDreamsGoalsProvider.commentEditTextController.selection =
+                        TextSelection.fromPosition(TextPosition(offset: cleaned.length));
+                  }
+                },
+
+                onEditingComplete: () {
                     _goalDescFocusNode.unfocus();
                     setState(() {});
                   },
@@ -1153,8 +1157,9 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                             borderRadius: BorderRadius.circular(10),
                             child: LinkPreviewGenerator(
                               link: adDreamsGoalsProvider.detectedLinks.isNotEmpty
-                                  ? adDreamsGoalsProvider.detectedLinks.first
+                                  ? normalizeInstagramUrl(cleanInstagramUrl(adDreamsGoalsProvider.detectedLinks.first))
                                   : '',
+
                               linkPreviewStyle: LinkPreviewStyle.large,
                               showDomain: true,
                               showBody: true,
@@ -1239,34 +1244,30 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                     }
                     setState(() {});
                   },
-                  onChanged: (value) {
-                    final matches = adDreamsGoalsProvider.urlRegex
-                        .allMatches(value)
-                        .map((match) => match.group(0)!)
-                        .toList();
+                onChanged: (value) {
+                  final matches = adDreamsGoalsProvider.urlRegex
+                      .allMatches(value)
+                      .map((m) => m.group(0)!)
+                      .toList();
 
-                    if (matches.isNotEmpty) {
-                      // Normalize the detected URL before saving
-                      final firstRawLink = matches.first;
-                      final normalizedLink = normalizeUrl(firstRawLink);
+                  if (matches.isNotEmpty) {
+                    final realLink = matches.first;
+                    debugPrint("🔗 Extracted Instagram URL: $realLink");
 
-                      setState(() {
-                        adDreamsGoalsProvider.editDetectedLinks.clear();
-                        adDreamsGoalsProvider.editDetectedLinks = [normalizedLink];
-                      });
+                    setState(() {
+                      adDreamsGoalsProvider.editDetectedLinks = [realLink];
+                    });
 
-                      // Remove only the raw link from text field
-                      final cleanedText = value.replaceAll(adDreamsGoalsProvider.urlRegex, '').trim();
+                    final cleaned = value.replaceAll(adDreamsGoalsProvider.urlRegex, '').trim();
 
-                      adDreamsGoalsProvider.commentEditTextController.text = cleanedText;
-                      adDreamsGoalsProvider.commentEditTextController.selection =
-                          TextSelection.fromPosition(
-                            TextPosition(offset: cleanedText.length),
-                          );
-                    }
-                  },
+                    adDreamsGoalsProvider.commentEditTextController.text = cleaned;
+                    adDreamsGoalsProvider.commentEditTextController.selection =
+                        TextSelection.fromPosition(TextPosition(offset: cleaned.length));
+                  }
+                },
 
-                  onEditingComplete: () {
+
+                onEditingComplete: () {
                     _goalDescFocusNode.unfocus();
                     setState(() {});
                   },
@@ -1287,7 +1288,7 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                             borderRadius: BorderRadius.circular(10),
                             child: LinkPreviewGenerator(
                               link: adDreamsGoalsProvider.editDetectedLinks.isNotEmpty
-                                  ? adDreamsGoalsProvider.editDetectedLinks.first
+                                  ? normalizeInstagramUrl(cleanInstagramUrl(adDreamsGoalsProvider.editDetectedLinks.first))
                                   : '',
                               linkPreviewStyle: LinkPreviewStyle.large,
                               showDomain: true,
@@ -2177,12 +2178,30 @@ class SharedContentData {
 }
 
 
-String normalizeUrl(String url) {
-  url = url.trim();
-
-  if (url.startsWith("http://") || url.startsWith("https://")) {
-    return url;
+String normalizeInstagramUrl(String url) {
+  try {
+    final uri = Uri.parse(url);
+    final cleanUri = Uri(
+      scheme: uri.scheme,
+      host: uri.host,
+      path: uri.path,
+    );
+    return cleanUri.toString();
+  } catch (_) {
+    return url; // fallback
   }
-
-  return "https://$url";  // Force a valid scheme
 }
+
+String cleanInstagramUrl(String rawText) {
+  final RegExp instaRegex = RegExp(
+    r'https?://(www\.)?instagram\.com/[^\s]+',
+    caseSensitive: false,
+  );
+
+  final match = instaRegex.firstMatch(rawText);
+  if (match == null) return "";
+
+  // Remove trailing spaces or line breaks
+  return match.group(0)!.trim();
+}
+

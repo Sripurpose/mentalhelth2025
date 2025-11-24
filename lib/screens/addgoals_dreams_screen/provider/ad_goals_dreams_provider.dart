@@ -2191,9 +2191,10 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
 
   List<String> detectedLinks = [];
   RegExp urlRegex = RegExp(
-    r'(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-&?=%.]+',
+    r'https?://(www\.)?instagram\.com/[^\s]+',
     caseSensitive: false,
   );
+
 
   List<String> editDetectedLinks = [];
   RegExp editUrlRegex = RegExp(
