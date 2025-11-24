@@ -488,525 +488,531 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
     Size size = MediaQuery.of(context).size;
 
     return tokenStatus == false
-        ? SafeArea(
-      child: Scaffold(
-        appBar: buildAppBarNumuEditGoals(
-          context,
-          size,
-          heading: adDreamsGoalsProvider.selectedOption == "Add to Existing Goal"
-              ? "Share Goal & Dreams"
-              : "Share Goal & Dreams",
-        ),
-        body: Stack(
-          children: [
-            Container(
-              width: size.width,
-              height: size.height,
-              decoration: BoxDecoration(
-                color: ColorsContent.homeBackGroundColor,
-              ),
-              child: Form(
-                key: _formKey,
-                child: Container(
-                  width: double.maxFinite,
-                  padding: const EdgeInsets.symmetric(horizontal: 27, vertical: 6),
-                  child: Consumer2<AdDreamsGoalsProvider, MentalStrengthEditProvider>(
-                    builder: (context, adDreamsGoalsProvider, mentalStrengthEditProvider, _) {
-                      return SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // ✅ FIRST DROPDOWN - ALWAYS ENABLED
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                              child: Container(
-                                decoration: ShapeDecoration(
-                                  color: ColorsContent.linkDropDownBackGroundColor,
-                                  shape: RoundedRectangleBorder(
-                                    side: const BorderSide(width: 0.8, color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(8.0),
-                                  ),
-                                ),
-                                child: DropdownButtonFormField<String>(
-                                  hint: Text("Select Category", style: CustomTextStyles.bodySmallGray700),
-                                  style: CustomTextStyles.bodySmallGray700,
-                                  iconEnabledColor: ColorsContent.newThemeColor,
-                                  iconDisabledColor: ColorsContent.newThemeColor,
-                                  value: adDreamsGoalsProvider.goalOptions.contains(adDreamsGoalsProvider.selectedOption)
-                                      ? adDreamsGoalsProvider.selectedOption
-                                      : (adDreamsGoalsProvider.goalOptions.contains("Create New Goal") ? "Create New Goal" : null),
-                                  decoration: const InputDecoration(
-                                    border: InputBorder.none,
-                                    contentPadding: EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-                                  ),
-                                  onChanged: (String? newValue) {
-                                    setState(() {
-                                      adDreamsGoalsProvider.selectedOption = newValue;
-
-                                      // ✅ When switching back to "Create New Goal", clear everything except shared link
-                                      if (newValue == "Create New Goal") {
-                                        adDreamsGoalsProvider.selectedExistingGoal = null;
-                                        adDreamsGoalsProvider.nameEditTextController.text = "";
-                                        adDreamsGoalsProvider.commentEditTextController.text = "";
-                                        adDreamsGoalsProvider.selectedDate = "";
-
-                                        // Clear all media
-                                        adDreamsGoalsProvider.recordedFilePath.clear();
-                                        adDreamsGoalsProvider.pickedImages.clear();
-                                        adDreamsGoalsProvider.takedImages.clear();
-                                        adDreamsGoalsProvider.alreadyRecordedFilePath.clear();
-                                        adDreamsGoalsProvider.alreadyPickedImages.clear();
-
-                                        // Clear location
-                                        adDreamsGoalsProvider.selectedLocationName = "";
-                                        adDreamsGoalsProvider.selectedLatitude = "";
-                                        adDreamsGoalsProvider.selectedLongitude = "";
-                                        adDreamsGoalsProvider.selectedLocationAddress = "";
-
-                                        // Clear actions
-                                        adDreamsGoalsProvider.goalModelIdName.clear();
-
-                                        // Clear category
-                                        editProfileProvider.categorys = null;
-                                        editProfileProvider.selectedCategory = null;
-                                        editProfileProvider.interestsValueController.text = "";
-
-                                        adDreamsGoalsProvider.mediaSelected = 0;
-
-                                        // ✅ Keep ONLY the shared link
-                                        if (sharedData != null && (sharedData!.url ?? '').isNotEmpty) {
-                                          if (!adDreamsGoalsProvider.detectedLinks.contains(sharedData!.url!)) {
-                                            adDreamsGoalsProvider.detectedLinks.clear();
-                                            adDreamsGoalsProvider.detectedLinks.add(sharedData!.url!);
-                                          }
-                                        }
-
-                                        adDreamsGoalsProvider.editDetectedLinks.clear();
-                                        unixTimestamp = null;
-                                      }
-
-                                      if (newValue != "Add to Existing Goal") {
-                                        adDreamsGoalsProvider.selectedExistingGoal = null;
-                                      }
-                                    });
-                                  },
-                                  items: (adDreamsGoalsProvider.goalListLink.isEmpty
-                                      ? ["Create New Goal"]
-                                      : [
-                                    if (!adDreamsGoalsProvider.goalOptions.contains("Create New Goal")) "Create New Goal",
-                                    ...adDreamsGoalsProvider.goalOptions,
-                                  ])
-                                      .toSet()
-                                      .map((String option) {
-                                    return DropdownMenuItem<String>(
-                                      value: option,
-                                      child: Text(option),
-                                    );
-                                  }).toList(),
-                                ),
-                              ),
-                            ),
-
-                            const SizedBox(height: 5),
-
-                            // SECOND DROPDOWN (only when needed)
-                            if (adDreamsGoalsProvider.selectedOption == "Add to Existing Goal") ...[
-                              const SizedBox(height: 10),
+        ? WillPopScope(
+      onWillPop: () async {
+        // ❌ Prevent going back
+        return false;
+      },
+          child: SafeArea(
+                child: Scaffold(
+          appBar: buildAppBarNumuEditGoals(
+            context,
+            size,
+            heading: adDreamsGoalsProvider.selectedOption == "Add to Existing Goal"
+                ? "Share Goal & Dreams"
+                : "Share Goal & Dreams",
+          ),
+          body: Stack(
+            children: [
+              Container(
+                width: size.width,
+                height: size.height,
+                decoration: BoxDecoration(
+                  color: ColorsContent.homeBackGroundColor,
+                ),
+                child: Form(
+                  key: _formKey,
+                  child: Container(
+                    width: double.maxFinite,
+                    padding: const EdgeInsets.symmetric(horizontal: 27, vertical: 6),
+                    child: Consumer2<AdDreamsGoalsProvider, MentalStrengthEditProvider>(
+                      builder: (context, adDreamsGoalsProvider, mentalStrengthEditProvider, _) {
+                        return SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // ✅ FIRST DROPDOWN - ALWAYS ENABLED
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 0.0),
                                 child: Container(
                                   decoration: ShapeDecoration(
-                                    color: Colors.white,
+                                    color: ColorsContent.linkDropDownBackGroundColor,
                                     shape: RoundedRectangleBorder(
                                       side: const BorderSide(width: 0.8, color: Colors.transparent),
                                       borderRadius: BorderRadius.circular(8.0),
                                     ),
                                   ),
-                                  child: IgnorePointer(
-                                    ignoring: _isLoadingNew,
-                                    child: DropdownButtonFormField<String>(
-                                      hint: Text("Select Existing Goal", style: CustomTextStyles.bodySmallGray700),
-                                      value: (() {
-                                        final selected = adDreamsGoalsProvider.selectedExistingGoal;
-                                        final list = adDreamsGoalsProvider.goalListLink;
-                                        if (selected == null || list.isEmpty) return null;
-
-                                        final exists = list.any((g) => g.id?.toString() == selected);
-                                        if (exists) {
-                                          return selected;
-                                        } else {
-                                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                                            if (mounted) {
-                                              adDreamsGoalsProvider.selectedExistingGoal = null;
-                                            }
-                                          });
-                                          return null;
-                                        }
-                                      })(),
-                                      iconEnabledColor: ColorsContent.newThemeColor,
-                                      iconDisabledColor: ColorsContent.newThemeColor,
-                                      decoration: const InputDecoration(
-                                        border: InputBorder.none,
-                                        contentPadding: EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-                                      ),
-                                      items: (() {
-                                        final list = adDreamsGoalsProvider.goalListLink;
-                                        final Map<String, dynamic> uniqueGoals = {};
-                                        for (var goalItem in list) {
-                                          if (goalItem.id != null) {
-                                            uniqueGoals[goalItem.id!.toString()] = goalItem;
-                                          }
-                                        }
-                                        return uniqueGoals.entries.map((entry) {
-                                          final goalItem = entry.value;
-                                          return DropdownMenuItem<String>(
-                                            value: entry.key,
-                                            child: Text(
-                                              goalItem.title ?? 'Unnamed Goal',
-                                              style: CustomTextStyles.bodySmallGray700,
-                                            ),
-                                          );
-                                        }).toList();
-                                      })(),
-                                      onChanged: (String? newValue) async {
-                                        if (newValue == null || newValue.isEmpty) return;
-
-                                        setState(() {
-                                          adDreamsGoalsProvider.selectedExistingGoal = newValue;
-                                          _isLoadingNew = true;
-                                        });
-
-                                        try {
-                                          adDreamsGoalsProvider.goalModelIdName.clear();
-                                          await mentalStrengthEditProvider.fetchGoalDetails(
-                                            goalId: newValue,
-                                            context: context,
-                                          );
-                                          applyRiskLogicInit();
-                                        } catch (e) {
-                                          debugPrint("⚠️ Error fetching goal details: $e");
-                                        } finally {
-                                          if (mounted) {
-                                            setState(() {
-                                              _isLoadingNew = false;
-                                            });
-                                          }
-                                        }
-                                      },
+                                  child: DropdownButtonFormField<String>(
+                                    hint: Text("Select Category", style: CustomTextStyles.bodySmallGray700),
+                                    style: CustomTextStyles.bodySmallGray700,
+                                    iconEnabledColor: ColorsContent.newThemeColor,
+                                    iconDisabledColor: ColorsContent.newThemeColor,
+                                    value: adDreamsGoalsProvider.goalOptions.contains(adDreamsGoalsProvider.selectedOption)
+                                        ? adDreamsGoalsProvider.selectedOption
+                                        : (adDreamsGoalsProvider.goalOptions.contains("Create New Goal") ? "Create New Goal" : null),
+                                    decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                      contentPadding: EdgeInsets.symmetric(horizontal: 18, vertical: 10),
                                     ),
+                                    onChanged: (String? newValue) {
+                                      setState(() {
+                                        adDreamsGoalsProvider.selectedOption = newValue;
+          
+                                        // ✅ When switching back to "Create New Goal", clear everything except shared link
+                                        if (newValue == "Create New Goal") {
+                                          adDreamsGoalsProvider.selectedExistingGoal = null;
+                                          adDreamsGoalsProvider.nameEditTextController.text = "";
+                                          adDreamsGoalsProvider.commentEditTextController.text = "";
+                                          adDreamsGoalsProvider.selectedDate = "";
+          
+                                          // Clear all media
+                                          adDreamsGoalsProvider.recordedFilePath.clear();
+                                          adDreamsGoalsProvider.pickedImages.clear();
+                                          adDreamsGoalsProvider.takedImages.clear();
+                                          adDreamsGoalsProvider.alreadyRecordedFilePath.clear();
+                                          adDreamsGoalsProvider.alreadyPickedImages.clear();
+          
+                                          // Clear location
+                                          adDreamsGoalsProvider.selectedLocationName = "";
+                                          adDreamsGoalsProvider.selectedLatitude = "";
+                                          adDreamsGoalsProvider.selectedLongitude = "";
+                                          adDreamsGoalsProvider.selectedLocationAddress = "";
+          
+                                          // Clear actions
+                                          adDreamsGoalsProvider.goalModelIdName.clear();
+          
+                                          // Clear category
+                                          editProfileProvider.categorys = null;
+                                          editProfileProvider.selectedCategory = null;
+                                          editProfileProvider.interestsValueController.text = "";
+          
+                                          adDreamsGoalsProvider.mediaSelected = 0;
+          
+                                          // ✅ Keep ONLY the shared link
+                                          if (sharedData != null && (sharedData!.url ?? '').isNotEmpty) {
+                                            if (!adDreamsGoalsProvider.detectedLinks.contains(sharedData!.url!)) {
+                                              adDreamsGoalsProvider.detectedLinks.clear();
+                                              adDreamsGoalsProvider.detectedLinks.add(sharedData!.url!);
+                                            }
+                                          }
+          
+                                          adDreamsGoalsProvider.editDetectedLinks.clear();
+                                          unixTimestamp = null;
+                                        }
+          
+                                        if (newValue != "Add to Existing Goal") {
+                                          adDreamsGoalsProvider.selectedExistingGoal = null;
+                                        }
+                                      });
+                                    },
+                                    items: (adDreamsGoalsProvider.goalListLink.isEmpty
+                                        ? ["Create New Goal"]
+                                        : [
+                                      if (!adDreamsGoalsProvider.goalOptions.contains("Create New Goal")) "Create New Goal",
+                                      ...adDreamsGoalsProvider.goalOptions,
+                                    ])
+                                        .toSet()
+                                        .map((String option) {
+                                      return DropdownMenuItem<String>(
+                                        value: option,
+                                        child: Text(option),
+                                      );
+                                    }).toList(),
                                   ),
                                 ),
                               ),
-                            ],
-
-                            const SizedBox(height: 15),
-                            _buildNameEditText(context),
-                            const SizedBox(height: 15),
-
-                            Consumer<EditProfileProvider>(
-                              builder: (context, editProfileProvider, _) {
-                                final categoryList = editProfileProvider.getCategoryModel?.category ?? [];
-                                Category? selectedCategory = editProfileProvider.selectedCategory;
-
-                                if (selectedCategory != null && categoryList.isNotEmpty) {
-                                  final match = categoryList.firstWhere(
-                                        (cat) => cat.id.toString() == selectedCategory?.id.toString(),
-                                    orElse: () => Category(id: '', categoryName: '', categoryImg: ''),
-                                  );
-                                  if (match.id == '') {
-                                    selectedCategory = null;
-                                  } else {
-                                    selectedCategory = match;
-                                  }
-                                }
-
-                                return Container(
-                                  height: size.height * 0.055,
-                                  padding: const EdgeInsets.only(left: 10, right: 5),
-                                  decoration: ShapeDecoration(
-                                    color: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      side: const BorderSide(width: 0.8, color: Colors.transparent),
-                                      borderRadius: BorderRadius.circular(8.0),
+          
+                              const SizedBox(height: 5),
+          
+                              // SECOND DROPDOWN (only when needed)
+                              if (adDreamsGoalsProvider.selectedOption == "Add to Existing Goal") ...[
+                                const SizedBox(height: 10),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                                  child: Container(
+                                    decoration: ShapeDecoration(
+                                      color: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                        side: const BorderSide(width: 0.8, color: Colors.transparent),
+                                        borderRadius: BorderRadius.circular(8.0),
+                                      ),
                                     ),
-                                  ),
-                                  child: categoryList.isEmpty
-                                      ? const SizedBox()
-                                      : DropdownButton<Category>(
-                                    value: selectedCategory,
-                                    items: categoryList.map((Category value) {
-                                      return DropdownMenuItem<Category>(
-                                        value: value,
-                                        child: Text(
-                                          value.categoryName ?? '',
-                                          style: CustomTextStyles.bodySmallGray700,
+                                    child: IgnorePointer(
+                                      ignoring: _isLoadingNew,
+                                      child: DropdownButtonFormField<String>(
+                                        hint: Text("Select Existing Goal", style: CustomTextStyles.bodySmallGray700),
+                                        value: (() {
+                                          final selected = adDreamsGoalsProvider.selectedExistingGoal;
+                                          final list = adDreamsGoalsProvider.goalListLink;
+                                          if (selected == null || list.isEmpty) return null;
+          
+                                          final exists = list.any((g) => g.id?.toString() == selected);
+                                          if (exists) {
+                                            return selected;
+                                          } else {
+                                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                                              if (mounted) {
+                                                adDreamsGoalsProvider.selectedExistingGoal = null;
+                                              }
+                                            });
+                                            return null;
+                                          }
+                                        })(),
+                                        iconEnabledColor: ColorsContent.newThemeColor,
+                                        iconDisabledColor: ColorsContent.newThemeColor,
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                          contentPadding: EdgeInsets.symmetric(horizontal: 18, vertical: 10),
                                         ),
-                                      );
-                                    }).toList(),
-                                    hint: Text(
-                                      editProfileProvider.interestsValueController.text.isEmpty
-                                          ? 'Select a category'
-                                          : editProfileProvider.interestsValueController.text,
-                                      style: CustomTextStyles.bodySmallGray700,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10),
-                                    underline: const SizedBox(),
-                                    isExpanded: true,
-                                    iconEnabledColor: ColorsContent.newThemeColor,
-                                    iconDisabledColor: ColorsContent.newThemeColor,
-                                    onChanged: (value) {
-                                      if (value != null) {
-                                        editProfileProvider.selectedCategory = value;
-                                        editProfileProvider.selectCategory(
-                                          value: value.categoryName.toString(),
-                                          mainCategory: value,
-                                        );
-                                        _isTokenExpired();
-                                        editProfileProvider.notifyListeners();
-                                      }
-                                    },
-                                  ),
-                                );
-                              },
-                            ),
-
-                            const SizedBox(height: 15),
-                            _buildAchievementDate(context),
-                            const SizedBox(height: 25),
-
-                            adDreamsGoalsProvider.selectedOption == 'Add to Existing Goal'
-                                ? _buildAddMediaColumnEdit(context, size)
-                                : _buildAddMediaColumn(context, size),
-
-                            const SizedBox(height: 11),
-                            const SizedBox(height: 24),
-
-                            adDreamsGoalsProvider.selectedOption == 'Add to Existing Goal'
-                                ? _buildCommentEditTextEditLink(context)
-                                : _buildCommentEditText(context),
-
-                            const SizedBox(height: 25),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 2),
-                              child: Text(
-                                "Actions to achieve the goal",
-                                style: theme.textTheme.titleSmall,
-                              ),
-                            ),
-                            const SizedBox(height: 3),
-                            _buildAddActionsButton(context),
-                            const SizedBox(height: 15),
-
-                            adDreamsGoalsProvider.selectedOption == 'Add to Existing Goal'
-                                ? Consumer2<AdDreamsGoalsProvider, AddActionsProvider>(
-                              builder: (context, adDreamsGoalsProvider, addActionsProvider, _) {
-                                return SizedBox(
-                                  height: adDreamsGoalsProvider.goalModelIdName.length * size.height * 0.065,
-                                  child: ListView.builder(
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    itemCount: adDreamsGoalsProvider.goalModelIdName.length,
-                                    itemBuilder: (context, index) {
-                                      var data = adDreamsGoalsProvider.goalModelIdName[index];
-                                      return Row(
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {},
-                                            child: Container(
-                                              margin: const EdgeInsets.only(bottom: 10),
-                                              height: size.height * 0.055,
-                                              width: size.width * 0.86,
-                                              padding: const EdgeInsets.only(bottom: 5, top: 5, left: 0, right: 5),
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius: BorderRadius.circular(5),
-                                                border: Border.all(color: Colors.grey, width: 0.5),
+                                        items: (() {
+                                          final list = adDreamsGoalsProvider.goalListLink;
+                                          final Map<String, dynamic> uniqueGoals = {};
+                                          for (var goalItem in list) {
+                                            if (goalItem.id != null) {
+                                              uniqueGoals[goalItem.id!.toString()] = goalItem;
+                                            }
+                                          }
+                                          return uniqueGoals.entries.map((entry) {
+                                            final goalItem = entry.value;
+                                            return DropdownMenuItem<String>(
+                                              value: entry.key,
+                                              child: Text(
+                                                goalItem.title ?? 'Unnamed Goal',
+                                                style: CustomTextStyles.bodySmallGray700,
                                               ),
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                children: [
-                                                  GestureDetector(
-                                                    onTap: () async {
-                                                      customPopup(
-                                                        context: context,
-                                                        onPressedDelete: () async {
-                                                          adDreamsGoalsProvider.getAddActionIdAndNameClear(index);
-                                                          await addActionsProvider.deleteActionFunction(
-                                                            deleteId: data.id,
-                                                            context: context,
-                                                          );
-                                                          Navigator.of(context).pop();
-                                                        },
-                                                        yes: "Yes",
-                                                        title: 'Do you Need Delete',
-                                                        content: 'Are you sure do you need delete',
-                                                      );
-                                                    },
-                                                    child: Padding(
-                                                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                            );
+                                          }).toList();
+                                        })(),
+                                        onChanged: (String? newValue) async {
+                                          if (newValue == null || newValue.isEmpty) return;
+          
+                                          setState(() {
+                                            adDreamsGoalsProvider.selectedExistingGoal = newValue;
+                                            _isLoadingNew = true;
+                                          });
+          
+                                          try {
+                                            adDreamsGoalsProvider.goalModelIdName.clear();
+                                            await mentalStrengthEditProvider.fetchGoalDetails(
+                                              goalId: newValue,
+                                              context: context,
+                                            );
+                                            applyRiskLogicInit();
+                                          } catch (e) {
+                                            debugPrint("⚠️ Error fetching goal details: $e");
+                                          } finally {
+                                            if (mounted) {
+                                              setState(() {
+                                                _isLoadingNew = false;
+                                              });
+                                            }
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+          
+                              const SizedBox(height: 15),
+                              _buildNameEditText(context),
+                              const SizedBox(height: 15),
+          
+                              Consumer<EditProfileProvider>(
+                                builder: (context, editProfileProvider, _) {
+                                  final categoryList = editProfileProvider.getCategoryModel?.category ?? [];
+                                  Category? selectedCategory = editProfileProvider.selectedCategory;
+          
+                                  if (selectedCategory != null && categoryList.isNotEmpty) {
+                                    final match = categoryList.firstWhere(
+                                          (cat) => cat.id.toString() == selectedCategory?.id.toString(),
+                                      orElse: () => Category(id: '', categoryName: '', categoryImg: ''),
+                                    );
+                                    if (match.id == '') {
+                                      selectedCategory = null;
+                                    } else {
+                                      selectedCategory = match;
+                                    }
+                                  }
+          
+                                  return Container(
+                                    height: size.height * 0.055,
+                                    padding: const EdgeInsets.only(left: 10, right: 5),
+                                    decoration: ShapeDecoration(
+                                      color: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                        side: const BorderSide(width: 0.8, color: Colors.transparent),
+                                        borderRadius: BorderRadius.circular(8.0),
+                                      ),
+                                    ),
+                                    child: categoryList.isEmpty
+                                        ? const SizedBox()
+                                        : DropdownButton<Category>(
+                                      value: selectedCategory,
+                                      items: categoryList.map((Category value) {
+                                        return DropdownMenuItem<Category>(
+                                          value: value,
+                                          child: Text(
+                                            value.categoryName ?? '',
+                                            style: CustomTextStyles.bodySmallGray700,
+                                          ),
+                                        );
+                                      }).toList(),
+                                      hint: Text(
+                                        editProfileProvider.interestsValueController.text.isEmpty
+                                            ? 'Select a category'
+                                            : editProfileProvider.interestsValueController.text,
+                                        style: CustomTextStyles.bodySmallGray700,
+                                      ),
+                                      borderRadius: BorderRadius.circular(10),
+                                      underline: const SizedBox(),
+                                      isExpanded: true,
+                                      iconEnabledColor: ColorsContent.newThemeColor,
+                                      iconDisabledColor: ColorsContent.newThemeColor,
+                                      onChanged: (value) {
+                                        if (value != null) {
+                                          editProfileProvider.selectedCategory = value;
+                                          editProfileProvider.selectCategory(
+                                            value: value.categoryName.toString(),
+                                            mainCategory: value,
+                                          );
+                                          _isTokenExpired();
+                                          editProfileProvider.notifyListeners();
+                                        }
+                                      },
+                                    ),
+                                  );
+                                },
+                              ),
+          
+                              const SizedBox(height: 15),
+                              _buildAchievementDate(context),
+                              const SizedBox(height: 25),
+          
+                              adDreamsGoalsProvider.selectedOption == 'Add to Existing Goal'
+                                  ? _buildAddMediaColumnEdit(context, size)
+                                  : _buildAddMediaColumn(context, size),
+          
+                              const SizedBox(height: 11),
+                              const SizedBox(height: 24),
+          
+                              adDreamsGoalsProvider.selectedOption == 'Add to Existing Goal'
+                                  ? _buildCommentEditTextEditLink(context)
+                                  : _buildCommentEditText(context),
+          
+                              const SizedBox(height: 25),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 2),
+                                child: Text(
+                                  "Actions to achieve the goal",
+                                  style: theme.textTheme.titleSmall,
+                                ),
+                              ),
+                              const SizedBox(height: 3),
+                              _buildAddActionsButton(context),
+                              const SizedBox(height: 15),
+          
+                              adDreamsGoalsProvider.selectedOption == 'Add to Existing Goal'
+                                  ? Consumer2<AdDreamsGoalsProvider, AddActionsProvider>(
+                                builder: (context, adDreamsGoalsProvider, addActionsProvider, _) {
+                                  return SizedBox(
+                                    height: adDreamsGoalsProvider.goalModelIdName.length * size.height * 0.065,
+                                    child: ListView.builder(
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      itemCount: adDreamsGoalsProvider.goalModelIdName.length,
+                                      itemBuilder: (context, index) {
+                                        var data = adDreamsGoalsProvider.goalModelIdName[index];
+                                        return Row(
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () {},
+                                              child: Container(
+                                                margin: const EdgeInsets.only(bottom: 10),
+                                                height: size.height * 0.055,
+                                                width: size.width * 0.86,
+                                                padding: const EdgeInsets.only(bottom: 5, top: 5, left: 0, right: 5),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius: BorderRadius.circular(5),
+                                                  border: Border.all(color: Colors.grey, width: 0.5),
+                                                ),
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  children: [
+                                                    GestureDetector(
+                                                      onTap: () async {
+                                                        customPopup(
+                                                          context: context,
+                                                          onPressedDelete: () async {
+                                                            adDreamsGoalsProvider.getAddActionIdAndNameClear(index);
+                                                            await addActionsProvider.deleteActionFunction(
+                                                              deleteId: data.id,
+                                                              context: context,
+                                                            );
+                                                            Navigator.of(context).pop();
+                                                          },
+                                                          yes: "Yes",
+                                                          title: 'Do you Need Delete',
+                                                          content: 'Are you sure do you need delete',
+                                                        );
+                                                      },
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                                        child: CircleAvatar(
+                                                          radius: size.width * 0.04,
+                                                          backgroundColor: ColorsContent.newThemeColor,
+                                                          child: Icon(
+                                                            Icons.close_outlined,
+                                                            color: Colors.white,
+                                                            size: size.width * 0.04,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                                      child: SingleChildScrollView(
+                                                        scrollDirection: Axis.horizontal,
+                                                        child: SizedBox(
+                                                          width: 250,
+                                                          child: Text(
+                                                            data.name,
+                                                            overflow: TextOverflow.ellipsis,
+                                                            maxLines: 4,
+                                                            textAlign: TextAlign.start,
+                                                            style: const TextStyle(
+                                                              fontFamily: 'Poppins',
+                                                              fontSize: 14,
+                                                              fontWeight: FontWeight.w400,
+                                                              color: Colors.black,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                  );
+                                },
+                              )
+                                  : Consumer<AdDreamsGoalsProvider>(
+                                builder: (context, adDreamsGoalsProvider, _) {
+                                  return SizedBox(
+                                    height: adDreamsGoalsProvider.goalModelIdName.length * size.height * 0.06,
+                                    child: ListView.builder(
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      itemCount: adDreamsGoalsProvider.goalModelIdName.length,
+                                      itemBuilder: (context, index) {
+                                        return Row(
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () {},
+                                              child: Container(
+                                                height: size.height * 0.04,
+                                                width: size.width * 0.85,
+                                                margin: const EdgeInsets.only(bottom: 4),
+                                                padding: const EdgeInsets.only(bottom: 5, top: 5, left: 0, right: 5),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius: BorderRadius.circular(100),
+                                                  border: Border.all(color: Colors.grey, width: 0.5),
+                                                ),
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        adDreamsGoalsProvider.getAddActionIdAndNameClear(index);
+                                                      },
                                                       child: CircleAvatar(
                                                         radius: size.width * 0.04,
                                                         backgroundColor: ColorsContent.newThemeColor,
                                                         child: Icon(
-                                                          Icons.close_outlined,
+                                                          Icons.close,
                                                           color: Colors.white,
                                                           size: size.width * 0.04,
                                                         ),
                                                       ),
                                                     ),
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                                                    child: SingleChildScrollView(
-                                                      scrollDirection: Axis.horizontal,
-                                                      child: SizedBox(
-                                                        width: 250,
-                                                        child: Text(
-                                                          data.name,
-                                                          overflow: TextOverflow.ellipsis,
-                                                          maxLines: 4,
-                                                          textAlign: TextAlign.start,
-                                                          style: const TextStyle(
-                                                            fontFamily: 'Poppins',
-                                                            fontSize: 14,
-                                                            fontWeight: FontWeight.w400,
-                                                            color: Colors.black,
-                                                          ),
-                                                        ),
+                                                    Text(
+                                                      adDreamsGoalsProvider.goalModelIdName[index].name,
+                                                      textAlign: TextAlign.center,
+                                                      style: const TextStyle(
+                                                        fontFamily: 'Poppins',
+                                                        color: Colors.grey,
                                                       ),
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  ),
-                                );
-                              },
-                            )
-                                : Consumer<AdDreamsGoalsProvider>(
-                              builder: (context, adDreamsGoalsProvider, _) {
-                                return SizedBox(
-                                  height: adDreamsGoalsProvider.goalModelIdName.length * size.height * 0.06,
-                                  child: ListView.builder(
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    itemCount: adDreamsGoalsProvider.goalModelIdName.length,
-                                    itemBuilder: (context, index) {
-                                      return Row(
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {},
-                                            child: Container(
-                                              height: size.height * 0.04,
-                                              width: size.width * 0.85,
-                                              margin: const EdgeInsets.only(bottom: 4),
-                                              padding: const EdgeInsets.only(bottom: 5, top: 5, left: 0, right: 5),
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius: BorderRadius.circular(100),
-                                                border: Border.all(color: Colors.grey, width: 0.5),
-                                              ),
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      adDreamsGoalsProvider.getAddActionIdAndNameClear(index);
-                                                    },
-                                                    child: CircleAvatar(
+                                                    CircleAvatar(
                                                       radius: size.width * 0.04,
                                                       backgroundColor: ColorsContent.newThemeColor,
                                                       child: Icon(
-                                                        Icons.close,
+                                                        Icons.arrow_forward_ios_outlined,
                                                         color: Colors.white,
                                                         size: size.width * 0.04,
                                                       ),
                                                     ),
-                                                  ),
-                                                  Text(
-                                                    adDreamsGoalsProvider.goalModelIdName[index].name,
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                      fontFamily: 'Poppins',
-                                                      color: Colors.grey,
-                                                    ),
-                                                  ),
-                                                  CircleAvatar(
-                                                    radius: size.width * 0.04,
-                                                    backgroundColor: ColorsContent.newThemeColor,
-                                                    child: Icon(
-                                                      Icons.arrow_forward_ios_outlined,
-                                                      color: Colors.white,
-                                                      size: size.width * 0.04,
-                                                    ),
-                                                  ),
-                                                ],
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  ),
-                                );
-                              },
-                            ),
-
-                            const SizedBox(height: 30),
-
-                            adDreamsGoalsProvider.selectedOption == 'Add to Existing Goal'
-                                ? _buildUpdateButton(context)
-                                : _buildSaveButton(context),
-
-                            const SizedBox(height: 20),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ),
-            // 🔵 NEW LOADING (FIRST 5 SECONDS)
-            if (isLoadingSomeTime)
-              Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: Container(
-                  color: Colors.grey.withOpacity(0.5),
-                  child: Center(
-                    child: CupertinoActivityIndicator(
-                      radius: 20,
-                      color: ColorsContent.newThemeColor,
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                  );
+                                },
+                              ),
+          
+                              const SizedBox(height: 30),
+          
+                              adDreamsGoalsProvider.selectedOption == 'Add to Existing Goal'
+                                  ? _buildUpdateButton(context)
+                                  : _buildSaveButton(context),
+          
+                              const SizedBox(height: 20),
+                            ],
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
               ),
-
-            if (_isLoadingNew)
-              Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: Container(
-                  color: Colors.grey.withOpacity(0.5),
-                  child: Center(
-                    child: CupertinoActivityIndicator(
-                      radius: 20,
-                      color: ColorsContent.newThemeColor,
+              // 🔵 NEW LOADING (FIRST 5 SECONDS)
+              if (isLoadingSomeTime)
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: Container(
+                    color: Colors.grey.withOpacity(0.5),
+                    child: Center(
+                      child: CupertinoActivityIndicator(
+                        radius: 20,
+                        color: ColorsContent.newThemeColor,
+                      ),
                     ),
                   ),
                 ),
+          
+              if (_isLoadingNew)
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: Container(
+                    color: Colors.grey.withOpacity(0.5),
+                    child: Center(
+                      child: CupertinoActivityIndicator(
+                        radius: 20,
+                        color: ColorsContent.newThemeColor,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+                ),
               ),
-          ],
-        ),
-      ),
-    )
+        )
         : const TokenExpireScreen();
   }
 
