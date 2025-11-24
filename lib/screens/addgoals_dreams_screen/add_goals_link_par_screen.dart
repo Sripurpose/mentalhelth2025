@@ -82,55 +82,309 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
   bool isLoading = true;
   bool _isLoadingNew = false;
   String? unixTimestamp;
+  bool isLoadingSomeTime = true;
 
   @override
   void initState() {
-    _loadSharedContent();
+    debugPrint('🎯 AddGoalsLinkParScreen initState called');
+
+    // Step 1: Initialize focus nodes FIRST
     _goalNameFocusNode = FocusNode();
     _goalDescFocusNode = FocusNode();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    Future.delayed(const Duration(seconds: 3), () {
+      if (mounted) {
+        setState(() {
+          isLoadingSomeTime = false;
+        });
+      }
+    });
+
+    // Step 2: Load shared content SYNCHRONOUSLY first (check injected data only)
+    _loadSharedContentSync();
+    debugPrint('✅ Sync shared content load completed');
+
+    // Step 3: Get provider instances (synchronous, safe)
+    try {
+      homeProvider = Provider.of<HomeProvider>(context, listen: false);
+      mentalStrengthEditProvider = Provider.of<MentalStrengthEditProvider>(context, listen: false);
+      dashBoardProvider = Provider.of<DashBoardProvider>(context, listen: false);
+      editProfileProvider = Provider.of<EditProfileProvider>(context, listen: false);
+      adDreamsGoalsProvider = Provider.of<AdDreamsGoalsProvider>(context, listen: false);
+      debugPrint('✅ Providers initialized');
+    } catch (e) {
+      debugPrint('❌ Provider initialization error: $e');
+      super.initState();
+      return;
+    }
+
+    // Step 4: Clear all fields immediately (synchronous)
+    try {
       adDreamsGoalsProvider.selectedOption = "";
       adDreamsGoalsProvider.selectedExistingGoal = null;
       adDreamsGoalsProvider.goalListLink = [];
-      adDreamsGoalsProvider.selectedOption ??= "Create New Goal";
+      adDreamsGoalsProvider.selectedOption = "Create New Goal";
       _goalNameFocusNode.unfocus();
       _goalDescFocusNode.unfocus();
-    });
 
-    homeProvider = Provider.of<HomeProvider>(context, listen: false);
-    mentalStrengthEditProvider = Provider.of<MentalStrengthEditProvider>(context, listen: false);
-    dashBoardProvider = Provider.of<DashBoardProvider>(context, listen: false);
-    editProfileProvider = Provider.of<EditProfileProvider>(context, listen: false);
-    adDreamsGoalsProvider = Provider.of<AdDreamsGoalsProvider>(context, listen: false);
-
-    adDreamsGoalsProvider.nameEditTextController.text = "";
-    editProfileProvider.interestsValueController.text = "";
-    adDreamsGoalsProvider.selectedDate = "";
-    adDreamsGoalsProvider.commentEditTextController.text = "";
-    adDreamsGoalsProvider.recordedFilePath.clear();
-    adDreamsGoalsProvider.pickedImages.clear();
-    adDreamsGoalsProvider.takedImages.clear();
-    adDreamsGoalsProvider.selectedLocationName = "";
-    adDreamsGoalsProvider.mediaSelected = 0;
-    adDreamsGoalsProvider.detectedLinks.clear();
-
-    if (sharedData != null && (sharedData!.url ?? '').isNotEmpty) {
+      adDreamsGoalsProvider.nameEditTextController.text = "";
+      editProfileProvider.interestsValueController.text = "";
+      adDreamsGoalsProvider.selectedDate = "";
+      adDreamsGoalsProvider.commentEditTextController.text = "";
+      adDreamsGoalsProvider.recordedFilePath.clear();
+      adDreamsGoalsProvider.pickedImages.clear();
+      adDreamsGoalsProvider.takedImages.clear();
+      adDreamsGoalsProvider.selectedLocationName = "";
+      adDreamsGoalsProvider.mediaSelected = 0;
       adDreamsGoalsProvider.detectedLinks.clear();
-      adDreamsGoalsProvider.detectedLinks.add(sharedData!.url!);
-      adDreamsGoalsProvider.editDetectedLinks.clear();
-      adDreamsGoalsProvider.editDetectedLinks.add(sharedData!.url!);
+
+      debugPrint('✅ Fields cleared');
+    } catch (e) {
+      debugPrint('❌ Field clearing error: $e');
     }
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      adDreamsGoalsProvider.clearLocationSelection();
-      adDreamsGoalsProvider.fetchAllGoalsForLink(context);
-      _isTokenExpired();
-      editProfileProvider.fetchCategory();
-      adDreamsGoalsProvider.goalModelIdName.clear();
+    // Step 5: Handle shared data (NOW sharedData should be populated)
+    if (sharedData != null && (sharedData!.url ?? '').isNotEmpty) {
+      try {
+        adDreamsGoalsProvider.detectedLinks.clear();
+        adDreamsGoalsProvider.detectedLinks.add(sharedData!.url!);
+        adDreamsGoalsProvider.editDetectedLinks.clear();
+        adDreamsGoalsProvider.editDetectedLinks.add(sharedData!.url!);
+        debugPrint('✅ Shared data loaded: ${sharedData!.url}');
+      } catch (e) {
+        debugPrint('❌ Shared data error: $e');
+      }
+    } else {
+      debugPrint('⚠️ No shared data available');
+    }
+
+    // Step 6: Load async data in background (don't wait for it)
+    _loadSharedContentAsync();
+
+    // Step 7: Schedule async initialization LATER (give widget time to build first)
+    Future.delayed(const Duration(milliseconds: 1000), () {
+      if (mounted) {
+        debugPrint('⏱️ 1 second delay passed, starting async initialization');
+        _initializeAsyncData();
+      }
     });
 
     super.initState();
+    debugPrint('✅ AddGoalsLinkParScreen initState completed');
+  }
+
+  /// Load INJECTED shared content SYNCHRONOUSLY (no platform channel)
+  void _loadSharedContentSync() {
+    debugPrint('📍 Loading injected shared content synchronously');
+
+    try {
+      final hasInjected = (widget.sharedUrl != null && widget.sharedUrl!.isNotEmpty) ||
+          (widget.sharedText != null && widget.sharedText!.isNotEmpty) ||
+          ((widget.sharedImages?.isNotEmpty) ?? false);
+
+      if (hasInjected) {
+        debugPrint('✅ Injected content found');
+        sharedData = SharedContentData(
+          text: null,
+          url: widget.sharedUrl,
+          sharedText: widget.sharedText,
+          imagePaths: List<String>.from(widget.sharedImages ?? const <String>[]),
+          timestamp: DateTime.now().millisecondsSinceEpoch ~/ 1000,
+        );
+        debugPrint('✅ Injected data set: url=${sharedData!.url}');
+        isLoading = false;
+        return;
+      }
+
+      debugPrint('⚠️ No injected content found');
+      isLoading = false;
+    } catch (e) {
+      debugPrint('❌ Error in _loadSharedContentSync: $e');
+      sharedData = null;
+      isLoading = false;
+    }
+  }
+
+  /// Load from platform channel ASYNCHRONOUSLY in background
+  Future<void> _loadSharedContentAsync() async {
+    debugPrint('📍 Loading platform channel data asynchronously in background');
+
+    try {
+      // Only load from platform if no injected data
+      final hasInjected = (widget.sharedUrl != null && widget.sharedUrl!.isNotEmpty) ||
+          (widget.sharedText != null && widget.sharedText!.isNotEmpty) ||
+          ((widget.sharedImages?.isNotEmpty) ?? false);
+
+      if (hasInjected) {
+        debugPrint('⏭️ Skipping platform channel - using injected data');
+        return;
+      }
+
+      final Map<dynamic, dynamic>? result =
+      await shareDataChannel.invokeMethod<Map<dynamic, dynamic>>('getSharedData');
+
+      if (result == null) {
+        debugPrint('⚠️ No data from platform channel');
+        sharedData = null;
+        return;
+      }
+
+      final json = result.cast<String, dynamic>();
+      final String? text = json['text'] as String?;
+      final String? url = json['url'] as String?;
+      final String? sharedText = json['sharedText'] as String?;
+      final dynamic tVal = json['timestamp'];
+      final int? timestamp = tVal is num ? tVal.toInt() : null;
+      final int imageCount = json['imageCount'] as int? ?? 0;
+
+      List<String> imagePaths = <String>[];
+      if (Platform.isIOS && imageCount > 0) {
+        imagePaths = await _getImagePathsFromAppGroup(imageCount);
+      } else if (json['images'] is List) {
+        imagePaths = List<String>.from((json['images'] as List).map((e) => e.toString()));
+      }
+
+      sharedData = SharedContentData(
+        text: text,
+        url: url,
+        sharedText: sharedText,
+        imagePaths: imagePaths,
+        timestamp: timestamp ?? (DateTime.now().millisecondsSinceEpoch ~/ 1000),
+      );
+
+      debugPrint('✅ Platform channel data loaded: url=$url');
+
+      // Clear after reading
+      try {
+        await shareDataChannel.invokeMethod('clearSharedData');
+      } catch (_) {}
+    } on PlatformException catch (e) {
+      debugPrint('❌ Platform error: ${e.message}');
+      sharedData = null;
+    } catch (e) {
+      debugPrint('❌ Failed to read shared content: $e');
+      sharedData = null;
+    }
+  }
+
+  /// Separate method for async initialization to handle cold start properly
+  Future<void> _initializeAsyncData() async {
+    debugPrint('🔄 Starting async initialization');
+
+    try {
+      // Safety check 1: Widget mounted?
+      if (!mounted) {
+        debugPrint('⚠️ Widget not mounted, skipping async init');
+        return;
+      }
+
+      // Safety check 2: Context valid?
+      if (context.mounted == false) {
+        debugPrint('⚠️ Context not mounted, skipping async init');
+        return;
+      }
+
+      debugPrint('📍 Step 1: Clearing location selection');
+      try {
+        adDreamsGoalsProvider.clearLocationSelection();
+        debugPrint('✅ Step 1 completed');
+      } catch (e) {
+        debugPrint('⚠️ Step 1 error: $e');
+      }
+
+      // Check mounted
+      if (!mounted) {
+        debugPrint('⚠️ Widget unmounted after step 1');
+        return;
+      }
+
+      debugPrint('📍 Step 2: Fetching all goals for link');
+      try {
+        await adDreamsGoalsProvider.fetchAllGoalsForLink(context);
+        debugPrint('✅ Step 2 completed');
+      } catch (e) {
+        debugPrint('⚠️ Step 2 error: $e');
+      }
+
+      // Check mounted
+      if (!mounted) {
+        debugPrint('⚠️ Widget unmounted after step 2');
+        return;
+      }
+
+      debugPrint('📍 Step 3: Checking token expiry');
+      try {
+        await _isTokenExpired();
+        debugPrint('✅ Step 3 completed');
+      } catch (e) {
+        debugPrint('⚠️ Step 3 error: $e');
+      }
+
+      // Check mounted
+      if (!mounted) {
+        debugPrint('⚠️ Widget unmounted after step 3');
+        return;
+      }
+
+      debugPrint('📍 Step 4: Fetching categories');
+      try {
+        await editProfileProvider.fetchCategory();
+        debugPrint('✅ Step 4 completed');
+      } catch (e) {
+        debugPrint('⚠️ Step 4 error: $e');
+      }
+
+      // Check mounted
+      if (!mounted) {
+        debugPrint('⚠️ Widget unmounted after step 4');
+        return;
+      }
+
+      debugPrint('📍 Step 5: Clearing goal model ID names');
+      try {
+        adDreamsGoalsProvider.goalModelIdName.clear();
+        debugPrint('✅ Step 5 completed');
+      } catch (e) {
+        debugPrint('⚠️ Step 5 error: $e');
+      }
+
+      debugPrint('✅ All async initialization completed successfully');
+    } catch (e, stackTrace) {
+      debugPrint('❌ FATAL Error in async initialization: $e');
+      debugPrint('Stack trace: $stackTrace');
+
+      if (mounted) {
+        try {
+          showCustomSnackBar(
+            context: context,
+            message: 'Error loading data. Please refresh.',
+          );
+        } catch (_) {
+          debugPrint('⚠️ Could not show snack bar');
+        }
+      }
+    }
+  }
+
+  /// Updated _isTokenExpired to be async and safe
+  Future<void> _isTokenExpired() async {
+    try {
+      if (!mounted) return;
+
+      await homeProvider.fetchJournals(initial: true, context: context);
+
+      if (!mounted) return;
+
+      tokenStatus = TokenManager.checkTokenExpiry();
+
+      if (tokenStatus && mounted) {
+        setState(() {
+          logger.e("Token status changed: $tokenStatus");
+        });
+      }
+    } catch (e) {
+      debugPrint('❌ Error in _isTokenExpired: $e');
+    }
   }
 
   void applyRiskLogicInit() {
@@ -198,68 +452,6 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
     }
   }
 
-  Future<void> _loadSharedContent() async {
-    setState(() => isLoading = true);
-
-    final hasInjected = (widget.sharedUrl != null && widget.sharedUrl!.isNotEmpty) ||
-        (widget.sharedText != null && widget.sharedText!.isNotEmpty) ||
-        ((widget.sharedImages?.isNotEmpty) ?? false);
-
-    if (hasInjected) {
-      sharedData = SharedContentData(
-        text: null,
-        url: widget.sharedUrl,
-        sharedText: widget.sharedText,
-        imagePaths: List<String>.from(widget.sharedImages ?? const <String>[]),
-        timestamp: DateTime.now().millisecondsSinceEpoch ~/ 1000,
-      );
-      setState(() => isLoading = false);
-      return;
-    }
-
-    try {
-      final Map<dynamic, dynamic>? result = await shareDataChannel.invokeMethod<Map<dynamic, dynamic>>('getSharedData');
-
-      if (result == null) {
-        sharedData = null;
-      } else {
-        final json = result.cast<String, dynamic>();
-        final String? text = json['text'] as String?;
-        final String? url = json['url'] as String?;
-        final String? sharedText = json['sharedText'] as String?;
-        final dynamic tVal = json['timestamp'];
-        final int? timestamp = tVal is num ? tVal.toInt() : null;
-        final int imageCount = json['imageCount'] as int? ?? 0;
-
-        List<String> imagePaths = <String>[];
-        if (Platform.isIOS && imageCount > 0) {
-          imagePaths = await _getImagePathsFromAppGroup(imageCount);
-        } else if (json['images'] is List) {
-          imagePaths = List<String>.from((json['images'] as List).map((e) => e.toString()));
-        }
-
-        sharedData = SharedContentData(
-          text: text,
-          url: url,
-          sharedText: sharedText,
-          imagePaths: imagePaths,
-          timestamp: timestamp ?? (DateTime.now().millisecondsSinceEpoch ~/ 1000),
-        );
-
-        try {
-          await shareDataChannel.invokeMethod('clearSharedData');
-        } catch (_) {}
-      }
-    } on PlatformException catch (e) {
-      debugPrint('Platform error: ${e.message}');
-      sharedData = null;
-    } catch (e) {
-      debugPrint('Failed to read shared content: $e');
-      sharedData = null;
-    }
-
-    setState(() => isLoading = false);
-  }
 
   Future<List<String>> _getImagePathsFromAppGroup(int imageCount) async {
     final List<String> paths = [];
@@ -281,15 +473,7 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
     return paths;
   }
 
-  Future<void> _isTokenExpired() async {
-    await homeProvider.fetchJournals(initial: true, context: context);
-    tokenStatus = TokenManager.checkTokenExpiry();
-    if (tokenStatus) {
-      setState(() {
-        logger.e("Token status changed: $tokenStatus");
-      });
-    }
-  }
+
 
   @override
   void dispose() {
@@ -785,6 +969,23 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                 ),
               ),
             ),
+            // 🔵 NEW LOADING (FIRST 5 SECONDS)
+            if (isLoadingSomeTime)
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: Container(
+                  color: Colors.grey.withOpacity(0.5),
+                  child: Center(
+                    child: CupertinoActivityIndicator(
+                      radius: 20,
+                      color: ColorsContent.newThemeColor,
+                    ),
+                  ),
+                ),
+              ),
 
             if (_isLoadingNew)
               Positioned(

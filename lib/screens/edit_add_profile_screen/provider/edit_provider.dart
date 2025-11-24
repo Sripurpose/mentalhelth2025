@@ -548,6 +548,7 @@ class EditProfileProvider extends ChangeNotifier {
           "authorization": "$token"
         },
       );
+      print("responsecategory${response.body}");
       if (response.statusCode == 200) {
         getCategoryModel = getCategoryFromJson(response.body);
         notifyListeners();

@@ -1,5 +1,5 @@
 // ==============================
-// main.dart (COMPLETE + FIXED)
+// main.dart (FIXED - Cold Start Navigation)
 // ==============================
 import 'dart:async';
 import 'dart:convert';
@@ -60,16 +60,134 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 const platform = MethodChannel('com.numuapp.numuapp/native');
 String? oneSignalIdOriginal;
 
+// ===== Global Deep Link Handler =====
+class DeepLinkHandler {
+  static final DeepLinkHandler _instance = DeepLinkHandler._internal();
+
+  factory DeepLinkHandler() => _instance;
+
+  DeepLinkHandler._internal();
+
+  String? pendingUrl;
+  String? pendingText;
+  List<String>? pendingImages;
+  bool hasPendingNavigation = false;
+  bool _isNavigating = false;
+
+  Future<void> handleDeepLink({
+    String? url,
+    String? text,
+    List<String>? images,
+  }) async {
+    if (_isNavigating) {
+      debugPrint('⚠️ Navigation already in progress, skipping');
+      return;
+    }
+
+    pendingUrl = url;
+    pendingText = text;
+    pendingImages = images;
+    hasPendingNavigation = true;
+
+    debugPrint('📌 Deep link queued: url=$url, text=$text, images=${images?.length ?? 0}');
+
+    // Try to navigate immediately, if not possible it will be handled on resume
+    _attemptNavigation();
+  }
+
+  void _attemptNavigation() {
+    if (!hasPendingNavigation || _isNavigating) return;
+
+    final ctx = navigatorKey.currentContext;
+    if (ctx == null) {
+      debugPrint('⚠️ Context not ready yet, will retry on resume');
+      return;
+    }
+
+    debugPrint('✅ Navigating with pending deep link');
+    _performNavigation(ctx, pendingUrl, pendingText, pendingImages);
+    hasPendingNavigation = false;
+  }
+
+  void _performNavigation(
+      BuildContext ctx,
+      String? url,
+      String? text,
+      List<String>? images,
+      ) {
+    if (_isNavigating) {
+      debugPrint('⚠️ Navigation already in progress');
+      return;
+    }
+
+    try {
+      _isNavigating = true;
+      debugPrint('🚀 Starting navigation to AddGoalsLinkParScreen with url=$url');
+
+      // Delay slightly to ensure widget tree is ready
+      Future.delayed(const Duration(milliseconds: 500), () {
+        try {
+          final navigator = Navigator.of(ctx);
+          debugPrint('📍 Navigator state: ${navigator.mounted}');
+
+          final route = MaterialPageRoute(
+            builder: (_) {
+              debugPrint('🔨 Building AddGoalsLinkParScreen with url=$url');
+              return AddGoalsLinkParScreen(
+                sharedUrl: url,
+                sharedText: text,
+                sharedImages: images,
+                onClose: () {
+                  debugPrint('❌ AddGoalsLinkParScreen onClose called');
+                  _isNavigating = false;
+                },
+              );
+            },
+            settings: RouteSettings(
+              name: 'AddGoalsLinkParScreen',
+              arguments: {'url': url, 'text': text, 'images': images},
+            ),
+          );
+
+          navigator.push(route).then((result) {
+            debugPrint('✅ Navigation completed with result: $result');
+            _isNavigating = false;
+          }).catchError((e) {
+            debugPrint('❌ Navigation error: $e');
+            _isNavigating = false;
+          });
+
+          debugPrint('✅ Navigation pushed successfully');
+        } catch (e) {
+          debugPrint('❌ Navigation error in delayed: $e\n${StackTrace.current}');
+          _isNavigating = false;
+        }
+      });
+    } catch (e) {
+      debugPrint('❌ Error in _performNavigation: $e\n${StackTrace.current}');
+      _isNavigating = false;
+    }
+  }
+
+  void resetNavigation() {
+    _isNavigating = false;
+    hasPendingNavigation = false;
+    pendingUrl = null;
+    pendingText = null;
+    pendingImages = null;
+  }
+}
+
+final deepLinkHandler = DeepLinkHandler();
+
 // ===== YouTube URL Handler =====
 class YouTubeUrlHandler {
-  /// Detect if URL is YouTube and convert to playable format
   static String? getPlayableYouTubeUrl(String? urlString) {
     if (urlString == null || urlString.isEmpty) return null;
 
     try {
       var url = urlString.trim();
 
-      // Add https if missing
       if (!url.startsWith('http://') && !url.startsWith('https://')) {
         url = 'https://$url';
       }
@@ -77,23 +195,16 @@ class YouTubeUrlHandler {
       final uri = Uri.parse(url);
       String? videoId;
 
-      // Format: youtube.com/watch?v=VIDEO_ID
       if ((uri.host.contains('youtube.com')) && uri.queryParameters.containsKey('v')) {
         videoId = uri.queryParameters['v'];
-      }
-      // Format: youtu.be/VIDEO_ID
-      else if (uri.host.contains('youtu.be')) {
+      } else if (uri.host.contains('youtu.be')) {
         videoId = uri.pathSegments.isNotEmpty ? uri.pathSegments.first : null;
-      }
-      // Format: youtube.com/embed/VIDEO_ID
-      else if (uri.host.contains('youtube.com') && uri.path.contains('/embed/')) {
+      } else if (uri.host.contains('youtube.com') && uri.path.contains('/embed/')) {
         videoId = uri.pathSegments.where((e) => e.isNotEmpty).lastWhere(
               (_) => true,
           orElse: () => '',
         );
-      }
-      // Format: youtube.com/v/VIDEO_ID
-      else if (uri.host.contains('youtube.com') && uri.path.contains('/v/')) {
+      } else if (uri.host.contains('youtube.com') && uri.path.contains('/v/')) {
         videoId = uri.pathSegments.where((e) => e.isNotEmpty).lastWhere(
               (_) => true,
           orElse: () => '',
@@ -113,7 +224,6 @@ class YouTubeUrlHandler {
     }
   }
 
-  /// Check if URL is YouTube
   static bool isYouTubeUrl(String? url) {
     if (url == null || url.isEmpty) return false;
     final lowerUrl = url.toLowerCase();
@@ -122,7 +232,6 @@ class YouTubeUrlHandler {
         lowerUrl.contains('youtube.com/embed');
   }
 
-  /// Check if string looks like a URL
   static bool looksLikeUrl(String text) {
     if (text.isEmpty) return false;
     return text.startsWith('http://') ||
@@ -149,7 +258,7 @@ Future<void> initializeReferralTracking() async {
   debugPrint("Referral tracking initialized");
 }
 
-// ===== Share Receiver =====
+// ===== Share Receiver (Android) =====
 class ShareReceiver {
   static const _channel = MethodChannel('com.numuapp.share/channel');
 
@@ -161,7 +270,6 @@ class ShareReceiver {
 
         if (data != null) {
           data = data.trim();
-          // Add https to URLs without scheme
           if (YouTubeUrlHandler.looksLikeUrl(data) && !data.startsWith('http')) {
             data = 'https://$data';
           }
@@ -173,24 +281,12 @@ class ShareReceiver {
         await prefs.setString('shared_type', type);
         await prefs.setString('shared_data', data ?? '');
 
-        final storedType = prefs.getString('shared_type');
-        final storedData = prefs.getString('shared_data');
-
-        debugPrint("✅ Stored successfully: Type: $storedType, Data: $storedData");
-
-        _navigateToAddGoalsScreen(type, data);
+        _processAndNavigate(type, data);
       }
     });
   }
 
-  /// Navigate to AddGoalsLinkScreen with shared content
-  static void _navigateToAddGoalsScreen(String type, String? data) {
-    final ctx = navigatorKey.currentContext;
-    if (ctx == null) {
-      debugPrint("⚠️ Navigator context is null");
-      return;
-    }
-
+  static void _processAndNavigate(String type, String? data) {
     String? sharedUrl;
     String? sharedText;
     List<String>? sharedImages;
@@ -201,7 +297,6 @@ class ShareReceiver {
         debugPrint("📄 Processing Text: $processedData");
 
         if (YouTubeUrlHandler.looksLikeUrl(processedData)) {
-          // It's a URL
           if (!processedData.startsWith('http')) {
             processedData = 'https://$processedData';
           }
@@ -215,7 +310,6 @@ class ShareReceiver {
             debugPrint("🔗 Regular URL: $sharedUrl");
           }
         } else {
-          // It's plain text
           sharedText = processedData;
           debugPrint("📝 Plain text: $sharedText");
         }
@@ -234,42 +328,28 @@ class ShareReceiver {
         debugPrint("📦 Multiple files: ${sharedImages.length}");
       }
 
-      Navigator.of(ctx).push(
-        MaterialPageRoute(
-          builder: (_) => AddGoalsLinkScreen(
-            sharedUrl: sharedUrl,
-            sharedText: sharedText,
-            sharedImages: sharedImages,
-            onClose: () {
-              Navigator.of(ctx).pop();
-              clearSharedData();
-            },
-          ),
-        ),
+      // Clear the stored data immediately after processing
+      unawaited(clearSharedData());
+
+      deepLinkHandler.handleDeepLink(
+        url: sharedUrl,
+        text: sharedText,
+        images: sharedImages,
       );
     } catch (e) {
-      debugPrint("❌ Error in _navigateToAddGoalsScreen: $e");
+      debugPrint("❌ Error in _processAndNavigate: $e");
     }
-  }
-
-  static Future<Map<String, String?>> getStoredShareData() async {
-    final prefs = await SharedPreferences.getInstance();
-    return {
-      'type': prefs.getString('shared_type'),
-      'data': prefs.getString('shared_data'),
-    };
   }
 
   static Future<void> checkAndNavigateOnResume() async {
     try {
-      final sharedData = await getStoredShareData();
-      final type = sharedData['type'];
-      final data = sharedData['data'];
+      final prefs = await SharedPreferences.getInstance();
+      final type = prefs.getString('shared_type');
+      final data = prefs.getString('shared_data');
 
       if (type != null && data != null && data.isNotEmpty) {
         debugPrint("🔄 Found stored shared data: $type - $data");
-        _navigateToAddGoalsScreen(type, data);
-        await clearSharedData();
+        _processAndNavigate(type, data);
       }
     } catch (e) {
       debugPrint("❌ Error checking stored data: $e");
@@ -293,12 +373,10 @@ void main() async {
   BindingBase.debugZoneErrorsAreFatal = true;
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 👇 Lock the app orientation to portrait only
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-
 
   try {
     ShareExtensionService.initialize();
@@ -313,7 +391,6 @@ void main() async {
       await Firebase.initializeApp(name: 'numuapp', options: DefaultFirebaseOptions.currentPlatform);
     }
 
-    // OneSignal setup (iOS)
     if (!kIsWeb && Platform.isIOS) {
       OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
       OneSignal.initialize("2c9a2265-f0a5-45a8-8f88-9faa90a04040");
@@ -333,8 +410,10 @@ void main() async {
         final ctx = navigatorKey.currentContext;
         if (ctx == null) return;
         if (type == 'actionreminder') {
-          Navigator.push(ctx, PageRouteBuilder(pageBuilder: (_, __, ___) =>
-              ReminderPushViewScreen(reminderData: Map<String, dynamic>.from(data)), transitionDuration: Duration.zero));
+          Navigator.push(ctx, PageRouteBuilder(
+            pageBuilder: (_, __, ___) => ReminderPushViewScreen(reminderData: Map<String, dynamic>.from(data)),
+            transitionDuration: Duration.zero,
+          ));
         } else if (type == 'subscription') {
           final url = data['url'] as String?;
           if (url != null && url.isNotEmpty) _launchInAppWithBrowserOptions(Uri.parse(url));
@@ -342,7 +421,6 @@ void main() async {
       });
     }
 
-    // Push (Android)
     if (!kIsWeb && Platform.isAndroid) {
       await PushNotifications.init();
       await PushNotifications.localNotiInit();
@@ -370,8 +448,10 @@ void main() async {
         final ctx = navigatorKey.currentContext;
         if (ctx == null) return;
         if (data['notification_type'] == 'actionreminder') {
-          Navigator.push(ctx, PageRouteBuilder(pageBuilder: (_, __, ___) =>
-              ReminderPushViewScreen(reminderData: Map<String, dynamic>.from(data)), transitionDuration: Duration.zero));
+          Navigator.push(ctx, PageRouteBuilder(
+            pageBuilder: (_, __, ___) => ReminderPushViewScreen(reminderData: Map<String, dynamic>.from(data)),
+            transitionDuration: Duration.zero,
+          ));
         } else if (data['notification_type'] == 'subscription') {
           final url = data['url'];
           if (url != null && (url as String).isNotEmpty) {
@@ -387,8 +467,10 @@ void main() async {
           if (ctx == null) return;
           final data = initialMessage.data;
           if (data['notification_type'] == 'actionreminder') {
-            Navigator.push(ctx, PageRouteBuilder(pageBuilder: (_, __, ___) =>
-                ReminderPushViewScreen(reminderData: Map<String, dynamic>.from(data)), transitionDuration: Duration.zero));
+            Navigator.push(ctx, PageRouteBuilder(
+              pageBuilder: (_, __, ___) => ReminderPushViewScreen(reminderData: Map<String, dynamic>.from(data)),
+              transitionDuration: Duration.zero,
+            ));
           } else if (data['notification_type'] == 'subscription') {
             final url = data['url'];
             if (url != null && (url as String).isNotEmpty) {
@@ -448,7 +530,6 @@ Future<void> _launchInAppWithBrowserOptions(Uri url) async {
       return;
     }
 
-    // Handle YouTube URLs
     if (YouTubeUrlHandler.isYouTubeUrl(urlToLaunch)) {
       final playableUrl = YouTubeUrlHandler.getPlayableYouTubeUrl(urlToLaunch);
       if (playableUrl != null) {
@@ -457,13 +538,11 @@ Future<void> _launchInAppWithBrowserOptions(Uri url) async {
       debugPrint("🎥 Launching YouTube: $urlToLaunch");
     }
 
-    // Handle custom deep links
     if (urlToLaunch.startsWith('mental://')) {
       debugPrint("⚠️ Custom deep link not implemented");
       return;
     }
 
-    // Ensure URL has scheme
     if (!urlToLaunch.startsWith('http://') && !urlToLaunch.startsWith('https://')) {
       urlToLaunch = 'https://$urlToLaunch';
     }
@@ -512,6 +591,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    debugPrint('🎯 MyApp initState called');
     WidgetsBinding.instance.addObserver(this);
 
     _checkPermissionStatus();
@@ -526,15 +606,18 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
     if (!kIsWeb && Platform.isAndroid) {
       Future.delayed(const Duration(milliseconds: 500), () async {
+        debugPrint('🔍 Checking for Android shared data on init');
         await ShareReceiver.checkAndNavigateOnResume();
       });
     }
 
     ref = FirebaseDatabase.instance.ref().child('mentalHealth');
     _observeDatabase();
-    Future.delayed(const Duration(seconds: 5), _fetchAppRegister);
+    // Delay fetchAppRegister even more to let navigation complete first
+    Future.delayed(const Duration(seconds: 10), _fetchAppRegister);
 
     ShareExtensionService.onSharedContent = (data) {
+      debugPrint('📱 ShareExtensionService received content');
       _openShareScreen(data);
     };
 
@@ -544,11 +627,19 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
+      debugPrint('🔄 App resumed');
       _checkOnResume();
+
+      // Only try pending navigation if we have pending data
+      if (deepLinkHandler.hasPendingNavigation) {
+        deepLinkHandler._attemptNavigation();
+      }
     }
 
     if (!kIsWeb && Platform.isAndroid) {
-      ShareReceiver.checkAndNavigateOnResume();
+      if (state == AppLifecycleState.resumed) {
+        ShareReceiver.checkAndNavigateOnResume();
+      }
     }
   }
 
@@ -564,36 +655,31 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   void _openShareScreen(Map<String, dynamic> data) {
     try {
+      debugPrint('📲 _openShareScreen called with data: $data');
       final images = (data['imagePaths'] as List?)?.map((e) => e.toString()).toList();
 
       var sharedUrl = data['url'] as String?;
       var sharedText = data['text'] as String? ?? data['sharedText'] as String?;
 
-      // Process YouTube URLs in text
       if (sharedText != null && YouTubeUrlHandler.isYouTubeUrl(sharedText)) {
         sharedUrl = YouTubeUrlHandler.getPlayableYouTubeUrl(sharedText);
         sharedText = null;
         debugPrint("🎥 YouTube from text: $sharedUrl");
       }
 
-      // Normalize YouTube URLs
       if (sharedUrl != null && YouTubeUrlHandler.isYouTubeUrl(sharedUrl)) {
         sharedUrl = YouTubeUrlHandler.getPlayableYouTubeUrl(sharedUrl);
         debugPrint("🎥 YouTube normalized: $sharedUrl");
       }
 
-      Navigator.of(navigatorKey.currentContext!).push(
-        MaterialPageRoute(
-          builder: (_) => AddGoalsLinkParScreen(
-            sharedUrl: sharedUrl,
-            sharedText: sharedText,
-            sharedImages: images,
-            onClose: () => Navigator.of(navigatorKey.currentContext!).pop(),
-          ),
-        ),
+      debugPrint('🚀 Calling deepLinkHandler.handleDeepLink from _openShareScreen');
+      deepLinkHandler.handleDeepLink(
+        url: sharedUrl,
+        text: sharedText,
+        images: images,
       );
     } catch (e) {
-      debugPrint("❌ Error in _openShareScreen: $e");
+      debugPrint("❌ Error in _openShareScreen: $e\n${StackTrace.current}");
     }
   }
 
@@ -608,6 +694,21 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       final snapshot = event.snapshot;
       if (snapshot.value is Map) {
         final value = Map<String, dynamic>.from(snapshot.value as Map);
+
+        // Don't trigger setState if we're navigating
+        if (deepLinkHandler._isNavigating || deepLinkHandler.hasPendingNavigation) {
+          debugPrint('⏸️ Skipping setState during navigation');
+          baseUrlLive = value['base_url_live'] as String?;
+          baseUrlQA = value['base_url_qa'] as String?;
+          oneSignalLive = value['onesignal_live'] as String?;
+          oneSignalStaging = value['onesignal_qa'] as String?;
+          baseUrlLiveIos = value['base_url_live_ios'] as String?;
+          baseUrlLiveAndroid = value['base_url_live_android'] as String?;
+          baseUrlAppShareDownloads = value['app_share_url'] as String?;
+          _setupRemoteConfig();
+          return;
+        }
+
         setState(() {
           baseUrlLive = value['base_url_live'] as String?;
           baseUrlQA = value['base_url_qa'] as String?;
@@ -640,8 +741,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     } else if (kReleaseMode) {
       if ((baseUrlLive ?? '').isNotEmpty) {
         UrlConstant.baseUrl = baseUrlLive ?? '';
-        ///appstore live ///
-       // UrlConstant.oneSignalRemote = oneSignalLive ?? '';
         UrlConstant.oneSignalRemote = oneSignalStaging ?? '';
         UrlConstant.appShareDownloads = baseUrlAppShareDownloads ?? '';
         isBaseUrlReady = true;
@@ -660,6 +759,13 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 
   Future<void> _fetchAppRegister() async {
+    // Don't fetch if we're navigating
+    if (deepLinkHandler._isNavigating || deepLinkHandler.hasPendingNavigation) {
+      debugPrint('⏸️ Skipping fetchAppRegister during navigation, will retry later');
+      Future.delayed(const Duration(seconds: 3), _fetchAppRegister);
+      return;
+    }
+
     final deviceType = Platform.isAndroid ? 'android' : 'ios';
     final signInProvider = Provider.of<SignInProvider>(context, listen: false);
     await signInProvider.fetchAppRegister(context, deviceType: deviceType);
@@ -784,7 +890,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       return;
     }
 
-    // Process shared URL if it's YouTube
     var sharedUrl = _sharedContent?.url;
     var sharedText = _sharedContent?.sharedText ?? _sharedContent?.text;
 
@@ -928,7 +1033,6 @@ class ShareExtensionService {
     final String? sharedText = (data['sharedText'] as String?) ?? text;
     var url = data['url'] as String?;
 
-    // Process YouTube URLs
     if (url != null && YouTubeUrlHandler.isYouTubeUrl(url)) {
       url = YouTubeUrlHandler.getPlayableYouTubeUrl(url);
       debugPrint("🎥 YouTube URL processed: $url");
