@@ -1240,18 +1240,26 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                         .toList();
 
                     if (matches.isNotEmpty) {
-                      final firstLink = matches.first;
+                      // Normalize the detected URL before saving
+                      final firstRawLink = matches.first;
+                      final normalizedLink = normalizeUrl(firstRawLink);
+
                       setState(() {
                         adDreamsGoalsProvider.editDetectedLinks.clear();
-                        adDreamsGoalsProvider.editDetectedLinks = [firstLink];
+                        adDreamsGoalsProvider.editDetectedLinks = [normalizedLink];
                       });
 
+                      // Remove only the raw link from text field
                       final cleanedText = value.replaceAll(adDreamsGoalsProvider.urlRegex, '').trim();
+
                       adDreamsGoalsProvider.commentEditTextController.text = cleanedText;
                       adDreamsGoalsProvider.commentEditTextController.selection =
-                          TextSelection.fromPosition(TextPosition(offset: cleanedText.length));
+                          TextSelection.fromPosition(
+                            TextPosition(offset: cleanedText.length),
+                          );
                     }
                   },
+
                   onEditingComplete: () {
                     _goalDescFocusNode.unfocus();
                     setState(() {});
@@ -2160,4 +2168,15 @@ class SharedContentData {
     required this.imagePaths,
     this.timestamp,
   });
+}
+
+
+String normalizeUrl(String url) {
+  url = url.trim();
+
+  if (url.startsWith("http://") || url.startsWith("https://")) {
+    return url;
+  }
+
+  return "https://$url";  // Force a valid scheme
 }

@@ -1,11 +1,8 @@
-// ==============================
-// main.dart (FIXED - Cold Start Navigation)
-// ==============================
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -14,15 +11,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mentalhelth/screens/addgoals_dreams_screen/add_goals_link_par_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mentalhelth/firebase_options.dart';
 import 'package:mentalhelth/screens/SharePostView.dart';
 import 'package:mentalhelth/screens/addactions_screen/model/alaram_info.dart';
-import 'package:mentalhelth/screens/addgoals_dreams_screen/add_goals_link_screen.dart';
-import 'package:mentalhelth/screens/addgoals_dreams_screen/addgoals_dreams_screen.dart';
+import 'package:mentalhelth/screens/addgoals_dreams_screen/add_goals_link_par_screen.dart';
 import 'package:mentalhelth/screens/auth/sign_in/widget/referral_code_helper.dart';
 import 'package:mentalhelth/screens/auth/signup_screen/provider/signup_provider.dart';
 import 'package:mentalhelth/screens/auth/splash/splash.dart';
@@ -33,16 +27,14 @@ import 'package:mentalhelth/screens/goals_dreams_page/provider/goals_dreams_prov
 import 'package:mentalhelth/screens/journal_list_screen/provider/journal_list_provider.dart';
 import 'package:mentalhelth/screens/mental_strength_add_edit_screen/provider/mental_strenght_edit_provider.dart';
 import 'package:mentalhelth/screens/reminder_push_view_screen/reminder_push_view_screen.dart';
-import 'package:mentalhelth/utils/core/constants.dart';
 import 'package:mentalhelth/utils/core/firebase_api.dart';
-import 'package:mentalhelth/utils/core/local_notification.dart';
 import 'package:mentalhelth/utils/core/url_constant.dart';
 import 'package:mentalhelth/utils/theme/colors.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
-
 import 'screens/actions_screen/provider/my_action_provider.dart';
 import 'screens/addactions_screen/provider/add_actions_provider.dart';
 import 'screens/addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
@@ -55,7 +47,8 @@ import 'screens/phone_singin_screen/provider/phone_sign_in_provider.dart';
 import 'screens/privacy_screen/provider/privacy_policy_provider.dart';
 
 // ===== Globals =====
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 const platform = MethodChannel('com.numuapp.numuapp/native');
 String? oneSignalIdOriginal;
@@ -89,7 +82,8 @@ class DeepLinkHandler {
     pendingImages = images;
     hasPendingNavigation = true;
 
-    debugPrint('📌 Deep link queued: url=$url, text=$text, images=${images?.length ?? 0}');
+    debugPrint(
+        '📌 Deep link queued: url=$url, text=$text, images=${images?.length ?? 0}');
 
     // Try to navigate immediately, if not possible it will be handled on resume
     _attemptNavigation();
@@ -110,11 +104,11 @@ class DeepLinkHandler {
   }
 
   void _performNavigation(
-      BuildContext ctx,
-      String? url,
-      String? text,
-      List<String>? images,
-      ) {
+    BuildContext ctx,
+    String? url,
+    String? text,
+    List<String>? images,
+  ) {
     if (_isNavigating) {
       debugPrint('⚠️ Navigation already in progress');
       return;
@@ -122,7 +116,8 @@ class DeepLinkHandler {
 
     try {
       _isNavigating = true;
-      debugPrint('🚀 Starting navigation to AddGoalsLinkParScreen with url=$url');
+      debugPrint(
+          '🚀 Starting navigation to AddGoalsLinkParScreen with url=$url');
 
       // Delay slightly to ensure widget tree is ready
       Future.delayed(const Duration(milliseconds: 500), () {
@@ -159,7 +154,8 @@ class DeepLinkHandler {
 
           debugPrint('✅ Navigation pushed successfully');
         } catch (e) {
-          debugPrint('❌ Navigation error in delayed: $e\n${StackTrace.current}');
+          debugPrint(
+              '❌ Navigation error in delayed: $e\n${StackTrace.current}');
           _isNavigating = false;
         }
       });
@@ -195,20 +191,22 @@ class YouTubeUrlHandler {
       final uri = Uri.parse(url);
       String? videoId;
 
-      if ((uri.host.contains('youtube.com')) && uri.queryParameters.containsKey('v')) {
+      if ((uri.host.contains('youtube.com')) &&
+          uri.queryParameters.containsKey('v')) {
         videoId = uri.queryParameters['v'];
       } else if (uri.host.contains('youtu.be')) {
         videoId = uri.pathSegments.isNotEmpty ? uri.pathSegments.first : null;
-      } else if (uri.host.contains('youtube.com') && uri.path.contains('/embed/')) {
+      } else if (uri.host.contains('youtube.com') &&
+          uri.path.contains('/embed/')) {
         videoId = uri.pathSegments.where((e) => e.isNotEmpty).lastWhere(
               (_) => true,
-          orElse: () => '',
-        );
+              orElse: () => '',
+            );
       } else if (uri.host.contains('youtube.com') && uri.path.contains('/v/')) {
         videoId = uri.pathSegments.where((e) => e.isNotEmpty).lastWhere(
               (_) => true,
-          orElse: () => '',
-        );
+              orElse: () => '',
+            );
       }
 
       if (videoId != null && videoId.isNotEmpty) {
@@ -240,7 +238,10 @@ class YouTubeUrlHandler {
         text.contains('youtube.com') ||
         text.contains('youtu.be') ||
         (text.contains('.') &&
-            (text.contains('com') || text.contains('io') || text.contains('app') || text.contains('org')));
+            (text.contains('com') ||
+                text.contains('io') ||
+                text.contains('app') ||
+                text.contains('org')));
   }
 }
 
@@ -270,7 +271,8 @@ class ShareReceiver {
 
         if (data != null) {
           data = data.trim();
-          if (YouTubeUrlHandler.looksLikeUrl(data) && !data.startsWith('http')) {
+          if (YouTubeUrlHandler.looksLikeUrl(data) &&
+              !data.startsWith('http')) {
             data = 'https://$data';
           }
         }
@@ -302,7 +304,8 @@ class ShareReceiver {
           }
 
           if (YouTubeUrlHandler.isYouTubeUrl(processedData)) {
-            final playableUrl = YouTubeUrlHandler.getPlayableYouTubeUrl(processedData);
+            final playableUrl =
+                YouTubeUrlHandler.getPlayableYouTubeUrl(processedData);
             sharedUrl = playableUrl;
             debugPrint("🎥 YouTube URL: $sharedUrl");
           } else {
@@ -384,11 +387,14 @@ void main() async {
     await initializeReferralTracking();
 
     if (kIsWeb) {
-      await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+      await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform);
     } else if (Platform.isAndroid) {
-      await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+      await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform);
     } else if (Platform.isIOS) {
-      await Firebase.initializeApp(name: 'numuapp', options: DefaultFirebaseOptions.currentPlatform);
+      await Firebase.initializeApp(
+          name: 'numuapp', options: DefaultFirebaseOptions.currentPlatform);
     }
 
     if (!kIsWeb && Platform.isIOS) {
@@ -400,7 +406,8 @@ void main() async {
       debugPrint("OneSignal ID: $oneSignalIdOriginal");
 
       OneSignal.Notifications.addForegroundWillDisplayListener((event) {
-        debugPrint('Foreground Notification: ${event.notification.jsonRepresentation()}');
+        debugPrint(
+            'Foreground Notification: ${event.notification.jsonRepresentation()}');
       });
 
       OneSignal.Notifications.addClickListener((event) {
@@ -410,13 +417,17 @@ void main() async {
         final ctx = navigatorKey.currentContext;
         if (ctx == null) return;
         if (type == 'actionreminder') {
-          Navigator.push(ctx, PageRouteBuilder(
-            pageBuilder: (_, __, ___) => ReminderPushViewScreen(reminderData: Map<String, dynamic>.from(data)),
-            transitionDuration: Duration.zero,
-          ));
+          Navigator.push(
+              ctx,
+              PageRouteBuilder(
+                pageBuilder: (_, __, ___) => ReminderPushViewScreen(
+                    reminderData: Map<String, dynamic>.from(data)),
+                transitionDuration: Duration.zero,
+              ));
         } else if (type == 'subscription') {
           final url = data['url'] as String?;
-          if (url != null && url.isNotEmpty) _launchInAppWithBrowserOptions(Uri.parse(url));
+          if (url != null && url.isNotEmpty)
+            _launchInAppWithBrowserOptions(Uri.parse(url));
         }
       });
     }
@@ -432,7 +443,8 @@ void main() async {
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
         final payloadData = jsonEncode(message.data);
         final imageUrl = message.notification?.android?.imageUrl ??
-            message.notification?.apple?.imageUrl ?? message.data['image'];
+            message.notification?.apple?.imageUrl ??
+            message.data['image'];
         if (message.notification != null) {
           PushNotifications.showSimpleNotification(
             title: message.notification!.title ?? '',
@@ -448,10 +460,13 @@ void main() async {
         final ctx = navigatorKey.currentContext;
         if (ctx == null) return;
         if (data['notification_type'] == 'actionreminder') {
-          Navigator.push(ctx, PageRouteBuilder(
-            pageBuilder: (_, __, ___) => ReminderPushViewScreen(reminderData: Map<String, dynamic>.from(data)),
-            transitionDuration: Duration.zero,
-          ));
+          Navigator.push(
+              ctx,
+              PageRouteBuilder(
+                pageBuilder: (_, __, ___) => ReminderPushViewScreen(
+                    reminderData: Map<String, dynamic>.from(data)),
+                transitionDuration: Duration.zero,
+              ));
         } else if (data['notification_type'] == 'subscription') {
           final url = data['url'];
           if (url != null && (url as String).isNotEmpty) {
@@ -460,17 +475,21 @@ void main() async {
         }
       });
 
-      final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+      final initialMessage =
+          await FirebaseMessaging.instance.getInitialMessage();
       if (initialMessage != null) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           final ctx = navigatorKey.currentContext;
           if (ctx == null) return;
           final data = initialMessage.data;
           if (data['notification_type'] == 'actionreminder') {
-            Navigator.push(ctx, PageRouteBuilder(
-              pageBuilder: (_, __, ___) => ReminderPushViewScreen(reminderData: Map<String, dynamic>.from(data)),
-              transitionDuration: Duration.zero,
-            ));
+            Navigator.push(
+                ctx,
+                PageRouteBuilder(
+                  pageBuilder: (_, __, ___) => ReminderPushViewScreen(
+                      reminderData: Map<String, dynamic>.from(data)),
+                  transitionDuration: Duration.zero,
+                ));
           } else if (data['notification_type'] == 'subscription') {
             final url = data['url'];
             if (url != null && (url as String).isNotEmpty) {
@@ -481,7 +500,8 @@ void main() async {
       }
     }
 
-    FlutterError.onError = (details) => FirebaseCrashlytics.instance.recordFlutterFatalError(details);
+    FlutterError.onError = (details) =>
+        FirebaseCrashlytics.instance.recordFlutterFatalError(details);
     PlatformDispatcher.instance.onError = (error, stack) {
       FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
       return true;
@@ -490,7 +510,8 @@ void main() async {
     await Hive.initFlutter();
     Hive.registerAdapter(AlarmInfoAdapter());
     await Hive.openBox<AlarmInfo>('alarm');
-    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(!kDebugMode);
+    await FirebaseCrashlytics.instance
+        .setCrashlyticsCollectionEnabled(!kDebugMode);
 
     runApp(MultiProvider(
       providers: [
@@ -543,7 +564,8 @@ Future<void> _launchInAppWithBrowserOptions(Uri url) async {
       return;
     }
 
-    if (!urlToLaunch.startsWith('http://') && !urlToLaunch.startsWith('https://')) {
+    if (!urlToLaunch.startsWith('http://') &&
+        !urlToLaunch.startsWith('https://')) {
       urlToLaunch = 'https://$urlToLaunch';
     }
 
@@ -567,6 +589,7 @@ Future<void> _launchInAppWithBrowserOptions(Uri url) async {
 // ===== MyApp =====
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -656,7 +679,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void _openShareScreen(Map<String, dynamic> data) {
     try {
       debugPrint('📲 _openShareScreen called with data: $data');
-      final images = (data['imagePaths'] as List?)?.map((e) => e.toString()).toList();
+      final images =
+          (data['imagePaths'] as List?)?.map((e) => e.toString()).toList();
 
       var sharedUrl = data['url'] as String?;
       var sharedText = data['text'] as String? ?? data['sharedText'] as String?;
@@ -672,7 +696,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         debugPrint("🎥 YouTube normalized: $sharedUrl");
       }
 
-      debugPrint('🚀 Calling deepLinkHandler.handleDeepLink from _openShareScreen');
+      debugPrint(
+          '🚀 Calling deepLinkHandler.handleDeepLink from _openShareScreen');
       deepLinkHandler.handleDeepLink(
         url: sharedUrl,
         text: sharedText,
@@ -696,7 +721,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         final value = Map<String, dynamic>.from(snapshot.value as Map);
 
         // Don't trigger setState if we're navigating
-        if (deepLinkHandler._isNavigating || deepLinkHandler.hasPendingNavigation) {
+        if (deepLinkHandler._isNavigating ||
+            deepLinkHandler.hasPendingNavigation) {
           debugPrint('⏸️ Skipping setState during navigation');
           baseUrlLive = value['base_url_live'] as String?;
           baseUrlQA = value['base_url_qa'] as String?;
@@ -761,7 +787,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Future<void> _fetchAppRegister() async {
     // Don't fetch if we're navigating
     if (deepLinkHandler._isNavigating || deepLinkHandler.hasPendingNavigation) {
-      debugPrint('⏸️ Skipping fetchAppRegister during navigation, will retry later');
+      debugPrint(
+          '⏸️ Skipping fetchAppRegister during navigation, will retry later');
       Future.delayed(const Duration(seconds: 3), _fetchAppRegister);
       return;
     }
@@ -781,7 +808,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   void _setupNotificationTapHandler() {
     if (!kIsWeb && Platform.isAndroid) {
-      const androidInitSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+      const androidInitSettings =
+          AndroidInitializationSettings('@mipmap/ic_launcher');
       final initSettings = InitializationSettings(android: androidInitSettings);
 
       flutterLocalNotificationsPlugin.initialize(
@@ -797,7 +825,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               Navigator.push(
                 ctx,
                 PageRouteBuilder(
-                  pageBuilder: (_, __, ___) => ReminderPushViewScreen(reminderData: Map<String, dynamic>.from(data)),
+                  pageBuilder: (_, __, ___) => ReminderPushViewScreen(
+                      reminderData: Map<String, dynamic>.from(data)),
                   transitionDuration: Duration.zero,
                 ),
               );
@@ -929,13 +958,13 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       home: isBaseUrlReady
           ? const SplashScreen()
           : Scaffold(
-        body: Center(
-          child: CupertinoActivityIndicator(
-            color: ColorsContent.newThemeColor,
-            radius: 15,
-          ),
-        ),
-      ),
+              body: Center(
+                child: CupertinoActivityIndicator(
+                  color: ColorsContent.newThemeColor,
+                  radius: 15,
+                ),
+              ),
+            ),
     );
   }
 }
@@ -1072,7 +1101,8 @@ class SharedContent {
   });
 
   @override
-  String toString() => 'SharedContent(text: $text, sharedText: $sharedText, url: $url, images: ${imagePaths.length}, has: $hasContent)';
+  String toString() =>
+      'SharedContent(text: $text, sharedText: $sharedText, url: $url, images: ${imagePaths.length}, has: $hasContent)';
 }
 
 // ============================================================

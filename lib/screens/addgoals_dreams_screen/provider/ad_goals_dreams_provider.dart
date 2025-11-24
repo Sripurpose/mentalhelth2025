@@ -23,6 +23,7 @@ import 'package:video_compress/video_compress.dart';
 
 import '../../../utils/core/constent.dart';
 import '../../../utils/theme/colors.dart';
+import '../../dash_borad_screen/dash_board_screen.dart';
 import '../../maintenence_screen/maintenence_screen.dart';
 import '../../mental_strength_add_edit_screen/model/all_model.dart';
 import '../../token_expiry/token_expiry.dart';
@@ -1908,10 +1909,21 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
         );
         clearAction();
         if (Platform.isIOS) {
-          Navigator.of(context).pop();
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => const DashBoardScreen(),
+            ),
+                (route) => false,
+          );
         }else{
-          Navigator.of(context).pop();
-          Navigator.of(context).pop();
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => const DashBoardScreen(),
+            ),
+                (route) => false,
+          );
+          // Navigator.of(context).pop();
+          // Navigator.of(context).pop();
         }
 
       } else if (response.statusCode == 503) {
