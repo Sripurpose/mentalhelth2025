@@ -62,509 +62,76 @@ Widget buildPopupDialog(BuildContext context, Size size) {
                   ),
                 ),
               ),
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      dashBoardProvider.changeCommentPage(
-                        index: 8,
-                      );
-                      Navigator.of(context).pop();
-                    },
-                    child: CircleAvatar(
-                      backgroundColor: Colors.grey,
-                      radius: size.width * 0.075,
-                      child: CustomImageView(
-                        imagePath:
-                            editProvider.getProfileModel?.profileurl.toString(),
-                        height: 58,
-                        width: 58,
-                        radius: BorderRadius.circular(
-                          34,
-                        ),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: size.width * 0.02,
-                  ),
-                  SizedBox(
-                    width: size.width * 0.40,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      // Enable horizontal scrolling
-                      child: Text(
-                        capitalText(
-                          editProvider.getProfileModel?.firstname.toString() ??
-                              "",
-                        ),
-                        style: const TextStyle(
-                          fontSize: 16.5,
-                          fontWeight: FontWeight.w500,
-                          fontFamily: 'Poppins',
-                          color: Colors.black,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: size.height * 0.01,
-              ),
-              //hided on purpose//
-              // Row(
-              //   children: [
-              //     Text(
-              //       "Active Monthly plan ",
-              //       style: CustomTextStyles.titleMediumffffffff15,
-              //     ),
-              //     Expanded(
-              //       child: Text(
-              //         "( ${editProvider.getProfileModel?.subscription?.planValidity!.toString()} Days remaining ) ",
-              //         style: CustomTextStyles.titleMediumffffffff13,
-              //         overflow: TextOverflow.ellipsis,
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              // const SizedBox(
-              //   height: 10,
-              // ),
-              // Align(
-              //   alignment: Alignment.topLeft,
-              //   child: GestureDetector(
-              //     onTap: () {
-              //       Navigator.of(context).push(MaterialPageRoute(
-              //         builder: (context) => SubscribePlanPage(
-              //           signed: true,
-              //         ),
-              //       ));
-              //     },
-              //     child: Text(
-              //       "Renew Now",
-              //       style: CustomTextStyles.labelLargeffffffff,
-              //     ),
-              //   ),
-              // ),
-              //hided on purpose//
-              Consumer<DashBoardProvider>(
-                  builder: (context, dashBoardProvider, _) {
-                return GestureDetector(
-                  onTap: () {
-                    dashBoardProvider.changePage(index: 1);
-                    Navigator.of(context).pop();
-                  },
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      "Mental strength",
-                      maxLines: 13,
-                      overflow: TextOverflow.ellipsis,
-                      style: CustomTextStyles
-                          .titleMediumOnSecondaryContainerMedium
-                          .copyWith(
-                        height: 2.19,
-                      ),
-                    ),
-                  ),
-                );
-              }),
-              SizedBox(
-                height: size.height * 0.001,
-              ),
-              Consumer<DashBoardProvider>(
-                  builder: (context, dashBoardProvider, _) {
-                return GestureDetector(
-                  onTap: () {
-                    dashBoardProvider.changePage(index: 2);
-                    Navigator.of(context).pop();
-                  },
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      "Smart Journal",
-                      maxLines: 13,
-                      overflow: TextOverflow.ellipsis,
-                      style: CustomTextStyles
-                          .titleMediumOnSecondaryContainerMedium
-                          .copyWith(
-                        height: 2.19,
-                      ),
-                    ),
-                  ),
-                );
-              }),
-              SizedBox(
-                height: size.height * 0.001,
-              ),
-              Consumer<DashBoardProvider>(
-                  builder: (context, dashBoardProvider, _) {
-                return GestureDetector(
-                  onTap: () {
-                    dashBoardProvider.changePage(index: 3);
-                    Navigator.of(context).pop();
-                  },
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      "Goals & Dreams",
-                      maxLines: 13,
-                      overflow: TextOverflow.ellipsis,
-                      style: CustomTextStyles
-                          .titleMediumOnSecondaryContainerMedium
-                          .copyWith(
-                        height: 2.19,
-                      ),
-                    ),
-                  ),
-                );
-              }),
-              SizedBox(
-                height: size.height * 0.001,
-              ),
-              Consumer<HomeProvider>(builder: (context, homeProvider, _) {
-                return GestureDetector(
-                  onTap: () async {
-                    dashBoardProvider.changeCommentPage(index: 10);
-                    Navigator.of(context).pop();
-                    // await homeProvider.fetchRemindersDetails();
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => const ViewReminderScreen(),
-                    //   ),
-                    // );
-                    //  dashBoardProvider.changeCommentPage(index: 10);
-                    //Navigator.of(context).pop();
-                  },
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      "Reminders",
-                      maxLines: 13,
-                      overflow: TextOverflow.ellipsis,
-                      style: CustomTextStyles
-                          .titleMediumOnSecondaryContainerMedium
-                          .copyWith(
-                        height: 2.19,
-                      ),
-                    ),
-                  ),
-                );
-              }),
-              SizedBox(
-                height: size.height * 0.001,
-              ),
-              // Consumer2<SignInProvider,EditProfileProvider>(
-              //   builder: (context, signInProvider,editProfileProvider, _) {
-              //     // Check the conditions for showing the "Subscription" button
-              //     bool showSubscription = editProfileProvider.getProfileModel?.show_subscription == "1" ;
-              //
-              //
-              //     // If conditions are met, display the GestureDetector for "Subscription"
-              //     return showSubscription
-              //         ? GestureDetector(
-              //             onTap: () async {
-              //               Navigator.of(context).push(
-              //                 MaterialPageRoute(
-              //                   builder: (context) => SubscriptionViewScreen(
-              //                     url: signInProvider
-              //                             .settingsList[0].subscription_url ??
-              //                         "",
-              //                   ),
-              //                 ),
-              //               );
-              //             },
-              //             child: Align(
-              //               alignment: Alignment.topLeft,
-              //               child: Text(
-              //                 "Subscription",
-              //                 maxLines: 13,
-              //                 overflow: TextOverflow.ellipsis,
-              //                 style: CustomTextStyles
-              //                     .titleMediumOnSecondaryContainerMedium
-              //                     .copyWith(
-              //                   height: 2.19,
-              //                 ),
-              //               ),
-              //             ),
-              //           )
-              //         : SizedBox
-              //             .shrink(); // Hide the button if the conditions are not met
-              //   },
-              // ),
-
-              SizedBox(
-                height: size.height * 0.03,
-              ),
-              Consumer<DashBoardProvider>(
-                  builder: (context, dashBoardProvider, _) {
-                return GestureDetector(
-                  onTap: () {
-                    dashBoardProvider.changeCommentPage(index: 6);
-                    Navigator.of(context).pop();
-                  },
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      "Privacy policy",
-                      maxLines: 13,
-                      overflow: TextOverflow.ellipsis,
-                      style: CustomTextStyles
-                          .titleMediumOnSecondaryContainerMedium
-                          .copyWith(
-                        height: 2.19,
-                      ),
-                    ),
-                  ),
-                );
-              }),
-              SizedBox(
-                height: size.height * 0.001,
-              ),
-              Consumer<DashBoardProvider>(
-                  builder: (context, dashBoardProvider, _) {
-                return GestureDetector(
-                  onTap: () {
-                    dashBoardProvider.changeCommentPage(index: 11);
-                    Navigator.of(context).pop();
-                  },
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      "Terms of service",
-                      maxLines: 13,
-                      overflow: TextOverflow.ellipsis,
-                      style: CustomTextStyles
-                          .titleMediumOnSecondaryContainerMedium
-                          .copyWith(
-                        height: 2.19,
-                      ),
-                    ),
-                  ),
-                );
-              }),
-              SizedBox(
-                height: size.height * 0.001,
-              ),
-              GestureDetector(
-                onTap: () {
-                  dashBoardProvider.changeCommentPage(index: 12);
-                  Navigator.of(context).pop();
-                  // Navigator.of(context).push(
-                  //   MaterialPageRoute(
-                  //     builder: (context) => const HelpScreen(
-                  //       url: "https://mh.featureme.live/v1/help/",
-                  //     ),
-                  //   ),
-                  // );
-                },
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    "Help",
-                    maxLines: 13,
-                    overflow: TextOverflow.ellipsis,
-                    style: CustomTextStyles
-                        .titleMediumOnSecondaryContainerMedium
-                        .copyWith(
-                      height: 2.19,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: size.height * 0.001,
-              ),
-
-              Consumer<SignInProvider>(
-              builder: (context, signInProvider, child) {
-              final shareData = signInProvider.appShareResponseModel;
-              final downloadUrl = Theme.of(context).platform == TargetPlatform.iOS
-              ? shareData?.appstoreUrl
-                  : shareData?.playstoreUrl;
-
-              // ✅ Check if shareData or its fields are empty/null
-              final bool hasValidData = shareData != null &&
-              (shareData.title?.isNotEmpty ?? false) &&
-              (shareData.message?.isNotEmpty ?? false) &&
-              (downloadUrl?.isNotEmpty ?? false);
-
-              if (!hasValidData) {
-              return const SizedBox.shrink(); // hide the widget completely
-              }
-
-              return GestureDetector(
-              onTap: () async {
-              final shareMessage = '''
-${shareData.title}
-
-${shareData.message}
-
-Download now: $downloadUrl
-''';
-
-              await Share.share(shareMessage);
-              },
-              child: Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-              "App share",
-              maxLines: 13,
-              overflow: TextOverflow.ellipsis,
-              style: CustomTextStyles
-                  .titleMediumOnSecondaryContainerMedium
-                  .copyWith(height: 2.19),
-              ),
-              ),
-              );
-              },
-              ),
-
-
-              SizedBox(
-                height: size.height * 0.005,
-              ),
-              GestureDetector(
-                onTap: () {
-                  dashBoardProvider.changeCommentPage(index: 14);
-                  Navigator.of(context).pop();
-                  // Navigator.of(context).push(
-                  //   MaterialPageRoute(
-                  //     builder: (context) => FeedbackScreen(),
-                  //   ),
-                  // );
-                },
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    "Feedback",
-                    maxLines: 13,
-                    overflow: TextOverflow.ellipsis,
-                    style: CustomTextStyles
-                        .titleMediumOnSecondaryContainerMedium
-                        .copyWith(
-                      height: 2.19,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: size.height * 0.005,
-              ),
-              Consumer<SignInProvider>(
-                builder: (context, signInProvider, child) {
-                  final dynamicMenuList = signInProvider.dynamicMenuList;
-
-                  if (dynamicMenuList == null || dynamicMenuList.isEmpty) {
-                    return const SizedBox.shrink();
-                  }
-
-                  final uniqueTitles = <String>{};
-                  final activeMenuItems = dynamicMenuList.where((item) {
-                    final isActive = item.status == "1";
-                    final isUnique = !uniqueTitles.contains(item.title);
-                    if (isActive && isUnique) {
-                      uniqueTitles.add(item.title ?? '');
-                      return true;
-                    }
-                    return false;
-                  }).toList();
-
-                  if (activeMenuItems.isEmpty) {
-                    return const SizedBox.shrink();
-                  }
-
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: List.generate(activeMenuItems.length, (index) {
-                      final menuItem = activeMenuItems[index];
-
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).pop();
-
-                              // ✅ Open the selected item’s webview with correct URL
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => DynamicMenuWebviewScreen(
-                                    title: menuItem.title,
-                                    url: menuItem.linkUrl,
-                                  ),
-                                ),
-                              );
-                            },
-                            child: Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                menuItem.title ?? '',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: CustomTextStyles
-                                    .titleMediumOnSecondaryContainerMedium
-                                    .copyWith(height: 2.19),
-                              ),
-                            ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        dashBoardProvider.changeCommentPage(
+                          index: 8,
+                        );
+                        Navigator.of(context).pop();
+                      },
+                      child: CircleAvatar(
+                        backgroundColor: Colors.grey,
+                        radius: size.width * 0.075,
+                        child: CustomImageView(
+                          imagePath:
+                              editProvider.getProfileModel?.profileurl.toString(),
+                          height: 58,
+                          width: 58,
+                          radius: BorderRadius.circular(
+                            34,
                           ),
-                          SizedBox(height: size.height * 0.005),
-                        ],
-                      );
-                    }),
-                  );
-                },
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: size.width * 0.02,
+                    ),
+                    SizedBox(
+                      width: size.width * 0.40,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        // Enable horizontal scrolling
+                        child: Text(
+                          capitalText(
+                            editProvider.getProfileModel?.firstname.toString() ??
+                                "",
+                          ),
+                          style: const TextStyle(
+                            fontSize: 16.5,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'Poppins',
+                            color: Colors.black,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-
-
-
-
               SizedBox(
-                height: size.height * 0.03,
+                height: size.height * 0.04,
               ),
-              Consumer2<EditProfileProvider, SignInProvider>(
-                builder: (context, editProfileProvider, signInProvider, _) {
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Consumer<DashBoardProvider>(
+                    builder: (context, dashBoardProvider, _) {
                   return GestureDetector(
-                    onTap: () async {
-                      customPopupNew(
-                        context: context,
-                        onPressedDelete: () async {
-                          editProfileProvider.profileUrl = "";
-                          if (Platform.isAndroid) {
-                            await PushNotifications.subscribeToTopic(
-                                "live_doLogin");
-                            await PushNotifications.unsubscribeFromTopic(
-                                "message");
-                          } else {
-                            OneSignal.logout();
-                            OneSignal.User.addTagWithKey(
-                                "topic", "live_doLogin");
-                            OneSignal.User.removeTag("message");
-                          }
-                          final prefs = await SharedPreferences.getInstance();
-                          await prefs.remove('lastSkippedTimestamp');
-                          addFCMTokenToSharePref(token: "");
-                          addVersionSharePref(version: "");
-                          // GoogleSignInService.logout();
-                          await signInProvider.logOutUser(context);
-                          await removeUserDetailsSharePref(context: context);
-                          removeAllValuesLogout(context: context);
-                        },
-                        title: 'Confirm Logout',
-                        content: 'Are you sure You want to logout?',
-                        yes: "Logout",
-                      );
+                    onTap: () {
+                      dashBoardProvider.changePage(index: 1);
+                      Navigator.of(context).pop();
                     },
                     child: Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        "Logout",
+                        "Mental strength",
                         maxLines: 13,
                         overflow: TextOverflow.ellipsis,
                         style: CustomTextStyles
@@ -575,22 +142,164 @@ Download now: $downloadUrl
                       ),
                     ),
                   );
-                },
+                }),
               ),
               SizedBox(
                 height: size.height * 0.001,
               ),
-              Consumer<DashBoardProvider>(
-                  builder: (context, dashBoardProvider, _) {
-                return GestureDetector(
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Consumer<DashBoardProvider>(
+                    builder: (context, dashBoardProvider, _) {
+                  return GestureDetector(
+                    onTap: () {
+                      dashBoardProvider.changePage(index: 2);
+                      Navigator.of(context).pop();
+                    },
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "Smart Journal",
+                        maxLines: 13,
+                        overflow: TextOverflow.ellipsis,
+                        style: CustomTextStyles
+                            .titleMediumOnSecondaryContainerMedium
+                            .copyWith(
+                          height: 2.19,
+                        ),
+                      ),
+                    ),
+                  );
+                }),
+              ),
+              SizedBox(
+                height: size.height * 0.001,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Consumer<DashBoardProvider>(
+                    builder: (context, dashBoardProvider, _) {
+                  return GestureDetector(
+                    onTap: () {
+                      dashBoardProvider.changePage(index: 3);
+                      Navigator.of(context).pop();
+                    },
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "Goals & Dreams",
+                        maxLines: 13,
+                        overflow: TextOverflow.ellipsis,
+                        style: CustomTextStyles
+                            .titleMediumOnSecondaryContainerMedium
+                            .copyWith(
+                          height: 2.19,
+                        ),
+                      ),
+                    ),
+                  );
+                }),
+              ),
+              SizedBox(
+                height: size.height * 0.001,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Consumer<HomeProvider>(builder: (context, homeProvider, _) {
+                  return GestureDetector(
+                    onTap: () async {
+                      dashBoardProvider.changeCommentPage(index: 10);
+                      Navigator.of(context).pop();
+                    },
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "Reminders",
+                        maxLines: 13,
+                        overflow: TextOverflow.ellipsis,
+                        style: CustomTextStyles
+                            .titleMediumOnSecondaryContainerMedium
+                            .copyWith(
+                          height: 2.19,
+                        ),
+                      ),
+                    ),
+                  );
+                }),
+              ),
+              SizedBox(
+                height: size.height * 0.001,
+              ),
+              SizedBox(
+                height: size.height * 0.03,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Consumer<DashBoardProvider>(
+                    builder: (context, dashBoardProvider, _) {
+                  return GestureDetector(
+                    onTap: () {
+                      dashBoardProvider.changeCommentPage(index: 6);
+                      Navigator.of(context).pop();
+                    },
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "Privacy policy",
+                        maxLines: 13,
+                        overflow: TextOverflow.ellipsis,
+                        style: CustomTextStyles
+                            .titleMediumOnSecondaryContainerMedium
+                            .copyWith(
+                          height: 2.19,
+                        ),
+                      ),
+                    ),
+                  );
+                }),
+              ),
+              SizedBox(
+                height: size.height * 0.001,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Consumer<DashBoardProvider>(
+                    builder: (context, dashBoardProvider, _) {
+                  return GestureDetector(
+                    onTap: () {
+                      dashBoardProvider.changeCommentPage(index: 11);
+                      Navigator.of(context).pop();
+                    },
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "Terms of service",
+                        maxLines: 13,
+                        overflow: TextOverflow.ellipsis,
+                        style: CustomTextStyles
+                            .titleMediumOnSecondaryContainerMedium
+                            .copyWith(
+                          height: 2.19,
+                        ),
+                      ),
+                    ),
+                  );
+                }),
+              ),
+              SizedBox(
+                height: size.height * 0.001,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: GestureDetector(
                   onTap: () {
-                    dashBoardProvider.changeCommentPage(index: 5);
+                    dashBoardProvider.changeCommentPage(index: 12);
                     Navigator.of(context).pop();
                   },
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: Text(
-                      "Delete Account",
+                      "Help",
                       maxLines: 13,
                       overflow: TextOverflow.ellipsis,
                       style: CustomTextStyles
@@ -600,8 +309,240 @@ Download now: $downloadUrl
                       ),
                     ),
                   ),
+                ),
+              ),
+              SizedBox(
+                height: size.height * 0.001,
+              ),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Consumer<SignInProvider>(
+                builder: (context, signInProvider, child) {
+                final shareData = signInProvider.appShareResponseModel;
+                final downloadUrl = Theme.of(context).platform == TargetPlatform.iOS
+                ? shareData?.appstoreUrl
+                    : shareData?.playstoreUrl;
+
+                // ✅ Check if shareData or its fields are empty/null
+                final bool hasValidData = shareData != null &&
+                (shareData.title?.isNotEmpty ?? false) &&
+                (shareData.message?.isNotEmpty ?? false) &&
+                (downloadUrl?.isNotEmpty ?? false);
+
+                if (!hasValidData) {
+                return const SizedBox.shrink(); // hide the widget completely
+                }
+
+                return GestureDetector(
+                onTap: () async {
+                final shareMessage = '''
+                ${shareData.title}
+
+                ${shareData.message}
+
+Download now: $downloadUrl
+''';
+
+                await Share.share(shareMessage);
+                },
+                child: Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                "App share",
+                maxLines: 13,
+                overflow: TextOverflow.ellipsis,
+                style: CustomTextStyles
+                    .titleMediumOnSecondaryContainerMedium
+                    .copyWith(height: 2.19),
+                ),
+                ),
                 );
-              }),
+                },
+                ),
+              ),
+
+
+              SizedBox(
+                height: size.height * 0.005,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: GestureDetector(
+                  onTap: () {
+                    dashBoardProvider.changeCommentPage(index: 14);
+                    Navigator.of(context).pop();
+                  },
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      "Feedback",
+                      maxLines: 13,
+                      overflow: TextOverflow.ellipsis,
+                      style: CustomTextStyles
+                          .titleMediumOnSecondaryContainerMedium
+                          .copyWith(
+                        height: 2.19,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: size.height * 0.005,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Consumer<SignInProvider>(
+                  builder: (context, signInProvider, child) {
+                    final dynamicMenuList = signInProvider.dynamicMenuList;
+
+                    if (dynamicMenuList == null || dynamicMenuList.isEmpty) {
+                      return const SizedBox.shrink();
+                    }
+
+                    final uniqueTitles = <String>{};
+                    final activeMenuItems = dynamicMenuList.where((item) {
+                      final isActive = item.status == "1";
+                      final isUnique = !uniqueTitles.contains(item.title);
+                      if (isActive && isUnique) {
+                        uniqueTitles.add(item.title ?? '');
+                        return true;
+                      }
+                      return false;
+                    }).toList();
+
+                    if (activeMenuItems.isEmpty) {
+                      return const SizedBox.shrink();
+                    }
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: List.generate(activeMenuItems.length, (index) {
+                        final menuItem = activeMenuItems[index];
+
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).pop();
+
+                                // ✅ Open the selected item’s webview with correct URL
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => DynamicMenuWebviewScreen(
+                                      title: menuItem.title,
+                                      url: menuItem.linkUrl,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  menuItem.title ?? '',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: CustomTextStyles
+                                      .titleMediumOnSecondaryContainerMedium
+                                      .copyWith(height: 2.19),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: size.height * 0.005),
+                          ],
+                        );
+                      }),
+                    );
+                  },
+                ),
+              ),
+
+              SizedBox(
+                height: size.height * 0.03,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Consumer2<EditProfileProvider, SignInProvider>(
+                  builder: (context, editProfileProvider, signInProvider, _) {
+                    return GestureDetector(
+                      onTap: () async {
+                        customPopupNew(
+                          context: context,
+                          onPressedDelete: () async {
+                            editProfileProvider.profileUrl = "";
+                            if (Platform.isAndroid) {
+                              await PushNotifications.subscribeToTopic(
+                                  "live_doLogin");
+                              await PushNotifications.unsubscribeFromTopic(
+                                  "message");
+                            } else {
+                              OneSignal.logout();
+                              OneSignal.User.addTagWithKey(
+                                  "topic", "live_doLogin");
+                              OneSignal.User.removeTag("message");
+                            }
+                            final prefs = await SharedPreferences.getInstance();
+                            await prefs.remove('lastSkippedTimestamp');
+                            addFCMTokenToSharePref(token: "");
+                            addVersionSharePref(version: "");
+                            // GoogleSignInService.logout();
+                            await signInProvider.logOutUser(context);
+                            await removeUserDetailsSharePref(context: context);
+                            removeAllValuesLogout(context: context);
+                          },
+                          title: 'Confirm Logout',
+                          content: 'Are you sure You want to logout?',
+                          yes: "Logout",
+                        );
+                      },
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          "Logout",
+                          maxLines: 13,
+                          overflow: TextOverflow.ellipsis,
+                          style: CustomTextStyles
+                              .titleMediumOnSecondaryContainerMedium
+                              .copyWith(
+                            height: 2.19,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              SizedBox(
+                height: size.height * 0.001,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Consumer<DashBoardProvider>(
+                    builder: (context, dashBoardProvider, _) {
+                  return GestureDetector(
+                    onTap: () {
+                      dashBoardProvider.changeCommentPage(index: 5);
+                      Navigator.of(context).pop();
+                    },
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "Delete Account",
+                        maxLines: 13,
+                        overflow: TextOverflow.ellipsis,
+                        style: CustomTextStyles
+                            .titleMediumOnSecondaryContainerMedium
+                            .copyWith(
+                          height: 2.19,
+                        ),
+                      ),
+                    ),
+                  );
+                }),
+              ),
               SizedBox(
                 height: size.height * 0.03,
               ),

@@ -382,7 +382,7 @@ class _UserProfileListItemWidgetState extends State<UserProfileListItemWidget> {
           color: Colors.white,
           icon: Icon(Icons.more_horiz, color: ColorsContent.blackText),
           padding: EdgeInsets.zero,
-          constraints: const BoxConstraints(minWidth: 100, maxWidth: 100),
+          constraints: const BoxConstraints(minWidth: 110, maxWidth: 110),
           onSelected: (value) {},
           itemBuilder: (BuildContext context) {
             return [
