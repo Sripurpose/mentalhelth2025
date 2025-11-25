@@ -31,6 +31,7 @@ import '../../utils/logic/permissions.dart';
 import '../../utils/theme/colors.dart';
 import '../../utils/theme/custom_button_style.dart';
 import '../../widgets/functions/popup.dart';
+import '../../widgets/widget/preview_link.dart';
 import '../SharePostView.dart';
 import '../addactions_screen/addactions_screen.dart';
 import '../addactions_screen/provider/add_actions_provider.dart';
@@ -547,37 +548,37 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                                     onChanged: (String? newValue) {
                                       setState(() {
                                         adDreamsGoalsProvider.selectedOption = newValue;
-          
+
                                         // ✅ When switching back to "Create New Goal", clear everything except shared link
                                         if (newValue == "Create New Goal") {
                                           adDreamsGoalsProvider.selectedExistingGoal = null;
                                           adDreamsGoalsProvider.nameEditTextController.text = "";
                                           adDreamsGoalsProvider.commentEditTextController.text = "";
                                           adDreamsGoalsProvider.selectedDate = "";
-          
+
                                           // Clear all media
                                           adDreamsGoalsProvider.recordedFilePath.clear();
                                           adDreamsGoalsProvider.pickedImages.clear();
                                           adDreamsGoalsProvider.takedImages.clear();
                                           adDreamsGoalsProvider.alreadyRecordedFilePath.clear();
                                           adDreamsGoalsProvider.alreadyPickedImages.clear();
-          
+
                                           // Clear location
                                           adDreamsGoalsProvider.selectedLocationName = "";
                                           adDreamsGoalsProvider.selectedLatitude = "";
                                           adDreamsGoalsProvider.selectedLongitude = "";
                                           adDreamsGoalsProvider.selectedLocationAddress = "";
-          
+
                                           // Clear actions
                                           adDreamsGoalsProvider.goalModelIdName.clear();
-          
+
                                           // Clear category
                                           editProfileProvider.categorys = null;
                                           editProfileProvider.selectedCategory = null;
                                           editProfileProvider.interestsValueController.text = "";
-          
+
                                           adDreamsGoalsProvider.mediaSelected = 0;
-          
+
                                           // ✅ Keep ONLY the shared link
                                           if (sharedData != null && (sharedData!.url ?? '').isNotEmpty) {
                                             if (!adDreamsGoalsProvider.detectedLinks.contains(sharedData!.url!)) {
@@ -585,11 +586,11 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                                               adDreamsGoalsProvider.detectedLinks.add(sharedData!.url!);
                                             }
                                           }
-          
+
                                           adDreamsGoalsProvider.editDetectedLinks.clear();
                                           unixTimestamp = null;
                                         }
-          
+
                                         if (newValue != "Add to Existing Goal") {
                                           adDreamsGoalsProvider.selectedExistingGoal = null;
                                         }
@@ -611,9 +612,9 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                                   ),
                                 ),
                               ),
-          
+
                               const SizedBox(height: 5),
-          
+
                               // SECOND DROPDOWN (only when needed)
                               if (adDreamsGoalsProvider.selectedOption == "Add to Existing Goal") ...[
                                 const SizedBox(height: 10),
@@ -635,7 +636,7 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                                           final selected = adDreamsGoalsProvider.selectedExistingGoal;
                                           final list = adDreamsGoalsProvider.goalListLink;
                                           if (selected == null || list.isEmpty) return null;
-          
+
                                           final exists = list.any((g) => g.id?.toString() == selected);
                                           if (exists) {
                                             return selected;
@@ -675,12 +676,12 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                                         })(),
                                         onChanged: (String? newValue) async {
                                           if (newValue == null || newValue.isEmpty) return;
-          
+
                                           setState(() {
                                             adDreamsGoalsProvider.selectedExistingGoal = newValue;
                                             _isLoadingNew = true;
                                           });
-          
+
                                           try {
                                             adDreamsGoalsProvider.goalModelIdName.clear();
                                             await mentalStrengthEditProvider.fetchGoalDetails(
@@ -703,16 +704,16 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                                   ),
                                 ),
                               ],
-          
+
                               const SizedBox(height: 15),
                               _buildNameEditText(context),
                               const SizedBox(height: 15),
-          
+
                               Consumer<EditProfileProvider>(
                                 builder: (context, editProfileProvider, _) {
                                   final categoryList = editProfileProvider.getCategoryModel?.category ?? [];
                                   Category? selectedCategory = editProfileProvider.selectedCategory;
-          
+
                                   if (selectedCategory != null && categoryList.isNotEmpty) {
                                     final match = categoryList.firstWhere(
                                           (cat) => cat.id.toString() == selectedCategory?.id.toString(),
@@ -724,7 +725,7 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                                       selectedCategory = match;
                                     }
                                   }
-          
+
                                   return Container(
                                     height: size.height * 0.055,
                                     padding: const EdgeInsets.only(left: 10, right: 5),
@@ -774,22 +775,22 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                                   );
                                 },
                               ),
-          
+
                               const SizedBox(height: 15),
                               _buildAchievementDate(context),
                               const SizedBox(height: 25),
-          
+
                               adDreamsGoalsProvider.selectedOption == 'Add to Existing Goal'
                                   ? _buildAddMediaColumnEdit(context, size)
                                   : _buildAddMediaColumn(context, size),
-          
+
                               const SizedBox(height: 11),
                               const SizedBox(height: 24),
-          
+
                               adDreamsGoalsProvider.selectedOption == 'Add to Existing Goal'
                                   ? _buildCommentEditTextEditLink(context)
                                   : _buildCommentEditText(context),
-          
+
                               const SizedBox(height: 25),
                               Padding(
                                 padding: const EdgeInsets.only(left: 2),
@@ -801,7 +802,7 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                               const SizedBox(height: 3),
                               _buildAddActionsButton(context),
                               const SizedBox(height: 15),
-          
+
                               adDreamsGoalsProvider.selectedOption == 'Add to Existing Goal'
                                   ? Consumer2<AdDreamsGoalsProvider, AddActionsProvider>(
                                 builder: (context, adDreamsGoalsProvider, addActionsProvider, _) {
@@ -958,13 +959,13 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                                   );
                                 },
                               ),
-          
+
                               const SizedBox(height: 30),
-          
+
                               adDreamsGoalsProvider.selectedOption == 'Add to Existing Goal'
                                   ? _buildUpdateButton(context)
                                   : _buildSaveButton(context),
-          
+
                               const SizedBox(height: 20),
                             ],
                           ),
@@ -991,7 +992,7 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                     ),
                   ),
                 ),
-          
+
               if (_isLoadingNew)
                 Positioned(
                   top: 0,
@@ -1113,30 +1114,26 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                     }
                     setState(() {});
                   },
-                onChanged: (value) {
-                  final matches = adDreamsGoalsProvider.urlRegex
-                      .allMatches(value)
-                      .map((m) => m.group(0)!)
-                      .toList();
+                  onChanged: (value) {
+                    final matches = adDreamsGoalsProvider.urlRegex
+                        .allMatches(value)
+                        .map((match) => match.group(0)!)
+                        .toList();
 
-                  if (matches.isNotEmpty) {
-                    final realLink = matches.first;
-                    debugPrint("🔗 Extracted Instagram URL: $realLink");
+                    if (matches.isNotEmpty) {
+                      final firstLink = matches.first;
+                      setState(() {
+                        adDreamsGoalsProvider.detectedLinks.clear();
+                        adDreamsGoalsProvider.detectedLinks = [firstLink];
+                      });
 
-                    setState(() {
-                      adDreamsGoalsProvider.detectedLinks = [realLink];
-                    });
-
-                    // Remove the Instagram URL from text
-                    final cleaned = value.replaceAll(adDreamsGoalsProvider.urlRegex, '').trim();
-
-                    adDreamsGoalsProvider.commentEditTextController.text = cleaned;
-                    adDreamsGoalsProvider.commentEditTextController.selection =
-                        TextSelection.fromPosition(TextPosition(offset: cleaned.length));
-                  }
-                },
-
-                onEditingComplete: () {
+                      final cleanedText = value.replaceAll(adDreamsGoalsProvider.urlRegex, '').trim();
+                      adDreamsGoalsProvider.commentEditTextController.text = cleanedText;
+                      adDreamsGoalsProvider.commentEditTextController.selection =
+                          TextSelection.fromPosition(TextPosition(offset: cleanedText.length));
+                    }
+                  },
+                  onEditingComplete: () {
                     _goalDescFocusNode.unfocus();
                     setState(() {});
                   },
@@ -1157,9 +1154,8 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                             borderRadius: BorderRadius.circular(10),
                             child: LinkPreviewGenerator(
                               link: adDreamsGoalsProvider.detectedLinks.isNotEmpty
-                                  ? normalizeInstagramUrl(cleanInstagramUrl(adDreamsGoalsProvider.detectedLinks.first))
+                                  ? adDreamsGoalsProvider.detectedLinks.first
                                   : '',
-
                               linkPreviewStyle: LinkPreviewStyle.large,
                               showDomain: true,
                               showBody: true,
@@ -1244,30 +1240,34 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                     }
                     setState(() {});
                   },
-                onChanged: (value) {
-                  final matches = adDreamsGoalsProvider.urlRegex
-                      .allMatches(value)
-                      .map((m) => m.group(0)!)
-                      .toList();
+                  onChanged: (value) {
+                    final matches = adDreamsGoalsProvider.urlRegex
+                        .allMatches(value)
+                        .map((match) => match.group(0)!)
+                        .toList();
 
-                  if (matches.isNotEmpty) {
-                    final realLink = matches.first;
-                    debugPrint("🔗 Extracted Instagram URL: $realLink");
+                    if (matches.isNotEmpty) {
+                      // Normalize the detected URL before saving
+                      final firstRawLink = matches.first;
+                      final normalizedLink = normalizeUrl(firstRawLink);
 
-                    setState(() {
-                      adDreamsGoalsProvider.editDetectedLinks = [realLink];
-                    });
+                      setState(() {
+                        adDreamsGoalsProvider.editDetectedLinks.clear();
+                        adDreamsGoalsProvider.editDetectedLinks = [normalizedLink];
+                      });
 
-                    final cleaned = value.replaceAll(adDreamsGoalsProvider.urlRegex, '').trim();
+                      // Remove only the raw link from text field
+                      final cleanedText = value.replaceAll(adDreamsGoalsProvider.urlRegex, '').trim();
 
-                    adDreamsGoalsProvider.commentEditTextController.text = cleaned;
-                    adDreamsGoalsProvider.commentEditTextController.selection =
-                        TextSelection.fromPosition(TextPosition(offset: cleaned.length));
-                  }
-                },
+                      adDreamsGoalsProvider.commentEditTextController.text = cleanedText;
+                      adDreamsGoalsProvider.commentEditTextController.selection =
+                          TextSelection.fromPosition(
+                            TextPosition(offset: cleanedText.length),
+                          );
+                    }
+                  },
 
-
-                onEditingComplete: () {
+                  onEditingComplete: () {
                     _goalDescFocusNode.unfocus();
                     setState(() {});
                   },
@@ -1288,7 +1288,7 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                             borderRadius: BorderRadius.circular(10),
                             child: LinkPreviewGenerator(
                               link: adDreamsGoalsProvider.editDetectedLinks.isNotEmpty
-                                  ? normalizeInstagramUrl(cleanInstagramUrl(adDreamsGoalsProvider.editDetectedLinks.first))
+                                  ? adDreamsGoalsProvider.editDetectedLinks.first
                                   : '',
                               linkPreviewStyle: LinkPreviewStyle.large,
                               showDomain: true,

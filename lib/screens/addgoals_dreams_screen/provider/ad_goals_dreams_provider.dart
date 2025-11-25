@@ -1656,10 +1656,21 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
         );
         clearAction();
         if (Platform.isIOS) {
-          Navigator.of(context).pop();
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => const DashBoardScreen(),
+            ),
+                (route) => false,
+          );
         }else{
-          Navigator.of(context).pop();
-          Navigator.of(context).pop();
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => const DashBoardScreen(),
+            ),
+                (route) => false,
+          );
+          // Navigator.of(context).pop();
+          // Navigator.of(context).pop();
         }
       } else if (response.statusCode == 503) {
         Future.delayed(Duration.zero, () {
@@ -2191,7 +2202,7 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
 
   List<String> detectedLinks = [];
   RegExp urlRegex = RegExp(
-    r'https?://(www\.)?instagram\.com/[^\s]+',
+    r'(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-&?=%.]+',
     caseSensitive: false,
   );
 
