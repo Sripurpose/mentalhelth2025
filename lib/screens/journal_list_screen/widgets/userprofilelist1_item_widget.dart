@@ -13,6 +13,7 @@ import 'package:mentalhelth/utils/theme/custom_text_style.dart';
 import 'package:mentalhelth/widgets/functions/popup.dart';
 import 'package:provider/provider.dart';
 import 'package:html_unescape/html_unescape.dart';
+import '../../../utils/logic/date_format.dart';
 import '../../../utils/theme/app_decoration.dart';
 import '../../../utils/theme/colors.dart';
 import '../../../utils/theme/theme_helper.dart';
@@ -76,7 +77,9 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                       width: size.width * 0.50,
                       child: Text(
                             () {
-                          final unescapedTitle = HtmlUnescape().convert(journalsModelList.journalTitle ?? '');
+
+                          final unescapedTitle =  capitalizeFirstLetter(
+                                  HtmlUnescape().convert(journalsModelList.journalTitle ?? ''));
                           return unescapedTitle.length > 38
                               ? '${unescapedTitle.substring(0, 38)}...'
                               : unescapedTitle;

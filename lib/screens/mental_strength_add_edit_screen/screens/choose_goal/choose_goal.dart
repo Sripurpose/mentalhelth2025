@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:html_unescape/html_unescape.dart';
 import 'package:mentalhelth/screens/addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
 import 'package:mentalhelth/screens/mental_strength_add_edit_screen/model/get_goals_model.dart';
 import 'package:mentalhelth/screens/mental_strength_add_edit_screen/provider/mental_strenght_edit_provider.dart';
@@ -374,7 +375,7 @@ class _ScreenChooseGoalMentalStrengthState
                 SizedBox(
                   width: size.width * 0.5,
                   child: Text(
-                    goals[index].title.toString(),
+                    HtmlUnescape().convert(goals[index].title.toString()),
                     style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,

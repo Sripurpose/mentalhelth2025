@@ -663,22 +663,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                   },
                                 ),
 
-
+                              const SizedBox(height: 25),
                               GestureDetector(
                                 onTap: (){
                                   dashBoardProvider.changePage(index: 1);
                                   mentalStrengthEditProvider.fetchEmotions(context: context);
                                 },
                                 child: SizedBox(
-                                  width: 500,
-                                  height: 200,
                                   child: Image.asset(
                                     ImageConstant.homeBannerNumuNew,
                                     fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
-
+                              const SizedBox(height: 10),
                               // homeProvider.journalsModelList.isEmpty?
                               //    const SizedBox():
                               Align(
@@ -690,7 +688,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     children: [
                                       // Title
                                       Text(
-                                        "Your Recent Journals",
+                                        "My Journals",
                                         style: TextStyle(
                                           fontSize: 20,
                                           fontFamily: 'Poppins',
@@ -890,7 +888,8 @@ class _HomeScreenState extends State<HomeScreen> {
       padding: const EdgeInsets.symmetric(
         horizontal: 15,
       ),
-      child: Row(
+      child:
+      Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Stack(
@@ -944,27 +943,21 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 7,
-              top: 21,
-              bottom: 21,
-            ),
-            child: SizedBox(
-              // color: Colors.cyan,
-              width: size.width * 0.60,
+          Expanded(
+            child: Center(
               child: Text(
-                capitalText(editProfileProvider.getProfileModel == null
-                    ? ""
-                    :editProfileProvider.getProfileModel!.firstname
-                    .toString()),
+                capitalText(
+                  editProfileProvider.getProfileModel?.firstname?.toString() ?? "",
+                ),
                 style: CustomTextStyles.bodyLarge18,
                 overflow: TextOverflow.ellipsis,
-                maxLines: 10, // Set the maximum number of lines to 3
+                maxLines: 2,
+                textAlign: TextAlign.center, // ⭐ align text center
               ),
             ),
           ),
-        //  const Spacer(),
+
+          //  const Spacer(),
           GestureDetector(
             onTap: () {
               showDialog(

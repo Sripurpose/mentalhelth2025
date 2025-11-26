@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:html_unescape/html_unescape.dart';
 import 'package:link_preview_generator/link_preview_generator.dart';
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/screens/dash_borad_screen/provider/dash_board_provider.dart';
@@ -752,57 +753,34 @@ class _NumuMentalStrengthAddEditPageState
       Size size,
       )
   {
-    return Container(
-      color: mentalStrengthEditProvider.openChooseGoal
-          ? ColorsContent.newThemeColor
-          : null,
-      padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
-      child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        padding: EdgeInsets.only(
-          top: size.height * 0.01,
-          bottom: size.height * 0.12, // ✅ Prevents FAB overlap
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildTitleEditText(context, mentalStrengthEditProvider),
-            SizedBox(height: size.height * 0.015),
-            _buildDescriptionEditText(context, mentalStrengthEditProvider),
-            SizedBox(height: size.height * 0.015),
-            _buildAddMediaColumn(context, size),
-            //
-            // if (mentalStrengthEditProvider.detectedLinks.isNotEmpty)
-            //   Column(
-            //     crossAxisAlignment: CrossAxisAlignment.start,
-            //     children: [
-            //       const SizedBox(height: 40),
-            //       ...mentalStrengthEditProvider.detectedLinks.map((link) {
-            //         return Padding(
-            //           padding: const EdgeInsets.only(bottom: 12.0),
-            //           child: LinkPreviewGenerator(
-            //             link: link,
-            //             linkPreviewStyle: LinkPreviewStyle.small, // 👈 smaller layout
-            //             showDomain: true,
-            //             showTitle: true,
-            //             bodyMaxLines: 1, // fewer lines = less height
-            //             boxShadow: const [
-            //               BoxShadow(
-            //                 color: Colors.black12,
-            //                 blurRadius: 6,
-            //                 offset: Offset(0, 2),
-            //               ),
-            //             ],
-            //             borderRadius: 12,
-            //           )
-            //         );
-            //       }).toList(),
-            //     ],
-            //   ),
+    final isLoading = mentalStrengthEditProvider.saveJournalLoading;
 
-
-
-          ],
+    return IgnorePointer(
+      ignoring: isLoading, // disables touch events
+      child: Opacity(
+        opacity: isLoading ? 0.5 : 1.0, // fades out UI when loading
+        child: Container(
+          color: mentalStrengthEditProvider.openChooseGoal
+              ? ColorsContent.newThemeColor
+              : null,
+          padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            padding: EdgeInsets.only(
+              top: size.height * 0.01,
+              bottom: size.height * 0.12, // ✅ Prevents FAB overlap
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildTitleEditText(context, mentalStrengthEditProvider),
+                SizedBox(height: size.height * 0.015),
+                _buildDescriptionEditText(context, mentalStrengthEditProvider),
+                SizedBox(height: size.height * 0.015),
+                _buildAddMediaColumn(context, size),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -810,50 +788,60 @@ class _NumuMentalStrengthAddEditPageState
 
 
   Widget _buildSecondTab(BuildContext context, Size size) {
+    final isLoading = mentalStrengthEditProvider.saveJournalLoading;
+
     Size size = MediaQuery.of(context).size;
-    return Center(
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 20,
-          ),
-          const Text(
-            "Rate How You Are Feeling Now ?",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              fontFamily: 'Poppins',
-            ),
-          ),
-          SizedBox(height: size.height * 0.05),
-          SvgPicture.asset(
-            ImageConstant.feelingDummyNumu, // Button icon
-          ),
-          SizedBox(height: size.height * 0.03),
-          SvgPicture.asset(
-            ImageConstant.lineNumu, // Button icon
-          ),
-          SizedBox(height: size.height * 0.03),
-          CustomRatingBar(
-            initialRating: mentalStrengthEditProvider.emotionalValueStar,
-            itemSize: 60,
-            color: ColorsContent.newThemeColor,
-            unselectedColor: Colors.grey,
-            onRatingUpdate: (value) {
-              logger.w("Updated emotional value star: $value");
+    return IgnorePointer(
+      ignoring: isLoading, // disables touch events
 
-              // Map the value from 1-5 to -2 to 2 as an integer
-              int mappedValue = ((value - 1) * 4 / (5 - 1) - 2).round();
+      child: Opacity(
+        opacity: isLoading ? 0.5 : 1.0, // fades out UI when loading
 
-              mentalStrengthEditProvider.fetchEmotions(
-                  emotion: "$mappedValue", context: context);
+        child: Center(
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 20,
+              ),
+              const Text(
+                "Rate How You Are Feeling Now ?",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Poppins',
+                ),
+              ),
+              SizedBox(height: size.height * 0.06),
+              SvgPicture.asset(
+                ImageConstant.feelingDummyNumu, // Button icon
+              ),
+              SizedBox(height: size.height * 0.020),
+              SvgPicture.asset(
+                ImageConstant.lineNumu, // Button icon
+              ),
+              SizedBox(height: size.height * 0.010),
+              CustomRatingBar(
+                initialRating: mentalStrengthEditProvider.emotionalValueStar,
+                itemSize: 60,
+                color: ColorsContent.newThemeColor,
+                unselectedColor: Colors.grey,
+                onRatingUpdate: (value) {
+                  logger.w("Updated emotional value star: $value");
 
-              mentalStrengthEditProvider.changeEmotionalValueStar(value);
-              _isTokenExpired(); // Call your method after rating update.
-            },
+                  // Map the value from 1-5 to -2 to 2 as an integer
+                  int mappedValue = ((value - 1) * 4 / (5 - 1) - 2).round();
+
+                  mentalStrengthEditProvider.fetchEmotions(
+                      emotion: "$mappedValue", context: context);
+
+                  mentalStrengthEditProvider.changeEmotionalValueStar(value);
+                  _isTokenExpired(); // Call your method after rating update.
+                },
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -861,152 +849,169 @@ class _NumuMentalStrengthAddEditPageState
   Widget _buildThirdTab(BuildContext context, Size size) {
     Size size = MediaQuery.of(context).size;
     final TextEditingController searchController = TextEditingController();
+    final isLoading = mentalStrengthEditProvider.saveJournalLoading;
 
-    return Center(
-      child: Column(
-        children: [
-          const SizedBox(height: 20),
-          const Text(
-            "What Is Your Emotional State?",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              fontFamily: 'Poppins',
-            ),
-          ),
-          SizedBox(height: size.height * 0.06),
-          (mentalStrengthEditProvider.getEmotionsModel == null)
-              ? const SizedBox()
-              : Container(
-                  width: size.width * 0.80,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    color: Colors.white,
-                  ),
-                  child: Center(
-                    child: DropdownButtonHideUnderline(
-                        child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                      child: DropdownButton2<Emotion>(
-                        isExpanded: true,
-                        value: mentalStrengthEditProvider.emotionValue,
-                        hint: const Text("Select Emotion"),
-                        items: mentalStrengthEditProvider
-                            .getEmotionsModel?.emotions
-                            ?.map((Emotion items) {
-                          return DropdownMenuItem<Emotion>(
-                            value: items,
+    return IgnorePointer(
+      ignoring: isLoading, // disables touch events
+
+      child: Opacity(
+        opacity: isLoading ? 0.5 : 1.0, // fades out UI when loading
+
+        child: Center(
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+              const Text(
+                "What Is Your Emotional State?",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Poppins',
+                ),
+              ),
+              SizedBox(height: size.height * 0.06),
+              (mentalStrengthEditProvider.getEmotionsModel == null)
+                  ? const SizedBox()
+                  : Container(
+                      width: size.width * 0.80,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
+                        color: Colors.white,
+                      ),
+                      child: Center(
+                        child: DropdownButtonHideUnderline(
                             child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Text(
-                                items.title.toString(),
-                                style: TextStyle(
-                                  color: ColorsContent.newThemeColor,
+                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                          child: DropdownButton2<Emotion>(
+                            isExpanded: true,
+                            value: mentalStrengthEditProvider.emotionValue,
+                            hint: const Text("Select Emotion"),
+                            items: mentalStrengthEditProvider
+                                .getEmotionsModel?.emotions
+                                ?.map((Emotion items) {
+                              return DropdownMenuItem<Emotion>(
+                                value: items,
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: Text(
+                                    items.title.toString(),
+                                    style: TextStyle(
+                                      color: ColorsContent.newThemeColor,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (Emotion? newValue) {
+                              final matched = mentalStrengthEditProvider
+                                  .getEmotionsModel?.emotions
+                                  ?.firstWhere((e) => e.id == newValue?.id,
+                                      orElse: () => newValue!);
+                              mentalStrengthEditProvider.addEmotionValue(matched!);
+                              _isTokenExpired();
+                            },
+                            dropdownStyleData: DropdownStyleData(
+                              maxHeight: 350,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: Colors.white,
+                              ),
+                            ),
+                            menuItemStyleData: const MenuItemStyleData(
+                              padding: EdgeInsets.all(8),
+                            ),
+                            dropdownSearchData: DropdownSearchData(
+                              searchController: searchController,
+                              searchInnerWidgetHeight: 60, // <- Required
+                              searchInnerWidget: Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: TextFormField(
+                                  controller: searchController,
+                                  decoration: const InputDecoration(
+                                    hintText: 'Search Emotion...',
+                                    contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 8),
+                                    border: OutlineInputBorder(),
+                                  ),
                                 ),
                               ),
+                              searchMatchFn: (item, searchValue) {
+                                return (item.value?.title ?? '')
+                                    .toLowerCase()
+                                    .startsWith(searchValue.toLowerCase());
+                              },
                             ),
-                          );
-                        }).toList(),
-                        onChanged: (Emotion? newValue) {
-                          final matched = mentalStrengthEditProvider
-                              .getEmotionsModel?.emotions
-                              ?.firstWhere((e) => e.id == newValue?.id,
-                                  orElse: () => newValue!);
-                          mentalStrengthEditProvider.addEmotionValue(matched!);
-                          _isTokenExpired();
-                        },
-                        dropdownStyleData: DropdownStyleData(
-                          maxHeight: 350,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: Colors.white,
-                          ),
-                        ),
-                        menuItemStyleData: const MenuItemStyleData(
-                          padding: EdgeInsets.all(8),
-                        ),
-                        dropdownSearchData: DropdownSearchData(
-                          searchController: searchController,
-                          searchInnerWidgetHeight: 60, // <- Required
-                          searchInnerWidget: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: TextFormField(
-                              controller: searchController,
-                              decoration: const InputDecoration(
-                                hintText: 'Search Emotion...',
-                                contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 8),
-                                border: OutlineInputBorder(),
+                            iconStyleData: IconStyleData(
+                              icon: Icon(
+                                Icons.arrow_drop_down,
+                                size: 30,
+                                color: ColorsContent
+                                    .newThemeColor, // Change the color of the dropdown icon here
                               ),
                             ),
                           ),
-                          searchMatchFn: (item, searchValue) {
-                            return (item.value?.title ?? '')
-                                .toLowerCase()
-                                .startsWith(searchValue.toLowerCase());
-                          },
-                        ),
-                        iconStyleData: IconStyleData(
-                          icon: Icon(
-                            Icons.arrow_drop_down,
-                            size: 30,
-                            color: ColorsContent
-                                .newThemeColor, // Change the color of the dropdown icon here
-                          ),
-                        ),
+                        )),
                       ),
-                    )),
-                  ),
-                ),
-        ],
+                    ),
+            ],
+          ),
+        ),
       ),
     );
   }
 
   Widget _buildFourthTab(BuildContext context, Size size) {
-    Size size = MediaQuery.of(context).size;
-    return Center(
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 20,
-          ),
-          const Text(
-            "Do You Like Your Reaction To",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              fontFamily: 'Poppins',
-            ),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          const Text(
-            "The situation?",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              fontFamily: 'Poppins',
-            ),
-          ),
-          SizedBox(height: size.height * 0.03),
-          SizedBox(height: size.height * 0.01),
-          CustomRatingBar(
-            initialRating: mentalStrengthEditProvider.driveValueStar,
-            itemSize: 60,
-            color: ColorsContent.newThemeColor,
-            onRatingUpdate: (value) {
-              mentalStrengthEditProvider.changeDriveValueStar(value);
+    final isLoading = mentalStrengthEditProvider.saveJournalLoading;
 
-              _isTokenExpired();
-            },
+    Size size = MediaQuery.of(context).size;
+    return IgnorePointer(
+      ignoring: isLoading, // disables touch events
+      child: Opacity(
+        opacity: isLoading ? 0.5 : 1.0, // fades out UI when loading
+        child: Center(
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 20,
+              ),
+              const Text(
+                "Do You Like Your Reaction To",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Poppins',
+                ),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              const Text(
+                "The situation?",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Poppins',
+                ),
+              ),
+              SizedBox(height: size.height * 0.03),
+              SizedBox(height: size.height * 0.01),
+              CustomRatingBar(
+                initialRating: mentalStrengthEditProvider.driveValueStar,
+                itemSize: 60,
+                color: ColorsContent.newThemeColor,
+                onRatingUpdate: (value) {
+                  mentalStrengthEditProvider.changeDriveValueStar(value);
+
+                  _isTokenExpired();
+                },
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -1046,7 +1051,7 @@ class _NumuMentalStrengthAddEditPageState
                 ),
               ),
               const SizedBox(
-                height: 20,
+                height: 45,
               ),
               SizedBox(
                 width: size.width * 0.80,
@@ -1137,8 +1142,8 @@ class _NumuMentalStrengthAddEditPageState
                                 scrollDirection: Axis.horizontal,
                                 // Enable horizontal scrolling
                                 child: Text(
-                                  mentalStrengthEditProvider.goalsValue.title
-                                      .toString(),
+                                  HtmlUnescape().convert(mentalStrengthEditProvider.goalsValue.title
+                                      .toString()),
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(
                                     color: Colors.white,
@@ -1318,8 +1323,8 @@ class _NumuMentalStrengthAddEditPageState
                               child: SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: Text(
-                                  mentalStrengthEditProvider.actionList[index].title
-                                      .toString(),
+                                  HtmlUnescape().convert(mentalStrengthEditProvider.actionList[index].title
+                                      .toString()),
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(
                                     color: Colors.white,

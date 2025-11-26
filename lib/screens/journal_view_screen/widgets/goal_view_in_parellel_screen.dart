@@ -186,23 +186,6 @@ class _GoalAndDreamFullViewBottomParellelSheetState
                         ],
                       );
                     }),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                  child: SizedBox(
-                    width: size.width * 0.70,
-                    child: Text(
-                      capitalText(
-                          widget.goalDetailModel.goals!.goalTitle.toString()),
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Poppins',
-                        color: Colors.black,
-                      ),
-                      maxLines: 4, // Set the maximum number of lines to 3
-                    ),
-                  ),
-                ),
                 const SizedBox(height: 10,),
                 _buildUntitledOne(
                   context,
@@ -784,6 +767,60 @@ class _GoalAndDreamFullViewBottomParellelSheetState
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            border: Border.all(
+                color: ColorsContent.newThemeColor,
+                width: 0.3), // Light purple border
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: ColorsContent.goalTextColor, // Light purple background
+                  borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(5)),
+                ),
+                child:  Text(
+                  "Goal Name",
+                  style: TextStyle(
+                    color:ColorsContent.signInGradientColorViolet, // Purple text
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: const BoxDecoration(
+                  color: Colors.white, // Off-white background
+                  borderRadius:
+                  BorderRadius.vertical(bottom: Radius.circular(5)),
+                ),
+                child: Text(
+                  capitalText(
+                      widget.goalDetailModel.goals!.goalTitle.toString()),
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 15,
+        ),
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),

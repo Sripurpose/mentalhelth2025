@@ -6,7 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:mentalhelth/screens/journal_list_screen/provider/journal_list_provider.dart';
 import 'package:mentalhelth/utils/theme/app_decoration.dart';
 import 'package:provider/provider.dart';
-
+import 'dart:math' as math;
 import '../../../utils/core/image_constant.dart';
 import '../../../utils/theme/colors.dart';
 
@@ -20,6 +20,7 @@ String? currentPlayingUrl;
 
 class JournalAudioPlayer extends StatefulWidget {
   const JournalAudioPlayer({super.key, required this.url});
+
   final String url;
 
   @override
@@ -28,23 +29,20 @@ class JournalAudioPlayer extends StatefulWidget {
 
 class _JournalAudioPlayerState extends State<JournalAudioPlayer> {
   bool isPlaying = false;
-  Duration duration = Duration.zero;  // total
-  Duration position = Duration.zero;  // current
+  Duration duration = Duration.zero;
+  Duration position = Duration.zero;
 
   @override
   void initState() {
     super.initState();
 
-    // Player state listener
     globalAudioPlayer.onPlayerStateChanged.listen((event) {
       if (!mounted) return;
       setState(() {
-        isPlaying =
-            event == PlayerState.playing && currentPlayingUrl == widget.url;
+        isPlaying = event == PlayerState.playing && currentPlayingUrl == widget.url;
       });
     });
 
-    // TOTAL duration listener (right side)
     globalAudioPlayer.onDurationChanged.listen((newDuration) {
       if (!mounted) return;
       setState(() {
@@ -52,7 +50,6 @@ class _JournalAudioPlayerState extends State<JournalAudioPlayer> {
       });
     });
 
-    // CURRENT position listener (left side)
     globalAudioPlayer.onPositionChanged.listen((newPosition) {
       if (!mounted) return;
       if (currentPlayingUrl == widget.url) {
@@ -62,14 +59,12 @@ class _JournalAudioPlayerState extends State<JournalAudioPlayer> {
       }
     });
 
-    // Preload audio (just for duration)
     _preloadDuration();
   }
 
   Future<void> _preloadDuration() async {
     try {
       await globalAudioPlayer.setSource(UrlSource(widget.url));
-      // After this, onDurationChanged will fire and set duration
     } catch (e) {
       debugPrint('Error preloading audio: $e');
     }
@@ -77,7 +72,6 @@ class _JournalAudioPlayerState extends State<JournalAudioPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Container(
       margin: const EdgeInsets.only(bottom: 5),
       padding: const EdgeInsets.symmetric(horizontal: 19, vertical: 8),
@@ -85,25 +79,21 @@ class _JournalAudioPlayerState extends State<JournalAudioPlayer> {
         color: ColorsContent.newThemeColor,
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Consumer<JournalListProvider>(
+      child: Consumer(
         builder: (context, journalListProvider, _) {
           return Row(
             children: [
               GestureDetector(
                 onTap: () async {
                   if (isPlaying) {
-                    // Pause current
                     await globalAudioPlayer.pause();
                     setState(() {
                       currentPlayingUrl = null;
                     });
                   } else {
-                    // Stop other audio if any
-                    if (currentPlayingUrl != null &&
-                        currentPlayingUrl != widget.url) {
+                    if (currentPlayingUrl != null && currentPlayingUrl != widget.url) {
                       await globalAudioPlayer.stop();
                     }
-                    // Play this url
                     currentPlayingUrl = widget.url;
                     await globalAudioPlayer.play(UrlSource(widget.url));
                   }
@@ -131,43 +121,109 @@ class _JournalAudioPlayerState extends State<JournalAudioPlayer> {
               Expanded(
                 child: Column(
                   children: [
-                    Slider(
-                      min: 0,
-                      max: duration.inSeconds
-                          .toDouble()
-                          .clamp(0.0, double.infinity),
-                      value: position.inSeconds
-                          .toDouble()
-                          .clamp(0.0, duration.inSeconds.toDouble()),
-                      onChanged: (value) async {
-                        final newPosition = Duration(seconds: value.toInt());
+                    GestureDetector(
+                      onTapDown: (details) async {
+                        final box = context.findRenderObject() as RenderBox;
+                        final localPosition = details.localPosition;
+                        final width = box.size.width;
+                        final percent = (localPosition.dx / width).clamp(0.0, 1.0);
+                        final newPosition = Duration(
+                          milliseconds: (duration.inMilliseconds * percent).toInt(),
+                        );
                         await globalAudioPlayer.seek(newPosition);
-                        await globalAudioPlayer.resume();
+                        if (!isPlaying) {
+                          await globalAudioPlayer.resume();
+                        }
                       },
+                      child: CustomPaint(
+                        size: const Size(double.infinity, 50),
+                        painter: WaveformPainter(
+                          progress: duration.inMilliseconds > 0
+                              ? position.inMilliseconds / duration.inMilliseconds
+                              : 0.0,
+                        ),
+                      ),
                     ),
+                    isPlaying?
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        // current time (left)
-                        Text(
-                          _formatDuration(position),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontFamily: 'Poppins',
+                        Container(
+                          decoration: BoxDecoration(
+                            color: ColorsContent.goalNotCompletedColor,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                            child: Text(
+                              _formatDuration(position),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontFamily: 'Poppins',
+                              ),
+                            ),
                           ),
                         ),
-                        // total time (right)
-                        Text(
-                          _formatDuration(duration),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontFamily: 'Poppins',
+                        Container(
+                          decoration: BoxDecoration(
+                            color: ColorsContent.goalNotCompletedColor,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                            child: Text(
+                              _formatDuration(duration),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontFamily: 'Poppins',
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ):
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: ColorsContent.newThemeColor,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                            child: Text(
+                             "",
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontFamily: 'Poppins',
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: ColorsContent.newThemeColor,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                            child: Text(
+                              "",
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontFamily: 'Poppins',
+                              ),
+                            ),
                           ),
                         ),
                       ],
                     ),
+
                   ],
                 ),
               ),
@@ -179,12 +235,61 @@ class _JournalAudioPlayerState extends State<JournalAudioPlayer> {
   }
 }
 
-// time format helper
 String _formatDuration(Duration duration) {
   String twoDigits(int n) => n.toString().padLeft(2, '0');
   final minutes = twoDigits(duration.inMinutes.remainder(60));
   final seconds = twoDigits(duration.inSeconds.remainder(60));
   return "$minutes:$seconds";
+}
+
+class WaveformPainter extends CustomPainter {
+  final double progress;
+
+  WaveformPainter({required this.progress});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    const barCount = 40;
+    final barWidth = size.width / barCount;
+    final spacing = barWidth * 0.4;
+    final actualBarWidth = barWidth - spacing;
+    final centerY = size.height / 2;
+
+    // WhatsApp-style random heights with variation
+    final random = math.Random(42); // Fixed seed for consistent pattern
+    final heights = List.generate(
+      barCount,
+          (i) {
+        // Create varied heights between 0.2 and 1.0
+        final baseHeight = 0.25 + random.nextDouble() * 0.75;
+        return baseHeight;
+      },
+    );
+
+    for (int i = 0; i < barCount; i++) {
+      final x = i * barWidth;
+      final barHeight = size.height * heights[i];
+      final isPlayed = (i / barCount) <= progress;
+
+      final paint = Paint()
+        ..color = isPlayed
+            ? Colors.white
+            : Colors.white.withOpacity(0.4)
+        ..strokeWidth = actualBarWidth
+        ..strokeCap = StrokeCap.round;
+
+      canvas.drawLine(
+        Offset(x + barWidth / 2, centerY - barHeight / 2),
+        Offset(x + barWidth / 2, centerY + barHeight / 2),
+        paint,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(WaveformPainter oldDelegate) {
+    return oldDelegate.progress != progress;
+  }
 }
 
 
@@ -269,7 +374,7 @@ class _GridAudioPlayerState extends State<GridAudioPlayer>
     return Center(
       child: Container(
         width: 340,
-        height: 250,
+        height: 350,
         padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 16),
         decoration: BoxDecoration(
           color: ColorsContent.newThemeColor.withOpacity(0.15),

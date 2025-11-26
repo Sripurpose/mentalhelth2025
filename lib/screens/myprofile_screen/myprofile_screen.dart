@@ -133,7 +133,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                             : SingleChildScrollView(
                                           child: Column(
                                             children: [
-                                              SizedBox(height: size.height * 0.1),
+                                              SizedBox(height: size.height * 0.08),
                                               SizedBox(
                                                 width: size.width * 0.55,
                                                 child: Align(
@@ -264,8 +264,15 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                       ),
                                                       TextSpan(
                                                         text:
-                                                        "${editProfileProvider.getProfileModel!.dob == null ? "" : dateFormatter(date: editProfileProvider.getProfileModel!.dob.toString())}\n\n",
-                                                        style: CustomTextStyles.bodyLargeff000000,
+                                                        "${editProfileProvider.getProfileModel!.dob == null ? "DD MMM YYYY" : dateFormatter(date: editProfileProvider.getProfileModel!.dob.toString())}\n\n",
+                                                        style: editProfileProvider.getProfileModel!.dob == null ?  TextStyle(
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                          FontWeight.w400,
+                                                          fontFamily: 'Poppins',
+                                                          color: ColorsContent.noDob,
+                                                        )
+                                                            :CustomTextStyles.bodyLargeff000000,
                                                       ),
                                                       TextSpan(
                                                         text: "Interests\n",
@@ -277,13 +284,29 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                         ),
                                                       ),
                                                       TextSpan(
-                                                        text: editProfileProvider.getProfileModel!.interests
-                                                            ?.split(',')
+                                                        text: (
+                                                            editProfileProvider.getProfileModel!.interests == null ||
+                                                                editProfileProvider.getProfileModel!.interests!.trim().isEmpty
+                                                        )
+                                                            ? "No interests added yet."
+                                                            : editProfileProvider.getProfileModel!.interests!
+                                                            .split(',')
                                                             .map((e) => e.trim())
                                                             .toSet()
                                                             .join(', '),
-                                                        style: CustomTextStyles.bodyLargeff000000,
+                                                        style: (
+                                                            editProfileProvider.getProfileModel!.interests == null ||
+                                                                editProfileProvider.getProfileModel!.interests!.trim().isEmpty
+                                                        )
+                                                            ? TextStyle(
+                                                          fontSize: 12,
+                                                          fontWeight: FontWeight.w400,
+                                                          fontFamily: 'Poppins',
+                                                          color: ColorsContent.noDob,
+                                                        )
+                                                            : CustomTextStyles.bodyLargeff000000,
                                                       )
+
                                                     ],
                                                   ),
                                                   textAlign: TextAlign.center,

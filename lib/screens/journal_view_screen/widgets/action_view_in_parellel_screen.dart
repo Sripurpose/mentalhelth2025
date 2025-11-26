@@ -809,7 +809,6 @@ class _ActionViewInParallelScreenState
         const SizedBox(
           height: 10,
         ),
-
         Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
@@ -842,7 +841,8 @@ class _ActionViewInParallelScreenState
                   if (title.length < 25)
                     Flexible(
                       child: Text(
-                        title,
+                        capitalText(
+                            title),
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w400,
@@ -858,7 +858,8 @@ class _ActionViewInParallelScreenState
                   child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,
                     child: Text(
-                      title,
+                      capitalText(
+                          title),
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
@@ -871,7 +872,6 @@ class _ActionViewInParallelScreenState
             ],
           ),
         ),
-
         const SizedBox(
           height: 10,
         ),

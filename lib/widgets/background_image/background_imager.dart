@@ -24,8 +24,8 @@ Widget backGroundImager({
       width: double.maxFinite,
       padding: padding ??
           EdgeInsets.only(
-            left: size.width * 0.05,
-            right: size.width * 0.05,
+            left: size.width * 0.02,
+            right: size.width * 0.02,
           ),
       child: child,
     ),
@@ -42,7 +42,7 @@ Widget backGroundImagerViewJournal({
     width: size.width,
     height: size.height,
     decoration: BoxDecoration(
-      color: ColorsContent.viewJournalColor, // Replace image with a solid color
+      color: ColorsContent.homeBackGroundColor, // Replace image with a solid color
       // image: DecorationImage(
       //   image: AssetImage(
       //     ImageConstant.imgGroup22,

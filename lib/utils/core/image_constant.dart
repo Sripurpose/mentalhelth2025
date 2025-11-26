@@ -29,6 +29,10 @@ class ImageConstant {
   static String dateMove = '$imagePath/date_move.svg';
   static String dateUpMove = '$imagePath/date_up_move.svg';
 
+  static String journalCalendarIcon = '$imagePath/journal_calendar_icon.svg';
+  static String journalTimeIcon = '$imagePath/journal_time_icon.svg';
+  static String journalLocationIcon = '$imagePath/journal_location_icon.svg';
+
   static String locationIconGridNumu = '$imagePath/location_icon_grid.svg';
   static String dateIconGridNumu = '$imagePath/date_icon_grid.svg';
   static String timeIconGridNumu = '$imagePath/time_icon_grid.svg';
@@ -149,4 +153,5 @@ class ImageConstant {
 
   static String imgPath4 = '$imagePath/img_path4.svg';
   static String dotDot = '$imagePath/dot_dot.svg';
+  static String locationHomeScreen = '$imagePath/location_home_screen.svg';
 }

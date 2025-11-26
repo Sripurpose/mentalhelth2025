@@ -25,6 +25,7 @@ import 'package:mentalhelth/widgets/video_player.dart';
 import 'package:mentalhelth/widgets/widget/shimmer.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../utils/logic/date_format.dart';
 import '../../../../utils/theme/colors.dart';
 import '../../../../widgets/app_bar/appbar_subtitle.dart';
 import '../../../../widgets/app_bar/custom_app_bar.dart';
@@ -150,9 +151,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                 : buildAppBarActionView(
                     context,
                     size,
-                    heading: capitalText(mentalStrengthEditProvider
-                        .actionsDetailsModel!.actions!.actionTitle
-                        .toString()),
+                    heading: "Action Details",
                     id: mentalStrengthEditProvider
                         .actionsDetailsModel!.actions!.actionId
                         .toString(),
@@ -186,8 +185,8 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    SizedBox(
-                                      height: 20,
+                                    const SizedBox(
+                                      height: 5,
                                     ),
                                     mentalStrengthEditProvider
                                                 .actionsDetailsModel ==
@@ -1209,7 +1208,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                   if (title.length < 25)
                     Flexible(
                       child: Text(
-                        title,
+                        category,
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w400,

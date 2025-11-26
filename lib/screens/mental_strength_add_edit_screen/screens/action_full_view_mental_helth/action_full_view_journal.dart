@@ -1130,7 +1130,7 @@ class _ActionFullViewJournalCreateBottomSheetState
                 color: ColorsContent.newThemeColor,
                 // You can change this to any color you want
                 width: 0.3 // Adjust the thickness of the border
-                ),
+            ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1143,7 +1143,6 @@ class _ActionFullViewJournalCreateBottomSheetState
                   ),
                   const SizedBox(width: 10),
                   const Text(
-                    textAlign: TextAlign.justify,
                     "Title",
                     style: TextStyle(
                       fontSize: 16,
@@ -1159,7 +1158,9 @@ class _ActionFullViewJournalCreateBottomSheetState
                   if (title.length < 25)
                     Flexible(
                       child: Text(
-                        title,
+                        textAlign: TextAlign.justify,
+                        capitalText(
+                            title),
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w400,
@@ -1175,7 +1176,8 @@ class _ActionFullViewJournalCreateBottomSheetState
                   child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,
                     child: Text(
-                      title,
+                      capitalText(
+                          title),
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
@@ -1197,6 +1199,11 @@ class _ActionFullViewJournalCreateBottomSheetState
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(5),
+            border: Border.all(
+                color: ColorsContent.newThemeColor,
+                // You can change this to any color you want
+                width: 0.3 // Adjust the thickness of the border
+            ),
           ),
           child: Builder(
             builder: (context) {
@@ -1238,14 +1245,14 @@ class _ActionFullViewJournalCreateBottomSheetState
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.white,
-                        borderRadius: const BorderRadius.vertical(
+                        borderRadius: BorderRadius.vertical(
                           bottom: Radius.circular(5),
                         ),
                       ),
                       child: Text(
-                        textAlign: TextAlign.justify,
+                       // textAlign: TextAlign.justify,
                         HtmlUnescape().convert(commentsText),
                         style: const TextStyle(
                           color: Colors.black,

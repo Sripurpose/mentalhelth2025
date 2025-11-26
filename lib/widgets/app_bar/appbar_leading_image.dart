@@ -317,7 +317,7 @@ PreferredSizeWidget buildAppBarJournalViewScreenNew(BuildContext context, Size s
     {String? heading, Function? onTap, bool isSigned = true})
 {
   return CustomAppBarNumu(
-    backgroundColor: ColorsContent.viewJournalColor,
+    backgroundColor: ColorsContent.homeBackGroundColor,
     leadingWidth: 36,
     leading:
     Consumer<DashBoardProvider>(builder: (context, dashBoardProvider, _) {

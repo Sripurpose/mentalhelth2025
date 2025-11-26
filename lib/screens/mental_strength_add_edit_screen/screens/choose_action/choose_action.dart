@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:html_unescape/html_unescape.dart';
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/screens/mental_strength_add_edit_screen/model/get_goals_model.dart';
 import 'package:mentalhelth/screens/mental_strength_add_edit_screen/model/list_goal_actions.dart'
@@ -231,7 +232,7 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
                                               SizedBox(
                                                 width: showActions ? size.width * 0.70 : size.width * 0.70,
                                                 child: Text(
-                                                  "${widget.goal.title}",
+                                                  HtmlUnescape().convert("${widget.goal.title}"),
                                                   overflow: TextOverflow.visible,
                                                   maxLines: null,
                                                   textAlign: TextAlign.start,
@@ -683,7 +684,7 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Text(
-                      action[index].title.toString(),
+                      HtmlUnescape().convert(action[index].title.toString()),
                       style: const TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Poppins',),
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,

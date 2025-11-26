@@ -62,62 +62,70 @@ Widget buildPopupDialog(BuildContext context, Size size) {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        dashBoardProvider.changeCommentPage(
-                          index: 8,
-                        );
-                        Navigator.of(context).pop();
-                      },
-                      child: CircleAvatar(
-                        backgroundColor: Colors.grey,
-                        radius: size.width * 0.075,
-                        child: CustomImageView(
-                          imagePath:
-                              editProvider.getProfileModel?.profileurl.toString(),
-                          height: 58,
-                          width: 58,
-                          radius: BorderRadius.circular(
-                            34,
+              SizedBox(height: 10,),
+
+              Container(
+                decoration: BoxDecoration(
+                color: ColorsContent.homeMenuTitleColor,
+                  borderRadius: BorderRadius.circular(6.0),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5.0,vertical: 5),
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          dashBoardProvider.changeCommentPage(
+                            index: 8,
+                          );
+                          Navigator.of(context).pop();
+                        },
+                        child: CircleAvatar(
+                          backgroundColor: Colors.grey,
+                          radius: size.width * 0.075,
+                          child: CustomImageView(
+                            imagePath:
+                                editProvider.getProfileModel?.profileurl.toString(),
+                            height: 58,
+                            width: 58,
+                            radius: BorderRadius.circular(
+                              34,
+                            ),
+                            fit: BoxFit.cover,
                           ),
-                          fit: BoxFit.cover,
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      width: size.width * 0.02,
-                    ),
-                    SizedBox(
-                      width: size.width * 0.40,
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        // Enable horizontal scrolling
-                        child: Text(
-                          capitalText(
-                            editProvider.getProfileModel?.firstname.toString() ??
-                                "",
+                      SizedBox(
+                        width: size.width * 0.02,
+                      ),
+                      SizedBox(
+                        width: size.width * 0.40,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          // Enable horizontal scrolling
+                          child: Text(
+                            capitalText(
+                              editProvider.getProfileModel?.firstname.toString() ??
+                                  "",
+                            ),
+                            style: const TextStyle(
+                              fontSize: 16.5,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: 'Poppins',
+                              color: Colors.black,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
                           ),
-                          style: const TextStyle(
-                            fontSize: 16.5,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'Poppins',
-                            color: Colors.black,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.center,
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               SizedBox(
-                height: size.height * 0.04,
+                height: size.height * 0.025,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),

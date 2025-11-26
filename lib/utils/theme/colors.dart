@@ -13,6 +13,8 @@ class ColorsContent {
   static Color dateTimeColor = const Color(0xFF464848);
   static Color whiteText = const Color(0xFFFFFFFF);
   static Color newThemeColor = const Color(0xFF7E69F8);
+  static Color homeMenuTitleColor = const Color(0xFFAC9EFF);
+  static Color noDob = const Color(0xFFB8B8B8);
   static Color actionBackColor = const Color(0xFF604DD1);
   static Color hintColor = const Color(0xFFAAAAAA);
   static Color homeBackGroundColor = const Color(0xFFE8EAF7);
@@ -22,6 +24,7 @@ class ColorsContent {
   static Color tokenExpiryTextColor = const Color(0xFF4A4A4A);
   static Color linkDropDownBackGroundColor = const Color(0xFFD1C9FF);
   static Color dateTimeBack = const Color(0xFFE1E4F5);
+  static Color locationHomeColor = const Color(0xFF7B67EE);
 
   static Color galleryCountColor = const Color(0xFF6551DC);
   static Color cameraCountColor = const Color(0xFF4B73EF);

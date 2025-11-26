@@ -200,7 +200,9 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     _buildUntitledOne(context, size),
-                                    const SizedBox(height: 15),
+                                    const SizedBox(height: 10),
+                                    Divider(color: ColorsContent.newThemeColor,thickness: 0.5,),
+                                    const SizedBox(height: 10),
                                     const Text(
                                       "In your mind",
                                       style: TextStyle(
@@ -958,14 +960,14 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                                         child: Text(
                                                           capitalizeFirstLetter(
                                                             HtmlUnescape().convert(
-                                                                homeProvider
-                                                                    .journalDetails
-                                                                    ?.journals
-                                                                    ?.goal
-                                                                    ?.goalTitle ??
-                                                                    ''
+                                                              (homeProvider.journalDetails?.journals?.goal?.goalTitle ?? '')
+                                                                  .length >
+                                                                  35
+                                                                  ? '${(homeProvider.journalDetails?.journals?.goal?.goalTitle ?? '').substring(0, 35)}...'
+                                                                  : (homeProvider.journalDetails?.journals?.goal?.goalTitle ?? ''),
                                                             ),
                                                           ),
+
                                                           style:
                                                               const TextStyle(
                                                             fontSize: 17,
@@ -1128,12 +1130,17 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                                                         20.0),
                                                             child: Text(
                                                               capitalizeFirstLetter(
-                                                                HtmlUnescape().convert(
-                                                                  action.actionTitle ??
-                                                                      '',
+                                                                HtmlUnescape()
+                                                                    .convert(
+                                                                  action.actionTitle!
+                                                                              .length >
+                                                                          35
+                                                                      ? '${action.actionTitle?.substring(0, 35)}...'
+                                                                      : action
+                                                                          .actionTitle
+                                                                          .toString(),
                                                                 ),
                                                               ),
-
                                                               style:
                                                                   const TextStyle(
                                                                 fontSize: 16,
@@ -1267,7 +1274,6 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
               Container(
                 width: size.width * 0.90,
                 padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -1277,53 +1283,78 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(
-                            Icons.calendar_today_outlined,
-                            size: 20,
-                            color: ColorsContent.newThemeColor,
-                          ),
-                          const SizedBox(width: 5),
-                          Text(
-                            homeProvider.journalDetails == null
-                                ? ""
-                                : dateFormatterViewJournal(
-                                    date: homeProvider.journalDetails!.journals!
-                                        .journalDatetime
-                                        .toString(),
+                          Container(
+                            decoration: AppDecoration
+                                .outlineGray
+                                .copyWith(
+                              borderRadius: BorderRadiusStyle
+                                  .roundedBorder4,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 5),
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset(ImageConstant.journalCalendarIcon,width: 14,),
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    homeProvider.journalDetails == null
+                                        ? ""
+                                        : dateFormatterViewJournal(
+                                      date: homeProvider.journalDetails!.journals!
+                                          .journalDatetime
+                                          .toString(),
+                                    ),
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w500,
+                                      color: ColorsContent.dateTimeColor,
+                                    ),
                                   ),
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w500,
-                              color: ColorsContent.blackText,
+                                ],
+                              ),
                             ),
                           ),
+
                           const SizedBox(width: 30),
                           SvgPicture.asset(
                             ImageConstant.line, // Button icon
+                            color: Colors.white,
                           ),
                           const SizedBox(width: 30),
-                          Icon(
-                            Icons.access_time,
-                            size: 20,
-                            color: ColorsContent.newThemeColor,
-                          ),
-                          const SizedBox(width: 5),
-                          Text(
-                            homeProvider.journalDetails == null
-                                ? ""
-                                : timeFormatter(
-                                    date: homeProvider.journalDetails!.journals!
-                                        .journalDatetime
-                                        .toString(),
+                          Container(
+                            decoration: AppDecoration
+                                .outlineGray
+                                .copyWith(
+                              borderRadius: BorderRadiusStyle
+                                  .roundedBorder4,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 5),
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset(ImageConstant.journalTimeIcon,width: 14,),
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    homeProvider.journalDetails == null
+                                        ? ""
+                                        : timeFormatter(
+                                      date: homeProvider.journalDetails!.journals!
+                                          .journalDatetime
+                                          .toString(),
+                                    ),
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w500,
+                                      color: ColorsContent.dateTimeColor,
+                                    ),
                                   ),
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w500,
-                              color: ColorsContent.blackText,
+                                ],
+                              ),
                             ),
                           ),
+
                         ],
                       ),
                     ),
@@ -1667,37 +1698,41 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                       },
                       child: ConstrainedBox(
                         constraints: const BoxConstraints(maxWidth: 320),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SvgPicture.asset(
-                              ImageConstant.locationView,
-                            ),
-                            const SizedBox(width: 5,),
-                            Flexible(
-                              child: Text(
-                                homeProvider.journalDetails?.journals?.location
-                                        ?.locationName
-                                        ?.replaceAll(
-                                            RegExp(r'[^a-zA-Z0-9, ]'), '')
-                                        .replaceAll(RegExp(r',\s*,+'), ',')
-                                        .replaceAll(RegExp(r'^,|,$'), '')
-                                        .trim() ??
-                                    "",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Poppins',
-                                  color: ColorsContent.goalCompletedTextColor,
-                                  decoration: TextDecoration.underline,
-                                  decorationColor: ColorsContent.goalCompletedTextColor,
-                                  decorationThickness: 1.5,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 4,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SvgPicture.asset(
+                                ImageConstant.journalLocationIcon,
+                                width: 14,
                               ),
-                            ),
-                          ],
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Flexible(
+                                child: Text(
+                                  homeProvider.journalDetails?.journals?.location
+                                          ?.locationName
+                                          ?.replaceAll(
+                                              RegExp(r'[^a-zA-Z0-9, ]'), '')
+                                          .replaceAll(RegExp(r',\s*,+'), ',')
+                                          .replaceAll(RegExp(r'^,|,$'), '')
+                                          .trim() ??
+                                      "",
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Poppins',
+                                    color: ColorsContent.locationHomeColor,
+                                    decorationThickness: 1.5,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 4,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),

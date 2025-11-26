@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:html_unescape/html_unescape.dart';
 import 'package:mentalhelth/utils/core/date_time_utils.dart';
 import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/utils/theme/theme_helper.dart';
 
+import '../../../utils/logic/date_format.dart';
 import '../../../utils/theme/app_decoration.dart';
 import '../../../utils/theme/custom_text_style.dart';
 import '../model/goals_and_dreams_model.dart';
@@ -93,10 +95,16 @@ class WeightLossComponentListItemWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   width:230,
                   child: Text(
-                    headding,
+                    capitalizeFirstLetter(
+                      HtmlUnescape().convert(
+                        headding.length > 30
+                            ? '${headding.substring(0, 30)}...'
+                            : headding,
+                      ),
+                    ),
                     style: const TextStyle(
                       fontSize: 16.5,
                       fontWeight: FontWeight.w500,
@@ -124,8 +132,8 @@ class WeightLossComponentListItemWidget extends StatelessWidget {
                               int.parse(startDate),
                             ),
                             style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
                               fontFamily: 'Poppins',
                               color:  ColorsContent.goalCompletedTextColor,
                             ),
@@ -144,8 +152,8 @@ class WeightLossComponentListItemWidget extends StatelessWidget {
                                 ? ""
                                 : formatDate2(int.parse(endDate)),
                             style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
                               fontFamily: 'Poppins',
                               color:  ColorsContent.goalCompletedTextColor,
                             ),

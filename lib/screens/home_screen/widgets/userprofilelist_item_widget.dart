@@ -100,8 +100,8 @@ class _UserProfileListItemWidgetState extends State<UserProfileListItemWidget> {
                 child: Text(
                   capitalizeFirstLetter(
                     HtmlUnescape().convert(
-                      widget.title.length > 38
-                          ? '${widget.title.substring(0, 38)}...'
+                      widget.title.length > 30
+                          ? '${widget.title.substring(0, 30)}...'
                           : widget.title,
                     ),
                   ),
@@ -121,32 +121,35 @@ class _UserProfileListItemWidgetState extends State<UserProfileListItemWidget> {
           //const SizedBox(height: 2),
 
           // 📅 Date
-          Row(
-            children: [
-              SvgPicture.asset(ImageConstant.dateIconGridNumu),
-              const SizedBox(width: 6),
-              Text(
-                formatDateOnly(int.parse(widget.date)),
-                style: TextStyle(
-                  fontSize: 13,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w400,
-                  color: ColorsContent.dateTimeColor,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+            child: Row(
+              children: [
+                SvgPicture.asset(ImageConstant.dateIconGridNumu),
+                const SizedBox(width: 6),
+                Text(
+                  formatDateOnly(int.parse(widget.date)),
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w400,
+                    color: ColorsContent.dateTimeColor,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 14),
-              SvgPicture.asset(ImageConstant.timeIconGridNumu),
-              const SizedBox(width: 6),
-              Text(
-                formatTimeOnly(int.parse(widget.date)),
-                style: TextStyle(
-                  fontSize: 13,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w400,
-                  color: ColorsContent.dateTimeColor,
+                const SizedBox(width: 14),
+                SvgPicture.asset(ImageConstant.timeIconGridNumu),
+                const SizedBox(width: 6),
+                Text(
+                  formatTimeOnly(int.parse(widget.date)),
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w400,
+                    color: ColorsContent.dateTimeColor,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
 
           const SizedBox(height: 5),
@@ -154,48 +157,42 @@ class _UserProfileListItemWidgetState extends State<UserProfileListItemWidget> {
           if (widget.locationName != null &&
               widget.locationLatitude != null &&
               widget.locationLongitude != null)
-            Padding(
-              padding: const EdgeInsets.only(top: 0),
-              child: GestureDetector(
-                onTap: () async {
-                  final lat = widget.locationLatitude!;
-                  final lon = widget.locationLongitude!;
-                  final googleMapsUrl =
-                      'https://www.google.com/maps/search/?api=1&query=$lat,$lon';
-                  if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
-                    await launchUrl(
-                      Uri.parse(googleMapsUrl),
-                      mode: LaunchMode.externalApplication,
-                    );
-                  }
-                },
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: SvgPicture.asset(ImageConstant.locationIconGridNumu),
-                    ),
-                    const SizedBox(width: 4),
-                    Expanded(
-                      child: Text(
-                        widget.locationName!,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          decorationColor: ColorsContent.newThemeColor,
-                          decorationThickness: 1.5,
-                          fontSize: 13,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w400,
-                          color: ColorsContent.newThemeColor,
-                        ),
+            GestureDetector(
+              onTap: () async {
+                final lat = widget.locationLatitude!;
+                final lon = widget.locationLongitude!;
+                final googleMapsUrl =
+                    'https://www.google.com/maps/search/?api=1&query=$lat,$lon';
+                if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
+                  await launchUrl(
+                    Uri.parse(googleMapsUrl),
+                    mode: LaunchMode.externalApplication,
+                  );
+                }
+              },
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(),
+                    child: SvgPicture.asset(ImageConstant.locationHomeScreen),
+                  ),
+                  const SizedBox(width: 0),
+                  Expanded(
+                    child: Text(
+                      widget.locationName!,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                       // decorationColor: ColorsContent.newThemeColor,
+                        decorationThickness: 1.5,
+                        fontSize: 13,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                        color: ColorsContent.locationHomeColor,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           const SizedBox(height: 5),
@@ -205,120 +202,123 @@ class _UserProfileListItemWidgetState extends State<UserProfileListItemWidget> {
           if (mediaList.isNotEmpty)
             Column(
               children: [
-                SizedBox(
-                  height: size.height * 0.38,
-                  child: Stack(
-                    children: [
-                      PageView.builder(
-                        controller: pageController,
-                        itemCount: mediaList.length,
-                        onPageChanged: (index) {
-                          setState(() => currentIndex = index);
-                        },
-                        itemBuilder: (context, index) {
-                          final media = mediaList[index];
-                          final type = media['type'];
-                          final url = media['url'] ?? '';
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                  child: SizedBox(
+                    height: size.height * 0.38,
+                    child: Stack(
+                      children: [
+                        PageView.builder(
+                          controller: pageController,
+                          itemCount: mediaList.length,
+                          onPageChanged: (index) {
+                            setState(() => currentIndex = index);
+                          },
+                          itemBuilder: (context, index) {
+                            final media = mediaList[index];
+                            final type = media['type'];
+                            final url = media['url'] ?? '';
 
-                          if (type == 'image') {
-                            return ClipRRect(
-                              borderRadius: BorderRadius.circular(0),
-                              child: Image.network(
-                                url,
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                                errorBuilder: (c, e, s) => const Center(
-                                  child: Icon(Icons.broken_image, size: 50, color: Colors.grey),
-                                ),
-                              ),
-                            );
-                          } else if (type == 'video') {
-                            return GestureDetector(
-                              onTap: () {
-                                showDialog(
-                                  context: context,
-                                  barrierDismissible: true,
-                                  builder: (_) => Dialog(
-                                    insetPadding: EdgeInsets.zero,
-                                    backgroundColor: Colors.black,
-                                    child: Stack(
-                                      children: [
-                                        Positioned.fill(
-                                          child: VideoPlayerWidgetViewAndAlreadyBuildMentalProgressBar(
-                                            videoUrl: url,
-                                          ),
-                                        ),
-                                        Positioned(
-                                          top: 40,
-                                          right: 20,
-                                          child: IconButton(
-                                            icon: const Icon(Icons.close, color: Colors.white, size: 30),
-                                            onPressed: () => Navigator.of(context).pop(),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                            if (type == 'image') {
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(0),
+                                child: Image.network(
+                                  url,
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                  errorBuilder: (c, e, s) => const Center(
+                                    child: Icon(Icons.broken_image, size: 50, color: Colors.grey),
                                   ),
-                                );
-                              },
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(0),
-                                child: VideoPlayerWidgetViewAndAlreadyBuildMental(
-                                  videoUrl: url,
                                 ),
-                              ),
-                            );
-                          } else if (type == 'audio') {
-                            return Center(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                                child: GridAudioPlayer(url: url),
-                              ),
-                            );
-                          }
-                          else if (type == 'chart') {
-                            final controller = WebViewController()
-                              ..setJavaScriptMode(JavaScriptMode.unrestricted)
-                              ..loadRequest(Uri.parse(url));
-
-                            return SizedBox(
-                              height: 250,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(0),
-                                child: WebViewWidget(
-                                  controller: controller,
+                              );
+                            } else if (type == 'video') {
+                              return GestureDetector(
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    barrierDismissible: true,
+                                    builder: (_) => Dialog(
+                                      insetPadding: EdgeInsets.zero,
+                                      backgroundColor: Colors.black,
+                                      child: Stack(
+                                        children: [
+                                          Positioned.fill(
+                                            child: VideoPlayerWidgetViewAndAlreadyBuildMentalProgressBar(
+                                              videoUrl: url,
+                                            ),
+                                          ),
+                                          Positioned(
+                                            top: 40,
+                                            right: 20,
+                                            child: IconButton(
+                                              icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                                              onPressed: () => Navigator.of(context).pop(),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(0),
+                                  child: VideoPlayerWidgetViewAndAlreadyBuildMental(
+                                    videoUrl: url,
+                                  ),
                                 ),
+                              );
+                            } else if (type == 'audio') {
+                              return Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                                  child: GridAudioPlayer(url: url),
+                                ),
+                              );
+                            }
+                            else if (type == 'chart') {
+                              final controller = WebViewController()
+                                ..setJavaScriptMode(JavaScriptMode.unrestricted)
+                                ..loadRequest(Uri.parse(url));
+
+                              return SizedBox(
+                                height: 250,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(0),
+                                  child: WebViewWidget(
+                                    controller: controller,
+                                  ),
+                                ),
+                              );
+                            }
+
+                            else {
+                              return const SizedBox.shrink();
+                            }
+                          },
+                        ),
+
+                        // 🔢 Top-right media counter
+                        Positioned(
+                          top: 10,
+                          right: 10,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(0.6),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text(
+                              '${currentIndex + 1}/${mediaList.length}',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
                               ),
-                            );
-                          }
-
-                          else {
-                            return const SizedBox.shrink();
-                          }
-                        },
-                      ),
-
-                      // 🔢 Top-right media counter
-                      Positioned(
-                        top: 10,
-                        right: 10,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.6),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Text(
-                            '${currentIndex + 1}/${mediaList.length}',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
 

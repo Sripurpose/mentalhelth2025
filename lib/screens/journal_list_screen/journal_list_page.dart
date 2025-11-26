@@ -307,7 +307,7 @@ class _JournalListPageState extends State<JournalListPage> {
               children: [
                 Column(
                   children: [
-                    const SizedBox(height: 20),
+                   // const SizedBox(height: 20),
                     buildAppBar(
                       context,
                       size,
