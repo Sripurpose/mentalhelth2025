@@ -73,11 +73,10 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
+                    SizedBox(
                       width: size.width * 0.50,
                       child: Text(
                             () {
-
                           final unescapedTitle =  capitalizeFirstLetter(
                                   HtmlUnescape().convert(journalsModelList.journalTitle ?? ''));
                           return unescapedTitle.length > 38
@@ -92,7 +91,6 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-
                     Text(
                       formatMilliseconds(
                           int.parse(journalsModelList.journalDatetime!)),
