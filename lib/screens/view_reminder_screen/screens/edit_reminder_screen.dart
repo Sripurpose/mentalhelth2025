@@ -830,7 +830,7 @@ class _EditReminderScreenScreenScreenState
   Widget _buildTitleEditText(BuildContext context) {
     return Consumer<HomeProvider>(
         builder: (context, homeProvider, _) {
-          return CustomTextFormFieldGoalOrActionName(
+          return CustomTextFormFieldNumuFirstShow(
             controller: homeProvider.titleEditTextController,
             hintText: "Title",
             hintStyle: CustomTextStyles.bodySmallGray700,

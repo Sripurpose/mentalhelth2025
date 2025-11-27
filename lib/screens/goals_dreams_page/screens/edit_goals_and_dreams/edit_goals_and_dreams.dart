@@ -811,7 +811,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
         builder: (context, adDreamsGoalsProvider, _) {
       return Padding(
         padding: const EdgeInsets.only(left: 2),
-        child: CustomTextFormFieldNumu(
+        child: CustomTextFormFieldNumuFirstShow(
           controller: adDreamsGoalsProvider.nameEditTextController,
           hintText: _titleFocusNode.hasFocus ? '' : "Goal Name",
           hintStyle: CustomTextStyles.bodySmallGray700,
@@ -904,7 +904,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // 📝 Always show text field
-              CustomTextFormFieldNumu(
+              CustomTextFormFieldNumuFirstShow(
                 controller: adDreamsGoalsProvider.commentEditTextController,
                 hintText: _descriptionFocusNode.hasFocus ? '' : "Goal Description",
                 hintStyle: CustomTextStyles.bodySmallGray700,
@@ -912,7 +912,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                 textInputType: TextInputType.multiline,
                 maxLines: 4,
                 focusNode: _descriptionFocusNode,
-                borderDecoration: InputBorder.none,
+          //     borderDecoration: InputBorder.none,
                 textAlign: TextAlign.start,
                 onTap: () => setState(() {}),
                 onEditingComplete: () {

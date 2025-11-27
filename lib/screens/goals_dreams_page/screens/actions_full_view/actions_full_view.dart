@@ -1144,7 +1144,8 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                   if (category.length < 25)
                     Flexible(
                       child: Text(
-                        category,
+                        capitalizeFirstLetter(
+                            HtmlUnescape().convert(category)),
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w400,
@@ -1160,7 +1161,8 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,
                     child: Text(
-                      category,
+                      capitalizeFirstLetter(
+                          HtmlUnescape().convert(category)),
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
@@ -1208,7 +1210,8 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                   if (title.length < 25)
                     Flexible(
                       child: Text(
-                        category,
+                        capitalizeFirstLetter(
+                            HtmlUnescape().convert(title)),
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w400,
@@ -1224,7 +1227,8 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,
                     child: Text(
-                      title,
+                      capitalizeFirstLetter(
+                          HtmlUnescape().convert(title)),
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
@@ -1297,7 +1301,8 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                         ),
                       ),
                       child: Text(
-                        HtmlUnescape().convert(commentsText),
+                        capitalizeFirstLetter(
+                            HtmlUnescape().convert(commentsText)),
                         style: const TextStyle(
                           color: Colors.black,
                           fontSize: 16,
@@ -1389,7 +1394,8 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                         ),
                       ),
                       child: Text(
-                        HtmlUnescape().convert(commentsText),
+                        capitalizeFirstLetter(
+                            HtmlUnescape().convert(commentsText)),
                         style: const TextStyle(
                           color: Colors.black,
                           fontSize: 16,

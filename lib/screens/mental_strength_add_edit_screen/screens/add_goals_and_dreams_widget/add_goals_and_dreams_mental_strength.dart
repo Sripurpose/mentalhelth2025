@@ -430,7 +430,7 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
         builder: (context, adDreamsGoalsProvider, _) {
       return Padding(
         padding: const EdgeInsets.only(left: 2),
-        child: CustomTextFormFieldGoalOrActionName(
+        child: CustomTextFormFieldNumuFirstShow(
           controller: adDreamsGoalsProvider.nameEditTextController,
           hintText: "Goal Name",
           hintStyle: CustomTextStyles.bodySmallGray700,

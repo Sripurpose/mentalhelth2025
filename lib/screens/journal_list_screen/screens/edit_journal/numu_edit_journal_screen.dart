@@ -2291,7 +2291,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
             .convert(mentalStrengthEditProvider.titleEditTextController.text);
         mentalStrengthEditProvider.titleEditTextController.text = decodedText;
 
-        return CustomTextFormFieldNumu(
+        return CustomTextFormFieldNumuFirstShow(
           controller: mentalStrengthEditProvider.titleEditTextController,
           hintText: "Title",
           hintStyle: CustomTextStyles.bodySmallGray700,
@@ -2362,7 +2362,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // 📝 Text field — always visible
-              CustomTextFormFieldNumu(
+              CustomTextFormFieldNumuFirstShow(
                 controller: provider.descriptionEditTextController,
                 hintText: "Start writing...",
                 hintStyle: CustomTextStyles.bodySmallGray700,
@@ -2370,7 +2370,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                 textInputType: TextInputType.multiline,
                 maxLines: 4,
                 focusNode: _descriptionFocusNode,
-                borderDecoration: InputBorder.none,
+              //  borderDecoration: InputBorder.none,
                 textAlign: TextAlign.start,
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'[\u0000-\uFFFF]')),

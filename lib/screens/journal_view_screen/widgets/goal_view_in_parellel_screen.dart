@@ -23,6 +23,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../widgets/app_bar/appbar_subtitle.dart';
 import '../../../../widgets/app_bar/custom_app_bar.dart';
+import '../../../utils/logic/date_format.dart';
 import '../../no_internet/duplicate_screen.dart';
 
 class GoalAndDreamFullViewBottomParellelSheet extends StatefulWidget {
@@ -805,8 +806,8 @@ class _GoalAndDreamFullViewBottomParellelSheetState
                   BorderRadius.vertical(bottom: Radius.circular(5)),
                 ),
                 child: Text(
-                  capitalText(
-                      widget.goalDetailModel.goals!.goalTitle.toString()),
+                  capitalizeFirstLetter(
+                      HtmlUnescape().convert( widget.goalDetailModel.goals!.goalTitle.toString())),
                   style: const TextStyle(
                     color: Colors.black,
                     fontSize: 16,
@@ -858,7 +859,8 @@ class _GoalAndDreamFullViewBottomParellelSheetState
                   BorderRadius.vertical(bottom: Radius.circular(5)),
                 ),
                 child: Text(
-                  category, // e.g., "Health & Fitness"
+                  capitalizeFirstLetter(
+                      HtmlUnescape().convert(category)),
                   style: const TextStyle(
                     color: Colors.black,
                     fontSize: 16,
@@ -1048,7 +1050,8 @@ class _GoalAndDreamFullViewBottomParellelSheetState
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      HtmlUnescape().convert(commentsText),
+                      capitalizeFirstLetter(
+                          HtmlUnescape().convert(commentsText)),
                       style: const TextStyle(
                         color: Colors.black,
                         fontSize: 16,
@@ -1096,7 +1099,8 @@ class _GoalAndDreamFullViewBottomParellelSheetState
               // 🧠 Case 2: Only text exists
               else if (commentsText.isNotEmpty) {
                 return Text(
-                  HtmlUnescape().convert(commentsText),
+                  capitalizeFirstLetter(
+                      HtmlUnescape().convert(commentsText)),
                   style: const TextStyle(
                     color: Colors.black,
                     fontSize: 16,

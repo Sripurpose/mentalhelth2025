@@ -22,6 +22,7 @@ import 'package:mentalhelth/widgets/custom_image_view.dart';
 import 'package:mentalhelth/widgets/video_player.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../utils/logic/date_format.dart';
 import '../../../../widgets/app_bar/appbar_subtitle.dart';
 import '../../../../widgets/app_bar/custom_app_bar.dart';
 import '../../../no_internet/duplicate_screen.dart';
@@ -903,8 +904,8 @@ class _GoalAndDreamFullViewBottomSheetState
                   BorderRadius.vertical(bottom: Radius.circular(5)),
                 ),
                 child: Text(
-                  capitalText(
-                      widget.goalDetailModel.goals!.goalTitle.toString()),
+                  capitalizeFirstLetter(
+                      HtmlUnescape().convert(widget.goalDetailModel.goals!.goalTitle.toString())),
                   style: const TextStyle(
                     color: Colors.black,
                     fontSize: 16,
@@ -957,7 +958,8 @@ class _GoalAndDreamFullViewBottomSheetState
                       BorderRadius.vertical(bottom: Radius.circular(5)),
                 ),
                 child: Text(
-                  category, // e.g., "Health & Fitness"
+                  capitalizeFirstLetter(
+                      HtmlUnescape().convert(category)),
                   style: const TextStyle(
                     color: Colors.black,
                     fontSize: 16,
@@ -1178,8 +1180,9 @@ class _GoalAndDreamFullViewBottomSheetState
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
+                            capitalizeFirstLetter(
+                                HtmlUnescape().convert(commentsText)),
                           //  textAlign: TextAlign.justify,
-                            HtmlUnescape().convert(commentsText),
                             style: const TextStyle(
                               color: Colors.black,
                               fontSize: 16,
@@ -1228,7 +1231,8 @@ class _GoalAndDreamFullViewBottomSheetState
                     else if (commentsText.isNotEmpty) {
                       return Text(
                         textAlign: TextAlign.justify,
-                        HtmlUnescape().convert(commentsText),
+                        capitalizeFirstLetter(
+                            HtmlUnescape().convert(commentsText)),
                         style: const TextStyle(
                           color: Colors.black,
                           fontSize: 16,

@@ -1396,7 +1396,7 @@ class _NumuMentalStrengthAddEditPageState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // 📝 Text field — always visible
-              CustomTextFormFieldNumu(
+              CustomTextFormFieldNumuFirstShow(
                 textAlign: TextAlign.start,
                 controller:
                 mentalStrengthEditProvider.descriptionEditTextController,
@@ -1412,7 +1412,7 @@ class _NumuMentalStrengthAddEditPageState
                 textInputType: TextInputType.multiline,
                 maxLines: 4,
                 focusNode: _descriptionFocusNode,
-                borderDecoration: InputBorder.none,
+               // borderDecoration: InputBorder.none,
                 onChanged: (value) {
                   final regex = mentalStrengthEditProvider.urlRegex;
                   final matches = regex.allMatches(value).map((m) => m.group(0)!).toList();
@@ -1548,7 +1548,7 @@ class _NumuMentalStrengthAddEditPageState
 
     return StatefulBuilder(
       builder: (context, setState) {
-        return CustomTextFormFieldNumu(
+        return CustomTextFormFieldNumuFirstShow(
           textAlign: TextAlign.start,
           controller: mentalStrengthEditProvider.titleEditTextController,
           hintText: _titleFocusNode.hasFocus ? '' : "Whats on your mind ?",

@@ -1064,7 +1064,7 @@ class _AddEditActionScreenState extends State<AddEditActionScreen> {
   Widget _buildTitleEditText(BuildContext context) {
     return Consumer<AddActionsProvider>(
         builder: (context, addActionsProvider, _) {
-          return CustomTextFormFieldGoalOrActionName(
+          return CustomTextFormFieldNumuFirstShow(
             controller: addActionsProvider.titleEditTextController,
             hintText: _actionNameFocusNode.hasFocus ? '' : "Title",
             hintStyle: CustomTextStyles.bodySmallGray700,

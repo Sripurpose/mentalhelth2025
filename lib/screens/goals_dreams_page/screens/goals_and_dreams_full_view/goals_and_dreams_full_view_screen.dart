@@ -1133,7 +1133,8 @@ class _GoalAndDreamFullViewScreenState
                       BorderRadius.vertical(bottom: Radius.circular(5)),
                 ),
                 child: Text(
-                  category, // e.g., "Health & Fitness"
+                  capitalizeFirstLetter(
+                      HtmlUnescape().convert(category)),
                   style: const TextStyle(
                     color: Colors.black,
                     fontSize: 16,
@@ -1356,7 +1357,8 @@ class _GoalAndDreamFullViewScreenState
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            HtmlUnescape().convert(commentsText),
+                            capitalizeFirstLetter(
+                                HtmlUnescape().convert(commentsText)),
                             style: const TextStyle(
                               color: Colors.black,
                               fontSize: 16,
@@ -1406,7 +1408,8 @@ class _GoalAndDreamFullViewScreenState
                     // 🧠 Case 2: Only text exists
                     else if (commentsText.isNotEmpty) {
                       return Text(
-                        HtmlUnescape().convert(commentsText),
+                        capitalizeFirstLetter(
+                            HtmlUnescape().convert(commentsText)),
                         style: const TextStyle(
                           color: Colors.black,
                           fontSize: 16,

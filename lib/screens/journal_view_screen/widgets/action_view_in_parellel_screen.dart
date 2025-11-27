@@ -26,6 +26,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../widgets/app_bar/appbar_subtitle.dart';
 import '../../../../widgets/app_bar/custom_app_bar.dart';
+import '../../../utils/logic/date_format.dart';
 import '../../../widgets/functions/popup.dart';
 import '../../no_internet/duplicate_screen.dart';
 
@@ -776,7 +777,8 @@ class _ActionViewInParallelScreenState
                   if (category.length < 25)
                     Flexible(
                       child: Text(
-                        category,
+                        capitalizeFirstLetter(
+                          HtmlUnescape().convert(category)),
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w400,
@@ -792,7 +794,8 @@ class _ActionViewInParallelScreenState
                   child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,
                     child: Text(
-                      category,
+                      capitalizeFirstLetter(
+                          HtmlUnescape().convert(category)),
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
@@ -841,8 +844,8 @@ class _ActionViewInParallelScreenState
                   if (title.length < 25)
                     Flexible(
                       child: Text(
-                        capitalText(
-                            title),
+                        capitalizeFirstLetter(
+                            HtmlUnescape().convert(title)),
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w400,
@@ -858,8 +861,8 @@ class _ActionViewInParallelScreenState
                   child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,
                     child: Text(
-                      capitalText(
-                          title),
+                      capitalizeFirstLetter(
+                          HtmlUnescape().convert(title)),
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
@@ -950,7 +953,8 @@ class _ActionViewInParallelScreenState
                                     ),
                                   ),
                                   child: Text(
-                                    HtmlUnescape().convert(commentsText),
+                                    capitalizeFirstLetter(
+                                        HtmlUnescape().convert(commentsText)),
                                     style: const TextStyle(
                                       color: Colors.black,
                                       fontSize: 16,
@@ -1014,7 +1018,8 @@ class _ActionViewInParallelScreenState
                                     ),
                                   ),
                                   child: Text(
-                                    HtmlUnescape().convert(commentsText),
+                                    capitalizeFirstLetter(
+                                        HtmlUnescape().convert(commentsText)),
                                     style: const TextStyle(
                                       color: Colors.black,
                                       fontSize: 16,

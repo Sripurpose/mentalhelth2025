@@ -292,7 +292,149 @@ class CustomTextFormFieldNumu extends StatelessWidget {
 }
 
 
-class CustomTextFormFieldGoalOrActionDesc extends StatelessWidget {
+class CustomTextFormFieldNumuFirstShow extends StatefulWidget {
+  const CustomTextFormFieldNumuFirstShow({
+    Key? key,
+    this.alignment,
+    this.width,
+    this.scrollPadding,
+    this.controller,
+    this.focusNode,
+    this.autofocus = false,
+    this.textStyle,
+    this.obscureText = false,
+    this.textInputAction = TextInputAction.next,
+    this.textInputType = TextInputType.text,
+    this.maxLines,
+    this.hintText,
+    this.hintStyle,
+    this.prefix,
+    this.prefixConstraints,
+    this.suffix,
+    this.suffixConstraints,
+    this.prefixText,
+    this.prefixStyle,
+    this.contentPadding,
+    this.borderDecoration,
+    this.fillColor,
+    this.filled = false,
+    this.validator,
+    this.onChanged,
+    this.onTap,
+    this.onEditingComplete,
+    this.textAlign,
+    this.isValids,
+    this.inputFormatters,
+    this.readOnly = false,
+  }) : super(key: key);
+
+  final Alignment? alignment;
+  final double? width;
+  final TextEditingController? scrollPadding;
+  final TextEditingController? controller;
+  final FocusNode? focusNode;
+  final bool? autofocus;
+  final TextStyle? textStyle;
+  final bool? obscureText;
+  final TextInputAction? textInputAction;
+  final TextInputType? textInputType;
+  final int? maxLines;
+  final String? hintText;
+  final TextStyle? hintStyle;
+  final Widget? prefix;
+  final BoxConstraints? prefixConstraints;
+  final Widget? suffix;
+  final BoxConstraints? suffixConstraints;
+  final String? prefixText;
+  final TextStyle? prefixStyle;
+  final EdgeInsets? contentPadding;
+  final InputDecoration? borderDecoration;
+  final Color? fillColor;
+  final bool? filled;
+  final FormFieldValidator<String>? validator;
+  final void Function(String)? onChanged;
+  final VoidCallback? onTap;
+  final VoidCallback? onEditingComplete;
+  final TextAlign? textAlign;
+  final bool? isValids;
+  final List<TextInputFormatter>? inputFormatters;
+  final bool readOnly;
+
+  @override
+  State<CustomTextFormFieldNumuFirstShow> createState() => _CustomTextFormFieldNumuFirstShowState();
+}
+
+class _CustomTextFormFieldNumuFirstShowState extends State<CustomTextFormFieldNumuFirstShow> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    widget.focusNode?.addListener(() {
+      if (!widget.focusNode!.hasFocus) {
+        // 👇 Forces cursor & visible text to the beginning
+        Future.delayed(const Duration(milliseconds: 10), () {
+          if (_scrollController.hasClients) {
+            _scrollController.jumpTo(0);
+          }
+        });
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final field = TextFormField(
+      controller: widget.controller,
+      focusNode: widget.focusNode,
+      scrollController: _scrollController,   // 👈 IMPORTANT
+      autofocus: widget.autofocus ?? false,
+      onChanged: widget.onChanged,
+      onTap: widget.onTap,
+      textAlign: widget.textAlign ?? TextAlign.start,
+      onEditingComplete: () {
+        FocusScope.of(context).unfocus();
+        widget.onEditingComplete?.call();
+      },
+      keyboardType: widget.textInputType,
+      textInputAction: widget.textInputAction,
+      obscureText: widget.obscureText ?? false,
+      style: widget.textStyle ?? CustomTextStyles.bodyMediumOnPrimary,
+      maxLines: widget.maxLines ?? 1,
+      inputFormatters: widget.inputFormatters,
+      readOnly: widget.readOnly,
+      decoration: InputDecoration(
+        hintText: widget.hintText,
+        hintStyle:
+        widget.hintStyle ?? CustomTextStyles.bodyLargeRobotoOnSecondaryContainer,
+        prefixIcon: widget.prefix,
+        suffixIcon: widget.suffix,
+        isDense: true,
+        filled: true,
+        fillColor: Colors.white,
+        contentPadding: widget.contentPadding ?? const EdgeInsets.all(11),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide.none,
+        ),
+      ),
+    );
+
+    if (widget.alignment != null) {
+      return Align(
+        alignment: widget.alignment!,
+        child: SizedBox(width: widget.width ?? double.maxFinite, child: field),
+      );
+    }
+
+    return SizedBox(width: widget.width ?? double.maxFinite, child: field);
+  }
+}
+
+
+
+class CustomTextFormFieldGoalOrActionDesc extends StatefulWidget {
   const CustomTextFormFieldGoalOrActionDesc({
     Key? key,
     this.alignment,
@@ -320,8 +462,8 @@ class CustomTextFormFieldGoalOrActionDesc extends StatelessWidget {
     this.filled = false,
     this.validator,
     this.onChanged,
-    this.onTap, // Added onTap parameter
-    this.onEditingComplete, // Added onEditingComplete parameter
+    this.onTap,
+    this.onEditingComplete,
     this.textAlign,
     this.isValids,
     this.inputFormatters,
@@ -353,81 +495,101 @@ class CustomTextFormFieldGoalOrActionDesc extends StatelessWidget {
   final bool? filled;
   final FormFieldValidator<String>? validator;
   final void Function(String)? onChanged;
-  final VoidCallback? onTap; // Declare onTap
-  final VoidCallback? onEditingComplete; // Declare onEditingComplete
+  final VoidCallback? onTap;
+  final VoidCallback? onEditingComplete;
   final TextAlign? textAlign;
   final bool? isValids;
   final List<TextInputFormatter>? inputFormatters;
   final bool readOnly;
 
   @override
-  Widget build(BuildContext context) {
-    return alignment != null
-        ? Align(
-      alignment: alignment ?? Alignment.center,
-      child: textFormFieldWidget(context),
-    )
-        : textFormFieldWidget(context);
+  State<CustomTextFormFieldGoalOrActionDesc> createState() =>
+      _CustomTextFormFieldGoalOrActionDescState();
+}
+
+class _CustomTextFormFieldGoalOrActionDescState
+    extends State<CustomTextFormFieldGoalOrActionDesc> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    widget.focusNode?.addListener(() {
+      if (!widget.focusNode!.hasFocus) {
+        // Scroll to the beginning after losing focus
+        Future.delayed(const Duration(milliseconds: 10), () {
+          if (_scrollController.hasClients) {
+            _scrollController.jumpTo(0);
+          }
+        });
+      }
+    });
   }
 
-  Widget textFormFieldWidget(BuildContext context) => SizedBox(
-    width: width ?? double.maxFinite,
-    child: TextFormField(
-      textAlign: textAlign ?? TextAlign.start,
-      onChanged: onChanged,
-      onTap: onTap,
+  @override
+  Widget build(BuildContext context) {
+    final field = TextFormField(
+      controller: widget.controller,
+      focusNode: widget.focusNode,
+      scrollController: _scrollController, // IMPORTANT
+      autofocus: widget.autofocus ?? false,
+      onChanged: widget.onChanged,
+      onTap: widget.onTap,
+      textAlign: widget.textAlign ?? TextAlign.start,
       onEditingComplete: () {
-        FocusScope.of(context).unfocus(); // Ensures keyboard is closed
-        if (onEditingComplete != null) {
-          onEditingComplete!(); // Calls the provided callback
-        }
+        FocusScope.of(context).unfocus();
+        widget.onEditingComplete?.call();
       },
-      scrollPadding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-      controller: controller,
-      focusNode: focusNode,
-      autofocus: autofocus ?? false,
-      style: textStyle ?? CustomTextStyles.bodyMediumOnPrimary,
-      obscureText: obscureText ?? false,
-      textInputAction: textInputAction,
-      keyboardType: textInputType,
-      maxLines: maxLines ?? 1,
-      decoration: decoration,
-      validator: validator,
-      inputFormatters: inputFormatters,
-      readOnly: readOnly,
-    ),
-  );
+      keyboardType: widget.textInputType,
+      textInputAction: widget.textInputAction,
+      obscureText: widget.obscureText ?? false,
+      style: widget.textStyle ?? CustomTextStyles.bodyMediumOnPrimary,
+      maxLines: widget.maxLines ?? 1,
+      inputFormatters: widget.inputFormatters,
+      readOnly: widget.readOnly,
+      decoration: InputDecoration(
+        hintText: widget.hintText ?? "",
+        errorText:
+        widget.isValids == null ? null : widget.isValids! ? null : "Invalid",
+        hintStyle: widget.hintStyle ??
+            CustomTextStyles.bodyLargeRobotoOnSecondaryContainer,
+        prefixIcon: widget.prefix,
+        prefixIconConstraints: widget.prefixConstraints,
+        suffixIcon: widget.suffix,
+        suffixIconConstraints: widget.suffixConstraints,
+        isDense: false,
+        contentPadding:
+        widget.contentPadding ?? const EdgeInsets.symmetric(vertical: 30, horizontal: 16),
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide.none,
+        ),
+      ),
+      validator: widget.validator,
+    );
 
+    if (widget.alignment != null) {
+      return Align(
+        alignment: widget.alignment!,
+        child: SizedBox(width: widget.width ?? double.maxFinite, child: field),
+      );
+    }
 
-  InputDecoration get decoration => InputDecoration(
-    hintText: hintText ?? "",
-    errorText: isValids == null ? null : isValids! ? null : 'Invalid phone number',
-    hintStyle: hintStyle ?? CustomTextStyles.bodyLargeRobotoOnSecondaryContainer,
-    prefixIcon: prefix,
-    prefixIconConstraints: prefixConstraints,
-    suffixIcon: suffix,
-    suffixIconConstraints: suffixConstraints,
-    isDense: false, // Ensure padding takes effect
-    contentPadding: const EdgeInsets.symmetric(vertical: 30, horizontal: 16), // Increase vertical padding
-    fillColor: Colors.white, // Set background color to white
-    filled: true, // Ensure fill color is applied
-    prefixText: prefixText,
-    prefixStyle: prefixStyle ?? CustomTextStyles.bodyLargeRobotoOnSecondaryContainer,
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10), // Curve for all four sides
-      borderSide: BorderSide.none, // No border
-    ),
-    enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10), // Apply same curve
-      borderSide: BorderSide.none,
-    ),
-    focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10), // Apply same curve
-      borderSide: BorderSide.none,
-    ),
-  );
-
+    return SizedBox(width: widget.width ?? double.maxFinite, child: field);
+  }
 }
+
 
 
 class CustomTextFormFieldGoalOrActionDescPopUp extends StatelessWidget {
@@ -596,8 +758,8 @@ class CustomTextFormFieldGoalOrActionName extends StatelessWidget {
     this.filled = false,
     this.validator,
     this.onChanged,
-    this.onTap, // Added onTap parameter
-    this.onEditingComplete, // Added onEditingComplete parameter
+    this.onTap,
+    this.onEditingComplete,
     this.textAlign,
     this.isValids,
     this.inputFormatters,
@@ -629,8 +791,8 @@ class CustomTextFormFieldGoalOrActionName extends StatelessWidget {
   final bool? filled;
   final FormFieldValidator<String>? validator;
   final void Function(String)? onChanged;
-  final VoidCallback? onTap; // Declare onTap
-  final VoidCallback? onEditingComplete; // Declare onEditingComplete
+  final VoidCallback? onTap;
+  final VoidCallback? onEditingComplete;
   final TextAlign? textAlign;
   final bool? isValids;
   final List<TextInputFormatter>? inputFormatters;
@@ -650,23 +812,38 @@ class CustomTextFormFieldGoalOrActionName extends StatelessWidget {
     width: width ?? double.maxFinite,
     child: TextFormField(
       textAlign: textAlign ?? TextAlign.start,
+      textAlignVertical: TextAlignVertical.center,
+
+      // 🔥 Important fix — prevents auto-scroll to end
+      minLines: 1,
+      maxLines: 1,
+      expands: false,
+      scrollPhysics: const NeverScrollableScrollPhysics(),
+
       onChanged: onChanged,
       onTap: onTap,
+
       onEditingComplete: () {
-        FocusScope.of(context).unfocus(); // Ensures keyboard is closed
+        FocusScope.of(context).unfocus();
         if (onEditingComplete != null) {
-          onEditingComplete!(); // Calls the provided callback
+          onEditingComplete!();
         }
       },
-      scrollPadding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+
+      scrollPadding:
+      EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+
       controller: controller,
       focusNode: focusNode,
       autofocus: autofocus ?? false,
-      style: textStyle ?? CustomTextStyles.bodyMediumOnPrimary,
+
+      // 🔥 Apply ellipsis so start of sentence remains visible
+      style: (textStyle ?? CustomTextStyles.bodyMediumOnPrimary)
+          .copyWith(overflow: TextOverflow.ellipsis),
+
       obscureText: obscureText ?? false,
       textInputAction: textInputAction,
       keyboardType: textInputType,
-      maxLines: maxLines ?? 1,
       decoration: decoration,
       validator: validator,
       inputFormatters: inputFormatters,
@@ -674,36 +851,41 @@ class CustomTextFormFieldGoalOrActionName extends StatelessWidget {
     ),
   );
 
-
   InputDecoration get decoration => InputDecoration(
     hintText: hintText ?? "",
-    errorText: isValids == null ? null : isValids! ? null : 'Invalid phone number',
-    hintStyle: hintStyle ?? CustomTextStyles.bodyLargeRobotoOnSecondaryContainer,
+    errorText: isValids == null
+        ? null
+        : isValids!
+        ? null
+        : 'Invalid phone number',
+    hintStyle:
+    hintStyle ?? CustomTextStyles.bodyLargeRobotoOnSecondaryContainer,
     prefixIcon: prefix,
     prefixIconConstraints: prefixConstraints,
     suffixIcon: suffix,
     suffixIconConstraints: suffixConstraints,
-    isDense: false, // Ensure padding takes effect
-    contentPadding: contentPadding ?? const EdgeInsets.all(11),
-    fillColor: Colors.white, // Set background color to white
-    filled: true, // Ensure fill color is applied
+    isDense: false,
+    contentPadding: contentPadding ?? const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+    fillColor: Colors.white,
+    filled: true,
     prefixText: prefixText,
-    prefixStyle: prefixStyle ?? CustomTextStyles.bodyLargeRobotoOnSecondaryContainer,
+    prefixStyle:
+    prefixStyle ?? CustomTextStyles.bodyLargeRobotoOnSecondaryContainer,
     border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10), // Curve for all four sides
-      borderSide: BorderSide.none, // No border
+      borderRadius: BorderRadius.circular(10),
+      borderSide: BorderSide.none,
     ),
     enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10), // Apply same curve
+      borderRadius: BorderRadius.circular(10),
       borderSide: BorderSide.none,
     ),
     focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10), // Apply same curve
+      borderRadius: BorderRadius.circular(10),
       borderSide: BorderSide.none,
     ),
   );
-
 }
+
 
 class CustomTextFormFieldEmailAndPasswordNumu extends StatelessWidget {
   const CustomTextFormFieldEmailAndPasswordNumu({

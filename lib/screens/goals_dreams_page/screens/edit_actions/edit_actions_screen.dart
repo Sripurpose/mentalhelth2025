@@ -1703,7 +1703,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
   Widget _buildTitleEditText(BuildContext context) {
     return Consumer<AddActionsProvider>(
         builder: (context, addActionsProvider, _) {
-      return CustomTextFormFieldNumu(
+      return CustomTextFormFieldNumuFirstShow(
         controller: addActionsProvider.titleEditTextController,
         hintText: _titleFocusNode.hasFocus ? '' : "Title",
         hintStyle: CustomTextStyles.bodySmallGray700,
@@ -1746,7 +1746,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // 📝 Always show the text field (for normal text)
-              CustomTextFormFieldNumu(
+              CustomTextFormFieldNumuFirstShow(
                 controller: addActionsProvider.descriptionEditTextController,
                 hintText:
                 _descriptionFocusNode.hasFocus ? '' : "Description",
@@ -1755,7 +1755,7 @@ class _EditActionScreenState extends State<EditActionScreen> {
                 textInputType: TextInputType.multiline,
                 maxLines: 4,
                 focusNode: _descriptionFocusNode,
-                borderDecoration: InputBorder.none,
+          //      borderDecoration: InputBorder.none,
                 textAlign: TextAlign.start,
                 onTap: () => setState(() {}),
                 onEditingComplete: () {

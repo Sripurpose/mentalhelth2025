@@ -769,7 +769,7 @@ class _AddActionMentalStrengthBottomSheetState
   Widget _buildTitleEditText(BuildContext context) {
     return Consumer<AddActionsProvider>(
         builder: (context, addActionsProvider, _) {
-      return CustomTextFormFieldNumu(
+      return CustomTextFormFieldNumuFirstShow(
         controller: addActionsProvider.titleEditTextController,
         hintText: "Title",
         hintStyle: CustomTextStyles.bodySmallGray700,
