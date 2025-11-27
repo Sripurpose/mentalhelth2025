@@ -66,7 +66,7 @@ Widget buildPopupDialog(BuildContext context, Size size) {
 
               Container(
                 decoration: BoxDecoration(
-                color: ColorsContent.homeMenuTitleColor,
+                color: ColorsContent.whiteText,
                   borderRadius: BorderRadius.circular(6.0),
                 ),
                 child: Padding(
@@ -82,12 +82,12 @@ Widget buildPopupDialog(BuildContext context, Size size) {
                         },
                         child: CircleAvatar(
                           backgroundColor: Colors.grey,
-                          radius: size.width * 0.075,
+                          radius: size.width * 0.050,
                           child: CustomImageView(
                             imagePath:
                                 editProvider.getProfileModel?.profileurl.toString(),
-                            height: 58,
-                            width: 58,
+                            height: 50,
+                            width: 50,
                             radius: BorderRadius.circular(
                               34,
                             ),
@@ -108,11 +108,11 @@ Widget buildPopupDialog(BuildContext context, Size size) {
                               editProvider.getProfileModel?.firstname.toString() ??
                                   "",
                             ),
-                            style: const TextStyle(
+                            style:  TextStyle(
                               fontSize: 16.5,
                               fontWeight: FontWeight.w500,
                               fontFamily: 'Poppins',
-                              color: Colors.black,
+                              color: ColorsContent.newThemeColor,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,

@@ -15,6 +15,7 @@ class ColorsContent {
   static Color newThemeColor = const Color(0xFF7E69F8);
   static Color homeMenuTitleColor = const Color(0xFFAC9EFF);
   static Color noDob = const Color(0xFFB8B8B8);
+  static Color searchHint = const Color(0xFFB1B1B1);
   static Color actionBackColor = const Color(0xFF604DD1);
   static Color hintColor = const Color(0xFFAAAAAA);
   static Color homeBackGroundColor = const Color(0xFFE8EAF7);

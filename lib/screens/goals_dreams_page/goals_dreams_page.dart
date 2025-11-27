@@ -7,6 +7,7 @@ import 'package:mentalhelth/screens/dash_borad_screen/provider/dash_board_provid
 import 'package:mentalhelth/screens/goals_dreams_page/provider/goals_dreams_provider.dart';
 import 'package:mentalhelth/screens/goals_dreams_page/provider/goals_dreams_provider.dart';
 import 'package:mentalhelth/screens/goals_dreams_page/screens/goals_and_dreams_full_view/goals_and_dreams_full_view_screen.dart';
+import 'package:mentalhelth/screens/goals_dreams_page/widgets/date_range_picker_screen_goals_and_dreams.dart';
 import 'package:mentalhelth/utils/core/image_constant.dart';
 import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/widgets/app_bar/appbar_leading_image.dart';
@@ -17,6 +18,7 @@ import 'package:provider/provider.dart';
 import '../edit_add_profile_screen/provider/edit_provider.dart';
 import '../goals_dreams_page/widgets/weightlosscomponentlist_item_widget.dart';
 import '../home_screen/provider/home_provider.dart';
+import '../home_screen/widgets/date_range_picker_screen.dart';
 import '../mental_strength_add_edit_screen/provider/mental_strenght_edit_provider.dart';
 import '../token_expiry/tocken_expiry_warning_screen.dart';
 import '../token_expiry/token_expiry.dart';
@@ -141,14 +143,15 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
               },
             ),
             const SizedBox(height: 20,),
+            buildSearchAndDateBar(context, goalsDreamsProvider),  // 🔍 Add this here
+            const SizedBox(height: 5,),
             Expanded(
               child: Consumer<GoalsDreamsProvider>(
                 builder: (context, goalsDreamsProvider, _) {
                   return Stack(
                     children: [
                       Container(
-                        height: goalsDreamsProvider.goalsAndDreamsModel?.pageCount == 1 ?
-                        size.height * 0.635 : size.height * 0.59,
+                        height:  size.height * 0.545,
                         color: goalsDreamsProvider.goalsanddreams.isEmpty
                             ? ColorsContent.homeBackGroundColor
                             : null,
@@ -259,114 +262,114 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
                           },
                         ),
                       ),
-               Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            // Pagination Row
-                            if ((goalsDreamsProvider
-                                .goalsAndDreamsModel
-                                ?.pageCount ??
-                                0) >
-                                1)
-                              Padding(
-                                padding:
-                                const EdgeInsets.only(bottom: 85),
-                                child: GestureDetector(
-                                  child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.center,
-                                    children: List.generate(
-                                      goalsDreamsProvider
-                                          .goalsAndDreamsModel
-                                          ?.pageCount ??
-                                          0,
-                                          (index) {
-                                        return GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              goalsDreamsProvider
-                                                  .setCurrentPage(
-                                                  index + 1);
-                                              goalsDreamsProvider
-                                                  .goalsanddreams
-                                                  .clear();
-                                              _onPageChanged(
-                                                  index + 1);
-                                            });
-                                            goalsDreamsProvider
-                                                .fetchGoalsAndDreams(
-                                                pageNo:
-                                                goalsDreamsProvider
-                                                    .currentPage
-                                                    .toString(),context: context);
-                                          },
-                                          child: goalsDreamsProvider
-                                              .goalsanddreams
-                                              .isNotEmpty
-                                              ? Container(
-                                            margin:
-                                            const EdgeInsets
-                                                .all(4.0),
-                                            padding:
-                                            const EdgeInsets
-                                                .all(8.0),
-                                            decoration:
-                                            BoxDecoration(
-                                              shape: BoxShape
-                                                  .circle,
-                                              color: goalsDreamsProvider
-                                                  .currentPage ==
-                                                  index + 1
-                                                  ? ColorsContent.newThemeColor
-                                                  : Colors.grey,
-                                            ),
-                                            child:
-                                            GestureDetector(
-                                              onTap: () {
-                                                setState(() {
-                                                  goalsDreamsProvider
-                                                      .setCurrentPage(
-                                                      index +
-                                                          1);
-                                                  goalsDreamsProvider
-                                                      .goalsanddreams
-                                                      .clear();
-                                                  _onPageChanged(
-                                                      index +
-                                                          1);
-                                                });
-                                                goalsDreamsProvider
-                                                    .fetchGoalsAndDreams(
-                                                    pageNo: goalsDreamsProvider
-                                                        .currentPage
-                                                        .toString(),context: context);
-                                              },
-                                              child: Text(
-                                                '${index + 1}',
-                                                style:
-                                                const TextStyle(
-                                                  color: Colors
-                                                      .white,
-                                                  fontWeight:
-                                                  FontWeight
-                                                      .bold,
-                                                  fontFamily: 'Poppins',
-                                                ),
-                                              ),
-                                            ),
-                                          )
-                                              : const SizedBox(),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
+               // Align(
+               //          alignment: Alignment.bottomCenter,
+               //          child: Column(
+               //            mainAxisSize: MainAxisSize.min,
+               //            children: [
+               //              // Pagination Row
+               //              if ((goalsDreamsProvider
+               //                  .goalsAndDreamsModel
+               //                  ?.pageCount ??
+               //                  0) >
+               //                  1)
+               //                Padding(
+               //                  padding:
+               //                  const EdgeInsets.only(bottom: 85),
+               //                  child: GestureDetector(
+               //                    child: Row(
+               //                      mainAxisAlignment:
+               //                      MainAxisAlignment.center,
+               //                      children: List.generate(
+               //                        goalsDreamsProvider
+               //                            .goalsAndDreamsModel
+               //                            ?.pageCount ??
+               //                            0,
+               //                            (index) {
+               //                          return GestureDetector(
+               //                            onTap: () {
+               //                              setState(() {
+               //                                goalsDreamsProvider
+               //                                    .setCurrentPage(
+               //                                    index + 1);
+               //                                goalsDreamsProvider
+               //                                    .goalsanddreams
+               //                                    .clear();
+               //                                _onPageChanged(
+               //                                    index + 1);
+               //                              });
+               //                              goalsDreamsProvider
+               //                                  .fetchGoalsAndDreams(
+               //                                  pageNo:
+               //                                  goalsDreamsProvider
+               //                                      .currentPage
+               //                                      .toString(),context: context);
+               //                            },
+               //                            child: goalsDreamsProvider
+               //                                .goalsanddreams
+               //                                .isNotEmpty
+               //                                ? Container(
+               //                              margin:
+               //                              const EdgeInsets
+               //                                  .all(4.0),
+               //                              padding:
+               //                              const EdgeInsets
+               //                                  .all(8.0),
+               //                              decoration:
+               //                              BoxDecoration(
+               //                                shape: BoxShape
+               //                                    .circle,
+               //                                color: goalsDreamsProvider
+               //                                    .currentPage ==
+               //                                    index + 1
+               //                                    ? ColorsContent.newThemeColor
+               //                                    : Colors.grey,
+               //                              ),
+               //                              child:
+               //                              GestureDetector(
+               //                                onTap: () {
+               //                                  setState(() {
+               //                                    goalsDreamsProvider
+               //                                        .setCurrentPage(
+               //                                        index +
+               //                                            1);
+               //                                    goalsDreamsProvider
+               //                                        .goalsanddreams
+               //                                        .clear();
+               //                                    _onPageChanged(
+               //                                        index +
+               //                                            1);
+               //                                  });
+               //                                  goalsDreamsProvider
+               //                                      .fetchGoalsAndDreams(
+               //                                      pageNo: goalsDreamsProvider
+               //                                          .currentPage
+               //                                          .toString(),context: context);
+               //                                },
+               //                                child: Text(
+               //                                  '${index + 1}',
+               //                                  style:
+               //                                  const TextStyle(
+               //                                    color: Colors
+               //                                        .white,
+               //                                    fontWeight:
+               //                                    FontWeight
+               //                                        .bold,
+               //                                    fontFamily: 'Poppins',
+               //                                  ),
+               //                                ),
+               //                              ),
+               //                            )
+               //                                : const SizedBox(),
+               //                          );
+               //                        },
+               //                      ),
+               //                    ),
+               //                  ),
+               //                ),
+               //            ],
+               //          ),
+               //        ),
                       // Floating Action Button
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -419,30 +422,74 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
     )
         : const TokenExpireScreen();
   }
+// 🔍 Search + Date Filter Bar
+  Widget buildSearchAndDateBar(
+      BuildContext context,
+      GoalsDreamsProvider goalsDreamsProvider,
+      )
+  {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(30),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          )
+        ],
+      ),
+      child: Row(
+        children: [
+          SvgPicture.asset(
+            ImageConstant.goalsAndDreamsSearchIcon,
+          ),
+          // Search Icon
 
+          const SizedBox(width: 10),
 
-// /// Section Widget
-// Widget _buildWeightLossComponentList(BuildContext context) {
-//   return ListView.separated(
-//     physics: const NeverScrollableScrollPhysics(),
-//     shrinkWrap: true,
-//     separatorBuilder: (
-//       context,
-//       index,
-//     ) {
-//       return const SizedBox(
-//         height: 2,
-//       );
-//     },
-//     itemCount: 1,
-//     itemBuilder: (context, index) {
-//       return const WeightLossComponentListItemWidget(
-//         image: '',
-//         headding: '',
-//       );
-//     },
-//   );
-// }
+          // Search TextField
+          Expanded(
+            child: TextField(
+              //controller: goalsDreamsProvider.c,
+              onChanged: (value) {
+                goalsDreamsProvider.filterGoalsBySearch(value);
+              },
+              decoration: InputDecoration(
+                hintText: "search goals",
+                hintStyle:TextStyle(
+                  color: ColorsContent.searchHint,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w300,
+                  fontFamily: 'Poppins',
+                ),
+                border: InputBorder.none,
+                isCollapsed: true,
+              ),
+            ),
+          ),
+
+          // Date Picker Button
+          GestureDetector(
+            onTap: () async {
+              DateRangePickerGoalsAndDreamsScreen.show(
+                context,
+                onDateRangeSelected: (startDate, endDate) {
+
+                },
+              );
+            },
+            child:SvgPicture.asset(
+              ImageConstant.goalsAndDreamsDateIcon,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
 }
 
-//////

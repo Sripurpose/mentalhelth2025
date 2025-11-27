@@ -89,6 +89,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
         Provider.of<AdDreamsGoalsProvider>(context, listen: false);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      adDreamsGoalsProvider.hasUserClearedLink = false;
       _descriptionFocusNode.unfocus();
       _titleFocusNode.unfocus();// Ensure it does not get focus automatically
       logger.w(
@@ -1007,11 +1008,22 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                         right: 6,
                         child: GestureDetector(
                           onTap: () {
-                            logger.i(
-                                "editDetectedLinks before clear: ${adDreamsGoalsProvider.editDetectedLinks}");
+                            customPopup(
+                              context: context,
+                              onPressedDelete: () {
+                                setState(() {
+                                  logger.i(
+                                      "editDetectedLinks before clear: ${adDreamsGoalsProvider.editDetectedLinks}");
+                                  adDreamsGoalsProvider.hasUserClearedLink = true;
+                                  adDreamsGoalsProvider.editDetectedLinks.clear();
+                                });
+                                Navigator.of(context).pop();
+                              },
+                              title: 'Confirm Delete',
+                              content:
+                              'Are you sure you want to delete this link?',
+                            );
 
-                            adDreamsGoalsProvider.hasUserClearedLink = true;
-                            adDreamsGoalsProvider.editDetectedLinks.clear();
                             setState(() {});
                           },
                           child: Container(

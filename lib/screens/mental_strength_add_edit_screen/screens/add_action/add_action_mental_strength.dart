@@ -21,6 +21,7 @@ import 'package:mentalhelth/widgets/custom_text_form_field.dart';
 import 'package:mentalhelth/widgets/functions/snack_bar.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../widgets/functions/popup.dart';
 import '../../../no_internet/duplicate_screen.dart';
 import '../../mental_strength_add_edit_page.dart';
 
@@ -910,9 +911,19 @@ class _AddActionMentalStrengthBottomSheetState
                         right: 6,
                         child: GestureDetector(
                           onTap: () {
-                            setState(() {
-                              addActionsProvider.detectedLinks.clear();
-                            });
+                            customPopup(
+                              context: context,
+                              onPressedDelete: () {
+                                setState(() {
+                                  addActionsProvider.detectedLinks.clear();
+                                });
+                                Navigator.of(context).pop();
+                              },
+                              title: 'Confirm Delete',
+                              content:
+                              'Are you sure you want to delete this link?',
+                            );
+
                           },
                           child: Container(
                             decoration: const BoxDecoration(

@@ -34,6 +34,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../utils/logic/permissions.dart';
+import '../../../../widgets/functions/popup.dart';
 import '../../../addactions_screen/model/alaram_info.dart';
 import '../../../dash_borad_screen/provider/dash_board_provider.dart';
 import '../../../edit_add_profile_screen/provider/edit_provider.dart';
@@ -1864,9 +1865,21 @@ class _EditActionScreenState extends State<EditActionScreen> {
                         right: 6,
                         child: GestureDetector(
                           onTap: () {
-                            addActionsProvider.hasUserClearedLink = true;
-                            addActionsProvider.editDetectedLinks.clear();
-                            setState(() {});
+
+                            customPopup(
+                              context: context,
+                              onPressedDelete: () {
+                                setState(() {
+                                  addActionsProvider.hasUserClearedLink = true;
+                                  addActionsProvider.editDetectedLinks.clear();
+                                });
+                                Navigator.of(context).pop();
+                              },
+                              title: 'Confirm Delete',
+                              content:
+                              'Are you sure you want to delete this link?',
+                            );
+
                           },
                           child: Container(
                             decoration: const BoxDecoration(

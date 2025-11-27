@@ -234,6 +234,7 @@ import 'package:logger/logger.dart';
 import 'package:mentalhelth/screens/dash_borad_screen/provider/dash_board_provider.dart';
 import 'package:mentalhelth/screens/home_screen/provider/home_provider.dart';
 import 'package:mentalhelth/screens/journal_list_screen/widgets/chart_view_list.dart';
+import 'package:mentalhelth/screens/journal_list_screen/widgets/date_range_picker_screen_journal_list.dart';
 import 'package:mentalhelth/screens/journal_list_screen/widgets/journal_list_view_widget.dart';
 import 'package:mentalhelth/screens/mental_strength_add_edit_screen/provider/mental_strenght_edit_provider.dart';
 import 'package:mentalhelth/utils/theme/colors.dart';
@@ -243,6 +244,8 @@ import 'package:provider/provider.dart';
 
 import '../../utils/core/image_constant.dart';
 import '../edit_add_profile_screen/provider/edit_provider.dart';
+import '../goals_dreams_page/provider/goals_dreams_provider.dart';
+import '../goals_dreams_page/widgets/date_range_picker_screen_goals_and_dreams.dart';
 import '../token_expiry/tocken_expiry_warning_screen.dart';
 import '../token_expiry/token_expiry.dart';
 import 'provider/journal_list_provider.dart';
@@ -383,6 +386,8 @@ class _JournalListPageState extends State<JournalListPage> {
                       ),
                     ),
                     SizedBox(height: size.height * 0.011),
+                    if(journalListProvider.listViewBool)
+                    buildSearchAndDateBar(context, homeProvider),  // 🔍 Add this here
                     Expanded(
                       child: journalListProvider.listViewBool
                           ? const JournalListViewWidget()
@@ -433,6 +438,74 @@ class _JournalListPageState extends State<JournalListPage> {
       ),
     )
         : const TokenExpireScreen();
+  }
+
+  // 🔍 Search + Date Filter Bar
+  Widget buildSearchAndDateBar(
+      BuildContext context,
+      HomeProvider journalListProvider,
+      )
+  {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(30),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          )
+        ],
+      ),
+      child: Row(
+        children: [
+          SvgPicture.asset(
+            ImageConstant.goalsAndDreamsSearchIcon,
+          ),
+          // Search Icon
+
+          const SizedBox(width: 10),
+
+          // Search TextField
+          Expanded(
+            child: TextField(
+              //controller: goalsDreamsProvider.c,
+              onChanged: (value) {
+                journalListProvider.filterJournalsBySearch(value);
+              },
+              decoration: InputDecoration(
+                hintText: "search goals",
+                hintStyle:TextStyle(
+                  color: ColorsContent.searchHint,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w300,
+                  fontFamily: 'Poppins',
+                ),
+                border: InputBorder.none,
+                isCollapsed: true,
+              ),
+            ),
+          ),
+
+          // Date Picker Button
+          GestureDetector(
+            onTap: () async {
+              DateRangePickerJournalListScreen.show(
+                context,
+                onDateRangeSelected: (startDate, endDate) {
+                },
+              );
+            },
+            child:SvgPicture.asset(
+              ImageConstant.goalsAndDreamsDateIcon,
+            ),
+          )
+        ],
+      ),
+    );
   }
 
 }

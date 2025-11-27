@@ -134,6 +134,9 @@ class HomeProvider extends ChangeNotifier {
   bool journalsModelLoading = false;
   int journalStatus = 0;
 
+  List<Journal> fullJournalsModelList = [];
+  String searchQuery = "";
+
   Future fetchJournals({bool initial = false,String? pageNo,required BuildContext context}) async {
     try {
       String? token = await getUserTokenSharePref();
@@ -179,21 +182,23 @@ class HomeProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         journalStatus = response.statusCode;
         journalsModel = journalsModelFromJson(response.body);
-        logger.w("journalsModel ${journalsModelFromJson(response.body)}");
 
-        // Add new items without duplication
         final newJournals = journalsModel!.journals ?? [];
 
-        // Ensure uniqueness by checking for duplicates based on a unique field like id
         for (var journal in newJournals) {
-          if (!journalsModelList.any((existingJournal) => existingJournal.journalId == journal.journalId)) {
+          if (!journalsModelList.any((existingJournal) =>
+          existingJournal.journalId == journal.journalId)) {
             journalsModelList.add(journal);
           }
         }
 
+        /// 👉 VERY IMPORTANT for search
+        fullJournalsModelList = List.from(journalsModelList);
+
         journalsModelLoading = false;
         notifyListeners();
       }
+
       else if(response.statusCode == 503){
         Future.delayed(Duration.zero, () {
           Navigator.of(context).push(
@@ -231,6 +236,22 @@ class HomeProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  void filterJournalsBySearch(String query) {
+    searchQuery = query.toLowerCase();
+
+    if (query.isEmpty) {
+      journalsModelList = List.from(fullJournalsModelList);
+    } else {
+      journalsModelList = fullJournalsModelList.where((goal) {
+        final title = goal.journalTitle?.toLowerCase() ?? "";
+        return title.contains(searchQuery);
+      }).toList();
+    }
+
+    notifyListeners();
+  }
+
 
 
   JournalsModelGrid? journalsModelGrid;

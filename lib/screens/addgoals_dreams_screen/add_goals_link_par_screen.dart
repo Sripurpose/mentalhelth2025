@@ -127,7 +127,6 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
       adDreamsGoalsProvider.selectedOption = "Create New Goal";
       _goalNameFocusNode.unfocus();
       _goalDescFocusNode.unfocus();
-
       adDreamsGoalsProvider.nameEditTextController.text = "";
       editProfileProvider.interestsValueController.text = "";
       adDreamsGoalsProvider.selectedDate = "";
@@ -1230,9 +1229,19 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                           right: 6,
                           child: GestureDetector(
                             onTap: () {
-                              setState(() {
-                                adDreamsGoalsProvider.detectedLinks.clear();
-                              });
+                              customPopup(
+                                context: context,
+                                onPressedDelete: () {
+                                  setState(() {
+                                    adDreamsGoalsProvider.detectedLinks.clear();
+                                  });
+                                  Navigator.of(context).pop();
+                                },
+                                title: 'Confirm Delete',
+                                content:
+                                'Are you sure you want to delete this link?',
+                              );
+
                             },
                             child: Container(
                               decoration: const BoxDecoration(
@@ -1365,7 +1374,20 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                           child: GestureDetector(
                             onTap: () {
                               setState(() {
-                                adDreamsGoalsProvider.editDetectedLinks.clear();
+
+                                customPopup(
+                                  context: context,
+                                  onPressedDelete: () {
+                                    setState(() {
+                                      adDreamsGoalsProvider.editDetectedLinks.clear();
+                                    });
+                                    Navigator.of(context).pop();
+                                  },
+                                  title: 'Confirm Delete',
+                                  content:
+                                  'Are you sure you want to delete this link?',
+                                );
+
                               });
                             },
                             child: Container(
@@ -1457,6 +1479,9 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                   context: context,
                 );
 
+                editProfileProvider.categorys!.id = "";
+                editProfileProvider.categorys!.categoryName = "";
+
                 if (goalsDreamsProvider.fetchGoalsAndDreamsStatus == 404) {
                   goalsDreamsProvider.fetchGoalsAndDreams(pageNo: 1.toString(), context: context);
                 }
@@ -1518,6 +1543,9 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                     GoalsDreamsProvider goalsDreamsProvider =
                     Provider.of<GoalsDreamsProvider>(context, listen: false);
                     // goalsDreamsProvider.fetchGoalsAndDreams(initial: true);
+                    editProfileProvider.categorys!.id = "";
+                    editProfileProvider.categorys!.categoryName = "";
+
 
                     await goalsDreamsProvider.fetchGoalsAndDreams(
                         pageNo: goalsDreamsProvider.currentPage.toString(),
@@ -1554,6 +1582,9 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                     await goalsDreamsProvider.fetchGoalsAndDreams(
                         pageNo: goalsDreamsProvider.currentPage.toString(),
                         context: context);
+
+                    editProfileProvider.categorys!.id = "";
+                    editProfileProvider.categorys!.categoryName = "";
                   }
                 } else {
                   showCustomSnackBar(

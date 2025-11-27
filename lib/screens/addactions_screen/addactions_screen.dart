@@ -26,6 +26,7 @@ import 'package:provider/provider.dart';
 
 import '../../utils/logic/permissions.dart';
 import '../../utils/theme/colors.dart';
+import '../../widgets/functions/popup.dart';
 import '../addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
 import '../dash_borad_screen/provider/dash_board_provider.dart';
 import '../edit_add_profile_screen/provider/edit_provider.dart';
@@ -1220,9 +1221,19 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                         right: 6,
                         child: GestureDetector(
                           onTap: () {
-                            setState(() {
-                              addActionsProvider.detectedLinks.clear();
-                            });
+                            customPopup(
+                              context: context,
+                              onPressedDelete: () {
+                                setState(() {
+                                  addActionsProvider.detectedLinks.clear();
+                                });
+                                Navigator.of(context).pop();
+                              },
+                              title: 'Confirm Delete',
+                              content:
+                              'Are you sure you want to delete this link?',
+                            );
+
                           },
                           child: Container(
                             decoration: const BoxDecoration(

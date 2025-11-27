@@ -115,6 +115,9 @@ class ImageConstant {
   static String mental_active_png = '$imagePath/mental_active_icon_png.png';
   static String listview_active_png = '$imagePath/listview_active_icon_png.png';
   static String goal_active_png = '$imagePath/goal_active_icon_png.png';
+  static String goalsAndDreamsDateIcon = '$imagePath/goals_and_dreams_date_icon.svg';
+  static String goalsAndDreamsSearchIcon = '$imagePath/goals_and_dreams_search_icon.svg';
+
 
   static String imgSettings = '$imagePath/mental_in_active_icon_numu.svg';
   static String imgSettingsActive = '$imagePath/mental_active_icon_numu.svg';

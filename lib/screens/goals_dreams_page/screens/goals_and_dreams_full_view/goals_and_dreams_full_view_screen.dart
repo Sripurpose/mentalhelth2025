@@ -1591,7 +1591,7 @@ class _GoalAndDreamFullViewScreenState
                           Navigator.of(context).pop();
                         },
                         title: 'Confirm Delete',
-                        content: 'Are you sure You want to Delete this Goal?',
+                        content: 'Are you sure you want to delete this Goal?',
                       );
                     },
                     height: 20, // 👈 Reduce height here

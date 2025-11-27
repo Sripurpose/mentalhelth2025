@@ -1510,9 +1510,19 @@ class _NumuMentalStrengthAddEditPageState
                         right: 6,
                         child: GestureDetector(
                           onTap: () {
-                            setState(() {
-                              mentalStrengthEditProvider.detectedLinks.clear();
-                            });
+                            customPopup(
+                              context: context,
+                              onPressedDelete: () {
+                                setState(() {
+                                  mentalStrengthEditProvider.detectedLinks.clear();
+                                });
+                                Navigator.of(context).pop();
+                              },
+                              title: 'Confirm Delete',
+                              content:
+                              'Are you sure you want to delete this link?',
+                            );
+
                           },
                           child: Container(
                             decoration: const BoxDecoration(

@@ -26,6 +26,7 @@ import 'package:provider/provider.dart';
 import '../../utils/logic/permissions.dart';
 import '../../utils/theme/colors.dart';
 import '../../utils/theme/custom_button_style.dart';
+import '../../widgets/functions/popup.dart';
 import '../addactions_screen/addactions_screen.dart';
 import '../dash_borad_screen/provider/dash_board_provider.dart';
 import '../goals_dreams_page/provider/goals_dreams_provider.dart';
@@ -663,9 +664,19 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
                           right: 6,
                           child: GestureDetector(
                             onTap: () {
-                              setState(() {
-                                adDreamsGoalsProvider.detectedLinks.clear();
-                              });
+                              customPopup(
+                                context: context,
+                                onPressedDelete: () {
+                                  setState(() {
+                                    adDreamsGoalsProvider.detectedLinks.clear();
+                                  });
+                                  Navigator.of(context).pop();
+                                },
+                                title: 'Confirm Delete',
+                                content:
+                                'Are you sure you want to delete this link?',
+                              );
+
                             },
                             child: Container(
                               decoration: const BoxDecoration(

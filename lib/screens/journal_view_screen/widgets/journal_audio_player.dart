@@ -192,11 +192,11 @@ class _JournalAudioPlayerState extends State<JournalAudioPlayer> {
                             color: ColorsContent.newThemeColor,
                             borderRadius: BorderRadius.circular(4),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 5.0),
                             child: Text(
                              "",
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 12,
                                 fontFamily: 'Poppins',
@@ -206,13 +206,13 @@ class _JournalAudioPlayerState extends State<JournalAudioPlayer> {
                         ),
                         Container(
                           decoration: BoxDecoration(
-                            color: ColorsContent.newThemeColor,
+                            color: ColorsContent.goalNotCompletedColor,
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 5.0),
                             child: Text(
-                              "",
+                              _formatDuration(duration),
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 12,

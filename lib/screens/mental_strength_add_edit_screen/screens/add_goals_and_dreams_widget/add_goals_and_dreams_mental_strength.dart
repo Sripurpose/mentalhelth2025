@@ -24,6 +24,7 @@ import 'package:mentalhelth/widgets/custom_text_form_field.dart';
 import 'package:mentalhelth/widgets/functions/snack_bar.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../widgets/functions/popup.dart';
 import '../../../auth/sign_in/provider/sign_in_provider.dart';
 import '../../../dash_borad_screen/provider/dash_board_provider.dart';
 import '../../../home_screen/provider/home_provider.dart';
@@ -620,9 +621,19 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
                           right: 6,
                           child: GestureDetector(
                             onTap: () {
-                              setState(() {
-                                adDreamsGoalsProvider.detectedLinks.clear();
-                              });
+                              customPopup(
+                                context: context,
+                                onPressedDelete: () {
+                                  setState(() {
+                                    adDreamsGoalsProvider.detectedLinks.clear();
+                                  });
+                                  Navigator.of(context).pop();
+                                },
+                                title: 'Confirm Delete',
+                                content:
+                                'Are you sure you want to delete this link?',
+                              );
+
                             },
                             child: Container(
                               decoration: const BoxDecoration(

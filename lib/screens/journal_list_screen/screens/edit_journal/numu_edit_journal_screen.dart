@@ -2515,10 +2515,22 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                         right: 6,
                         child: GestureDetector(
                           onTap: () {
-                            setState(() {
-                              provider.editDetectedLinks.clear();
-                              provider.hasUserClearedLink = true;
-                            });
+
+                            customPopup(
+                              context: context,
+                              onPressedDelete: () {
+                                setState(() {
+                                  provider.editDetectedLinks.clear();
+                                  provider.hasUserClearedLink = true;
+                                });
+                                Navigator.of(context).pop();
+                              },
+                              title: 'Confirm Delete',
+                              content:
+                              'Are you sure you want to delete this link?',
+                            );
+
+
                           },
                           child: Container(
                             decoration: const BoxDecoration(

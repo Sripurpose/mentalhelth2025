@@ -596,7 +596,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                     child: Column(
                       children: [
-                        SizedBox(height: size.height * 0.01),
+                        SizedBox(height: size.height * 0.035),
                         _buildHeaderRow(context, size, editProfileProvider, dashBoardProvider),
                         Expanded(
                           child: Column(
@@ -944,7 +944,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           Expanded(
-            child: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
               child: Text(
                 capitalText(
                   editProfileProvider.getProfileModel?.firstname?.toString() ?? "",
@@ -952,7 +953,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: CustomTextStyles.bodyLarge18,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
-                textAlign: TextAlign.center, // ⭐ align text center
+                         //   textAlign: TextAlign.center, // ⭐ align text center
               ),
             ),
           ),

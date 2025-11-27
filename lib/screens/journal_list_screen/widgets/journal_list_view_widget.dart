@@ -146,6 +146,49 @@ class _JournalListViewWidgetState extends State<JournalListViewWidget> {
               ),
 
               // Pagination Row - Always Visible
+              // if (homeProvider.journalsModelList.isNotEmpty)
+              //   Padding(
+              //     padding: const EdgeInsets.only(bottom: 80.0),
+              //     child: Visibility(
+              //       visible: (homeProvider.journalsModel?.pageCount ?? 0) > 1,
+              //       child: Row(
+              //         mainAxisAlignment: MainAxisAlignment.center,
+              //         children: List.generate(
+              //           homeProvider.journalsModel?.pageCount ?? 0,
+              //               (index) {
+              //             return GestureDetector(
+              //               onTap: () {
+              //                 homeProvider.setCurrentPage(index + 1);
+              //                 homeProvider.journalsModelList.clear();
+              //                 print("currentPagenews ${homeProvider.currentPage}");
+              //                 homeProvider.fetchJournals(
+              //                     pageNo: homeProvider.currentPage.toString(),context: context);
+              //                  homeProvider.fetchJournalsGridView(initial: true,context: context,fullList: true);
+              //               },
+              //               child: Container(
+              //                 margin: const EdgeInsets.all(4.0),
+              //                 padding: const EdgeInsets.all(8.0),
+              //                 decoration: BoxDecoration(
+              //                   shape: BoxShape.circle,
+              //                   color: homeProvider.currentPage == index + 1
+              //                       ? ColorsContent.newThemeColor
+              //                       : Colors.grey,
+              //                 ),
+              //                 child: Text(
+              //                   '${index + 1}',
+              //                   style: const TextStyle(
+              //                     color: Colors.white,
+              //                     fontWeight: FontWeight.bold,
+              //                     fontFamily: 'Poppins',
+              //                   ),
+              //                 ),
+              //               ),
+              //             );
+              //           },
+              //         ),
+              //       ),
+              //     ),
+              //   ),
               if (homeProvider.journalsModelList.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 80.0),
@@ -163,7 +206,7 @@ class _JournalListViewWidgetState extends State<JournalListViewWidget> {
                               print("currentPagenews ${homeProvider.currentPage}");
                               homeProvider.fetchJournals(
                                   pageNo: homeProvider.currentPage.toString(),context: context);
-                               homeProvider.fetchJournalsGridView(initial: true,context: context,fullList: true);
+                              homeProvider.fetchJournalsGridView(initial: true,context: context,fullList: true);
                             },
                             child: Container(
                               margin: const EdgeInsets.all(4.0),
@@ -174,9 +217,9 @@ class _JournalListViewWidgetState extends State<JournalListViewWidget> {
                                     ? ColorsContent.newThemeColor
                                     : Colors.grey,
                               ),
-                              child: Text(
-                                '${index + 1}',
-                                style: const TextStyle(
+                              child: const Text(
+                                '',
+                                style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                   fontFamily: 'Poppins',

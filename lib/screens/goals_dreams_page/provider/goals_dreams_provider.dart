@@ -46,6 +46,8 @@ class GoalsDreamsProvider extends ChangeNotifier {
     _currentPage = page;
     notifyListeners(); // Notify UI to update
   }
+  List<Goalsanddream> fullGoalsList = [];
+  String searchQuery = "";
 
   GoalsAndDreamsModel? goalsAndDreamsModel;
   bool goalsAndDreamsModelLoading = false;
@@ -104,21 +106,24 @@ class GoalsDreamsProvider extends ChangeNotifier {
       goalsAndDreamsModel = goalsAndDreamsModelFromJson(response.body);
       logger.w("goalsAndDreamsModel ${goalsAndDreamsModel}");
      // if (initial) {
-       goalsanddreams.clear();
+      // Always clear before adding fresh data
+      goalsanddreams.clear();
+      fullGoalsList.clear();
 
-        if (goalsAndDreamsModel != null) {
-          if (goalsAndDreamsModel!.goalsanddreams != null) {
-            goalsanddreams.addAll(goalsAndDreamsModel!.goalsanddreams!);
-          }
+      if (goalsAndDreamsModel != null) {
+        if (goalsAndDreamsModel!.goalsanddreams != null) {
+          fullGoalsList = List.from(goalsAndDreamsModel!.goalsanddreams!);
+          goalsanddreams = List.from(fullGoalsList);
         }
-     // }
-      // else {
-      //   if (goalsAndDreamsModel != null) {
-      //     if (goalsAndDreamsModel!.goalsanddreams != null) {
-      //       goalsanddreams.addAll(goalsAndDreamsModel!.goalsanddreams!);
-      //     }
-      //   }
-      // }
+      }
+
+
+      // if (goalsAndDreamsModel != null) {
+        //   if (goalsAndDreamsModel!.goalsanddreams != null) {
+        //     goalsanddreams.addAll(goalsAndDreamsModel!.goalsanddreams!);
+        //   }
+        // }
+
 
       notifyListeners();
     }
@@ -157,6 +162,25 @@ class GoalsDreamsProvider extends ChangeNotifier {
     //   notifyListeners();
     // }
   }
+
+
+  void filterGoalsBySearch(String query) {
+    searchQuery = query.toLowerCase();
+
+    if (query.isEmpty) {
+      goalsanddreams = List.from(fullGoalsList);
+    } else {
+      goalsanddreams = fullGoalsList.where((goal) {
+        final title = goal.goalTitle?.toLowerCase() ?? "";
+        return title.contains(searchQuery);
+      }).toList();
+    }
+
+    notifyListeners();
+  }
+
+
+
 
   //update goal status
   bool updateGoalStatusLoading = false;

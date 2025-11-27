@@ -1647,7 +1647,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                   },
                                   title: 'Confirm Delete',
                                   content:
-                                      'Are you sure you want to delete this journals?',
+                                      'Are you sure you want to delete this journal?',
                                 );
                               },
                               height: 20, // 👈 Reduce height here

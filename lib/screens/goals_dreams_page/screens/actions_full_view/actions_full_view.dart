@@ -1606,7 +1606,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                           Navigator.of(context).pop();
                         },
                         title: 'Confirm Delete',
-                        content: 'Are you sure You want to Delete this Action?',
+                        content: 'Are you sure you want to delete this action?',
                       );
                     },
                     height: 20, // 👈 Reduce height here
