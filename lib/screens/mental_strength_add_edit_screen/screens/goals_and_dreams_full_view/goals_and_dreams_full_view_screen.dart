@@ -6,18 +6,14 @@ import 'package:link_preview_generator/link_preview_generator.dart';
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/screens/addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
 import 'package:mentalhelth/screens/goals_dreams_page/provider/goals_dreams_provider.dart';
-import 'package:mentalhelth/screens/journal_view_screen/widgets/jouranl_view_google_map.dart';
 import 'package:mentalhelth/screens/journal_view_screen/widgets/journal_audio_player.dart';
 import 'package:mentalhelth/screens/mental_strength_add_edit_screen/model/goal_details_model.dart';
 import 'package:mentalhelth/screens/mental_strength_add_edit_screen/provider/mental_strenght_edit_provider.dart';
 import 'package:mentalhelth/utils/core/date_time_utils.dart';
 import 'package:mentalhelth/utils/core/image_constant.dart';
-import 'package:mentalhelth/utils/logic/logic.dart';
 import 'package:mentalhelth/utils/theme/colors.dart';
 import 'package:mentalhelth/utils/theme/custom_text_style.dart';
-import 'package:mentalhelth/utils/theme/theme_helper.dart';
 import 'package:mentalhelth/widgets/app_bar/appbar_leading_image.dart';
-import 'package:mentalhelth/widgets/custom_checkbox_button.dart';
 import 'package:mentalhelth/widgets/custom_image_view.dart';
 import 'package:mentalhelth/widgets/video_player.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +21,6 @@ import 'package:provider/provider.dart';
 import '../../../../utils/logic/date_format.dart';
 import '../../../../widgets/app_bar/appbar_subtitle.dart';
 import '../../../../widgets/app_bar/custom_app_bar.dart';
-import '../../../no_internet/duplicate_screen.dart';
 
 class GoalAndDreamFullViewBottomSheet extends StatefulWidget {
   const GoalAndDreamFullViewBottomSheet(

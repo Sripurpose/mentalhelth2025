@@ -26,553 +26,341 @@ import '../../../dynamic_menu_pages/dynamic_Menu_Webview_Screen.dart';
 
 Widget buildPopupDialog(BuildContext context, Size size) {
   return AlertDialog(
-    backgroundColor: Colors.transparent, // Make background transparent
+    backgroundColor: Colors.transparent,
     contentPadding: EdgeInsets.zero,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(20.0),
-    ),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     content: Container(
+      width: double.maxFinite,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage(
-            ImageConstant.gradientBackgroundNumu,
-          ),
+          image: AssetImage(ImageConstant.gradientBackgroundNumu),
           fit: BoxFit.cover,
         ),
-        borderRadius: BorderRadius.circular(20.0),
+        borderRadius: BorderRadius.circular(20),
       ),
-      width: double.maxFinite,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Consumer2<EditProfileProvider, DashBoardProvider>(
-            builder: (context, editProvider, dashBoardProvider, _) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Align(
-                alignment: Alignment.topRight,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: CustomImageView(
-                    imagePath: ImageConstant.imgCloseNumu,
-                    height: 30,
-                    width: 30,
-                  ),
-                ),
+          builder: (context, editProvider, dashBoardProvider, _) {
+            return ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: size.height * 0.75,
               ),
-              SizedBox(height: 10,),
+              child: Column(
+                children: [
+                  /// ===================== CLOSE BUTTON ======================
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: CustomImageView(
+                        imagePath: ImageConstant.imgCloseNumu,
+                        height: 30,
+                        width: 30,
+                      ),
+                    ),
+                  ),
 
-              Container(
-                decoration: BoxDecoration(
-                color: ColorsContent.whiteText,
-                  borderRadius: BorderRadius.circular(6.0),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5.0,vertical: 5),
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          dashBoardProvider.changeCommentPage(
-                            index: 8,
-                          );
-                          Navigator.of(context).pop();
-                        },
-                        child: CircleAvatar(
-                          backgroundColor: Colors.grey,
-                          radius: size.width * 0.050,
-                          child: CustomImageView(
-                            imagePath:
-                                editProvider.getProfileModel?.profileurl.toString(),
-                            height: 50,
-                            width: 50,
-                            radius: BorderRadius.circular(
-                              34,
+                  const SizedBox(height: 10),
+
+                  /// ===================== PROFILE INFO (FIXED) ======================
+                  Container(
+                    decoration: BoxDecoration(
+                      color: ColorsContent.whiteText,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    padding: const EdgeInsets.all(5),
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            dashBoardProvider.changeCommentPage(index: 8);
+                            Navigator.pop(context);
+                          },
+                          child: CircleAvatar(
+                            backgroundColor: Colors.grey,
+                            radius: size.width * 0.05,
+                            child: CustomImageView(
+                              imagePath:
+                              editProvider.getProfileModel?.profileurl ?? "",
+                              height: 50,
+                              width: 50,
+                              radius: BorderRadius.circular(34),
+                              fit: BoxFit.cover,
                             ),
-                            fit: BoxFit.cover,
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        width: size.width * 0.02,
-                      ),
-                      SizedBox(
-                        width: size.width * 0.40,
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          // Enable horizontal scrolling
-                          child: Text(
-                            capitalText(
-                              editProvider.getProfileModel?.firstname.toString() ??
-                                  "",
-                            ),
-                            style:  TextStyle(
-                              fontSize: 16.5,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: 'Poppins',
-                              color: ColorsContent.newThemeColor,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: size.height * 0.025,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Consumer<DashBoardProvider>(
-                    builder: (context, dashBoardProvider, _) {
-                  return GestureDetector(
-                    onTap: () {
-                      dashBoardProvider.changePage(index: 1);
-                      Navigator.of(context).pop();
-                    },
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        "Mental strength",
-                        maxLines: 13,
-                        overflow: TextOverflow.ellipsis,
-                        style: CustomTextStyles
-                            .titleMediumOnSecondaryContainerMedium
-                            .copyWith(
-                          height: 2.19,
-                        ),
-                      ),
-                    ),
-                  );
-                }),
-              ),
-              SizedBox(
-                height: size.height * 0.001,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Consumer<DashBoardProvider>(
-                    builder: (context, dashBoardProvider, _) {
-                  return GestureDetector(
-                    onTap: () {
-                      dashBoardProvider.changePage(index: 2);
-                      Navigator.of(context).pop();
-                    },
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        "Smart Journal",
-                        maxLines: 13,
-                        overflow: TextOverflow.ellipsis,
-                        style: CustomTextStyles
-                            .titleMediumOnSecondaryContainerMedium
-                            .copyWith(
-                          height: 2.19,
-                        ),
-                      ),
-                    ),
-                  );
-                }),
-              ),
-              SizedBox(
-                height: size.height * 0.001,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Consumer<DashBoardProvider>(
-                    builder: (context, dashBoardProvider, _) {
-                  return GestureDetector(
-                    onTap: () {
-                      dashBoardProvider.changePage(index: 3);
-                      Navigator.of(context).pop();
-                    },
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        "Goals & Dreams",
-                        maxLines: 13,
-                        overflow: TextOverflow.ellipsis,
-                        style: CustomTextStyles
-                            .titleMediumOnSecondaryContainerMedium
-                            .copyWith(
-                          height: 2.19,
-                        ),
-                      ),
-                    ),
-                  );
-                }),
-              ),
-              SizedBox(
-                height: size.height * 0.001,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Consumer<HomeProvider>(builder: (context, homeProvider, _) {
-                  return GestureDetector(
-                    onTap: () async {
-                      dashBoardProvider.changeCommentPage(index: 10);
-                      Navigator.of(context).pop();
-                    },
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        "Reminders",
-                        maxLines: 13,
-                        overflow: TextOverflow.ellipsis,
-                        style: CustomTextStyles
-                            .titleMediumOnSecondaryContainerMedium
-                            .copyWith(
-                          height: 2.19,
-                        ),
-                      ),
-                    ),
-                  );
-                }),
-              ),
-              SizedBox(
-                height: size.height * 0.001,
-              ),
-              SizedBox(
-                height: size.height * 0.03,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Consumer<DashBoardProvider>(
-                    builder: (context, dashBoardProvider, _) {
-                  return GestureDetector(
-                    onTap: () {
-                      dashBoardProvider.changeCommentPage(index: 6);
-                      Navigator.of(context).pop();
-                    },
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        "Privacy policy",
-                        maxLines: 13,
-                        overflow: TextOverflow.ellipsis,
-                        style: CustomTextStyles
-                            .titleMediumOnSecondaryContainerMedium
-                            .copyWith(
-                          height: 2.19,
-                        ),
-                      ),
-                    ),
-                  );
-                }),
-              ),
-              SizedBox(
-                height: size.height * 0.001,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Consumer<DashBoardProvider>(
-                    builder: (context, dashBoardProvider, _) {
-                  return GestureDetector(
-                    onTap: () {
-                      dashBoardProvider.changeCommentPage(index: 11);
-                      Navigator.of(context).pop();
-                    },
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        "Terms of service",
-                        maxLines: 13,
-                        overflow: TextOverflow.ellipsis,
-                        style: CustomTextStyles
-                            .titleMediumOnSecondaryContainerMedium
-                            .copyWith(
-                          height: 2.19,
-                        ),
-                      ),
-                    ),
-                  );
-                }),
-              ),
-              SizedBox(
-                height: size.height * 0.001,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: GestureDetector(
-                  onTap: () {
-                    dashBoardProvider.changeCommentPage(index: 12);
-                    Navigator.of(context).pop();
-                  },
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      "Help",
-                      maxLines: 13,
-                      overflow: TextOverflow.ellipsis,
-                      style: CustomTextStyles
-                          .titleMediumOnSecondaryContainerMedium
-                          .copyWith(
-                        height: 2.19,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: size.height * 0.001,
-              ),
-
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Consumer<SignInProvider>(
-                builder: (context, signInProvider, child) {
-                final shareData = signInProvider.appShareResponseModel;
-                final downloadUrl = Theme.of(context).platform == TargetPlatform.iOS
-                ? shareData?.appstoreUrl
-                    : shareData?.playstoreUrl;
-
-                // ✅ Check if shareData or its fields are empty/null
-                final bool hasValidData = shareData != null &&
-                (shareData.title?.isNotEmpty ?? false) &&
-                (shareData.message?.isNotEmpty ?? false) &&
-                (downloadUrl?.isNotEmpty ?? false);
-
-                if (!hasValidData) {
-                return const SizedBox.shrink(); // hide the widget completely
-                }
-
-                return GestureDetector(
-                onTap: () async {
-                final shareMessage = '''
-                ${shareData.title}
-
-                ${shareData.message}
-
-Download now: $downloadUrl
-''';
-
-                await Share.share(shareMessage);
-                },
-                child: Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                "App share",
-                maxLines: 13,
-                overflow: TextOverflow.ellipsis,
-                style: CustomTextStyles
-                    .titleMediumOnSecondaryContainerMedium
-                    .copyWith(height: 2.19),
-                ),
-                ),
-                );
-                },
-                ),
-              ),
-
-
-              SizedBox(
-                height: size.height * 0.005,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: GestureDetector(
-                  onTap: () {
-                    dashBoardProvider.changeCommentPage(index: 14);
-                    Navigator.of(context).pop();
-                  },
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      "Feedback",
-                      maxLines: 13,
-                      overflow: TextOverflow.ellipsis,
-                      style: CustomTextStyles
-                          .titleMediumOnSecondaryContainerMedium
-                          .copyWith(
-                        height: 2.19,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: size.height * 0.005,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Consumer<SignInProvider>(
-                  builder: (context, signInProvider, child) {
-                    final dynamicMenuList = signInProvider.dynamicMenuList;
-
-                    if (dynamicMenuList == null || dynamicMenuList.isEmpty) {
-                      return const SizedBox.shrink();
-                    }
-
-                    final uniqueTitles = <String>{};
-                    final activeMenuItems = dynamicMenuList.where((item) {
-                      final isActive = item.status == "1";
-                      final isUnique = !uniqueTitles.contains(item.title);
-                      if (isActive && isUnique) {
-                        uniqueTitles.add(item.title ?? '');
-                        return true;
-                      }
-                      return false;
-                    }).toList();
-
-                    if (activeMenuItems.isEmpty) {
-                      return const SizedBox.shrink();
-                    }
-
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: List.generate(activeMenuItems.length, (index) {
-                        final menuItem = activeMenuItems[index];
-
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).pop();
-
-                                // ✅ Open the selected item’s webview with correct URL
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => DynamicMenuWebviewScreen(
-                                      title: menuItem.title,
-                                      url: menuItem.linkUrl,
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: Align(
-                                alignment: Alignment.topLeft,
-                                child: Text(
-                                  menuItem.title ?? '',
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: CustomTextStyles
-                                      .titleMediumOnSecondaryContainerMedium
-                                      .copyWith(height: 2.19),
-                                ),
+                        SizedBox(width: size.width * 0.02),
+                        SizedBox(
+                          width: size.width * 0.40,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Text(
+                              capitalText(
+                                editProvider.getProfileModel?.firstname ?? "",
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 16.5,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'Poppins',
+                                color: ColorsContent.newThemeColor,
                               ),
                             ),
-                            SizedBox(height: size.height * 0.005),
-                          ],
-                        );
-                      }),
-                    );
-                  },
-                ),
-              ),
-
-              SizedBox(
-                height: size.height * 0.03,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Consumer2<EditProfileProvider, SignInProvider>(
-                  builder: (context, editProfileProvider, signInProvider, _) {
-                    return GestureDetector(
-                      onTap: () async {
-                        customPopupNew(
-                          context: context,
-                          onPressedDelete: () async {
-                            editProfileProvider.profileUrl = "";
-                            if (Platform.isAndroid) {
-                              await PushNotifications.subscribeToTopic(
-                                  "live_doLogin");
-                              await PushNotifications.unsubscribeFromTopic(
-                                  "message");
-                            } else {
-                              OneSignal.logout();
-                              OneSignal.User.addTagWithKey(
-                                  "topic", "live_doLogin");
-                              OneSignal.User.removeTag("message");
-                            }
-                            final prefs = await SharedPreferences.getInstance();
-                            await prefs.remove('lastSkippedTimestamp');
-                            addFCMTokenToSharePref(token: "");
-                            addVersionSharePref(version: "");
-                            // GoogleSignInService.logout();
-                            await signInProvider.logOutUser(context);
-                            await removeUserDetailsSharePref(context: context);
-                            removeAllValuesLogout(context: context);
-                          },
-                          title: 'Confirm Logout',
-                          content: 'Are you sure You want to logout?',
-                          yes: "Logout",
-                        );
-                      },
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          "Logout",
-                          maxLines: 13,
-                          overflow: TextOverflow.ellipsis,
-                          style: CustomTextStyles
-                              .titleMediumOnSecondaryContainerMedium
-                              .copyWith(
-                            height: 2.19,
                           ),
                         ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              SizedBox(
-                height: size.height * 0.001,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Consumer<DashBoardProvider>(
-                    builder: (context, dashBoardProvider, _) {
-                  return GestureDetector(
-                    onTap: () {
-                      dashBoardProvider.changeCommentPage(index: 5);
-                      Navigator.of(context).pop();
-                    },
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        "Delete Account",
-                        maxLines: 13,
-                        overflow: TextOverflow.ellipsis,
-                        style: CustomTextStyles
-                            .titleMediumOnSecondaryContainerMedium
-                            .copyWith(
-                          height: 2.19,
-                        ),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(height: size.height * 0.02),
+
+                  /// ===================== SCROLLABLE CONTENT ======================
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          _menuItem(
+                            title: "Mental strength",
+                            onTap: () {
+                              dashBoardProvider.changePage(index: 1);
+                              Navigator.pop(context);
+                            },
+                          ),
+                          _menuItem(
+                            title: "Smart Journal",
+                            onTap: () {
+                              dashBoardProvider.changePage(index: 2);
+                              Navigator.pop(context);
+                            },
+                          ),
+                          _menuItem(
+                            title: "Goals & Dreams",
+                            onTap: () {
+                              dashBoardProvider.changePage(index: 3);
+                              Navigator.pop(context);
+                            },
+                          ),
+                          _menuItem(
+                            title: "Reminders",
+                            onTap: () {
+                              dashBoardProvider.changeCommentPage(index: 10);
+                              Navigator.pop(context);
+                            },
+                          ),
+
+                          SizedBox(height: size.height * 0.02),
+
+                          _menuItem(
+                            title: "Privacy policy",
+                            onTap: () {
+                              dashBoardProvider.changeCommentPage(index: 6);
+                              Navigator.pop(context);
+                            },
+                          ),
+                          _menuItem(
+                            title: "Terms of service",
+                            onTap: () {
+                              dashBoardProvider.changeCommentPage(index: 11);
+                              Navigator.pop(context);
+                            },
+                          ),
+                          _menuItem(
+                            title: "Help",
+                            onTap: () {
+                              dashBoardProvider.changeCommentPage(index: 12);
+                              Navigator.pop(context);
+                            },
+                          ),
+
+                          SizedBox(height: size.height * 0.01),
+
+                          /// ===================== APP SHARE ======================
+                          Consumer<SignInProvider>(
+                            builder: (context, signInProvider, child) {
+                              final shareData =
+                                  signInProvider.appShareResponseModel;
+                              final url = Theme.of(context).platform ==
+                                  TargetPlatform.iOS
+                                  ? shareData?.appstoreUrl
+                                  : shareData?.playstoreUrl;
+
+                              final bool showShare =
+                                  shareData != null &&
+                                      (shareData.title?.isNotEmpty ?? false) &&
+                                      (shareData.message?.isNotEmpty ?? false) &&
+                                      (url?.isNotEmpty ?? false);
+
+                              if (!showShare) return SizedBox.shrink();
+
+                              return _menuItem(
+                                title: "App share",
+                                onTap: () async {
+                                  final message = """
+${shareData!.title}
+
+${shareData.message}
+
+Download now: $url
+""";
+                                  await Share.share(message);
+                                },
+                              );
+                            },
+                          ),
+
+                          _menuItem(
+                            title: "Feedback",
+                            onTap: () {
+                              dashBoardProvider.changeCommentPage(index: 14);
+                              Navigator.pop(context);
+                            },
+                          ),
+
+                          /// ===================== DYNAMIC MENU ======================
+                          Consumer<SignInProvider>(
+                            builder: (context, provider, _) {
+                              final list = provider.dynamicMenuList;
+
+                              if (list == null || list.isEmpty)
+                                return SizedBox.shrink();
+
+                              final added = <String>{};
+                              final items = list.where((e) {
+                                final active = e.status == "1";
+                                final unique = !added.contains(e.title);
+                                if (active && unique) {
+                                  added.add(e.title!);
+                                  return true;
+                                }
+                                return false;
+                              }).toList();
+
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: items.map((item) {
+                                  return _menuItem(
+                                    title: item.title ?? "",
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => DynamicMenuWebviewScreen(
+                                            title: item.title,
+                                            url: item.linkUrl,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                }).toList(),
+                              );
+                            },
+                          ),
+
+                          SizedBox(height: size.height * 0.02),
+
+                          /// ===================== LOGOUT ======================
+                          Consumer2<EditProfileProvider, SignInProvider>(
+                            builder: (context, editProvider, signInProvider, _) {
+                              return _menuItem(
+                                title: "Logout",
+                                onTap: () {
+                                  customPopupNew(
+                                    context: context,
+                                    title: "Confirm Logout",
+                                    content: "Are you sure You want to logout?",
+                                    yes: "Logout",
+                                    onPressedDelete: () async {
+                                      editProvider.profileUrl = "";
+
+                                      if (Platform.isAndroid) {
+                                        await PushNotifications
+                                            .subscribeToTopic("live_doLogin");
+                                        await PushNotifications
+                                            .unsubscribeFromTopic("message");
+                                      } else {
+                                        OneSignal.logout();
+                                        OneSignal.User.addTagWithKey(
+                                            "topic", "live_doLogin");
+                                        OneSignal.User.removeTag("message");
+                                      }
+
+                                      final prefs =
+                                      await SharedPreferences.getInstance();
+                                      await prefs.remove('lastSkippedTimestamp');
+
+                                      addFCMTokenToSharePref(token: "");
+                                      addVersionSharePref(version: "");
+
+                                      await signInProvider.logOutUser(context);
+                                      await removeUserDetailsSharePref(
+                                          context: context);
+                                      removeAllValuesLogout(context: context);
+                                    },
+                                  );
+                                },
+                              );
+                            },
+                          ),
+
+                          _menuItem(
+                            title: "Delete Account",
+                            onTap: () {
+                              dashBoardProvider.changeCommentPage(index: 5);
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
                       ),
                     ),
-                  );
-                }),
-              ),
-              SizedBox(
-                height: size.height * 0.03,
-              ),
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  "App Version ${Platform.isAndroid ? Constent.versionCodeAndroid : Constent.versionCodeIOS} ",
-                  maxLines: 13,
-                  overflow: TextOverflow.ellipsis,
-                  style: CustomTextStyles.titleMediumOnSecondaryContainerMedium
-                      .copyWith(
-                    height: 2.19,
                   ),
-                ),
+
+                  SizedBox(height: size.height * 0.02),
+
+                  /// ===================== VERSION (FIXED) ======================
+                  Text(
+                    "App Version ${Platform.isAndroid ? Constent.versionCodeAndroid : Constent.versionCodeIOS}",
+                    style: TextStyle(
+                      fontSize: 16.5,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Poppins',
+                      color: ColorsContent.whiteText,
+                    ),
+                  ),
+                ],
               ),
-            ],
-          );
-        }),
+            );
+          },
+        ),
       ),
     ),
   );
 }
+
+
+/// Reusable item widget
+Widget _menuItem({required String title, required VoidCallback onTap}) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 4.0),
+    child: GestureDetector(
+      onTap: onTap,
+      child: Align(
+        alignment: Alignment.topLeft,
+        child: Text(
+          title,
+          style: CustomTextStyles.titleMediumOnSecondaryContainerMedium
+              .copyWith(height: 2.19),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
+    ),
+  );
+}
+
 
 Future<void> shareImageWithText() async {
   // Load image from assets

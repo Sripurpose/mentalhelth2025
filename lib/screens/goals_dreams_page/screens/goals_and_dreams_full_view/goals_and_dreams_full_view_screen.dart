@@ -1503,7 +1503,8 @@ class _GoalAndDreamFullViewScreenState
     String? heading,
     required String id,
     required String goalStatus,
-  }) {
+  })
+  {
     return CustomAppBarNumu(
       backgroundColor: ColorsContent.homeBackGroundColor,
       leadingWidth: 36,

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -55,113 +56,148 @@ class GoalsDreamsProvider extends ChangeNotifier {
 
   int pageLoad = 1;
   int fetchGoalsAndDreamsStatus = 0;
-  Future fetchGoalsAndDreams({bool initial = false,String? pageNo,required BuildContext context}) async {
+  DateTime? fromDate;
+  DateTime? toDate;
+
+  String? formattedFromDate;
+  String? formattedToDate;
+
+  Future fetchGoalsAndDreams({
+    bool initial = false,
+    String? pageNo,
+    required BuildContext context,
+    bool fullList = false,
+    DateTime? fromDateParam,
+    DateTime? toDateParam,
+  }) async {
     fetchGoalsAndDreamsStatus = 0;
-    // try {
-    // goalsAndDreamsModel = null;
+
     String? token = await getUserTokenSharePref();
     goalsAndDreamsModelLoading = true;
+
     String deviceType = Platform.isAndroid ? 'android' : 'ios';
-    String? versionCode = '';
-    if (Platform.isAndroid) {
-      versionCode = Constent.versionCodeAndroid.isNotEmpty
-          ? Constent.versionCodeAndroid
-          : await getVersionSharePref(); // Fetch user ID if version code is empty
-    } else if (Platform.isIOS) {
-      versionCode = Constent.versionCodeIOS.isNotEmpty
-          ? Constent.versionCodeIOS
-          : await getVersionSharePref(); // Fetch user ID if version code is empty
-    }
+    String? versionCode = await getVersionSharePref();
+
     notifyListeners();
+
     Map<String, String> headers = {
       'device-type': deviceType,
       'version': versionCode.toString(),
-      'authorization': token!, // Assuming token is not null
+      'authorization': token!,
     };
+
+    // ---------------------------------------------
+    // PAGE RESET
+    // ---------------------------------------------
     if (initial) {
       pageLoad = 1;
+
+      /// IMPORTANT FIX!
       goalsanddreams.clear();
-      notifyListeners();
+      fullGoalsList.clear();
     } else {
       pageLoad += 1;
-      notifyListeners();
     }
 
     notifyListeners();
-    Uri url = Uri.parse(
-      UrlConstant.goalsanddreamsUrl(
-        page: pageNo ?? "1",
-      ),
-    );
-    final response = await http.get(
-      url,
-      headers: headers,
-    );
 
-    logger.i("fetchGoalsAndDreamsurl$url");
+    // ---------------------------------------------
+    // DATE FILTER LOGIC
+    // ---------------------------------------------
+    if (!fullList) {
+      final start = fromDateParam ?? this.fromDate ?? DateTime.now();
+      final end = toDateParam ?? this.toDate ?? DateTime.now();
 
-    log(response.body.toString(), name: " fetchGoalsAndDreams");
-    if (response.statusCode == 200) {
-      fetchGoalsAndDreamsStatus = response.statusCode;
-      goalsAndDreamsModel = goalsAndDreamsModelFromJson(response.body);
-      logger.w("goalsAndDreamsModel ${goalsAndDreamsModel}");
-     // if (initial) {
-      // Always clear before adding fresh data
+      this.fromDate = start;
+      this.toDate = end;
+
+      formattedFromDate = _formatDateForApi(start);
+      formattedToDate = _formatDateForApi(end);
+    } else {
+      this.fromDate = null;
+      this.toDate = null;
+      formattedFromDate = null;
+      formattedToDate = null;
+    }
+
+    // ---------------------------------------------
+    // POST BODY
+    // ---------------------------------------------
+    final body = {
+      "page_no": pageLoad.toString(),
+      if (!fullList) ...{
+        "from_date": formattedFromDate!,
+        "to_date": formattedToDate!,
+      },
+    };
+
+    Uri url = Uri.parse(UrlConstant.goalsanddreamsUrl(page: '1'));
+
+    logger.i("POST URL: $url");
+    logger.i("POST BODY: $body");
+
+    final response = await http.post(url, headers: headers, body: body);
+
+    log(response.body.toString(), name: "fetchGoalsAndDreams");
+
+    // ---------------------------------------------
+    // RESPONSE HANDLING
+    // ---------------------------------------------
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      fetchGoalsAndDreamsStatus = 200;
+
+      goalsAndDreamsModel =
+          goalsAndDreamsModelFromJson(response.body);
+
+      /// IMPORTANT FIX!
       goalsanddreams.clear();
       fullGoalsList.clear();
 
-      if (goalsAndDreamsModel != null) {
-        if (goalsAndDreamsModel!.goalsanddreams != null) {
-          fullGoalsList = List.from(goalsAndDreamsModel!.goalsanddreams!);
-          goalsanddreams = List.from(fullGoalsList);
-        }
+      if (goalsAndDreamsModel?.goalsanddreams != null &&
+          goalsAndDreamsModel!.goalsanddreams!.isNotEmpty) {
+
+        fullGoalsList = List.from(
+          goalsAndDreamsModel!.goalsanddreams!,
+        );
+
+        goalsanddreams = List.from(fullGoalsList);
       }
 
-
-      // if (goalsAndDreamsModel != null) {
-        //   if (goalsAndDreamsModel!.goalsanddreams != null) {
-        //     goalsanddreams.addAll(goalsAndDreamsModel!.goalsanddreams!);
-        //   }
-        // }
-
-
+      goalsAndDreamsModelLoading = false;
       notifyListeners();
     }
-    else if(response.statusCode == 503){
-      Future.delayed(Duration.zero, () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => const MaintenenceScreen(
-              title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
-              message: "",
-            ),
+
+    else if (response.statusCode == 503) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const MaintenenceScreen(
+            title:
+            "App is in maintenance mode, Please be patient, we'll be back in a couple of hours!",
+            message: "",
           ),
-        );
-      });
+        ),
+      );
     }
+
     else {
       fetchGoalsAndDreamsStatus = response.statusCode;
-      goalsAndDreamsModelLoading = false;
-      logger.w("goalsAndDreamsModelelse ${goalsAndDreamsModel}");
-      notifyListeners();
     }
-    fetchGoalsAndDreamsStatus = response.statusCode;
-    if(response.statusCode == 401){
+
+    if (response.statusCode == 401 || response.statusCode == 403) {
       TokenManager.setTokenStatus(true);
-      //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
     }
-    if(response.statusCode == 403){
-      TokenManager.setTokenStatus(true);
-      //CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
-    }
+
     goalsAndDreamsModelLoading = false;
     notifyListeners();
-    // } catch (e) {
-    //   log(e.toString());
-    //   goalsAndDreamsModelLoading = false;
-    //   notifyListeners();
-    // }
   }
+
+
+
+  // Helper function to format date as YYYY-MM-DD
+  String _formatDateForApi(DateTime date) {
+    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+  }
+
 
 
   void filterGoalsBySearch(String query) {
