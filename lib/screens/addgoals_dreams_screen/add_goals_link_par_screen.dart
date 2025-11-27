@@ -147,17 +147,70 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
     // Step 5: Handle shared data (NOW sharedData should be populated)
     if (sharedData != null && (sharedData!.url ?? '').isNotEmpty) {
       try {
-        adDreamsGoalsProvider.detectedLinks.clear();
-        adDreamsGoalsProvider.detectedLinks.add(sharedData!.url!);
-        adDreamsGoalsProvider.editDetectedLinks.clear();
-        adDreamsGoalsProvider.editDetectedLinks.add(sharedData!.url!);
-        debugPrint('✅ Shared data loaded: ${sharedData!.url}');
+        String raw = sharedData!.url!;
+
+        // Match common social media URLs including YouTube watch?v= URLs
+        // final RegExp socialUrlRegex = RegExp(
+        //   r'(https?:\/\/(?:www\.)?(?:instagram\.com|youtu\.be|youtube\.com\/watch\?v=[^&\s]+|youtube\.com|tiktok\.com|twitter\.com|x\.com|facebook\.com|linkedin\.com)[^\s]*)',
+        //   caseSensitive: false,
+        // );
+
+        final RegExp socialUrlRegex = RegExp(
+          r'(https?:\/\/(?:www\.)?(?:'
+          r'instagram\.com|youtu\.be|youtube\.com|tiktok\.com|twitter\.com|x\.com|facebook\.com|linkedin\.com|pinterest\.com|snapchat\.com|reddit\.com|wa\.me|t\.me|discord\.gg|medium\.com|github\.com|vimeo\.com|twitch\.tv)'
+          r'[^\s]*)',
+          caseSensitive: false,
+        );
+
+        final match = socialUrlRegex.firstMatch(raw);
+
+        if (match != null) {
+          String cleanUrl = match.group(0)!;
+
+          // Remove unwanted query parameters except YouTube's 'v' parameter
+          if (cleanUrl.contains("?")) {
+            if (cleanUrl.contains("youtube.com/watch")) {
+              // Keep ?v=xxxx
+              final uri = Uri.parse(cleanUrl);
+              final vParam = uri.queryParameters['v'];
+              if (vParam != null) {
+                cleanUrl = "https://www.youtube.com/watch?v=$vParam";
+              }
+            } else {
+              // Remove all other query parameters
+              cleanUrl = cleanUrl.split("?").first;
+            }
+          }
+
+          // Remove trailing slash
+          if (cleanUrl.endsWith("/")) {
+            cleanUrl = cleanUrl.substring(0, cleanUrl.length - 1);
+          }
+
+          // Save cleaned URL
+          sharedData = SharedContentData(
+            text: sharedData!.text,
+            url: cleanUrl,
+            sharedText: sharedData!.sharedText,
+            imagePaths: sharedData!.imagePaths,
+            timestamp: sharedData!.timestamp,
+          );
+
+          // Save to provider
+          adDreamsGoalsProvider.detectedLinks.clear();
+          adDreamsGoalsProvider.detectedLinks.add(cleanUrl);
+          adDreamsGoalsProvider.editDetectedLinks.clear();
+          adDreamsGoalsProvider.editDetectedLinks.add(cleanUrl);
+
+          debugPrint("✅ Shared data loaded (clean): $cleanUrl");
+        } else {
+          debugPrint("⚠️ No valid social media URL found in shared data");
+        }
       } catch (e) {
-        debugPrint('❌ Shared data error: $e');
+        debugPrint("❌ Shared data error: $e");
       }
-    } else {
-      debugPrint('⚠️ No shared data available');
     }
+
 
     // Step 6: Load async data in background (don't wait for it)
     _loadSharedContentAsync();
