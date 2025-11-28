@@ -267,7 +267,7 @@ class _JournalListPageState extends State<JournalListPage> {
 
   Future<void> _isTokenExpired() async {
    // await homeProvider.fetchChartView(context);
-    await homeProvider.fetchJournals(initial: true,context: context);
+    await homeProvider.fetchJournals(initial: true,context: context,fullList: true);
     await homeProvider.fetchJournalsGridView(initial: true,context: context);
     await editProfileProvider.fetchUserProfile(context);
     tokenStatus = TokenManager.checkTokenExpiry();
@@ -472,12 +472,13 @@ class _JournalListPageState extends State<JournalListPage> {
           // Search TextField
           Expanded(
             child: TextField(
-              //controller: goalsDreamsProvider.c,
               onChanged: (value) {
-                journalListProvider.filterJournalsBySearch(value);
+                homeProvider.searchQuery = value;
+                homeProvider.filterJournalsBySearch(value);
               },
+              controller: homeProvider.searchController,
               decoration: InputDecoration(
-                hintText: "search goals",
+                hintText: "search journals",
                 hintStyle:TextStyle(
                   color: ColorsContent.searchHint,
                   fontSize: 14,
@@ -490,12 +491,54 @@ class _JournalListPageState extends State<JournalListPage> {
             ),
           ),
 
+          // ❌ CLEAR ICON
+          Consumer<HomeProvider>(
+            builder: (context, homeProvider, _) {
+              return homeProvider.searchQuery.isNotEmpty
+                  ? GestureDetector(
+                onTap: () {
+                  homeProvider.searchController.clear();
+                  homeProvider.filterJournalsBySearch("");
+                },
+                child: Container(
+                  height: 32,
+                  width: 32,
+                  decoration: BoxDecoration(
+                    color: ColorsContent.newThemeColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Center(
+                    child: Icon(
+                      Icons.close_sharp,
+                      size: 25,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              )
+                  : const SizedBox.shrink();
+            },
+          ),
+
+          const SizedBox(width: 10),
+
           // Date Picker Button
           GestureDetector(
             onTap: () async {
               DateRangePickerJournalListScreen.show(
                 context,
-                onDateRangeSelected: (startDate, endDate) {
+                onDateRangeSelected: (startDate, endDate) async {
+                  await homeProvider.fetchJournals(
+                    initial: true,
+                    context: context,
+                    fromDateParam: startDate,
+                    toDateParam: endDate,
+                    fullList: false,
+                  );
+
+                  homeProvider.filterJournalsBySearch(
+                    homeProvider.searchQuery,
+                  );
                 },
               );
             },

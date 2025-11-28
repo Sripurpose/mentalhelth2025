@@ -47,7 +47,8 @@ import 'model/all_Goals_List_Link_Response_Model.dart';
 import 'model/id_model.dart';
 import 'provider/ad_goals_dreams_provider.dart';
 
-const MethodChannel shareDataChannel = MethodChannel('com.numuapp.numuapp/shareData');
+const MethodChannel shareDataChannel =
+    MethodChannel('com.numuapp.numuapp/shareData');
 
 class AddGoalsLinkParScreen extends StatefulWidget {
   const AddGoalsLinkParScreen({
@@ -108,10 +109,14 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
     // Step 3: Get provider instances (synchronous, safe)
     try {
       homeProvider = Provider.of<HomeProvider>(context, listen: false);
-      mentalStrengthEditProvider = Provider.of<MentalStrengthEditProvider>(context, listen: false);
-      dashBoardProvider = Provider.of<DashBoardProvider>(context, listen: false);
-      editProfileProvider = Provider.of<EditProfileProvider>(context, listen: false);
-      adDreamsGoalsProvider = Provider.of<AdDreamsGoalsProvider>(context, listen: false);
+      mentalStrengthEditProvider =
+          Provider.of<MentalStrengthEditProvider>(context, listen: false);
+      dashBoardProvider =
+          Provider.of<DashBoardProvider>(context, listen: false);
+      editProfileProvider =
+          Provider.of<EditProfileProvider>(context, listen: false);
+      adDreamsGoalsProvider =
+          Provider.of<AdDreamsGoalsProvider>(context, listen: false);
       debugPrint('✅ Providers initialized');
     } catch (e) {
       debugPrint('❌ Provider initialization error: $e');
@@ -210,7 +215,6 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
       }
     }
 
-
     // Step 6: Load async data in background (don't wait for it)
     _loadSharedContentAsync();
 
@@ -231,9 +235,10 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
     debugPrint('📍 Loading injected shared content synchronously');
 
     try {
-      final hasInjected = (widget.sharedUrl != null && widget.sharedUrl!.isNotEmpty) ||
-          (widget.sharedText != null && widget.sharedText!.isNotEmpty) ||
-          ((widget.sharedImages?.isNotEmpty) ?? false);
+      final hasInjected =
+          (widget.sharedUrl != null && widget.sharedUrl!.isNotEmpty) ||
+              (widget.sharedText != null && widget.sharedText!.isNotEmpty) ||
+              ((widget.sharedImages?.isNotEmpty) ?? false);
 
       if (hasInjected) {
         debugPrint('✅ Injected content found');
@@ -241,7 +246,8 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
           text: null,
           url: widget.sharedUrl,
           sharedText: widget.sharedText,
-          imagePaths: List<String>.from(widget.sharedImages ?? const <String>[]),
+          imagePaths:
+              List<String>.from(widget.sharedImages ?? const <String>[]),
           timestamp: DateTime.now().millisecondsSinceEpoch ~/ 1000,
         );
         debugPrint('✅ Injected data set: url=${sharedData!.url}');
@@ -264,17 +270,18 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
 
     try {
       // Only load from platform if no injected data
-      final hasInjected = (widget.sharedUrl != null && widget.sharedUrl!.isNotEmpty) ||
-          (widget.sharedText != null && widget.sharedText!.isNotEmpty) ||
-          ((widget.sharedImages?.isNotEmpty) ?? false);
+      final hasInjected =
+          (widget.sharedUrl != null && widget.sharedUrl!.isNotEmpty) ||
+              (widget.sharedText != null && widget.sharedText!.isNotEmpty) ||
+              ((widget.sharedImages?.isNotEmpty) ?? false);
 
       if (hasInjected) {
         debugPrint('⏭️ Skipping platform channel - using injected data');
         return;
       }
 
-      final Map<dynamic, dynamic>? result =
-      await shareDataChannel.invokeMethod<Map<dynamic, dynamic>>('getSharedData');
+      final Map<dynamic, dynamic>? result = await shareDataChannel
+          .invokeMethod<Map<dynamic, dynamic>>('getSharedData');
 
       if (result == null) {
         debugPrint('⚠️ No data from platform channel');
@@ -294,7 +301,8 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
       if (Platform.isIOS && imageCount > 0) {
         imagePaths = await _getImagePathsFromAppGroup(imageCount);
       } else if (json['images'] is List) {
-        imagePaths = List<String>.from((json['images'] as List).map((e) => e.toString()));
+        imagePaths = List<String>.from(
+            (json['images'] as List).map((e) => e.toString()));
       }
 
       sharedData = SharedContentData(
@@ -424,8 +432,8 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
     try {
       if (!mounted) return;
 
-      await homeProvider.fetchJournals(initial: true, context: context);
-
+      await homeProvider.fetchJournals(
+          initial: true, context: context, fullList: true);
       if (!mounted) return;
 
       tokenStatus = TokenManager.checkTokenExpiry();
@@ -442,8 +450,10 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
 
   void applyRiskLogicInit() {
     try {
-      EditProfileProvider editProfileProvider = Provider.of<EditProfileProvider>(context, listen: false);
-      AdDreamsGoalsProvider adDreamsGoalsProvider = Provider.of<AdDreamsGoalsProvider>(context, listen: false);
+      EditProfileProvider editProfileProvider =
+          Provider.of<EditProfileProvider>(context, listen: false);
+      AdDreamsGoalsProvider adDreamsGoalsProvider =
+          Provider.of<AdDreamsGoalsProvider>(context, listen: false);
 
       adDreamsGoalsProvider.alreadyRecordedFilePath.clear();
       adDreamsGoalsProvider.alreadyPickedImages.clear();
@@ -452,18 +462,24 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
       final goal = mentalStrengthEditProvider.goalDetailModel;
       if (goal == null) return;
 
-      adDreamsGoalsProvider.nameEditTextController.text = goal.goals?.goalTitle ?? '';
-      adDreamsGoalsProvider.commentEditTextController.text = goal.goals?.goalDetails ?? '';
+      adDreamsGoalsProvider.nameEditTextController.text =
+          goal.goals?.goalTitle ?? '';
+      adDreamsGoalsProvider.commentEditTextController.text =
+          goal.goals?.goalDetails ?? '';
 
       if (goal.goals?.gemMedia != null) {
         for (var media in goal.goals!.gemMedia!) {
           if (media.mediaType == 'audio') {
             adDreamsGoalsProvider.alreadyRecordedFilePath.add(
-              AllModel(id: media.mediaId.toString(), value: media.gemMedia.toString()),
+              AllModel(
+                  id: media.mediaId.toString(),
+                  value: media.gemMedia.toString()),
             );
           } else if (media.mediaType == 'image' || media.mediaType == 'video') {
             adDreamsGoalsProvider.alreadyPickedImages.add(
-              AllModel(id: media.mediaId.toString(), value: media.gemMedia.toString()),
+              AllModel(
+                  id: media.mediaId.toString(),
+                  value: media.gemMedia.toString()),
             );
           }
         }
@@ -475,10 +491,14 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
             : int.parse(goal.goals!.goalEnddate!),
       );
 
-      adDreamsGoalsProvider.selectedLocationName = goal.goals?.location?.locationName ?? '';
-      adDreamsGoalsProvider.selectedLatitude = goal.goals?.location?.locationLatitude ?? '';
-      adDreamsGoalsProvider.selectedLongitude = goal.goals?.location?.locationLongitude ?? '';
-      adDreamsGoalsProvider.selectedLocationAddress = goal.goals?.location?.locationAddress ?? '';
+      adDreamsGoalsProvider.selectedLocationName =
+          goal.goals?.location?.locationName ?? '';
+      adDreamsGoalsProvider.selectedLatitude =
+          goal.goals?.location?.locationLatitude ?? '';
+      adDreamsGoalsProvider.selectedLongitude =
+          goal.goals?.location?.locationLongitude ?? '';
+      adDreamsGoalsProvider.selectedLocationAddress =
+          goal.goals?.location?.locationAddress ?? '';
 
       final selectedCat = Category(
         id: goal.goals?.categoryId?.toString(),
@@ -505,11 +525,11 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
     }
   }
 
-
   Future<List<String>> _getImagePathsFromAppGroup(int imageCount) async {
     final List<String> paths = [];
     try {
-      final Directory baseDir = Directory('/var/mobile/Containers/Shared/AppGroup');
+      final Directory baseDir =
+          Directory('/var/mobile/Containers/Shared/AppGroup');
       if (!baseDir.existsSync()) return paths;
 
       for (final entity in baseDir.listSync()) {
@@ -526,8 +546,6 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
     return paths;
   }
 
-
-
   @override
   void dispose() {
     _goalNameFocusNode.dispose();
@@ -537,535 +555,831 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final adDreamsGoalsProvider = Provider.of<AdDreamsGoalsProvider>(context, listen: false);
+    final adDreamsGoalsProvider =
+        Provider.of<AdDreamsGoalsProvider>(context, listen: false);
     Size size = MediaQuery.of(context).size;
 
     return tokenStatus == false
         ? WillPopScope(
-      onWillPop: () async {
-        // ❌ Prevent going back
-        return false;
-      },
-          child: SafeArea(
-                child: Scaffold(
-          appBar: buildAppBarNumuEditGoals(
-            context,
-            size,
-            heading: adDreamsGoalsProvider.selectedOption == "Add to Existing Goal"
-                ? "Share Goal & Dreams"
-                : "Share Goal & Dreams",
-          ),
-          body: Stack(
-            children: [
-              Container(
-                width: size.width,
-                height: size.height,
-                decoration: BoxDecoration(
-                  color: ColorsContent.homeBackGroundColor,
+            onWillPop: () async {
+              // ❌ Prevent going back
+              return false;
+            },
+            child: SafeArea(
+              child: Scaffold(
+                appBar: buildAppBarNumuEditGoals(
+                  context,
+                  size,
+                  heading: adDreamsGoalsProvider.selectedOption ==
+                          "Add to Existing Goal"
+                      ? "Share Goal & Dreams"
+                      : "Share Goal & Dreams",
                 ),
-                child: Form(
-                  key: _formKey,
-                  child: Container(
-                    width: double.maxFinite,
-                    padding: const EdgeInsets.symmetric(horizontal: 27, vertical: 6),
-                    child: Consumer2<AdDreamsGoalsProvider, MentalStrengthEditProvider>(
-                      builder: (context, adDreamsGoalsProvider, mentalStrengthEditProvider, _) {
-                        return SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // ✅ FIRST DROPDOWN - ALWAYS ENABLED
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                                child: Container(
-                                  decoration: ShapeDecoration(
-                                    color: ColorsContent.linkDropDownBackGroundColor,
-                                    shape: RoundedRectangleBorder(
-                                      side: const BorderSide(width: 0.8, color: Colors.transparent),
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                  ),
-                                  child: DropdownButtonFormField<String>(
-                                    hint: Text("Select Category", style: CustomTextStyles.bodySmallGray700),
-                                    style: CustomTextStyles.bodySmallGray700,
-                                    iconEnabledColor: ColorsContent.newThemeColor,
-                                    iconDisabledColor: ColorsContent.newThemeColor,
-                                    value: adDreamsGoalsProvider.goalOptions.contains(adDreamsGoalsProvider.selectedOption)
-                                        ? adDreamsGoalsProvider.selectedOption
-                                        : (adDreamsGoalsProvider.goalOptions.contains("Create New Goal") ? "Create New Goal" : null),
-                                    decoration: const InputDecoration(
-                                      border: InputBorder.none,
-                                      contentPadding: EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-                                    ),
-                                    onChanged: (String? newValue) {
-                                      setState(() {
-                                        adDreamsGoalsProvider.selectedOption = newValue;
+                body: Stack(
+                  children: [
+                    Container(
+                      width: size.width,
+                      height: size.height,
+                      decoration: BoxDecoration(
+                        color: ColorsContent.homeBackGroundColor,
+                      ),
+                      child: Form(
+                        key: _formKey,
+                        child: Container(
+                          width: double.maxFinite,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 27, vertical: 6),
+                          child: Consumer2<AdDreamsGoalsProvider,
+                              MentalStrengthEditProvider>(
+                            builder: (context, adDreamsGoalsProvider,
+                                mentalStrengthEditProvider, _) {
+                              return SingleChildScrollView(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // ✅ FIRST DROPDOWN - ALWAYS ENABLED
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 0.0),
+                                      child: Container(
+                                        decoration: ShapeDecoration(
+                                          color: ColorsContent
+                                              .linkDropDownBackGroundColor,
+                                          shape: RoundedRectangleBorder(
+                                            side: const BorderSide(
+                                                width: 0.8,
+                                                color: Colors.transparent),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                        ),
+                                        child: DropdownButtonFormField<String>(
+                                          hint: Text("Select Category",
+                                              style: CustomTextStyles
+                                                  .bodySmallGray700),
+                                          style:
+                                              CustomTextStyles.bodySmallGray700,
+                                          iconEnabledColor:
+                                              ColorsContent.newThemeColor,
+                                          iconDisabledColor:
+                                              ColorsContent.newThemeColor,
+                                          value: adDreamsGoalsProvider
+                                                  .goalOptions
+                                                  .contains(
+                                                      adDreamsGoalsProvider
+                                                          .selectedOption)
+                                              ? adDreamsGoalsProvider
+                                                  .selectedOption
+                                              : (adDreamsGoalsProvider
+                                                      .goalOptions
+                                                      .contains(
+                                                          "Create New Goal")
+                                                  ? "Create New Goal"
+                                                  : null),
+                                          decoration: const InputDecoration(
+                                            border: InputBorder.none,
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                                    horizontal: 18,
+                                                    vertical: 10),
+                                          ),
+                                          onChanged: (String? newValue) {
+                                            setState(() {
+                                              adDreamsGoalsProvider
+                                                  .selectedOption = newValue;
 
-                                        // ✅ When switching back to "Create New Goal", clear everything except shared link
-                                        if (newValue == "Create New Goal") {
-                                          adDreamsGoalsProvider.selectedExistingGoal = null;
-                                          adDreamsGoalsProvider.nameEditTextController.text = "";
-                                          adDreamsGoalsProvider.commentEditTextController.text = "";
-                                          adDreamsGoalsProvider.selectedDate = "";
+                                              // ✅ When switching back to "Create New Goal", clear everything except shared link
+                                              if (newValue ==
+                                                  "Create New Goal") {
+                                                adDreamsGoalsProvider
+                                                        .selectedExistingGoal =
+                                                    null;
+                                                adDreamsGoalsProvider
+                                                    .nameEditTextController
+                                                    .text = "";
+                                                adDreamsGoalsProvider
+                                                    .commentEditTextController
+                                                    .text = "";
+                                                adDreamsGoalsProvider
+                                                    .selectedDate = "";
 
-                                          // Clear all media
-                                          adDreamsGoalsProvider.recordedFilePath.clear();
-                                          adDreamsGoalsProvider.pickedImages.clear();
-                                          adDreamsGoalsProvider.takedImages.clear();
-                                          adDreamsGoalsProvider.alreadyRecordedFilePath.clear();
-                                          adDreamsGoalsProvider.alreadyPickedImages.clear();
+                                                // Clear all media
+                                                adDreamsGoalsProvider
+                                                    .recordedFilePath
+                                                    .clear();
+                                                adDreamsGoalsProvider
+                                                    .pickedImages
+                                                    .clear();
+                                                adDreamsGoalsProvider
+                                                    .takedImages
+                                                    .clear();
+                                                adDreamsGoalsProvider
+                                                    .alreadyRecordedFilePath
+                                                    .clear();
+                                                adDreamsGoalsProvider
+                                                    .alreadyPickedImages
+                                                    .clear();
 
-                                          // Clear location
-                                          adDreamsGoalsProvider.selectedLocationName = "";
-                                          adDreamsGoalsProvider.selectedLatitude = "";
-                                          adDreamsGoalsProvider.selectedLongitude = "";
-                                          adDreamsGoalsProvider.selectedLocationAddress = "";
+                                                // Clear location
+                                                adDreamsGoalsProvider
+                                                    .selectedLocationName = "";
+                                                adDreamsGoalsProvider
+                                                    .selectedLatitude = "";
+                                                adDreamsGoalsProvider
+                                                    .selectedLongitude = "";
+                                                adDreamsGoalsProvider
+                                                    .selectedLocationAddress = "";
 
-                                          // Clear actions
-                                          adDreamsGoalsProvider.goalModelIdName.clear();
+                                                // Clear actions
+                                                adDreamsGoalsProvider
+                                                    .goalModelIdName
+                                                    .clear();
 
-                                          // Clear category
-                                          editProfileProvider.categorys = null;
-                                          editProfileProvider.selectedCategory = null;
-                                          editProfileProvider.interestsValueController.text = "";
+                                                // Clear category
+                                                editProfileProvider.categorys =
+                                                    null;
+                                                editProfileProvider
+                                                    .selectedCategory = null;
+                                                editProfileProvider
+                                                    .interestsValueController
+                                                    .text = "";
 
-                                          adDreamsGoalsProvider.mediaSelected = 0;
+                                                adDreamsGoalsProvider
+                                                    .mediaSelected = 0;
 
-                                          // ✅ Keep ONLY the shared link
-                                          if (sharedData != null && (sharedData!.url ?? '').isNotEmpty) {
-                                            if (!adDreamsGoalsProvider.detectedLinks.contains(sharedData!.url!)) {
-                                              adDreamsGoalsProvider.detectedLinks.clear();
-                                              adDreamsGoalsProvider.detectedLinks.add(sharedData!.url!);
-                                            }
-                                          }
+                                                // ✅ Keep ONLY the shared link
+                                                if (sharedData != null &&
+                                                    (sharedData!.url ?? '')
+                                                        .isNotEmpty) {
+                                                  if (!adDreamsGoalsProvider
+                                                      .detectedLinks
+                                                      .contains(
+                                                          sharedData!.url!)) {
+                                                    adDreamsGoalsProvider
+                                                        .detectedLinks
+                                                        .clear();
+                                                    adDreamsGoalsProvider
+                                                        .detectedLinks
+                                                        .add(sharedData!.url!);
+                                                  }
+                                                }
 
-                                          adDreamsGoalsProvider.editDetectedLinks.clear();
-                                          unixTimestamp = null;
-                                        }
+                                                adDreamsGoalsProvider
+                                                    .editDetectedLinks
+                                                    .clear();
+                                                unixTimestamp = null;
+                                              }
 
-                                        if (newValue != "Add to Existing Goal") {
-                                          adDreamsGoalsProvider.selectedExistingGoal = null;
-                                        }
-                                      });
-                                    },
-                                    items: (adDreamsGoalsProvider.goalListLink.isEmpty
-                                        ? ["Create New Goal"]
-                                        : [
-                                      if (!adDreamsGoalsProvider.goalOptions.contains("Create New Goal")) "Create New Goal",
-                                      ...adDreamsGoalsProvider.goalOptions,
-                                    ])
-                                        .toSet()
-                                        .map((String option) {
-                                      return DropdownMenuItem<String>(
-                                        value: option,
-                                        child: Text(option),
-                                      );
-                                    }).toList(),
-                                  ),
-                                ),
-                              ),
-
-                              const SizedBox(height: 5),
-
-                              // SECOND DROPDOWN (only when needed)
-                              if (adDreamsGoalsProvider.selectedOption == "Add to Existing Goal") ...[
-                                const SizedBox(height: 10),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                                  child: Container(
-                                    decoration: ShapeDecoration(
-                                      color: Colors.white,
-                                      shape: RoundedRectangleBorder(
-                                        side: const BorderSide(width: 0.8, color: Colors.transparent),
-                                        borderRadius: BorderRadius.circular(8.0),
-                                      ),
-                                    ),
-                                    child: IgnorePointer(
-                                      ignoring: _isLoadingNew,
-                                      child: DropdownButtonFormField<String>(
-                                        hint: Text("Select Existing Goal", style: CustomTextStyles.bodySmallGray700),
-                                        value: (() {
-                                          final selected = adDreamsGoalsProvider.selectedExistingGoal;
-                                          final list = adDreamsGoalsProvider.goalListLink;
-                                          if (selected == null || list.isEmpty) return null;
-
-                                          final exists = list.any((g) => g.id?.toString() == selected);
-                                          if (exists) {
-                                            return selected;
-                                          } else {
-                                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                                              if (mounted) {
-                                                adDreamsGoalsProvider.selectedExistingGoal = null;
+                                              if (newValue !=
+                                                  "Add to Existing Goal") {
+                                                adDreamsGoalsProvider
+                                                        .selectedExistingGoal =
+                                                    null;
                                               }
                                             });
-                                            return null;
-                                          }
-                                        })(),
-                                        iconEnabledColor: ColorsContent.newThemeColor,
-                                        iconDisabledColor: ColorsContent.newThemeColor,
-                                        decoration: const InputDecoration(
-                                          border: InputBorder.none,
-                                          contentPadding: EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-                                        ),
-                                        items: (() {
-                                          final list = adDreamsGoalsProvider.goalListLink;
-                                          final Map<String, dynamic> uniqueGoals = {};
-                                          for (var goalItem in list) {
-                                            if (goalItem.id != null) {
-                                              uniqueGoals[goalItem.id!.toString()] = goalItem;
-                                            }
-                                          }
-                                          return uniqueGoals.entries.map((entry) {
-                                            final goalItem = entry.value;
+                                          },
+                                          items: (adDreamsGoalsProvider
+                                                      .goalListLink.isEmpty
+                                                  ? ["Create New Goal"]
+                                                  : [
+                                                      if (!adDreamsGoalsProvider
+                                                          .goalOptions
+                                                          .contains(
+                                                              "Create New Goal"))
+                                                        "Create New Goal",
+                                                      ...adDreamsGoalsProvider
+                                                          .goalOptions,
+                                                    ])
+                                              .toSet()
+                                              .map((String option) {
                                             return DropdownMenuItem<String>(
-                                              value: entry.key,
-                                              child: Text(
-                                                goalItem.title ?? 'Unnamed Goal',
-                                                style: CustomTextStyles.bodySmallGray700,
-                                              ),
+                                              value: option,
+                                              child: Text(option),
                                             );
-                                          }).toList();
-                                        })(),
-                                        onChanged: (String? newValue) async {
-                                          if (newValue == null || newValue.isEmpty) return;
-
-                                          setState(() {
-                                            adDreamsGoalsProvider.selectedExistingGoal = newValue;
-                                            _isLoadingNew = true;
-                                          });
-
-                                          try {
-                                            adDreamsGoalsProvider.goalModelIdName.clear();
-                                            await mentalStrengthEditProvider.fetchGoalDetails(
-                                              goalId: newValue,
-                                              context: context,
-                                            );
-                                            applyRiskLogicInit();
-                                          } catch (e) {
-                                            debugPrint("⚠️ Error fetching goal details: $e");
-                                          } finally {
-                                            if (mounted) {
-                                              setState(() {
-                                                _isLoadingNew = false;
-                                              });
-                                            }
-                                          }
-                                        },
+                                          }).toList(),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                              ],
 
-                              const SizedBox(height: 15),
-                              _buildNameEditText(context),
-                              const SizedBox(height: 15),
+                                    const SizedBox(height: 5),
 
-                              Consumer<EditProfileProvider>(
-                                builder: (context, editProfileProvider, _) {
-                                  final categoryList = editProfileProvider.getCategoryModel?.category ?? [];
-                                  Category? selectedCategory = editProfileProvider.selectedCategory;
-
-                                  if (selectedCategory != null && categoryList.isNotEmpty) {
-                                    final match = categoryList.firstWhere(
-                                          (cat) => cat.id.toString() == selectedCategory?.id.toString(),
-                                      orElse: () => Category(id: '', categoryName: '', categoryImg: ''),
-                                    );
-                                    if (match.id == '') {
-                                      selectedCategory = null;
-                                    } else {
-                                      selectedCategory = match;
-                                    }
-                                  }
-
-                                  return Container(
-                                    height: size.height * 0.055,
-                                    padding: const EdgeInsets.only(left: 10, right: 5),
-                                    decoration: ShapeDecoration(
-                                      color: Colors.white,
-                                      shape: RoundedRectangleBorder(
-                                        side: const BorderSide(width: 0.8, color: Colors.transparent),
-                                        borderRadius: BorderRadius.circular(8.0),
-                                      ),
-                                    ),
-                                    child: categoryList.isEmpty
-                                        ? const SizedBox()
-                                        : DropdownButton<Category>(
-                                      value: selectedCategory,
-                                      items: categoryList.map((Category value) {
-                                        return DropdownMenuItem<Category>(
-                                          value: value,
-                                          child: Text(
-                                            value.categoryName ?? '',
-                                            style: CustomTextStyles.bodySmallGray700,
+                                    // SECOND DROPDOWN (only when needed)
+                                    if (adDreamsGoalsProvider.selectedOption ==
+                                        "Add to Existing Goal") ...[
+                                      const SizedBox(height: 10),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 0.0),
+                                        child: Container(
+                                          decoration: ShapeDecoration(
+                                            color: Colors.white,
+                                            shape: RoundedRectangleBorder(
+                                              side: const BorderSide(
+                                                  width: 0.8,
+                                                  color: Colors.transparent),
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                            ),
                                           ),
-                                        );
-                                      }).toList(),
-                                      hint: Text(
-                                        editProfileProvider.interestsValueController.text.isEmpty
-                                            ? 'Select a category'
-                                            : editProfileProvider.interestsValueController.text,
-                                        style: CustomTextStyles.bodySmallGray700,
+                                          child: IgnorePointer(
+                                            ignoring: _isLoadingNew,
+                                            child:
+                                                DropdownButtonFormField<String>(
+                                              hint: Text("Select Existing Goal",
+                                                  style: CustomTextStyles
+                                                      .bodySmallGray700),
+                                              value: (() {
+                                                final selected =
+                                                    adDreamsGoalsProvider
+                                                        .selectedExistingGoal;
+                                                final list =
+                                                    adDreamsGoalsProvider
+                                                        .goalListLink;
+                                                if (selected == null ||
+                                                    list.isEmpty) return null;
+
+                                                final exists = list.any((g) =>
+                                                    g.id?.toString() ==
+                                                    selected);
+                                                if (exists) {
+                                                  return selected;
+                                                } else {
+                                                  WidgetsBinding.instance
+                                                      .addPostFrameCallback(
+                                                          (_) {
+                                                    if (mounted) {
+                                                      adDreamsGoalsProvider
+                                                              .selectedExistingGoal =
+                                                          null;
+                                                    }
+                                                  });
+                                                  return null;
+                                                }
+                                              })(),
+                                              iconEnabledColor:
+                                                  ColorsContent.newThemeColor,
+                                              iconDisabledColor:
+                                                  ColorsContent.newThemeColor,
+                                              decoration: const InputDecoration(
+                                                border: InputBorder.none,
+                                                contentPadding:
+                                                    EdgeInsets.symmetric(
+                                                        horizontal: 18,
+                                                        vertical: 10),
+                                              ),
+                                              items: (() {
+                                                final list =
+                                                    adDreamsGoalsProvider
+                                                        .goalListLink;
+                                                final Map<String, dynamic>
+                                                    uniqueGoals = {};
+                                                for (var goalItem in list) {
+                                                  if (goalItem.id != null) {
+                                                    uniqueGoals[goalItem.id!
+                                                        .toString()] = goalItem;
+                                                  }
+                                                }
+                                                return uniqueGoals.entries
+                                                    .map((entry) {
+                                                  final goalItem = entry.value;
+                                                  return DropdownMenuItem<
+                                                      String>(
+                                                    value: entry.key,
+                                                    child: Text(
+                                                      goalItem.title ??
+                                                          'Unnamed Goal',
+                                                      style: CustomTextStyles
+                                                          .bodySmallGray700,
+                                                    ),
+                                                  );
+                                                }).toList();
+                                              })(),
+                                              onChanged:
+                                                  (String? newValue) async {
+                                                if (newValue == null ||
+                                                    newValue.isEmpty) return;
+
+                                                setState(() {
+                                                  adDreamsGoalsProvider
+                                                          .selectedExistingGoal =
+                                                      newValue;
+                                                  _isLoadingNew = true;
+                                                });
+
+                                                try {
+                                                  adDreamsGoalsProvider
+                                                      .goalModelIdName
+                                                      .clear();
+                                                  await mentalStrengthEditProvider
+                                                      .fetchGoalDetails(
+                                                    goalId: newValue,
+                                                    context: context,
+                                                  );
+                                                  applyRiskLogicInit();
+                                                } catch (e) {
+                                                  debugPrint(
+                                                      "⚠️ Error fetching goal details: $e");
+                                                } finally {
+                                                  if (mounted) {
+                                                    setState(() {
+                                                      _isLoadingNew = false;
+                                                    });
+                                                  }
+                                                }
+                                              },
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                      borderRadius: BorderRadius.circular(10),
-                                      underline: const SizedBox(),
-                                      isExpanded: true,
-                                      iconEnabledColor: ColorsContent.newThemeColor,
-                                      iconDisabledColor: ColorsContent.newThemeColor,
-                                      onChanged: (value) {
-                                        if (value != null) {
-                                          editProfileProvider.selectedCategory = value;
-                                          editProfileProvider.selectCategory(
-                                            value: value.categoryName.toString(),
-                                            mainCategory: value,
+                                    ],
+
+                                    const SizedBox(height: 15),
+                                    _buildNameEditText(context),
+                                    const SizedBox(height: 15),
+
+                                    Consumer<EditProfileProvider>(
+                                      builder:
+                                          (context, editProfileProvider, _) {
+                                        final categoryList = editProfileProvider
+                                                .getCategoryModel?.category ??
+                                            [];
+                                        Category? selectedCategory =
+                                            editProfileProvider
+                                                .selectedCategory;
+
+                                        if (selectedCategory != null &&
+                                            categoryList.isNotEmpty) {
+                                          final match = categoryList.firstWhere(
+                                            (cat) =>
+                                                cat.id.toString() ==
+                                                selectedCategory?.id.toString(),
+                                            orElse: () => Category(
+                                                id: '',
+                                                categoryName: '',
+                                                categoryImg: ''),
                                           );
-                                          _isTokenExpired();
-                                          editProfileProvider.notifyListeners();
+                                          if (match.id == '') {
+                                            selectedCategory = null;
+                                          } else {
+                                            selectedCategory = match;
+                                          }
                                         }
+
+                                        return Container(
+                                          height: size.height * 0.055,
+                                          padding: const EdgeInsets.only(
+                                              left: 10, right: 5),
+                                          decoration: ShapeDecoration(
+                                            color: Colors.white,
+                                            shape: RoundedRectangleBorder(
+                                              side: const BorderSide(
+                                                  width: 0.8,
+                                                  color: Colors.transparent),
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                            ),
+                                          ),
+                                          child: categoryList.isEmpty
+                                              ? const SizedBox()
+                                              : DropdownButton<Category>(
+                                                  value: selectedCategory,
+                                                  items: categoryList
+                                                      .map((Category value) {
+                                                    return DropdownMenuItem<
+                                                        Category>(
+                                                      value: value,
+                                                      child: Text(
+                                                        value.categoryName ??
+                                                            '',
+                                                        style: CustomTextStyles
+                                                            .bodySmallGray700,
+                                                      ),
+                                                    );
+                                                  }).toList(),
+                                                  hint: Text(
+                                                    editProfileProvider
+                                                            .interestsValueController
+                                                            .text
+                                                            .isEmpty
+                                                        ? 'Select a category'
+                                                        : editProfileProvider
+                                                            .interestsValueController
+                                                            .text,
+                                                    style: CustomTextStyles
+                                                        .bodySmallGray700,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  underline: const SizedBox(),
+                                                  isExpanded: true,
+                                                  iconEnabledColor:
+                                                      ColorsContent
+                                                          .newThemeColor,
+                                                  iconDisabledColor:
+                                                      ColorsContent
+                                                          .newThemeColor,
+                                                  onChanged: (value) {
+                                                    if (value != null) {
+                                                      editProfileProvider
+                                                              .selectedCategory =
+                                                          value;
+                                                      editProfileProvider
+                                                          .selectCategory(
+                                                        value: value
+                                                            .categoryName
+                                                            .toString(),
+                                                        mainCategory: value,
+                                                      );
+                                                      _isTokenExpired();
+                                                      editProfileProvider
+                                                          .notifyListeners();
+                                                    }
+                                                  },
+                                                ),
+                                        );
                                       },
                                     ),
-                                  );
-                                },
-                              ),
 
-                              const SizedBox(height: 15),
-                              _buildAchievementDate(context),
-                              const SizedBox(height: 25),
+                                    const SizedBox(height: 15),
+                                    _buildAchievementDate(context),
+                                    const SizedBox(height: 25),
 
-                              adDreamsGoalsProvider.selectedOption == 'Add to Existing Goal'
-                                  ? _buildAddMediaColumnEdit(context, size)
-                                  : _buildAddMediaColumn(context, size),
+                                    adDreamsGoalsProvider.selectedOption ==
+                                            'Add to Existing Goal'
+                                        ? _buildAddMediaColumnEdit(
+                                            context, size)
+                                        : _buildAddMediaColumn(context, size),
 
-                              const SizedBox(height: 11),
-                              const SizedBox(height: 24),
+                                    const SizedBox(height: 11),
+                                    const SizedBox(height: 24),
 
-                              adDreamsGoalsProvider.selectedOption == 'Add to Existing Goal'
-                                  ? _buildCommentEditTextEditLink(context)
-                                  : _buildCommentEditText(context),
+                                    adDreamsGoalsProvider.selectedOption ==
+                                            'Add to Existing Goal'
+                                        ? _buildCommentEditTextEditLink(context)
+                                        : _buildCommentEditText(context),
 
-                              const SizedBox(height: 25),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 2),
-                                child: Text(
-                                  "Actions to achieve the goal",
-                                  style: theme.textTheme.titleSmall,
-                                ),
-                              ),
-                              const SizedBox(height: 3),
-                              _buildAddActionsButton(context),
-                              const SizedBox(height: 15),
+                                    const SizedBox(height: 25),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 2),
+                                      child: Text(
+                                        "Actions to achieve the goal",
+                                        style: theme.textTheme.titleSmall,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 3),
+                                    _buildAddActionsButton(context),
+                                    const SizedBox(height: 15),
 
-                              adDreamsGoalsProvider.selectedOption == 'Add to Existing Goal'
-                                  ? Consumer2<AdDreamsGoalsProvider, AddActionsProvider>(
-                                builder: (context, adDreamsGoalsProvider, addActionsProvider, _) {
-                                  return SizedBox(
-                                    height: adDreamsGoalsProvider.goalModelIdName.length * size.height * 0.065,
-                                    child: ListView.builder(
-                                      physics: const NeverScrollableScrollPhysics(),
-                                      itemCount: adDreamsGoalsProvider.goalModelIdName.length,
-                                      itemBuilder: (context, index) {
-                                        var data = adDreamsGoalsProvider.goalModelIdName[index];
-                                        return Row(
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {},
-                                              child: Container(
-                                                margin: const EdgeInsets.only(bottom: 10),
-                                                height: size.height * 0.055,
-                                                width: size.width * 0.86,
-                                                padding: const EdgeInsets.only(bottom: 5, top: 5, left: 0, right: 5),
-                                                decoration: BoxDecoration(
-                                                  color: Colors.white,
-                                                  borderRadius: BorderRadius.circular(5),
-                                                  border: Border.all(color: Colors.grey, width: 0.5),
-                                                ),
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                  children: [
-                                                    GestureDetector(
-                                                      onTap: () async {
-                                                        customPopup(
-                                                          context: context,
-                                                          onPressedDelete: () async {
-                                                            adDreamsGoalsProvider.getAddActionIdAndNameClear(index);
-                                                            await addActionsProvider.deleteActionFunction(
-                                                              deleteId: data.id,
-                                                              context: context,
-                                                            );
-                                                            Navigator.of(context).pop();
-                                                          },
-                                                          yes: "Yes",
-                                                          title: 'Do you Need Delete',
-                                                          content: 'Are you sure do you need delete',
-                                                        );
-                                                      },
-                                                      child: Padding(
-                                                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                                        child: CircleAvatar(
-                                                          radius: size.width * 0.04,
-                                                          backgroundColor: ColorsContent.newThemeColor,
-                                                          child: Icon(
-                                                            Icons.close_outlined,
-                                                            color: Colors.white,
-                                                            size: size.width * 0.04,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                                                      child: SingleChildScrollView(
-                                                        scrollDirection: Axis.horizontal,
-                                                        child: SizedBox(
-                                                          width: 250,
-                                                          child: Text(
-                                                            data.name,
-                                                            overflow: TextOverflow.ellipsis,
-                                                            maxLines: 4,
-                                                            textAlign: TextAlign.start,
-                                                            style: const TextStyle(
-                                                              fontFamily: 'Poppins',
-                                                              fontSize: 14,
-                                                              fontWeight: FontWeight.w400,
-                                                              color: Colors.black,
+                                    adDreamsGoalsProvider.selectedOption ==
+                                            'Add to Existing Goal'
+                                        ? Consumer2<AdDreamsGoalsProvider,
+                                            AddActionsProvider>(
+                                            builder: (context,
+                                                adDreamsGoalsProvider,
+                                                addActionsProvider,
+                                                _) {
+                                              return SizedBox(
+                                                height: adDreamsGoalsProvider
+                                                        .goalModelIdName
+                                                        .length *
+                                                    size.height *
+                                                    0.065,
+                                                child: ListView.builder(
+                                                  physics:
+                                                      const NeverScrollableScrollPhysics(),
+                                                  itemCount:
+                                                      adDreamsGoalsProvider
+                                                          .goalModelIdName
+                                                          .length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    var data =
+                                                        adDreamsGoalsProvider
+                                                                .goalModelIdName[
+                                                            index];
+                                                    return Row(
+                                                      children: [
+                                                        GestureDetector(
+                                                          onTap: () {},
+                                                          child: Container(
+                                                            margin:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                                    bottom: 10),
+                                                            height:
+                                                                size.height *
+                                                                    0.055,
+                                                            width: size.width *
+                                                                0.86,
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                                    bottom: 5,
+                                                                    top: 5,
+                                                                    left: 0,
+                                                                    right: 5),
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color:
+                                                                  Colors.white,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          5),
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  width: 0.5),
+                                                            ),
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                GestureDetector(
+                                                                  onTap:
+                                                                      () async {
+                                                                    customPopup(
+                                                                      context:
+                                                                          context,
+                                                                      onPressedDelete:
+                                                                          () async {
+                                                                        adDreamsGoalsProvider
+                                                                            .getAddActionIdAndNameClear(index);
+                                                                        await addActionsProvider
+                                                                            .deleteActionFunction(
+                                                                          deleteId:
+                                                                              data.id,
+                                                                          context:
+                                                                              context,
+                                                                        );
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                      },
+                                                                      yes:
+                                                                          "Yes",
+                                                                      title:
+                                                                          'Do you Need Delete',
+                                                                      content:
+                                                                          'Are you sure do you need delete',
+                                                                    );
+                                                                  },
+                                                                  child:
+                                                                      Padding(
+                                                                    padding: const EdgeInsets
+                                                                        .symmetric(
+                                                                        horizontal:
+                                                                            8.0),
+                                                                    child:
+                                                                        CircleAvatar(
+                                                                      radius: size
+                                                                              .width *
+                                                                          0.04,
+                                                                      backgroundColor:
+                                                                          ColorsContent
+                                                                              .newThemeColor,
+                                                                      child:
+                                                                          Icon(
+                                                                        Icons
+                                                                            .close_outlined,
+                                                                        color: Colors
+                                                                            .white,
+                                                                        size: size.width *
+                                                                            0.04,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Padding(
+                                                                  padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal:
+                                                                          10.0),
+                                                                  child:
+                                                                      SingleChildScrollView(
+                                                                    scrollDirection:
+                                                                        Axis.horizontal,
+                                                                    child:
+                                                                        SizedBox(
+                                                                      width:
+                                                                          250,
+                                                                      child:
+                                                                          Text(
+                                                                        data.name,
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        maxLines:
+                                                                            4,
+                                                                        textAlign:
+                                                                            TextAlign.start,
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          fontFamily:
+                                                                              'Poppins',
+                                                                          fontSize:
+                                                                              14,
+                                                                          fontWeight:
+                                                                              FontWeight.w400,
+                                                                          color:
+                                                                              Colors.black,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
                                                             ),
                                                           ),
                                                         ),
-                                                      ),
-                                                    ),
-                                                  ],
+                                                      ],
+                                                    );
+                                                  },
                                                 ),
-                                              ),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    ),
-                                  );
-                                },
-                              )
-                                  : Consumer<AdDreamsGoalsProvider>(
-                                builder: (context, adDreamsGoalsProvider, _) {
-                                  return SizedBox(
-                                    height: adDreamsGoalsProvider.goalModelIdName.length * size.height * 0.06,
-                                    child: ListView.builder(
-                                      physics: const NeverScrollableScrollPhysics(),
-                                      itemCount: adDreamsGoalsProvider.goalModelIdName.length,
-                                      itemBuilder: (context, index) {
-                                        return Row(
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {},
-                                              child: Container(
-                                                height: size.height * 0.04,
-                                                width: size.width * 0.85,
-                                                margin: const EdgeInsets.only(bottom: 4),
-                                                padding: const EdgeInsets.only(bottom: 5, top: 5, left: 0, right: 5),
-                                                decoration: BoxDecoration(
-                                                  color: Colors.white,
-                                                  borderRadius: BorderRadius.circular(100),
-                                                  border: Border.all(color: Colors.grey, width: 0.5),
-                                                ),
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        adDreamsGoalsProvider.getAddActionIdAndNameClear(index);
-                                                      },
-                                                      child: CircleAvatar(
-                                                        radius: size.width * 0.04,
-                                                        backgroundColor: ColorsContent.newThemeColor,
-                                                        child: Icon(
-                                                          Icons.close,
-                                                          color: Colors.white,
-                                                          size: size.width * 0.04,
+                                              );
+                                            },
+                                          )
+                                        : Consumer<AdDreamsGoalsProvider>(
+                                            builder: (context,
+                                                adDreamsGoalsProvider, _) {
+                                              return SizedBox(
+                                                height: adDreamsGoalsProvider
+                                                        .goalModelIdName
+                                                        .length *
+                                                    size.height *
+                                                    0.06,
+                                                child: ListView.builder(
+                                                  physics:
+                                                      const NeverScrollableScrollPhysics(),
+                                                  itemCount:
+                                                      adDreamsGoalsProvider
+                                                          .goalModelIdName
+                                                          .length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return Row(
+                                                      children: [
+                                                        GestureDetector(
+                                                          onTap: () {},
+                                                          child: Container(
+                                                            height:
+                                                                size.height *
+                                                                    0.04,
+                                                            width: size.width *
+                                                                0.85,
+                                                            margin:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                                    bottom: 4),
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                                    bottom: 5,
+                                                                    top: 5,
+                                                                    left: 0,
+                                                                    right: 5),
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color:
+                                                                  Colors.white,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          100),
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  width: 0.5),
+                                                            ),
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                GestureDetector(
+                                                                  onTap: () {
+                                                                    adDreamsGoalsProvider
+                                                                        .getAddActionIdAndNameClear(
+                                                                            index);
+                                                                  },
+                                                                  child:
+                                                                      CircleAvatar(
+                                                                    radius: size
+                                                                            .width *
+                                                                        0.04,
+                                                                    backgroundColor:
+                                                                        ColorsContent
+                                                                            .newThemeColor,
+                                                                    child: Icon(
+                                                                      Icons
+                                                                          .close,
+                                                                      color: Colors
+                                                                          .white,
+                                                                      size: size
+                                                                              .width *
+                                                                          0.04,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Text(
+                                                                  adDreamsGoalsProvider
+                                                                      .goalModelIdName[
+                                                                          index]
+                                                                      .name,
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    fontFamily:
+                                                                        'Poppins',
+                                                                    color: Colors
+                                                                        .grey,
+                                                                  ),
+                                                                ),
+                                                                CircleAvatar(
+                                                                  radius:
+                                                                      size.width *
+                                                                          0.04,
+                                                                  backgroundColor:
+                                                                      ColorsContent
+                                                                          .newThemeColor,
+                                                                  child: Icon(
+                                                                    Icons
+                                                                        .arrow_forward_ios_outlined,
+                                                                    color: Colors
+                                                                        .white,
+                                                                    size: size
+                                                                            .width *
+                                                                        0.04,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      adDreamsGoalsProvider.goalModelIdName[index].name,
-                                                      textAlign: TextAlign.center,
-                                                      style: const TextStyle(
-                                                        fontFamily: 'Poppins',
-                                                        color: Colors.grey,
-                                                      ),
-                                                    ),
-                                                    CircleAvatar(
-                                                      radius: size.width * 0.04,
-                                                      backgroundColor: ColorsContent.newThemeColor,
-                                                      child: Icon(
-                                                        Icons.arrow_forward_ios_outlined,
-                                                        color: Colors.white,
-                                                        size: size.width * 0.04,
-                                                      ),
-                                                    ),
-                                                  ],
+                                                      ],
+                                                    );
+                                                  },
                                                 ),
-                                              ),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    ),
-                                  );
-                                },
-                              ),
+                                              );
+                                            },
+                                          ),
 
-                              const SizedBox(height: 30),
+                                    const SizedBox(height: 30),
 
-                              adDreamsGoalsProvider.selectedOption == 'Add to Existing Goal'
-                                  ? _buildUpdateButton(context)
-                                  : _buildSaveButton(context),
+                                    adDreamsGoalsProvider.selectedOption ==
+                                            'Add to Existing Goal'
+                                        ? _buildUpdateButton(context)
+                                        : _buildSaveButton(context),
 
-                              const SizedBox(height: 20),
-                            ],
+                                    const SizedBox(height: 20),
+                                  ],
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ),
-              // 🔵 NEW LOADING (FIRST 5 SECONDS)
-              if (isLoadingSomeTime)
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: Container(
-                    color: Colors.grey.withOpacity(0.5),
-                    child: Center(
-                      child: CupertinoActivityIndicator(
-                        radius: 20,
-                        color: ColorsContent.newThemeColor,
+                        ),
                       ),
                     ),
-                  ),
-                ),
+                    // 🔵 NEW LOADING (FIRST 5 SECONDS)
+                    if (isLoadingSomeTime)
+                      Positioned(
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        child: Container(
+                          color: Colors.grey.withOpacity(0.5),
+                          child: Center(
+                            child: CupertinoActivityIndicator(
+                              radius: 20,
+                              color: ColorsContent.newThemeColor,
+                            ),
+                          ),
+                        ),
+                      ),
 
-              if (_isLoadingNew)
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: Container(
-                    color: Colors.grey.withOpacity(0.5),
-                    child: Center(
-                      child: CupertinoActivityIndicator(
-                        radius: 20,
-                        color: ColorsContent.newThemeColor,
+                    if (_isLoadingNew)
+                      Positioned(
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        child: Container(
+                          color: Colors.grey.withOpacity(0.5),
+                          child: Center(
+                            child: CupertinoActivityIndicator(
+                              radius: 20,
+                              color: ColorsContent.newThemeColor,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-            ],
-          ),
+                  ],
                 ),
               ),
-        )
+            ),
+          )
         : const TokenExpireScreen();
   }
 
@@ -1103,7 +1417,10 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
             decoration: ShapeDecoration(
               color: Colors.white,
               shape: RoundedRectangleBorder(
-                side: const BorderSide(width: 0.8, style: BorderStyle.solid, color: Colors.transparent),
+                side: const BorderSide(
+                    width: 0.8,
+                    style: BorderStyle.solid,
+                    color: Colors.transparent),
                 borderRadius: BorderRadius.circular(8.0),
               ),
             ),
@@ -1151,7 +1468,8 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
               children: [
                 CustomTextFormFieldGoalOrActionDesc(
                   controller: adDreamsGoalsProvider.commentEditTextController,
-                  hintText: _goalDescFocusNode.hasFocus ? '' : "Goal Description",
+                  hintText:
+                      _goalDescFocusNode.hasFocus ? '' : "Goal Description",
                   hintStyle: CustomTextStyles.bodySmallGray700,
                   maxLines: 4,
                   focusNode: _goalDescFocusNode,
@@ -1159,10 +1477,12 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                   textInputType: TextInputType.multiline,
                   borderDecoration: InputBorder.none,
                   onTap: () {
-                    if (adDreamsGoalsProvider.commentEditTextController.text.isEmpty &&
+                    if (adDreamsGoalsProvider
+                            .commentEditTextController.text.isEmpty &&
                         sharedData != null &&
                         (sharedData!.sharedText ?? '').isNotEmpty) {
-                      adDreamsGoalsProvider.commentEditTextController.text = sharedData!.sharedText!;
+                      adDreamsGoalsProvider.commentEditTextController.text =
+                          sharedData!.sharedText!;
                     }
                     setState(() {});
                   },
@@ -1179,10 +1499,15 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                         adDreamsGoalsProvider.detectedLinks = [firstLink];
                       });
 
-                      final cleanedText = value.replaceAll(adDreamsGoalsProvider.urlRegex, '').trim();
-                      adDreamsGoalsProvider.commentEditTextController.text = cleanedText;
-                      adDreamsGoalsProvider.commentEditTextController.selection =
-                          TextSelection.fromPosition(TextPosition(offset: cleanedText.length));
+                      final cleanedText = value
+                          .replaceAll(adDreamsGoalsProvider.urlRegex, '')
+                          .trim();
+                      adDreamsGoalsProvider.commentEditTextController.text =
+                          cleanedText;
+                      adDreamsGoalsProvider
+                              .commentEditTextController.selection =
+                          TextSelection.fromPosition(
+                              TextPosition(offset: cleanedText.length));
                     }
                   },
                   onEditingComplete: () {
@@ -1190,7 +1515,6 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                     setState(() {});
                   },
                 ),
-
                 if (hasLink)
                   Padding(
                     padding: const EdgeInsets.only(top: 12.0),
@@ -1199,13 +1523,15 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey.shade300, width: 1.2),
+                            border: Border.all(
+                                color: Colors.grey.shade300, width: 1.2),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: LinkPreviewGenerator(
-                              link: adDreamsGoalsProvider.detectedLinks.isNotEmpty
+                              link: adDreamsGoalsProvider
+                                      .detectedLinks.isNotEmpty
                                   ? adDreamsGoalsProvider.detectedLinks.first
                                   : '',
                               linkPreviewStyle: LinkPreviewStyle.large,
@@ -1239,9 +1565,8 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                                 },
                                 title: 'Confirm Delete',
                                 content:
-                                'Are you sure you want to delete this link?',
+                                    'Are you sure you want to delete this link?',
                               );
-
                             },
                             child: Container(
                               decoration: const BoxDecoration(
@@ -1287,7 +1612,8 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
               children: [
                 CustomTextFormFieldGoalOrActionDesc(
                   controller: adDreamsGoalsProvider.commentEditTextController,
-                  hintText: _goalDescFocusNode.hasFocus ? '' : "Goal Description",
+                  hintText:
+                      _goalDescFocusNode.hasFocus ? '' : "Goal Description",
                   hintStyle: CustomTextStyles.bodySmallGray700,
                   maxLines: 4,
                   focusNode: _goalDescFocusNode,
@@ -1295,10 +1621,12 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                   textInputType: TextInputType.multiline,
                   borderDecoration: InputBorder.none,
                   onTap: () {
-                    if (adDreamsGoalsProvider.commentEditTextController.text.isEmpty &&
+                    if (adDreamsGoalsProvider
+                            .commentEditTextController.text.isEmpty &&
                         sharedData != null &&
                         (sharedData!.sharedText ?? '').isNotEmpty) {
-                      adDreamsGoalsProvider.commentEditTextController.text = sharedData!.sharedText!;
+                      adDreamsGoalsProvider.commentEditTextController.text =
+                          sharedData!.sharedText!;
                     }
                     setState(() {});
                   },
@@ -1315,26 +1643,29 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
 
                       setState(() {
                         adDreamsGoalsProvider.editDetectedLinks.clear();
-                        adDreamsGoalsProvider.editDetectedLinks = [normalizedLink];
+                        adDreamsGoalsProvider.editDetectedLinks = [
+                          normalizedLink
+                        ];
                       });
 
                       // Remove only the raw link from text field
-                      final cleanedText = value.replaceAll(adDreamsGoalsProvider.urlRegex, '').trim();
+                      final cleanedText = value
+                          .replaceAll(adDreamsGoalsProvider.urlRegex, '')
+                          .trim();
 
-                      adDreamsGoalsProvider.commentEditTextController.text = cleanedText;
-                      adDreamsGoalsProvider.commentEditTextController.selection =
-                          TextSelection.fromPosition(
-                            TextPosition(offset: cleanedText.length),
-                          );
+                      adDreamsGoalsProvider.commentEditTextController.text =
+                          cleanedText;
+                      adDreamsGoalsProvider.commentEditTextController
+                          .selection = TextSelection.fromPosition(
+                        TextPosition(offset: cleanedText.length),
+                      );
                     }
                   },
-
                   onEditingComplete: () {
                     _goalDescFocusNode.unfocus();
                     setState(() {});
                   },
                 ),
-
                 if (hasLink)
                   Padding(
                     padding: const EdgeInsets.only(top: 12.0),
@@ -1343,14 +1674,17 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey.shade300, width: 1.2),
+                            border: Border.all(
+                                color: Colors.grey.shade300, width: 1.2),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: LinkPreviewGenerator(
-                              link: adDreamsGoalsProvider.editDetectedLinks.isNotEmpty
-                                  ? adDreamsGoalsProvider.editDetectedLinks.first
+                              link: adDreamsGoalsProvider
+                                      .editDetectedLinks.isNotEmpty
+                                  ? adDreamsGoalsProvider
+                                      .editDetectedLinks.first
                                   : '',
                               linkPreviewStyle: LinkPreviewStyle.large,
                               showDomain: true,
@@ -1374,20 +1708,19 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                           child: GestureDetector(
                             onTap: () {
                               setState(() {
-
                                 customPopup(
                                   context: context,
                                   onPressedDelete: () {
                                     setState(() {
-                                      adDreamsGoalsProvider.editDetectedLinks.clear();
+                                      adDreamsGoalsProvider.editDetectedLinks
+                                          .clear();
                                     });
                                     Navigator.of(context).pop();
                                   },
                                   title: 'Confirm Delete',
                                   content:
-                                  'Are you sure you want to delete this link?',
+                                      'Are you sure you want to delete this link?',
                                 );
-
                               });
                             },
                             child: Container(
@@ -1447,15 +1780,21 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
 
             if (!adDreamsGoalsProvider.isVideoUploading) {
               if (adDreamsGoalsProvider.nameEditTextController.text.isEmpty) {
-                showCustomSnackBar(context: context, message: "Please fill Goal name");
+                showCustomSnackBar(
+                    context: context, message: "Please fill Goal name");
               } else if (editProfileProvider.categorys == null) {
-                showCustomSnackBar(context: context, message: "Please fill Categories");
+                showCustomSnackBar(
+                    context: context, message: "Please fill Categories");
               } else if (adDreamsGoalsProvider.selectedDate.isEmpty) {
-                showCustomSnackBar(context: context, message: "Please fill Achievement date");
+                showCustomSnackBar(
+                    context: context, message: "Please fill Achievement date");
               } else if (adDreamsGoalsProvider.formattedDate == null) {
-                showCustomSnackBar(context: context, message: "Please select a valid date");
-              } else if (editProfileProvider.interestsValueController.text.isEmpty) {
-                showCustomSnackBar(context: context, message: "Please select a category");
+                showCustomSnackBar(
+                    context: context, message: "Please select a valid date");
+              } else if (editProfileProvider
+                  .interestsValueController.text.isEmpty) {
+                showCustomSnackBar(
+                    context: context, message: "Please select a category");
               } else {
                 await adDreamsGoalsProvider.saveGemFunctionLink(
                   context,
@@ -1465,7 +1804,8 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                   locationName: adDreamsGoalsProvider.selectedLocationName,
                   locationLatitude: adDreamsGoalsProvider.selectedLatitude,
                   locationLongitude: adDreamsGoalsProvider.selectedLongitude,
-                  locationAddress: adDreamsGoalsProvider.selectedLocationAddress,
+                  locationAddress:
+                      adDreamsGoalsProvider.selectedLocationAddress,
                   categoryId: editProfileProvider.categorys!.id.toString(),
                   gemEndDate: adDreamsGoalsProvider.formattedDate,
                   mediaThumbs: adDreamsGoalsProvider.mediaThumbList,
@@ -1473,21 +1813,27 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                 );
 
                 GoalsDreamsProvider goalsDreamsProvider =
-                Provider.of<GoalsDreamsProvider>(context, listen: false);
+                    Provider.of<GoalsDreamsProvider>(context, listen: false);
                 goalsDreamsProvider.fetchGoalsAndDreams(
-                  pageNo: goalsDreamsProvider.currentPage.toString(),
-                  context: context,
-                );
+                    pageNo: "1",
+                    context: context,
+                    initial: true,
+                    fullList: true);
 
                 editProfileProvider.categorys!.id = "";
                 editProfileProvider.categorys!.categoryName = "";
 
                 if (goalsDreamsProvider.fetchGoalsAndDreamsStatus == 404) {
-                  goalsDreamsProvider.fetchGoalsAndDreams(pageNo: 1.toString(), context: context);
+                  goalsDreamsProvider.fetchGoalsAndDreams(
+                      pageNo: "1",
+                      context: context,
+                      initial: true,
+                      fullList: true);
                 }
               }
             } else {
-              showCustomSnackBar(context: context, message: "Please wait, video is uploading");
+              showCustomSnackBar(
+                  context: context, message: "Please wait, video is uploading");
             }
           },
           height: 45,
@@ -1508,105 +1854,104 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
   Widget _buildUpdateButton(BuildContext context) {
     return Consumer2<AdDreamsGoalsProvider, EditProfileProvider>(
         builder: (context, adDreamsGoalsProvider, editProfileProvider, _) {
-          return CustomElevatedButton(
-            loading: adDreamsGoalsProvider.saveAddActionsLoading,
-            onPressed: () async {
-              _isTokenExpired();
-              if (!adDreamsGoalsProvider.isVideoUploading) {
-                if (adDreamsGoalsProvider.nameEditTextController.text.isNotEmpty &&
-                    editProfileProvider.categorys != null &&
-                    adDreamsGoalsProvider.formattedDate != null) {
-                  if (adDreamsGoalsProvider.formattedDate.isNotEmpty) {
-                    logger.w("formattedDate${adDreamsGoalsProvider.formattedDate}");
-                    logger.w(
-                        "adDreamsGoalsProvider.goalModelIdName${adDreamsGoalsProvider.goalModelIdName}");
+      return CustomElevatedButton(
+        loading: adDreamsGoalsProvider.saveAddActionsLoading,
+        onPressed: () async {
+          _isTokenExpired();
+          if (!adDreamsGoalsProvider.isVideoUploading) {
+            if (adDreamsGoalsProvider.nameEditTextController.text.isNotEmpty &&
+                editProfileProvider.categorys != null &&
+                adDreamsGoalsProvider.formattedDate != null) {
+              if (adDreamsGoalsProvider.formattedDate.isNotEmpty) {
+                logger.w("formattedDate${adDreamsGoalsProvider.formattedDate}");
+                logger.w(
+                    "adDreamsGoalsProvider.goalModelIdName${adDreamsGoalsProvider.goalModelIdName}");
 
-                    // ✅ Call update function with all required parameters
-                    await adDreamsGoalsProvider.updateGoalFunctionLink(
-                      context,
-                      title: adDreamsGoalsProvider.nameEditTextController.text,
-                      details: adDreamsGoalsProvider.commentEditTextController.text,
-                      mediaName: adDreamsGoalsProvider.addMediaUploadResponseList,
-                      locationName: adDreamsGoalsProvider.selectedLocationName,
-                      locationLatitude: adDreamsGoalsProvider.selectedLatitude,
-                      locationLongitude: adDreamsGoalsProvider.selectedLongitude,
-                      locationAddress:
+                // ✅ Call update function with all required parameters
+                await adDreamsGoalsProvider.updateGoalFunctionLink(
+                  context,
+                  title: adDreamsGoalsProvider.nameEditTextController.text,
+                  details: adDreamsGoalsProvider.commentEditTextController.text,
+                  mediaName: adDreamsGoalsProvider.addMediaUploadResponseList,
+                  locationName: adDreamsGoalsProvider.selectedLocationName,
+                  locationLatitude: adDreamsGoalsProvider.selectedLatitude,
+                  locationLongitude: adDreamsGoalsProvider.selectedLongitude,
+                  locationAddress:
                       adDreamsGoalsProvider.selectedLocationAddress,
-                      categoryId: editProfileProvider.categorys!.id.toString(),
-                      gemEndDate: adDreamsGoalsProvider.formattedDate,
-                      mediaThumbs: adDreamsGoalsProvider.mediaThumbList,
-                      actionId: adDreamsGoalsProvider.goalModelIdName,
-                      gemId: adDreamsGoalsProvider.selectedExistingGoal.toString(),
-                      editDetectedLinks: adDreamsGoalsProvider.editDetectedLinks,
-                    );
-
-                    GoalsDreamsProvider goalsDreamsProvider =
-                    Provider.of<GoalsDreamsProvider>(context, listen: false);
-                    // goalsDreamsProvider.fetchGoalsAndDreams(initial: true);
-                    editProfileProvider.categorys!.id = "";
-                    editProfileProvider.categorys!.categoryName = "";
-
-
-                    await goalsDreamsProvider.fetchGoalsAndDreams(
-                        pageNo: goalsDreamsProvider.currentPage.toString(),
-                        context: context);
-                  } else {
-                    logger.w("formattedDate${adDreamsGoalsProvider.formattedDate}");
-                    logger.w("selectedDate${adDreamsGoalsProvider.selectedDate}");
-                    logger.w(
-                        "adDreamsGoalsProvider.goalModelIdName1${jsonEncode(adDreamsGoalsProvider.goalModelIdName)}");
-
-                    // ✅ Call update function with all required parameters
-                    await adDreamsGoalsProvider.updateGoalFunctionLink(
-                      context,
-                      title: adDreamsGoalsProvider.nameEditTextController.text,
-                      details: adDreamsGoalsProvider.commentEditTextController.text,
-                      mediaName: adDreamsGoalsProvider.addMediaUploadResponseList,
-                      locationName: adDreamsGoalsProvider.selectedLocationName,
-                      locationLatitude: adDreamsGoalsProvider.selectedLatitude,
-                      locationLongitude: adDreamsGoalsProvider.selectedLongitude,
-                      locationAddress:
-                      adDreamsGoalsProvider.selectedLocationAddress,
-                      categoryId: editProfileProvider.categorys!.id.toString(),
-                      gemEndDate: unixTimestamp.toString(),
-                      mediaThumbs: adDreamsGoalsProvider.mediaThumbList,
-                      actionId: adDreamsGoalsProvider.goalModelIdName,
-                      gemId: adDreamsGoalsProvider.selectedExistingGoal.toString(),
-                      editDetectedLinks: adDreamsGoalsProvider.editDetectedLinks,
-                    );
-
-                    GoalsDreamsProvider goalsDreamsProvider =
-                    Provider.of<GoalsDreamsProvider>(context, listen: false);
-                    // goalsDreamsProvider.fetchGoalsAndDreams(initial: true);
-
-                    await goalsDreamsProvider.fetchGoalsAndDreams(
-                        pageNo: goalsDreamsProvider.currentPage.toString(),
-                        context: context);
-
-                    editProfileProvider.categorys!.id = "";
-                    editProfileProvider.categorys!.categoryName = "";
-                  }
-                } else {
-                  showCustomSnackBar(
-                    context: context,
-                    message: "Please fill in all the fields",
-                  );
-                }
-              } else {
-                showCustomSnackBar(
-                  context: context,
-                  message: "Please Wait Video Uploading",
+                  categoryId: editProfileProvider.categorys!.id.toString(),
+                  gemEndDate: adDreamsGoalsProvider.formattedDate,
+                  mediaThumbs: adDreamsGoalsProvider.mediaThumbList,
+                  actionId: adDreamsGoalsProvider.goalModelIdName,
+                  gemId: adDreamsGoalsProvider.selectedExistingGoal.toString(),
+                  editDetectedLinks: adDreamsGoalsProvider.editDetectedLinks,
                 );
+
+                GoalsDreamsProvider goalsDreamsProvider =
+                    Provider.of<GoalsDreamsProvider>(context, listen: false);
+                editProfileProvider.categorys!.id = "";
+                editProfileProvider.categorys!.categoryName = "";
+
+                await goalsDreamsProvider.fetchGoalsAndDreams(
+                    pageNo: "1",
+                    context: context,
+                    initial: true,
+                    fullList: true);
+              } else {
+                logger.w("formattedDate${adDreamsGoalsProvider.formattedDate}");
+                logger.w("selectedDate${adDreamsGoalsProvider.selectedDate}");
+                logger.w(
+                    "adDreamsGoalsProvider.goalModelIdName1${jsonEncode(adDreamsGoalsProvider.goalModelIdName)}");
+
+                // ✅ Call update function with all required parameters
+                await adDreamsGoalsProvider.updateGoalFunctionLink(
+                  context,
+                  title: adDreamsGoalsProvider.nameEditTextController.text,
+                  details: adDreamsGoalsProvider.commentEditTextController.text,
+                  mediaName: adDreamsGoalsProvider.addMediaUploadResponseList,
+                  locationName: adDreamsGoalsProvider.selectedLocationName,
+                  locationLatitude: adDreamsGoalsProvider.selectedLatitude,
+                  locationLongitude: adDreamsGoalsProvider.selectedLongitude,
+                  locationAddress:
+                      adDreamsGoalsProvider.selectedLocationAddress,
+                  categoryId: editProfileProvider.categorys!.id.toString(),
+                  gemEndDate: unixTimestamp.toString(),
+                  mediaThumbs: adDreamsGoalsProvider.mediaThumbList,
+                  actionId: adDreamsGoalsProvider.goalModelIdName,
+                  gemId: adDreamsGoalsProvider.selectedExistingGoal.toString(),
+                  editDetectedLinks: adDreamsGoalsProvider.editDetectedLinks,
+                );
+
+                GoalsDreamsProvider goalsDreamsProvider =
+                    Provider.of<GoalsDreamsProvider>(context, listen: false);
+
+
+                await goalsDreamsProvider.fetchGoalsAndDreams(
+                    pageNo: "1", context: context, initial: true, fullList: true);
+
+                editProfileProvider.categorys!.id = "";
+                editProfileProvider.categorys!.categoryName = "";
               }
-            },
-            height: 45,
-            text: "Update",
-            margin: const EdgeInsets.only(left: 2),
-            buttonStyle: CustomButtonStyles.outlinePrimaryTL5,
-            buttonTextStyle:
+            } else {
+              showCustomSnackBar(
+                context: context,
+                message: "Please fill in all the fields",
+              );
+            }
+          } else {
+            showCustomSnackBar(
+              context: context,
+              message: "Please Wait Video Uploading",
+            );
+          }
+        },
+        height: 45,
+        text: "Update",
+        margin: const EdgeInsets.only(left: 2),
+        buttonStyle: CustomButtonStyles.outlinePrimaryTL5,
+        buttonTextStyle:
             CustomTextStyles.titleSmallHelveticaOnSecondaryContainer,
-          );
-        });
+      );
+    });
   }
 
   Widget _buildAddMediaColumn(BuildContext context, Size size) {
@@ -1633,19 +1978,25 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                             FocusScope.of(context).requestFocus(FocusNode());
                             _isTokenExpired();
 
-                            if (await requestGalleryPermission() && Platform.isAndroid) {
+                            if (await requestGalleryPermission() &&
+                                Platform.isAndroid) {
                               mentalStrengthEditProvider.selectedMedia(1);
-                              await galleryBottomSheetAddGoals(context: context, title: 'Gallery');
+                              await galleryBottomSheetAddGoals(
+                                  context: context, title: 'Gallery');
                             } else if (Platform.isIOS) {
                               mentalStrengthEditProvider.selectedMedia(1);
-                              await galleryBottomSheetAddGoals(context: context, title: 'Gallery');
+                              await galleryBottomSheetAddGoals(
+                                  context: context, title: 'Gallery');
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text("Gallery permission is required.")),
+                                const SnackBar(
+                                    content: Text(
+                                        "Gallery permission is required.")),
                               );
                             }
                           },
-                          child: SvgPicture.asset(ImageConstant.galleryAddMediaNumu),
+                          child: SvgPicture.asset(
+                              ImageConstant.galleryAddMediaNumu),
                         ),
                         Positioned(
                           bottom: Platform.isIOS ? 50 : 45,
@@ -1653,7 +2004,8 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                           left: 40,
                           child: Consumer<AdDreamsGoalsProvider>(
                             builder: (context, mentalStrengthEditProvider, _) {
-                              if (mentalStrengthEditProvider.pickedImages.isEmpty) {
+                              if (mentalStrengthEditProvider
+                                  .pickedImages.isEmpty) {
                                 return const SizedBox();
                               }
                               return Container(
@@ -1666,11 +2018,14 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                                     image: AssetImage(ImageConstant.imgMenu),
                                     fit: BoxFit.cover,
                                   ),
-                                  border: Border.all(color: Colors.white, width: 1.0),
+                                  border: Border.all(
+                                      color: Colors.white, width: 1.0),
                                 ),
                                 child: Center(
                                   child: Text(
-                                    mentalStrengthEditProvider.pickedImages.length.toString(),
+                                    mentalStrengthEditProvider
+                                        .pickedImages.length
+                                        .toString(),
                                     style: const TextStyle(
                                       fontFamily: 'Poppins',
                                       color: Colors.white,
@@ -1696,19 +2051,25 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                             FocusScope.of(context).requestFocus(FocusNode());
                             _isTokenExpired();
 
-                            if (await requestCameraPermission() && Platform.isAndroid) {
+                            if (await requestCameraPermission() &&
+                                Platform.isAndroid) {
                               mentalStrengthEditProvider.selectedMedia(2);
-                              cameraBottomSheetAdGoals(context: context, title: "Camera");
+                              cameraBottomSheetAdGoals(
+                                  context: context, title: "Camera");
                             } else if (Platform.isIOS) {
                               mentalStrengthEditProvider.selectedMedia(2);
-                              cameraBottomSheetAdGoals(context: context, title: "Camera");
+                              cameraBottomSheetAdGoals(
+                                  context: context, title: "Camera");
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text("Camera permission is required.")),
+                                const SnackBar(
+                                    content:
+                                        Text("Camera permission is required.")),
                               );
                             }
                           },
-                          child: SvgPicture.asset(ImageConstant.cameraAddMediaNumu),
+                          child: SvgPicture.asset(
+                              ImageConstant.cameraAddMediaNumu),
                         ),
                         Positioned(
                           bottom: Platform.isIOS ? 50 : 45,
@@ -1716,7 +2077,8 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                           left: 40,
                           child: Consumer<AdDreamsGoalsProvider>(
                             builder: (context, mentalStrengthEditProvider, _) {
-                              if (mentalStrengthEditProvider.takedImages.isEmpty) {
+                              if (mentalStrengthEditProvider
+                                  .takedImages.isEmpty) {
                                 return const SizedBox();
                               }
                               return Container(
@@ -1729,11 +2091,14 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                                     image: AssetImage(ImageConstant.imgMenu),
                                     fit: BoxFit.cover,
                                   ),
-                                  border: Border.all(color: Colors.white, width: 1.0),
+                                  border: Border.all(
+                                      color: Colors.white, width: 1.0),
                                 ),
                                 child: Center(
                                   child: Text(
-                                    mentalStrengthEditProvider.takedImages.length.toString(),
+                                    mentalStrengthEditProvider
+                                        .takedImages.length
+                                        .toString(),
                                     style: const TextStyle(
                                       fontFamily: 'Poppins',
                                       color: Colors.white,
@@ -1759,9 +2124,11 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                             FocusScope.of(context).requestFocus(FocusNode());
                             _isTokenExpired();
                             mentalStrengthEditProvider.selectedMedia(0);
-                            await audioBottomSheetAddGoals(context: context, title: 'Record Audio');
+                            await audioBottomSheetAddGoals(
+                                context: context, title: 'Record Audio');
                           },
-                          child: SvgPicture.asset(ImageConstant.recordAddMediaNumu),
+                          child: SvgPicture.asset(
+                              ImageConstant.recordAddMediaNumu),
                         ),
                         Positioned(
                           bottom: Platform.isIOS ? 50 : 45,
@@ -1769,7 +2136,8 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                           left: 40,
                           child: Consumer<AdDreamsGoalsProvider>(
                             builder: (context, mentalStrengthEditProvider, _) {
-                              if (mentalStrengthEditProvider.recordedFilePath.isEmpty) {
+                              if (mentalStrengthEditProvider
+                                  .recordedFilePath.isEmpty) {
                                 return const SizedBox();
                               }
                               return Container(
@@ -1782,11 +2150,14 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                                     image: AssetImage(ImageConstant.imgMenu),
                                     fit: BoxFit.cover,
                                   ),
-                                  border: Border.all(color: Colors.white, width: 1.0),
+                                  border: Border.all(
+                                      color: Colors.white, width: 1.0),
                                 ),
                                 child: Center(
                                   child: Text(
-                                    mentalStrengthEditProvider.recordedFilePath.length.toString(),
+                                    mentalStrengthEditProvider
+                                        .recordedFilePath.length
+                                        .toString(),
                                     style: const TextStyle(
                                       fontFamily: 'Poppins',
                                       color: Colors.white,
@@ -1812,22 +2183,27 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                             FocusScope.of(context).requestFocus(FocusNode());
                             mentalStrengthEditProvider.selectedMedia(3);
 
-                            final status = await Permission.locationWhenInUse.status;
+                            final status =
+                                await Permission.locationWhenInUse.status;
                             if (status.isDenied || status.isPermanentlyDenied) {
-                              final result = await Permission.locationWhenInUse.request();
-                              if (result.isDenied || result.isPermanentlyDenied) {
+                              final result =
+                                  await Permission.locationWhenInUse.request();
+                              if (result.isDenied ||
+                                  result.isPermanentlyDenied) {
                                 if (mounted) {
                                   showDialog(
                                     context: context,
                                     barrierDismissible: false,
                                     builder: (context) => AlertDialog(
-                                      title: const Text('Location Permission Required'),
+                                      title: const Text(
+                                          'Location Permission Required'),
                                       content: const Text(
                                         'Location permission is needed to add your current location to the mental strength entry. Please enable it in settings.',
                                       ),
                                       actions: [
                                         TextButton(
-                                          onPressed: () => Navigator.pop(context),
+                                          onPressed: () =>
+                                              Navigator.pop(context),
                                           child: const Text('Cancel'),
                                         ),
                                         TextButton(
@@ -1855,14 +2231,17 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                                     return SafeArea(
                                       child: Padding(
                                         padding: EdgeInsets.only(
-                                          bottom: MediaQuery.of(context).viewInsets.bottom,
+                                          bottom: MediaQuery.of(context)
+                                              .viewInsets
+                                              .bottom,
                                         ),
                                         child: Container(
                                           width: double.infinity,
                                           padding: const EdgeInsets.all(20),
                                           decoration: const BoxDecoration(
                                             color: Colors.white,
-                                            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                                            borderRadius: BorderRadius.vertical(
+                                                top: Radius.circular(20)),
                                           ),
                                           child: const AddGoalsGoogleMap(),
                                         ),
@@ -1873,7 +2252,8 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                               }
                             }
                           },
-                          child: SvgPicture.asset(ImageConstant.locationAddMediaNumu),
+                          child: SvgPicture.asset(
+                              ImageConstant.locationAddMediaNumu),
                         ),
                         Positioned(
                           bottom: Platform.isIOS ? 50 : 45,
@@ -1881,7 +2261,8 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                           left: 40,
                           child: Consumer<AdDreamsGoalsProvider>(
                             builder: (context, mentalStrengthEditProvider, _) {
-                              if (mentalStrengthEditProvider.selectedLocationName.isEmpty) {
+                              if (mentalStrengthEditProvider
+                                  .selectedLocationName.isEmpty) {
                                 return const SizedBox();
                               }
                               return Container(
@@ -1894,7 +2275,8 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                                     image: AssetImage(ImageConstant.imgMenu),
                                     fit: BoxFit.cover,
                                   ),
-                                  border: Border.all(color: Colors.white, width: 1.0),
+                                  border: Border.all(
+                                      color: Colors.white, width: 1.0),
                                 ),
                                 child: const Center(
                                   child: Text(
@@ -1946,19 +2328,25 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                             FocusScope.of(context).requestFocus(FocusNode());
                             _isTokenExpired();
 
-                            if (await requestGalleryPermission() && Platform.isAndroid) {
+                            if (await requestGalleryPermission() &&
+                                Platform.isAndroid) {
                               adDreamsGoalsProvider.selectedMedia(1);
-                              await galleryBottomSheetAddGoals(context: context, title: 'Gallery');
+                              await galleryBottomSheetAddGoals(
+                                  context: context, title: 'Gallery');
                             } else if (Platform.isIOS) {
                               adDreamsGoalsProvider.selectedMedia(1);
-                              await galleryBottomSheetAddGoals(context: context, title: 'Gallery');
+                              await galleryBottomSheetAddGoals(
+                                  context: context, title: 'Gallery');
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text("Gallery permission is required.")),
+                                const SnackBar(
+                                    content: Text(
+                                        "Gallery permission is required.")),
                               );
                             }
                           },
-                          child: SvgPicture.asset(ImageConstant.galleryAddMediaNumu),
+                          child: SvgPicture.asset(
+                              ImageConstant.galleryAddMediaNumu),
                         ),
                         Positioned(
                           bottom: Platform.isIOS ? 50 : 45,
@@ -1966,7 +2354,8 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                           left: 40,
                           child: Consumer<AdDreamsGoalsProvider>(
                             builder: (context, adDreamsGoalsProvider, _) {
-                              if (adDreamsGoalsProvider.alreadyPickedImages.isEmpty &&
+                              if (adDreamsGoalsProvider
+                                      .alreadyPickedImages.isEmpty &&
                                   adDreamsGoalsProvider.pickedImages.isEmpty) {
                                 return const SizedBox();
                               }
@@ -1980,7 +2369,8 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                                     image: AssetImage(ImageConstant.imgMenu),
                                     fit: BoxFit.cover,
                                   ),
-                                  border: Border.all(color: Colors.white, width: 1.0),
+                                  border: Border.all(
+                                      color: Colors.white, width: 1.0),
                                 ),
                                 child: Center(
                                   child: Text(
@@ -2010,19 +2400,25 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                             FocusScope.of(context).requestFocus(FocusNode());
                             _isTokenExpired();
 
-                            if (await requestCameraPermission() && Platform.isAndroid) {
+                            if (await requestCameraPermission() &&
+                                Platform.isAndroid) {
                               adDreamsGoalsProvider.selectedMedia(2);
-                              cameraBottomSheetAdGoals(context: context, title: "Camera");
+                              cameraBottomSheetAdGoals(
+                                  context: context, title: "Camera");
                             } else if (Platform.isIOS) {
                               adDreamsGoalsProvider.selectedMedia(2);
-                              cameraBottomSheetAdGoals(context: context, title: "Camera");
+                              cameraBottomSheetAdGoals(
+                                  context: context, title: "Camera");
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text("Camera permission is required.")),
+                                const SnackBar(
+                                    content:
+                                        Text("Camera permission is required.")),
                               );
                             }
                           },
-                          child: SvgPicture.asset(ImageConstant.cameraAddMediaNumu),
+                          child: SvgPicture.asset(
+                              ImageConstant.cameraAddMediaNumu),
                         ),
                         Positioned(
                           bottom: Platform.isIOS ? 50 : 45,
@@ -2043,11 +2439,13 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                                     image: AssetImage(ImageConstant.imgMenu),
                                     fit: BoxFit.cover,
                                   ),
-                                  border: Border.all(color: Colors.white, width: 1.0),
+                                  border: Border.all(
+                                      color: Colors.white, width: 1.0),
                                 ),
                                 child: Center(
                                   child: Text(
-                                    adDreamsGoalsProvider.takedImages.length.toString(),
+                                    adDreamsGoalsProvider.takedImages.length
+                                        .toString(),
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
@@ -2073,9 +2471,11 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                             FocusScope.of(context).requestFocus(FocusNode());
                             _isTokenExpired();
                             adDreamsGoalsProvider.selectedMedia(0);
-                            await audioBottomSheetAddGoals(context: context, title: 'Record Audio');
+                            await audioBottomSheetAddGoals(
+                                context: context, title: 'Record Audio');
                           },
-                          child: SvgPicture.asset(ImageConstant.recordAddMediaNumu),
+                          child: SvgPicture.asset(
+                              ImageConstant.recordAddMediaNumu),
                         ),
                         Positioned(
                           bottom: Platform.isIOS ? 50 : 45,
@@ -2083,8 +2483,10 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                           left: 40,
                           child: Consumer<AdDreamsGoalsProvider>(
                             builder: (context, adDreamsGoalsProvider, _) {
-                              if (adDreamsGoalsProvider.alreadyRecordedFilePath.isEmpty &&
-                                  adDreamsGoalsProvider.recordedFilePath.isEmpty) {
+                              if (adDreamsGoalsProvider
+                                      .alreadyRecordedFilePath.isEmpty &&
+                                  adDreamsGoalsProvider
+                                      .recordedFilePath.isEmpty) {
                                 return const SizedBox();
                               }
                               return Container(
@@ -2097,7 +2499,8 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                                     image: AssetImage(ImageConstant.imgMenu),
                                     fit: BoxFit.cover,
                                   ),
-                                  border: Border.all(color: Colors.white, width: 1.0),
+                                  border: Border.all(
+                                      color: Colors.white, width: 1.0),
                                 ),
                                 child: Center(
                                   child: Text(
@@ -2127,22 +2530,27 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                             FocusScope.of(context).requestFocus(FocusNode());
                             adDreamsGoalsProvider.selectedMedia(3);
 
-                            final status = await Permission.locationWhenInUse.status;
+                            final status =
+                                await Permission.locationWhenInUse.status;
                             if (status.isDenied || status.isPermanentlyDenied) {
-                              final result = await Permission.locationWhenInUse.request();
-                              if (result.isDenied || result.isPermanentlyDenied) {
+                              final result =
+                                  await Permission.locationWhenInUse.request();
+                              if (result.isDenied ||
+                                  result.isPermanentlyDenied) {
                                 if (mounted) {
                                   showDialog(
                                     context: context,
                                     barrierDismissible: false,
                                     builder: (context) => AlertDialog(
-                                      title: const Text('Location Permission Required'),
+                                      title: const Text(
+                                          'Location Permission Required'),
                                       content: const Text(
                                         'Location permission is needed to add your current location to the mental strength entry. Please enable it in settings.',
                                       ),
                                       actions: [
                                         TextButton(
-                                          onPressed: () => Navigator.pop(context),
+                                          onPressed: () =>
+                                              Navigator.pop(context),
                                           child: const Text('Cancel'),
                                         ),
                                         TextButton(
@@ -2170,16 +2578,20 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                                     return SafeArea(
                                       child: Padding(
                                         padding: EdgeInsets.only(
-                                          bottom: MediaQuery.of(context).viewInsets.bottom,
+                                          bottom: MediaQuery.of(context)
+                                              .viewInsets
+                                              .bottom,
                                         ),
                                         child: Container(
                                           width: double.infinity,
                                           padding: const EdgeInsets.all(20),
                                           decoration: const BoxDecoration(
                                             color: Colors.white,
-                                            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                                            borderRadius: BorderRadius.vertical(
+                                                top: Radius.circular(20)),
                                           ),
-                                          child: const AddGoalsGoogleMap(isEdit: true),
+                                          child: const AddGoalsGoogleMap(
+                                              isEdit: true),
                                         ),
                                       ),
                                     );
@@ -2188,7 +2600,8 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                               }
                             }
                           },
-                          child: SvgPicture.asset(ImageConstant.locationAddMediaNumu),
+                          child: SvgPicture.asset(
+                              ImageConstant.locationAddMediaNumu),
                         ),
                         Positioned(
                           bottom: Platform.isIOS ? 50 : 45,
@@ -2196,7 +2609,8 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                           left: 40,
                           child: Consumer<AdDreamsGoalsProvider>(
                             builder: (context, adDreamsGoalsProvider, _) {
-                              if (adDreamsGoalsProvider.selectedLocationName.isEmpty) {
+                              if (adDreamsGoalsProvider
+                                  .selectedLocationName.isEmpty) {
                                 return const SizedBox();
                               }
                               return Container(
@@ -2209,11 +2623,15 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                                     image: AssetImage(ImageConstant.imgMenu),
                                     fit: BoxFit.cover,
                                   ),
-                                  border: Border.all(color: Colors.white, width: 1.0),
+                                  border: Border.all(
+                                      color: Colors.white, width: 1.0),
                                 ),
                                 child: Center(
                                   child: Text(
-                                    adDreamsGoalsProvider.selectedLocationName.isEmpty ? "" : "1",
+                                    adDreamsGoalsProvider
+                                            .selectedLocationName.isEmpty
+                                        ? ""
+                                        : "1",
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
@@ -2261,7 +2679,6 @@ class SharedContentData {
   });
 }
 
-
 String normalizeInstagramUrl(String url) {
   try {
     final uri = Uri.parse(url);
@@ -2288,4 +2705,3 @@ String cleanInstagramUrl(String rawText) {
   // Remove trailing spaces or line breaks
   return match.group(0)!.trim();
 }
-

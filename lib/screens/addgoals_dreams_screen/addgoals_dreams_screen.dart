@@ -102,7 +102,7 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
 
   Future<void> _isTokenExpired() async {
     //await homeProvider.fetchChartView(context);
-    await homeProvider.fetchJournals(initial: true,context: context);
+    await homeProvider.fetchJournals(initial: true,context: context,fullList: true);
     // await editProfileProvider.fetchUserProfile();
     tokenStatus = TokenManager.checkTokenExpiry();
     if (tokenStatus) {
@@ -384,17 +384,16 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
                                                           ),
                                                         ),
                                                         Text(
-                                                          adDreamsGoalsProvider
-                                                              .goalModelIdName[
-                                                                  index]
-                                                              .name,
-                                                          textAlign:
-                                                              TextAlign.center,
+                                                          adDreamsGoalsProvider.goalModelIdName[index].name.length > 30
+                                                              ? '${adDreamsGoalsProvider.goalModelIdName[index].name.substring(0, 30)}...'
+                                                              : adDreamsGoalsProvider.goalModelIdName[index].name,
+                                                          textAlign: TextAlign.center,
                                                           style: const TextStyle(
                                                             fontFamily: 'Poppins',
                                                             color: Colors.grey,
                                                           ),
                                                         ),
+
                                                         CircleAvatar(
                                                           radius:
                                                               size.width * 0.04,
@@ -827,9 +826,11 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
                   context,
                   listen: false,
                 );
-                goalsDreamsProvider.fetchGoalsAndDreams(pageNo: goalsDreamsProvider.currentPage.toString(),context: context);
+                goalsDreamsProvider.fetchGoalsAndDreams(
+                    pageNo: "1", context: context, initial: true, fullList: true);
                 if(goalsDreamsProvider.fetchGoalsAndDreamsStatus == 404){
-                  goalsDreamsProvider.fetchGoalsAndDreams(pageNo: 1.toString(),context: context);
+                  goalsDreamsProvider.fetchGoalsAndDreams(
+                      pageNo: "1", context: context, initial: true, fullList: true);
                 }
 
               }

@@ -100,8 +100,8 @@ class _UserProfileListItemWidgetState extends State<UserProfileListItemWidget> {
                 child: Text(
                   capitalizeFirstLetter(
                     HtmlUnescape().convert(
-                      widget.title.length > 30
-                          ? '${widget.title.substring(0, 30)}...'
+                      widget.title.length > 28
+                          ? '${widget.title.substring(0, 28)}...'
                           : widget.title,
                     ),
                   ),

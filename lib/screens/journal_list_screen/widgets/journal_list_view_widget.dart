@@ -36,22 +36,16 @@ class _JournalListViewWidgetState extends State<JournalListViewWidget> {
     homeProvider = Provider.of<HomeProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       print("currentPagnewse$currentPage");
-      _scrollController.addListener(_loadMoreData);
-      homeProvider.fetchJournals(initial: true,context: context); // Fetch initial journals
-      homeProvider.fetchJournalsGridView(initial: true,context: context); // Fetch initial journals
+      homeProvider.fetchJournals(
+          initial: true, context: context, fullList: true);
+      homeProvider.fetchJournalsGridView(
+          initial: true, context: context); // Fetch initial journals
       Future.delayed(const Duration(seconds: 1), () {
         setState(() {
           isLoading = false;
         });
       });
     });
-  }
-
-  void _loadMoreData() {
-    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
-      homeProvider.fetchJournals(context: context);
-      homeProvider.fetchJournalsGridView(initial: true,context: context); // Fetch initial journals
-    }
   }
 
   @override
@@ -61,8 +55,10 @@ class _JournalListViewWidgetState extends State<JournalListViewWidget> {
       builder: (context, journalListProvider, homeProvider, _) {
         return RefreshIndicator(
           onRefresh: () async {
-            homeProvider.fetchJournals(initial: true,context: context);
-            homeProvider.fetchJournalsGridView(initial: true,context: context); // Fetch initial journals
+            homeProvider.fetchJournals(
+                initial: true, context: context, fullList: true);
+            homeProvider.fetchJournalsGridView(
+                initial: true, context: context); // Fetch initial journals
           },
           child: Column(
             children: [
@@ -72,74 +68,79 @@ class _JournalListViewWidgetState extends State<JournalListViewWidget> {
                   children: [
                     Container(
                       color: homeProvider.journalsModelList.isEmpty &&
-                          !homeProvider.journalsModelLoading
+                              !homeProvider.journalsModelLoading
                           ? Colors.transparent
                           : null,
-                      padding: const EdgeInsets.symmetric(horizontal: 28,vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 28, vertical: 10),
                       child: isLoading
-                          ?   Center(child: CupertinoActivityIndicator(
-                        color: ColorsContent.newThemeColor,
-                        radius: 15,
-                      ))
-                          : homeProvider.journalsModelList.isEmpty &&
-                          !homeProvider.journalsModelLoading
-                          ? Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                                            ImageConstant.noDataNumu,
-                                                    ),
-                              const Text("No data found",
-                                  style: TextStyle(fontSize: 18, color: Colors.black, fontFamily: 'Poppins',fontWeight: FontWeight.bold)),
-                              const SizedBox(height: 10),
-                              const Text("Check back later",
-                                  style: TextStyle(fontSize: 18, color: Colors.black, fontFamily: 'Poppins',fontWeight: FontWeight.normal)),
-                            ],
-                          )
-                          : ListView.separated(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(), // Prevent ListView from scrolling separately
-                        separatorBuilder: (context, index) {
-                          return const SizedBox(height: 10);
-                        },
-                        itemCount: homeProvider.journalsModelList.length +
-                            (homeProvider.journalsModelLoading ? 1 : 0),
-                        itemBuilder: (context, index) {
-                          if (index < homeProvider.journalsModelList.length) {
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => JournalViewScreen(
-                                      journalId: homeProvider
-                                          .journalsModelList[index]
-                                          .journalId
-                                          .toString(),
-                                      index: index,
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: UserProfileList1ItemWidget(
-                                journalsModelList:
-                                homeProvider.journalsModelList[index],
-                                index: index,
-                              ),
-                            );
-                          } else if (homeProvider.journalsModelLoading) {
-                            return Center(child: CupertinoActivityIndicator(
+                          ? Center(
+                              child: CupertinoActivityIndicator(
                               color: ColorsContent.newThemeColor,
                               radius: 15,
-                            ));
-                          } else {
-                            return Center(
-                              child: Image.asset(
-                                ImageConstant.noData,
-                              ),
-                            );
-                          }
-                        },
-                      ),
+                            ))
+                          : homeProvider.journalsModelList.isEmpty &&
+                                  !homeProvider.journalsModelLoading
+                              ? GestureDetector(
+                                  onTap: () {},
+                                  child: SvgPicture.asset(
+                                    ImageConstant.homeSearchDataFoundGradient,
+                                    width: size.width * 0.90,
+                                    height: size.height * 0.50,
+                                  ),
+                                )
+                              : ListView.separated(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  // Prevent ListView from scrolling separately
+                                  separatorBuilder: (context, index) {
+                                    return const SizedBox(height: 10);
+                                  },
+                                  itemCount:
+                                      homeProvider.journalsModelList.length +
+                                          (homeProvider.journalsModelLoading
+                                              ? 1
+                                              : 0),
+                                  itemBuilder: (context, index) {
+                                    if (index <
+                                        homeProvider.journalsModelList.length) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  JournalViewScreen(
+                                                journalId: homeProvider
+                                                    .journalsModelList[index]
+                                                    .journalId
+                                                    .toString(),
+                                                index: index,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: UserProfileList1ItemWidget(
+                                          journalsModelList: homeProvider
+                                              .journalsModelList[index],
+                                          index: index,
+                                        ),
+                                      );
+                                    } else if (homeProvider
+                                        .journalsModelLoading) {
+                                      return Center(
+                                          child: CupertinoActivityIndicator(
+                                        color: ColorsContent.newThemeColor,
+                                        radius: 15,
+                                      ));
+                                    } else {
+                                      return Center(
+                                        child: Image.asset(
+                                          ImageConstant.noData,
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
                     ),
                   ],
                 ),
@@ -155,15 +156,20 @@ class _JournalListViewWidgetState extends State<JournalListViewWidget> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: List.generate(
                         homeProvider.journalsModel?.pageCount ?? 0,
-                            (index) {
+                        (index) {
                           return GestureDetector(
                             onTap: () {
                               homeProvider.setCurrentPage(index + 1);
                               homeProvider.journalsModelList.clear();
-                              print("currentPagenews ${homeProvider.currentPage}");
+                              print(
+                                  "currentPagenews ${homeProvider.currentPage}");
                               homeProvider.fetchJournals(
-                                  pageNo: homeProvider.currentPage.toString(),context: context);
-                               homeProvider.fetchJournalsGridView(initial: true,context: context,fullList: true);
+                                  pageNo: homeProvider.currentPage.toString(),
+                                  context: context);
+                              homeProvider.fetchJournalsGridView(
+                                  initial: true,
+                                  context: context,
+                                  fullList: true);
                             },
                             child: const Text(
                               '',

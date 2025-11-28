@@ -109,10 +109,9 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
 
   Future<void> _isTokenExpired() async {
     // await homeProvider.fetchChartView(context);
-    await homeProvider.fetchJournals(
-        pageNo: homeProvider.currentPage.toString(), context: context);
+    await homeProvider.fetchJournals(initial: true,context: context,fullList: true);
     if (homeProvider.journalStatus == 404) {
-      await homeProvider.fetchJournals(pageNo: 1.toString(), context: context);
+      await homeProvider.fetchJournals(initial: true,context: context,fullList: true);
     }
     //await editProfileProvider.fetchUserProfile();
     tokenStatus = TokenManager.checkTokenExpiry();
@@ -215,7 +214,9 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                 // } else {
                                 //   Navigator.of(context).pop();
                                 // }
-                                Navigator.of(context).pop();
+                               if(mentalStrengthEditProvider.saveJournalLoading == false) {
+                                 Navigator.of(context).pop();
+                               }
                               },
                             ),
 
@@ -234,18 +235,21 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                       if (currentTabIndex > 0)
                                         GestureDetector(
                                           onTap: () {
-                                            _tabController.animateTo(
-                                                currentTabIndex -
-                                                    1); // Go to previous tab
+                                           if(mentalStrengthEditProvider.saveJournalLoading == false) {
+                                             _tabController.animateTo(
+                                                 currentTabIndex -
+                                                     1); // Go to previous tab
 
-                                            mentalStrengthEditProvider
-                                                .openGoalViewSheet = false;
-                                            mentalStrengthEditProvider
-                                                .openActionFullView = false;
-                                            mentalStrengthEditProvider
-                                                .openAddAction = false;
+                                             mentalStrengthEditProvider
+                                                 .openGoalViewSheet = false;
+                                             mentalStrengthEditProvider
+                                                 .openActionFullView = false;
+                                             mentalStrengthEditProvider
+                                                 .openAddAction = false;
+                                           }
                                           },
-                                          child: Row(
+                                          child: mentalStrengthEditProvider.saveJournalLoading == false ?
+                                          Row(
                                             children: [
                                               SvgPicture.asset(
                                                 ImageConstant
@@ -268,7 +272,8 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                                 ),
                                               ),
                                             ],
-                                          ),
+                                          ):
+                                              const SizedBox(),
                                         )
                                       else
                                         const SizedBox(width: 48),
@@ -691,20 +696,11 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                                           seconds: 3),
                                                       () async {
                                                     //   homeProvider.currentPage == 1;
-                                                    await homeProvider
-                                                        .fetchJournals(
-                                                            pageNo: homeProvider
-                                                                .currentPage
-                                                                .toString(),
-                                                            context: context);
+                                                        await homeProvider.fetchJournals(initial: true,context: context,fullList: true);
                                                     if (homeProvider
                                                             .journalStatus ==
                                                         404) {
-                                                      await homeProvider
-                                                          .fetchJournals(
-                                                              pageNo:
-                                                                  1.toString(),
-                                                              context: context);
+                                                      await homeProvider.fetchJournals(initial: true,context: context,fullList: true);
                                                     }
                                                     logger.i(
                                                         "homeProvider.currentPage${homeProvider.currentPage}");

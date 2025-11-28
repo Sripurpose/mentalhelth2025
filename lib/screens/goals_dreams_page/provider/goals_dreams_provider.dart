@@ -38,17 +38,18 @@ class GoalsDreamsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
-  int _currentPage = 1; // Store the current page number
-
-  int get currentPage => _currentPage;
-
-  void setCurrentPage(int page) {
-    _currentPage = page;
-    notifyListeners(); // Notify UI to update
-  }
   List<Goalsanddream> fullGoalsList = [];
   String searchQuery = "";
+  TextEditingController searchController = TextEditingController();
+
+  GoalsDreamsProvider() {
+    searchController.addListener(() {
+      searchQuery = searchController.text;
+      notifyListeners();
+    });
+  }
+
+
 
   GoalsAndDreamsModel? goalsAndDreamsModel;
   bool goalsAndDreamsModelLoading = false;
@@ -62,6 +63,14 @@ class GoalsDreamsProvider extends ChangeNotifier {
   String? formattedFromDate;
   String? formattedToDate;
 
+
+  int totalPages = 1;
+  int currentPage = 1;
+
+
+// assuming 10 items per page; adjust if your API uses a different page size
+
+
   Future fetchGoalsAndDreams({
     bool initial = false,
     String? pageNo,
@@ -69,6 +78,7 @@ class GoalsDreamsProvider extends ChangeNotifier {
     bool fullList = false,
     DateTime? fromDateParam,
     DateTime? toDateParam,
+    String keyword = "",      // 🔥 NEW SEARCH VALUE
   }) async {
     fetchGoalsAndDreamsStatus = 0;
 
@@ -89,14 +99,11 @@ class GoalsDreamsProvider extends ChangeNotifier {
     // ---------------------------------------------
     // PAGE RESET
     // ---------------------------------------------
+// PAGE LOGIC
+    // If first load → reset
     if (initial) {
-      pageLoad = 1;
-
-      /// IMPORTANT FIX!
       goalsanddreams.clear();
       fullGoalsList.clear();
-    } else {
-      pageLoad += 1;
     }
 
     notifyListeners();
@@ -123,13 +130,17 @@ class GoalsDreamsProvider extends ChangeNotifier {
     // ---------------------------------------------
     // POST BODY
     // ---------------------------------------------
+// ---- POST BODY ----
     final body = {
-      "page_no": pageLoad.toString(),
+      "page_no": pageNo ?? "1",
+      "keyword": keyword,     // 🔥 Add search text here
+
       if (!fullList) ...{
-        "from_date": formattedFromDate!,
-        "to_date": formattedToDate!,
-      },
+        "from_date": formattedFromDate ?? "",
+        "to_date": formattedToDate ?? "",
+      }
     };
+
 
     Uri url = Uri.parse(UrlConstant.goalsanddreamsUrl(page: '1'));
 
@@ -148,6 +159,10 @@ class GoalsDreamsProvider extends ChangeNotifier {
 
       goalsAndDreamsModel =
           goalsAndDreamsModelFromJson(response.body);
+
+      // Read pagination from API
+      currentPage = int.parse(goalsAndDreamsModel!.currentPage.toString()) ?? 1;
+      totalPages = goalsAndDreamsModel?.pageCount ?? 1;
 
       /// IMPORTANT FIX!
       goalsanddreams.clear();

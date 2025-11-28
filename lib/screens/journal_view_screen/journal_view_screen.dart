@@ -956,14 +956,14 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                                             const EdgeInsets
                                                                 .symmetric(
                                                                 horizontal:
-                                                                    20.0),
+                                                                    10.0),
                                                         child: Text(
                                                           capitalizeFirstLetter(
                                                             HtmlUnescape().convert(
                                                               (homeProvider.journalDetails?.journals?.goal?.goalTitle ?? '')
                                                                   .length >
-                                                                  35
-                                                                  ? '${(homeProvider.journalDetails?.journals?.goal?.goalTitle ?? '').substring(0, 35)}...'
+                                                                  30
+                                                                  ? '${(homeProvider.journalDetails?.journals?.goal?.goalTitle ?? '').substring(0, 30)}...'
                                                                   : (homeProvider.journalDetails?.journals?.goal?.goalTitle ?? ''),
                                                             ),
                                                           ),
@@ -1127,15 +1127,15 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                                                 const EdgeInsets
                                                                     .symmetric(
                                                                     horizontal:
-                                                                        20.0),
+                                                                        10.0),
                                                             child: Text(
                                                               capitalizeFirstLetter(
                                                                 HtmlUnescape()
                                                                     .convert(
                                                                   action.actionTitle!
                                                                               .length >
-                                                                          35
-                                                                      ? '${action.actionTitle?.substring(0, 35)}...'
+                                                                          30
+                                                                      ? '${action.actionTitle?.substring(0, 30)}...'
                                                                       : action
                                                                           .actionTitle
                                                                           .toString(),
@@ -1614,18 +1614,13 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                           break; // Stop the loop once item is removed
                                         }
                                       }
-                                      await homeProvider.fetchJournals(
-                                          pageNo: homeProvider.currentPage
-                                              .toString(),
-                                          context: context);
+                                      await homeProvider.fetchJournals(initial: true,context: context,fullList: true);
                                       await homeProvider.fetchJournalsGridView(
                                           initial: true,
                                           context: context,
                                           fullList: true);
                                       if (homeProvider.journalStatus == 404) {
-                                        await homeProvider.fetchJournals(
-                                            pageNo: 1.toString(),
-                                            context: context);
+                                        await homeProvider.fetchJournals(initial: true,context: context,fullList: true);
                                         await homeProvider
                                             .fetchJournalsGridView(
                                                 initial: true,

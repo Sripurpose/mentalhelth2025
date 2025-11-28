@@ -68,7 +68,7 @@ class _MentalStrengthAddEditFullViewScreenState
   PermissionStatus permissionStatus = PermissionStatus.denied;
   late FocusNode _descriptionFocusNode;
   Future<void> _isTokenExpired() async {
-    await homeProvider.fetchJournals(initial: true,context: context);
+    await homeProvider.fetchJournals(initial: true,context: context,fullList: true);
     await homeProvider.fetchJournalsGridView(initial: true,context: context);
     //  await editProfileProvider.fetchUserProfile();
     tokenStatus = TokenManager.checkTokenExpiry();
@@ -176,8 +176,8 @@ class _MentalStrengthAddEditFullViewScreenState
                         context,
                         size,
                         heading: "Mental Strength",
-                        onTap: () {
-                          homeProvider.fetchJournals(initial: true,context: context);
+                        onTap: () async {
+                          await homeProvider.fetchJournals(initial: true,context: context,fullList: true);
                           dashBoardProvider.changePage(index: 0);
                         },
                       ),

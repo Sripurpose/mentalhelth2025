@@ -154,7 +154,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
 
   Future<void> _isTokenExpired() async {
     //await homeProvider.fetchChartView(context);
-    await homeProvider.fetchJournals(initial: true,context: context);
+    await homeProvider.fetchJournals(initial: true,context: context,fullList: true);
     // await editProfileProvider.fetchUserProfile();
     tokenStatus = TokenManager.checkTokenExpiry();
     if (tokenStatus) {
@@ -1145,7 +1145,8 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                   context,
                   listen: false,
                 );
-                // goalsDreamsProvider.fetchGoalsAndDreams(initial: true);
+                goalsDreamsProvider.fetchGoalsAndDreams(
+                    pageNo: "1", context: context, initial: true, fullList: true);
               } else {
                 logger.w("formattedDate${adDreamsGoalsProvider.formattedDate}");
                 logger.w("selectedDate${adDreamsGoalsProvider.selectedDate}");
@@ -1173,7 +1174,8 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                   listen: false,
                 );
 
-                //goalsDreamsProvider.fetchGoalsAndDreams(initial: true);
+                goalsDreamsProvider.fetchGoalsAndDreams(
+                    pageNo: "1", context: context, initial: true, fullList: true);
               }
             } else {
               showCustomSnackBar(

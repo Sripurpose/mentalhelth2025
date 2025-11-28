@@ -81,9 +81,9 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
 
   Future<void> _isTokenExpired() async {
    // await homeProvider.fetchChartView(context);
-    await homeProvider.fetchJournals(pageNo:homeProvider.currentPage.toString(),context: context);
+    await homeProvider.fetchJournals(initial: true,context: context,fullList: true);
     if(homeProvider.journalStatus == 404){
-      await homeProvider.fetchJournals(pageNo:1.toString(),context: context);
+      await homeProvider.fetchJournals(initial: true,context: context,fullList: true);
     }
     //await editProfileProvider.fetchUserProfile();
     tokenStatus = TokenManager.checkTokenExpiry();
@@ -956,9 +956,9 @@ class _EditJournalMentalStrengthState extends State<EditJournalMentalStrength> {
                                                             seconds: 3),
                                                         () async {
                                                        //   homeProvider.currentPage == 1;
-                                                          await homeProvider.fetchJournals(pageNo:homeProvider.currentPage.toString(),context: context);
+                                                          await homeProvider.fetchJournals(initial: true,context: context,fullList: true);
                                                           if(homeProvider.journalStatus == 404){
-                                                            await homeProvider.fetchJournals(pageNo:1.toString(),context: context);
+                                                            await homeProvider.fetchJournals(initial: true,context: context,fullList: true);
                                                           }
                                                       logger.i("homeProvider.currentPage${homeProvider.currentPage}");
                                                     });

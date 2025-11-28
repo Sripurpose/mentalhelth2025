@@ -152,72 +152,6 @@ Widget buildPopupDialog(BuildContext context, Size size) {
 
                           SizedBox(height: size.height * 0.02),
 
-                          _menuItem(
-                            title: "Privacy policy",
-                            onTap: () {
-                              dashBoardProvider.changeCommentPage(index: 6);
-                              Navigator.pop(context);
-                            },
-                          ),
-                          _menuItem(
-                            title: "Terms of service",
-                            onTap: () {
-                              dashBoardProvider.changeCommentPage(index: 11);
-                              Navigator.pop(context);
-                            },
-                          ),
-                          _menuItem(
-                            title: "Help",
-                            onTap: () {
-                              dashBoardProvider.changeCommentPage(index: 12);
-                              Navigator.pop(context);
-                            },
-                          ),
-
-                          SizedBox(height: size.height * 0.01),
-
-                          /// ===================== APP SHARE ======================
-                          Consumer<SignInProvider>(
-                            builder: (context, signInProvider, child) {
-                              final shareData =
-                                  signInProvider.appShareResponseModel;
-                              final url = Theme.of(context).platform ==
-                                  TargetPlatform.iOS
-                                  ? shareData?.appstoreUrl
-                                  : shareData?.playstoreUrl;
-
-                              final bool showShare =
-                                  shareData != null &&
-                                      (shareData.title?.isNotEmpty ?? false) &&
-                                      (shareData.message?.isNotEmpty ?? false) &&
-                                      (url?.isNotEmpty ?? false);
-
-                              if (!showShare) return SizedBox.shrink();
-
-                              return _menuItem(
-                                title: "App share",
-                                onTap: () async {
-                                  final message = """
-${shareData!.title}
-
-${shareData.message}
-
-Download now: $url
-""";
-                                  await Share.share(message);
-                                },
-                              );
-                            },
-                          ),
-
-                          _menuItem(
-                            title: "Feedback",
-                            onTap: () {
-                              dashBoardProvider.changeCommentPage(index: 14);
-                              Navigator.pop(context);
-                            },
-                          ),
-
                           /// ===================== DYNAMIC MENU ======================
                           Consumer<SignInProvider>(
                             builder: (context, provider, _) {
@@ -260,7 +194,72 @@ Download now: $url
                             },
                           ),
 
-                          SizedBox(height: size.height * 0.02),
+                          _menuItem(
+                            title: "Privacy policy",
+                            onTap: () {
+                              dashBoardProvider.changeCommentPage(index: 6);
+                              Navigator.pop(context);
+                            },
+                          ),
+                          _menuItem(
+                            title: "Terms of service",
+                            onTap: () {
+                              dashBoardProvider.changeCommentPage(index: 11);
+                              Navigator.pop(context);
+                            },
+                          ),
+                          _menuItem(
+                            title: "Help",
+                            onTap: () {
+                              dashBoardProvider.changeCommentPage(index: 12);
+                              Navigator.pop(context);
+                            },
+                          ),
+
+                         // SizedBox(height: size.height * 0.01),
+
+                          /// ===================== APP SHARE ======================
+                          Consumer<SignInProvider>(
+                            builder: (context, signInProvider, child) {
+                              final shareData =
+                                  signInProvider.appShareResponseModel;
+                              final url = Theme.of(context).platform ==
+                                  TargetPlatform.iOS
+                                  ? shareData?.appstoreUrl
+                                  : shareData?.playstoreUrl;
+
+                              final bool showShare =
+                                  shareData != null &&
+                                      (shareData.title?.isNotEmpty ?? false) &&
+                                      (shareData.message?.isNotEmpty ?? false) &&
+                                      (url?.isNotEmpty ?? false);
+
+                              if (!showShare) return SizedBox.shrink();
+
+                              return _menuItem(
+                                title: "App share",
+                                onTap: () async {
+                                  final message = """
+${shareData!.title}
+
+${shareData.message}
+
+Download now: $url
+""";
+                                  await Share.share(message);
+                                },
+                              );
+                            },
+                          ),
+
+                          _menuItem(
+                            title: "Feedback",
+                            onTap: () {
+                              dashBoardProvider.changeCommentPage(index: 14);
+                              Navigator.pop(context);
+                            },
+                          ),
+                       //   SizedBox(height: size.height * 0.01),
 
                           /// ===================== LOGOUT ======================
                           Consumer2<EditProfileProvider, SignInProvider>(

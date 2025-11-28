@@ -264,9 +264,8 @@ class _GoalsListWidgetState extends State<GoalsListWidget> {
                                                       .id
                                                       .toString(),
                                             );
-                                            goalsDreamsProvider
-                                                .fetchGoalsAndDreams(
-                                                    initial: true,context: context);
+                                            goalsDreamsProvider.fetchGoalsAndDreams(
+                                                pageNo: "1", context: context, initial: true, fullList: true);
                                             Navigator.of(context).pop();
                                           },
                                           yes: "Yes",
@@ -391,9 +390,7 @@ class _GoalsListWidgetState extends State<GoalsListWidget> {
                               status: "1",
                             );
                             goalsDreamsProvider.fetchGoalsAndDreams(
-                              initial: true,
-                              context: context
-                            );
+                                pageNo: "1", context: context, initial: true, fullList: true);
                             Navigator.of(context).pop();
                           },
                           yes: "Yes",

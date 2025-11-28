@@ -1509,7 +1509,7 @@ class _ActionFullViewJournalCreateBottomSheetState
                       await addActionsProvider.deleteActionFunction(
                           deleteId: id, context: context);
                       goalsDreamsProvider.fetchGoalsAndDreams(
-                          initial: true, context: context);
+                          pageNo: "1", context: context, initial: true, fullList: true);
                       Navigator.of(context).pop();
                     },
                     value: 'Delete',

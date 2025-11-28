@@ -73,7 +73,7 @@ class _NumuMentalStrengthAddEditPageState
   late FocusNode _titleFocusNode;
 
   Future<void> _isTokenExpired() async {
-    await homeProvider.fetchJournals(initial: true, context: context);
+    await homeProvider.fetchJournals(initial: true,context: context,fullList: true);
     //  await editProfileProvider.fetchUserProfile();
     tokenStatus = TokenManager.checkTokenExpiry();
     if (tokenStatus) {
@@ -245,15 +245,19 @@ class _NumuMentalStrengthAddEditPageState
                                     if (currentTabIndex > 0)
                                       GestureDetector(
                                         onTap: () {
-                                          _tabController.animateTo(
-                                              currentTabIndex -
-                                                  1); // Go to previous tab
+                                          if(mentalStrengthEditProvider.saveJournalLoading == false){
+                                            _tabController.animateTo(
+                                                currentTabIndex -
+                                                    1); // Go to previous tab
 
-                                          mentalStrengthEditProvider
-                                              .openAllCloser();
+                                            mentalStrengthEditProvider
+                                                .openAllCloser();
+                                          }
+
                                           // FocusScope.of(context).unfocus();
                                         },
-                                        child: Row(
+                                        child:  mentalStrengthEditProvider.saveJournalLoading == false ?
+                                        Row(
                                           children: [
                                             SvgPicture.asset(
                                               ImageConstant
@@ -265,8 +269,7 @@ class _NumuMentalStrengthAddEditPageState
                                             ),
                                             const SizedBox(width: 10),
                                             // Spacing between icon and text
-                                            Text(
-                                              "Back",
+                                            Text("Back" ,
                                               style: TextStyle(
                                                 fontSize: 17,
                                                 fontWeight: FontWeight.w500,
@@ -275,7 +278,7 @@ class _NumuMentalStrengthAddEditPageState
                                               ),
                                             ),
                                           ],
-                                        ),
+                                        ):const SizedBox(),
                                       )
                                     else
                                       GestureDetector(

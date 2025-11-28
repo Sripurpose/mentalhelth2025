@@ -68,7 +68,7 @@ class _GoalAndDreamFullViewScreenState
         Provider.of<GoalsDreamsProvider>(context, listen: false);
     mentalStrengthEditProvider =
         Provider.of<MentalStrengthEditProvider>(context, listen: false);
-    goalsDreamsProvider.fetchGoalsAndDreams(initial: true, context: context);
+
     mentalStrengthEditProvider.fetchGoalActions(
       goalId: widget.goalsanddream.goalId.toString(),
     );
@@ -959,8 +959,10 @@ class _GoalAndDreamFullViewScreenState
                                         );
                                         await goalsDreamsProvider
                                             .fetchGoalsAndDreams(
+                                                pageNo: "1",
+                                                context: context,
                                                 initial: true,
-                                                context: context);
+                                                fullList: true);
                                         mentalStrengthEditProvider
                                             .fetchGoalActions(
                                           goalId: widget.goalsanddream.goalId
@@ -1058,7 +1060,7 @@ class _GoalAndDreamFullViewScreenState
                 decoration: BoxDecoration(
                   color: ColorsContent.goalTextColor, // Light purple background
                   borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(5)),
+                      const BorderRadius.vertical(top: Radius.circular(5)),
                 ),
                 child: Text(
                   "Goal Name",
@@ -1077,7 +1079,7 @@ class _GoalAndDreamFullViewScreenState
                 decoration: const BoxDecoration(
                   color: Colors.white, // Off-white background
                   borderRadius:
-                  BorderRadius.vertical(bottom: Radius.circular(5)),
+                      BorderRadius.vertical(bottom: Radius.circular(5)),
                 ),
                 child: Text(
                   capitalizeFirstLetter(HtmlUnescape().convert(title)),
@@ -1133,8 +1135,7 @@ class _GoalAndDreamFullViewScreenState
                       BorderRadius.vertical(bottom: Radius.circular(5)),
                 ),
                 child: Text(
-                  capitalizeFirstLetter(
-                      HtmlUnescape().convert(category)),
+                  capitalizeFirstLetter(HtmlUnescape().convert(category)),
                   style: const TextStyle(
                     color: Colors.black,
                     fontSize: 16,
@@ -1503,8 +1504,7 @@ class _GoalAndDreamFullViewScreenState
     String? heading,
     required String id,
     required String goalStatus,
-  })
-  {
+  }) {
     return CustomAppBarNumu(
       backgroundColor: ColorsContent.homeBackGroundColor,
       leadingWidth: 36,

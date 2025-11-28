@@ -83,7 +83,8 @@ class _ViewReminderScreenState extends State<ViewReminderScreen> {
       logger.w("homeProvider.reminderStatusCode${homeProvider.reminderStatusCode}");
       goalsDreamsProvider.goalsanddreams = [];
       goalsDreamsProvider.goalsanddreams.clear();
-      goalsDreamsProvider.fetchGoalsAndDreams(initial: true,context: context);
+      goalsDreamsProvider.fetchGoalsAndDreams(
+          pageNo: "1", context: context, initial: true, fullList: true);
       // mentalStrengthEditProvider.fetchGoalActions(goalId: widget.goalsanddream.goalId.toString(),);
       _isTokenExpired();
     });
@@ -100,7 +101,8 @@ class _ViewReminderScreenState extends State<ViewReminderScreen> {
 
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
-      goalsDreamsProvider.fetchGoalsAndDreams(context: context);
+      goalsDreamsProvider.fetchGoalsAndDreams(
+          pageNo: "1", context: context, initial: true, fullList: true);
     }
 
     if (_scrollController.position.pixels !=

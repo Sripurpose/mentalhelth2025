@@ -93,6 +93,7 @@ class ImageConstant {
   static String createGoals = '$imagePath/create_goals.svg';
   static String createGoalsSvg = '$imagePath/create_goals_svg.svg';
   static String createGoalsPng = '$imagePath/create_goal_png.png';
+  static String addGoalPng = '$imagePath/add_goal_png.png';
   static String imgGroup29 = '$imagePath/img_group_29.svg';
   static String imgGroup22 = '$imagePath/img_group_22.png';
   static String gradientBackground = '$imagePath/gradient_background.png';
@@ -131,6 +132,11 @@ class ImageConstant {
 
   static String imgArrowDown = '$imagePath/goal_in_active_icon_numu.svg';
   static String imgArrowDownActive = '$imagePath/goals_active_icon_numu.svg';
+
+  static String loadMoreScrollIconActive = '$imagePath/load_more_scroll_icon.svg';
+  static String previousScrollIconActive = '$imagePath/previous_scroll_icon.svg';
+
+
 
   static String goalsDreamsActive = '$imagePath/goals_dreams_active.svg';
   static String goalsDreamsInActive = '$imagePath/goals_dreams_inactive.svg';

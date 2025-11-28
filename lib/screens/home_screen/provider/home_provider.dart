@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -136,106 +137,154 @@ class HomeProvider extends ChangeNotifier {
 
   List<Journal> fullJournalsModelList = [];
   String searchQuery = "";
+  TextEditingController searchController = TextEditingController();
 
-  Future fetchJournals({bool initial = false,String? pageNo,required BuildContext context}) async {
-    try {
-      String? token = await getUserTokenSharePref();
-      journalsModelLoading = true;
-      String deviceType = Platform.isAndroid ? 'android' : 'ios';
-      String? versionCode = '';
-      if (Platform.isAndroid) {
-        versionCode = Constent.versionCodeAndroid.isNotEmpty
-            ? Constent.versionCodeAndroid
-            : await getVersionSharePref(); // Fetch user ID if version code is empty
-      } else if (Platform.isIOS) {
-        versionCode = Constent.versionCodeIOS.isNotEmpty
-            ? Constent.versionCodeIOS
-            : await getVersionSharePref(); // Fetch user ID if version code is empty
-      }
-      journalStatus = 0;
+  HomeProvider() {
+    searchController.addListener(() {
+      searchQuery = searchController.text;
       notifyListeners();
+    });
+  }
 
-      Map<String, String> headers = {
-        'device-type': deviceType,
-        'version': versionCode.toString(),
-        'authorization': token ?? "", // Assuming token is not null
-      };
 
-      if (initial) {
-        pageLoad = 1;
-        journalsModelList.clear();
-        notifyListeners();
-      } else {
-        pageLoad += 1;
-        notifyListeners();
+  DateTime? fromDateList;
+  DateTime? toDateList;
+
+  String? formattedFromDate;
+  String? formattedToDate;
+
+  Future fetchJournals({
+    bool initial = false,
+    String? pageNo,
+    required BuildContext context,
+    bool fullList = false,
+    DateTime? fromDateParam,
+    DateTime? toDateParam,
+  }) async {
+    journalStatus = 0;
+
+    String? token = await getUserTokenSharePref();
+    journalsModelLoading = true;
+
+    String deviceType = Platform.isAndroid ? 'android' : 'ios';
+    String? versionCode = Platform.isAndroid
+        ? (Constent.versionCodeAndroid.isNotEmpty
+        ? Constent.versionCodeAndroid
+        : await getVersionSharePref())
+        : (Constent.versionCodeIOS.isNotEmpty
+        ? Constent.versionCodeIOS
+        : await getVersionSharePref());
+
+    notifyListeners();
+
+    Map<String, String> headers = {
+      'device-type': deviceType,
+      'version': versionCode.toString(),
+      'authorization': token!,
+    };
+
+    // ---------------------------------------------
+    // PAGE RESET
+    // ---------------------------------------------
+    if (initial) {
+      pageLoad = 1;
+
+      /// IMPORTANT FIX!
+      journalsModelList.clear();
+      fullJournalsModelList.clear();
+    } else {
+      pageLoad += 1;
+    }
+
+    notifyListeners();
+
+    // ---------------------------------------------
+    // DATE FILTER LOGIC
+    // ---------------------------------------------
+    if (!fullList) {
+      final start = fromDateParam ?? this.fromDate ?? DateTime.now();
+      final end = toDateParam ?? this.toDate ?? DateTime.now();
+
+      this.fromDate = start;
+      this.toDate = end;
+
+      formattedFromDate = _formatDateForApi(start);
+      formattedToDate = _formatDateForApi(end);
+    } else {
+      this.fromDate = null;
+      this.toDate = null;
+      formattedFromDate = null;
+      formattedToDate = null;
+    }
+
+    // ---------------------------------------------
+    // POST BODY
+    // ---------------------------------------------
+    final body = {
+      "page_no": pageLoad.toString(),
+      if (!fullList) ...{
+        "from_date": formattedFromDate!,
+        "to_date": formattedToDate!,
+      },
+    };
+
+    Uri url = Uri.parse(UrlConstant.journalsUrl(page: '1'));
+
+    logger.i("POST URL: $url");
+    logger.i("POST BODY: $body");
+
+    final response = await http.post(url, headers: headers, body: body);
+
+    log(response.body.toString(), name: "fetchJournals");
+
+    // ---------------------------------------------
+    // RESPONSE HANDLING
+    // ---------------------------------------------
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      journalStatus = 200;
+
+      journalsModel = journalsModelFromJson(response.body);
+
+      /// IMPORTANT FIX!
+      journalsModelList.clear();
+      fullJournalsModelList.clear();
+
+      if (journalsModel?.journals != null &&
+          journalsModel!.journals!.isNotEmpty) {
+
+        fullJournalsModelList = List.from(journalsModel!.journals!);
+
+        journalsModelList = List.from(fullJournalsModelList);
       }
 
-      Uri url = Uri.parse(
-        UrlConstant.journalsUrl(
-          page: pageNo ?? "1",
-        ),
-      );
-      logger.w("url $url");
-
-      final response = await http.get(url, headers: headers);
-
-      if (response.statusCode == 200) {
-        journalStatus = response.statusCode;
-        journalsModel = journalsModelFromJson(response.body);
-
-        final newJournals = journalsModel!.journals ?? [];
-
-        for (var journal in newJournals) {
-          if (!journalsModelList.any((existingJournal) =>
-          existingJournal.journalId == journal.journalId)) {
-            journalsModelList.add(journal);
-          }
-        }
-
-        /// 👉 VERY IMPORTANT for search
-        fullJournalsModelList = List.from(journalsModelList);
-
-        journalsModelLoading = false;
-        notifyListeners();
-      }
-
-      else if(response.statusCode == 503){
-        Future.delayed(Duration.zero, () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const MaintenenceScreen(
-                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
-                message: "",
-              ),
-            ),
-          );
-        });
-      }
-      else {
-        TokenManager.setTokenStatus(false);
-        journalStatus = response.statusCode;
-        logger.w("journalsModelelse ${journalsModelFromJson(response.body)}");
-        journalsModelLoading = false;
-        journalsModelList.clear();
-        notifyListeners();
-      }
-
-      // Handle token expiry (401, 403)
-      if (response.statusCode == 401 || response.statusCode == 403) {
-        journalStatus = response.statusCode;
-        TokenManager.setTokenStatus(true);
-        // CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
-      }
-
-      journalsModelLoading = false;
-      notifyListeners();
-    } catch (e) {
-      logger.w("catch $e");
       journalsModelLoading = false;
       notifyListeners();
     }
+
+    else if (response.statusCode == 503) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const MaintenenceScreen(
+            title: "App is in maintenance mode, Please be patient, we'll be back in a couple of hours!",
+            message: "",
+          ),
+        ),
+      );
+    }
+
+    else {
+      journalStatus = response.statusCode;
+    }
+
+    if (response.statusCode == 401 || response.statusCode == 403) {
+      TokenManager.setTokenStatus(true);
+    }
+
+    journalsModelLoading = false;
     notifyListeners();
   }
+
+
 
   void filterJournalsBySearch(String query) {
     searchQuery = query.toLowerCase();

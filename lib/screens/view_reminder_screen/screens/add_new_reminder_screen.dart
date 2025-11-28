@@ -50,7 +50,8 @@ class _AddNewReminderScreenScreenState
     mentalStrengthEditProvider =
         Provider.of<MentalStrengthEditProvider>(context, listen: false);
     homeProvider = Provider.of<HomeProvider>(context, listen: false);
-    goalsDreamsProvider.fetchGoalsAndDreams(initial: true,context: context);
+    goalsDreamsProvider.fetchGoalsAndDreams(
+        pageNo: "1", context: context, initial: true, fullList: true);
     addActionsProvider =
         Provider.of<AddActionsProvider>(context, listen: false);
     _loadGoalListDropDown();

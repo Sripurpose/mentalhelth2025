@@ -339,7 +339,7 @@ class _AddGoalsLinkScreenState extends State<AddGoalsLinkScreen> {
 
   Future<void> _isTokenExpired() async {
     //await homeProvider.fetchChartView(context);
-    await homeProvider.fetchJournals(initial: true, context: context);
+    await homeProvider.fetchJournals(initial: true,context: context,fullList: true);
     // await editProfileProvider.fetchUserProfile();
     tokenStatus = TokenManager.checkTokenExpiry();
     if (tokenStatus) {

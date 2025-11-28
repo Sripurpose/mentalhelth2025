@@ -94,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _isTokenExpired() async {
 
-    await homeProvider.fetchJournals(initial: true,context: context);
+    await homeProvider.fetchJournals(initial: true,context: context,fullList: true);
     await homeProvider.fetchJournalsGridView(initial: true,context: context,fullList: true);
    // await homeProvider.fetchChartView(context);
   //  checkAndFetchVersionUpdate(context);
@@ -590,7 +590,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       await signInProvider.fetchSettings(context);
                       _isTokenExpired();
                    //   homeProvider.fetchChartView(context);
-                      homeProvider.fetchJournals(initial: true,context: context);
+                      await homeProvider.fetchJournals(initial: true,context: context,fullList: true);
                       homeProvider.fetchJournalsGridView(initial: true,context: context,fullList: true);
                       editProfileProvider.fetchUserProfile(context);
                     },

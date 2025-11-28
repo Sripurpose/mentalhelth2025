@@ -89,8 +89,7 @@ class DashBoardScreen extends StatelessWidget {
                       await editProfileProvider.fetchUserProfile(context);
                     } else if (index == 2) {
                       await journalListProvider.fetchJournalChartView(context: context);
-                      await homeProvider.fetchJournals(initial: true,context: context);
-                    }
+                      await homeProvider.fetchJournals(initial: true,context: context,fullList: true);                    }
                   },
                   items: [
                     BottomNavigationBarItem(

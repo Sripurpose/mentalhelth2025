@@ -319,11 +319,10 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                                     const SnackBar(content: Text("Journals deleted successfully")),
                                   );
                                 }
-                                await homeProvider.fetchJournals(
-                                    pageNo: homeProvider.currentPage.toString(), context: context);
+                                await homeProvider.fetchJournals(initial: true,context: context,fullList: true);
 
                                 if (homeProvider.journalStatus == 404) {
-                                  await homeProvider.fetchJournals(pageNo: "1", context: context);
+                                  await homeProvider.fetchJournals(initial: true,context: context,fullList: true);
                                 }
 
                                 List<int> indicesToRemove = [];
