@@ -292,7 +292,7 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
                                             },
                                           ),
                               ),
-
+                              goalsDreamsProvider.goalsanddreams.isNotEmpty?
                               Padding(
                                 padding:
                                 const EdgeInsets.symmetric(horizontal: 30.0,vertical: 70),
@@ -336,7 +336,7 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
                                     ),
                                   ),
                                 ),
-                              ),
+                              ):SizedBox(),
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 25.0),
@@ -459,6 +459,7 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
                     child: TextField(
                       controller: goalsDreamsProvider.searchController,
                       textInputAction: TextInputAction.search,
+                      // readOnly: goalsDreamsProvider.selectedStartDate != null,
 
                       onSubmitted: (value) async {
                         goalsDreamsProvider.searchQuery = value;
@@ -535,6 +536,12 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
               DateRangePickerGoalsAndDreamsScreen.show(
                 context,
                 onDateRangeSelected: (startDate, endDate) async {
+                  goalsDreamsProvider.selectedStartDate = startDate;
+                  goalsDreamsProvider.selectedEndDate = endDate;
+
+                  goalsDreamsProvider.searchController.text =
+                      goalsDreamsProvider.selectedDateRangeText;
+
                   await goalsDreamsProvider.fetchGoalsAndDreams(
                     initial: true,
                     context: context,
@@ -542,12 +549,25 @@ class _GoalsDreamsPageState extends State<GoalsDreamsPage> {
                     toDateParam: endDate,
                     fullList: false,
                   );
-
-                  goalsDreamsProvider.filterGoalsBySearch(
-                    goalsDreamsProvider.searchQuery,
-                  );
                 },
               );
+
+              // DateRangePickerGoalsAndDreamsScreen.show(
+              //   context,
+              //   onDateRangeSelected: (startDate, endDate) async {
+              //     await goalsDreamsProvider.fetchGoalsAndDreams(
+              //       initial: true,
+              //       context: context,
+              //       fromDateParam: startDate,
+              //       toDateParam: endDate,
+              //       fullList: false,
+              //     );
+              //
+              //     goalsDreamsProvider.filterGoalsBySearch(
+              //       goalsDreamsProvider.searchQuery,
+              //     );
+              //   },
+              // );
             },
             child: SvgPicture.asset(ImageConstant.goalsAndDreamsDateIcon),
           ),

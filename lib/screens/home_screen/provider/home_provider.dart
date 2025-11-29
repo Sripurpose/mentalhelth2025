@@ -153,6 +153,23 @@ class HomeProvider extends ChangeNotifier {
   String? formattedFromDate;
   String? formattedToDate;
 
+
+  DateTime? selectedStartDate;
+  DateTime? selectedEndDate;
+
+  void clearDateRange() {
+    selectedStartDate = null;
+    selectedEndDate = null;
+    notifyListeners();
+  }
+
+  String get selectedDateRangeText {
+    if (selectedStartDate == null || selectedEndDate == null) return "";
+    final s = DateFormat("dd/MM/yyyy").format(selectedStartDate!);
+    final e = DateFormat("dd/MM/yyyy").format(selectedEndDate!);
+    return "$s - $e";
+  }
+
   Future fetchJournals({
     bool initial = false,
     String? pageNo,
@@ -160,6 +177,7 @@ class HomeProvider extends ChangeNotifier {
     bool fullList = false,
     DateTime? fromDateParam,
     DateTime? toDateParam,
+    String keyword = "",      // 🔥 NEW SEARCH VALUE
   }) async {
     journalStatus = 0;
 
@@ -186,14 +204,12 @@ class HomeProvider extends ChangeNotifier {
     // ---------------------------------------------
     // PAGE RESET
     // ---------------------------------------------
+// PAGE LOGIC
+    // If first load → reset
     if (initial) {
-      pageLoad = 1;
-
       /// IMPORTANT FIX!
       journalsModelList.clear();
       fullJournalsModelList.clear();
-    } else {
-      pageLoad += 1;
     }
 
     notifyListeners();
@@ -217,15 +233,19 @@ class HomeProvider extends ChangeNotifier {
       formattedToDate = null;
     }
 
+
     // ---------------------------------------------
     // POST BODY
     // ---------------------------------------------
+// ---- POST BODY ----
     final body = {
-      "page_no": pageLoad.toString(),
+      "page_no": pageNo ?? "1",
+      "keyword": keyword,     // 🔥 Add search text here
+
       if (!fullList) ...{
-        "from_date": formattedFromDate!,
-        "to_date": formattedToDate!,
-      },
+        "from_date": formattedFromDate ?? "",
+        "to_date": formattedToDate ?? "",
+      }
     };
 
     Uri url = Uri.parse(UrlConstant.journalsUrl(page: '1'));

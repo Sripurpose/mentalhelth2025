@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:mentalhelth/utils/core/url_constant.dart';
 
@@ -47,6 +48,22 @@ class GoalsDreamsProvider extends ChangeNotifier {
       searchQuery = searchController.text;
       notifyListeners();
     });
+  }
+
+  DateTime? selectedStartDate;
+  DateTime? selectedEndDate;
+
+  void clearDateRange() {
+    selectedStartDate = null;
+    selectedEndDate = null;
+    notifyListeners();
+  }
+
+  String get selectedDateRangeText {
+    if (selectedStartDate == null || selectedEndDate == null) return "";
+    final s = DateFormat("dd/MM/yyyy").format(selectedStartDate!);
+    final e = DateFormat("dd/MM/yyyy").format(selectedEndDate!);
+    return "$s - $e";
   }
 
 
