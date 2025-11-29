@@ -534,7 +534,7 @@ class _JournalListPageState extends State<JournalListPage> {
                                                     bottom: 0),
                                                 // Adjust the position
                                                 child: SizedBox(
-                                                  width: 95, // Increase width
+                                                  width: 150, // Increase width
                                                   height: 70, // Increase height
                                                   child: FloatingActionButton(
                                                     backgroundColor:
@@ -558,11 +558,20 @@ class _JournalListPageState extends State<JournalListPage> {
                                                           .fetchEmotions(
                                                               context: context);
                                                     },
-                                                    child: Image.asset(
-                                                      ImageConstant.addGoalPng,
-                                                      // Make sure this points to your PNG file
-                                                      //  fit: BoxFit.cover,
+                                                    child:
+                                                    addGoalButton(
+                                                      onTap: () {
+                                                        dashBoardProvider
+                                                            .changePage(index: 1);
+                                                        mentalStrengthEditProvider
+                                                            .fetchEmotions(
+                                                            context: context);
+                                                      },
                                                     ),
+
+                                                    // Image.asset(
+                                                    //   ImageConstant.addGoalPng,
+                                                    // ),
                                                   ),
                                                 ),
                                               ),
@@ -763,4 +772,39 @@ class _JournalListPageState extends State<JournalListPage> {
       ),
     );
   }
+
+
+  Widget addGoalButton({required VoidCallback onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        decoration: BoxDecoration(
+          color: const Color(0xFF7C63F7), // Same purple color
+          borderRadius: BorderRadius.circular(25),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(
+              Icons.add,
+              color: Colors.white,
+              size: 20,
+            ),
+            const SizedBox(width: 6),
+            const Text(
+              "Add Journal",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                fontFamily: "Poppins",
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
 }
