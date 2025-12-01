@@ -157,7 +157,7 @@ class DeepLinkHandler {
             nextScreen = const NewSplashScreen();
             showToast(
               context: ctx,
-              message: "Login required. Please sign in.",
+              message: "Login required. Please Login!",
             );
           }
 
