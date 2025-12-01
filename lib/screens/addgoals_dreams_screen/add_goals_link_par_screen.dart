@@ -126,6 +126,8 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
 
     // Step 4: Clear all fields immediately (synchronous)
     try {
+      editProfileProvider.categorys!.id = "";
+      editProfileProvider.categorys!.categoryName = "";
       adDreamsGoalsProvider.selectedOption = "";
       adDreamsGoalsProvider.selectedExistingGoal = null;
       adDreamsGoalsProvider.goalListLink = [];

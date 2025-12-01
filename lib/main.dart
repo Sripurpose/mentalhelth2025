@@ -1,6 +1,7 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -19,6 +20,7 @@ import 'package:mentalhelth/screens/addactions_screen/model/alaram_info.dart';
 import 'package:mentalhelth/screens/addgoals_dreams_screen/add_goals_link_par_screen.dart';
 import 'package:mentalhelth/screens/auth/sign_in/widget/referral_code_helper.dart';
 import 'package:mentalhelth/screens/auth/signup_screen/provider/signup_provider.dart';
+import 'package:mentalhelth/screens/auth/splash/new_splash_screen.dart';
 import 'package:mentalhelth/screens/auth/splash/splash.dart';
 import 'package:mentalhelth/screens/auth/subscribe_plan_page/provider/subscribe_plan_provider.dart';
 import 'package:mentalhelth/screens/dash_borad_screen/provider/dash_board_provider.dart';
@@ -29,7 +31,9 @@ import 'package:mentalhelth/screens/mental_strength_add_edit_screen/provider/men
 import 'package:mentalhelth/screens/reminder_push_view_screen/reminder_push_view_screen.dart';
 import 'package:mentalhelth/utils/core/firebase_api.dart';
 import 'package:mentalhelth/utils/core/url_constant.dart';
+import 'package:mentalhelth/utils/logic/shared_prefrence.dart';
 import 'package:mentalhelth/utils/theme/colors.dart';
+import 'package:mentalhelth/widgets/functions/snack_bar.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -110,7 +114,8 @@ class DeepLinkHandler {
       String? url,
       String? text,
       List<String>? images,
-      ) {
+      ) async {
+
     if (_isNavigating) {
       debugPrint('⚠️ Navigation already in progress');
       return;
@@ -118,54 +123,68 @@ class DeepLinkHandler {
 
     try {
       _isNavigating = true;
-      debugPrint('🚀 Starting navigation to AddGoalsLinkParScreen with url=$url');
+      debugPrint('🚀 Starting navigation...');
 
-      // Longer delay for Android when app was terminated
       final delay = Platform.isAndroid ? 1000 : 500;
 
-      Future.delayed(Duration(milliseconds: delay), () {
+      Future.delayed(Duration(milliseconds: delay), () async {
         try {
+          // 🔥 Get subscription value
+          final getSubScribed = await getUserSubScribeSharePref();
+          debugPrint("🔎 Subscription value = $getSubScribed");
+
           final navigator = Navigator.of(ctx);
-          debugPrint('📍 Navigator state: ${navigator.mounted}');
+
+          // 🔥 Condition Check
+          final bool allowAddGoalsScreen =
+              getSubScribed.toString() == "1" || getSubScribed.toString() == "0";
+
+          Widget nextScreen;
+
+          if (allowAddGoalsScreen) {
+            debugPrint("👍 Allowed → Navigating to AddGoalsLinkParScreen");
+            nextScreen = AddGoalsLinkParScreen(
+              sharedUrl: url,
+              sharedText: text,
+              sharedImages: images,
+              onClose: () {
+                debugPrint('❌ AddGoalsLinkParScreen onClose called');
+                _isNavigating = false;
+              },
+            );
+          } else {
+            debugPrint("🚫 Not allowed → Navigating to NewSplashScreen");
+            nextScreen = const NewSplashScreen();
+            showToast(
+              context: ctx,
+              message: "Login required. Please sign in.",
+            );
+          }
 
           final route = MaterialPageRoute(
-            builder: (_) {
-              debugPrint('🔨 Building AddGoalsLinkParScreen with url=$url');
-              return AddGoalsLinkParScreen(
-                sharedUrl: url,
-                sharedText: text,
-                sharedImages: images,
-                onClose: () {
-                  debugPrint('❌ AddGoalsLinkParScreen onClose called');
-                  _isNavigating = false;
-                },
-              );
-            },
-            settings: RouteSettings(
-              name: 'AddGoalsLinkParScreen',
-              arguments: {'url': url, 'text': text, 'images': images},
-            ),
+            builder: (_) => nextScreen,
           );
 
           navigator.push(route).then((result) {
-            debugPrint('✅ Navigation completed with result: $result');
+            debugPrint('✅ Navigation completed: $result');
             _isNavigating = false;
           }).catchError((e) {
             debugPrint('❌ Navigation error: $e');
             _isNavigating = false;
           });
 
-          debugPrint('✅ Navigation pushed successfully');
         } catch (e) {
-          debugPrint('❌ Navigation error in delayed: $e\n${StackTrace.current}');
+          debugPrint('❌ Navigation error inside delayed: $e\n${StackTrace.current}');
           _isNavigating = false;
         }
       });
+
     } catch (e) {
       debugPrint('❌ Error in _performNavigation: $e\n${StackTrace.current}');
       _isNavigating = false;
     }
   }
+
 
   void resetNavigation() {
     _isNavigating = false;
@@ -631,6 +650,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   String? baseUrlLive;
   String? baseUrlQA;
   String? baseUrlAppShareDownloads;
+  int? paginationCount;
   bool isBaseUrlReady = false;
 
   String? oneSignalLive;
@@ -764,6 +784,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           baseUrlLiveIos = value['base_url_live_ios'] as String?;
           baseUrlLiveAndroid = value['base_url_live_android'] as String?;
           baseUrlAppShareDownloads = value['app_share_url'] as String?;
+          paginationCount = value['pagination_count'] as int?;
+
           _setupRemoteConfig();
           return;
         }
@@ -776,6 +798,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           baseUrlLiveIos = value['base_url_live_ios'] as String?;
           baseUrlLiveAndroid = value['base_url_live_android'] as String?;
           baseUrlAppShareDownloads = value['app_share_url'] as String?;
+          paginationCount = value['pagination_count'] as int?;
+
         });
         _setupRemoteConfig();
       } else {
@@ -794,6 +818,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         UrlConstant.baseUrl = baseUrlQA ?? '';
         UrlConstant.oneSignalRemote = oneSignalStaging ?? '';
         UrlConstant.appShareDownloads = baseUrlAppShareDownloads ?? '';
+        UrlConstant.paginationCount = paginationCount ?? 0;
+
         isBaseUrlReady = true;
         debugPrint('✅ QA Base URL: $baseUrlQA');
       }
@@ -802,6 +828,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         UrlConstant.baseUrl = baseUrlLive ?? '';
         UrlConstant.oneSignalRemote = oneSignalStaging ?? '';
         UrlConstant.appShareDownloads = baseUrlAppShareDownloads ?? '';
+        UrlConstant.paginationCount = paginationCount ?? 0;
         isBaseUrlReady = true;
         debugPrint('✅ Live Base URL ($deviceType): $baseUrlLive');
       }

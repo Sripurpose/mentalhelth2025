@@ -1588,6 +1588,12 @@ class _GoalAndDreamFullViewScreenState
                             deleteId: id,
                           );
                           await Future.delayed(const Duration(seconds: 1));
+                          goalsDreamsProvider.fetchGoalsAndDreams(
+                              pageNo: "1",
+                              context: context,
+                              initial: true,
+                              fullList: true
+                          );
                           Navigator.of(context).pop();
                           Navigator.of(context).pop();
                         },

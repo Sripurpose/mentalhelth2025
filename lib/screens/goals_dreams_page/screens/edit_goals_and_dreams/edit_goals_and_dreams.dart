@@ -631,9 +631,9 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                                                                   },
                                                                   yes: "Yes",
                                                                   title:
-                                                                      'Do you Need Delete',
+                                                                      'Confirm Delete?',
                                                                   content:
-                                                                      'Are you sure do you need delete',
+                                                                      'Are you sure you want to delete this action?',
                                                                 );
                                                               },
                                                               child: Padding(

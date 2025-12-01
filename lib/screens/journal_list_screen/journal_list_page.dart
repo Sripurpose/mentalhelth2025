@@ -1,231 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'package:mentalhelth/screens/home_screen/provider/home_provider.dart';
-// import 'package:mentalhelth/screens/journal_list_screen/provider/journal_list_provider.dart';
-// import 'package:mentalhelth/screens/journal_list_screen/widgets/chart_view_list.dart';
-// import 'package:mentalhelth/screens/journal_list_screen/widgets/userprofilelist1_item_widget.dart';
-// import 'package:mentalhelth/screens/journal_view_screen/journal_view_screen.dart';
-// import 'package:mentalhelth/widgets/app_bar/appbar_leading_image.dart';
-// import 'package:provider/provider.dart';
-//
-// import '../../utils/core/image_constant.dart';
-// import '../../utils/theme/app_decoration.dart';
-// import '../../utils/theme/theme_helper.dart';
-//
-// // ignore_for_file: must_be_immutable
-// class JournalListPage extends StatefulWidget {
-//   const JournalListPage({Key? key})
-//       : super(
-//           key: key,
-//         );
-//
-//   @override
-//   JournalListPageState createState() => JournalListPageState();
-// }
-//
-// class JournalListPageState extends State<JournalListPage>
-//     with AutomaticKeepAliveClientMixin<JournalListPage> {
-//   final ScrollController _scrollController = ScrollController();
-//   @override
-//   void initState() {
-//     HomeProvider homeProvider = Provider.of<HomeProvider>(
-//       context,
-//       listen: false,
-//     );
-//     JournalListProvider journalListProvider =
-//         Provider.of<JournalListProvider>(context, listen: false);
-//     // homeProvider.journalsModelList = [];
-//     homeProvider.fetchJournals();
-//     _loadMoreData();
-//     journalListProvider.fetchJournalChartView();
-//     _scrollController.addListener(_loadMoreData);
-//     super.initState();
-//   }
-//
-//   void _loadMoreData() {
-//     HomeProvider homeProvider =
-//         Provider.of<HomeProvider>(context, listen: false);
-//     if (_scrollController.hasClients) {
-//       final double maxScroll = _scrollController.position.maxScrollExtent;
-//       final double currentScroll = _scrollController.position.pixels;
-//       final double scrollPercentage = currentScroll / maxScroll;
-//       // Adjust the threshold percentage as needed
-//       if (scrollPercentage >= 0.5) {
-//         // Trigger an action when scroll reaches 80% of the total scrollable area
-//         print("Reached 80% of scroll");
-//         // Call your function to fetch journals
-//         homeProvider.fetchJournals();
-//       }
-//     }
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     Size size = MediaQuery.of(context).size;
-//     return SafeArea(
-//       child: Container(
-//         width: size.width,
-//         height: size.height,
-//         decoration: BoxDecoration(
-//           color: theme.colorScheme.onSecondaryContainer.withOpacity(1),
-//           image: DecorationImage(
-//             image: AssetImage(
-//               ImageConstant.imgGroup193,
-//             ),
-//             fit: BoxFit.cover,
-//           ),
-//         ),
-//         child: Container(
-//           width: double.maxFinite,
-//           decoration: AppDecoration.fillOnSecondaryContainer.copyWith(
-//             image: DecorationImage(
-//               image: AssetImage(
-//                 ImageConstant.imgGroup193,
-//               ),
-//               fit: BoxFit.cover,
-//             ),
-//           ),
-//           child: Consumer2<JournalListProvider, HomeProvider>(
-//               builder: (context, journalListProvider, homeProvider, _) {
-//             return Padding(
-//               padding: const EdgeInsets.symmetric(horizontal: 0),
-//               child: Column(
-//                 children: [
-//                   buildAppBar(
-//                     context,
-//                     size,
-//                     heading: "My Journals",
-//                   ),
-//                   Padding(
-//                     padding: const EdgeInsets.symmetric(horizontal: 28),
-//                     child: Row(
-//                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                       children: [
-//                         GestureDetector(
-//                           onTap: () {
-//                             journalListProvider.changeListViewBar(true);
-//                           },
-//                           child: Container(
-//                             width: size.width * 0.42,
-//                             padding: EdgeInsets.only(
-//                               left: size.width * 0.1,
-//                               right: size.width * 0.1,
-//                               top: size.width * 0.03,
-//                               bottom: size.width * 0.03,
-//                             ),
-//                             decoration: BoxDecoration(
-//                               color: journalListProvider.listViewBool
-//                                   ? Colors.blue
-//                                   : Colors.blue[100],
-//                               borderRadius: const BorderRadius.only(
-//                                 topLeft: Radius.circular(20),
-//                               ),
-//                             ),
-//                             child: const Center(
-//                               child: Text(
-//                                 "List View",
-//                                 style: TextStyle(
-//                                   color: Colors.white,
-//                                 ),
-//                               ),
-//                             ),
-//                           ),
-//                         ),
-//                         GestureDetector(
-//                           onTap: () {
-//                             journalListProvider.changeListViewBar(false);
-//                           },
-//                           child: Container(
-//                             width: size.width * 0.42,
-//                             padding: EdgeInsets.only(
-//                               left: size.width * 0.1,
-//                               right: size.width * 0.1,
-//                               top: size.width * 0.03,
-//                               bottom: size.width * 0.03,
-//                             ),
-//                             decoration: BoxDecoration(
-//                               color: journalListProvider.listViewBool
-//                                   ? Colors.blue[100]
-//                                   : Colors.blue,
-//                               borderRadius: const BorderRadius.only(
-//                                 topRight: Radius.circular(20),
-//                               ),
-//                             ),
-//                             child: const Center(
-//                               child: Text(
-//                                 "Chart View",
-//                                 style: TextStyle(
-//                                   color: Colors.white,
-//                                 ),
-//                               ),
-//                             ),
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                   SizedBox(
-//                     height: size.height * 0.031,
-//                   ),
-//                   journalListProvider.listViewBool
-//                       ? homeProvider.journalsModelList == null
-//                           ? const SizedBox()
-//                           : Expanded(
-//                               child: Padding(
-//                                 padding:
-//                                     const EdgeInsets.symmetric(horizontal: 28),
-//                                 child: ListView.separated(
-//                                   controller: _scrollController,
-//                                   separatorBuilder: (
-//                                     context,
-//                                     index,
-//                                   ) {
-//                                     return const SizedBox(
-//                                       height: 3,
-//                                     );
-//                                   },
-//                                   itemCount:
-//                                       homeProvider.journalsModelList!.length,
-//                                   itemBuilder: (context, index) {
-//                                     if (index ==
-//                                         homeProvider.journalsModelList.length) {
-//                                       return const Center(
-//                                         child: CircularProgressIndicator(),
-//                                       );
-//                                     } else {
-//                                       return GestureDetector(
-//                                         onTap: () {
-//                                           Navigator.of(context).push(
-//                                             MaterialPageRoute(
-//                                               builder: (context) =>
-//                                                   JournalViewScreen(
-//                                                 journalsModelList: homeProvider
-//                                                     .journalsModelList![index],
-//                                                 indexs: index,
-//                                               ),
-//                                             ),
-//                                           );
-//                                         },
-//                                         child: UserProfileList1ItemWidget(
-//                                           journalsModelList: homeProvider
-//                                               .journalsModelList![index],
-//                                           index: index,
-//                                         ),
-//                                       );
-//                                     }
-//                                   },
-//                                 ),
-//                               ),
-//                             )
-//                       : const ChartViewList(),
-//                 ],
-//               ),
-//             );
-//           }),
-//         ),
-//       ),
-//     );
-//   }
-// }
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -243,6 +15,7 @@ import 'package:mentalhelth/widgets/background_image/background_imager.dart';
 import 'package:provider/provider.dart';
 
 import '../../utils/core/image_constant.dart';
+import '../../utils/core/url_constant.dart';
 import '../edit_add_profile_screen/provider/edit_provider.dart';
 import '../goals_dreams_page/provider/goals_dreams_provider.dart';
 import '../goals_dreams_page/widgets/date_range_picker_screen_goals_and_dreams.dart';
@@ -273,13 +46,12 @@ class _JournalListPageState extends State<JournalListPage> {
 
     setState(() => isLoading = true);
 
-    // Keep provider in sync
     homeProvider.pageLoad = pageNo;
 
     await homeProvider.fetchJournals(
       pageNo: pageNo.toString(),
       context: context,
-      initial: pageNo == 1, // reset only on first page
+      initial: pageNo == 1,
       fullList: true,
     );
 
@@ -290,7 +62,6 @@ class _JournalListPageState extends State<JournalListPage> {
   }
 
   Future<void> _isTokenExpired() async {
-    // await homeProvider.fetchChartView(context);
     await homeProvider.fetchJournals(
         initial: true, context: context, fullList: true);
     await homeProvider.fetchJournalsGridView(initial: true, context: context);
@@ -300,9 +71,6 @@ class _JournalListPageState extends State<JournalListPage> {
       setState(() {
         logger.e("Token status changed: $tokenStatus");
       });
-      logger.e("Token status changed: $tokenStatus");
-    } else {
-      logger.e("Token status changedElse: $tokenStatus");
     }
   }
 
@@ -326,332 +94,269 @@ class _JournalListPageState extends State<JournalListPage> {
     Size size = MediaQuery.of(context).size;
     return tokenStatus == false
         ? SafeArea(
-            child: backGroundImager(
-              size: size,
-              padding: EdgeInsets.zero,
-              child: Consumer4<MentalStrengthEditProvider, JournalListProvider,
-                  HomeProvider, DashBoardProvider>(
-                builder: (context, mentalStrengthEditProvider,
-                    journalListProvider, homeProvider, dashBoardProvider, _) {
-                  return Stack(
+      child: backGroundImager(
+        size: size,
+        padding: EdgeInsets.zero,
+        child: Consumer4<MentalStrengthEditProvider, JournalListProvider,
+            HomeProvider, DashBoardProvider>(
+          builder: (context, mentalStrengthEditProvider,
+              journalListProvider, homeProvider, dashBoardProvider, _) {
+            return Column(
+              children: [
+                buildAppBar(
+                  context,
+                  size,
+                  heading: "My Journals",
+                  onTap: () {
+                    dashBoardProvider.changePage(index: 0);
+                  },
+                ),
+                const SizedBox(height: 10),
+
+                // TAB BUTTONS
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        children: [
-                          // const SizedBox(height: 20),
-                          buildAppBar(
-                            context,
-                            size,
-                            heading: "My Journals",
-                            onTap: () {
-                              dashBoardProvider.changePage(index: 0);
-                            },
+                      GestureDetector(
+                        onTap: () {
+                          journalListProvider.changeListViewBar(true);
+                        },
+                        child: Container(
+                          width: size.width * 0.42,
+                          padding: EdgeInsets.symmetric(
+                            vertical: size.width * 0.03,
                           ),
-                          const SizedBox(height: 10),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 30),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    journalListProvider.changeListViewBar(true);
-                                  },
-                                  child: Container(
-                                    width: size.width * 0.42,
-                                    padding: EdgeInsets.symmetric(
-                                      vertical: size.width * 0.03,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: journalListProvider.listViewBool
-                                          ? ColorsContent.newThemeColor
-                                          : ColorsContent.goalNotCompletedColor,
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(20),
-                                      ),
-                                    ),
-                                    child: const Center(
-                                      child: Text(
-                                        "List View",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontFamily: 'Poppins',
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    journalListProvider
-                                        .changeListViewBar(false);
-                                    journalListProvider.fetchJournalChartView(
-                                        context: context);
-                                  },
-                                  child: Container(
-                                    width: size.width * 0.42,
-                                    padding: EdgeInsets.symmetric(
-                                      vertical: size.width * 0.03,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: journalListProvider.listViewBool
-                                          ? ColorsContent.goalNotCompletedColor
-                                          : ColorsContent.newThemeColor,
-                                      borderRadius: const BorderRadius.only(
-                                        topRight: Radius.circular(20),
-                                      ),
-                                    ),
-                                    child: const Center(
-                                      child: Text(
-                                        "Chart View",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontFamily: 'Poppins',
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                          decoration: BoxDecoration(
+                            color: journalListProvider.listViewBool
+                                ? ColorsContent.newThemeColor
+                                : ColorsContent.goalNotCompletedColor,
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(20),
                             ),
                           ),
-                          SizedBox(height: size.height * 0.011),
-                          if (journalListProvider.listViewBool)
-                            buildSearchAndDateBar(context, homeProvider),
-                          // 🔍 Add this here
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 25.0),
-                            child: Align(
-                              alignment: Alignment.topRight,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  // Previous Button
-                                  GestureDetector(
-                                    onTap: currentPage > 1 && !isLoading
-                                        ? () async {
-                                            await loadPage(currentPage - 1);
-                                          }
-                                        : null,
-                                    child: currentPage > 1
-                                        ? SvgPicture.asset(ImageConstant
-                                            .previousScrollIconActive)
-                                        : const SizedBox(),
-                                    //   SvgPicture.asset(ImageConstant.previousScrollIconActive),
-                                  ),
-                                ],
-                              ),
+                          child: const Center(
+                            child: Text(
+                              "List View",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
-                          const SizedBox(
-                            height: 10,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          journalListProvider.changeListViewBar(false);
+                          journalListProvider.fetchJournalChartView(
+                              context: context);
+                        },
+                        child: Container(
+                          width: size.width * 0.42,
+                          padding: EdgeInsets.symmetric(
+                            vertical: size.width * 0.03,
                           ),
-                          Expanded(
-                            child: Consumer<HomeProvider>(
-                              builder: (context, homeProvider, _) {
-                                return Stack(
-                                  children: [
-                                    journalListProvider.listViewBool
-                                        ? const JournalListViewWidget()
-                                        : const ChartViewList(),
-                                    journalListProvider.listViewBool &&
-                                        homeProvider.journalsModelList.isNotEmpty
-                                        ? Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 30.0, vertical: 70),
-                                            child: Align(
-                                              alignment: Alignment.bottomLeft,
-                                              child: Container(
-                                                // ⭐ DECORATION ADDED
-                                                decoration: BoxDecoration(
-                                                  color: Colors.white,
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                ),
-
-                                                child: Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 8.0,
-                                                      vertical: 4),
-                                                  child: Text(
-                                                    () {
-                                                      // Parse values safely
-                                                      final totalCount =
-                                                          int.tryParse(homeProvider
-                                                                      .journalsModel
-                                                                      ?.totalCount
-                                                                      .toString() ??
-                                                                  '0') ??
-                                                              0;
-                                                      final currentPage =
-                                                          int.tryParse(homeProvider
-                                                                      .journalsModel
-                                                                      ?.currentPage
-                                                                      .toString() ??
-                                                                  '1') ??
-                                                              1;
-                                                      const pageCount =
-                                                          10; // fixed items per page
-
-                                                      // Calculate start and end items
-                                                      final startItem =
-                                                          ((currentPage - 1) *
-                                                                  pageCount) +
-                                                              1;
-                                                      final endItem =
-                                                          (currentPage *
-                                                                      pageCount) >
-                                                                  totalCount
-                                                              ? totalCount
-                                                              : currentPage *
-                                                                  pageCount;
-
-                                                      return "$endItem of $totalCount";
-                                                    }(),
-                                                    style: TextStyle(
-                                                      fontSize: 13,
-                                                      fontFamily: 'Poppins',
-                                                      color: ColorsContent
-                                                          .blackText,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          )
-                                        : const SizedBox(),
-                                    journalListProvider.listViewBool
-                                        ? Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 25.0),
-                                            child: Align(
-                                              alignment: Alignment.bottomRight,
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    bottom: 0),
-                                                // Adjust the position
-                                                child: SizedBox(
-                                                  width: 150, // Increase width
-                                                  height: 70, // Increase height
-                                                  child: FloatingActionButton(
-                                                    backgroundColor:
-                                                        Colors.transparent,
-                                                    elevation: 0,
-                                                    // removes shadow
-                                                    highlightElevation: 0,
-                                                    focusElevation: 0,
-                                                    hoverElevation: 0,
-                                                    splashColor:
-                                                        Colors.transparent,
-                                                    // disables ripple effect
-                                                    foregroundColor:
-                                                        Colors.transparent,
-                                                    shape: const CircleBorder(),
-                                                    // Ensures circular shape
-                                                    onPressed: () {
-                                                      dashBoardProvider
-                                                          .changePage(index: 1);
-                                                      mentalStrengthEditProvider
-                                                          .fetchEmotions(
-                                                              context: context);
-                                                    },
-                                                    child:
-                                                    addGoalButton(
-                                                      onTap: () {
-                                                        dashBoardProvider
-                                                            .changePage(index: 1);
-                                                        mentalStrengthEditProvider
-                                                            .fetchEmotions(
-                                                            context: context);
-                                                      },
-                                                    ),
-
-                                                    // Image.asset(
-                                                    //   ImageConstant.addGoalPng,
-                                                    // ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          )
-                                        : const SizedBox(),
-                                    journalListProvider.listViewBool
-                                        ? Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 15.0),
-                                            child: Align(
-                                              alignment: Alignment.bottomCenter,
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  // Load More Button
-                                                  GestureDetector(
-                                                    onTap: (homeProvider.journalsModel
-                                                                        ?.pageCount ??
-                                                                    1) >
-                                                                currentPage &&
-                                                            !isLoading
-                                                        ? () async {
-                                                            final next =
-                                                                currentPage + 1;
-                                                            await loadPage(
-                                                                next);
-                                                          }
-                                                        : null,
-                                                    child: (homeProvider
-                                                                    .journalsModel
-                                                                    ?.pageCount ??
-                                                                1) >
-                                                            currentPage
-                                                        ? SvgPicture.asset(
-                                                            ImageConstant
-                                                                .loadMoreScrollIconActive)
-                                                        : const SizedBox(),
-                                                    //    SvgPicture.asset(ImageConstant.loadMoreScrollIconActive),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 10,
-                                                  ),
-
-                                                  /// --------- "10 of 50" text below ---------
-
-                                                  const SizedBox(
-                                                    height: 15,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          )
-                                        : const SizedBox()
-                                  ],
-                                );
-                              },
+                          decoration: BoxDecoration(
+                            color: journalListProvider.listViewBool
+                                ? ColorsContent.goalNotCompletedColor
+                                : ColorsContent.newThemeColor,
+                            borderRadius: const BorderRadius.only(
+                              topRight: Radius.circular(20),
                             ),
                           ),
-                        ],
+                          child: const Center(
+                            child: Text(
+                              "Chart View",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
                       ),
                     ],
-                  );
-                },
-              ),
-            ),
-          )
+                  ),
+                ),
+
+                SizedBox(height: size.height * 0.011),
+
+                // SEARCH BAR (only in List View)
+                if (journalListProvider.listViewBool)
+                  buildSearchAndDateBar(context, homeProvider),
+
+                const SizedBox(height: 15),
+
+                // PREVIOUS BUTTON (only in List View)
+                if (journalListProvider.listViewBool &&
+                    homeProvider.journalsModelList.isNotEmpty &&
+                    currentPage > 1)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 25.0, bottom: 10),
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: GestureDetector(
+                        onTap: !isLoading
+                            ? () async {
+                          await loadPage(currentPage - 1);
+                        }
+                            : null,
+                        child: SvgPicture.asset(
+                          ImageConstant.previousScrollIconActive,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                // MAIN CONTENT AREA
+                Expanded(
+                  child: Consumer<HomeProvider>(
+                    builder: (context, homeProvider, _) {
+                      return Stack(
+                        children: [
+                          // LIST OR CHART VIEW
+                          Container(
+                            //color: Colors.red,
+                          //  height:size.height * 0.60,
+                            margin: EdgeInsets.only(
+                              bottom: journalListProvider.listViewBool &&
+                                  homeProvider.journalsModelList.isNotEmpty
+                                  ? 0
+                                  : 0,
+                            ),
+                            child: journalListProvider.listViewBool
+                                ? const JournalListViewWidget()
+                                : const ChartViewList(),
+                          ),
+
+                          // PAGINATION COUNT - Bottom Left
+                          if (journalListProvider.listViewBool &&
+                              homeProvider.journalsModelList.isNotEmpty)
+                            Positioned(
+                              bottom: 30,
+                              left: 30,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 6),
+                                child: Text(
+                                      () {
+                                    final totalCount = int.tryParse(
+                                        homeProvider.journalsModel
+                                            ?.totalCount
+                                            .toString() ??
+                                            '0') ??
+                                        0;
+                                    final currentPageNum = int.tryParse(
+                                        homeProvider.journalsModel
+                                            ?.currentPage
+                                            .toString() ??
+                                            '1') ??
+                                        1;
+                                    var pageCount =
+                                        UrlConstant.paginationCount;
+                                    final startItem =
+                                        ((currentPageNum - 1) *
+                                            pageCount) +
+                                            1;
+                                    final endItem =
+                                    (currentPageNum * pageCount) >
+                                        totalCount
+                                        ? totalCount
+                                        : currentPageNum * pageCount;
+                                    return "$endItem of $totalCount";
+                                  }(),
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontFamily: 'Poppins',
+                                    color: ColorsContent.blackText,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                          // LOAD MORE BUTTON - Bottom Center
+                          if (journalListProvider.listViewBool &&
+                              homeProvider.journalsModelList.isNotEmpty &&
+                              (homeProvider.journalsModel?.pageCount ?? 1) >
+                                  currentPage &&
+                              !isLoading)
+                            Positioned(
+                              bottom: 20,
+                              left: 0,
+                              right: 0,
+                              child: Center(
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    await loadPage(currentPage + 1);
+                                  },
+                                  child: SvgPicture.asset(
+                                    ImageConstant.loadMoreScrollIconActive,
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                          // ADD JOURNAL BUTTON - Bottom Right
+                          if (journalListProvider.listViewBool)
+                            Positioned(
+                              bottom: 10,
+                              right: 10,
+                              child: SizedBox(
+                                width: 150,
+                                height: 70,
+                                child: FloatingActionButton(
+                                  backgroundColor: Colors.transparent,
+                                  elevation: 0,
+                                  highlightElevation: 0,
+                                  focusElevation: 0,
+                                  hoverElevation: 0,
+                                  splashColor: Colors.transparent,
+                                  foregroundColor: Colors.transparent,
+                                  shape: const CircleBorder(),
+                                  onPressed: () {
+                                    dashBoardProvider.changePage(index: 1);
+                                    mentalStrengthEditProvider
+                                        .fetchEmotions(context: context);
+                                  },
+                                  child: addGoalButton(
+                                    onTap: () {
+                                      dashBoardProvider.changePage(index: 1);
+                                      mentalStrengthEditProvider
+                                          .fetchEmotions(context: context);
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    )
         : const TokenExpireScreen();
   }
 
-  // 🔍 Search + Date Filter Bar
   Widget buildSearchAndDateBar(
-    BuildContext context,
-    HomeProvider homeProvider,
-  ) {
+      BuildContext context,
+      HomeProvider homeProvider,
+      ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 5),
       child: Row(
         children: [
-          // ⭐ SEARCH BOX
           Expanded(
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
@@ -670,15 +375,12 @@ class _JournalListPageState extends State<JournalListPage> {
                 children: [
                   SvgPicture.asset(ImageConstant.goalsAndDreamsSearchIcon),
                   const SizedBox(width: 10),
-
-                  // 🔍 SEARCH FIELD
                   Expanded(
                     child: TextField(
                       controller: homeProvider.searchController,
                       textInputAction: TextInputAction.search,
                       onSubmitted: (value) async {
                         homeProvider.searchQuery = value;
-
                         await homeProvider.fetchJournals(
                           initial: true,
                           context: context,
@@ -700,40 +402,37 @@ class _JournalListPageState extends State<JournalListPage> {
                       ),
                     ),
                   ),
-
-                  // ❌ CLEAR ICON
                   Consumer<HomeProvider>(
                     builder: (context, provider, _) {
                       return provider.searchQuery.isNotEmpty
                           ? GestureDetector(
-                              onTap: () async {
-                                provider.searchController.clear();
-                                provider.searchQuery = "";
-
-                                await provider.fetchJournals(
-                                  initial: true,
-                                  context: context,
-                                  fullList: true,
-                                  keyword: "",
-                                  pageNo: "1",
-                                );
-                              },
-                              child: Container(
-                                height: 25,
-                                width: 25,
-                                decoration: BoxDecoration(
-                                  color: ColorsContent.newThemeColor,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Center(
-                                  child: Icon(
-                                    Icons.close_sharp,
-                                    size: 15,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            )
+                        onTap: () async {
+                          provider.searchController.clear();
+                          provider.searchQuery = "";
+                          await provider.fetchJournals(
+                            initial: true,
+                            context: context,
+                            fullList: true,
+                            keyword: "",
+                            pageNo: "1",
+                          );
+                        },
+                        child: Container(
+                          height: 25,
+                          width: 25,
+                          decoration: BoxDecoration(
+                            color: ColorsContent.newThemeColor,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Center(
+                            child: Icon(
+                              Icons.close_sharp,
+                              size: 15,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      )
                           : const SizedBox.shrink();
                     },
                   ),
@@ -741,10 +440,7 @@ class _JournalListPageState extends State<JournalListPage> {
               ),
             ),
           ),
-
           const SizedBox(width: 12),
-
-          // 📅 DATE PICKER ICON OUTSIDE BOX
           GestureDetector(
             onTap: () async {
               DateRangePickerGoalsAndDreamsScreen.show(
@@ -752,10 +448,8 @@ class _JournalListPageState extends State<JournalListPage> {
                 onDateRangeSelected: (startDate, endDate) async {
                   homeProvider.selectedStartDate = startDate;
                   homeProvider.selectedEndDate = endDate;
-
                   homeProvider.searchController.text =
                       homeProvider.selectedDateRangeText;
-
                   await homeProvider.fetchJournals(
                     initial: true,
                     context: context,
@@ -773,26 +467,25 @@ class _JournalListPageState extends State<JournalListPage> {
     );
   }
 
-
   Widget addGoalButton({required VoidCallback onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
-          color: const Color(0xFF7C63F7), // Same purple color
+          color: const Color(0xFF7C63F7),
           borderRadius: BorderRadius.circular(25),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(
+          children: const [
+            Icon(
               Icons.add,
               color: Colors.white,
               size: 20,
             ),
-            const SizedBox(width: 6),
-            const Text(
+            SizedBox(width: 6),
+            Text(
               "Add Journal",
               style: TextStyle(
                 color: Colors.white,
@@ -806,5 +499,4 @@ class _JournalListPageState extends State<JournalListPage> {
       ),
     );
   }
-
 }

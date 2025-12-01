@@ -717,12 +717,15 @@ class _GoalAndDreamFullViewBottomSheetState
                                                   scrollDirection:
                                                       Axis.horizontal,
                                                   child: Text(
-                                                    HtmlUnescape().convert( widget
-                                                        .goalDetailModel
-                                                        .goals!
-                                                        .action![index]
-                                                        .actionTitle ??
-                                                        "",),
+
+                                                    capitalizeFirstLetter(
+                                                      HtmlUnescape()
+                                                          .convert(widget
+                                                          .goalDetailModel
+                                                          .goals!
+                                                          .action![index]
+                                                          .actionTitle ??
+                                                          "",)),
                                                     style: const TextStyle(
                                                       fontSize: 16,
                                                       fontWeight:
