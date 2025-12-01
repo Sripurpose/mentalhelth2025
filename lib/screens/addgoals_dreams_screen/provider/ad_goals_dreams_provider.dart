@@ -19,11 +19,13 @@ import 'package:mentalhelth/utils/logic/shared_prefrence.dart';
 import 'package:mentalhelth/widgets/functions/snack_bar.dart';
 import 'package:mentalhelth/widgets/widget/video_compessor.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:video_compress/video_compress.dart';
 
 import '../../../utils/core/constent.dart';
 import '../../../utils/theme/colors.dart';
 import '../../dash_borad_screen/dash_board_screen.dart';
+import '../../dash_borad_screen/provider/dash_board_provider.dart';
 import '../../maintenence_screen/maintenence_screen.dart';
 import '../../mental_strength_add_edit_screen/model/all_model.dart';
 import '../../token_expiry/token_expiry.dart';
@@ -1654,25 +1656,26 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
           context: context,
           message: json.decode(response.body)["text"],
         );
+
         clearAction();
-        if (Platform.isIOS) {
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (context) => const DashBoardScreen(),
-            ),
-                (route) => false,
-          );
-        }else{
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (context) => const DashBoardScreen(),
-            ),
-                (route) => false,
-          );
-          // Navigator.of(context).pop();
-          // Navigator.of(context).pop();
-        }
-      } else if (response.statusCode == 503) {
+
+        // STEP 1: Navigate to DashboardScreen
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const DashBoardScreen()),
+              (route) => false,
+        );
+
+        // STEP 2: After navigation completes, change the page
+        Future.delayed(const Duration(milliseconds: 200), () {
+          final dashProvider =
+          Provider.of<DashBoardProvider>(context, listen: false);
+          dashProvider.changePage(index: 3);
+        });
+
+        return;
+      }
+
+      else if (response.statusCode == 503) {
         Future.delayed(Duration.zero, () {
           Navigator.of(context).push(
             MaterialPageRoute(
@@ -1918,26 +1921,25 @@ class AdDreamsGoalsProvider extends ChangeNotifier {
           context: context,
           message: json.decode(response.body)["text"],
         );
-        clearAction();
-        if (Platform.isIOS) {
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (context) => const DashBoardScreen(),
-            ),
-                (route) => false,
-          );
-        }else{
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (context) => const DashBoardScreen(),
-            ),
-                (route) => false,
-          );
-          // Navigator.of(context).pop();
-          // Navigator.of(context).pop();
-        }
 
-      } else if (response.statusCode == 503) {
+        clearAction();
+
+        // STEP 1: Navigate to DashboardScreen
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const DashBoardScreen()),
+              (route) => false,
+        );
+
+        // STEP 2: After navigation completes, change the page
+        Future.delayed(const Duration(milliseconds: 200), () {
+          final dashProvider =
+          Provider.of<DashBoardProvider>(context, listen: false);
+          dashProvider.changePage(index: 3);
+        });
+
+        return;
+      }
+      else if (response.statusCode == 503) {
         Future.delayed(Duration.zero, () {
           Navigator.of(context).push(
             MaterialPageRoute(
