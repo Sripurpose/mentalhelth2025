@@ -158,7 +158,7 @@ class _GoalsDreamsPageState extends State {
                             : null,
                         padding: const EdgeInsets.symmetric(horizontal: 23),
                         margin: EdgeInsets.only(
-                          bottom: goalsDreamsProvider.goalsanddreams.isNotEmpty ? 80 : 80,
+                          bottom: goalsDreamsProvider.goalsanddreams.isNotEmpty ? 110 : 110,
                         ),
                         child: goalsDreamsProvider.goalsAndDreamsModelLoading
                             ? Center(
@@ -207,7 +207,7 @@ class _GoalsDreamsPageState extends State {
                       // PAGINATION COUNT - Bottom Left
                       if (goalsDreamsProvider.goalsanddreams.isNotEmpty)
                         Positioned(
-                          bottom: 30,
+                          bottom: 66,
                           left: 30,
                           child: Container(
                             decoration: BoxDecoration(
@@ -243,7 +243,7 @@ class _GoalsDreamsPageState extends State {
                           (goalsDreamsProvider.goalsAndDreamsModel?.pageCount ?? 1) > currentPage &&
                           !isLoading)
                         Positioned(
-                          bottom: 20,
+                          bottom: 40,
                           left: 0,
                           right: 0,
                           child: Center(
@@ -260,7 +260,7 @@ class _GoalsDreamsPageState extends State {
 
                       // ADD GOAL BUTTON
                       Positioned(
-                        bottom: 0,
+                        bottom: -15,
                         right: 25,
                         child: SizedBox(
                           width: 90,

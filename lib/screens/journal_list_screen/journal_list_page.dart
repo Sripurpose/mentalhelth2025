@@ -223,8 +223,8 @@ class _JournalListPageState extends State<JournalListPage> {
                             margin: EdgeInsets.only(
                               bottom: journalListProvider.listViewBool &&
                                   homeProvider.journalsModelList.isNotEmpty
-                                  ? 0
-                                  : 0,
+                                  ? 10
+                                  : 10,
                             ),
                             child: journalListProvider.listViewBool
                                 ? const JournalListViewWidget()
@@ -235,7 +235,7 @@ class _JournalListPageState extends State<JournalListPage> {
                           if (journalListProvider.listViewBool &&
                               homeProvider.journalsModelList.isNotEmpty)
                             Positioned(
-                              bottom: 30,
+                              bottom: 65,
                               left: 30,
                               child: Container(
                                 decoration: BoxDecoration(
@@ -288,7 +288,7 @@ class _JournalListPageState extends State<JournalListPage> {
                                   currentPage &&
                               !isLoading)
                             Positioned(
-                              bottom: 20,
+                              bottom: 40,
                               left: 0,
                               right: 0,
                               child: Center(
@@ -306,7 +306,7 @@ class _JournalListPageState extends State<JournalListPage> {
                           // ADD JOURNAL BUTTON - Bottom Right
                           if (journalListProvider.listViewBool)
                             Positioned(
-                              bottom: 10,
+                              bottom: 0,
                               right: 10,
                               child: SizedBox(
                                 width: 150,
