@@ -151,40 +151,41 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
     }
 
     // Step 5: Handle shared data (NOW sharedData should be populated)
-    if (sharedData != null && (sharedData!.url ?? '').isNotEmpty) {
-      try {
-        String raw = sharedData!.url!;
+    if (sharedData != null) {
+      String? rawUrl;
 
-        // Match common social media URLs including YouTube watch?v= URLs
-        // final RegExp socialUrlRegex = RegExp(
-        //   r'(https?:\/\/(?:www\.)?(?:instagram\.com|youtu\.be|youtube\.com\/watch\?v=[^&\s]+|youtube\.com|tiktok\.com|twitter\.com|x\.com|facebook\.com|linkedin\.com)[^\s]*)',
-        //   caseSensitive: false,
-        // );
+      // Pick the first non-empty field: url > text > sharedText
+      if ((sharedData!.url ?? '').isNotEmpty) {
+        rawUrl = sharedData!.url;
+      } else if ((sharedData!.text ?? '').isNotEmpty) {
+        rawUrl = sharedData!.text;
+      } else if ((sharedData!.sharedText ?? '').isNotEmpty) {
+        rawUrl = sharedData!.sharedText;
+      }
 
-        final RegExp socialUrlRegex = RegExp(
-          r'(https?:\/\/(?:www\.)?(?:'
-          r'instagram\.com|youtu\.be|youtube\.com|tiktok\.com|twitter\.com|x\.com|facebook\.com|linkedin\.com|pinterest\.com|snapchat\.com|reddit\.com|wa\.me|t\.me|discord\.gg|medium\.com|github\.com|vimeo\.com|twitch\.tv)'
-          r'[^\s]*)',
-          caseSensitive: false,
-        );
+      if (rawUrl != null && rawUrl.isNotEmpty) {
+        try {
+          // Regex to match social media URLs
+          final RegExp socialUrlRegex = RegExp(
+            r'(https?:\/\/(?:www\.)?(?:'
+            r'instagram\.com|youtu\.be|youtube\.com|tiktok\.com|twitter\.com|x\.com|facebook\.com|linkedin\.com|pinterest\.com|snapchat\.com|reddit\.com|wa\.me|t\.me|discord\.gg|medium\.com|github\.com|vimeo\.com|twitch\.tv)'
+            r'(?:/[^\s]*)?(?:\?[^\s]*)?)',
+            caseSensitive: false,
+          );
 
-        final match = socialUrlRegex.firstMatch(raw);
+          final match = socialUrlRegex.firstMatch(rawUrl);
+          String cleanUrl = match?.group(0) ?? rawUrl;
 
-        if (match != null) {
-          String cleanUrl = match.group(0)!;
+          // Remove unwanted query parameters except YouTube's ?v=
+          if (cleanUrl.contains("?") && !cleanUrl.contains("youtube.com/watch")) {
+            cleanUrl = cleanUrl.split("?").first;
+          }
 
-          // Remove unwanted query parameters except YouTube's 'v' parameter
-          if (cleanUrl.contains("?")) {
-            if (cleanUrl.contains("youtube.com/watch")) {
-              // Keep ?v=xxxx
-              final uri = Uri.parse(cleanUrl);
-              final vParam = uri.queryParameters['v'];
-              if (vParam != null) {
-                cleanUrl = "https://www.youtube.com/watch?v=$vParam";
-              }
-            } else {
-              // Remove all other query parameters
-              cleanUrl = cleanUrl.split("?").first;
+          if (cleanUrl.contains("youtube.com/watch")) {
+            final uri = Uri.parse(cleanUrl);
+            final vParam = uri.queryParameters['v'];
+            if (vParam != null) {
+              cleanUrl = "https://www.youtube.com/watch?v=$vParam";
             }
           }
 
@@ -193,7 +194,7 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
             cleanUrl = cleanUrl.substring(0, cleanUrl.length - 1);
           }
 
-          // Save cleaned URL
+          // Save cleaned URL back to sharedData
           sharedData = SharedContentData(
             text: sharedData!.text,
             url: cleanUrl,
@@ -202,20 +203,23 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
             timestamp: sharedData!.timestamp,
           );
 
-          // Save to provider
-          adDreamsGoalsProvider.detectedLinks.clear();
-          adDreamsGoalsProvider.detectedLinks.add(cleanUrl);
-          adDreamsGoalsProvider.editDetectedLinks.clear();
-          adDreamsGoalsProvider.editDetectedLinks.add(cleanUrl);
+          // Save to providers
+          adDreamsGoalsProvider.detectedLinks
+            ..clear()
+            ..add(cleanUrl);
+          adDreamsGoalsProvider.editDetectedLinks
+            ..clear()
+            ..add(cleanUrl);
 
           debugPrint("✅ Shared data loaded (clean): $cleanUrl");
-        } else {
-          debugPrint("⚠️ No valid social media URL found in shared data");
+        } catch (e, s) {
+          debugPrint("❌ Shared data processing error: $e\n$s");
         }
-      } catch (e) {
-        debugPrint("❌ Shared data error: $e");
+      } else {
+        debugPrint("⚠️ No URL found in shared data");
       }
     }
+
 
     // Step 6: Load async data in background (don't wait for it)
     _loadSharedContentAsync();
