@@ -89,7 +89,7 @@ class WeightLossComponentListItemWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(
               left: 15,
-              bottom: 12,
+              bottom: 0,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

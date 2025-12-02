@@ -560,7 +560,7 @@ class _CustomTextFormFieldGoalOrActionDescState
         suffixIconConstraints: widget.suffixConstraints,
         isDense: false,
         contentPadding:
-        widget.contentPadding ?? const EdgeInsets.symmetric(vertical: 30, horizontal: 16),
+        widget.contentPadding ?? const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
         filled: true,
         fillColor: Colors.white,
         border: OutlineInputBorder(
