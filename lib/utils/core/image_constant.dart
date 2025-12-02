@@ -55,6 +55,7 @@ class ImageConstant {
   static String homeSearchDataFound = 'assets/images/search_data_found.svg';
   static String homeSearchDataFoundNew = 'assets/images/search_data_found_new.svg';
   static String homeSearchDataFoundGradient = 'assets/images/search_data_found_gradient.svg';
+  static String goalNotFoundSvg = 'assets/images/goals_not_found_svg.svg';
   static String tabBackButton = 'assets/images/tab_back_button.svg';
   static String numuMentalBackButton = 'assets/images/numu_mental_back.svg';
   static String goToIcon = 'assets/images/go_to_icon.png';

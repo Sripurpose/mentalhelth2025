@@ -79,16 +79,27 @@ class _JournalListViewWidgetState extends State<JournalListViewWidget> {
                               color: ColorsContent.newThemeColor,
                               radius: 15,
                             ))
-                          : homeProvider.journalsModelList.isEmpty &&
-                                  !homeProvider.journalsModelLoading
-                              ? GestureDetector(
-                                  onTap: () {},
-                                  child: SvgPicture.asset(
-                                    ImageConstant.homeSearchDataFoundGradient,
-                                    width: size.width * 0.90,
-                                    height: size.height * 0.50,
-                                  ),
-                                )
+                          :  homeProvider.journalStatus == 404
+                          ?
+                      GestureDetector(
+                        onTap: () {},
+                        child: SvgPicture.asset(
+                          ImageConstant.homeSearchDataFoundGradient,
+                          width: size.width * 0.95,
+                          height: size.height * 0.50,
+                        ),
+                      )
+
+                          : homeProvider.journalStatus == 204
+                          ?
+                      GestureDetector(
+                        onTap: () {},
+                        child: SvgPicture.asset(
+                          ImageConstant.homeScreenNoData,
+                          width: size.width * 0.95,
+                          height: size.height * 0.50,
+                        ),
+                      )
                               : ListView.separated(
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),

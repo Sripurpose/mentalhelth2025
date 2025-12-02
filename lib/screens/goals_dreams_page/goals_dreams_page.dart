@@ -167,12 +167,25 @@ class _GoalsDreamsPageState extends State {
                             radius: 15,
                           ),
                         )
-                            : goalsDreamsProvider.goalsanddreams.isEmpty
-                            ? Center(
+                            : goalsDreamsProvider.fetchGoalsAndDreamsStatus == 404
+                            ?
+                        GestureDetector(
+                          onTap: () {},
                           child: SvgPicture.asset(
                             ImageConstant.homeSearchDataFoundGradient,
-                            width: size.width * 0.90,
-                            height: size.height * 0.40,
+                            width: size.width * 0.95,
+                            height: size.height * 0.50,
+                          ),
+                        )
+
+                            : goalsDreamsProvider.fetchGoalsAndDreamsStatus == 204
+                            ?
+                        GestureDetector(
+                          onTap: () {},
+                          child: SvgPicture.asset(
+                            ImageConstant.goalNotFoundSvg,
+                            width: size.width * 0.95,
+                            height: size.height * 0.50,
                           ),
                         )
                             : ListView.builder(
