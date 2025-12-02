@@ -27,7 +27,8 @@
         tools:replace="android:icon, android:label"
         android:allowBackup="false"
         android:allowClearUserData="true"
-        android:fullBackupContent="false">
+        android:fullBackupContent="false"
+        >
         <!-- Your activity declarations go here, e.g. -->
         <!-- <activity android:name=".MainActivity"> -->
         <!--     <intent-filter> -->

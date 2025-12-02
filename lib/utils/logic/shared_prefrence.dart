@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mentalhelth/screens/addactions_screen/provider/add_actions_provider.dart';
 import 'package:mentalhelth/screens/addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
@@ -45,20 +46,34 @@ Future<String?> getVersionSharePref() async {
 }
 
 //remove user id
+// Future<void> removeUserDetailsSharePref({required BuildContext context}) async {
+//   DashBoardProvider dashBoardProvider = Provider.of(context, listen: false);
+//   final SharedPreferences prefs = await SharedPreferences.getInstance();
+//   await prefs.remove('adDialogLastShown');
+//   prefs.clear();
+//   dashBoardProvider.changePage(index: 0);
+//   // ignore: use_build_context_synchronously
+//   Navigator.of(context).pushAndRemoveUntil(
+//     MaterialPageRoute(
+//       builder: (context) => const LandingRegisterScreenScreen(),
+//     ),
+//     (route) => false,
+//   );
+// }
+
 Future<void> removeUserDetailsSharePref({required BuildContext context}) async {
-  DashBoardProvider dashBoardProvider = Provider.of(context, listen: false);
+  final dashBoardProvider = Provider.of<DashBoardProvider>(context, listen: false);
   final SharedPreferences prefs = await SharedPreferences.getInstance();
+
   await prefs.remove('adDialogLastShown');
-  prefs.clear();
+  await prefs.clear();
+
   dashBoardProvider.changePage(index: 0);
-  // ignore: use_build_context_synchronously
-  Navigator.of(context).pushAndRemoveUntil(
-    MaterialPageRoute(
-      builder: (context) => const LandingRegisterScreenScreen(),
-    ),
-    (route) => false,
-  );
+
+  // Close ALL activities (Android)
+  SystemNavigator.pop(); // App closes completely
 }
+
 
 //ad user token
 void addUserTokenSharePref({required String token}) async {
