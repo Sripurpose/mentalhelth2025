@@ -158,7 +158,7 @@ class _GoalsDreamsPageState extends State {
                             : null,
                         padding: const EdgeInsets.symmetric(horizontal: 23),
                         margin: EdgeInsets.only(
-                          bottom: goalsDreamsProvider.goalsanddreams.isNotEmpty ? 110 : 110,
+                          bottom: goalsDreamsProvider.goalsanddreams.isNotEmpty ? 70 : 70,
                         ),
                         child: goalsDreamsProvider.goalsAndDreamsModelLoading
                             ? Center(
@@ -207,7 +207,7 @@ class _GoalsDreamsPageState extends State {
                       // PAGINATION COUNT - Bottom Left
                       if (goalsDreamsProvider.goalsanddreams.isNotEmpty)
                         Positioned(
-                          bottom: 66,
+                          bottom: 15,
                           left: 30,
                           child: Container(
                             decoration: BoxDecoration(
@@ -243,7 +243,7 @@ class _GoalsDreamsPageState extends State {
                           (goalsDreamsProvider.goalsAndDreamsModel?.pageCount ?? 1) > currentPage &&
                           !isLoading)
                         Positioned(
-                          bottom: 40,
+                          bottom: 10,
                           left: 0,
                           right: 0,
                           child: Center(
@@ -260,11 +260,11 @@ class _GoalsDreamsPageState extends State {
 
                       // ADD GOAL BUTTON
                       Positioned(
-                        bottom: -15,
+                        bottom: -20,
                         right: 25,
                         child: SizedBox(
-                          width: 90,
-                          height: 90,
+                          width: 100,
+                          height: 100,
                           child: FloatingActionButton(
                             backgroundColor: Colors.transparent,
                             elevation: 0,
@@ -309,7 +309,7 @@ class _GoalsDreamsPageState extends State {
         children: [
           Expanded(
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(30),
@@ -410,7 +410,10 @@ class _GoalsDreamsPageState extends State {
                 },
               );
             },
-            child: SvgPicture.asset(ImageConstant.goalsAndDreamsDateIcon),
+            child: Padding(
+              padding: const EdgeInsets.only(right: 5.0),
+              child: SvgPicture.asset(ImageConstant.goalsAndDreamsDateIcon),
+            ),
           ),
         ],
       ),

@@ -25,29 +25,28 @@ import '../../../../widgets/custom_image_view.dart';
 import '../../../dynamic_menu_pages/dynamic_Menu_Webview_Screen.dart';
 
 Widget buildPopupDialog(BuildContext context, Size size) {
-  return AlertDialog(
-    backgroundColor: Colors.transparent,
-    contentPadding: EdgeInsets.zero,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-    content: Container(
-      width: double.maxFinite,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage(ImageConstant.gradientBackgroundNumu),
-          fit: BoxFit.cover,
-        ),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-        child: Consumer2<EditProfileProvider, DashBoardProvider>(
-          builder: (context, editProvider, dashBoardProvider, _) {
-            return ConstrainedBox(
-              constraints: BoxConstraints(
-                maxHeight: size.height * 0.75,
-              ),
+  return Consumer3<EditProfileProvider, DashBoardProvider, SignInProvider>(
+    builder: (context, editProvider, dashBoardProvider, signInProvider, _) {
+      return AlertDialog(
+        backgroundColor: Colors.transparent,
+        contentPadding: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        content: Container(
+          width: double.maxFinite,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(ImageConstant.gradientBackgroundNumu),
+              fit: BoxFit.cover,
+            ),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxHeight: size.height * 0.75),
               child: Column(
                 children: [
+
                   /// ===================== CLOSE BUTTON ======================
                   Align(
                     alignment: Alignment.topRight,
@@ -63,7 +62,7 @@ Widget buildPopupDialog(BuildContext context, Size size) {
 
                   const SizedBox(height: 10),
 
-                  /// ===================== PROFILE INFO (FIXED) ======================
+                  /// ===================== PROFILE INFO ======================
                   Container(
                     decoration: BoxDecoration(
                       color: ColorsContent.whiteText,
@@ -152,47 +151,46 @@ Widget buildPopupDialog(BuildContext context, Size size) {
 
                           SizedBox(height: size.height * 0.02),
 
-                          /// ===================== DYNAMIC MENU ======================
-                          Consumer<SignInProvider>(
-                            builder: (context, provider, _) {
-                              final list = provider.dynamicMenuList;
+                          /// ===================== DYNAMIC MENU (NOW WORKS) ======================
+                          Builder(builder: (_) {
+                            final list = signInProvider.dynamicMenuList;
 
-                              if (list == null || list.isEmpty)
-                                return SizedBox.shrink();
+                            if (list == null || list.isEmpty)
+                              return SizedBox.shrink();
 
-                              final added = <String>{};
-                              final items = list.where((e) {
-                                final active = e.status == "1";
-                                final unique = !added.contains(e.title);
-                                if (active && unique) {
-                                  added.add(e.title!);
-                                  return true;
-                                }
-                                return false;
-                              }).toList();
+                            final added = <String>{};
+                            final items = list.where((e) {
+                              final active = e.status == "1";
+                              final unique = !added.contains(e.title);
+                              if (active && unique) {
+                                added.add(e.title!);
+                                return true;
+                              }
+                              return false;
+                            }).toList();
 
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: items.map((item) {
-                                  return _menuItem(
-                                    title: item.title ?? "",
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) => DynamicMenuWebviewScreen(
-                                            title: item.title,
-                                            url: item.linkUrl,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  );
-                                }).toList(),
-                              );
-                            },
-                          ),
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: items.map((item) {
+                                return _menuItem(
+                                  title: item.title ?? "",
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) =>
+                                            DynamicMenuWebviewScreen(
+                                              title: item.title,
+                                              url: item.linkUrl,
+                                            ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              }).toList(),
+                            );
+                          }),
 
                           _menuItem(
                             title: "Privacy policy",
@@ -216,41 +214,37 @@ Widget buildPopupDialog(BuildContext context, Size size) {
                             },
                           ),
 
-                         // SizedBox(height: size.height * 0.01),
-
                           /// ===================== APP SHARE ======================
-                          Consumer<SignInProvider>(
-                            builder: (context, signInProvider, child) {
-                              final shareData =
-                                  signInProvider.appShareResponseModel;
-                              final url = Theme.of(context).platform ==
-                                  TargetPlatform.iOS
-                                  ? shareData?.appstoreUrl
-                                  : shareData?.playstoreUrl;
+                          Builder(builder: (_) {
+                            final shareData =
+                                signInProvider.appShareResponseModel;
+                            final url = Theme.of(context).platform ==
+                                TargetPlatform.iOS
+                                ? shareData?.appstoreUrl
+                                : shareData?.playstoreUrl;
 
-                              final bool showShare =
-                                  shareData != null &&
-                                      (shareData.title?.isNotEmpty ?? false) &&
-                                      (shareData.message?.isNotEmpty ?? false) &&
-                                      (url?.isNotEmpty ?? false);
+                            final bool showShare =
+                                shareData != null &&
+                                    (shareData.title?.isNotEmpty ?? false) &&
+                                    (shareData.message?.isNotEmpty ?? false) &&
+                                    (url?.isNotEmpty ?? false);
 
-                              if (!showShare) return SizedBox.shrink();
+                            if (!showShare) return SizedBox.shrink();
 
-                              return _menuItem(
-                                title: "App share",
-                                onTap: () async {
-                                  final message = """
+                            return _menuItem(
+                              title: "App share",
+                              onTap: () async {
+                                final message = """
 ${shareData!.title}
 
 ${shareData.message}
 
 Download now: $url
 """;
-                                  await Share.share(message);
-                                },
-                              );
-                            },
-                          ),
+                                await Share.share(message);
+                              },
+                            );
+                          }),
 
                           _menuItem(
                             title: "Feedback",
@@ -259,47 +253,43 @@ Download now: $url
                               Navigator.pop(context);
                             },
                           ),
-                       //   SizedBox(height: size.height * 0.01),
 
                           /// ===================== LOGOUT ======================
-                          Consumer2<EditProfileProvider, SignInProvider>(
-                            builder: (context, editProvider, signInProvider, _) {
-                              return _menuItem(
-                                title: "Logout",
-                                onTap: () {
-                                  customPopupNew(
-                                    context: context,
-                                    title: "Confirm Logout",
-                                    content: "Are you sure You want to logout?",
-                                    yes: "Logout",
-                                    onPressedDelete: () async {
-                                      editProvider.profileUrl = "";
+                          _menuItem(
+                            title: "Logout",
+                            onTap: () {
+                              customPopupNew(
+                                context: context,
+                                title: "Confirm Logout",
+                                content: "Are you sure You want to logout?",
+                                yes: "Logout",
+                                onPressedDelete: () async {
+                                  editProvider.profileUrl = "";
 
-                                      if (Platform.isAndroid) {
-                                        await PushNotifications
-                                            .subscribeToTopic("live_doLogin");
-                                        await PushNotifications
-                                            .unsubscribeFromTopic("message");
-                                      } else {
-                                        OneSignal.logout();
-                                        OneSignal.User.addTagWithKey(
-                                            "topic", "live_doLogin");
-                                        OneSignal.User.removeTag("message");
-                                      }
+                                  if (Platform.isAndroid) {
+                                    await PushNotifications
+                                        .subscribeToTopic("live_doLogin");
+                                    await PushNotifications
+                                        .unsubscribeFromTopic("message");
+                                  } else {
+                                    OneSignal.logout();
+                                    OneSignal.User.addTagWithKey(
+                                        "topic", "live_doLogin");
+                                    OneSignal.User.removeTag("message");
+                                  }
 
-                                      final prefs =
-                                      await SharedPreferences.getInstance();
-                                      await prefs.remove('lastSkippedTimestamp');
+                                  final prefs =
+                                  await SharedPreferences.getInstance();
+                                  await prefs
+                                      .remove('lastSkippedTimestamp');
 
-                                      addFCMTokenToSharePref(token: "");
-                                      addVersionSharePref(version: "");
+                                  addFCMTokenToSharePref(token: "");
+                                  addVersionSharePref(version: "");
 
-                                      await signInProvider.logOutUser(context);
-                                      await removeUserDetailsSharePref(
-                                          context: context);
-                                      removeAllValuesLogout(context: context);
-                                    },
-                                  );
+                                  await signInProvider.logOutUser(context);
+                                  await removeUserDetailsSharePref(
+                                      context: context);
+                                  removeAllValuesLogout(context: context);
                                 },
                               );
                             },
@@ -319,7 +309,7 @@ Download now: $url
 
                   SizedBox(height: size.height * 0.02),
 
-                  /// ===================== VERSION (FIXED) ======================
+                  /// ===================== VERSION ======================
                   Text(
                     "App Version ${Platform.isAndroid ? Constent.versionCodeAndroid : Constent.versionCodeIOS}",
                     style: TextStyle(
@@ -331,13 +321,14 @@ Download now: $url
                   ),
                 ],
               ),
-            );
-          },
+            ),
+          ),
         ),
-      ),
-    ),
+      );
+    },
   );
 }
+
 
 
 /// Reusable item widget

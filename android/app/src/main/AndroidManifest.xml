@@ -23,7 +23,10 @@
         android:name="${applicationName}"
         android:label="Numu"
         android:icon="@mipmap/ic_launcher"
-        tools:replace="android:icon, android:label">
+        tools:replace="android:icon, android:label"
+        android:allowBackup="false"
+        android:allowClearUserData="true"
+        android:fullBackupContent="false">
 
         <!-- ✅ Google Maps API key -->
         <meta-data

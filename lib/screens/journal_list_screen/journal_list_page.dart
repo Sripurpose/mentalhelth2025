@@ -187,7 +187,7 @@ class _JournalListPageState extends State<JournalListPage> {
                 if (journalListProvider.listViewBool)
                   buildSearchAndDateBar(context, homeProvider),
 
-                const SizedBox(height: 15),
+                const SizedBox(height: 0),
 
                 // PREVIOUS BUTTON (only in List View)
                 if (journalListProvider.listViewBool &&
@@ -223,8 +223,8 @@ class _JournalListPageState extends State<JournalListPage> {
                             margin: EdgeInsets.only(
                               bottom: journalListProvider.listViewBool &&
                                   homeProvider.journalsModelList.isNotEmpty
-                                  ? 10
-                                  : 10,
+                                  ? 70
+                                  : 70,
                             ),
                             child: journalListProvider.listViewBool
                                 ? const JournalListViewWidget()
@@ -235,7 +235,7 @@ class _JournalListPageState extends State<JournalListPage> {
                           if (journalListProvider.listViewBool &&
                               homeProvider.journalsModelList.isNotEmpty)
                             Positioned(
-                              bottom: 65,
+                              bottom: 15,
                               left: 30,
                               child: Container(
                                 decoration: BoxDecoration(
@@ -288,7 +288,7 @@ class _JournalListPageState extends State<JournalListPage> {
                                   currentPage &&
                               !isLoading)
                             Positioned(
-                              bottom: 40,
+                              bottom: 10,
                               left: 0,
                               right: 0,
                               child: Center(
@@ -306,11 +306,11 @@ class _JournalListPageState extends State<JournalListPage> {
                           // ADD JOURNAL BUTTON - Bottom Right
                           if (journalListProvider.listViewBool)
                             Positioned(
-                              bottom: 0,
-                              right: 10,
+                              bottom: -20,
+                              right: 25,
                               child: SizedBox(
-                                width: 150,
-                                height: 70,
+                                width: 100,
+                                height: 100,
                                 child: FloatingActionButton(
                                   backgroundColor: Colors.transparent,
                                   elevation: 0,
@@ -325,13 +325,7 @@ class _JournalListPageState extends State<JournalListPage> {
                                     mentalStrengthEditProvider
                                         .fetchEmotions(context: context);
                                   },
-                                  child: addGoalButton(
-                                    onTap: () {
-                                      dashBoardProvider.changePage(index: 1);
-                                      mentalStrengthEditProvider
-                                          .fetchEmotions(context: context);
-                                    },
-                                  ),
+                                  child: Image.asset(ImageConstant.addJournalPng),
                                 ),
                               ),
                             ),
@@ -359,7 +353,7 @@ class _JournalListPageState extends State<JournalListPage> {
         children: [
           Expanded(
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(30),
@@ -460,43 +454,14 @@ class _JournalListPageState extends State<JournalListPage> {
                 },
               );
             },
-            child: SvgPicture.asset(ImageConstant.goalsAndDreamsDateIcon),
+            child: Padding(
+              padding: const EdgeInsets.only(right: 5.0),
+              child: SvgPicture.asset(ImageConstant.goalsAndDreamsDateIcon),
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget addGoalButton({required VoidCallback onTap}) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-        decoration: BoxDecoration(
-          color: const Color(0xFF7C63F7),
-          borderRadius: BorderRadius.circular(25),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: const [
-            Icon(
-              Icons.add,
-              color: Colors.white,
-              size: 20,
-            ),
-            SizedBox(width: 6),
-            Text(
-              "Add Journal",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                fontFamily: "Poppins",
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }

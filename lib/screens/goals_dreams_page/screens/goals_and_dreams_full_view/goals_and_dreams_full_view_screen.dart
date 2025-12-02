@@ -795,7 +795,7 @@ class _GoalAndDreamFullViewScreenState
                                                                     .only(
                                                                     bottom: 5,
                                                                     top: 5,
-                                                                    right: 5),
+                                                                    right: 0),
                                                             decoration:
                                                                 BoxDecoration(
                                                               color: ColorsContent
@@ -868,12 +868,16 @@ class _GoalAndDreamFullViewScreenState
                                                                       size.width *
                                                                           0.45,
                                                                   child: Text(
-                                                                    widget
-                                                                        .goalsanddream
-                                                                        .action![
-                                                                            index]
-                                                                        .actionTitle
-                                                                        .toString(),
+                                                                    capitalizeFirstLetter(
+                                                                        HtmlUnescape()
+                                                                            .convert(
+                                                                      widget
+                                                                          .goalsanddream
+                                                                          .action![
+                                                                              index]
+                                                                          .actionTitle
+                                                                          .toString(),
+                                                                    )),
                                                                     overflow:
                                                                         TextOverflow
                                                                             .ellipsis,
@@ -1592,8 +1596,7 @@ class _GoalAndDreamFullViewScreenState
                               pageNo: "1",
                               context: context,
                               initial: true,
-                              fullList: true
-                          );
+                              fullList: true);
                           Navigator.of(context).pop();
                           Navigator.of(context).pop();
                         },

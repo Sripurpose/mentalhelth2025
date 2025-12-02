@@ -1136,78 +1136,68 @@ class SignInProvider extends ChangeNotifier {
   DynamicMenuResponseModel? dynamicMenuResponseModel;
   List<DynamicSetting> dynamicMenuList = [];
 
-  Future<void> fetchDynamicMenu(
-      BuildContext context)
-  async {
+  Future<void> fetchDynamicMenu(BuildContext context) async {
     try {
       statusDynamicMenu = 0;
       dynamicMenuResponseModel = null;
-
-      String? token = await getUserTokenSharePref();
       dynamicMenuLoading = true;
-      logger.w("dynamicMenuLoading $dynamicMenuLoading");
       notifyListeners();
 
-      Uri url = Uri.parse(UrlConstant.pageSettingsUrl);
-      logger.w("url $url");
+      String? token = await getUserTokenSharePref();
 
+      Uri url = Uri.parse(UrlConstant.pageSettingsUrl);
       String deviceType = Platform.isAndroid ? 'android' : 'ios';
-      String? versionCode = '';
-      if (Platform.isAndroid) {
-        versionCode = Constent.versionCodeAndroid.isNotEmpty
-            ? Constent.versionCodeAndroid
-            : await getVersionSharePref(); // Fetch user ID if version code is empty
-      } else if (Platform.isIOS) {
-        versionCode = Constent.versionCodeIOS.isNotEmpty
-            ? Constent.versionCodeIOS
-            : await getVersionSharePref(); // Fetch user ID if version code is empty
-      }
+      String? versionCode = Platform.isAndroid
+          ? (Constent.versionCodeAndroid.isNotEmpty
+          ? Constent.versionCodeAndroid
+          : await getVersionSharePref())
+          : (Constent.versionCodeIOS.isNotEmpty
+          ? Constent.versionCodeIOS
+          : await getVersionSharePref());
 
       Map<String, String> headers = {
         'Device-Type': deviceType,
         'Version': versionCode.toString(),
-        'authorization': token!, // Assuming token is not null
+        'authorization': token!,
       };
 
       final response = await http.get(url, headers: headers);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         statusDynamicMenu = response.statusCode;
-        dynamicMenuResponseModel = dynamicMenuResponseModelFromJson(response.body);
-        if (dynamicMenuResponseModel != null) {
-          if (dynamicMenuResponseModel!.dynamicSettings != null) {
-            dynamicMenuList.addAll(dynamicMenuResponseModel!.dynamicSettings!);
-            logger.w("dynamicMenuList${jsonEncode(dynamicMenuResponseModel)}");
-          }
+
+        dynamicMenuResponseModel =
+            dynamicMenuResponseModelFromJson(response.body);
+
+        // 👉 IMPORTANT FIX: Clear old data before inserting new
+        dynamicMenuList.clear();
+
+        if (dynamicMenuResponseModel?.dynamicSettings != null) {
+          dynamicMenuList
+              .addAll(dynamicMenuResponseModel!.dynamicSettings!);
         }
+
         dynamicMenuLoading = false;
         notifyListeners();
-
-        logger.w("dynamicMenuLoading $dynamicMenuLoading");
-        logger.w("dynamicMenuResponseModel $dynamicMenuResponseModel");
       }
-      else if(response.statusCode == 503){
+
+      else if (response.statusCode == 503) {
         Future.delayed(Duration.zero, () {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => const MaintenenceScreen(
-                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                title:
+                "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
                 message: "",
               ),
             ),
           );
         });
       }
+
       else {
         statusDynamicMenu = response.statusCode;
-        logger.i("settingsRegisterModel${jsonEncode(settingsRegisterModel?.status)}");
-        if (response.statusCode == 401 || response.statusCode == 403) {
-          statusDynamicMenu = response.statusCode;
-          //   TokenManager.setTokenStatus(true);
-          // CacheManager.setAccessToken(CacheManager.getUser().refreshToken);
-        }
       }
-      statusDynamicMenu = response.statusCode;
 
       dynamicMenuLoading = false;
       notifyListeners();
@@ -1217,5 +1207,6 @@ class SignInProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
 
 }

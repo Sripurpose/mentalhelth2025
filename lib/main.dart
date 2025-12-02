@@ -18,6 +18,7 @@ import 'package:mentalhelth/firebase_options.dart';
 import 'package:mentalhelth/screens/SharePostView.dart';
 import 'package:mentalhelth/screens/addactions_screen/model/alaram_info.dart';
 import 'package:mentalhelth/screens/addgoals_dreams_screen/add_goals_link_par_screen.dart';
+import 'package:mentalhelth/screens/auth/sign_in/landing_register_screen.dart';
 import 'package:mentalhelth/screens/auth/sign_in/widget/referral_code_helper.dart';
 import 'package:mentalhelth/screens/auth/signup_screen/provider/signup_provider.dart';
 import 'package:mentalhelth/screens/auth/splash/new_splash_screen.dart';
@@ -154,7 +155,7 @@ class DeepLinkHandler {
             );
           } else {
             debugPrint("🚫 Not allowed → Navigating to NewSplashScreen");
-            nextScreen = const NewSplashScreen();
+            nextScreen = const LandingRegisterScreenScreen();
             showToast(
               context: ctx,
               message: "Login required. Please Login!",

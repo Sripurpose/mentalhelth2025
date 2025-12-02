@@ -145,46 +145,6 @@ class _JournalListViewWidgetState extends State<JournalListViewWidget> {
                   ],
                 ),
               ),
-
-              // Pagination Row - Always Visible
-              if (homeProvider.journalsModelList.isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 80.0),
-                  child: Visibility(
-                    visible: (homeProvider.journalsModel?.pageCount ?? 0) > 1,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(
-                        homeProvider.journalsModel?.pageCount ?? 0,
-                        (index) {
-                          return GestureDetector(
-                            onTap: () {
-                              homeProvider.setCurrentPage(index + 1);
-                              homeProvider.journalsModelList.clear();
-                              print(
-                                  "currentPagenews ${homeProvider.currentPage}");
-                              homeProvider.fetchJournals(
-                                  pageNo: homeProvider.currentPage.toString(),
-                                  context: context);
-                              homeProvider.fetchJournalsGridView(
-                                  initial: true,
-                                  context: context,
-                                  fullList: true);
-                            },
-                            child: const Text(
-                              '',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Poppins',
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ),
             ],
           ),
         );
