@@ -41,76 +41,80 @@ Widget buildPopupDialog(BuildContext context, Size size) {
             borderRadius: BorderRadius.circular(20),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
             child: ConstrainedBox(
               constraints: BoxConstraints(maxHeight: size.height * 0.75),
               child: Column(
                 children: [
+                  const SizedBox(height: 15),
 
-                  /// ===================== CLOSE BUTTON ======================
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: CustomImageView(
-                        imagePath: ImageConstant.imgCloseNumu,
-                        height: 30,
-                        width: 30,
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 10),
 
                   /// ===================== PROFILE INFO ======================
-                  Container(
-                    decoration: BoxDecoration(
-                      color: ColorsContent.whiteText,
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    padding: const EdgeInsets.all(5),
-                    child: Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            dashBoardProvider.changeCommentPage(index: 8);
-                            Navigator.pop(context);
-                          },
-                          child: CircleAvatar(
-                            backgroundColor: Colors.grey,
-                            radius: size.width * 0.05,
-                            child: CustomImageView(
-                              imagePath:
-                              editProvider.getProfileModel?.profileurl ?? "",
-                              height: 50,
-                              width: 50,
-                              radius: BorderRadius.circular(34),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        width: size.width * 0.58,
+                        decoration: BoxDecoration(
+                          color: ColorsContent.whiteText,
+                          borderRadius: BorderRadius.circular(6),
                         ),
-                        SizedBox(width: size.width * 0.02),
-                        SizedBox(
-                          width: size.width * 0.40,
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Text(
-                              capitalText(
-                                editProvider.getProfileModel?.firstname ?? "",
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 16.5,
-                                fontWeight: FontWeight.w500,
-                                fontFamily: 'Poppins',
-                                color: ColorsContent.newThemeColor,
+                        padding: const EdgeInsets.all(5),
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                dashBoardProvider.changeCommentPage(index: 8);
+                                Navigator.pop(context);
+                              },
+                              child: CircleAvatar(
+                                backgroundColor: Colors.grey,
+                                radius: size.width * 0.05,
+                                child: CustomImageView(
+                                  imagePath:
+                                  editProvider.getProfileModel?.profileurl ?? "",
+                                  height: 50,
+                                  width: 50,
+                                  radius: BorderRadius.circular(34),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
+                            SizedBox(width: size.width * 0.02),
+                            SizedBox(
+                              width: size.width * 0.40,
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Text(
+                                  capitalText(
+                                    editProvider.getProfileModel?.firstname ?? "",
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 16.5,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'Poppins',
+                                    color: ColorsContent.newThemeColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: GestureDetector(
+                          onTap: () => Navigator.pop(context),
+                          child: CustomImageView(
+                            imagePath: ImageConstant.imgCloseNumu,
+                            height: 30,
+                            width: 30,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
 
                   SizedBox(height: size.height * 0.02),
@@ -128,7 +132,7 @@ Widget buildPopupDialog(BuildContext context, Size size) {
                             },
                           ),
                           _menuItem(
-                            title: "Smart Journal",
+                            title: "Smart Journals",
                             onTap: () {
                               dashBoardProvider.changePage(index: 2);
                               Navigator.pop(context);
@@ -149,7 +153,7 @@ Widget buildPopupDialog(BuildContext context, Size size) {
                             },
                           ),
 
-                          SizedBox(height: size.height * 0.02),
+                        //  SizedBox(height: size.height * 0.01),
 
                           /// ===================== DYNAMIC MENU (NOW WORKS) ======================
                           Builder(builder: (_) {
@@ -191,6 +195,7 @@ Widget buildPopupDialog(BuildContext context, Size size) {
                               }).toList(),
                             );
                           }),
+                           SizedBox(height: size.height * 0.02),
 
                           _menuItem(
                             title: "Privacy policy",
@@ -319,6 +324,7 @@ Download now: $url
                       color: ColorsContent.whiteText,
                     ),
                   ),
+                  const SizedBox(height: 25),
                 ],
               ),
             ),
