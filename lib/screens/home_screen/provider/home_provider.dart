@@ -458,6 +458,12 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void reset() {
+    journalsModelGrid = null;
+    journalsModelGridList = [];
+    notifyListeners();
+  }
+
 
 
 // Helper function to format date as YYYY-MM-DD

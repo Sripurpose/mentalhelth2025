@@ -46,34 +46,23 @@ Future<String?> getVersionSharePref() async {
 }
 
 //remove user id
-// Future<void> removeUserDetailsSharePref({required BuildContext context}) async {
-//   DashBoardProvider dashBoardProvider = Provider.of(context, listen: false);
-//   final SharedPreferences prefs = await SharedPreferences.getInstance();
-//   await prefs.remove('adDialogLastShown');
-//   prefs.clear();
-//   dashBoardProvider.changePage(index: 0);
-//   // ignore: use_build_context_synchronously
-//   Navigator.of(context).pushAndRemoveUntil(
-//     MaterialPageRoute(
-//       builder: (context) => const LandingRegisterScreenScreen(),
-//     ),
-//     (route) => false,
-//   );
-// }
-
 Future<void> removeUserDetailsSharePref({required BuildContext context}) async {
-  final dashBoardProvider = Provider.of<DashBoardProvider>(context, listen: false);
+  DashBoardProvider dashBoardProvider = Provider.of(context, listen: false);
+  HomeProvider homeProvider = Provider.of(context, listen: false);
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-
   await prefs.remove('adDialogLastShown');
-  await prefs.clear();
-
+  prefs.clear();
   dashBoardProvider.changePage(index: 0);
+  homeProvider.reset();
 
-  // Close ALL activities (Android)
-  SystemNavigator.pop(); // App closes completely
+  // ignore: use_build_context_synchronously
+  Navigator.of(context).pushAndRemoveUntil(
+    MaterialPageRoute(
+      builder: (context) => const LandingRegisterScreenScreen(),
+    ),
+    (route) => false,
+  );
 }
-
 
 //ad user token
 void addUserTokenSharePref({required String token}) async {
