@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../utils/core/date_time_utils.dart';
 import '../../../../utils/core/image_constant.dart';
+import '../../../../utils/logic/date_format.dart';
 import '../../../../utils/theme/colors.dart';
 import '../../../../utils/theme/theme_helper.dart';
 import '../../../../widgets/custom_image_view.dart';
@@ -232,7 +233,13 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
                                               SizedBox(
                                                 width: showActions ? size.width * 0.70 : size.width * 0.70,
                                                 child: Text(
-                                                  HtmlUnescape().convert("${widget.goal.title}"),
+                                                  capitalizeFirstLetter(
+                                                    HtmlUnescape().convert(
+                                                      widget.goal.title.toString().length > 20
+                                                          ? '${widget.goal.title.toString().substring(0, 20)}...'
+                                                          : widget.goal.title.toString(),
+                                                    ),
+                                                  ),
                                                   overflow: TextOverflow.visible,
                                                   maxLines: null,
                                                   textAlign: TextAlign.start,
@@ -684,7 +691,13 @@ class _ChooseActionMentalHelthState extends State<ChooseActionMentalHelth> {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Text(
-                      HtmlUnescape().convert(action[index].title.toString()),
+                      capitalizeFirstLetter(
+                        HtmlUnescape().convert(
+                          action[index].title.toString().length > 18
+                              ? '${action[index].title.toString().substring(0, 18)}...'
+                              : action[index].title.toString(),
+                        ),
+                      ),
                       style: const TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Poppins',),
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,

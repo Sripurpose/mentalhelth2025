@@ -362,6 +362,7 @@ import 'package:provider/provider.dart';
 import '../../../../utils/theme/colors.dart';
 import '../../../../widgets/functions/popup.dart';
 import '../../../../widgets/functions/snack_bar.dart';
+import '../../../journal_view_screen/widgets/journal_audio_player.dart';
 
 class MentalStrengthAudioPlayer extends StatefulWidget {
   const MentalStrengthAudioPlayer({
@@ -396,6 +397,7 @@ class _MentalStrengthAudioPlayerState extends State<MentalStrengthAudioPlayer> {
   void initState() {
     super.initState();
 
+    // Listen to player state
     audioPlayer.onPlayerStateChanged.listen((event) {
       if (mounted) {
         setState(() {
@@ -404,6 +406,7 @@ class _MentalStrengthAudioPlayerState extends State<MentalStrengthAudioPlayer> {
       }
     });
 
+    // Listen to duration
     audioPlayer.onDurationChanged.listen((newDuration) {
       if (mounted) {
         setState(() {
@@ -413,6 +416,7 @@ class _MentalStrengthAudioPlayerState extends State<MentalStrengthAudioPlayer> {
       }
     });
 
+    // Listen to position
     audioPlayer.onPositionChanged.listen((newPosition) {
       if (mounted) {
         setState(() {
@@ -420,33 +424,66 @@ class _MentalStrengthAudioPlayerState extends State<MentalStrengthAudioPlayer> {
         });
       }
     });
-  }
 
-  Future<void> playAudio() async {
-    try {
-      if (isPlaying) {
-        await audioPlayer.pause();
-      } else {
-        await audioPlayer.stop();
-        await audioPlayer.release();
+    // Listen when audio completes
+    audioPlayer.onPlayerComplete.listen((_) {
+      if (!mounted) return;
+      setState(() {
+        isPlaying = false;
+        position = duration; // move slider to end
+      });
+    });
 
-        if (widget.url.startsWith("http") || widget.url.startsWith("https")) {
+    // ⭐ PRELOAD AUDIO METADATA (IMPORTANT)
+    Future.microtask(() async {
+      try {
+        if (widget.url.startsWith("http")) {
           await audioPlayer.setSourceUrl(widget.url);
         } else {
           final file = File(widget.url);
           if (await file.exists()) {
             await audioPlayer.setSourceDeviceFile(widget.url);
-          } else {
-            showCustomSnackBar(
-              context: context,
-              message: "Audio file not found at the given path.",
-            );
-            return;
           }
         }
-
-        await audioPlayer.play(UrlSource(widget.url));
+      } catch (e) {
+        logger.e("Duration preload error: $e");
       }
+    });
+  }
+
+
+
+  Future<void> playAudio() async {
+    try {
+      // If currently playing → pause
+      if (isPlaying) {
+        await audioPlayer.pause();
+        return;
+      }
+
+      // CASE 1: Audio finished → must restart using .play()
+      if (position >= duration && duration != Duration.zero) {
+        if (widget.url.startsWith("http")) {
+          await audioPlayer.play(UrlSource(widget.url));
+        } else {
+          await audioPlayer.play(DeviceFileSource(widget.url));
+        }
+        return;
+      }
+
+      // CASE 2: First time play or paused → resume if possible
+      if (position > Duration.zero && position < duration) {
+        await audioPlayer.resume();
+        return;
+      }
+
+      // CASE 3: Normal first-time play
+      if (widget.url.startsWith("http")) {
+        await audioPlayer.play(UrlSource(widget.url));
+      } else {
+        await audioPlayer.play(DeviceFileSource(widget.url));
+      }
+
     } catch (e) {
       logger.e("Error playing audio: $e");
       showCustomSnackBar(
@@ -455,6 +492,9 @@ class _MentalStrengthAudioPlayerState extends State<MentalStrengthAudioPlayer> {
       );
     }
   }
+
+
+
 
   String formatDuration(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2, '0');
@@ -519,38 +559,60 @@ class _MentalStrengthAudioPlayerState extends State<MentalStrengthAudioPlayer> {
                           width: size.width * 0.5,
                           child: Column(
                             children: [
-                              Slider(
-                                inactiveColor: Colors.grey,
-                                activeColor: Colors.white,
-                                min: 0,
-                                max: duration.inSeconds.toDouble(),
-                                value: position.inSeconds
-                                    .toDouble()
-                                    .clamp(0.0, duration.inSeconds.toDouble()),
-                                onChanged: (value) async {
-                                  final pos = Duration(seconds: value.toInt());
-                                  await audioPlayer.seek(pos);
-                                  if (!isPlaying) {
-                                    await audioPlayer.resume();
-                                  }
-                                },
+                              CustomPaint(
+                                size: const Size(double.infinity, 50),
+                                painter: WaveformPainter(
+                                  progress: duration.inMilliseconds > 0
+                                      ? position.inMilliseconds / duration.inMilliseconds
+                                      : 0.0,
+                                ),
                               ),
-                              Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+
+                              // --- TIMER DISPLAY FIX ---
+                              (isPlaying)
+                                  ? Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     formatDuration(position),
                                     style: const TextStyle(
-                                        color: Colors.white, fontSize: 12,fontFamily: 'Poppins',),
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontFamily: 'Poppins',
+                                    ),
                                   ),
                                   Text(
-                                    formatDuration(duration),
+                                    isInitialized ? formatDuration(duration) : "00:00",
                                     style: const TextStyle(
-                                        color: Colors.white, fontSize: 12,fontFamily: 'Poppins',),
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontFamily: 'Poppins',
+                                    ),
+                                  ),
+                                ],
+                              )
+                                  : Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    "", // Hides left timer
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontFamily: 'Poppins',
+                                    ),
+                                  ),
+                                  Text(
+                                    isInitialized ? formatDuration(duration) : "00:00",
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontFamily: 'Poppins',
+                                    ),
                                   ),
                                 ],
                               ),
+
                             ],
                           ),
                         ),

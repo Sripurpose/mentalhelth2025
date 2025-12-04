@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../utils/core/date_time_utils.dart';
 import '../../../../utils/core/image_constant.dart';
+import '../../../../utils/logic/date_format.dart';
 import '../../../../utils/theme/colors.dart';
 import '../../../../utils/theme/theme_helper.dart';
 import '../../../../widgets/custom_image_view.dart';
@@ -375,7 +376,13 @@ class _ScreenChooseGoalMentalStrengthState
                 SizedBox(
                   width: size.width * 0.5,
                   child: Text(
-                    HtmlUnescape().convert(goals[index].title.toString()),
+                    capitalizeFirstLetter(
+                      HtmlUnescape().convert(
+                        goals[index].title.toString().length > 18
+                            ? '${goals[index].title.toString().substring(0, 18)}...'
+                            : goals[index].title.toString(),
+                      ),
+                    ),
                     style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,
