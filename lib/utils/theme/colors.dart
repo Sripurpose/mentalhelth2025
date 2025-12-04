@@ -56,9 +56,10 @@ class ColorsContent {
   static Color expandedBorderColor = const Color(0xFFDED9FD);
 
   ///chartViewNewColors///
-  static Color optimalNewColor = const Color(0xFF00A355);
-  static Color destructiveNewColor = const Color(0xFFEF0305);
-  static Color stressfulNewColor = const Color(0xFFECCF27);
-  static Color passiveNewColor = const Color(0xFF008CCC);
+  static Color optimalNewColor = const Color(0xFF5BC185);
+  static Color destructiveNewColor = const Color(0xFFFE5758);
+  static Color stressfulNewColor = const Color(0xFFFFAB51);
+  static Color passiveNewColor = const Color(0xFF698AF7);
+  static Color mySupportingEmotionsColor = const Color(0xFFF5F5F5);
 
 }

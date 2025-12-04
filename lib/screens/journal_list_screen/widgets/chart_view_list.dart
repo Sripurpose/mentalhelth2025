@@ -44,10 +44,10 @@ class ChartCircularWidgetState extends State<ChartCircularWidget> {
   late TooltipBehavior tooltip;
   List<ChartData> data = [];
   final Map<String, Color> colorMap = {
-    'Optimal': ColorsContent.optimalStateColor,
-    'Stressful': ColorsContent.stressFullStateColor,
-    'Passive': ColorsContent.passiveStateColor,
-    'Destructive': ColorsContent.destructiveStateColor,
+    'Optimal': ColorsContent.optimalNewColor,
+    'Stressful': ColorsContent.stressfulNewColor,
+    'Passive': ColorsContent.passiveNewColor,
+    'Destructive': ColorsContent.destructiveNewColor,
   };
 
   var logger = Logger();
@@ -151,7 +151,7 @@ class ChartCircularWidgetState extends State<ChartCircularWidget> {
                           // ✅ LEGEND BELOW CHART
                           Padding(
                             padding:
-                                const EdgeInsets.symmetric(horizontal: 40.0),
+                                const EdgeInsets.symmetric(horizontal: 50),
                             child: CustomLegend(
                               data: data,
                               colorMap: colorMap,
@@ -278,31 +278,31 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
     final sections = [
       {
         'key': 'Optimal',
-        'color': ColorsContent.optimalStateColor.withOpacity(0.3),
+        'color': ColorsContent.optimalNewColor.withOpacity(0.2),
         'title': 'Optimal',
         'data': chart?.optimal,
         'percent': chart?.optimal?.percent ?? 0,
         'count': chart?.optimal?.count ?? 0,
       },
       {
-        'key': 'Stressful',
-        'color': ColorsContent.stressFullStateColor.withOpacity(0.3),
-        'title': 'Stressful',
-        'data': chart?.stressful,
-        'percent': chart?.stressful?.percent ?? 0,
-        'count': chart?.stressful?.count ?? 0,
-      },
-      {
         'key': 'Passive',
-        'color': ColorsContent.passiveStateColor.withOpacity(0.3),
+        'color': ColorsContent.passiveNewColor.withOpacity(0.2),
         'title': 'Passive',
         'data': chart?.passive,
         'percent': chart?.passive?.percent ?? 0,
         'count': chart?.passive?.count ?? 0,
       },
       {
+        'key': 'Stressful',
+        'color': ColorsContent.stressfulNewColor.withOpacity(0.2),
+        'title': 'Stressful',
+        'data': chart?.stressful,
+        'percent': chart?.stressful?.percent ?? 0,
+        'count': chart?.stressful?.count ?? 0,
+      },
+      {
         'key': 'Destructive',
-        'color': ColorsContent.destructiveStateColor.withOpacity(0.3),
+        'color': ColorsContent.destructiveNewColor.withOpacity(0.2),
         'title': 'Destructive',
         'data': chart?.destructive,
         'percent': chart?.destructive?.percent ?? 0,
@@ -324,7 +324,7 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
           children: [
             for (final section in sections)
               Container(
-                margin: const EdgeInsets.symmetric(vertical: 0),
+                margin: const EdgeInsets.symmetric(vertical: 2),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
@@ -338,13 +338,13 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                       border: Border(
                         bottom: BorderSide(
                           color: section['title'] == "Optimal"
-                              ? ColorsContent.optimalStateColor
-                              : section['title'] == "Stressful"
-                                  ? ColorsContent.stressFullStateColor
-                                  : section['title'] == "Passive"
-                                      ? ColorsContent.passiveStateColor
+                              ? ColorsContent.optimalNewColor
+                              : section['title'] == "Passive"
+                                  ? ColorsContent.passiveNewColor
+                                  : section['title'] == "Stressful"
+                                      ? ColorsContent.stressfulNewColor
                                       : section['title'] == "Destructive"
-                                          ? ColorsContent.destructiveStateColor
+                                          ? ColorsContent.destructiveNewColor
                                           : ColorsContent.newThemeColor,
                           // KEEP ORIGINAL COLOR
                           width: 1.0,
@@ -361,13 +361,13 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                             ? Icons.arrow_drop_up // when expanded
                             : Icons.arrow_drop_down, // when collapsed
                         color: section['title'] == "Optimal"
-                            ? ColorsContent.optimalStateColor
-                            : section['title'] == "Stressful"
-                                ? ColorsContent.stressFullStateColor
-                                : section['title'] == "Passive"
-                                    ? ColorsContent.passiveStateColor
+                            ? ColorsContent.optimalNewColor
+                            : section['title'] == "Passive"
+                                ? ColorsContent.passiveNewColor
+                                : section['title'] == "Stressful"
+                                    ? ColorsContent.stressfulNewColor
                                     : section['title'] == "Destructive"
-                                        ? ColorsContent.destructiveStateColor
+                                        ? ColorsContent.destructiveNewColor
                                         : ColorsContent.newThemeColor,
                         size: 28,
                       ),
@@ -383,13 +383,13 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.bold,
                           color: section['title'] == "Optimal"
-                              ? ColorsContent.optimalStateColor
-                              : section['title'] == "Stressful"
-                                  ? ColorsContent.stressFullStateColor
-                                  : section['title'] == "Passive"
-                                      ? ColorsContent.passiveStateColor
+                              ? ColorsContent.optimalNewColor
+                              : section['title'] == "Passive"
+                                  ? ColorsContent.passiveNewColor
+                                  : section['title'] == "Stressful"
+                                      ? ColorsContent.stressfulNewColor
                                       : section['title'] == "Destructive"
-                                          ? ColorsContent.destructiveStateColor
+                                          ? ColorsContent.destructiveNewColor
                                           : ColorsContent
                                               .newThemeColor, // default
                         ),
@@ -456,9 +456,9 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
             // Supporting Emotions (same logic)
             // -----------------------------
             Container(
-              margin: const EdgeInsets.symmetric(vertical: 30),
+              margin: const EdgeInsets.symmetric(vertical: 20),
               decoration: BoxDecoration(
-                color: ColorsContent.optimalStateColor,
+                color: ColorsContent.mySupportingEmotionsColor,
                 borderRadius: BorderRadius.circular(0),
               ),
               child: ExpansionTile(
@@ -470,7 +470,7 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                   expandedKey == "supporting"
                       ? Icons.arrow_drop_up // when expanded
                       : Icons.arrow_drop_down, // when collapsed
-                  color: Colors.white,
+                  color: ColorsContent.newThemeColor,
                   size: 28,
                 ),
 
@@ -483,10 +483,10 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
 
                 title: Row(
                   children: [
-                    const Text(
+                    Text(
                       'My Supporting Emotions  ',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: ColorsContent.newThemeColor,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Poppins',
                       ),
@@ -495,15 +495,15 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: Colors.white,
+                          color: ColorsContent.newThemeColor,
                           width: 1.5,
                         ),
                       ),
                       padding: const EdgeInsets.all(4),
-                      child: const Text(
+                      child: Text(
                         '?',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: ColorsContent.newThemeColor,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Poppins',
                           fontSize: 12,
@@ -523,7 +523,7 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                             decoration: BoxDecoration(
                               border: Border(
                                 bottom: BorderSide(
-                                  color: ColorsContent.optimalStateColor,
+                                  color: ColorsContent.expandedBorderColor,
                                   width: 0.5,
                                 ),
                               ),
@@ -544,7 +544,7 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                               trailing: GestureDetector(
                                 onTap: () {
                                   final emotionId =
-                                  (support[i].emotionId ?? '').toString();
+                                      (support[i].emotionId ?? '').toString();
 
                                   customPopup(
                                     context: context,
@@ -561,7 +561,7 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                                       );
 
                                       final result =
-                                      await provider.deleteReminderFunction(
+                                          await provider.deleteReminderFunction(
                                         emotion_id: emotionId,
                                         context: context,
                                       );
@@ -602,7 +602,7 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                                     },
                                     title: 'Confirm Delete',
                                     content:
-                                    'Are you sure you want to delete this reminder?',
+                                        'Are you sure you want to delete this reminder?',
                                   );
                                 },
                                 child: SvgPicture.asset(
@@ -617,6 +617,9 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                   ),
                 ],
               ),
+            ),
+            const SizedBox(
+              height: 30,
             ),
           ],
         ),

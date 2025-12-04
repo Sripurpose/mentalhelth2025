@@ -823,13 +823,12 @@ class _NumuMentalStrengthAddEditPageState
               ),
               SizedBox(height: size.height * 0.06),
               SvgPicture.asset(
-                ImageConstant.feelingDummyNumu, // Button icon
+                ImageConstant.feelingDummyNumuNew, // Button icon
               ),
               SizedBox(height: size.height * 0.020),
-              SvgPicture.asset(
-                ImageConstant.lineNumu, // Button icon
-              ),
-              SizedBox(height: size.height * 0.010),
+              // SvgPicture.asset(
+              //   ImageConstant.lineNumu, // Button icon
+              // ),
               CustomRatingBar(
                 initialRating: mentalStrengthEditProvider.emotionalValueStar,
                 itemSize: 60,

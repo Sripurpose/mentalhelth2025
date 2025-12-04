@@ -1696,13 +1696,9 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
               ),
               SizedBox(height: size.height * 0.05),
               SvgPicture.asset(
-                ImageConstant.feelingDummyNumu, // Button icon
+                ImageConstant.feelingDummyNumuNew, // Button icon
               ),
-              SizedBox(height: size.height * 0.03),
-              SvgPicture.asset(
-                ImageConstant.lineNumu, // Button icon
-              ),
-              SizedBox(height: size.height * 0.03),
+              SizedBox(height: size.height * 0.02),
               CustomRatingBar(
                 initialRating: mentalStrengthEditProvider.emotionalValueStar,
                 itemSize: 60,
