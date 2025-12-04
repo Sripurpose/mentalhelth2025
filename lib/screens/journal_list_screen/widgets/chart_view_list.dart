@@ -136,7 +136,7 @@ class ChartCircularWidgetState extends State<ChartCircularWidget> {
                                   isVisible: true,
                                   labelPosition: ChartDataLabelPosition.inside,
                                   textStyle: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 15,
                                     fontWeight: FontWeight.w700,
                                     color: Colors.white,
                                     fontFamily: 'Poppins',

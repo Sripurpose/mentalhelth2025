@@ -64,7 +64,7 @@ class _JournalListPageState extends State<JournalListPage> {
   Future<void> _isTokenExpired() async {
     await homeProvider.fetchJournals(
         initial: true, context: context, fullList: true);
-    await homeProvider.fetchJournalsGridView(initial: true, context: context);
+   // await homeProvider.fetchJournalsGridView(initial: true, context: context);
     await editProfileProvider.fetchUserProfile(context);
     tokenStatus = TokenManager.checkTokenExpiry();
     if (tokenStatus) {
@@ -224,7 +224,7 @@ class _JournalListPageState extends State<JournalListPage> {
                               bottom: journalListProvider.listViewBool &&
                                   homeProvider.journalsModelList.isNotEmpty
                                   ? 70
-                                  : 70,
+                                  : 20,
                             ),
                             child: journalListProvider.listViewBool
                                 ? const JournalListViewWidget()

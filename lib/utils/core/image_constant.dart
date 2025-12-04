@@ -19,6 +19,7 @@ class ImageConstant {
   static String noData = '$imagePath/home/noData.gif';
   static String imgMenu = '$imagePath/img_menu.svg';
   static String feelingDummyNumu = '$imagePath/feeling_dummy_numu.svg';
+  static String feelingDummyNumuNew = '$imagePath/feeling_dummy_numu_new.svg';
   static String homeSearchNumu = '$imagePath/home_search.svg';
   static String homeDotNumu = '$imagePath/home_dot.svg';
   static String line = '$imagePath/line.svg';

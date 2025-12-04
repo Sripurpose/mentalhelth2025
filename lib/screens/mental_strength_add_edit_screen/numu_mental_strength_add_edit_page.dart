@@ -579,10 +579,13 @@ class _NumuMentalStrengthAddEditPageState
                                                       .newThemeColor,
                                                 ),
                                               );
-                                            } else {
+                                            } else if (!mentalStrengthEditProvider
+                                                .saveJournalLoading){
                                               await mentalStrengthEditProvider
                                                   .saveButtonFunction(context);
                                               _isTokenExpired();
+                                            }else{
+
                                             }
                                           },
                                           child: Stack(
@@ -657,10 +660,13 @@ class _NumuMentalStrengthAddEditPageState
                                                       .newThemeColor,
                                                 ),
                                               );
-                                            } else {
+                                            } else if (!mentalStrengthEditProvider
+                                                .saveJournalLoading){
                                               await mentalStrengthEditProvider
                                                   .saveButtonFunction(context);
                                               _isTokenExpired();
+                                            }else{
+
                                             }
                                           },
                                           child:

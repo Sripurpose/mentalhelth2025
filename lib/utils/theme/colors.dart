@@ -40,9 +40,9 @@ class ColorsContent {
   static Color goalNotCompletedColor = const Color(0xFFA296F3);
   static Color goalCompletedTextColor = const Color(0xFF666666);
   static Color optimalStateColor = const Color(0xFFB768F7);
-  static Color passiveStateColor = const Color(0xFFF87E69);
+  static Color passiveStateColor = const Color(0xFF688BF7);
   static Color stressFullStateColor = const Color(0xFF7E69F8);
-  static Color destructiveStateColor = const Color(0xFF688BF7);
+  static Color destructiveStateColor = const Color(0xFFF87E69);
   static Color chooseGoalActionColor = const Color(0xFFCECBF7);
   static Color numuThemeGradientColor1 = const Color(0xFFCECBF7);
   static Color numuThemeGradientColor2 = const Color(0xFF7F6AFD);
@@ -54,5 +54,11 @@ class ColorsContent {
   static Color allBorderColor = const Color(0xFFDDDBF6);
   static Color allBorderColor1 = const Color(0xFFEEEBFF);
   static Color expandedBorderColor = const Color(0xFFDED9FD);
+
+  ///chartViewNewColors///
+  static Color optimalNewColor = const Color(0xFF00A355);
+  static Color destructiveNewColor = const Color(0xFFEF0305);
+  static Color stressfulNewColor = const Color(0xFFECCF27);
+  static Color passiveNewColor = const Color(0xFF008CCC);
 
 }

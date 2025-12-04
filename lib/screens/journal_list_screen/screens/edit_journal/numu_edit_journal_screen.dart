@@ -484,90 +484,94 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                                       .titleEditTextController
                                                       .text
                                                       .isNotEmpty) {
-                                                bool isSuccess =
-                                                    await mentalStrengthEditProvider
-                                                        .updateJournalLoading(
-                                                  journalId: homeProvider
-                                                      .journalDetails!
-                                                      .journals!
-                                                      .journalId
-                                                      .toString(),
-                                                  context,
-                                                  journalTitle:
-                                                      mentalStrengthEditProvider
-                                                          .titleEditTextController
-                                                          .text,
-                                                  journalDesc:
-                                                      mentalStrengthEditProvider
-                                                          .descriptionEditTextController
-                                                          .text,
-                                                  emotionId:
-                                                      mentalStrengthEditProvider
-                                                          .emotionValue!.id
-                                                          .toString(),
-                                                  emotionValue:
-                                                      mentalStrengthEditProvider
-                                                          .emotionalValueStar
-                                                          .toString(),
-                                                  driveValue:
-                                                      mentalStrengthEditProvider
-                                                          .driveValueStar
-                                                          .toString(),
-                                                  goalId:
-                                                      mentalStrengthEditProvider
-                                                          .goalsValue.id
-                                                          .toString(),
-                                                  locationName:
-                                                      mentalStrengthEditProvider
-                                                          .selectedLocationName,
-                                                  locationLatitude:
-                                                      mentalStrengthEditProvider
-                                                          .selectedLatitude,
-                                                  locationLongitude:
-                                                      mentalStrengthEditProvider
-                                                          .selectedLongitude,
-                                                      mediaThumbs: mentalStrengthEditProvider.mediaThumbList, // ✅ pass here
-                                                  mediaName:
-                                                      mentalStrengthEditProvider
-                                                          .addMediaUploadResponseList,
-                                                  locationAddress:
-                                                      mentalStrengthEditProvider
-                                                          .selectedLocationAddress,
-                                                  actionIdList:
-                                                      mentalStrengthEditProvider
-                                                          .actionList
-                                                          .map(
-                                                              (e) => e.id ?? "")
-                                                          .toList(),
-                                                      editDetectedLinks: mentalStrengthEditProvider.editDetectedLinks,
-                                                );
-                                                if (isSuccess) {
-                                                  Future.delayed(
-                                                      const Duration(
-                                                          seconds: 3),
-                                                      () async {
-                                                    //   homeProvider.currentPage == 1;
-                                                        await homeProvider.fetchJournalsGridView(initial: true,context: context,fullList: true);
-
-                                                        if (homeProvider
-                                                            .journalStatus ==
-                                                        404) {
+                                                if(!mentalStrengthEditProvider
+                                                    .saveJournalLoading){
+                                                  bool isSuccess =
+                                                  await mentalStrengthEditProvider
+                                                      .updateJournalLoading(
+                                                    journalId: homeProvider
+                                                        .journalDetails!
+                                                        .journals!
+                                                        .journalId
+                                                        .toString(),
+                                                    context,
+                                                    journalTitle:
+                                                    mentalStrengthEditProvider
+                                                        .titleEditTextController
+                                                        .text,
+                                                    journalDesc:
+                                                    mentalStrengthEditProvider
+                                                        .descriptionEditTextController
+                                                        .text,
+                                                    emotionId:
+                                                    mentalStrengthEditProvider
+                                                        .emotionValue!.id
+                                                        .toString(),
+                                                    emotionValue:
+                                                    mentalStrengthEditProvider
+                                                        .emotionalValueStar
+                                                        .toString(),
+                                                    driveValue:
+                                                    mentalStrengthEditProvider
+                                                        .driveValueStar
+                                                        .toString(),
+                                                    goalId:
+                                                    mentalStrengthEditProvider
+                                                        .goalsValue.id
+                                                        .toString(),
+                                                    locationName:
+                                                    mentalStrengthEditProvider
+                                                        .selectedLocationName,
+                                                    locationLatitude:
+                                                    mentalStrengthEditProvider
+                                                        .selectedLatitude,
+                                                    locationLongitude:
+                                                    mentalStrengthEditProvider
+                                                        .selectedLongitude,
+                                                    mediaThumbs: mentalStrengthEditProvider.mediaThumbList, // ✅ pass here
+                                                    mediaName:
+                                                    mentalStrengthEditProvider
+                                                        .addMediaUploadResponseList,
+                                                    locationAddress:
+                                                    mentalStrengthEditProvider
+                                                        .selectedLocationAddress,
+                                                    actionIdList:
+                                                    mentalStrengthEditProvider
+                                                        .actionList
+                                                        .map(
+                                                            (e) => e.id ?? "")
+                                                        .toList(),
+                                                    editDetectedLinks: mentalStrengthEditProvider.editDetectedLinks,
+                                                  );
+                                                  if (isSuccess) {
+                                                    Future.delayed(
+                                                        const Duration(
+                                                            seconds: 3),
+                                                            () async {
+                                                          //   homeProvider.currentPage == 1;
                                                           await homeProvider.fetchJournalsGridView(initial: true,context: context,fullList: true);
 
-                                                        }
-                                                    logger.i(
-                                                        "homeProvider.currentPage${homeProvider.currentPage}");
-                                                  });
+                                                          if (homeProvider
+                                                              .journalStatus ==
+                                                              404) {
+                                                            await homeProvider.fetchJournalsGridView(initial: true,context: context,fullList: true);
 
-                                                  DashBoardProvider
-                                                      dashBoardProvider =
-                                                      Provider.of<
-                                                              DashBoardProvider>(
-                                                          context,
-                                                          listen: false);
-                                                  dashBoardProvider.changePage(
-                                                      index: 2);
+                                                          }
+                                                          logger.i(
+                                                              "homeProvider.currentPage${homeProvider.currentPage}");
+                                                        });
+
+                                                    DashBoardProvider
+                                                    dashBoardProvider =
+                                                    Provider.of<
+                                                        DashBoardProvider>(
+                                                        context,
+                                                        listen: false);
+                                                    dashBoardProvider.changePage(
+                                                        index: 2);
+                                                  }
                                                 }
+
                                               } else {
                                                 showCustomSnackBar(
                                                   context: context,
@@ -633,88 +637,100 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                                       .titleEditTextController
                                                       .text
                                                       .isNotEmpty) {
-                                                bool isSuccess =
-                                                    await mentalStrengthEditProvider
-                                                        .updateJournalLoading(
-                                                  journalId: homeProvider
-                                                      .journalDetails!
-                                                      .journals!
-                                                      .journalId
-                                                      .toString(),
-                                                  context,
-                                                  journalTitle:
-                                                      mentalStrengthEditProvider
-                                                          .titleEditTextController
-                                                          .text,
-                                                  journalDesc:
-                                                      mentalStrengthEditProvider
-                                                          .descriptionEditTextController
-                                                          .text,
-                                                  emotionId:
-                                                      mentalStrengthEditProvider
-                                                          .emotionValue!.id
-                                                          .toString(),
-                                                  emotionValue:
-                                                      mentalStrengthEditProvider
-                                                          .emotionalValueStar
-                                                          .toString(),
-                                                  driveValue:
-                                                      mentalStrengthEditProvider
-                                                          .driveValueStar
-                                                          .toString(),
-                                                  goalId:
-                                                      mentalStrengthEditProvider
-                                                          .goalsValue.id
-                                                          .toString(),
-                                                  locationName:
-                                                      mentalStrengthEditProvider
-                                                          .selectedLocationName,
-                                                  locationLatitude:
-                                                      mentalStrengthEditProvider
-                                                          .selectedLatitude,
-                                                  locationLongitude:
-                                                      mentalStrengthEditProvider
-                                                          .selectedLongitude,
-                                                      mediaThumbs: mentalStrengthEditProvider.mediaThumbList, // ✅ pass here
-                                                  mediaName:
-                                                      mentalStrengthEditProvider
-                                                          .addMediaUploadResponseList,
-                                                  locationAddress:
-                                                      mentalStrengthEditProvider
-                                                          .selectedLocationAddress,
-                                                  actionIdList:
-                                                      mentalStrengthEditProvider
-                                                          .actionList
-                                                          .map(
-                                                              (e) => e.id ?? "")
-                                                          .toList(),
-                                                      editDetectedLinks: mentalStrengthEditProvider.editDetectedLinks,
-                                                );
-                                                if (isSuccess) {
-                                                  Future.delayed(
-                                                      const Duration(
-                                                          seconds: 3),
-                                                      () async {
-                                                    //   homeProvider.currentPage == 1;
-                                                        await homeProvider.fetchJournals(initial: true,context: context,fullList: true);
-                                                    if (homeProvider
-                                                            .journalStatus ==
-                                                        404) {
-                                                      await homeProvider.fetchJournals(initial: true,context: context,fullList: true);
-                                                    }
-                                                    logger.i(
-                                                        "homeProvider.currentPage${homeProvider.currentPage}");
-                                                  });
 
-                                                  DashBoardProvider
-                                                      dashBoardProvider =
-                                                      Provider.of<
-                                                              DashBoardProvider>(
-                                                          context,
-                                                          listen: false);
-                                                  dashBoardProvider.changePage(
-                                                      index: 2);
+                                                if(!mentalStrengthEditProvider
+                                                    .saveJournalLoading){
+                                                  bool isSuccess =
+                                                  await mentalStrengthEditProvider
+                                                      .updateJournalLoading(
+                                                    journalId: homeProvider
+                                                        .journalDetails!
+                                                        .journals!
+                                                        .journalId
+                                                        .toString(),
+                                                    context,
+                                                    journalTitle:
+                                                    mentalStrengthEditProvider
+                                                        .titleEditTextController
+                                                        .text,
+                                                    journalDesc:
+                                                    mentalStrengthEditProvider
+                                                        .descriptionEditTextController
+                                                        .text,
+                                                    emotionId:
+                                                    mentalStrengthEditProvider
+                                                        .emotionValue!.id
+                                                        .toString(),
+                                                    emotionValue:
+                                                    mentalStrengthEditProvider
+                                                        .emotionalValueStar
+                                                        .toString(),
+                                                    driveValue:
+                                                    mentalStrengthEditProvider
+                                                        .driveValueStar
+                                                        .toString(),
+                                                    goalId:
+                                                    mentalStrengthEditProvider
+                                                        .goalsValue.id
+                                                        .toString(),
+                                                    locationName:
+                                                    mentalStrengthEditProvider
+                                                        .selectedLocationName,
+                                                    locationLatitude:
+                                                    mentalStrengthEditProvider
+                                                        .selectedLatitude,
+                                                    locationLongitude:
+                                                    mentalStrengthEditProvider
+                                                        .selectedLongitude,
+                                                    mediaThumbs: mentalStrengthEditProvider.mediaThumbList, // ✅ pass here
+                                                    mediaName:
+                                                    mentalStrengthEditProvider
+                                                        .addMediaUploadResponseList,
+                                                    locationAddress:
+                                                    mentalStrengthEditProvider
+                                                        .selectedLocationAddress,
+                                                    actionIdList:
+                                                    mentalStrengthEditProvider
+                                                        .actionList
+                                                        .map(
+                                                            (e) => e.id ?? "")
+                                                        .toList(),
+                                                    editDetectedLinks: mentalStrengthEditProvider.editDetectedLinks,
+                                                  );
+                                                  if (isSuccess) {
+                                                    Future.delayed(
+                                                        const Duration(
+                                                            seconds: 3),
+                                                            () async {
+                                                          //   homeProvider.currentPage == 1;
+                                                          await homeProvider.fetchJournals(initial: true,context: context,fullList: true);
+                                                          if (homeProvider
+                                                              .journalStatus ==
+                                                              404) {
+                                                            await homeProvider.fetchJournals(initial: true,context: context,fullList: true);
+                                                          }
+                                                          logger.i(
+                                                              "homeProvider.currentPage${homeProvider.currentPage}");
+                                                        });
+
+                                                    DashBoardProvider
+                                                    dashBoardProvider =
+                                                    Provider.of<
+                                                        DashBoardProvider>(
+                                                        context,
+                                                        listen: false);
+                                                    dashBoardProvider.changePage(
+                                                        index: 2);
+                                                  }
+
+
+
+                                                }else{
+
                                                 }
+
+
+
                                               } else {
                                                 showCustomSnackBar(
                                                   context: context,

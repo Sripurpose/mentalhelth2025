@@ -414,6 +414,7 @@ class _HomeScreenState extends State<HomeScreen> {
         signInProvider.fetchSettings(context),
         signInProvider.fetchMessages(context),
         signInProvider.fetchDynamicMenu(context),
+        homeProvider.fetchJournalsGridView(initial: true,context: context,fullList: true),
       ]),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
