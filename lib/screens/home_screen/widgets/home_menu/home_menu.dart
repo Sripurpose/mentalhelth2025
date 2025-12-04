@@ -54,7 +54,7 @@ Widget buildPopupDialog(BuildContext context, Size size) {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        width: size.width * 0.58,
+                        width: Platform.isAndroid ? size.width * 0.58 : size.width * 0.60,
                         decoration: BoxDecoration(
                           color: ColorsContent.whiteText,
                           borderRadius: BorderRadius.circular(6),
