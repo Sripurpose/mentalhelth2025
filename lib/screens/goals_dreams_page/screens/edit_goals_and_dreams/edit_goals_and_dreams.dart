@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:html_unescape/html_unescape.dart';
 import 'package:intl/intl.dart';
 import 'package:link_preview_generator/link_preview_generator.dart';
 import 'package:logger/logger.dart';
@@ -37,6 +38,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../utils/core/date_time_utils.dart';
+import '../../../../utils/logic/date_format.dart';
 import '../../../../utils/logic/permissions.dart';
 import '../../../../widgets/app_bar/custom_app_bar.dart';
 import '../../../../widgets/functions/popup.dart';
@@ -656,7 +658,7 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                                                               ),
                                                             ),
                                                             Padding(
-                                                              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                                              padding: const EdgeInsets.symmetric(horizontal: 5.0),
                                                               child: SingleChildScrollView(
                                                                 scrollDirection:
                                                                     Axis.horizontal,
@@ -664,11 +666,17 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                                                                 child: SizedBox(
                                                                   width: 250,
                                                                   child: Text(
-                                                                    data.name,
+                                                                    capitalizeFirstLetter(
+                                                                      HtmlUnescape().convert(
+                                                                        data.name.length > 28
+                                                                            ? '${ data.name.substring(0, 28)}...'
+                                                                            :  data.name,
+                                                                      ),
+                                                                    ),
                                                                     overflow:
                                                                         TextOverflow
                                                                             .ellipsis,
-                                                                    maxLines: 4,
+                                                                    maxLines: 1,
                                                                     // Set the maximum number of lines to 3
                                                                     textAlign:
                                                                         TextAlign
