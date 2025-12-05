@@ -35,6 +35,7 @@ class _JournalListPageState extends State<JournalListPage> {
   late DashBoardProvider dashBoardProvider;
   late EditProfileProvider editProfileProvider;
   late MentalStrengthEditProvider mentalStrengthEditProvider;
+  late JournalListProvider journalListProvider;
   bool tokenStatus = false;
   var logger = Logger();
 
@@ -83,11 +84,22 @@ class _JournalListPageState extends State<JournalListPage> {
         Provider.of<EditProfileProvider>(context, listen: false);
     mentalStrengthEditProvider =
         Provider.of<MentalStrengthEditProvider>(context, listen: false);
+    journalListProvider =   Provider.of<JournalListProvider>(context, listen: false);
     scheduleMicrotask(() {
       currentPage = 1;
       _isTokenExpired();
     });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+
+      homeProvider.searchController.clear();
+      homeProvider.searchQuery = "";
+      homeProvider.selectedStartDate = null;
+      homeProvider.selectedEndDate = null;
+      journalListProvider.listViewBool = true;
+    });
   }
+
 
   @override
   Widget build(BuildContext context) {

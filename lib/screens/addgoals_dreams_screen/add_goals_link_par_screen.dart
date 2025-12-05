@@ -126,6 +126,8 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
 
     // Step 4: Clear all fields immediately (synchronous)
     try {
+      editProfileProvider.getProfileModel!.interests = "";
+      editProfileProvider.getProfileModel!.interests = null;
       editProfileProvider.getCategoryModel = null;
       editProfileProvider.categorys!.id = "";
       editProfileProvider.categorys!.categoryName = "";
@@ -1501,6 +1503,8 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
 
                     if (matches.isNotEmpty) {
                       final firstLink = matches.first;
+                      if (firstLink.length < 8) return; // prevent `..` or short junk
+
                       setState(() {
                         adDreamsGoalsProvider.detectedLinks.clear();
                         adDreamsGoalsProvider.detectedLinks = [firstLink];
@@ -1530,8 +1534,7 @@ class _AddGoalsLinkParScreenState extends State<AddGoalsLinkParScreen> {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            border: Border.all(
-                                color: Colors.grey.shade300, width: 1.2),
+
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: ClipRRect(

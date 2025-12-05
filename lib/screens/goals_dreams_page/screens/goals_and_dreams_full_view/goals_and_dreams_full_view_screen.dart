@@ -27,6 +27,7 @@ import '../../../../utils/logic/date_format.dart';
 import '../../../../widgets/app_bar/appbar_subtitle.dart';
 import '../../../../widgets/app_bar/custom_app_bar.dart';
 import '../../../../widgets/functions/popup.dart';
+import '../../../../widgets/widget/justifiedText.dart';
 import '../../../addactions_screen/provider/add_actions_provider.dart';
 import '../../../mental_strength_add_edit_screen/provider/mental_strenght_edit_provider.dart';
 import '../../../no_internet/duplicate_screen.dart';
@@ -153,411 +154,383 @@ class _GoalAndDreamFullViewScreenState
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildUntitledOne(
+                        _buildUntitledTitle(
                           context,
                           size,
-                          category:
-                              widget.goalsanddream.categoryName.toString(),
                           title: widget.goalsanddream.goalTitle.toString(),
-                          createDate: widget.goalsanddream.createdAt.toString(),
-                          achiveDate:
-                              widget.goalsanddream.goalEnddate.toString(),
-                          status: widget.goalsanddream.goalStatus.toString(),
-                          comments: widget.goalsanddream.goalDetails.toString(),
                         ),
+                        imageList.isNotEmpty
+                            ? const SizedBox(height: 10)
+                            : const SizedBox(),
+                        imageList.isNotEmpty
+                            ?
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.white, // Off-white background
+                            borderRadius:
+                            BorderRadius.circular(5),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                                child: Text(
+                                  "Image",
+                                  style: TextStyle(
+                                    color: ColorsContent.goalDetailsHeading,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.symmetric(horizontal: 0,vertical: 5),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white, // Off-white background
+                                    borderRadius:
+                                    BorderRadius.circular(0),
+                                  ),
+                                  child: SizedBox(
+                                    height: imageList.isNotEmpty
+                                        ? size.height * 0.3
+                                        : 0,
+                                    child: Stack(
+                                      children: [
+                                        PageView.builder(
+                                          controller: photoController,
+                                          itemCount: imageList.length,
+                                          itemBuilder: (context, index) {
+                                            return GestureDetector(
+                                              onTap: () {
+                                                showDialog(
+                                                  context: context,
+                                                  barrierDismissible:
+                                                  true,
+                                                  builder: (_) => Dialog(
+                                                    insetPadding:
+                                                    EdgeInsets.zero,
+                                                    backgroundColor:
+                                                    Colors.black,
+                                                    shape:
+                                                    const RoundedRectangleBorder(
+                                                      borderRadius:
+                                                      BorderRadius
+                                                          .zero, // Remove rounded corners
+                                                    ),
+                                                    child: Stack(
+                                                      children: [
+                                                        InteractiveViewer(
+                                                          child: Center(
+                                                            child: Image
+                                                                .network(
+                                                              imageList[
+                                                              index],
+                                                              fit: BoxFit
+                                                                  .contain,
+                                                              loadingBuilder:
+                                                                  (context,
+                                                                  child,
+                                                                  loadingProgress) {
+                                                                if (loadingProgress ==
+                                                                    null)
+                                                                  return child;
+                                                                return const Center(
+                                                                    child:
+                                                                    CupertinoActivityIndicator());
+                                                              },
+                                                              errorBuilder: (context,
+                                                                  error,
+                                                                  stackTrace) =>
+                                                              const Center(
+                                                                  child:
+                                                                  Icon(Icons.broken_image, color: Colors.white)),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Positioned(
+                                                          top: 40,
+                                                          right: 20,
+                                                          child:
+                                                          IconButton(
+                                                            icon: const Icon(
+                                                                Icons
+                                                                    .close,
+                                                                color: Colors
+                                                                    .white,
+                                                                size: 30),
+                                                            onPressed: () =>
+                                                                Navigator.of(
+                                                                    context)
+                                                                    .pop(),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              child: CustomImageView(
+                                                fit: BoxFit.cover,
+                                                imagePath:
+                                                imageList[index],
+                                                height:
+                                                size.height * 0.30,
+                                                width: size.width,
+                                                alignment:
+                                                Alignment.center,
+                                                radius: BorderRadius.circular(
+                                                    0), // your original radius
+                                              ),
+                                            );
+                                          },
+                                          onPageChanged: (int pageIndex) {
+                                            setState(() {
+                                              photoCurrentIndex =
+                                                  pageIndex;
+                                            });
+                                          },
+                                        ),
+                                        if (imageList.length != 1)
+                                          Positioned(
+                                            bottom: 10,
+                                            left: 0,
+                                            right: 0,
+                                            child: SizedBox(
+                                              width: imageList.length *
+                                                  size.width *
+                                                  0.1,
+                                              child: buildIndicators(
+                                                imageList.length,
+                                                photoCurrentIndex,
+                                              ),
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  )),
+                            ],
+                          ),
+                        )
+                            : const SizedBox(),
 
                         audioList.isNotEmpty
                             ? const SizedBox(height: 10)
                             : const SizedBox(),
                         audioList.isEmpty
                             ? const SizedBox()
-                            : Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  border: Border.all(
-                                      color: ColorsContent.newThemeColor,
-                                      width: 0.3), // Light purple border
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      width: double.infinity,
-                                      padding: const EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        color: ColorsContent.goalTextColor,
-                                        // Light purple background
-                                        borderRadius:
-                                            const BorderRadius.vertical(
-                                                top: Radius.circular(5)),
-                                      ),
-                                      child: Text(
-                                        "Audio",
-                                        style: TextStyle(
-                                          color: ColorsContent
-                                              .signInGradientColorViolet,
-                                          // Purple text
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: 'Poppins',
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      width: double.infinity,
-                                      padding: const EdgeInsets.all(10),
-                                      decoration: const BoxDecoration(
-                                        color: Colors
-                                            .white, // Off-white background
-                                        borderRadius: BorderRadius.vertical(
-                                            bottom: Radius.circular(5)),
-                                      ),
-                                      child: SizedBox(
-                                        height: size.height * 0.113,
-                                        child: ListView.builder(
-                                          //   physics: const NeverScrollableScrollPhysics(),
-                                          itemCount: audioList.length,
-                                          itemBuilder: (context, index) {
-                                            return JournalAudioPlayer(
-                                              url: audioList[index],
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                            :
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.white, // Off-white background
+                            borderRadius:
+                            BorderRadius.circular(5),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                                child: Text(
+                                  "Voice",
+                                  style: TextStyle(
+                                    color: ColorsContent.goalDetailsHeading,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'Poppins',
+                                  ),
                                 ),
                               ),
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.symmetric(horizontal: 0,vertical: 3),
+                                decoration: const BoxDecoration(
+                                  color: Colors
+                                      .white, // Off-white background
+                                  borderRadius: BorderRadius.vertical(
+                                      bottom: Radius.circular(5)),
+                                ),
+                                child: SizedBox(
+                                  height: size.height * 0.10,
+                                  child: ListView.builder(
+                                    //   physics: const NeverScrollableScrollPhysics(),
+                                    itemCount: audioList.length,
+                                    itemBuilder: (context, index) {
+                                      return JournalAudioPlayer(
+                                        url: audioList[index],
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
 
-                        imageList.isNotEmpty
-                            ? const SizedBox(height: 10)
-                            : const SizedBox(),
-                        imageList.isNotEmpty
-                            ? Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  border: Border.all(
-                                      color: ColorsContent.newThemeColor,
-                                      width: 0.3), // Light purple border
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      width: double.infinity,
-                                      padding: const EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        color: ColorsContent.goalTextColor,
-                                        // Light purple background
-                                        borderRadius:
-                                            const BorderRadius.vertical(
-                                                top: Radius.circular(5)),
-                                      ),
-                                      child: Text(
-                                        "Photo",
-                                        style: TextStyle(
-                                          color: ColorsContent
-                                              .signInGradientColorViolet,
-                                          // Purple text
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: 'Poppins',
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                        width: double.infinity,
-                                        padding: const EdgeInsets.all(10),
-                                        decoration: const BoxDecoration(
-                                          color: Colors
-                                              .white, // Off-white background
-                                          borderRadius: BorderRadius.vertical(
-                                              bottom: Radius.circular(5)),
-                                        ),
-                                        child: SizedBox(
-                                          height: imageList.isNotEmpty
-                                              ? size.height * 0.3
-                                              : 0,
-                                          child: Stack(
-                                            children: [
-                                              PageView.builder(
-                                                controller: photoController,
-                                                itemCount: imageList.length,
-                                                itemBuilder: (context, index) {
-                                                  return GestureDetector(
-                                                    onTap: () {
-                                                      showDialog(
-                                                        context: context,
-                                                        barrierDismissible:
-                                                            true,
-                                                        builder: (_) => Dialog(
-                                                          insetPadding:
-                                                              EdgeInsets.zero,
-                                                          backgroundColor:
-                                                              Colors.black,
-                                                          shape:
-                                                              const RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .zero, // Remove rounded corners
-                                                          ),
-                                                          child: Stack(
-                                                            children: [
-                                                              InteractiveViewer(
-                                                                child: Center(
-                                                                  child: Image
-                                                                      .network(
-                                                                    imageList[
-                                                                        index],
-                                                                    fit: BoxFit
-                                                                        .contain,
-                                                                    loadingBuilder:
-                                                                        (context,
-                                                                            child,
-                                                                            loadingProgress) {
-                                                                      if (loadingProgress ==
-                                                                          null)
-                                                                        return child;
-                                                                      return const Center(
-                                                                          child:
-                                                                              CupertinoActivityIndicator());
-                                                                    },
-                                                                    errorBuilder: (context,
-                                                                            error,
-                                                                            stackTrace) =>
-                                                                        const Center(
-                                                                            child:
-                                                                                Icon(Icons.broken_image, color: Colors.white)),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Positioned(
-                                                                top: 40,
-                                                                right: 20,
-                                                                child:
-                                                                    IconButton(
-                                                                  icon: const Icon(
-                                                                      Icons
-                                                                          .close,
-                                                                      color: Colors
-                                                                          .white,
-                                                                      size: 30),
-                                                                  onPressed: () =>
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop(),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      );
-                                                    },
-                                                    child: CustomImageView(
-                                                      fit: BoxFit.cover,
-                                                      imagePath:
-                                                          imageList[index],
-                                                      height:
-                                                          size.height * 0.30,
-                                                      width: size.width,
-                                                      alignment:
-                                                          Alignment.center,
-                                                      radius: BorderRadius.circular(
-                                                          8), // your original radius
-                                                    ),
-                                                  );
-                                                },
-                                                onPageChanged: (int pageIndex) {
-                                                  setState(() {
-                                                    photoCurrentIndex =
-                                                        pageIndex;
-                                                  });
-                                                },
-                                              ),
-                                              if (imageList.length != 1)
-                                                Positioned(
-                                                  bottom: 10,
-                                                  left: 0,
-                                                  right: 0,
-                                                  child: SizedBox(
-                                                    width: imageList.length *
-                                                        size.width *
-                                                        0.1,
-                                                    child: buildIndicators(
-                                                      imageList.length,
-                                                      photoCurrentIndex,
-                                                    ),
-                                                  ),
-                                                ),
-                                            ],
-                                          ),
-                                        )),
-                                  ],
-                                ),
-                              )
-                            : const SizedBox(),
+
 
                         videoList.isNotEmpty
                             ? const SizedBox(height: 10)
                             : const SizedBox(),
                         videoList.isNotEmpty
-                            ? Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  border: Border.all(
-                                      color: ColorsContent.newThemeColor,
-                                      width: 0.3), // Light purple border
+                            ?
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.white, // Off-white background
+                            borderRadius:
+                            BorderRadius.circular(5),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 1.0),
+                                child: Text(
+                                  "Video",
+                                  style: TextStyle(
+                                    color: ColorsContent.goalDetailsHeading,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'Poppins',
+                                  ),
                                 ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      width: double.infinity,
-                                      padding: const EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        color: ColorsContent.goalTextColor,
-                                        // Light purple background
-                                        borderRadius:
-                                            const BorderRadius.vertical(
-                                                top: Radius.circular(5)),
-                                      ),
-                                      child: Text(
-                                        "Video",
-                                        style: TextStyle(
-                                          color: ColorsContent
-                                              .signInGradientColorViolet,
-                                          // Purple text
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: 'Poppins',
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                        width: double.infinity,
-                                        padding: const EdgeInsets.all(10),
-                                        decoration: const BoxDecoration(
-                                          color: Colors
-                                              .white, // Off-white background
-                                          borderRadius: BorderRadius.vertical(
-                                              bottom: Radius.circular(5)),
-                                        ),
-                                        child: SizedBox(
-                                          height: videoList.isNotEmpty
-                                              ? size.height * 0.3
-                                              : 0,
-                                          child: Stack(
-                                            children: [
-                                              PageView.builder(
-                                                controller: videoController,
-                                                itemCount: videoList.length,
-                                                itemBuilder: (context, index) {
-                                                  return GestureDetector(
-                                                    onTap: () {
-                                                      showDialog(
-                                                        context: context,
-                                                        barrierDismissible:
-                                                            true,
-                                                        builder: (_) => Dialog(
-                                                          insetPadding:
-                                                              EdgeInsets.zero,
-                                                          backgroundColor:
-                                                              Colors.black,
-                                                          shape:
-                                                              const RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .zero,
-                                                          ),
-                                                          child: Stack(
-                                                            children: [
-                                                              // ✅ No hardcoded AspectRatio
-                                                              Center(
-                                                                child:
-                                                                    VideoPlayerWidgetViewAndAlreadyGoalProgressBar(
-                                                                  videoUrl:
-                                                                      videoList[
-                                                                          index],
-                                                                ),
-                                                              ),
-
-                                                              // Close button
-                                                              Positioned(
-                                                                top: 40,
-                                                                right: 20,
-                                                                child:
-                                                                    IconButton(
-                                                                  icon: const Icon(
-                                                                      Icons
-                                                                          .close,
-                                                                      color: Colors
-                                                                          .white,
-                                                                      size: 30),
-                                                                  onPressed: () =>
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop(),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      );
-                                                    },
-                                                    child: ClipRRect(
+                              ),
+                              Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.symmetric(horizontal: 0,vertical: 5),
+                                  decoration: const BoxDecoration(
+                                    color: Colors
+                                        .white, // Off-white background
+                                    borderRadius: BorderRadius.vertical(
+                                        bottom: Radius.circular(5)),
+                                  ),
+                                  child: SizedBox(
+                                    height: videoList.isNotEmpty
+                                        ? size.height * 0.3
+                                        : 0,
+                                    child: Stack(
+                                      children: [
+                                        PageView.builder(
+                                          controller: videoController,
+                                          itemCount: videoList.length,
+                                          itemBuilder: (context, index) {
+                                            return GestureDetector(
+                                              onTap: () {
+                                                showDialog(
+                                                  context: context,
+                                                  barrierDismissible:
+                                                  true,
+                                                  builder: (_) => Dialog(
+                                                    insetPadding:
+                                                    EdgeInsets.zero,
+                                                    backgroundColor:
+                                                    Colors.black,
+                                                    shape:
+                                                    const RoundedRectangleBorder(
                                                       borderRadius:
-                                                          BorderRadius.circular(
-                                                              5),
-                                                      child:
-                                                          VideoPlayerWidgetViewAndAlreadyGoal(
-                                                        videoUrl:
-                                                            videoList[index],
-                                                      ),
+                                                      BorderRadius
+                                                          .zero,
                                                     ),
-                                                  );
-                                                },
-                                                onPageChanged: (int pageIndex) {
-                                                  setState(() {
-                                                    videoCurrentIndex =
-                                                        pageIndex;
-                                                  });
-                                                },
-                                              ),
-                                              // PageView.builder(
-                                              //   controller: videoController,
-                                              //   itemCount: videoList.length,
-                                              //   itemBuilder: (context, index) {
-                                              //     return VideoPlayerWidget(
-                                              //       videoUrl: videoList[index],
-                                              //     );
-                                              //   },
-                                              //   onPageChanged: (int pageIndex) {
-                                              //     setState(() {
-                                              //       videoCurrentIndex = pageIndex;
-                                              //     });
-                                              //   },
-                                              // ),
-                                              if (videoList.length != 1)
-                                                Positioned(
-                                                  bottom: 10,
-                                                  left: 0,
-                                                  right: 0,
-                                                  child: SizedBox(
-                                                    width: videoList.length *
-                                                        size.width *
-                                                        0.1,
-                                                    child: buildIndicators(
-                                                      videoList.length,
-                                                      videoCurrentIndex,
+                                                    child: Stack(
+                                                      children: [
+                                                        // ✅ No hardcoded AspectRatio
+                                                        Center(
+                                                          child:
+                                                          VideoPlayerWidgetViewAndAlreadyGoalProgressBar(
+                                                            videoUrl:
+                                                            videoList[
+                                                            index],
+                                                          ),
+                                                        ),
+
+                                                        // Close button
+                                                        Positioned(
+                                                          top: 40,
+                                                          right: 20,
+                                                          child:
+                                                          IconButton(
+                                                            icon: const Icon(
+                                                                Icons
+                                                                    .close,
+                                                                color: Colors
+                                                                    .white,
+                                                                size: 30),
+                                                            onPressed: () =>
+                                                                Navigator.of(
+                                                                    context)
+                                                                    .pop(),
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
+                                                );
+                                              },
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                BorderRadius.circular(
+                                                    0),
+                                                child:
+                                                VideoPlayerWidgetViewAndAlreadyGoal(
+                                                  videoUrl:
+                                                  videoList[index],
                                                 ),
-                                            ],
+                                              ),
+                                            );
+                                          },
+                                          onPageChanged: (int pageIndex) {
+                                            setState(() {
+                                              videoCurrentIndex =
+                                                  pageIndex;
+                                            });
+                                          },
+                                        ),
+                                        // PageView.builder(
+                                        //   controller: videoController,
+                                        //   itemCount: videoList.length,
+                                        //   itemBuilder: (context, index) {
+                                        //     return VideoPlayerWidget(
+                                        //       videoUrl: videoList[index],
+                                        //     );
+                                        //   },
+                                        //   onPageChanged: (int pageIndex) {
+                                        //     setState(() {
+                                        //       videoCurrentIndex = pageIndex;
+                                        //     });
+                                        //   },
+                                        // ),
+                                        if (videoList.length != 1)
+                                          Positioned(
+                                            bottom: 10,
+                                            left: 0,
+                                            right: 0,
+                                            child: SizedBox(
+                                              width: videoList.length *
+                                                  size.width *
+                                                  0.1,
+                                              child: buildIndicators(
+                                                videoList.length,
+                                                videoCurrentIndex,
+                                              ),
+                                            ),
                                           ),
-                                        )),
-                                  ],
-                                ),
-                              )
+                                      ],
+                                    ),
+                                  )),
+                            ],
+                          ),
+                        )
                             : const SizedBox(),
 
                         widget.goalsanddream.location?.locationAddress != null
@@ -566,92 +539,127 @@ class _GoalAndDreamFullViewScreenState
                               )
                             : const SizedBox(),
                         widget.goalsanddream.location?.locationAddress != null
-                            ? Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  border: Border.all(
-                                      color: ColorsContent.newThemeColor,
-                                      width: 0.3), // Light purple border
+                            ?
+
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.white, // Off-white background
+                            borderRadius:
+                            BorderRadius.circular(5),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 1.0),
+                                child: Text(
+                                  "Location",
+                                  style: TextStyle(
+                                    color: ColorsContent.goalDetailsHeading,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'Poppins',
+                                  ),
                                 ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                              ),
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.symmetric(horizontal: 0,vertical: 5),
+                                decoration: const BoxDecoration(
+                                  color: Colors
+                                      .white, // Off-white background
+                                  borderRadius: BorderRadius.vertical(
+                                      bottom: Radius.circular(5)),
+                                ),
+                                child: Row(
                                   children: [
-                                    Container(
-                                      width: double.infinity,
-                                      padding: const EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        color: ColorsContent.goalTextColor,
-                                        // Light purple background
-                                        borderRadius:
-                                            const BorderRadius.vertical(
-                                                top: Radius.circular(5)),
-                                      ),
-                                      child: Text(
-                                        "Your Location",
-                                        style: TextStyle(
-                                          color: ColorsContent
-                                              .signInGradientColorViolet,
-                                          // Purple text
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: 'Poppins',
-                                        ),
-                                      ),
+                                    Icon(
+                                      Icons.location_on,
+                                      color: ColorsContent.newThemeColor,
+                                      size: size.width * 0.06,
                                     ),
-                                    Container(
-                                      width: double.infinity,
-                                      padding: const EdgeInsets.all(10),
-                                      decoration: const BoxDecoration(
-                                        color: Colors
-                                            .white, // Off-white background
-                                        borderRadius: BorderRadius.vertical(
-                                            bottom: Radius.circular(5)),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            Icons.location_on,
-                                            color: ColorsContent.newThemeColor,
-                                            size: size.width * 0.06,
+                                    Expanded(
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.vertical,
+                                        child: Text(
+                                          widget.goalsanddream.location
+                                              ?.locationAddress
+                                              ?.replaceAll(
+                                              RegExp(
+                                                  r'[^a-zA-Z0-9, ]'),
+                                              '') // Remove unwanted characters
+                                              .replaceAll(
+                                              RegExp(r',\s*,+'),
+                                              ',') // Replace multiple consecutive commas with a single comma
+                                              .replaceAll(
+                                              RegExp(r'^,|,$'),
+                                              '') // Remove leading and trailing commas
+                                              .trim() ??
+                                              "",
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: 'Poppins',
                                           ),
-                                          Expanded(
-                                            child: SingleChildScrollView(
-                                              scrollDirection: Axis.vertical,
-                                              child: Text(
-                                                widget.goalsanddream.location
-                                                        ?.locationAddress
-                                                        ?.replaceAll(
-                                                            RegExp(
-                                                                r'[^a-zA-Z0-9, ]'),
-                                                            '') // Remove unwanted characters
-                                                        .replaceAll(
-                                                            RegExp(r',\s*,+'),
-                                                            ',') // Replace multiple consecutive commas with a single comma
-                                                        .replaceAll(
-                                                            RegExp(r'^,|,$'),
-                                                            '') // Remove leading and trailing commas
-                                                        .trim() ??
-                                                    "",
-                                                style: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w400,
-                                                  fontFamily: 'Poppins',
-                                                ),
-                                                overflow: TextOverflow.visible,
-                                                maxLines:
-                                                    4, // Ensures scrolling works
-                                              ),
-                                            ),
-                                          ),
-                                        ],
+                                          overflow: TextOverflow.visible,
+                                          maxLines:
+                                          4, // Ensures scrolling works
+                                        ),
                                       ),
                                     ),
                                   ],
                                 ),
-                              )
+                              ),
+                            ],
+                          ),
+                        )
                             : const SizedBox(),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        _buildUntitledDescription(
+                          context,
+                          size,
+                          comments: widget.goalsanddream.goalDetails.toString(),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
 
+                        _buildUntitledCategory(
+                          context,
+                          size,
+                          category:
+                          widget.goalsanddream.categoryName.toString(),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        _buildUntitledCreatedDate(
+                          context,
+                          size,
+                          createDate: widget.goalsanddream.createdAt.toString(),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        _buildUntitledAchievementDate(
+                          context,
+                          size,
+                          achiveDate: widget.goalsanddream.goalEnddate.toString(),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        _buildUntitledStatus(
+                          context,
+                          size,
+                          status: widget.goalsanddream.goalStatus.toString(),
+                        ),
                         widget.goalsanddream.action!.isEmpty
                             ? const SizedBox()
                             : const SizedBox(height: 10),
@@ -664,11 +672,12 @@ class _GoalAndDreamFullViewScreenState
                                     addActionsProvider,
                                     adDreamsGoalsProvider,
                                     _) {
-                                  return Container(
+                                  return
+                                    Container(
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(5),
                                         border: Border.all(
-                                            color: ColorsContent.newThemeColor,
+                                            color: ColorsContent.whiteText,
                                             width: 0.3)),
                                     child: Column(
                                       crossAxisAlignment:
@@ -677,9 +686,9 @@ class _GoalAndDreamFullViewScreenState
                                         // Header container for "Actions"
                                         Container(
                                           width: double.infinity,
-                                          padding: const EdgeInsets.all(10),
+                                          padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 5),
                                           decoration: BoxDecoration(
-                                            color: ColorsContent.goalTextColor,
+                                            color: ColorsContent.whiteText,
                                             // Light purple background
                                             borderRadius:
                                                 const BorderRadius.vertical(
@@ -688,11 +697,9 @@ class _GoalAndDreamFullViewScreenState
                                           child: Text(
                                             "Actions",
                                             style: TextStyle(
-                                              color: ColorsContent
-                                                  .signInGradientColorViolet,
-                                              // Purple text
+                                              color: ColorsContent.goalDetailsHeading,
                                               fontSize: 16,
-                                              fontWeight: FontWeight.bold,
+                                              fontWeight: FontWeight.w500,
                                               fontFamily: 'Poppins',
                                             ),
                                           ),
@@ -701,7 +708,7 @@ class _GoalAndDreamFullViewScreenState
                                         Container(
                                           width: double.infinity,
                                           padding: const EdgeInsets.symmetric(
-                                              vertical: 8),
+                                              vertical: 5),
                                           decoration: const BoxDecoration(
                                             color: Colors
                                                 .white, // Light background
@@ -810,10 +817,6 @@ class _GoalAndDreamFullViewScreenState
                                                                   MainAxisAlignment
                                                                       .start,
                                                               children: [
-                                                                // mentalStrengthEditProvider.getListGoalActionsModel?.actions != null &&
-                                                                //     index < isActionCompletedList.length &&
-                                                                //     mentalStrengthEditProvider.getListGoalActionsModel!.actions![index].actionStatus != "1"
-                                                                //     ?
                                                                 Padding(
                                                                   padding: const EdgeInsets
                                                                       .symmetric(
@@ -1001,375 +1004,123 @@ class _GoalAndDreamFullViewScreenState
     );
   }
 
-  Widget _buildUntitledOne(BuildContext context, Size size,
-      {required String category,
+  Widget _buildUntitledTitle(BuildContext context, Size size,
+      {
       required String title,
-      required String createDate,
-      required String achiveDate,
-      required String status,
-      required String comments}) {
+}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // Container(
-        //   decoration: BoxDecoration(
-        //     borderRadius: BorderRadius.circular(5),
-        //     border: const Border(
-        //       bottom: BorderSide(
-        //         color: Color(0xFF9C7CFF), // your bottom purple line color
-        //         width: 4, // thickness
-        //       ),
-        //     ),
-        //   ),
-        //   child: Column(
-        //     crossAxisAlignment: CrossAxisAlignment.start,
-        //     children: [
-        //       Container(
-        //         width: double.infinity,
-        //         padding: const EdgeInsets.all(10),
-        //         decoration: BoxDecoration(
-        //           color: Colors.white,
-        //           borderRadius: BorderRadius.circular(5),
-        //         ),
-        //         child: Padding(
-        //           padding: const EdgeInsets.symmetric(horizontal: 3.0),
-        //           child: Text(
-        //             capitalizeFirstLetter(HtmlUnescape().convert(title)),
-        //             style: TextStyle(
-        //               color: ColorsContent.newThemeColor,
-        //               fontSize: 18,
-        //               fontWeight: FontWeight.w600,
-        //               fontFamily: 'Poppins',
-        //             ),
-        //           ),
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
         Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            border: Border.all(
-                color: ColorsContent.newThemeColor,
-                width: 0.3), // Light purple border
+            color: Colors.white, // Off-white background
+            borderRadius:
+                BorderRadius.circular(5),
           ),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: ColorsContent.goalTextColor, // Light purple background
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(5)),
-                ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
                 child: Text(
                   "Goal Name",
                   style: TextStyle(
-                    color: ColorsContent.signInGradientColorViolet,
-                    // Purple text
+                    color: ColorsContent.goalDetailsHeading,
                     fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w500,
                     fontFamily: 'Poppins',
                   ),
                 ),
               ),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
-                decoration: const BoxDecoration(
-                  color: Colors.white, // Off-white background
-                  borderRadius:
-                      BorderRadius.vertical(bottom: Radius.circular(5)),
-                ),
-                child: Text(
-                  capitalizeFirstLetter(HtmlUnescape().convert(title)),
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Poppins',
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 15,
-        ),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            border: Border.all(
-                color: ColorsContent.newThemeColor,
-                width: 0.3), // Light purple border
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: ColorsContent.goalTextColor, // Light purple background
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(5)),
-                ),
-                child: Text(
-                  "Category",
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2),
+                child:
+                JustifiedText(
+                  text:   capitalizeFirstLetter(HtmlUnescape().convert(title)),
                   style: TextStyle(
-                    color: ColorsContent.signInGradientColorViolet,
-                    // Purple text
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Poppins',
-                  ),
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
-                decoration: const BoxDecoration(
-                  color: Colors.white, // Off-white background
-                  borderRadius:
-                      BorderRadius.vertical(bottom: Radius.circular(5)),
-                ),
-                child: Text(
-                  capitalizeFirstLetter(HtmlUnescape().convert(category)),
-                  style: const TextStyle(
-                    color: Colors.black,
+                    height: 1.70, // still useful for vertical rhythm
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
                     fontFamily: 'Poppins',
+                    color: ColorsContent.blackThemeColor,
                   ),
+                  // optional: maxLines: 10,
                 ),
               ),
             ],
           ),
         ),
-        const SizedBox(
-          height: 10,
-        ),
+      ],
+    );
+  }
+
+
+  Widget _buildUntitledDescription(BuildContext context, Size size,
+      {
+        required String comments}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
         Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 10),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            border: Border.all(
-                color: ColorsContent.newThemeColor,
-                width: 0.3), // Light purple border
+            color: Colors.white, // Off-white background
+            borderRadius:
+            BorderRadius.circular(5),
           ),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: ColorsContent.goalTextColor, // Light purple background
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(5)),
-                ),
-                child: Text(
-                  "Created Date",
-                  style: TextStyle(
-                    color: ColorsContent.signInGradientColorViolet,
-                    // Purple text
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Poppins',
-                  ),
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
-                decoration: const BoxDecoration(
-                  color: Colors.white, // Off-white background
-                  borderRadius:
-                      BorderRadius.vertical(bottom: Radius.circular(5)),
-                ),
-                child: Text(
-                  formatDate(int.parse(createDate)), // e.g., "Health & Fitness"
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Poppins',
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            border: Border.all(
-                color: ColorsContent.newThemeColor,
-                width: 0.3), // Light purple border
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: ColorsContent.goalTextColor, // Light purple background
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(5)),
-                ),
-                child: Text(
-                  "Achievement Date",
-                  style: TextStyle(
-                    color: ColorsContent.signInGradientColorViolet,
-                    // Purple text
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Poppins',
-                  ),
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
-                decoration: const BoxDecoration(
-                  color: Colors.white, // Off-white background
-                  borderRadius:
-                      BorderRadius.vertical(bottom: Radius.circular(5)),
-                ),
-                child: Text(
-                  achiveDate == "" ? "" : formatDate2(int.parse(achiveDate)),
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Poppins',
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            border: Border.all(
-                color: ColorsContent.newThemeColor,
-                width: 0.3), // Light purple border
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: ColorsContent.goalTextColor, // Light purple background
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(5)),
-                ),
-                child: Text(
-                  "Status",
-                  style: TextStyle(
-                    color: ColorsContent.signInGradientColorViolet,
-                    // Purple text
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Poppins',
-                  ),
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
-                decoration: const BoxDecoration(
-                  color: Colors.white, // Off-white background
-                  borderRadius:
-                      BorderRadius.vertical(bottom: Radius.circular(5)),
-                ),
-                child: Text(
-                  status == "0" ? "Active" : "DeActive",
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Poppins',
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            border: Border.all(
-                color: ColorsContent.newThemeColor,
-                width: 0.3), // Light purple border
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: ColorsContent.goalTextColor, // Light purple background
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(5)),
-                ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5.0),
                 child: Text(
                   "Description",
                   style: TextStyle(
-                    color: ColorsContent.signInGradientColorViolet,
-                    // Purple text
+                    color: ColorsContent.goalDetailsHeading,
                     fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w500,
                     fontFamily: 'Poppins',
                   ),
                 ),
               ),
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 5),
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius:
-                      BorderRadius.vertical(bottom: Radius.circular(5)),
+                  BorderRadius.vertical(bottom: Radius.circular(0)),
                 ),
                 child: Builder(
                   builder: (context) {
                     final commentsText = (comments ?? "").trim();
                     final previewLink =
-                        widget.goalsanddream.preview_link.toString().trim();
+                    widget.goalsanddream.preview_link.toString().trim();
 
                     // 🧠 Case 1: Both text and preview exist → show both
                     if (commentsText.isNotEmpty && previewLink.isNotEmpty) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            capitalizeFirstLetter(
+
+                          JustifiedText(
+                            text:  capitalizeFirstLetter(
                                 HtmlUnescape().convert(commentsText)),
-                            style: const TextStyle(
-                              color: Colors.black,
+                            style:  TextStyle(
+                              height: 1.70, // still useful for vertical rhythm
+                              color: ColorsContent.blackThemeColor,
                               fontSize: 16,
                               fontWeight: FontWeight.w400,
                               fontFamily: 'Poppins',
                             ),
+                            // optional: maxLines: 10,
                           ),
                           const SizedBox(height: 8),
                           Padding(
@@ -1382,10 +1133,10 @@ class _GoalAndDreamFullViewScreenState
                                   color: Colors.grey.shade300,
                                   width: 1.2,
                                 ),
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(0),
                               ),
                               child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(0),
                                 child: LinkPreviewGenerator(
                                   link: previewLink,
                                   linkPreviewStyle: LinkPreviewStyle.large,
@@ -1394,7 +1145,7 @@ class _GoalAndDreamFullViewScreenState
                                   showBody: true,
                                   showTitle: true,
                                   bodyMaxLines: 3,
-                                  borderRadius: 10,
+                                  borderRadius: 0,
                                   boxShadow: const [
                                     BoxShadow(
                                       color: Colors.black12,
@@ -1412,33 +1163,32 @@ class _GoalAndDreamFullViewScreenState
 
                     // 🧠 Case 2: Only text exists
                     else if (commentsText.isNotEmpty) {
-                      return Text(
-                        capitalizeFirstLetter(
-                            HtmlUnescape().convert(commentsText)),
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Poppins',
-                        ),
-                      );
+                      return
+                        JustifiedText(
+                          text:  capitalizeFirstLetter(
+                              HtmlUnescape().convert(commentsText)),
+                          style:  TextStyle(
+                            height: 1.70, // still useful for vertical rhythm
+                            color: ColorsContent.blackThemeColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Poppins',
+                          ),
+                          // optional: maxLines: 10,
+                        );
                     }
 
                     // 🔗 Case 3: Only link preview exists
                     else if (previewLink.isNotEmpty) {
                       return Padding(
-                        padding: EdgeInsets.only(),
+                        padding: const EdgeInsets.only(),
                         child: Container(
                           height: 300,
                           decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.grey.shade300,
-                              width: 1.2,
-                            ),
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(0),
                           ),
                           child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(0),
                             child: LinkPreviewGenerator(
                               link: previewLink,
                               linkPreviewStyle: LinkPreviewStyle.large,
@@ -1447,7 +1197,7 @@ class _GoalAndDreamFullViewScreenState
                               showBody: true,
                               showTitle: true,
                               bodyMaxLines: 3,
-                              borderRadius: 10,
+                              borderRadius: 0,
                               boxShadow: const [
                                 BoxShadow(
                                   color: Colors.black12,
@@ -1471,9 +1221,234 @@ class _GoalAndDreamFullViewScreenState
             ],
           ),
         ),
+
       ],
     );
   }
+
+
+  Widget _buildUntitledCategory(BuildContext context, Size size,
+      {required String category,
+}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.white, // Off-white background
+            borderRadius:
+            BorderRadius.circular(5),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                child: Text(
+                  "Category",
+                  style: TextStyle(
+                    color: ColorsContent.goalDetailsHeading,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                child: JustifiedText(
+                  text:   capitalizeFirstLetter(HtmlUnescape().convert(category)),
+                  style: TextStyle(
+                    height: 1.70, // still useful for vertical rhythm
+                    color: ColorsContent.blackThemeColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Poppins',
+                  ),
+                  // optional: maxLines: 10,
+                ),
+              ),
+            ],
+          ),
+        ),
+
+      ],
+    );
+  }
+
+  Widget _buildUntitledCreatedDate(BuildContext context, Size size,
+      {
+        required String createDate,
+}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.white, // Off-white background
+            borderRadius:
+            BorderRadius.circular(5),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                child: Text(
+                  "Created Date",
+                  style: TextStyle(
+                    color: ColorsContent.goalDetailsHeading,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                child:
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                  child: JustifiedText(
+                    text: formatDate(int.parse(createDate)),
+                    style: TextStyle(
+                      height: 1.70, // still useful for vertical rhythm
+                      color: ColorsContent.blackThemeColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Poppins',
+                    ),
+                    // optional: maxLines: 10,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+
+  Widget _buildUntitledAchievementDate(BuildContext context, Size size,
+      {
+        required String achiveDate,
+      }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.white, // Off-white background
+            borderRadius:
+            BorderRadius.circular(5),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                child: Text(
+                  "Achievement Date",
+                  style: TextStyle(
+                    color: ColorsContent.goalDetailsHeading,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                child:
+                JustifiedText(
+                  text: achiveDate == "" ? "" : formatDate2(int.parse(achiveDate)),
+                  style: TextStyle(
+                    height: 1.70, // still useful for vertical rhythm
+                    color: ColorsContent.blackThemeColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Poppins',
+                  ),
+                  // optional: maxLines: 10,
+                ),
+              ),
+            ],
+          ),
+        ),
+
+      ],
+    );
+  }
+
+
+  Widget _buildUntitledStatus(BuildContext context, Size size,
+      {
+        required String status,
+ }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.white, // Off-white background
+            borderRadius:
+            BorderRadius.circular(5),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                child: Text(
+                  "Status",
+                  style: TextStyle(
+                    color: ColorsContent.goalDetailsHeading,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                child: Text(
+                  status == "0" ? "Active" : "DeActive",
+                  style:  TextStyle(
+                    color: ColorsContent.blackThemeColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+
+      ],
+    );
+  }
+
 
   Widget buildIndicators(int pageCount, int currentIndex) {
     return Row(

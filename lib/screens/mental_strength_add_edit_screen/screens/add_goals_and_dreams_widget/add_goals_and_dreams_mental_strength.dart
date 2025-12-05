@@ -532,6 +532,8 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
 
                     if (matches.isNotEmpty) {
                       final firstLink = matches.first;
+                      if (firstLink.length < 8) return; // prevent `..` or short junk
+
 
                       // ✅ ONLY keep the first link (replace any previous)
                       setState(() {
@@ -562,10 +564,6 @@ class _AddGoalsDreamsBottomSheetState extends State<AddGoalsDreamsBottomSheet> {
 
                         Container(
                           decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.grey.shade300,
-                              width: 1.2,
-                            ),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: ClipRRect(

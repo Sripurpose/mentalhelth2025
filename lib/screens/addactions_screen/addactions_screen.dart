@@ -1118,10 +1118,9 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                 },
                 onChanged: (value) {
                   // 🔍 Detect URLs dynamically
-                  final matches = addActionsProvider.urlRegex
-                      .allMatches(value)
-                      .map((match) => match.group(0)!)
-                      .toList();
+
+                  final matches = addActionsProvider.urlRegex.allMatches(value).map((m) => m.group(0)!).toList();
+
 
                   // ✅ If found any new link, show preview
                   if (matches.isNotEmpty) {
@@ -1144,6 +1143,8 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                     }
 
                     final firstLink = matches.first;
+
+                    if (firstLink.length < 8) return; // prevent `..` or short junk
 
                     setState(() {
                       // ❌ Clear previous links and add ONLY the first one
@@ -1174,10 +1175,6 @@ class _AddactionsScreenState extends State<AddactionsScreen> {
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.grey.shade300,
-                            width: 1.5,
-                          ),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: ClipRRect(

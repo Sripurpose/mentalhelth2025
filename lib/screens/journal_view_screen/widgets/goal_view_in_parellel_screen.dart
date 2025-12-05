@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:html_unescape/html_unescape.dart';
@@ -24,6 +25,7 @@ import 'package:provider/provider.dart';
 import '../../../../widgets/app_bar/appbar_subtitle.dart';
 import '../../../../widgets/app_bar/custom_app_bar.dart';
 import '../../../utils/logic/date_format.dart';
+import '../../../widgets/widget/justifiedText.dart';
 import '../../no_internet/duplicate_screen.dart';
 
 class GoalAndDreamFullViewBottomParellelSheet extends StatefulWidget {
@@ -191,306 +193,387 @@ class _GoalAndDreamFullViewBottomParellelSheetState
                 const SizedBox(
                   height: 10,
                 ),
-                _buildUntitledOne(
+
+                _buildUntitledTitle(
                   context,
                   size,
-                  category:
-                      widget.goalDetailModel.goals!.categoryName.toString(),
-                  createDate:
-                      widget.goalDetailModel.goals!.createdAt.toString(),
-                  achiveDate:
-                      widget.goalDetailModel.goals!.goalEnddate.toString(),
-                  status: widget.goalDetailModel.goals!.goalStatus.toString(),
-                  comments:
-                      widget.goalDetailModel.goals!.goalDetails.toString(),
-                  previewLinkApi:
-                      widget.goalDetailModel.goals!.preview_link.toString(),
+                  title:  widget.goalDetailModel.goals!.goalTitle.toString(),
                 ),
+
+
+                imageList.isNotEmpty
+                    ? const SizedBox(height: 10)
+                    : const SizedBox(),
+                imageList.isNotEmpty
+                    ?
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.white, // Off-white background
+                    borderRadius:
+                    BorderRadius.circular(5),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                        child: Text(
+                          "Image",
+                          style: TextStyle(
+                            color: ColorsContent.goalDetailsHeading,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'Poppins',
+                          ),
+                        ),
+                      ),
+                      Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(horizontal: 0,vertical: 5),
+                          decoration: BoxDecoration(
+                            color: Colors.white, // Off-white background
+                            borderRadius:
+                            BorderRadius.circular(0),
+                          ),
+                          child: SizedBox(
+                            height: imageList.isNotEmpty
+                                ? size.height * 0.3
+                                : 0,
+                            child: Stack(
+                              children: [
+                                PageView.builder(
+                                  controller: photoController,
+                                  itemCount: imageList.length,
+                                  itemBuilder: (context, index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          barrierDismissible:
+                                          true,
+                                          builder: (_) => Dialog(
+                                            insetPadding:
+                                            EdgeInsets.zero,
+                                            backgroundColor:
+                                            Colors.black,
+                                            shape:
+                                            const RoundedRectangleBorder(
+                                              borderRadius:
+                                              BorderRadius
+                                                  .zero, // Remove rounded corners
+                                            ),
+                                            child: Stack(
+                                              children: [
+                                                InteractiveViewer(
+                                                  child: Center(
+                                                    child: Image
+                                                        .network(
+                                                      imageList[
+                                                      index],
+                                                      fit: BoxFit
+                                                          .contain,
+                                                      loadingBuilder:
+                                                          (context,
+                                                          child,
+                                                          loadingProgress) {
+                                                        if (loadingProgress ==
+                                                            null)
+                                                          return child;
+                                                        return  Center(
+                                                            child:
+                                                            CupertinoActivityIndicator());
+                                                      },
+                                                      errorBuilder: (context,
+                                                          error,
+                                                          stackTrace) =>
+                                                      const Center(
+                                                          child:
+                                                          Icon(Icons.broken_image, color: Colors.white)),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Positioned(
+                                                  top: 40,
+                                                  right: 20,
+                                                  child:
+                                                  IconButton(
+                                                    icon: const Icon(
+                                                        Icons
+                                                            .close,
+                                                        color: Colors
+                                                            .white,
+                                                        size: 30),
+                                                    onPressed: () =>
+                                                        Navigator.of(
+                                                            context)
+                                                            .pop(),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: CustomImageView(
+                                        fit: BoxFit.cover,
+                                        imagePath:
+                                        imageList[index],
+                                        height:
+                                        size.height * 0.30,
+                                        width: size.width,
+                                        alignment:
+                                        Alignment.center,
+                                        radius: BorderRadius.circular(
+                                            0), // your original radius
+                                      ),
+                                    );
+                                  },
+                                  onPageChanged: (int pageIndex) {
+                                    setState(() {
+                                      photoCurrentIndex =
+                                          pageIndex;
+                                    });
+                                  },
+                                ),
+                                if (imageList.length != 1)
+                                  Positioned(
+                                    bottom: 10,
+                                    left: 0,
+                                    right: 0,
+                                    child: SizedBox(
+                                      width: imageList.length *
+                                          size.width *
+                                          0.1,
+                                      child: buildIndicators(
+                                        imageList.length,
+                                        photoCurrentIndex,
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          )),
+                    ],
+                  ),
+                )
+                    : const SizedBox(),
+
+
                 audioList.isNotEmpty
                     ? const SizedBox(height: 10)
                     : const SizedBox(),
                 audioList.isEmpty
                     ? const SizedBox()
-                    : Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(
-                              color: ColorsContent.newThemeColor,
-                              width: 0.3), // Light purple border
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: ColorsContent.goalTextColor,
-                                // Light purple background
-                                borderRadius: const BorderRadius.vertical(
-                                    top: Radius.circular(5)),
-                              ),
-                              child: Text(
-                                "Audio",
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  color:
-                                      ColorsContent.signInGradientColorViolet,
-                                  // Purple text
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(10),
-                              decoration: const BoxDecoration(
-                                color: Colors.white, // Off-white background
-                                borderRadius: BorderRadius.vertical(
-                                    bottom: Radius.circular(5)),
-                              ),
-                              child: SizedBox(
-                                height: size.height * 0.113,
-                                child: ListView.builder(
-                                  //   physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: audioList.length,
-                                  itemBuilder: (context, index) {
-                                    return JournalAudioPlayer(
-                                      url: audioList[index],
-                                    );
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
+                    :
+
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.white, // Off-white background
+                    borderRadius:
+                    BorderRadius.circular(5),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                        child: Text(
+                          "Voice",
+                          style: TextStyle(
+                            color: ColorsContent.goalDetailsHeading,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'Poppins',
+                          ),
                         ),
                       ),
-                imageList.isNotEmpty
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(horizontal: 0,vertical: 3),
+                        decoration: const BoxDecoration(
+                          color: Colors
+                              .white, // Off-white background
+                          borderRadius: BorderRadius.vertical(
+                              bottom: Radius.circular(5)),
+                        ),
+                        child: SizedBox(
+                          height: size.height * 0.10,
+                          child: ListView.builder(
+                            //   physics: const NeverScrollableScrollPhysics(),
+                            itemCount: audioList.length,
+                            itemBuilder: (context, index) {
+                              return JournalAudioPlayer(
+                                url: audioList[index],
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                videoList.isNotEmpty
                     ? const SizedBox(height: 10)
                     : const SizedBox(),
-                imageList.isNotEmpty
-                    ? Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(
-                              color: ColorsContent.newThemeColor,
-                              width: 0.3), // Light purple border
+                videoList.isNotEmpty
+                    ?
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.white, // Off-white background
+                    borderRadius:
+                    BorderRadius.circular(5),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 1.0),
+                        child: Text(
+                          "Video",
+                          style: TextStyle(
+                            color: ColorsContent.goalDetailsHeading,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'Poppins',
+                          ),
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: ColorsContent.goalTextColor,
-                                // Light purple background
-                                borderRadius: const BorderRadius.vertical(
-                                    top: Radius.circular(5)),
-                              ),
-                              child: Text(
-                                "Photo",
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  color:
-                                      ColorsContent.signInGradientColorViolet,
-                                  // Purple text
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Container(
-                                width: double.infinity,
-                                padding: const EdgeInsets.all(10),
-                                decoration: const BoxDecoration(
-                                  color: Colors.white, // Off-white background
-                                  borderRadius: BorderRadius.vertical(
-                                      bottom: Radius.circular(5)),
-                                ),
-                                child: SizedBox(
-                                  height: imageList.isNotEmpty
-                                      ? size.height * 0.3
-                                      : 0,
-                                  child: Stack(
-                                    children: [
-                                      PageView.builder(
-                                        controller: photoController,
-                                        itemCount: imageList.length,
-                                        itemBuilder: (context, index) {
-                                          return CustomImageView(
-                                            fit: BoxFit.cover,
-                                            imagePath: imageList[index],
-                                            height: size.height * 0.30,
-                                            width: size.width,
-                                            alignment: Alignment.center,
-                                            radius: BorderRadius.circular(8),
-                                          );
-                                        },
-                                        onPageChanged: (int pageIndex) {
-                                          setState(() {
-                                            photoCurrentIndex = pageIndex;
-                                          });
-                                        },
-                                      ),
-                                      if (imageList.length != 1)
-                                        Positioned(
-                                          bottom: 10,
-                                          left: 0,
-                                          right: 0,
-                                          child: SizedBox(
-                                            width: imageList.length *
-                                                size.width *
-                                                0.1,
-                                            child: buildIndicators(
-                                              imageList.length,
-                                              photoCurrentIndex,
+                      ),
+                      Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(horizontal: 0,vertical: 5),
+                          decoration: const BoxDecoration(
+                            color: Colors
+                                .white, // Off-white background
+                            borderRadius: BorderRadius.vertical(
+                                bottom: Radius.circular(5)),
+                          ),
+                          child: SizedBox(
+                            height: videoList.isNotEmpty
+                                ? size.height * 0.3
+                                : 0,
+                            child: Stack(
+                              children: [
+                                PageView.builder(
+                                  controller: videoController,
+                                  itemCount: videoList.length,
+                                  itemBuilder: (context, index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          barrierDismissible:
+                                          true,
+                                          builder: (_) => Dialog(
+                                            insetPadding:
+                                            EdgeInsets.zero,
+                                            backgroundColor:
+                                            Colors.black,
+                                            shape:
+                                            const RoundedRectangleBorder(
+                                              borderRadius:
+                                              BorderRadius
+                                                  .zero,
                                             ),
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                )),
-                          ],
-                        ),
-                      )
-                    : const SizedBox(),
-                videoList.isNotEmpty
-                    ? const SizedBox(height: 10)
-                    : const SizedBox(),
-                videoList.isNotEmpty
-                    ? Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(
-                              color: ColorsContent.newThemeColor,
-                              width: 0.3), // Light purple border
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: ColorsContent.goalTextColor,
-                                // Light purple background
-                                borderRadius: const BorderRadius.vertical(
-                                    top: Radius.circular(5)),
-                              ),
-                              child: Text(
-                                "Video",
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  color:
-                                      ColorsContent.signInGradientColorViolet,
-                                  // Purple text
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Container(
-                                width: double.infinity,
-                                padding: const EdgeInsets.all(10),
-                                decoration: const BoxDecoration(
-                                  color: Colors.white, // Off-white background
-                                  borderRadius: BorderRadius.vertical(
-                                      bottom: Radius.circular(5)),
-                                ),
-                                child: SizedBox(
-                                  height: videoList.isNotEmpty
-                                      ? size.height * 0.3
-                                      : 0,
-                                  child: Stack(
-                                    children: [
-                                      PageView.builder(
-                                        controller: videoController,
-                                        itemCount: videoList.length,
-                                        itemBuilder: (context, index) {
-                                          return GestureDetector(
-                                            onTap: () {
-                                              showDialog(
-                                                context: context,
-                                                barrierDismissible: true,
-                                                builder: (_) => Dialog(
-                                                  insetPadding: EdgeInsets.zero,
-                                                  backgroundColor: Colors.black,
-                                                  shape:
-                                                      const RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.zero,
-                                                  ),
-                                                  child: Stack(
-                                                    children: [
-                                                      Center(
-                                                        child: AspectRatio(
-                                                          aspectRatio: 16 / 9,
-                                                          child:
-                                                              VideoPlayerWidgetViewAndAlreadyGoalProgressBar(
-                                                            videoUrl: videoList[
-                                                                index],
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Positioned(
-                                                        top: 40,
-                                                        right: 20,
-                                                        child: IconButton(
-                                                          icon: const Icon(
-                                                              Icons.close,
-                                                              color:
-                                                                  Colors.white,
-                                                              size: 30),
-                                                          onPressed: () =>
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop(),
-                                                        ),
-                                                      ),
-                                                    ],
+                                            child: Stack(
+                                              children: [
+                                                // ✅ No hardcoded AspectRatio
+                                                Center(
+                                                  child:
+                                                  VideoPlayerWidgetViewAndAlreadyGoalProgressBar(
+                                                    videoUrl:
+                                                    videoList[
+                                                    index],
                                                   ),
                                                 ),
-                                              );
-                                            },
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              child:
-                                                  VideoPlayerWidgetViewAndAlreadyGoal(
-                                                videoUrl: videoList[index],
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        onPageChanged: (int pageIndex) {
-                                          setState(() {
-                                            videoCurrentIndex = pageIndex;
-                                          });
-                                        },
-                                      ),
-                                      if (videoList.length != 1)
-                                        Positioned(
-                                          bottom: 10,
-                                          left: 0,
-                                          right: 0,
-                                          child: SizedBox(
-                                            width: videoList.length *
-                                                size.width *
-                                                0.1,
-                                            child: buildIndicators(
-                                              videoList.length,
-                                              videoCurrentIndex,
+
+                                                // Close button
+                                                Positioned(
+                                                  top: 40,
+                                                  right: 20,
+                                                  child:
+                                                  IconButton(
+                                                    icon: const Icon(
+                                                        Icons
+                                                            .close,
+                                                        color: Colors
+                                                            .white,
+                                                        size: 30),
+                                                    onPressed: () =>
+                                                        Navigator.of(
+                                                            context)
+                                                            .pop(),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
+                                        );
+                                      },
+                                      child: ClipRRect(
+                                        borderRadius:
+                                        BorderRadius.circular(
+                                            0),
+                                        child:
+                                        VideoPlayerWidgetViewAndAlreadyGoal(
+                                          videoUrl:
+                                          videoList[index],
                                         ),
-                                    ],
+                                      ),
+                                    );
+                                  },
+                                  onPageChanged: (int pageIndex) {
+                                    setState(() {
+                                      videoCurrentIndex =
+                                          pageIndex;
+                                    });
+                                  },
+                                ),
+                                // PageView.builder(
+                                //   controller: videoController,
+                                //   itemCount: videoList.length,
+                                //   itemBuilder: (context, index) {
+                                //     return VideoPlayerWidget(
+                                //       videoUrl: videoList[index],
+                                //     );
+                                //   },
+                                //   onPageChanged: (int pageIndex) {
+                                //     setState(() {
+                                //       videoCurrentIndex = pageIndex;
+                                //     });
+                                //   },
+                                // ),
+                                if (videoList.length != 1)
+                                  Positioned(
+                                    bottom: 10,
+                                    left: 0,
+                                    right: 0,
+                                    child: SizedBox(
+                                      width: videoList.length *
+                                          size.width *
+                                          0.1,
+                                      child: buildIndicators(
+                                        videoList.length,
+                                        videoCurrentIndex,
+                                      ),
+                                    ),
                                   ),
-                                )),
-                          ],
-                        ),
-                      )
+                              ],
+                            ),
+                          )),
+                    ],
+                  ),
+                )
+
                     : const SizedBox(),
                 widget.goalDetailModel.goals!.location?.locationAddress != null
                     ? const SizedBox(
@@ -498,84 +581,122 @@ class _GoalAndDreamFullViewBottomParellelSheetState
                       )
                     : const SizedBox(),
                 widget.goalDetailModel.goals!.location?.locationAddress != null
-                    ? Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(
-                              color: ColorsContent.newThemeColor,
-                              width: 0.3), // Light purple border
+                    ?
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.white, // Off-white background
+                    borderRadius:
+                    BorderRadius.circular(5),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 1.0),
+                        child: Text(
+                          "Location",
+                          style: TextStyle(
+                            color: ColorsContent.goalDetailsHeading,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'Poppins',
+                          ),
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                      ),
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(horizontal: 0,vertical: 5),
+                        decoration: const BoxDecoration(
+                          color: Colors
+                              .white, // Off-white background
+                          borderRadius: BorderRadius.vertical(
+                              bottom: Radius.circular(5)),
+                        ),
+                        child: Row(
                           children: [
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: ColorsContent.goalTextColor,
-                                // Light purple background
-                                borderRadius: const BorderRadius.vertical(
-                                    top: Radius.circular(5)),
-                              ),
-                              child: Text(
-                                "Your Location",
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  color:
-                                      ColorsContent.signInGradientColorViolet,
-                                  // Purple text
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                            Icon(
+                              Icons.location_on,
+                              color: ColorsContent.newThemeColor,
+                              size: size.width * 0.06,
                             ),
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(10),
-                              decoration: const BoxDecoration(
-                                color: Colors.white, // Off-white background
-                                borderRadius: BorderRadius.vertical(
-                                    bottom: Radius.circular(5)),
-                              ),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.location_on,
-                                    color: ColorsContent.newThemeColor,
-                                    size: size.width * 0.06,
+                            Expanded(
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.vertical,
+                                child: Text(
+                                  widget.goalDetailModel.goals!.location
+                                      ?.locationAddress
+                                      ?.replaceAll(
+                                      RegExp(
+                                          r'[^a-zA-Z0-9, ]'),
+                                      '') // Remove unwanted characters
+                                      .replaceAll(
+                                      RegExp(r',\s*,+'),
+                                      ',') // Replace multiple consecutive commas with a single comma
+                                      .replaceAll(
+                                      RegExp(r'^,|,$'),
+                                      '') // Remove leading and trailing commas
+                                      .trim() ??
+                                      "",
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Poppins',
                                   ),
-                                  Expanded(
-                                    child: SingleChildScrollView(
-                                      scrollDirection: Axis.vertical,
-                                      child: Text(
-                                        widget.goalDetailModel.goals!.location
-                                                ?.locationAddress
-                                                ?.replaceAll(
-                                                    RegExp(r'[^a-zA-Z0-9, ]'),
-                                                    '') // Remove unwanted characters
-                                                .replaceAll(RegExp(r',\s*,+'),
-                                                    ',') // Replace multiple consecutive commas with a single comma
-                                                .replaceAll(RegExp(r'^,|,$'),
-                                                    '') // Remove leading and trailing commas
-                                                .trim() ??
-                                            "",
-                                        style: CustomTextStyles
-                                            .bodyMediumGray700_1,
-                                        overflow: TextOverflow.visible,
-                                        maxLines: 4, // Ensures scrolling works
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                                  overflow: TextOverflow.visible,
+                                  maxLines:
+                                  4, // Ensures scrolling works
+                                ),
                               ),
                             ),
                           ],
                         ),
-                      )
+                      ),
+                    ],
+                  ),
+                )
                     : const SizedBox(),
                 widget.goalDetailModel.goals!.action!.isEmpty
                     ? const SizedBox()
                     : const SizedBox(height: 10),
+
+                _buildUntitledDescription(
+                  context,
+                  size,
+                  comments:  widget.goalDetailModel.goals!.goalDetails.toString(),previewLinkApi: widget.goalDetailModel.goals!.preview_link.toString(),
+                ),
+                const SizedBox(height: 10),
+
+                _buildUntitledCategory(
+                  context,
+                  size,
+                  category: widget.goalDetailModel.goals!.categoryName.toString(),
+                ),
+                const SizedBox(height: 10),
+
+                _buildUntitledCreatedDate(
+                  context,
+                  size,
+                createDate: widget.goalDetailModel.goals!.createdAt.toString(),
+                ),
+
+                const SizedBox(height: 10),
+                _buildUntitledAchievementDate(
+                  context,
+                  size,
+               achiveDate: widget.goalDetailModel.goals!.goalEnddate.toString(),
+                ),
+                const SizedBox(height: 10),
+                _buildUntitledStatus(
+                  context,
+                  size,
+                  status: widget.goalDetailModel.goals!.goalStatus.toString(),
+                ),
+                const SizedBox(height: 10),
+
                 Consumer<AdDreamsGoalsProvider>(
                   builder: (context, adDreamsGoalsProvider, _) {
                     logger.w(
@@ -596,9 +717,9 @@ class _GoalAndDreamFullViewBottomParellelSheetState
                                 // Header container
                                 Container(
                                   width: double.infinity,
-                                  padding: const EdgeInsets.all(10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 8),
                                   decoration: BoxDecoration(
-                                    color: ColorsContent.goalTextColor,
+                                    color: ColorsContent.whiteText,
                                     borderRadius: const BorderRadius.vertical(
                                       top: Radius.circular(5),
                                     ),
@@ -606,11 +727,10 @@ class _GoalAndDreamFullViewBottomParellelSheetState
                                   child: Text(
                                     "Actions",
                                     style: TextStyle(
-                                      color: ColorsContent
-                                          .signInGradientColorViolet,
-                                      fontFamily: 'Poppins',
+                                      color: ColorsContent.goalDetailsHeading,
                                       fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: 'Poppins',
                                     ),
                                   ),
                                 ),
@@ -619,7 +739,7 @@ class _GoalAndDreamFullViewBottomParellelSheetState
                                 Container(
                                   width: double.infinity,
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 10),
+                                      horizontal: 10, vertical: 5),
                                   decoration: const BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.vertical(
@@ -635,7 +755,7 @@ class _GoalAndDreamFullViewBottomParellelSheetState
                                     itemBuilder: (context, index) {
                                       return Padding(
                                         padding: const EdgeInsets.symmetric(
-                                            vertical: 4),
+                                            vertical: 0),
                                         child: GestureDetector(
                                           onTap: () {
                                             // Handle tap
@@ -654,29 +774,26 @@ class _GoalAndDreamFullViewBottomParellelSheetState
                                             child: Row(
                                               children: [
                                                 Expanded(
-                                                  child: SingleChildScrollView(
-                                                    scrollDirection:
-                                                        Axis.horizontal,
-                                                    child: Text(
-                                                      capitalizeFirstLetter(
-                                                          HtmlUnescape().convert(widget
-                                                                  .goalDetailModel
-                                                                  .goals!
-                                                                  .action![
-                                                                      index]
-                                                                  .actionTitle ??
-                                                              "")),
-                                                      style: const TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontFamily: 'Poppins',
-                                                        color: Colors.white,
-                                                      ),
-                                                      maxLines: 1,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
+                                                  child: Text(
+                                                    capitalizeFirstLetter(
+                                                        HtmlUnescape().convert(widget
+                                                                .goalDetailModel
+                                                                .goals!
+                                                                .action![
+                                                                    index]
+                                                                .actionTitle ??
+                                                            "")),
+                                                    style: const TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontFamily: 'Poppins',
+                                                      color: Colors.white,
                                                     ),
+                                                    overflow:
+                                                    TextOverflow
+                                                        .ellipsis,
+                                                    maxLines: 1,
                                                   ),
                                                 ),
                                               ],
@@ -794,283 +911,68 @@ class _GoalAndDreamFullViewBottomParellelSheetState
   //   );
   // }
 
-  Widget _buildUntitledOne(BuildContext context, Size size,
-      {required String category,
-      required String createDate,
-      required String achiveDate,
-      required String status,
-      required String comments,
-      required String previewLinkApi}) {
+  Widget _buildUntitledTitle(BuildContext context, Size size,
+      {
+        required String title,
+      }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            border: Border.all(
-                color: ColorsContent.newThemeColor,
-                width: 0.3), // Light purple border
+            color: Colors.white, // Off-white background
+            borderRadius:
+            BorderRadius.circular(5),
           ),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: ColorsContent.goalTextColor, // Light purple background
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(5)),
-                ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
                 child: Text(
                   "Goal Name",
                   style: TextStyle(
-                    color: ColorsContent.signInGradientColorViolet,
-                    // Purple text
+                    color: ColorsContent.goalDetailsHeading,
                     fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w500,
                     fontFamily: 'Poppins',
                   ),
                 ),
               ),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
-                decoration: const BoxDecoration(
-                  color: Colors.white, // Off-white background
-                  borderRadius:
-                      BorderRadius.vertical(bottom: Radius.circular(5)),
-                ),
-                child: Text(
-                  capitalizeFirstLetter(HtmlUnescape().convert(
-                      widget.goalDetailModel.goals!.goalTitle.toString())),
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Poppins',
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 15,
-        ),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            border: Border.all(
-                color: ColorsContent.newThemeColor,
-                width: 0.3), // Light purple border
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: ColorsContent.goalTextColor, // Light purple background
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(5)),
-                ),
-                child: Text(
-                  "Category",
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2),
+                child:
+                JustifiedText(
+                  text:   capitalizeFirstLetter(HtmlUnescape().convert(title)),
                   style: TextStyle(
-                    color: ColorsContent.signInGradientColorViolet,
-                    // Purple text
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Poppins',
-                  ),
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
-                decoration: const BoxDecoration(
-                  color: Colors.white, // Off-white background
-                  borderRadius:
-                      BorderRadius.vertical(bottom: Radius.circular(5)),
-                ),
-                child: Text(
-                  capitalizeFirstLetter(HtmlUnescape().convert(category)),
-                  style: const TextStyle(
-                    color: Colors.black,
+                    height: 1.70, // still useful for vertical rhythm
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
                     fontFamily: 'Poppins',
+                    color: ColorsContent.blackThemeColor,
                   ),
+                  // optional: maxLines: 10,
                 ),
               ),
             ],
           ),
         ),
-        const SizedBox(
-          height: 10,
-        ),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            border: Border.all(
-                color: ColorsContent.newThemeColor,
-                width: 0.3), // Light purple border
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: ColorsContent.goalTextColor, // Light purple background
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(5)),
-                ),
-                child: Text(
-                  "Created Date",
-                  style: TextStyle(
-                    color: ColorsContent.signInGradientColorViolet,
-                    // Purple text
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Poppins',
-                  ),
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
-                decoration: const BoxDecoration(
-                  color: Colors.white, // Off-white background
-                  borderRadius:
-                      BorderRadius.vertical(bottom: Radius.circular(5)),
-                ),
-                child: Text(
-                  formatDate(int.parse(createDate)), // e.g., "Health & Fitness"
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Poppins',
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            border: Border.all(
-                color: ColorsContent.newThemeColor,
-                width: 0.3), // Light purple border
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: ColorsContent.goalTextColor, // Light purple background
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(5)),
-                ),
-                child: Text(
-                  "Achievement Date",
-                  style: TextStyle(
-                    color: ColorsContent.signInGradientColorViolet,
-                    // Purple text
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Poppins',
-                  ),
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
-                decoration: const BoxDecoration(
-                  color: Colors.white, // Off-white background
-                  borderRadius:
-                      BorderRadius.vertical(bottom: Radius.circular(5)),
-                ),
-                child: Text(
-                  achiveDate == "" ? "" : formatDate2(int.parse(achiveDate)),
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Poppins',
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            border: Border.all(
-                color: ColorsContent.newThemeColor,
-                width: 0.3), // Light purple border
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: ColorsContent.goalTextColor, // Light purple background
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(5)),
-                ),
-                child: Text(
-                  "Status",
-                  style: TextStyle(
-                    color: ColorsContent.signInGradientColorViolet,
-                    // Purple text
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Poppins',
-                  ),
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
-                decoration: const BoxDecoration(
-                  color: Colors.white, // Off-white background
-                  borderRadius:
-                      BorderRadius.vertical(bottom: Radius.circular(5)),
-                ),
-                child: Text(
-                  status == "0" ? "Active" : "DeActive",
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Poppins',
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
+      ],
+    );
+  }
+
+  Widget _buildUntitledDescription(BuildContext context, Size size,
+      {
+        required String comments,
+        required String previewLinkApi}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
         Container(
           width: double.infinity,
           padding: const EdgeInsets.all(10),
@@ -1078,30 +980,98 @@ class _GoalAndDreamFullViewBottomParellelSheetState
             color: Colors.white,
             borderRadius: BorderRadius.vertical(bottom: Radius.circular(5)),
           ),
-          child: Builder(
-            builder: (context) {
-              final commentsText = (comments ?? "").trim();
-              final previewLink = previewLinkApi;
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 1.0),
+                child: Text(
+                  "Description",
+                  style: TextStyle(
+                    color: ColorsContent.goalDetailsHeading,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+              ),
+              Builder(
+                builder: (context) {
+                  final commentsText = (comments ?? "").trim();
+                  final previewLink = previewLinkApi;
 
-              // 🧠 Case 1: Both text and preview exist → show both
-              if (commentsText.isNotEmpty && previewLink.isNotEmpty) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      capitalizeFirstLetter(
-                          HtmlUnescape().convert(commentsText)),
+                  // 🧠 Case 1: Both text and preview exist → show both
+                  if (commentsText.isNotEmpty && previewLink.isNotEmpty) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          capitalizeFirstLetter(
+                              HtmlUnescape().convert(commentsText)),
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Poppins',
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              bottom: commentsText.isNotEmpty ? 10.0 : 0.0),
+                          child: Container(
+                            height: 300,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.grey.shade300,
+                                width: 1.2,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: LinkPreviewGenerator(
+                                link: previewLink,
+                                linkPreviewStyle: LinkPreviewStyle.large,
+                                // 👈 Forces column format
+                                showDomain: true,
+                                showBody: true,
+                                showTitle: true,
+                                bodyMaxLines: 3,
+                                borderRadius: 10,
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    blurRadius: 4,
+                                    offset: Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+
+                  // 🧠 Case 2: Only text exists
+                  else if (commentsText.isNotEmpty) {
+                    return Text(
+                      capitalizeFirstLetter(HtmlUnescape().convert(commentsText)),
                       style: const TextStyle(
                         color: Colors.black,
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
                         fontFamily: 'Poppins',
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          bottom: commentsText.isNotEmpty ? 10.0 : 0.0),
+                    );
+                  }
+
+                  // 🔗 Case 3: Only link preview exists
+                  else if (previewLink.isNotEmpty) {
+                    return Padding(
+                      padding: EdgeInsets.only(),
                       child: Container(
                         height: 300,
                         decoration: BoxDecoration(
@@ -1132,71 +1102,249 @@ class _GoalAndDreamFullViewBottomParellelSheetState
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                );
-              }
+                    );
+                  }
 
-              // 🧠 Case 2: Only text exists
-              else if (commentsText.isNotEmpty) {
-                return Text(
-                  capitalizeFirstLetter(HtmlUnescape().convert(commentsText)),
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Poppins',
-                  ),
-                );
-              }
-
-              // 🔗 Case 3: Only link preview exists
-              else if (previewLink.isNotEmpty) {
-                return Padding(
-                  padding: EdgeInsets.only(),
-                  child: Container(
-                    height: 300,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.grey.shade300,
-                        width: 1.2,
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: LinkPreviewGenerator(
-                        link: previewLink,
-                        linkPreviewStyle: LinkPreviewStyle.large,
-                        // 👈 Forces column format
-                        showDomain: true,
-                        showBody: true,
-                        showTitle: true,
-                        bodyMaxLines: 3,
-                        borderRadius: 10,
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 4,
-                            offset: Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              }
-
-              // ❌ Case 4: Nothing
-              else {
-                return const SizedBox.shrink();
-              }
-            },
+                  // ❌ Case 4: Nothing
+                  else {
+                    return const SizedBox.shrink();
+                  }
+                },
+              ),
+            ],
           ),
         ),
       ],
     );
   }
+
+
+  Widget _buildUntitledCategory(BuildContext context, Size size,
+      {required String category,
+      }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.white, // Off-white background
+            borderRadius:
+            BorderRadius.circular(5),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                child: Text(
+                  "Category",
+                  style: TextStyle(
+                    color: ColorsContent.goalDetailsHeading,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                child: JustifiedText(
+                  text:   capitalizeFirstLetter(HtmlUnescape().convert(category)),
+                  style: TextStyle(
+                    height: 1.70, // still useful for vertical rhythm
+                    color: ColorsContent.blackThemeColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Poppins',
+                  ),
+                  // optional: maxLines: 10,
+                ),
+              ),
+            ],
+          ),
+        ),
+
+      ],
+    );
+  }
+
+
+  Widget _buildUntitledCreatedDate(BuildContext context, Size size,
+      {
+        required String createDate,
+      }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.white, // Off-white background
+            borderRadius:
+            BorderRadius.circular(5),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                child: Text(
+                  "Created Date",
+                  style: TextStyle(
+                    color: ColorsContent.goalDetailsHeading,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                child:
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                  child: JustifiedText(
+                    text: formatDate(int.parse(createDate)),
+                    style: TextStyle(
+                      height: 1.70, // still useful for vertical rhythm
+                      color: ColorsContent.blackThemeColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Poppins',
+                    ),
+                    // optional: maxLines: 10,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+
+  Widget _buildUntitledAchievementDate(BuildContext context, Size size,
+      {
+        required String achiveDate,
+      }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.white, // Off-white background
+            borderRadius:
+            BorderRadius.circular(5),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                child: Text(
+                  "Achievement Date",
+                  style: TextStyle(
+                    color: ColorsContent.goalDetailsHeading,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                child:
+                JustifiedText(
+                  text: achiveDate == "" ? "" : formatDate2(int.parse(achiveDate)),
+                  style: TextStyle(
+                    height: 1.70, // still useful for vertical rhythm
+                    color: ColorsContent.blackThemeColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Poppins',
+                  ),
+                  // optional: maxLines: 10,
+                ),
+              ),
+            ],
+          ),
+        ),
+
+      ],
+    );
+  }
+
+
+  Widget _buildUntitledStatus(BuildContext context, Size size,
+      {
+        required String status,
+      }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.white, // Off-white background
+            borderRadius:
+            BorderRadius.circular(5),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                child: Text(
+                  "Status",
+                  style: TextStyle(
+                    color: ColorsContent.goalDetailsHeading,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                child: Text(
+                  status == "0" ? "Active" : "DeActive",
+                  style:  TextStyle(
+                    color: ColorsContent.blackThemeColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+
+      ],
+    );
+  }
+
+
+
+
 
   Widget buildIndicators(int pageCount, int currentIndex) {
     return Row(

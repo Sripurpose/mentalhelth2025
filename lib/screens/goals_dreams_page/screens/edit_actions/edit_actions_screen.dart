@@ -43,6 +43,7 @@ import '../../../mental_strength_add_edit_screen/provider/mental_strenght_edit_p
 import '../../../no_internet/duplicate_screen.dart';
 import '../../../token_expiry/tocken_expiry_warning_screen.dart';
 import '../../../token_expiry/token_expiry.dart';
+import '../../provider/goals_dreams_provider.dart';
 
 class EditActionScreen extends StatefulWidget {
   const EditActionScreen({Key? key, required this.actionsDetailsModel})
@@ -1800,6 +1801,8 @@ class _EditActionScreenState extends State<EditActionScreen> {
                     }
 
                     final firstLink = matches.first;
+                    if (firstLink.length < 8) return; // prevent `..` or short junk
+
 
                     // ✅ Store ONLY the first link (replace any previous)
                     addActionsProvider.editDetectedLinks.clear();
@@ -1833,10 +1836,6 @@ class _EditActionScreenState extends State<EditActionScreen> {
 
                       Container(
                         decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.grey.shade300,
-                            width: 1.2,
-                          ),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: ClipRRect(
@@ -1908,8 +1907,8 @@ class _EditActionScreenState extends State<EditActionScreen> {
 
   /// Section Widget
   Widget _buildSaveButton(BuildContext context) {
-    return Consumer2<AddActionsProvider, AdDreamsGoalsProvider>(
-        builder: (context, addActionsProvider, adDreamsGoalsProvider, _) {
+    return Consumer3<GoalsDreamsProvider,AddActionsProvider, AdDreamsGoalsProvider>(
+        builder: (context, goalsDreamsProvider,addActionsProvider, adDreamsGoalsProvider, _) {
       return CustomElevatedButton(
         loading: addActionsProvider.saveAddActionsLoading,
         onPressed: () async {
@@ -1941,6 +1940,13 @@ class _EditActionScreenState extends State<EditActionScreen> {
                     isReminder: "1",
                   editDetectedLinks: addActionsProvider.editDetectedLinks,
                 );
+
+                goalsDreamsProvider.fetchGoalsAndDreams(
+                    pageNo: "1",
+                    context: context,
+                    initial: true,
+                    fullList: true
+                );
               } else {
                 await addActionsProvider.editActionFunction(context,
                     title: addActionsProvider.titleEditTextController.text,
@@ -1962,6 +1968,12 @@ class _EditActionScreenState extends State<EditActionScreen> {
 
               mentalStrengthEditProvider.fetchGoalActions(
                 goalId: widget.actionsDetailsModel!.actions!.goalId ?? "",
+              );
+              goalsDreamsProvider.fetchGoalsAndDreams(
+                  pageNo: "1",
+                  context: context,
+                  initial: true,
+                  fullList: true
               );
 
               // adDreamsGoalsProvider.getAddActionIdAndName(

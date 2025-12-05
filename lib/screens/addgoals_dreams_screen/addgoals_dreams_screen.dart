@@ -549,10 +549,9 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
                   borderDecoration: InputBorder.none,
                   onTap: () => setState(() {}),
                   onChanged: (value) {
-                    final matches = adDreamsGoalsProvider.urlRegex
-                        .allMatches(value)
-                        .map((match) => match.group(0)!)
-                        .toList();
+
+                    final matches = adDreamsGoalsProvider.urlRegex.allMatches(value).map((m) => m.group(0)!).toList();
+
 
                     if (matches.isNotEmpty) {
                       // ✅ Check if user already has a link AND is trying to add another
@@ -574,6 +573,8 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
                       }
 
                       final firstLink = matches.first;
+
+                      if (firstLink.length < 8) return; // prevent `..` or short junk
 
                       // ✅ ONLY keep the first link (replace any previous)
                       setState(() {
@@ -604,10 +605,6 @@ class _AddGoalsDreamsScreenState extends State<AddGoalsDreamsScreen> {
 
                         Container(
                           decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.grey.shade300,
-                              width: 1.2,
-                            ),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: ClipRRect(

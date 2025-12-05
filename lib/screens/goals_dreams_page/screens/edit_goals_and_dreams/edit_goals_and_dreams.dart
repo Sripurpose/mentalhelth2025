@@ -956,6 +956,8 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                     }
 
                     final firstLink = matches.first;
+                    if (firstLink.length < 8) return; // prevent `..` or short junk
+
 
                     // ✅ Store ONLY the first detected link (replace any previous)
                     adDreamsGoalsProvider.editDetectedLinks.clear();
@@ -980,13 +982,8 @@ class _EditGoalsScreenState extends State<EditGoalsScreen> {
                   child: Stack(
                     alignment: Alignment.topRight,
                     children: [
-
                       Container(
                         decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.grey.shade300,
-                            width: 1.2,
-                          ),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: ClipRRect(

@@ -42,6 +42,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import '../../utils/logic/logic.dart';
 import '../../utils/theme/app_decoration.dart';
 import '../../widgets/background_image/background_imager.dart';
+import '../../widgets/widget/justifiedText.dart';
 import '../addgoals_dreams_screen/provider/ad_goals_dreams_provider.dart';
 import '../journal_list_screen/journal_list_page.dart';
 import '../journal_list_screen/screens/edit_journal/numu_edit_journal_screen.dart';
@@ -214,27 +215,26 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                     ),
                                     const SizedBox(height: 2),
                                     SizedBox(
-                                      width: size.width * 0.70,
-                                      child: Text(
-                                        homeProvider.journalDetails == null
+                                      width: size.width * 0.90,
+                                      child:
+                                      JustifiedText(
+                                        text: homeProvider.journalDetails == null
                                             ? ""
                                             : capitalizeFirstLetter(
-                                                HtmlUnescape().convert(
-                                                  homeProvider.journalDetails!
-                                                      .journals!.journalTitle
-                                                      .toString(),
-                                                ),
-                                              ),
-                                        maxLines: 10,
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.justify,
+                                          HtmlUnescape().convert(
+                                            homeProvider.journalDetails!
+                                                .journals!.journalTitle
+                                                .toString(),
+                                          ),
+                                        ),
                                         style: TextStyle(
                                           fontSize: 16,
+                                          height: 1.70, // still useful for vertical rhythm
                                           fontWeight: FontWeight.w400,
                                           fontFamily: 'Poppins',
-                                          color: ColorsContent
-                                              .goalCompletedTextColor,
+                                          color: ColorsContent.goalCompletedTextColor,
                                         ),
+                                        // optional: maxLines: 10,
                                       ),
                                     ),
 
@@ -278,18 +278,18 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                             children: [
                                               // 🧠 Show description text (if available)
                                               if (hasDesc)
-                                                Text(
-                                                  HtmlUnescape()
-                                                      .convert(journalDesc),
-                                                  textAlign: TextAlign.justify,
+                                                JustifiedText(
+                                                  text: HtmlUnescape().convert(journalDesc),
                                                   style: TextStyle(
                                                     fontSize: 16,
+                                                    height: 1.70, // still useful for vertical rhythm
                                                     fontWeight: FontWeight.w400,
                                                     fontFamily: 'Poppins',
-                                                    color: ColorsContent
-                                                        .goalCompletedTextColor,
+                                                    color: ColorsContent.goalCompletedTextColor,
                                                   ),
+                                                  // optional: maxLines: 10,
                                                 ),
+
 
                                               // 🔗 Show preview link (if available)
                                               if (hasPreview)

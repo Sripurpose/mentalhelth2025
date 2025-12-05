@@ -1428,6 +1428,8 @@ class _NumuMentalStrengthAddEditPageState
                   if (matches.isNotEmpty) {
                     final newLink = matches.first;
 
+                    if (newLink.length < 8) return; // prevent `..` or short junk
+
                     // ❗ CONDITION: A link is already added
                     if (mentalStrengthEditProvider.detectedLinks.isNotEmpty) {
                       showToastTOP(
@@ -1485,10 +1487,6 @@ class _NumuMentalStrengthAddEditPageState
 
                       Container(
                         decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.grey.shade300,
-                            width: 1.2,
-                          ),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: ClipRRect(

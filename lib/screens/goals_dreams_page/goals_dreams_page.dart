@@ -95,6 +95,11 @@ class _GoalsDreamsPageState extends State {
           fullList: true
       );
       _isTokenExpired();
+
+      goalsDreamsProvider.searchController.clear();
+      goalsDreamsProvider.searchQuery = "";
+      goalsDreamsProvider.selectedStartDate = null;
+      goalsDreamsProvider.selectedEndDate = null;
     });
     super.initState();
   }

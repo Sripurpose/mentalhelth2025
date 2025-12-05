@@ -552,7 +552,7 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                                           await homeProvider.fetchJournalsGridView(initial: true,context: context,fullList: true);
 
                                                           if (homeProvider
-                                                              .journalStatus ==
+                                                              .journalGridStatus ==
                                                               404) {
                                                             await homeProvider.fetchJournalsGridView(initial: true,context: context,fullList: true);
 
@@ -703,11 +703,11 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                                                             seconds: 3),
                                                             () async {
                                                           //   homeProvider.currentPage == 1;
-                                                          await homeProvider.fetchJournals(initial: true,context: context,fullList: true);
+                                                          await homeProvider.fetchJournalsGridView(initial: true,context: context,fullList: true);
                                                           if (homeProvider
-                                                              .journalStatus ==
+                                                              .journalGridStatus ==
                                                               404) {
-                                                            await homeProvider.fetchJournals(initial: true,context: context,fullList: true);
+                                                            await homeProvider.fetchJournalsGridView(initial: true,context: context,fullList: true);
                                                           }
                                                           logger.i(
                                                               "homeProvider.currentPage${homeProvider.currentPage}");
@@ -2385,11 +2385,13 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
                 ],
                 onChanged: (value) {
                   final regex = provider.editUrlRegex;
-                  final matches =
-                  regex.allMatches(value).map((m) => m.group(0)!).toList();
+                  final matches = regex.allMatches(value).map((m) => m.group(0)!).toList();
+
 
                   if (matches.isNotEmpty) {
                     final firstLink = matches.first;
+
+                    if (firstLink.length < 8) return; // prevent `..` or short junk
 
                     // 🚫 Condition: SAME link already exists → show toast
                     if (provider.editDetectedLinks.isNotEmpty &&
@@ -2462,10 +2464,6 @@ class _NumuEditJournalScreenState extends State<NumuEditJournalScreen>
 
                       Container(
                         decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.grey.shade300,
-                            width: 1.2,
-                          ),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: ClipRRect(

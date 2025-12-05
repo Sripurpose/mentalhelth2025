@@ -820,6 +820,7 @@ class _AddActionMentalStrengthBottomSheetState
                   // ✅ If found any new link, show preview
                   if (matches.isNotEmpty) {
                     final firstLink = matches.first;
+                    if (firstLink.length < 8) return; // prevent `..` or short junk
 
                     setState(() {
                       // ❌ Clear previous links and add ONLY the first one
@@ -850,10 +851,6 @@ class _AddActionMentalStrengthBottomSheetState
 
                       Container(
                         decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.grey.shade300,
-                            width: 1.2,
-                          ),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: ClipRRect(

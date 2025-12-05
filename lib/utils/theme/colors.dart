@@ -32,6 +32,7 @@ class ColorsContent {
   static Color recordCountColor = const Color(0xFFA153E1);
   static Color locationCountColor = const Color(0xFF755EF9);
   static Color signInGradientColorViolet = const Color(0xFF7F6AFD);
+  static Color goalDetailsHeading = const Color(0xFF826EF8);
   static Color goalTextColor = const Color(0xFFDBD5FF);
   static Color signInGradientColorBlue = const Color(0xFF583DF5);
   static Color signInGradientColorBlueNew = const Color(0xFF6233C4);

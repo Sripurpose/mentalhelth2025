@@ -541,74 +541,74 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),
-                              trailing: GestureDetector(
-                                onTap: () {
-                                  final emotionId =
-                                      (support[i].emotionId ?? '').toString();
-
-                                  customPopup(
-                                    context: context,
-                                    onPressedDelete: () async {
-                                      showDialog(
-                                        context: context,
-                                        barrierDismissible: false,
-                                        builder: (_) => Center(
-                                          child: CupertinoActivityIndicator(
-                                            color: ColorsContent.newThemeColor,
-                                            radius: 15,
-                                          ),
-                                        ),
-                                      );
-
-                                      final result =
-                                          await provider.deleteReminderFunction(
-                                        emotion_id: emotionId,
-                                        context: context,
-                                      );
-
-                                      if (mounted) Navigator.of(context).pop();
-
-                                      if (result) {
-                                        await provider.fetchJournalChartView(
-                                            context: context);
-
-                                        if (mounted &&
-                                            Navigator.canPop(context)) {
-                                          Navigator.of(context).pop();
-                                        }
-
-                                        if (mounted) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                              content: Text(
-                                                  'Emotion removed successfully'),
-                                              backgroundColor: Colors.green,
-                                            ),
-                                          );
-                                        }
-                                      } else {
-                                        if (mounted) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                              content: Text(
-                                                  'Failed to remove emotion'),
-                                              backgroundColor: Colors.red,
-                                            ),
-                                          );
-                                        }
-                                      }
-                                    },
-                                    title: 'Confirm Delete',
-                                    content:
-                                        'Are you sure you want to delete this reminder?',
-                                  );
-                                },
-                                child: SvgPicture.asset(
-                                  ImageConstant.numuCloseChart,
-                                ),
-                              ),
+                              // trailing: GestureDetector(
+                              //   onTap: () {
+                              //     final emotionId =
+                              //         (support[i].emotionId ?? '').toString();
+                              //
+                              //     customPopup(
+                              //       context: context,
+                              //       onPressedDelete: () async {
+                              //         showDialog(
+                              //           context: context,
+                              //           barrierDismissible: false,
+                              //           builder: (_) => Center(
+                              //             child: CupertinoActivityIndicator(
+                              //               color: ColorsContent.newThemeColor,
+                              //               radius: 15,
+                              //             ),
+                              //           ),
+                              //         );
+                              //
+                              //         final result =
+                              //             await provider.deleteReminderFunction(
+                              //           emotion_id: emotionId,
+                              //           context: context,
+                              //         );
+                              //
+                              //         if (mounted) Navigator.of(context).pop();
+                              //
+                              //         if (result) {
+                              //           await provider.fetchJournalChartView(
+                              //               context: context);
+                              //
+                              //           if (mounted &&
+                              //               Navigator.canPop(context)) {
+                              //             Navigator.of(context).pop();
+                              //           }
+                              //
+                              //           if (mounted) {
+                              //             ScaffoldMessenger.of(context)
+                              //                 .showSnackBar(
+                              //               const SnackBar(
+                              //                 content: Text(
+                              //                     'Emotion removed successfully'),
+                              //                 backgroundColor: Colors.green,
+                              //               ),
+                              //             );
+                              //           }
+                              //         } else {
+                              //           if (mounted) {
+                              //             ScaffoldMessenger.of(context)
+                              //                 .showSnackBar(
+                              //               const SnackBar(
+                              //                 content: Text(
+                              //                     'Failed to remove emotion'),
+                              //                 backgroundColor: Colors.red,
+                              //               ),
+                              //             );
+                              //           }
+                              //         }
+                              //       },
+                              //       title: 'Confirm Delete',
+                              //       content:
+                              //           'Are you sure you want to delete this reminder?',
+                              //     );
+                              //   },
+                              //   child: SvgPicture.asset(
+                              //     ImageConstant.numuCloseChart,
+                              //   ),
+                              // ),
                             ),
                           ),
                         ],

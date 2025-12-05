@@ -2756,14 +2756,23 @@ class MentalStrengthEditProvider extends ChangeNotifier {
   }
 
   List<String> detectedLinks = [];
+  // RegExp urlRegex = RegExp(
+  //   r'(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-&?=%.]+',
+  //   caseSensitive: false,
+  // );
+
   RegExp urlRegex = RegExp(
-    r'(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-&?=%.]+',
+    r'((https?:\/\/|ftp:\/\/)?(www\.)?[a-zA-Z0-9\-]+\.[a-zA-Z]{2,}(\/\S*)?)',
     caseSensitive: false,
   );
 
   List<String> editDetectedLinks = [];
+  // RegExp editUrlRegex = RegExp(
+  //   r'(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-&?=%.]+',
+  //   caseSensitive: false,
+  // );
   RegExp editUrlRegex = RegExp(
-    r'(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-&?=%.]+',
+    r'((https?:\/\/|ftp:\/\/)?(www\.)?[a-zA-Z0-9\-]+\.[a-zA-Z]{2,}(\/\S*)?)',
     caseSensitive: false,
   );
 
