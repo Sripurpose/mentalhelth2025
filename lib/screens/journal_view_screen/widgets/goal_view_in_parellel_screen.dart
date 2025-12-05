@@ -755,7 +755,7 @@ class _GoalAndDreamFullViewBottomParellelSheetState
                                     itemBuilder: (context, index) {
                                       return Padding(
                                         padding: const EdgeInsets.symmetric(
-                                            vertical: 0),
+                                            vertical: 5),
                                         child: GestureDetector(
                                           onTap: () {
                                             // Handle tap
