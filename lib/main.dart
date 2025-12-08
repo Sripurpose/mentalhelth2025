@@ -827,7 +827,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     } else if (kReleaseMode) {
       if ((baseUrlLive ?? '').isNotEmpty) {
         UrlConstant.baseUrl = baseUrlLive ?? '';
-        UrlConstant.oneSignalRemote = oneSignalStaging ?? '';
+        ///testing url ////
+      //  UrlConstant.oneSignalRemote = oneSignalStaging ?? '';
+
+        ///production live url ///
+        UrlConstant.oneSignalRemote = oneSignalLive ?? '';
         UrlConstant.appShareDownloads = baseUrlAppShareDownloads ?? '';
         UrlConstant.paginationCount = paginationCount ?? 0;
         isBaseUrlReady = true;
@@ -856,7 +860,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
     final deviceType = Platform.isAndroid ? 'android' : 'ios';
     final signInProvider = Provider.of<SignInProvider>(context, listen: false);
-    await signInProvider.fetchAppRegister(context, deviceType: deviceType);
+  //  await signInProvider.fetchAppRegister(context, deviceType: deviceType);
   }
 
   Future<void> _requestPermissions() async {
