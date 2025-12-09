@@ -816,7 +816,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     final deviceType = Platform.isAndroid ? 'android' : 'ios';
     if (kDebugMode) {
       if ((baseUrlQA ?? '').isNotEmpty) {
-        UrlConstant.baseUrl = baseUrlLive ?? '';
+        UrlConstant.baseUrl = baseUrlQA ?? '';
         UrlConstant.oneSignalRemote = oneSignalStaging ?? '';
         UrlConstant.appShareDownloads = baseUrlAppShareDownloads ?? '';
         UrlConstant.paginationCount = paginationCount ?? 0;
