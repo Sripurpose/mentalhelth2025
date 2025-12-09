@@ -290,7 +290,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // Check the platform and set the update URL accordingly
     Uri updateUrl = Platform.isAndroid
-        ? Uri.parse("https://play.google.com/store/apps/details?id=com.mentalhelth.mentalhelth")
+        ? Uri.parse("https://play.google.com/store/apps/details?id=com.numuapp.numuapp")
         : Uri.parse("https://apps.apple.com/app/id6736739491"); // Replace with your iOS App Store link
 
     // Launch the update URL in an in-app browser if it's not a "mental" URL
