@@ -192,7 +192,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                                 .actionsDetailsModel ==
                                             null
                                         ? const SizedBox()
-                                        : _buildUntitledOne(
+                                        : _buildUntitledGoal(
                                             context,
                                             size,
                                             category: mentalStrengthEditProvider
@@ -200,100 +200,51 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                                 .actions!
                                                 .goalTitle
                                                 .toString(),
-                                            createDate:
-                                                mentalStrengthEditProvider
-                                                    .actionsDetailsModel!
-                                                    .actions!
-                                                    .actionDatetime
-                                                    .toString(),
-                                            achiveDate:
-                                                mentalStrengthEditProvider
-                                                    .actionsDetailsModel!
-                                                    .actions!
-                                                    .actionDatetime
-                                                    .toString(),
-                                            status: mentalStrengthEditProvider
-                                                .actionsDetailsModel!
-                                                .actions!
-                                                .actionStatus
-                                                .toString(),
-                                            comments: mentalStrengthEditProvider
-                                                .actionsDetailsModel!
-                                                .actions!
-                                                .actionDetails
-                                                .toString(),
-                                            title: mentalStrengthEditProvider
-                                                .actionsDetailsModel!
-                                                .actions!
-                                                .actionTitle
-                                                .toString(),
-                                            previewLinkApi:
-                                                mentalStrengthEditProvider
-                                                    .actionsDetailsModel!
-                                                    .actions!
-                                                    .preview_link
-                                                    .toString(),
                                           ),
-                                    audioList.isEmpty
-                                        ? const SizedBox()
-                                        : const SizedBox(height: 10),
-                                    audioList.isEmpty
-                                        ? const SizedBox()
-                                        : Container(
-                                            padding: const EdgeInsets.all(10),
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                            ),
-                                            height: size.height * 0.18,
-                                            // Adjusted height for text + list
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    SvgPicture.asset(
-                                                      ImageConstant
-                                                          .actionDetailsMark, // Replace with your actual SVG asset path
-                                                    ),
-                                                    const SizedBox(width: 10),
-                                                    const Text(
-                                                      "Audio",
-                                                      style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        fontFamily: 'Poppins',
-                                                        color: Colors.black,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      " : ",
-                                                      style: CustomTextStyles
-                                                          .blackText16000000W700(),
-                                                    ),
-                                                  ],
-                                                ),
-                                                const SizedBox(height: 10),
-                                                // Space between text row and list
-                                                Expanded(
-                                                  child: ListView.builder(
-                                                    itemCount: audioList.length,
-                                                    itemBuilder:
-                                                        (context, index) {
-                                                      return JournalAudioPlayer(
-                                                        url: audioList[index],
-                                                      );
-                                                    },
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
+
+
+                                    // _buildUntitledTitle(
+                                    //   context,
+                                    //   size,
+                                    //   category: mentalStrengthEditProvider
+                                    //       .actionsDetailsModel!
+                                    //       .actions!
+                                    //       .goalTitle
+                                    //       .toString(),
+                                    //   createDate:
+                                    //   mentalStrengthEditProvider
+                                    //       .actionsDetailsModel!
+                                    //       .actions!
+                                    //       .actionDatetime
+                                    //       .toString(),
+                                    //   achiveDate:
+                                    //   mentalStrengthEditProvider
+                                    //       .actionsDetailsModel!
+                                    //       .actions!
+                                    //       .actionDatetime
+                                    //       .toString(),
+                                    //   status: mentalStrengthEditProvider
+                                    //       .actionsDetailsModel!
+                                    //       .actions!
+                                    //       .actionStatus
+                                    //       .toString(),
+                                    //   comments: mentalStrengthEditProvider
+                                    //       .actionsDetailsModel!
+                                    //       .actions!
+                                    //       .actionDetails
+                                    //       .toString(),
+                                    //   title: mentalStrengthEditProvider
+                                    //       .actionsDetailsModel!
+                                    //       .actions!
+                                    //       .actionTitle
+                                    //       .toString(),
+                                    //   previewLinkApi:
+                                    //   mentalStrengthEditProvider
+                                    //       .actionsDetailsModel!
+                                    //       .actions!
+                                    //       .preview_link
+                                    //       .toString(),
+                                    // ),
                                     imageList.isEmpty
                                         ? const SizedBox()
                                         : const SizedBox(height: 10),
@@ -316,29 +267,18 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                               children: [
                                                 Row(
                                                   children: [
-                                                    SvgPicture.asset(
-                                                      ImageConstant
-                                                          .actionDetailsMark, // Replace with your photo SVG path
-                                                    ),
-                                                    const SizedBox(width: 10),
-                                                    const Text(
-                                                      "Photo",
+                                                     Text(
+                                                      "Image",
                                                       style: TextStyle(
+                                                        color: ColorsContent.goalDetailsHeading,
                                                         fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w600,
+                                                        fontWeight: FontWeight.w500,
                                                         fontFamily: 'Poppins',
-                                                        color: Colors.black,
                                                       ),
-                                                    ),
-                                                    Text(
-                                                      " : ",
-                                                      style: CustomTextStyles
-                                                          .blackText16000000W700(),
                                                     ),
                                                   ],
                                                 ),
-                                                const SizedBox(height: 8),
+                                                const SizedBox(height: 5),
                                                 Expanded(
                                                   child: Stack(
                                                     children: [
@@ -454,6 +394,53 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                               ],
                                             ),
                                           ),
+                                    audioList.isEmpty
+                                        ? const SizedBox()
+                                        : const SizedBox(height: 10),
+                                    audioList.isEmpty
+                                        ? const SizedBox()
+                                        : Container(
+                                      padding: const EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius:
+                                        BorderRadius.circular(5),
+                                      ),
+                                      height: size.height * 0.155,
+                                      // Adjusted height for text + list
+                                      child: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                               Text(
+                                                "Voice",
+                                                style: TextStyle(
+                                                  color: ColorsContent.goalDetailsHeading,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: 'Poppins',
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 5),
+                                          // Space between text row and list
+                                          Expanded(
+                                            child: ListView.builder(
+                                              itemCount: audioList.length,
+                                              itemBuilder:
+                                                  (context, index) {
+                                                return JournalAudioPlayer(
+                                                  url: audioList[index],
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                     videoList.isEmpty
                                         ? const SizedBox()
                                         : const SizedBox(
@@ -477,25 +464,14 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                               children: [
                                                 Row(
                                                   children: [
-                                                    SvgPicture.asset(
-                                                      ImageConstant
-                                                          .actionDetailsMark, // Replace with your SVG icon for video
-                                                    ),
-                                                    const SizedBox(width: 10),
-                                                    const Text(
+                                                     Text(
                                                       "Video",
                                                       style: TextStyle(
+                                                        color: ColorsContent.goalDetailsHeading,
                                                         fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w600,
+                                                        fontWeight: FontWeight.w500,
                                                         fontFamily: 'Poppins',
-                                                        color: Colors.black,
                                                       ),
-                                                    ),
-                                                    Text(
-                                                      " : ",
-                                                      style: CustomTextStyles
-                                                          .blackText16000000W700(),
                                                     ),
                                                   ],
                                                 ),
@@ -566,7 +542,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                                               borderRadius:
                                                                   BorderRadius
                                                                       .circular(
-                                                                          5),
+                                                                          0),
                                                               child:
                                                                   VideoPlayerWidgetViewAndAlreadyAction(
                                                                 videoUrl:
@@ -644,25 +620,14 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                               children: [
                                                 Row(
                                                   children: [
-                                                    SvgPicture.asset(
-                                                      ImageConstant
-                                                          .actionDetailsMark, // Replace with your location SVG asset
-                                                    ),
-                                                    const SizedBox(width: 10),
-                                                    const Text(
+                                                     Text(
                                                       "Location",
                                                       style: TextStyle(
+                                                        color: ColorsContent.goalDetailsHeading,
                                                         fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w600,
+                                                        fontWeight: FontWeight.w500,
                                                         fontFamily: 'Poppins',
-                                                        color: Colors.black,
                                                       ),
-                                                    ),
-                                                    Text(
-                                                      " : ",
-                                                      style: CustomTextStyles
-                                                          .blackText16000000W700(),
                                                     ),
                                                   ],
                                                 ),
@@ -724,6 +689,60 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                             ),
                                           )
                                         : const SizedBox(),
+                                    const SizedBox(height: 10,),
+                                    mentalStrengthEditProvider
+                                        .actionsDetailsModel ==
+                                        null
+                                        ? const SizedBox()
+                                        : _buildUntitledTitle(
+                                      context,
+                                      size,
+                                      title: mentalStrengthEditProvider
+                                          .actionsDetailsModel!
+                                          .actions!
+                                          .actionTitle
+                                          .toString(),
+                                    ),
+                                    const SizedBox(height: 10,),
+                                    mentalStrengthEditProvider
+                                        .actionsDetailsModel ==
+                                        null
+                                        ? const SizedBox()
+                                        : _buildUntitledDescription(
+                                      context,
+                                      size,
+                                      comments: mentalStrengthEditProvider
+                                          .actionsDetailsModel!
+                                          .actions!
+                                          .actionDetails
+                                          .toString(),
+                                      previewLinkApi:
+                                      mentalStrengthEditProvider
+                                          .actionsDetailsModel!
+                                          .actions!
+                                          .preview_link
+                                          .toString(),
+                                    ),
+                                    mentalStrengthEditProvider
+                                        .actionsDetailsModel!
+                                        .actions!
+                                        .actionDetails
+                                        .toString().isNotEmpty ?
+                                    const SizedBox(height: 10,):const SizedBox(),
+                                    mentalStrengthEditProvider
+                                        .actionsDetailsModel ==
+                                        null
+                                        ? const SizedBox()
+                                        : _buildUntitledStatus(
+                                      context,
+                                      size,
+                                      status: mentalStrengthEditProvider
+                                          .actionsDetailsModel!
+                                          .actions!
+                                          .actionStatus
+                                          .toString(),
+                                    ),
+
                                     mentalStrengthEditProvider
                                                     .actionsDetailsModel!
                                                     .actions!
@@ -773,59 +792,24 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                                         children: [
                                                           Expanded(
                                                             child: Row(
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .min,
                                                               children: [
-                                                                SvgPicture
-                                                                    .asset(
-                                                                  ImageConstant
-                                                                      .actionDetailsMark,
-                                                                ),
-                                                                const SizedBox(
-                                                                    width: 10),
-                                                                const Text(
+                                                                 Text(
                                                                   "Reminder",
-                                                                  style:
-                                                                      TextStyle(
-                                                                    fontSize:
-                                                                        16,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600,
-                                                                    fontFamily:
-                                                                        'Poppins',
-                                                                    color: Colors
-                                                                        .black,
-                                                                  ),
-                                                                ),
-                                                                const Text(
-                                                                  " : ",
-                                                                  style:
-                                                                      TextStyle(
-                                                                    fontSize:
-                                                                        16,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600,
-                                                                    fontFamily:
-                                                                        'Poppins',
-                                                                    color: Colors
-                                                                        .black,
+                                                                  style: TextStyle(
+                                                                    color: ColorsContent.goalDetailsHeading,
+                                                                    fontSize: 16,
+                                                                    fontWeight: FontWeight.w500,
+                                                                    fontFamily: 'Poppins',
                                                                   ),
                                                                 ),
                                                               ],
                                                             ),
                                                           ),
-                                                          SvgPicture.asset(
-                                                            ImageConstant
-                                                                .reminderClock,
-                                                          ),
                                                         ],
                                                       ),
 
                                                       const SizedBox(
-                                                          height: 10),
+                                                          height: 2),
 
                                                       // Date row
                                                       Row(
@@ -835,15 +819,16 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                                         children: [
                                                           const Text(
                                                             "Date  : ",
-                                                            style: TextStyle(
+                                                            style:
+                                                             TextStyle(
                                                               fontSize: 16,
                                                               fontWeight:
-                                                                  FontWeight
-                                                                      .w600,
+                                                              FontWeight
+                                                                  .w400,
                                                               fontFamily:
-                                                                  'Poppins',
-                                                              color:
-                                                                  Colors.black,
+                                                              'Poppins',
+                                                              color: Colors
+                                                                  .black,
                                                             ),
                                                           ),
                                                           Expanded(
@@ -888,15 +873,16 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                                         children: [
                                                           const Text(
                                                             "Time  : ",
-                                                            style: TextStyle(
+                                                            style:
+                                                             TextStyle(
                                                               fontSize: 16,
                                                               fontWeight:
-                                                                  FontWeight
-                                                                      .w600,
+                                                              FontWeight
+                                                                  .w400,
                                                               fontFamily:
-                                                                  'Poppins',
-                                                              color:
-                                                                  Colors.black,
+                                                              'Poppins',
+                                                              color: Colors
+                                                                  .black,
                                                             ),
                                                           ),
                                                           Expanded(
@@ -941,15 +927,16 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                                                         children: [
                                                           const Text(
                                                             "Repeat: ",
-                                                            style: TextStyle(
+                                                            style:
+                                                             TextStyle(
                                                               fontSize: 16,
                                                               fontWeight:
-                                                                  FontWeight
-                                                                      .w600,
+                                                              FontWeight
+                                                                  .w400,
                                                               fontFamily:
-                                                                  'Poppins',
-                                                              color:
-                                                                  Colors.black,
+                                                              'Poppins',
+                                                              color: Colors
+                                                                  .black,
                                                             ),
                                                           ),
                                                           Expanded(
@@ -1054,43 +1041,174 @@ class _ActionsFullViewState extends State<ActionsFullView> {
   }
 
   /// Section Widget
-  Widget _buildUntitledOne(
+  Widget _buildUntitledGoal(
     BuildContext context,
     Size size, {
     required String category,
-    required String createDate,
-    required String achiveDate,
-    required String status,
-    required String comments,
-    required String title,
-    required String previewLinkApi,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          padding: const EdgeInsets.all(8), // Optional: adds inner spacing
+          width: double.infinity,
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: Colors.white, // White background
-            borderRadius: BorderRadius.circular(5), // Rounded corners
+            color: Colors.white, // Off-white background
+            borderRadius:
+            BorderRadius.circular(5),
           ),
-          child: Row(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SvgPicture.asset(
-                ImageConstant
-                    .actionDetailsMark, // Replace with your actual asset path
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                child: Text(
+                  "Goal",
+                  style: TextStyle(
+                    color: ColorsContent.goalDetailsHeading,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
               ),
-              const SizedBox(
-                width: 10,
+              Padding(
+                  padding:  const EdgeInsets.symmetric(horizontal: 2),
+                  child:Text(
+                    capitalizeFirstLetter(HtmlUnescape().convert(category)),
+                    //  textAlign: TextAlign.justify,
+                    style: TextStyle(
+                      height: 1.70,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Poppins',
+                      color: ColorsContent.blackThemeColor,
+                    ),
+                  )
+
+                // JustifiedText(
+                //   text:   capitalizeFirstLetter(HtmlUnescape().convert(title)),
+                //   style: TextStyle(
+                //     height: 1.70, // still useful for vertical rhythm
+                //     fontSize: 16,
+                //     fontWeight: FontWeight.w400,
+                //     fontFamily: 'Poppins',
+                //     color: ColorsContent.blackThemeColor,
+                //   ),
+                //   // optional: maxLines: 10,
+                // ),
               ),
-              const Text(
-                "Status : ",
-                style: TextStyle(
-                  fontSize: 16.5,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Poppins',
-                  color: Colors.black,
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+
+  Widget _buildUntitledTitle(
+      BuildContext context,
+      Size size, {
+
+        required String title,
+
+      }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.white, // Off-white background
+            borderRadius:
+            BorderRadius.circular(5),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                child: Text(
+                  "Title",
+                  style: TextStyle(
+                    color: ColorsContent.goalDetailsHeading,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+              ),
+              Padding(
+                  padding:  const EdgeInsets.symmetric(horizontal: 2),
+                  child:Text(
+                    capitalizeFirstLetter(HtmlUnescape().convert(title)),
+                    //  textAlign: TextAlign.justify,
+                    style: TextStyle(
+                      height: 1.70,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Poppins',
+                      color: ColorsContent.blackThemeColor,
+                    ),
+                  )
+
+                // JustifiedText(
+                //   text:   capitalizeFirstLetter(HtmlUnescape().convert(title)),
+                //   style: TextStyle(
+                //     height: 1.70, // still useful for vertical rhythm
+                //     fontSize: 16,
+                //     fontWeight: FontWeight.w400,
+                //     fontFamily: 'Poppins',
+                //     color: ColorsContent.blackThemeColor,
+                //   ),
+                //   // optional: maxLines: 10,
+                // ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildUntitledStatus(
+      BuildContext context,
+      Size size, {
+
+        required String status,
+
+      }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.white, // Off-white background
+            borderRadius:
+            BorderRadius.circular(5),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                child: Text(
+                  "Status",
+                  style: TextStyle(
+                    color: ColorsContent.goalDetailsHeading,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Poppins',
+                  ),
                 ),
               ),
               SizedBox(
@@ -1109,141 +1227,32 @@ class _ActionsFullViewState extends State<ActionsFullView> {
             ],
           ),
         ),
-        const SizedBox(
-          height: 10,
-        ),
-        Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(
-                    ImageConstant.actionDetailsMark,
-                  ),
-                  const SizedBox(width: 10),
-                  const Text(
-                    "Goal",
-                    style: TextStyle(
-                      fontSize: 16.5,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'Poppins',
-                      color: Colors.black,
-                    ),
-                  ),
-                  Text(
-                    " : ",
-                    style: CustomTextStyles.blackText16000000W700(),
-                  ),
-                  if (category.length < 25)
-                    Flexible(
-                      child: Text(
-                        capitalizeFirstLetter(
-                            HtmlUnescape().convert(category)),
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Poppins',
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-              if (category.length >= 25)
-                SizedBox(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Text(
-                      capitalizeFirstLetter(
-                          HtmlUnescape().convert(category)),
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Poppins',
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ),
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(
-                    ImageConstant.actionDetailsMark,
-                  ),
-                  const SizedBox(width: 10),
-                  const Text(
-                    "Title",
-                    style: TextStyle(
-                      fontSize: 16.5,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'Poppins',
-                      color: Colors.black,
-                    ),
-                  ),
-                  Text(
-                    " : ",
-                    style: CustomTextStyles.blackText16000000W700(),
-                  ),
-                  if (title.length < 25)
-                    Flexible(
-                      child: Text(
-                        capitalizeFirstLetter(
-                            HtmlUnescape().convert(title)),
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Poppins',
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-              if (title.length >= 25)
-                SizedBox(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Text(
-                      capitalizeFirstLetter(
-                          HtmlUnescape().convert(title)),
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Poppins',
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ),
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
+      ],
+    );
+  }
+
+
+
+  Widget _buildUntitledDescription(
+      BuildContext context,
+      Size size, {
+        required String comments,
+
+        required String previewLinkApi,
+      }) {
+
+    final commentsText = (comments ?? "").trim();
+    final previewLink = previewLinkApi.trim();
+
+    // ❌ If BOTH comments & link are empty → return nothing
+    if (commentsText.isEmpty && previewLink.isEmpty) {
+      return const SizedBox.shrink();
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+
         Container(
           width: double.infinity,
           padding: const EdgeInsets.all(10),
@@ -1253,8 +1262,8 @@ class _ActionsFullViewState extends State<ActionsFullView> {
           ),
           child: Builder(
             builder: (context) {
-              final commentsText = (comments ?? "").trim();
-              final previewLink = previewLinkApi;
+              // final commentsText = (comments ?? "").trim();
+              // final previewLink = previewLinkApi;
 
               // 🧠 CASE 1: If both text and link exist → show both
               if (commentsText.isNotEmpty && previewLink.isNotEmpty) {
@@ -1262,28 +1271,14 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SvgPicture.asset(
-                          ImageConstant.actionDetailsMark,
-                        ),
-                        const SizedBox(width: 10),
-                        const Text(
+                         Text(
                           "Description",
                           style: TextStyle(
-                            fontSize: 16.5,
-                            fontWeight: FontWeight.w600,
+                            color: ColorsContent.goalDetailsHeading,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
                             fontFamily: 'Poppins',
-                            color: Colors.black,
-                          ),
-                        ),
-                        const Text(
-                          " : ",
-                          style: TextStyle(
-                            fontSize: 16.5,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: 'Poppins',
-                            color: Colors.black,
                           ),
                         ),
                       ],
@@ -1293,7 +1288,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                     // 📝 Description Text
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.symmetric(horizontal: 0),
                       decoration: const BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.vertical(
@@ -1357,28 +1352,14 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SvgPicture.asset(
-                          ImageConstant.actionDetailsMark,
-                        ),
-                        const SizedBox(width: 10),
-                        const Text(
+                        Text(
                           "Description",
                           style: TextStyle(
-                            fontSize: 16.5,
-                            fontWeight: FontWeight.w600,
+                            color: ColorsContent.goalDetailsHeading,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
                             fontFamily: 'Poppins',
-                            color: Colors.black,
-                          ),
-                        ),
-                        const Text(
-                          " : ",
-                          style: TextStyle(
-                            fontSize: 16.5,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: 'Poppins',
-                            color: Colors.black,
                           ),
                         ),
                       ],
@@ -1386,7 +1367,7 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                     const SizedBox(height: 6),
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.symmetric(horizontal: 0),
                       decoration: const BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.vertical(
@@ -1416,26 +1397,13 @@ class _ActionsFullViewState extends State<ActionsFullView> {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SvgPicture.asset(
-                          ImageConstant.actionDetailsMark,
-                        ),
-                        const SizedBox(width: 10),
-                        const Text(
+                        Text(
                           "Description",
                           style: TextStyle(
-                            fontSize: 16.5,
-                            fontWeight: FontWeight.w600,
+                            color: ColorsContent.goalDetailsHeading,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
                             fontFamily: 'Poppins',
-                            color: Colors.black,
-                          ),
-                        ),
-                        const Text(
-                          " : ",
-                          style: TextStyle(
-                            fontSize: 16.5,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: 'Poppins',
-                            color: Colors.black,
                           ),
                         ),
                       ],
@@ -1487,6 +1455,8 @@ class _ActionsFullViewState extends State<ActionsFullView> {
       ],
     );
   }
+
+
 
   Widget buildIndicators(int pageCount, int currentIndex) {
     return Row(

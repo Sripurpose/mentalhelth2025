@@ -626,9 +626,10 @@ class _GoalAndDreamFullViewScreenState
                           size,
                           comments: widget.goalsanddream.goalDetails.toString(),
                         ),
+                        widget.goalsanddream.goalDetails.toString().isNotEmpty?
                         const SizedBox(
                           height: 10,
-                        ),
+                        ):SizedBox(),
 
                         _buildUntitledCategory(
                           context,
@@ -1037,19 +1038,30 @@ class _GoalAndDreamFullViewScreenState
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 2),
-                child:
-                JustifiedText(
-                  text:   capitalizeFirstLetter(HtmlUnescape().convert(title)),
+                padding:  const EdgeInsets.symmetric(horizontal: 2),
+                child:Text(
+                  capitalizeFirstLetter(HtmlUnescape().convert(title)),
+                //  textAlign: TextAlign.justify,
                   style: TextStyle(
-                    height: 1.70, // still useful for vertical rhythm
+                    height: 1.70,
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
                     fontFamily: 'Poppins',
                     color: ColorsContent.blackThemeColor,
                   ),
-                  // optional: maxLines: 10,
-                ),
+                )
+
+                // JustifiedText(
+                //   text:   capitalizeFirstLetter(HtmlUnescape().convert(title)),
+                //   style: TextStyle(
+                //     height: 1.70, // still useful for vertical rhythm
+                //     fontSize: 16,
+                //     fontWeight: FontWeight.w400,
+                //     fontFamily: 'Poppins',
+                //     color: ColorsContent.blackThemeColor,
+                //   ),
+                //   // optional: maxLines: 10,
+                // ),
               ),
             ],
           ),
@@ -1062,6 +1074,16 @@ class _GoalAndDreamFullViewScreenState
   Widget _buildUntitledDescription(BuildContext context, Size size,
       {
         required String comments}) {
+
+    final commentsText = (comments ?? "").trim();
+    final previewLink =
+    widget.goalsanddream.preview_link.toString().trim();
+
+    // ❌ If BOTH comments & link are empty → return nothing
+    if (commentsText.isEmpty && previewLink.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -1100,9 +1122,9 @@ class _GoalAndDreamFullViewScreenState
                 ),
                 child: Builder(
                   builder: (context) {
-                    final commentsText = (comments ?? "").trim();
-                    final previewLink =
-                    widget.goalsanddream.preview_link.toString().trim();
+                    // final commentsText = (comments ?? "").trim();
+                    // final previewLink =
+                    // widget.goalsanddream.preview_link.toString().trim();
 
                     // 🧠 Case 1: Both text and preview exist → show both
                     if (commentsText.isNotEmpty && previewLink.isNotEmpty) {
@@ -1110,17 +1132,29 @@ class _GoalAndDreamFullViewScreenState
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
 
-                          JustifiedText(
-                            text:  capitalizeFirstLetter(
+                          // JustifiedText(
+                          //   text:  capitalizeFirstLetter(
+                          //       HtmlUnescape().convert(commentsText)),
+                          //   style:  TextStyle(
+                          //     height: 1.70, // still useful for vertical rhythm
+                          //     color: ColorsContent.blackThemeColor,
+                          //     fontSize: 16,
+                          //     fontWeight: FontWeight.w400,
+                          //     fontFamily: 'Poppins',
+                          //   ),
+                          //   // optional: maxLines: 10,
+                          // ),
+                          Text(
+                            capitalizeFirstLetter(
                                 HtmlUnescape().convert(commentsText)),
-                            style:  TextStyle(
-                              height: 1.70, // still useful for vertical rhythm
-                              color: ColorsContent.blackThemeColor,
+                            //  textAlign: TextAlign.justify,
+                            style: TextStyle(
+                              height: 1.70,
                               fontSize: 16,
                               fontWeight: FontWeight.w400,
                               fontFamily: 'Poppins',
+                              color: ColorsContent.blackThemeColor,
                             ),
-                            // optional: maxLines: 10,
                           ),
                           const SizedBox(height: 8),
                           Padding(
@@ -1164,18 +1198,30 @@ class _GoalAndDreamFullViewScreenState
                     // 🧠 Case 2: Only text exists
                     else if (commentsText.isNotEmpty) {
                       return
-                        JustifiedText(
-                          text:  capitalizeFirstLetter(
+                        Text(
+                          capitalizeFirstLetter(
                               HtmlUnescape().convert(commentsText)),
-                          style:  TextStyle(
-                            height: 1.70, // still useful for vertical rhythm
-                            color: ColorsContent.blackThemeColor,
+                          //  textAlign: TextAlign.justify,
+                          style: TextStyle(
+                            height: 1.70,
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
                             fontFamily: 'Poppins',
+                            color: ColorsContent.blackThemeColor,
                           ),
-                          // optional: maxLines: 10,
                         );
+                        // JustifiedText(
+                        //   text:  capitalizeFirstLetter(
+                        //       HtmlUnescape().convert(commentsText)),
+                        //   style:  TextStyle(
+                        //     height: 1.70, // still useful for vertical rhythm
+                        //     color: ColorsContent.blackThemeColor,
+                        //     fontSize: 16,
+                        //     fontWeight: FontWeight.w400,
+                        //     fontFamily: 'Poppins',
+                        //   ),
+                        //   // optional: maxLines: 10,
+                        // );
                     }
 
                     // 🔗 Case 3: Only link preview exists

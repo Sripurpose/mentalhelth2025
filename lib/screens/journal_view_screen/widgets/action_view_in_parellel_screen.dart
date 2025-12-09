@@ -168,93 +168,14 @@ class _ActionViewInParallelScreenState
                                       mentalStrengthEditProvider.actionsDetailsModel ==
                                           null
                                           ? const SizedBox()
-                                          : _buildUntitledOne(
+                                          : _buildUntitledGoal(
                                         context,
                                         size,
                                         category: mentalStrengthEditProvider
-                                            .actionsDetailsModel!.actions!.goalTitle
-                                            .toString(),
-                                        createDate: mentalStrengthEditProvider
                                             .actionsDetailsModel!
                                             .actions!
-                                            .actionDatetime
+                                            .goalTitle
                                             .toString(),
-                                        achiveDate: mentalStrengthEditProvider
-                                            .actionsDetailsModel!
-                                            .actions!
-                                            .actionDatetime
-                                            .toString(),
-                                        status: mentalStrengthEditProvider
-                                            .actionsDetailsModel!
-                                            .actions!
-                                            .actionStatus
-                                            .toString(),
-                                        comments:  mentalStrengthEditProvider
-                                            .actionsDetailsModel!
-                                            .actions!
-                                            .actionDetails
-                                            .toString(),
-                                        title: mentalStrengthEditProvider
-                                            .actionsDetailsModel!
-                                            .actions!
-                                            .actionTitle
-                                            .toString(),
-                                        previewLinkApi: mentalStrengthEditProvider
-                                            .actionsDetailsModel!
-                                            .actions!
-                                            .preview_link
-                                            .toString(),
-                                      ),
-                                      audioList.isEmpty ?
-                                      const SizedBox():
-                                      const SizedBox(height: 10),
-                                      audioList.isEmpty
-                                          ? const SizedBox() :
-                                      Container(
-                                        padding: const EdgeInsets.all(10),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.circular(5),
-                                        ),
-                                        height: size.height * 0.18, // Adjusted height for text + list
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                SvgPicture.asset(
-                                                  ImageConstant.actionDetailsMark, // Replace with your actual SVG asset path
-                                                ),
-                                                const SizedBox(width: 10),
-                                                const Text(
-                                                  "Audio",
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w600,
-                                                    fontFamily: 'Poppins',
-                                                    color: Colors.black,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  " : ",
-                                                  style: CustomTextStyles.blackText16000000W700(),
-                                                ),
-                                              ],
-                                            ),
-                                            const SizedBox(height: 10), // Space between text row and list
-                                            Expanded(
-                                              child: ListView.builder(
-                                                itemCount: audioList.length,
-                                                itemBuilder: (context, index) {
-                                                  return JournalAudioPlayer(
-                                                    url: audioList[index],
-                                                  );
-                                                },
-                                              ),
-                                            ),
-                                          ],
-                                        ),
                                       ),
                                       imageList.isEmpty?const SizedBox():
                                       const SizedBox(height: 10),
@@ -272,26 +193,18 @@ class _ActionViewInParallelScreenState
                                           children: [
                                             Row(
                                               children: [
-                                                SvgPicture.asset(
-                                                  ImageConstant.actionDetailsMark, // Replace with your photo SVG path
-                                                ),
-                                                const SizedBox(width: 10),
-                                                const Text(
-                                                  "Photo",
+                                                 Text(
+                                                  "Image",
                                                   style: TextStyle(
+                                                    color: ColorsContent.goalDetailsHeading,
                                                     fontSize: 16,
-                                                    fontWeight: FontWeight.w600,
+                                                    fontWeight: FontWeight.w500,
                                                     fontFamily: 'Poppins',
-                                                    color: Colors.black,
                                                   ),
-                                                ),
-                                                Text(
-                                                  " : ",
-                                                  style: CustomTextStyles.blackText16000000W700(),
                                                 ),
                                               ],
                                             ),
-                                            const SizedBox(height: 8),
+                                            const SizedBox(height: 5),
                                             Expanded(
                                               child: Stack(
                                                 children: [
@@ -314,25 +227,68 @@ class _ActionViewInParallelScreenState
                                                     },
                                                   ),
                                                   if(imageList.length != 1)
-                                                  Positioned(
-                                                    bottom: 10,
-                                                    left: 0,
-                                                    right: 0,
-                                                    child: Center(
-                                                      child: buildIndicators(
-                                                        imageList.length,
-                                                        photoCurrentIndex,
+                                                    Positioned(
+                                                      bottom: 10,
+                                                      left: 0,
+                                                      right: 0,
+                                                      child: Center(
+                                                        child: buildIndicators(
+                                                          imageList.length,
+                                                          photoCurrentIndex,
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
                                                 ],
                                               ),
                                             ),
                                           ],
                                         ),
                                       ),
+                                      audioList.isEmpty ?
+                                      const SizedBox():
+                                      const SizedBox(height: 10),
+                                      audioList.isEmpty
+                                          ? const SizedBox() :
+                                      Container(
+                                        padding: const EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(5),
+                                        ),
+                                        height: size.height * 0.155, // Adjusted height for text + list
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                 Text(
+                                                  "Voice",
+                                                  style: TextStyle(
+                                                    color: ColorsContent.goalDetailsHeading,
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontFamily: 'Poppins',
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 5), // Space between text row and list
+                                            Expanded(
+                                              child: ListView.builder(
+                                                itemCount: audioList.length,
+                                                itemBuilder: (context, index) {
+                                                  return JournalAudioPlayer(
+                                                    url: audioList[index],
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+
                                       videoList.isEmpty?
-                                      SizedBox():
+                                      const SizedBox():
                                       const SizedBox(
                                         height: 10,
                                       ),
@@ -354,26 +310,18 @@ class _ActionViewInParallelScreenState
                                           children: [
                                             Row(
                                               children: [
-                                                SvgPicture.asset(
-                                                  ImageConstant.actionDetailsMark, // Replace with your SVG icon for video
-                                                ),
-                                                const SizedBox(width: 10),
-                                                const Text(
+                                                 Text(
                                                   "Video",
                                                   style: TextStyle(
+                                                    color: ColorsContent.goalDetailsHeading,
                                                     fontSize: 16,
-                                                    fontWeight: FontWeight.w600,
+                                                    fontWeight: FontWeight.w500,
                                                     fontFamily: 'Poppins',
-                                                    color: Colors.black,
                                                   ),
-                                                ),
-                                                Text(
-                                                  " : ",
-                                                  style: CustomTextStyles.blackText16000000W700(),
                                                 ),
                                               ],
                                             ),
-                                            const SizedBox(height: 8),
+                                            const SizedBox(height: 5),
                                             Expanded(
                                               child: Stack(
                                                 children: [
@@ -416,7 +364,7 @@ class _ActionViewInParallelScreenState
                                                           );
                                                         },
                                                         child: ClipRRect(
-                                                          borderRadius: BorderRadius.circular(5),
+                                                          borderRadius: BorderRadius.circular(0),
                                                           child: VideoPlayerWidgetViewAndAlreadyAction(
                                                             videoUrl: videoList[index],
                                                           ),
@@ -461,22 +409,14 @@ class _ActionViewInParallelScreenState
                                           children: [
                                             Row(
                                               children: [
-                                                SvgPicture.asset(
-                                                  ImageConstant.actionDetailsMark, // Replace with your location SVG asset
-                                                ),
-                                                const SizedBox(width: 10),
-                                                const Text(
+                                                 Text(
                                                   "Location",
                                                   style: TextStyle(
+                                                    color: ColorsContent.goalDetailsHeading,
                                                     fontSize: 16,
-                                                    fontWeight: FontWeight.w600,
+                                                    fontWeight: FontWeight.w500,
                                                     fontFamily: 'Poppins',
-                                                    color: Colors.black,
                                                   ),
-                                                ),
-                                                Text(
-                                                  " : ",
-                                                  style: CustomTextStyles.blackText16000000W700(),
                                                 ),
                                               ],
                                             ),
@@ -518,6 +458,60 @@ class _ActionViewInParallelScreenState
                                       )
                                           :
                                       const SizedBox(),
+
+                                      const SizedBox(height: 10,),
+                                      mentalStrengthEditProvider
+                                          .actionsDetailsModel ==
+                                          null
+                                          ? const SizedBox()
+                                          : _buildUntitledTitle(
+                                        context,
+                                        size,
+                                        title: mentalStrengthEditProvider
+                                            .actionsDetailsModel!
+                                            .actions!
+                                            .actionTitle
+                                            .toString(),
+                                      ),
+                                      const SizedBox(height: 10,),
+                                      mentalStrengthEditProvider
+                                          .actionsDetailsModel ==
+                                          null
+                                          ? const SizedBox()
+                                          : _buildUntitledDescription(
+                                        context,
+                                        size,
+                                        comments: mentalStrengthEditProvider
+                                            .actionsDetailsModel!
+                                            .actions!
+                                            .actionDetails
+                                            .toString(),
+                                        previewLinkApi:
+                                        mentalStrengthEditProvider
+                                            .actionsDetailsModel!
+                                            .actions!
+                                            .preview_link
+                                            .toString(),
+                                      ),
+                                      mentalStrengthEditProvider
+                                          .actionsDetailsModel!
+                                          .actions!
+                                          .actionDetails
+                                          .toString().isNotEmpty ?
+                                      const SizedBox(height: 10,):const SizedBox(),
+                                      mentalStrengthEditProvider
+                                          .actionsDetailsModel ==
+                                          null
+                                          ? const SizedBox()
+                                          : _buildUntitledStatus(
+                                        context,
+                                        size,
+                                        status: mentalStrengthEditProvider
+                                            .actionsDetailsModel!
+                                            .actions!
+                                            .actionStatus
+                                            .toString(),
+                                      ),
                                       const SizedBox(height: 2),
                                       mentalStrengthEditProvider.actionsDetailsModel!.actions!.actionStatus == "1" ||
                                           mentalStrengthEditProvider.actionsDetailsModel!.actions!.reminder == null ? const SizedBox():const SizedBox(height: 10),
@@ -543,41 +537,23 @@ class _ActionViewInParallelScreenState
                                                         children: [
                                                           Expanded(
                                                             child: Row(
-                                                              mainAxisSize: MainAxisSize.min,
                                                               children: [
-                                                                SvgPicture.asset(
-                                                                  ImageConstant.actionDetailsMark,
-                                                                ),
-                                                                const SizedBox(width: 10),
-                                                                const Text(
+                                                                 Text(
                                                                   "Reminder",
                                                                   style: TextStyle(
+                                                                    color: ColorsContent.goalDetailsHeading,
                                                                     fontSize: 16,
-                                                                    fontWeight: FontWeight.w600,
+                                                                    fontWeight: FontWeight.w500,
                                                                     fontFamily: 'Poppins',
-                                                                    color: Colors.black,
-                                                                  ),
-                                                                ),
-                                                                const Text(
-                                                                  " : ",
-                                                                  style: TextStyle(
-                                                                    fontSize: 16,
-                                                                    fontWeight: FontWeight.w600,
-                                                                    fontFamily: 'Poppins',
-                                                                    color: Colors.black,
                                                                   ),
                                                                 ),
                                                               ],
                                                             ),
                                                           ),
-                                                          SvgPicture.asset(
-                                                            ImageConstant.reminderClock,
-
-                                                          ),
                                                         ],
                                                       ),
 
-                                                      const SizedBox(height: 10),
+                                                      const SizedBox(height: 2),
 
                                                       // Date row
                                                       Row(
@@ -585,9 +561,9 @@ class _ActionViewInParallelScreenState
                                                         children: [
                                                           const Text(
                                                             "Date  : ",
-                                                            style: TextStyle(
+                                                            style:  TextStyle(
                                                               fontSize: 16,
-                                                              fontWeight: FontWeight.w600,
+                                                              fontWeight: FontWeight.w400,
                                                               fontFamily: 'Poppins',
                                                               color: Colors.black,
                                                             ),
@@ -617,9 +593,9 @@ class _ActionViewInParallelScreenState
                                                         children: [
                                                           const Text(
                                                             "Time  : ",
-                                                            style: TextStyle(
+                                                            style:  TextStyle(
                                                               fontSize: 16,
-                                                              fontWeight: FontWeight.w600,
+                                                              fontWeight: FontWeight.w400,
                                                               fontFamily: 'Poppins',
                                                               color: Colors.black,
                                                             ),
@@ -649,9 +625,9 @@ class _ActionViewInParallelScreenState
                                                         children: [
                                                           const Text(
                                                             "Repeat: ",
-                                                            style: TextStyle(
+                                                            style:  TextStyle(
                                                               fontSize: 16,
-                                                              fontWeight: FontWeight.w600,
+                                                              fontWeight: FontWeight.w400,
                                                               fontFamily: 'Poppins',
                                                               color: Colors.black,
                                                             ),
@@ -1149,6 +1125,423 @@ class _ActionViewInParallelScreenState
               }
 
               // ❌ CASE 3: If both are empty → show nothing
+              else {
+                return const SizedBox.shrink();
+              }
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// Section Widget
+  Widget _buildUntitledGoal(
+      BuildContext context,
+      Size size, {
+        required String category,
+      }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.white, // Off-white background
+            borderRadius:
+            BorderRadius.circular(5),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                child: Text(
+                  "Goal",
+                  style: TextStyle(
+                    color: ColorsContent.goalDetailsHeading,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+              ),
+              Padding(
+                  padding:  const EdgeInsets.symmetric(horizontal: 2),
+                  child:Text(
+                    capitalizeFirstLetter(HtmlUnescape().convert(category)),
+                    //  textAlign: TextAlign.justify,
+                    style: TextStyle(
+                      height: 1.70,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Poppins',
+                      color: ColorsContent.blackThemeColor,
+                    ),
+                  )
+
+                // JustifiedText(
+                //   text:   capitalizeFirstLetter(HtmlUnescape().convert(title)),
+                //   style: TextStyle(
+                //     height: 1.70, // still useful for vertical rhythm
+                //     fontSize: 16,
+                //     fontWeight: FontWeight.w400,
+                //     fontFamily: 'Poppins',
+                //     color: ColorsContent.blackThemeColor,
+                //   ),
+                //   // optional: maxLines: 10,
+                // ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+
+  Widget _buildUntitledTitle(
+      BuildContext context,
+      Size size, {
+
+        required String title,
+
+      }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.white, // Off-white background
+            borderRadius:
+            BorderRadius.circular(5),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                child: Text(
+                  "Title",
+                  style: TextStyle(
+                    color: ColorsContent.goalDetailsHeading,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+              ),
+              Padding(
+                  padding:  const EdgeInsets.symmetric(horizontal: 2),
+                  child:Text(
+                    capitalizeFirstLetter(HtmlUnescape().convert(title)),
+                    //  textAlign: TextAlign.justify,
+                    style: TextStyle(
+                      height: 1.70,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Poppins',
+                      color: ColorsContent.blackThemeColor,
+                    ),
+                  )
+
+                // JustifiedText(
+                //   text:   capitalizeFirstLetter(HtmlUnescape().convert(title)),
+                //   style: TextStyle(
+                //     height: 1.70, // still useful for vertical rhythm
+                //     fontSize: 16,
+                //     fontWeight: FontWeight.w400,
+                //     fontFamily: 'Poppins',
+                //     color: ColorsContent.blackThemeColor,
+                //   ),
+                //   // optional: maxLines: 10,
+                // ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+
+  Widget _buildUntitledStatus(
+      BuildContext context,
+      Size size, {
+
+        required String status,
+
+      }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.white, // Off-white background
+            borderRadius:
+            BorderRadius.circular(5),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                child: Text(
+                  "Status",
+                  style: TextStyle(
+                    color: ColorsContent.goalDetailsHeading,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+              ),
+              SizedBox(
+                // color: Colors.blue,
+                width: size.width * 0.60,
+                child: Text(
+                  status == "0" ? "Active" : "DeActive",
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Poppins',
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+
+
+  Widget _buildUntitledDescription(
+      BuildContext context,
+      Size size, {
+        required String comments,
+
+        required String previewLinkApi,
+      }) {
+
+    final commentsText = (comments ?? "").trim();
+    final previewLink = previewLinkApi.trim();
+
+    // ❌ If BOTH comments & link are empty → return nothing
+    if (commentsText.isEmpty && previewLink.isEmpty) {
+      return const SizedBox.shrink();
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: Builder(
+            builder: (context) {
+              // final commentsText = (comments ?? "").trim();
+              // final previewLink = previewLinkApi;
+
+              // 🧠 CASE 1: If both text and link exist → show both
+              if (commentsText.isNotEmpty && previewLink.isNotEmpty) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          "Description",
+                          style: TextStyle(
+                            color: ColorsContent.goalDetailsHeading,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'Poppins',
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+
+                    // 📝 Description Text
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(horizontal: 0),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.vertical(
+                          bottom: Radius.circular(5),
+                        ),
+                      ),
+                      child: Text(
+                        capitalizeFirstLetter(
+                            HtmlUnescape().convert(commentsText)),
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Poppins',
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    // 🔗 Link Preview
+                    Padding(
+                      padding: EdgeInsets.only(top: comments.isNotEmpty ? 6.0 : 0.0),
+                      child: Container(
+                        height:300,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey.shade300,
+                            width: 1.2,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: LinkPreviewGenerator(
+                            link: previewLink,
+                            linkPreviewStyle: LinkPreviewStyle.large, // 👈 Forces column format
+                            showDomain: true,
+                            showBody: true,
+                            showTitle: true,
+                            bodyMaxLines: 3,
+                            borderRadius: 10,
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 4,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }
+
+              // 🧠 CASE 2: Only text exists
+              else if (commentsText.isNotEmpty) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          "Description",
+                          style: TextStyle(
+                            color: ColorsContent.goalDetailsHeading,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'Poppins',
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(horizontal: 0),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.vertical(
+                          bottom: Radius.circular(5),
+                        ),
+                      ),
+                      child: Text(
+                        capitalizeFirstLetter(
+                            HtmlUnescape().convert(commentsText)),
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Poppins',
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }
+
+              // 🔗 CASE 3: Only link exists
+              else if (previewLink.isNotEmpty) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Description",
+                          style: TextStyle(
+                            color: ColorsContent.goalDetailsHeading,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'Poppins',
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Padding(
+                      padding: EdgeInsets.only(),
+                      child: Container(
+                        height:300,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey.shade300,
+                            width: 1.2,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: LinkPreviewGenerator(
+                            link: previewLink,
+                            linkPreviewStyle: LinkPreviewStyle.large, // 👈 Forces column format
+                            showDomain: true,
+                            showBody: true,
+                            showTitle: true,
+                            bodyMaxLines: 3,
+                            borderRadius: 10,
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 4,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }
+
+              // ❌ CASE 4: Nothing to show
               else {
                 return const SizedBox.shrink();
               }
