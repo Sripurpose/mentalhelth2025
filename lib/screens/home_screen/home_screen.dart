@@ -327,7 +327,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void checkVersionUpdate() async {
     final String androidUpdateUrl = "https://play.google.com/store/apps/details?id=com.numuapp.numuapp";
-    final String iosUpdateUrl = "https://apps.apple.com/app/id6736739491"; // Replace with your iOS App Store link
+    final String iosUpdateUrl = "https://apps.apple.com/app/id6746407087"; // Replace with your iOS App Store link
     final prefs = await SharedPreferences.getInstance();
     final lastSkippedTimestamp = prefs.getInt('lastSkippedTimestamp');
     final currentTime = DateTime.now().millisecondsSinceEpoch;
