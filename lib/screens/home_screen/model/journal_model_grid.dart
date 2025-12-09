@@ -106,6 +106,7 @@ class JournalMedia {
   String? mediaType;
   String? gemMedia;
   String? videoThumb;
+  String? isChart;
 
   JournalMedia({
     this.mediaId,
@@ -113,6 +114,7 @@ class JournalMedia {
     this.mediaType,
     this.gemMedia,
     this.videoThumb,
+    this.isChart,
   });
 
   factory JournalMedia.fromJson(Map<String, dynamic> json) => JournalMedia(
@@ -121,6 +123,7 @@ class JournalMedia {
     mediaType: json["media_type"],
     gemMedia: json["gem_media"],
     videoThumb: json["video_thumb"],
+    isChart: json["is_chart"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -129,6 +132,7 @@ class JournalMedia {
     "media_type": mediaType,
     "gem_media": gemMedia,
     "video_thumb": videoThumb,
+    "is_chart": isChart,
   };
 }
 

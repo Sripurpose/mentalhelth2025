@@ -205,7 +205,7 @@ class _UserProfileListItemWidgetState extends State<UserProfileListItemWidget> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 0.0),
                   child: SizedBox(
-                    height: size.height * 0.38,
+                    height: size.height * 0.27,
                     child: Stack(
                       children: [
                         PageView.builder(
