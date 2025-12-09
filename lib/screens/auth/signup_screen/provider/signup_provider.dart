@@ -109,7 +109,7 @@ class SignUpProvider extends ChangeNotifier {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => const MaintenenceScreen(
-                title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+                title: "App is in maintenance mode, Please be patient, we'll be back in a couple of hours!",
                 message: "",
               ),
             ),

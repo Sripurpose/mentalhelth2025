@@ -377,7 +377,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => MaintenenceScreen(
-              title: "App is in maintainance mode, Please be patient, we'll be back in a couple of hours!",
+              title: "App is in maintenance mode, Please be patient, we'll be back in a couple of hours!",
               message: signInProvider.versionUpdateModel?.message ?? "",
             ),
           ),
