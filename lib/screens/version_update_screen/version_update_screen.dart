@@ -86,8 +86,8 @@ class _VersionUpdateCheckScreenState extends State<VersionUpdateCheckScreen> {
 
     // Check the platform and set the update URL accordingly
     Uri updateUrl = Platform.isAndroid
-        ? Uri.parse("https://play.google.com/store/apps/details?id=com.mentalhelth.mentalhelth")
-        : Uri.parse("https://apps.apple.com/app/id6736739491"); // Replace with your iOS App Store link
+        ? Uri.parse("https://play.google.com/store/apps/details?id=com.numuapp.numuapp")
+        : Uri.parse("https://apps.apple.com/app/id6746407087"); // Replace with your iOS App Store link
 
     // Launch the update URL in an in-app browser if it's not a "mental" URL
     try {
@@ -124,8 +124,8 @@ class _VersionUpdateCheckScreenState extends State<VersionUpdateCheckScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final String androidUpdateUrl = "https://play.google.com/store/apps/details?id=com.mentalhelth.mentalhelth";
-    final String iosUpdateUrl = "https://apps.apple.com/app/id6736739491"; // Replace with your iOS App Store link
+    const String androidUpdateUrl = "https://play.google.com/store/apps/details?id=com.numuapp.numuapp";
+    const String iosUpdateUrl = "https://apps.apple.com/app/id6746407087"; // Replace with your iOS App Store link
     final signInProvider = Provider.of<SignInProvider>(context, listen: false);
     var isRequiredValue =
         signInProvider.settingsRegisterModel?.settings?[0].isRequired;
