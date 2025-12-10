@@ -166,24 +166,10 @@ class ChartCircularWidgetState extends State<ChartCircularWidget> {
                 : Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SvgPicture.asset(ImageConstant.noDataNumu),
-                      const Text(
-                        "No chart found",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Poppins',
-                          color: Colors.black,
-                        ),
-                      ),
-                      const SizedBox(height: 5),
-                      const Text(
-                        "Check back later",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Poppins',
-                          color: Colors.black,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                        child: SvgPicture.asset(
+                          ImageConstant.noChartDataSvg,
                         ),
                       ),
                     ],
@@ -312,7 +298,12 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30.0),
-      child: provider.journalChartStatusCode != 404 ?
+      child:
+      provider.journalChartViewModelLoading
+          ? const Center(
+        child: SizedBox()
+      ):
+      provider.journalChartStatusCode != 404 ?
       Container(
         decoration: const BoxDecoration(
           color: Colors.white,
@@ -625,7 +616,6 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
           ],
         ),
       ):const SizedBox(),
-
     );
   }
 }

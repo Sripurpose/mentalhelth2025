@@ -110,6 +110,7 @@ class ImageConstant {
   static String imgGroup193 = '$imagePath/img_group_193.png';
 
   static String imgTelevision = '$imagePath/common_back_svg.svg';
+  static String noChartDataSvg = '$imagePath/no_chart_found.svg';
 
   static String imgHome = '$imagePath/home_in_active_icon_numu.svg';
   static String homeInactive = '$imagePath/home_inactive.svg';
