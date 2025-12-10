@@ -155,7 +155,7 @@ class DeepLinkHandler {
             );
           } else {
             debugPrint("🚫 Not allowed → Navigating to NewSplashScreen");
-            nextScreen = const LandingRegisterScreenScreen();
+            nextScreen = const SplashScreen();
             showToast(
               context: ctx,
               message: "Login required. Please Login!",

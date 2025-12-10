@@ -54,8 +54,8 @@ Widget backGroundImagerViewJournal({
       width: double.maxFinite,
       padding: padding ??
           EdgeInsets.only(
-            left: size.width * 0.05,
-            right: size.width * 0.05,
+            left: size.width * 0.04,
+            right: size.width * 0.04,
           ),
       child: child,
     ),
