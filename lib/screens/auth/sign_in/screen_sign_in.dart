@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:logger/logger.dart';
+import 'package:mentalhelth/screens/auth/sign_in/landing_register_screen.dart';
 import 'package:mentalhelth/screens/auth/sign_in/provider/sign_in_provider.dart';
 import 'package:mentalhelth/screens/auth/sign_in/widget/sign_in_widget.dart';
 import 'package:mentalhelth/screens/edit_add_profile_screen/provider/edit_provider.dart';
@@ -157,7 +158,10 @@ class _ScreenSignInState extends State<ScreenSignIn> {
             child: Center(
               child:  GestureDetector(
                 onTap: (){
-                  Navigator.of(context).pop();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const LandingRegisterScreenScreen()),
+                  );
                 },
                 child: CustomImageView(
                   imagePath: ImageConstant.allBackIcon,
@@ -174,7 +178,10 @@ class _ScreenSignInState extends State<ScreenSignIn> {
             child: Center(
               child:  GestureDetector(
                 onTap: (){
-                  Navigator.of(context).pop();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const LandingRegisterScreenScreen()),
+                  );
                 },
                 child: CustomImageView(
                   imagePath: ImageConstant.allBackIcon,
