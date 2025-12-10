@@ -44,6 +44,7 @@ class _LandingRegisterScreenScreenState
 
     scheduleMicrotask(() async {
       final deviceType = Platform.isAndroid ? 'android' : 'ios';
+      signInProvider.fetchAppRegister(context,deviceType: deviceType);
       if (signInProvider.statusAppSetup == 503) {
         logger.w("App in maintenance: ${signInProvider.statusAppSetup}");
         Navigator.of(context).push(
