@@ -17,6 +17,7 @@ import '../../../widgets/video_player.dart';
 import 'package:mentalhelth/screens/mental_strength_add_edit_screen/model/list_goal_actions.dart'
 as action;
 
+import '../../../widgets/widget/justifiedText.dart';
 import '../../edit_add_profile_screen/provider/edit_provider.dart';
 import '../../journal_list_screen/provider/journal_list_provider.dart';
 import '../../journal_list_screen/screens/edit_journal/numu_edit_journal_screen.dart';
@@ -642,20 +643,32 @@ class _ExpandableDescriptionState extends State<ExpandableDescription> {
       children: [
         Padding(
           padding: const EdgeInsets.only(top: 5),
-          child: Text(
-            textAlign: TextAlign.justify,
-            capitalizeFirstLetter(
-              HtmlUnescape().convert(
-                  displayText
-              ),
-            ),
+          child:
+          JustifiedText(
+            text: HtmlUnescape().convert(displayText),
             style: TextStyle(
-              fontSize: 14,
-              fontFamily: 'Poppins',
+              fontSize: 16,
+              height: 1.70, // still useful for vertical rhythm
               fontWeight: FontWeight.w400,
-              color: ColorsContent.blackText,
+              fontFamily: 'Poppins',
+              color: ColorsContent.goalCompletedTextColor,
             ),
-          ),
+            // optional: maxLines: 10,
+          )
+          // Text(
+          //   textAlign: TextAlign.justify,
+          //   capitalizeFirstLetter(
+          //     HtmlUnescape().convert(
+          //         displayText
+          //     ),
+          //   ),
+          //   style: TextStyle(
+          //     fontSize: 14,
+          //     fontFamily: 'Poppins',
+          //     fontWeight: FontWeight.w400,
+          //     color: ColorsContent.blackText,
+          //   ),
+          // ),
         ),
         if (isLongText)
           GestureDetector(
