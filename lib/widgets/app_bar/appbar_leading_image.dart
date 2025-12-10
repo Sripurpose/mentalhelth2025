@@ -111,6 +111,67 @@ PreferredSizeWidget buildAppBar(BuildContext context, Size size,
   );
 }
 
+PreferredSizeWidget buildAppBarFeedback(BuildContext context, Size size,
+    {String? heading, Function? onTap, bool isSigned = true}) {
+  return CustomAppBarFeedback(
+    backgroundColor:ColorsContent.homeBackGroundColor, // Set your desired background color here,
+    leadingWidth: 36,
+    leading:
+    Consumer<DashBoardProvider>(builder: (context, dashBoardProvider, _) {
+      return AppbarLeadingImage(
+        onTap: onTap ??
+                () {
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (context) => const DashBoardScreen(),
+                ),
+                    (route) => false,
+              );
+              dashBoardProvider.changeCommentPage(
+                index: 0,
+              );
+            },
+        imagePath: ImageConstant.imgTelevision,
+        margin: const EdgeInsets.only(
+          left: 21,
+          top: 18,
+          bottom: 20,
+        ),
+      );
+    }),
+    title: AppbarSubtitle(
+      text: heading ?? "My profile",
+      margin: const EdgeInsets.only(
+        left: 11,
+      ),
+    ),
+    actions: [
+      !isSigned
+          ? const SizedBox()
+          : GestureDetector(
+        onTap: () {
+          if (isSigned) {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) =>
+                  buildPopupDialog(context, size),
+            );
+          } else {}
+        },
+        child: Padding(
+          padding: EdgeInsets.only(
+            right: size.width * 0.07,
+          ),
+          child:
+          SvgPicture.asset(
+            ImageConstant.menuBarSvg,
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
 PreferredSizeWidget buildAppBarNumu(BuildContext context, Size size,
     {String? heading, Function? onTap, bool isSigned = true}) {
   return CustomAppBarNumu(

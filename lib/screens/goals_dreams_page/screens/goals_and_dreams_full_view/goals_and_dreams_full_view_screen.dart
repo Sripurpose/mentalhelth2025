@@ -720,7 +720,7 @@ class _GoalAndDreamFullViewScreenState
                                             height: widget.goalsanddream.action!
                                                     .length *
                                                 size.height *
-                                                0.065,
+                                                0.06,
                                             child: ListView.builder(
                                               //  physics: const NeverScrollableScrollPhysics(),
                                               itemCount: widget

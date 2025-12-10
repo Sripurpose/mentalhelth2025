@@ -425,7 +425,10 @@ class _UserProfileListItemWidgetState extends State<UserProfileListItemWidget> {
                     i < homeProvider.journalDetails!.journals!.journalMedia!.length;
                     i++) {
                       if (homeProvider.journalDetails!.journals!
-                          .journalMedia![i].mediaType == 'image') {
+                          .journalMedia![i].mediaType == 'image' &&
+                          homeProvider.journalDetails?.journals!
+                              .journalMedia![i].is_chart !=
+                              '1') {
                         mentalStrengthEditProvider.alreadyPickedImages.add(
                           AllModel(
                             id: homeProvider.journalDetails!.journals!

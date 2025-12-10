@@ -173,7 +173,9 @@ class UserProfileList1ItemWidget extends StatelessWidget {
                                 i++) {
                               if (homeProvider.journalDetails!.journals!
                                       .journalMedia![i].mediaType ==
-                                  'image') {
+                                  'image' && homeProvider.journalDetails?.journals!
+                                  .journalMedia![i].is_chart !=
+                              '1') {
                                 mentalStrengthEditProvider.alreadyPickedImages.add(
                                   AllModel(
                                     id: homeProvider.journalDetails!.journals!

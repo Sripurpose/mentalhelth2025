@@ -30,9 +30,9 @@ class FeedbackScreen extends StatelessWidget {
       child: SafeArea(
         child: Scaffold(
           extendBody: true,
-          extendBodyBehindAppBar: true,
+        //  extendBodyBehindAppBar: true,
           resizeToAvoidBottomInset: false,
-          appBar: buildAppBar(
+          appBar: buildAppBarFeedback(
             context,
             size,
             heading: "Feedback",
@@ -49,7 +49,7 @@ class FeedbackScreen extends StatelessWidget {
                   width: double.maxFinite,
                   padding: const EdgeInsets.only(
                     left: 28,
-                    top: 80,
+                    top: 50,
                     right: 28,
                   ),
                   child: Column(
@@ -109,7 +109,7 @@ class FeedbackScreen extends StatelessWidget {
                       _buildMessageEditText(context),
                       const SizedBox(height: 40),
                       _buildSubmitButton(context),
-                      const SizedBox(height: 5),
+                      const SizedBox(height: 20),
                     ],
                   ),
                 ),
