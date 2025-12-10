@@ -58,7 +58,7 @@ Future<void> removeUserDetailsSharePref({required BuildContext context}) async {
   // ignore: use_build_context_synchronously
   Navigator.of(context).pushAndRemoveUntil(
     MaterialPageRoute(
-      builder: (context) => const ScreenSignIn(),
+      builder: (context) => const LandingRegisterScreenScreen(),
     ),
     (route) => false,
   );
