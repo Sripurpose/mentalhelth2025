@@ -644,8 +644,8 @@ class _ExpandableDescriptionState extends State<ExpandableDescription> {
         Padding(
           padding: const EdgeInsets.only(top: 5),
           child:
-          JustifiedText(
-            text: HtmlUnescape().convert(displayText),
+          Text(
+          HtmlUnescape().convert(displayText),
             style: TextStyle(
               fontSize: 16,
               height: 1.70, // still useful for vertical rhythm

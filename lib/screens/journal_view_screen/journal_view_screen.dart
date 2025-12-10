@@ -280,7 +280,18 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                             children: [
                                               // 🧠 Show description text (if available)
                                               if (hasDesc)
-                                                Platform.isAndroid?
+                                                //Platform.isAndroid?
+                                                Text(
+                                                  HtmlUnescape().convert(journalDesc),
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    height: 1.70, // vertical rhythm
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily: 'Poppins',
+                                                    color: ColorsContent.goalCompletedTextColor,
+                                                  ),
+                                                  // optional: maxLines: 10,
+                                                ),
                                                 // JustifiedText(
                                                 //   text: HtmlUnescape().convert(journalDesc),
                                                 //   style: TextStyle(
@@ -293,35 +304,35 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
                                                 //   // optional: maxLines: 10,
                                                 // )
 
-                                                SingleChildScrollView(
-                                          scrollDirection: Axis.horizontal,
-                                          child: JustifiedText(
-                                            text: HtmlUnescape().convert(journalDesc),
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              height: 1.70, // vertical rhythm
-                                              fontWeight: FontWeight.w400,
-                                              fontFamily: 'Poppins',
-                                              color: ColorsContent.goalCompletedTextColor,
-                                            ),
-                                            // optional: maxLines: 10,
-                                          ),
-                                          )
-                                                    :
-                                                SingleChildScrollView(
-                                                  scrollDirection: Axis.horizontal,
-                                                  child: JustifiedText(
-                                                    text: HtmlUnescape().convert(journalDesc),
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      height: 1.70, // vertical rhythm
-                                                      fontWeight: FontWeight.w400,
-                                                      fontFamily: 'Poppins',
-                                                      color: ColorsContent.goalCompletedTextColor,
-                                                    ),
-                                                    // optional: maxLines: 10,
-                                                  ),
-                                                ),
+                                          //       SingleChildScrollView(
+                                          // scrollDirection: Axis.horizontal,
+                                          // child: JustifiedText(
+                                          //   text: HtmlUnescape().convert(journalDesc),
+                                          //   style: TextStyle(
+                                          //     fontSize: 16,
+                                          //     height: 1.70, // vertical rhythm
+                                          //     fontWeight: FontWeight.w400,
+                                          //     fontFamily: 'Poppins',
+                                          //     color: ColorsContent.goalCompletedTextColor,
+                                          //   ),
+                                          //   // optional: maxLines: 10,
+                                          // ),
+                                          // )
+                                          //           :
+                                          //       SingleChildScrollView(
+                                          //         scrollDirection: Axis.horizontal,
+                                          //         child: JustifiedText(
+                                          //           text: HtmlUnescape().convert(journalDesc),
+                                          //           style: TextStyle(
+                                          //             fontSize: 16,
+                                          //             height: 1.70, // vertical rhythm
+                                          //             fontWeight: FontWeight.w400,
+                                          //             fontFamily: 'Poppins',
+                                          //             color: ColorsContent.goalCompletedTextColor,
+                                          //           ),
+                                          //           // optional: maxLines: 10,
+                                          //         ),
+                                          //       ),
 
 
                                               // 🔗 Show preview link (if available)
