@@ -864,9 +864,7 @@ class _EditReminderScreenScreenScreenState
               customPopup(
                 context: context,
                 onPressedDelete: () async {
-                  if (homeProvider.titleEditTextController.text.isNotEmpty &&
-                      homeProvider
-                          .descriptionEditTextController.text.isNotEmpty) {
+                  if (homeProvider.titleEditTextController.text.isNotEmpty) {
                     await homeProvider.editReminderFunction(
                         context,
                         title: homeProvider.titleEditTextController.text,
