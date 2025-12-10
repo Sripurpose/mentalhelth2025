@@ -223,6 +223,8 @@ class _ReminderPushViewScreenState extends State<ReminderPushViewScreen> {
                                                             fontFamily: 'Poppins',
                                                             color: Colors.black,
                                                           ),
+                                                          softWrap: true, // allows text to wrap to next line
+                                                          overflow: TextOverflow.visible, // ensures no ellipsis
                                                         ),
                                                       ],
                                                     ),
@@ -267,6 +269,8 @@ class _ReminderPushViewScreenState extends State<ReminderPushViewScreen> {
                                                             fontFamily: 'Poppins',
                                                             color: Colors.black,
                                                           ),
+                                                          softWrap: true, // allows text to wrap to next line
+                                                          overflow: TextOverflow.visible, // ensures no ellipsis
                                                         ),
                                                       ],
                                                     ),
@@ -311,6 +315,8 @@ class _ReminderPushViewScreenState extends State<ReminderPushViewScreen> {
                                                             fontFamily: 'Poppins',
                                                             color: Colors.black,
                                                           ),
+                                                          softWrap: true, // allows text to wrap to next line
+                                                          overflow: TextOverflow.visible, // ensures no ellipsis
                                                         ),
                                                       ],
                                                     ),
