@@ -104,13 +104,13 @@ class DeepLinkHandler {
     }
 
     debugPrint('✅ Navigating with pending deep link');
-    _performNavigation(ctx, pendingUrl, pendingText, pendingImages);
+    Platform.isAndroid ? _performNavigationAndroid(ctx, pendingUrl, pendingText, pendingImages) : _performNavigationIOS(ctx, pendingUrl, pendingText, pendingImages);
     hasPendingNavigation = false;
   }
 
 // ===== Updated DeepLinkHandler._performNavigation =====
 // Replace the _performNavigation method in DeepLinkHandler class:
-  void _performNavigation(
+  void _performNavigationIOS(
       BuildContext ctx,
       String? url,
       String? text,
@@ -194,6 +194,83 @@ class DeepLinkHandler {
       _isNavigating = false;
     }
   }
+
+  void _performNavigationAndroid(
+      BuildContext ctx,
+      String? url,
+      String? text,
+      List<String>? images,
+      ) async {
+
+    if (_isNavigating) {
+      debugPrint('⚠️ Navigation already in progress');
+      return;
+    }
+
+    try {
+      _isNavigating = true;
+      debugPrint('🚀 Starting navigation...');
+
+      final delay = Platform.isAndroid ? 1000 : 500;
+
+      Future.delayed(Duration(milliseconds: delay), () async {
+        try {
+          // 🔥 Get subscription value
+          final getSubScribed = await getUserSubScribeSharePref();
+          debugPrint("🔎 Subscription value = $getSubScribed");
+
+          final navigator = Navigator.of(ctx);
+
+          // 🔥 Condition Check
+          final bool allowAddGoalsScreen =
+              getSubScribed.toString() == "1" || getSubScribed.toString() == "0";
+
+          Widget nextScreen;
+
+          if (allowAddGoalsScreen) {
+            debugPrint("👍 Allowed → Navigating to AddGoalsLinkParScreen");
+            nextScreen = AddGoalsLinkParScreen(
+              sharedUrl: url,
+              sharedText: text,
+              sharedImages: images,
+              onClose: () {
+                debugPrint('❌ AddGoalsLinkParScreen onClose called');
+                _isNavigating = false;
+              },
+            );
+          } else {
+            debugPrint("🚫 Not allowed → Navigating to NewSplashScreen");
+            nextScreen = const SplashScreen();
+            showToast(
+              context: ctx,
+              message: "Login required. Please Login!",
+            );
+          }
+
+          final route = MaterialPageRoute(
+            builder: (_) => nextScreen,
+          );
+
+          navigator.push(route).then((result) {
+            debugPrint('✅ Navigation completed: $result');
+            _isNavigating = false;
+          }).catchError((e) {
+            debugPrint('❌ Navigation error: $e');
+            _isNavigating = false;
+          });
+
+        } catch (e) {
+          debugPrint('❌ Navigation error inside delayed: $e\n${StackTrace.current}');
+          _isNavigating = false;
+        }
+      });
+
+    } catch (e) {
+      debugPrint('❌ Error in _performNavigation: $e\n${StackTrace.current}');
+      _isNavigating = false;
+    }
+  }
+
 
 
   void resetNavigation() {
