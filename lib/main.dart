@@ -115,7 +115,8 @@ class DeepLinkHandler {
       String? url,
       String? text,
       List<String>? images,
-      ) async {
+      )
+  async {
 
     if (_isNavigating) {
       debugPrint('⚠️ Navigation already in progress');
@@ -140,39 +141,47 @@ class DeepLinkHandler {
           final bool allowAddGoalsScreen =
               getSubScribed.toString() == "1" || getSubScribed.toString() == "0";
 
-          Widget nextScreen;
-
           if (allowAddGoalsScreen) {
             debugPrint("👍 Allowed → Navigating to AddGoalsLinkParScreen");
-            nextScreen = AddGoalsLinkParScreen(
-              sharedUrl: url,
-              sharedText: text,
-              sharedImages: images,
-              onClose: () {
-                debugPrint('❌ AddGoalsLinkParScreen onClose called');
-                _isNavigating = false;
-              },
+
+            final route = MaterialPageRoute(
+              builder: (_) => AddGoalsLinkParScreen(
+                sharedUrl: url,
+                sharedText: text,
+                sharedImages: images,
+                onClose: () {
+                  debugPrint('❌ AddGoalsLinkParScreen onClose called');
+                  _isNavigating = false;
+                },
+              ),
             );
+
+            navigator.push(route).then((result) {
+              debugPrint('✅ Navigation completed: $result');
+              _isNavigating = false;
+            }).catchError((e) {
+              debugPrint('❌ Navigation error: $e');
+              _isNavigating = false;
+            });
+
           } else {
-            debugPrint("🚫 Not allowed → Navigating to NewSplashScreen");
-            nextScreen = const SplashScreen();
+            debugPrint("🚫 Not allowed → User not logged in");
+
             showToast(
               context: ctx,
               message: "Login required. Please Login!",
             );
+
+            // Just reset the flag and let the app continue its normal flow
+            // The SplashScreen/initialization will handle navigation properly
+            _isNavigating = false;
+
+            // Optional: If you want to navigate to login screen specifically
+            // navigator.pushAndRemoveUntil(
+            //   MaterialPageRoute(builder: (_) => const ScreenSignIn()),
+            //   (route) => false,
+            // );
           }
-
-          final route = MaterialPageRoute(
-            builder: (_) => nextScreen,
-          );
-
-          navigator.push(route).then((result) {
-            debugPrint('✅ Navigation completed: $result');
-            _isNavigating = false;
-          }).catchError((e) {
-            debugPrint('❌ Navigation error: $e');
-            _isNavigating = false;
-          });
 
         } catch (e) {
           debugPrint('❌ Navigation error inside delayed: $e\n${StackTrace.current}');
