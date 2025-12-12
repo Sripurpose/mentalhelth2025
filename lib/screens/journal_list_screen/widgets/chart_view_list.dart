@@ -301,9 +301,9 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
           ? const Center(child: SizedBox())
           : provider.journalChartStatusCode != 404
               ? Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
+                  decoration:  BoxDecoration(
+                    color: ColorsContent.homeBackGroundColor,
+                    borderRadius: const BorderRadius.only(
                       bottomRight: Radius.circular(8),
                       bottomLeft: Radius.circular(8),
                     ),
@@ -312,9 +312,9 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                     children: [
                       for (final section in sections)
                         Container(
-                          margin: const EdgeInsets.symmetric(vertical: 1),
+                          margin: const EdgeInsets.symmetric(vertical: 0),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: ColorsContent.homeBackGroundColor,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Theme(
@@ -443,7 +443,7 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                       // Supporting Emotions (same logic)
                       // -----------------------------
                       Container(
-                        margin: const EdgeInsets.symmetric(vertical: 20),
+                        margin: const EdgeInsets.symmetric(vertical: 10),
                         decoration: BoxDecoration(
                           color: ColorsContent.mySupportingEmotionsColor,
                           borderRadius: BorderRadius.circular(0),
@@ -455,7 +455,7 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                           ),
                           child: ExpansionTile(
                             tilePadding:
-                                const EdgeInsets.symmetric(horizontal: 16,vertical: 3),
+                                const EdgeInsets.symmetric(horizontal: 16,vertical: 1),
                             childrenPadding: EdgeInsets.zero,
                             visualDensity: const VisualDensity(
                                 horizontal: -4, vertical: -4),
@@ -465,7 +465,7 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                               expandedKey == "supporting"
                                   ? Icons.arrow_drop_up
                                   : Icons.arrow_drop_down,
-                              color: ColorsContent.newThemeColor,
+                              color: ColorsContent.whiteText,
                               size: 28,
                             ),
                             initiallyExpanded: expandedKey == "supporting",
@@ -479,7 +479,7 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                                 Text(
                                   'My Supporting Emotions  ',
                                   style: TextStyle(
-                                    color: ColorsContent.newThemeColor,
+                                    color:ColorsContent.whiteText,
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'Poppins',
                                   ),
@@ -488,7 +488,7 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     border: Border.all(
-                                      color: ColorsContent.newThemeColor,
+                                      color: ColorsContent.whiteText,
                                       width: 1.5,
                                     ),
                                   ),
@@ -496,7 +496,7 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
                                   child: Text(
                                     '?',
                                     style: TextStyle(
-                                      color: ColorsContent.newThemeColor,
+                                      color: ColorsContent.whiteText,
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'Poppins',
                                       fontSize: 12,

@@ -61,6 +61,6 @@ class ColorsContent {
   static Color destructiveNewColor = const Color(0xFFFE5758);
   static Color stressfulNewColor = const Color(0xFFFFAB51);
   static Color passiveNewColor = const Color(0xFF698AF7);
-  static Color mySupportingEmotionsColor = const Color(0xFFF5F5F5);
+  static Color mySupportingEmotionsColor = const Color(0xFF42964C);
 
 }
