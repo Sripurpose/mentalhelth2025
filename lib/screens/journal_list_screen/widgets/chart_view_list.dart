@@ -150,8 +150,7 @@ class ChartCircularWidgetState extends State<ChartCircularWidget> {
 
                           // ✅ LEGEND BELOW CHART
                           Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 50),
+                            padding: const EdgeInsets.symmetric(horizontal: 50),
                             child: CustomLegend(
                               data: data,
                               colorMap: colorMap,
@@ -298,324 +297,263 @@ class _EmotionBreakdownListState extends State<EmotionBreakdownList> {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30.0),
-      child:
-      provider.journalChartViewModelLoading
-          ? const Center(
-        child: SizedBox()
-      ):
-      provider.journalChartStatusCode != 404 ?
-      Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            bottomRight: Radius.circular(8),
-            bottomLeft: Radius.circular(8),
-          ),
-        ),
-        child: Column(
-          children: [
-            for (final section in sections)
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 2),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: section['color'] as Color, // KEEP ORIGINAL COLOR
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          color: section['title'] == "Optimal"
-                              ? ColorsContent.optimalNewColor
-                              : section['title'] == "Passive"
-                                  ? ColorsContent.passiveNewColor
-                                  : section['title'] == "Stressful"
-                                      ? ColorsContent.stressfulNewColor
-                                      : section['title'] == "Destructive"
-                                          ? ColorsContent.destructiveNewColor
-                                          : ColorsContent.newThemeColor,
-                          // KEEP ORIGINAL COLOR
-                          width: 1.0,
-                        ),
-                      ),
+      child: provider.journalChartViewModelLoading
+          ? const Center(child: SizedBox())
+          : provider.journalChartStatusCode != 404
+              ? Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(8),
+                      bottomLeft: Radius.circular(8),
                     ),
-                    child: ExpansionTile(
-                      tilePadding: const EdgeInsets.symmetric(horizontal: 16),
-                      childrenPadding: const EdgeInsets.only(left: 0, right: 0),
-                      initiallyExpanded: expandedKey == section['key'],
-                      // ⭐ CUSTOM DROPDOWN ICON
-                      trailing: Icon(
-                        expandedKey == section['key']
-                            ? Icons.arrow_drop_up // when expanded
-                            : Icons.arrow_drop_down, // when collapsed
-                        color: section['title'] == "Optimal"
-                            ? ColorsContent.optimalNewColor
-                            : section['title'] == "Passive"
-                                ? ColorsContent.passiveNewColor
-                                : section['title'] == "Stressful"
-                                    ? ColorsContent.stressfulNewColor
-                                    : section['title'] == "Destructive"
-                                        ? ColorsContent.destructiveNewColor
-                                        : ColorsContent.newThemeColor,
-                        size: 28,
-                      ),
-                      onExpansionChanged: (isExpanded) {
-                        setState(() {
-                          expandedKey =
-                              isExpanded ? section['key'] as String : null;
-                        });
-                      },
-                      title: Text(
-                        '${section['title']} (${section['count']}) ${(section['percent'] as num).toStringAsFixed(1)}%',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.bold,
-                          color: section['title'] == "Optimal"
-                              ? ColorsContent.optimalNewColor
-                              : section['title'] == "Passive"
-                                  ? ColorsContent.passiveNewColor
-                                  : section['title'] == "Stressful"
-                                      ? ColorsContent.stressfulNewColor
-                                      : section['title'] == "Destructive"
-                                          ? ColorsContent.destructiveNewColor
-                                          : ColorsContent
-                                              .newThemeColor, // default
-                        ),
-                      ),
-
-                      children: [
+                  ),
+                  child: Column(
+                    children: [
+                      for (final section in sections)
                         Container(
-                          width: double.infinity,
-                          color: Colors.white, // EXPANDED PORTION COLOR
-                          child: Column(
-                            children: (() {
-                              final data = section['data'];
-                              if (data == null) return <Widget>[];
+                          margin: const EdgeInsets.symmetric(vertical: 1),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Theme(
+                            data: Theme.of(context).copyWith(
+                              dividerColor: Colors
+                                  .transparent, // 🚫 Remove unwanted borders
+                            ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: section['color'] as Color,
+                              ),
+                              child: ExpansionTile(
+                                tilePadding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 5),
+                                childrenPadding: EdgeInsets.zero,
+                                visualDensity: const VisualDensity(
+                                    horizontal: -4, vertical: -4),
+                                initiallyExpanded:
+                                    expandedKey == section['key'],
+                                trailing: Icon(
+                                  expandedKey == section['key']
+                                      ? Icons.arrow_drop_up
+                                      : Icons.arrow_drop_down,
+                                  color: section['title'] == "Optimal"
+                                      ? ColorsContent.optimalNewColor
+                                      : section['title'] == "Passive"
+                                          ? ColorsContent.passiveNewColor
+                                          : section['title'] == "Stressful"
+                                              ? ColorsContent.stressfulNewColor
+                                              : section['title'] ==
+                                                      "Destructive"
+                                                  ? ColorsContent
+                                                      .destructiveNewColor
+                                                  : ColorsContent.newThemeColor,
+                                  size: 28,
+                                ),
+                                onExpansionChanged: (isExpanded) {
+                                  setState(() {
+                                    expandedKey = isExpanded
+                                        ? section['key'] as String
+                                        : null;
+                                  });
+                                },
+                                title: Text(
+                                  '${section['title']} (${section['count']}) ${(section['percent'] as num).toStringAsFixed(1)}%',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.bold,
+                                    color: section['title'] == "Optimal"
+                                        ? ColorsContent.optimalNewColor
+                                        : section['title'] == "Passive"
+                                            ? ColorsContent.passiveNewColor
+                                            : section['title'] == "Stressful"
+                                                ? ColorsContent
+                                                    .stressfulNewColor
+                                                : section['title'] ==
+                                                        "Destructive"
+                                                    ? ColorsContent
+                                                        .destructiveNewColor
+                                                    : ColorsContent
+                                                        .newThemeColor,
+                                  ),
+                                ),
+                                children: [
+                                  Container(
+                                    width: double.infinity,
+                                    color: Colors.white,
+                                    child: Column(
+                                      children: (() {
+                                        final data = section['data'];
+                                        if (data == null) return <Widget>[];
 
-                              final emotions = (data as dynamic).emotions
-                                      as List<dynamic>? ??
-                                  [];
+                                        final emotions = (data as dynamic)
+                                                .emotions as List<dynamic>? ??
+                                            [];
 
-                              final children = <Widget>[];
+                                        final children = <Widget>[];
 
-                              for (int i = 0; i < emotions.length; i++) {
-                                final e = emotions[i];
-                                final emotionTitle =
-                                    (e as dynamic).emotionTitle?.toString() ??
-                                        '';
+                                        for (int i = 0;
+                                            i < emotions.length;
+                                            i++) {
+                                          final e = emotions[i];
+                                          final emotionTitle = (e as dynamic)
+                                                  .emotionTitle
+                                                  ?.toString() ??
+                                              '';
 
-                                children.add(
-                                  ListTile(
-                                    dense: true,
-                                    title: Text(
-                                      emotionTitle.toUpperCase(),
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        color: ColorsContent.greyText,
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w400,
-                                      ),
+                                          children.add(
+                                            ListTile(
+                                              dense: true,
+                                              title: Text(
+                                                emotionTitle.toUpperCase(),
+                                                style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: ColorsContent.greyText,
+                                                  fontFamily: 'Poppins',
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+
+                                          if (i < emotions.length - 1) {
+                                            children.add(
+                                              Divider(
+                                                color: ColorsContent
+                                                    .expandedBorderColor,
+                                                thickness: 1.0,
+                                                height: 0,
+                                              ),
+                                            );
+                                          }
+                                        }
+
+                                        return children;
+                                      })(),
                                     ),
                                   ),
-                                );
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
 
-                                if (i < emotions.length - 1) {
-                                  children.add(
-                                    Divider(
-                                      color: ColorsContent.expandedBorderColor,
-                                      thickness: 1.0,
-                                      height: 0,
+                      // -----------------------------
+                      // Supporting Emotions (same logic)
+                      // -----------------------------
+                      Container(
+                        margin: const EdgeInsets.symmetric(vertical: 20),
+                        decoration: BoxDecoration(
+                          color: ColorsContent.mySupportingEmotionsColor,
+                          borderRadius: BorderRadius.circular(0),
+                        ),
+                        child: Theme(
+                          data: Theme.of(context).copyWith(
+                            dividerColor: Colors
+                                .transparent, // 🚫 Remove unwanted borders
+                          ),
+                          child: ExpansionTile(
+                            tilePadding:
+                                const EdgeInsets.symmetric(horizontal: 16,vertical: 3),
+                            childrenPadding: EdgeInsets.zero,
+                            visualDensity: const VisualDensity(
+                                horizontal: -4, vertical: -4),
+                            iconColor: Colors.white,
+                            collapsedIconColor: Colors.white,
+                            trailing: Icon(
+                              expandedKey == "supporting"
+                                  ? Icons.arrow_drop_up
+                                  : Icons.arrow_drop_down,
+                              color: ColorsContent.newThemeColor,
+                              size: 28,
+                            ),
+                            initiallyExpanded: expandedKey == "supporting",
+                            onExpansionChanged: (isExpanded) {
+                              setState(() {
+                                expandedKey = isExpanded ? "supporting" : null;
+                              });
+                            },
+                            title: Row(
+                              children: [
+                                Text(
+                                  'My Supporting Emotions  ',
+                                  style: TextStyle(
+                                    color: ColorsContent.newThemeColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: ColorsContent.newThemeColor,
+                                      width: 1.5,
                                     ),
-                                  );
-                                }
-                              }
-
-                              return children;
-                            })(),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-
-            // -----------------------------
-            // Supporting Emotions (same logic)
-            // -----------------------------
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 20),
-              decoration: BoxDecoration(
-                color: ColorsContent.mySupportingEmotionsColor,
-                borderRadius: BorderRadius.circular(0),
-              ),
-              child: ExpansionTile(
-                iconColor: Colors.white,
-                collapsedIconColor: Colors.white,
-
-                // ⭐ CUSTOM WHITE ICON (DROP DOWN / UP)
-                trailing: Icon(
-                  expandedKey == "supporting"
-                      ? Icons.arrow_drop_up // when expanded
-                      : Icons.arrow_drop_down, // when collapsed
-                  color: ColorsContent.newThemeColor,
-                  size: 28,
-                ),
-
-                initiallyExpanded: expandedKey == "supporting",
-                onExpansionChanged: (isExpanded) {
-                  setState(() {
-                    expandedKey = isExpanded ? "supporting" : null;
-                  });
-                },
-
-                title: Row(
-                  children: [
-                    Text(
-                      'My Supporting Emotions  ',
-                      style: TextStyle(
-                        color: ColorsContent.newThemeColor,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Poppins',
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: ColorsContent.newThemeColor,
-                          width: 1.5,
-                        ),
-                      ),
-                      padding: const EdgeInsets.all(4),
-                      child: Text(
-                        '?',
-                        style: TextStyle(
-                          color: ColorsContent.newThemeColor,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Poppins',
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-
-                children: [
-                  Container(
-                    color: Colors.white,
-                    child: Column(
-                      children: [
-                        for (int i = 0; i < support.length; i++) ...[
-                          Container(
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                  color: ColorsContent.expandedBorderColor,
-                                  width: 0.5,
+                                  ),
+                                  padding: const EdgeInsets.all(4),
+                                  child: Text(
+                                    '?',
+                                    style: TextStyle(
+                                      color: ColorsContent.newThemeColor,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins',
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            children: [
+                              Container(
+                                color: Colors.white,
+                                child: Column(
+                                  children: [
+                                    for (int i = 0;
+                                        i < support.length;
+                                        i++) ...[
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          border: Border(
+                                            bottom: BorderSide(
+                                              color: ColorsContent
+                                                  .expandedBorderColor,
+                                              width: 0.5,
+                                            ),
+                                          ),
+                                        ),
+                                        child: ListTile(
+                                          dense: true,
+                                          title: Text(
+                                            (support[i].emotionTitle ?? '')
+                                                .toString()
+                                                .toUpperCase(),
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.black54,
+                                              fontFamily: 'Poppins',
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ],
                                 ),
                               ),
-                            ),
-                            child: ListTile(
-                              dense: true,
-                              title: Text(
-                                (support[i].emotionTitle ?? '')
-                                    .toString()
-                                    .toUpperCase(),
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.black54,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                              // trailing: GestureDetector(
-                              //   onTap: () {
-                              //     final emotionId =
-                              //         (support[i].emotionId ?? '').toString();
-                              //
-                              //     customPopup(
-                              //       context: context,
-                              //       onPressedDelete: () async {
-                              //         showDialog(
-                              //           context: context,
-                              //           barrierDismissible: false,
-                              //           builder: (_) => Center(
-                              //             child: CupertinoActivityIndicator(
-                              //               color: ColorsContent.newThemeColor,
-                              //               radius: 15,
-                              //             ),
-                              //           ),
-                              //         );
-                              //
-                              //         final result =
-                              //             await provider.deleteReminderFunction(
-                              //           emotion_id: emotionId,
-                              //           context: context,
-                              //         );
-                              //
-                              //         if (mounted) Navigator.of(context).pop();
-                              //
-                              //         if (result) {
-                              //           await provider.fetchJournalChartView(
-                              //               context: context);
-                              //
-                              //           if (mounted &&
-                              //               Navigator.canPop(context)) {
-                              //             Navigator.of(context).pop();
-                              //           }
-                              //
-                              //           if (mounted) {
-                              //             ScaffoldMessenger.of(context)
-                              //                 .showSnackBar(
-                              //               const SnackBar(
-                              //                 content: Text(
-                              //                     'Emotion removed successfully'),
-                              //                 backgroundColor: Colors.green,
-                              //               ),
-                              //             );
-                              //           }
-                              //         } else {
-                              //           if (mounted) {
-                              //             ScaffoldMessenger.of(context)
-                              //                 .showSnackBar(
-                              //               const SnackBar(
-                              //                 content: Text(
-                              //                     'Failed to remove emotion'),
-                              //                 backgroundColor: Colors.red,
-                              //               ),
-                              //             );
-                              //           }
-                              //         }
-                              //       },
-                              //       title: 'Confirm Delete',
-                              //       content:
-                              //           'Are you sure you want to delete this reminder?',
-                              //     );
-                              //   },
-                              //   child: SvgPicture.asset(
-                              //     ImageConstant.numuCloseChart,
-                              //   ),
-                              // ),
-                            ),
+                            ],
                           ),
-                        ],
-                      ],
-                    ),
+                        ),
+                      ),
+
+                      const SizedBox(
+                        height: 30,
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-          ],
-        ),
-      ):const SizedBox(),
+                )
+              : const SizedBox(),
     );
   }
 }
