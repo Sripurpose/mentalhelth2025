@@ -212,19 +212,18 @@ class _ReminderPushViewScreenState extends State<ReminderPushViewScreen> {
                                                         const SizedBox(
                                                           width: 5,
                                                         ),
-                                                        Text(
-                                                          widget.reminderData[
-                                                                  'goal_title']
-                                                              .toString(),
-                                                          style: const TextStyle(
-                                                            fontSize: 16,
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                            fontFamily: 'Poppins',
-                                                            color: Colors.black,
+                                                        /// 👇 THIS IS THE FIX — allows multiline
+                                                        Expanded(
+                                                          child: Text(
+                                                            widget.reminderData['goal_title'].toString(),
+                                                            style: const TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight: FontWeight.w400,
+                                                              fontFamily: 'Poppins',
+                                                              color: Colors.black,
+                                                            ),
+                                                            softWrap: true,
                                                           ),
-                                                          softWrap: true, // allows text to wrap to next line
-                                                          overflow: TextOverflow.visible, // ensures no ellipsis
                                                         ),
                                                       ],
                                                     ),
@@ -258,19 +257,20 @@ class _ReminderPushViewScreenState extends State<ReminderPushViewScreen> {
                                                         const SizedBox(
                                                           width: 5,
                                                         ),
-                                                        Text(
-                                                          widget.reminderData[
-                                                                  'reminder_title']
-                                                              .toString(),
-                                                          style: const TextStyle(
-                                                            fontSize: 16,
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                            fontFamily: 'Poppins',
-                                                            color: Colors.black,
+                                                        /// 👇 THIS IS THE FIX — allows multiline
+                                                        Expanded(
+                                                          child: Text(
+                                                            widget.reminderData[
+                                                            'reminder_title']
+                                                                .toString(),
+                                                            style: const TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight: FontWeight.w400,
+                                                              fontFamily: 'Poppins',
+                                                              color: Colors.black,
+                                                            ),
+                                                            softWrap: true,
                                                           ),
-                                                          softWrap: true, // allows text to wrap to next line
-                                                          overflow: TextOverflow.visible, // ensures no ellipsis
                                                         ),
                                                       ],
                                                     ),
@@ -304,19 +304,19 @@ class _ReminderPushViewScreenState extends State<ReminderPushViewScreen> {
                                                         const SizedBox(
                                                           width: 5,
                                                         ),
-                                                        Text(
-                                                          widget.reminderData[
-                                                                  'reminder_desc']
-                                                              .toString(),
-                                                          style: const TextStyle(
-                                                            fontSize: 16,
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                            fontFamily: 'Poppins',
-                                                            color: Colors.black,
+                                                        Expanded(
+                                                          child: Text(
+                                                            widget.reminderData[
+                                                            'reminder_desc']
+                                                                .toString(),
+                                                            style: const TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight: FontWeight.w400,
+                                                              fontFamily: 'Poppins',
+                                                              color: Colors.black,
+                                                            ),
+                                                            softWrap: true,
                                                           ),
-                                                          softWrap: true, // allows text to wrap to next line
-                                                          overflow: TextOverflow.visible, // ensures no ellipsis
                                                         ),
                                                       ],
                                                     ),
